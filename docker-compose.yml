@@ -1,0 +1,61 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-satyam}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-satyam}
+      POSTGRES_DB: ${POSTGRES_DB:-satyam}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/migrations/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-satyam}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    env_file: .env
+    environment:
+      # App connects as the least-privilege role so Postgres RLS is enforced.
+      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://satyam_app:satyam_app@postgres:5432/satyam}
+      # Owner/superuser URL, used ONLY by `make seed` / migrations.
+      SEED_DATABASE_URL: ${SEED_DATABASE_URL:-postgresql+asyncpg://satyam:satyam@postgres:5432/satyam}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    image: oven/bun:1
+    working_dir: /app
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    command: sh -c "bun install && bun run dev --host"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:

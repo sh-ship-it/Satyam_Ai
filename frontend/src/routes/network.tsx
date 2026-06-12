@@ -1,0 +1,915 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Shell } from "@/components/Shell";
+import { CaseDrawer } from "@/components/CaseDrawer";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ChevronDown, Maximize2, Download, FileJson, ImageDown, Save, Trash2, Sliders } from "lucide-react";
+import { useT } from "@/lib/i18n";
+
+
+export const Route = createFileRoute("/network")({
+  head: () => ({
+    meta: [
+      { title: "Network · Satyam" },
+      { name: "description", content: "Criminal network and ego-graph exploration." },
+    ],
+  }),
+  component: NetworkScreen,
+});
+
+const NODES = [
+  { id: "S1", x: 50, y: 50, r: 22, group: 0, label: "Seed: S. Manjunath", role: "seed" },
+  { id: "N1", x: 25, y: 30, r: 12, group: 1, label: "R. Iqbal" },
+  { id: "N2", x: 80, y: 32, r: 14, group: 1, label: "K. Devraj" },
+  { id: "N3", x: 80, y: 70, r: 10, group: 2, label: "Anon-04" },
+  { id: "N4", x: 22, y: 72, r: 16, group: 2, label: "P. Naidu" },
+  { id: "N5", x: 50, y: 14, r: 8, group: 1, label: "Vendor-12" },
+  { id: "N6", x: 50, y: 88, r: 9, group: 2, label: "Loc-Whitefield" },
+  { id: "N7", x: 13, y: 50, r: 7, group: 3, label: "Vehicle KA-05" },
+  { id: "N8", x: 92, y: 50, r: 7, group: 3, label: "Phone +91…" },
+];
+const EDGES = [
+  ["S1","N1"],["S1","N2"],["S1","N3"],["S1","N4"],["S1","N5"],["S1","N6"],["S1","N7"],["S1","N8"],
+  ["N1","N5"],["N2","N3"],["N4","N6"],["N1","N7"],["N2","N8"],
+];
+
+const GROUP_COLOR = ["oklch(0.546 0.215 262)", "oklch(0.65 0.17 150)", "oklch(0.7 0.18 50)", "oklch(0.58 0.22 27)"];
+const GROUP_SHAPE = ["circle", "square", "diamond", "triangle"];
+
+type PosMap = Record<string, { x: number; y: number; vx: number; vy: number; fx?: number | null; fy?: number | null }>;
+
+function NetworkScreen() {
+  const t = useT();
+  const [selected, setSelected] = useState("S1");
+  const [selectedSet, setSelectedSet] = useState<Set<string>>(() => new Set(["S1"]));
+  const [drawer, setDrawer] = useState(false);
+  const [taskMsg, setTaskMsg] = useState<string | null>(null);
+
+  // Voice command "open network for suspect …" lands here.
+  useEffect(() => {
+    const onTask = (e: Event) => {
+      const d = (e as CustomEvent).detail;
+      if (!d || d.route !== "/network") return;
+      setTaskMsg(d.task || d.query || null);
+    };
+    window.addEventListener("satyam:run-task", onTask);
+    return () => window.removeEventListener("satyam:run-task", onTask);
+  }, []);
+  const [exportOpen, setExportOpen] = useState(false);
+  const [exporting, setExporting] = useState<null | "png" | "json">(null);
+  const [exportScope, setExportScope] = useState<"selection" | "all">("selection");
+  const graphSvgRef = useRef<SVGSVGElement>(null);
+  const node = NODES.find((n) => n.id === selected)!;
+
+  // ---- Physics tuning state ----
+  const [repulsion, setRepulsion] = useState(18);
+  const [springStrength, setSpringStrength] = useState(0.012);
+  const [centerGravity, setCenterGravity] = useState(0.002);
+  const [damping, setDamping] = useState(0.82);
+  const physicsRef = useRef({ repulsion, springStrength, centerGravity, damping });
+  physicsRef.current = { repulsion, springStrength, centerGravity, damping };
+
+  // ---- Physics presets ----
+  type Preset = { repulsion: number; springStrength: number; centerGravity: number; damping: number };
+  const BUILTIN_PRESETS: Record<string, Preset> = {
+    Default:   { repulsion: 18, springStrength: 0.012, centerGravity: 0.002, damping: 0.82 },
+    Tight:     { repulsion: 8,  springStrength: 0.030, centerGravity: 0.004, damping: 0.88 },
+    Spread:    { repulsion: 42, springStrength: 0.006, centerGravity: 0.001, damping: 0.80 },
+    Floaty:    { repulsion: 26, springStrength: 0.008, centerGravity: 0.0008, damping: 0.94 },
+    Snappy:    { repulsion: 22, springStrength: 0.022, centerGravity: 0.003, damping: 0.70 },
+  };
+  const PRESETS_KEY = "network.physics.presets.v1";
+  const ACTIVE_KEY = "network.physics.active.v1";
+  const [userPresets, setUserPresets] = useState<Record<string, Preset>>(() => {
+    if (typeof window === "undefined") return {};
+    try { return JSON.parse(localStorage.getItem(PRESETS_KEY) || "{}"); } catch { return {}; }
+  });
+  const [activePreset, setActivePreset] = useState<string>(() => {
+    if (typeof window === "undefined") return "Default";
+    return localStorage.getItem(ACTIVE_KEY) || "Default";
+  });
+  const [presetsOpen, setPresetsOpen] = useState(false);
+  const allPresets = useMemo(() => ({ ...BUILTIN_PRESETS, ...userPresets }), [userPresets]);
+
+  const applyPreset = (name: string) => {
+    const p = allPresets[name];
+    if (!p) return;
+    setRepulsion(p.repulsion);
+    setSpringStrength(p.springStrength);
+    setCenterGravity(p.centerGravity);
+    setDamping(p.damping);
+    setActivePreset(name);
+    try { localStorage.setItem(ACTIVE_KEY, name); } catch {}
+    setPresetsOpen(false);
+  };
+  const saveCurrentAsPreset = () => {
+    const name = (typeof window !== "undefined" ? window.prompt(t("Preset name"), "") : "")?.trim();
+    if (!name) return;
+    if (name in BUILTIN_PRESETS) {
+      if (typeof window !== "undefined") window.alert(t("That name is reserved"));
+      return;
+    }
+    const next = { ...userPresets, [name]: { repulsion, springStrength, centerGravity, damping } };
+    setUserPresets(next);
+    setActivePreset(name);
+    try {
+      localStorage.setItem(PRESETS_KEY, JSON.stringify(next));
+      localStorage.setItem(ACTIVE_KEY, name);
+    } catch {}
+  };
+  const deletePreset = (name: string) => {
+    if (name in BUILTIN_PRESETS) return;
+    const { [name]: _, ...rest } = userPresets;
+    setUserPresets(rest);
+    try { localStorage.setItem(PRESETS_KEY, JSON.stringify(rest)); } catch {}
+    if (activePreset === name) applyPreset("Default");
+  };
+  // Mark active as "Custom" when sliders drift from the named preset
+  useEffect(() => {
+    const p = allPresets[activePreset];
+    if (!p) return;
+    const drift =
+      p.repulsion !== repulsion ||
+      p.springStrength !== springStrength ||
+      p.centerGravity !== centerGravity ||
+      p.damping !== damping;
+    if (drift && activePreset !== "Custom") setActivePreset("Custom");
+  }, [repulsion, springStrength, centerGravity, damping, allPresets, activePreset]);
+
+  // ---- Dynamic simulation state ----
+  const [pos, setPos] = useState<PosMap>(() => {
+    const o: PosMap = {};
+    NODES.forEach((n) => {
+      o[n.id] = { x: n.x, y: n.y, vx: 0, vy: 0, fx: n.id === "S1" ? n.x : null, fy: n.id === "S1" ? n.y : null };
+    });
+    return o;
+  });
+  const posRef = useRef(pos);
+  posRef.current = pos;
+  const [view, setView] = useState({ x: 0, y: 0, scale: 1 });
+  const [frameMs, setFrameMs] = useState(16);
+  const dragRef = useRef<{ id: string | null; panning: boolean; lastX: number; lastY: number }>({ id: null, panning: false, lastX: 0, lastY: 0 });
+
+  // Force simulation loop
+  useEffect(() => {
+    let raf = 0;
+    let last = performance.now();
+    const tick = (now: number) => {
+      const dt = Math.min(40, now - last);
+      last = now;
+      setFrameMs(dt);
+      const ph = physicsRef.current;
+      const p = { ...posRef.current };
+      const ids = NODES.map((n) => n.id);
+      // Repulsion
+      for (let i = 0; i < ids.length; i++) {
+        for (let j = i + 1; j < ids.length; j++) {
+          const a = p[ids[i]];
+          const b = p[ids[j]];
+          let dx = b.x - a.x;
+          let dy = b.y - a.y;
+          let d2 = dx * dx + dy * dy;
+          if (d2 < 0.01) d2 = 0.01;
+          const f = ph.repulsion / d2;
+          const d = Math.sqrt(d2);
+          const fx = (dx / d) * f;
+          const fy = (dy / d) * f;
+          a.vx -= fx;
+          a.vy -= fy;
+          b.vx += fx;
+          b.vy += fy;
+        }
+      }
+      // Edge springs
+      EDGES.forEach(([a, b]) => {
+        const A = p[a];
+        const B = p[b];
+        const dx = B.x - A.x;
+        const dy = B.y - A.y;
+        const d = Math.sqrt(dx * dx + dy * dy) || 0.01;
+        const rest = a === "S1" || b === "S1" ? 26 : 22;
+        const k = ph.springStrength * (d - rest);
+        const fx = (dx / d) * k;
+        const fy = (dy / d) * k;
+        A.vx += fx;
+        A.vy += fy;
+        B.vx -= fx;
+        B.vy -= fy;
+      });
+      // Center gravity + integration
+      ids.forEach((id) => {
+        const n = p[id];
+        n.vx += (50 - n.x) * ph.centerGravity;
+        n.vy += (50 - n.y) * ph.centerGravity;
+        n.vx *= ph.damping;
+        n.vy *= ph.damping;
+        if (n.fx != null && n.fy != null) {
+          n.x = n.fx;
+          n.y = n.fy;
+          n.vx = 0;
+          n.vy = 0;
+        } else {
+          n.x += n.vx;
+          n.y += n.vy;
+          n.x = Math.max(6, Math.min(94, n.x));
+          n.y = Math.max(6, Math.min(94, n.y));
+        }
+      });
+      setPos({ ...p });
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  // Convert client coords to SVG viewBox coords
+  const clientToSvg = (cx: number, cy: number) => {
+    const svg = graphSvgRef.current;
+    if (!svg) return { x: 50, y: 50 };
+    const pt = svg.createSVGPoint();
+    pt.x = cx;
+    pt.y = cy;
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return { x: 50, y: 50 };
+    const r = pt.matrixTransform(ctm.inverse());
+    return { x: r.x, y: r.y };
+  };
+
+  const onNodePointerDown = (id: string, e: React.PointerEvent) => {
+    e.stopPropagation();
+    (e.target as Element).setPointerCapture?.(e.pointerId);
+    dragRef.current = { id, panning: false, lastX: e.clientX, lastY: e.clientY };
+    setPos((prev) => ({ ...prev, [id]: { ...prev[id], fx: prev[id].x, fy: prev[id].y } }));
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    const d = dragRef.current;
+    if (d.id) {
+      const { x, y } = clientToSvg(e.clientX, e.clientY);
+      setPos((prev) => ({ ...prev, [d.id!]: { ...prev[d.id!], x, y, fx: x, fy: y, vx: 0, vy: 0 } }));
+    } else if (d.panning) {
+      const dx = e.clientX - d.lastX;
+      const dy = e.clientY - d.lastY;
+      d.lastX = e.clientX;
+      d.lastY = e.clientY;
+      setView((v) => ({ ...v, x: v.x - dx * 0.15 * v.scale, y: v.y - dy * 0.15 * v.scale }));
+    }
+  };
+  const onPointerUp = (id?: string) => (e: React.PointerEvent) => {
+    const d = dragRef.current;
+    if (d.id && id !== "S1") {
+      // release fixed unless seed
+      const did = d.id;
+      setPos((prev) => ({ ...prev, [did]: { ...prev[did], fx: null, fy: null } }));
+    }
+    dragRef.current = { id: null, panning: false, lastX: 0, lastY: 0 };
+  };
+  const onBgPointerDown = (e: React.PointerEvent) => {
+    dragRef.current = { id: null, panning: true, lastX: e.clientX, lastY: e.clientY };
+  };
+  const onWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    setView((v) => {
+      const factor = e.deltaY > 0 ? 1.1 : 0.9;
+      const s = Math.max(0.4, Math.min(3, v.scale * factor));
+      return { ...v, scale: s };
+    });
+  };
+
+  const zoomBy = (factor: number) => setView((v) => ({ ...v, scale: Math.max(0.4, Math.min(3, v.scale * factor)) }));
+  const recenter = () => setView({ x: 0, y: 0, scale: 1 });
+
+  const viewBox = useMemo(() => {
+    const size = 100 * view.scale;
+    const cx = 50 + view.x;
+    const cy = 50 + view.y;
+    return `${cx - size / 2} ${cy - size / 2} ${size} ${size}`;
+  }, [view]);
+
+  const handleNodeClick = (id: string, e: React.MouseEvent) => {
+    setSelected(id);
+    setSelectedSet((prev) => {
+      const next = new Set(prev);
+      if (e.shiftKey || e.metaKey || e.ctrlKey) {
+        if (next.has(id) && next.size > 1) next.delete(id);
+        else next.add(id);
+      } else {
+        next.clear();
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const stamp = () => new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+
+  const triggerDownload = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  const getScopedData = (scope: "selection" | "all") => {
+    if (scope === "all" || selectedSet.size === 0) {
+      return { nodes: NODES, edges: EDGES };
+    }
+    const ids = selectedSet;
+    const nodes = NODES.filter((n) => ids.has(n.id));
+    const edges = EDGES.filter(([a, b]) => ids.has(a) && ids.has(b));
+    return { nodes, edges };
+  };
+
+  const exportJson = () => {
+    setExporting("json");
+    const { nodes, edges } = getScopedData(exportScope);
+    const snapshot = {
+      generatedAt: new Date().toISOString(),
+      seedEntity: "S. Manjunath",
+      depth: 2,
+      scope: exportScope,
+      selection: Array.from(selectedSet),
+      primarySelection: selected,
+      stats: { nodes: nodes.length, edges: edges.length },
+      nodes: nodes.map((n) => ({
+        id: n.id,
+        label: n.label,
+        role: (n as any).role ?? null,
+        group: n.group,
+        position: { x: n.x, y: n.y },
+        radius: n.r,
+      })),
+      edges: edges.map(([source, target]) => ({ source, target })),
+    };
+    const blob = new Blob([JSON.stringify(snapshot, null, 2)], {
+      type: "application/json",
+    });
+    const suffix = exportScope === "selection" ? "selection" : "full";
+    triggerDownload(blob, `satyam-network-${suffix}-${stamp()}.json`);
+    setTimeout(() => {
+      setExporting(null);
+      setExportOpen(false);
+    }, 300);
+  };
+
+  const buildExportSvg = (scope: "selection" | "all") => {
+    const { nodes, edges } = getScopedData(scope);
+    const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+    const edgeXml = edges
+      .map(([a, b]) => {
+        const A = nodeMap.get(a)!;
+        const B = nodeMap.get(b)!;
+        const isCore = a === "S1" || b === "S1";
+        return `<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="#1a1f2e" stroke-opacity="${isCore ? 0.6 : 0.25}" stroke-width="${isCore ? 0.32 : 0.18}" ${isCore ? "" : 'stroke-dasharray="0.6 0.6"'}/>`;
+      })
+      .join("");
+    const nodeXml = nodes
+      .map((n) => {
+        const r = n.r / 10;
+        const color = GROUP_COLOR[n.group];
+        const shape = GROUP_SHAPE[n.group];
+        const isSeed = n.id === "S1";
+        let shapeXml = "";
+        if (shape === "circle") shapeXml = `<circle cx="${n.x}" cy="${n.y}" r="${r}" fill="${color}" stroke="#1a1f2e" stroke-width="${isSeed ? 0.7 : 0.45}"/>`;
+        else if (shape === "square") shapeXml = `<rect x="${n.x - r}" y="${n.y - r}" width="${r * 2}" height="${r * 2}" fill="${color}" stroke="#1a1f2e" stroke-width="0.45"/>`;
+        else if (shape === "diamond") shapeXml = `<polygon points="${n.x},${n.y - r} ${n.x + r},${n.y} ${n.x},${n.y + r} ${n.x - r},${n.y}" fill="${color}" stroke="#1a1f2e" stroke-width="0.45"/>`;
+        else shapeXml = `<polygon points="${n.x},${n.y - r} ${n.x + r},${n.y + r} ${n.x - r},${n.y + r}" fill="${color}" stroke="#1a1f2e" stroke-width="0.45"/>`;
+        const labelW = Math.max(n.label.length * 0.88, 6);
+        const labelBg = isSeed ? "#1a1f2e" : "#ffffff";
+        const labelFg = isSeed ? "#ffffff" : "#1a1f2e";
+        const label = `<g transform="translate(${n.x},${n.y + r + 2.6})"><rect x="${-labelW / 2}" y="-1.2" width="${labelW}" height="2.5" fill="${labelBg}" stroke="#1a1f2e" stroke-width="0.18"/><text x="0" y="0.65" text-anchor="middle" font-size="1.35" font-weight="700" fill="${labelFg}" font-family="ui-monospace,monospace" letter-spacing="0.03em">${n.label.toUpperCase().replace(/[<>&]/g, "")}</text></g>`;
+        return shapeXml + label;
+      })
+      .join("");
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1600" height="1600">${edgeXml}${nodeXml}</svg>`;
+  };
+
+  const exportPng = async () => {
+    setExporting("png");
+    try {
+      const W = 1600;
+      const H = 1600;
+      const { nodes, edges } = getScopedData(exportScope);
+      const xml = buildExportSvg(exportScope);
+      const svg64 = btoa(unescape(encodeURIComponent(xml)));
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      await new Promise<void>((res, rej) => {
+        img.onload = () => res();
+        img.onerror = () => rej(new Error("svg load failed"));
+        img.src = `data:image/svg+xml;base64,${svg64}`;
+      });
+      const canvas = document.createElement("canvas");
+      canvas.width = W;
+      canvas.height = H;
+      const ctx = canvas.getContext("2d")!;
+      ctx.fillStyle = "#f5f6f8";
+      ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = "rgba(120,130,150,0.35)";
+      for (let x = 0; x < W; x += 56) {
+        for (let y = 0; y < H; y += 56) {
+          ctx.beginPath();
+          ctx.arc(x, y, 2.4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.drawImage(img, 0, 0, W, H);
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "bold 22px ui-monospace, monospace";
+      const scopeLabel = exportScope === "selection" ? "SELECTION" : "FULL";
+      ctx.fillText(
+        `SATYAM · ${scopeLabel} · ${nodes.length} NODES · ${edges.length} EDGES · ${new Date().toLocaleString()}`,
+        32,
+        H - 28,
+      );
+      await new Promise<void>((res) =>
+        canvas.toBlob((b) => {
+          if (b) triggerDownload(b, `satyam-network-${exportScope}-${stamp()}.png`);
+          res();
+        }, "image/png"),
+      );
+    } finally {
+      setExporting(null);
+      setExportOpen(false);
+    }
+  };
+
+  const scopedCounts = (() => {
+    const { nodes, edges } = getScopedData(exportScope);
+    return { nodes: nodes.length, edges: edges.length };
+  })();
+
+
+
+  return (
+    <Shell>
+      <div className="flex h-[calc(100vh-3.5rem-26px)]">
+        <section className="flex-1 min-w-0 flex flex-col">
+          {taskMsg && (
+            <div className="border-b border-border bg-primary/10 px-5 py-2 text-xs font-medium text-foreground">
+              {t("Voice task")}: {taskMsg}
+            </div>
+          )}
+          {/* Controls */}
+          <div className="flex flex-wrap items-center gap-2 border-b border-border bg-card px-5 py-3 text-foreground">
+            <Control label={t("Seed entity")}>
+              <input defaultValue="S. Manjunath" className="w-44 rounded-md border border-input bg-card px-2 py-1.5 text-sm text-foreground" />
+            </Control>
+            <Control label={t("Depth")}>
+              <Select options={["1", "2", "3"]} value="2" />
+            </Control>
+            <Control label={t("Edge type")}>
+              <Select options={[t("All"), t("Co-accused"), t("Phone"), t("Vehicle"), t("Location")]} />
+            </Control>
+            <Control label={t("Community")}>
+              <Select options={[t("All"), "C-01 (Theft ring)", "C-02 (Cyber)", "C-03 (Narcotics)"]} />
+            </Control>
+            <div className="hidden xl:flex items-center gap-3 border-l border-border pl-3">
+              <div className="relative">
+                <button
+                  onClick={() => setPresetsOpen((v) => !v)}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2 py-1.5 text-[11px] font-medium hover:bg-muted"
+                  title={t("Physics presets")}
+                >
+                  <Sliders className="size-3.5" />
+                  <span className="max-w-[90px] truncate">{activePreset}</span>
+                  <ChevronDown className="size-3" />
+                </button>
+                {presetsOpen && (
+                  <>
+                    <div className="fixed inset-0 z-30" onClick={() => setPresetsOpen(false)} />
+                    <div className="absolute right-0 z-40 mt-1 w-56 rounded-md border border-border bg-popover p-1 shadow-lg">
+                      <div className="px-2 py-1 text-[10px] uppercase tracking-wide text-muted-foreground">{t("Built-in")}</div>
+                      {Object.keys(BUILTIN_PRESETS).map((name) => (
+                        <button
+                          key={name}
+                          onClick={() => applyPreset(name)}
+                          className={`flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-xs hover:bg-muted ${activePreset === name ? "bg-muted" : ""}`}
+                        >
+                          <span>{name}</span>
+                          {activePreset === name && <span className="text-[10px] text-muted-foreground">✓</span>}
+                        </button>
+                      ))}
+                      {Object.keys(userPresets).length > 0 && (
+                        <>
+                          <div className="mt-1 px-2 py-1 text-[10px] uppercase tracking-wide text-muted-foreground">{t("Saved")}</div>
+                          {Object.keys(userPresets).map((name) => (
+                            <div key={name} className={`group flex items-center justify-between rounded px-2 py-1.5 text-xs hover:bg-muted ${activePreset === name ? "bg-muted" : ""}`}>
+                              <button onClick={() => applyPreset(name)} className="flex-1 text-left truncate">
+                                {name}
+                              </button>
+                              <button
+                                onClick={() => deletePreset(name)}
+                                className="ml-1 rounded p-1 text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-card hover:text-destructive"
+                                title={t("Delete preset")}
+                              >
+                                <Trash2 className="size-3" />
+                              </button>
+                            </div>
+                          ))}
+                        </>
+                      )}
+                      <div className="my-1 h-px bg-border" />
+                      <button
+                        onClick={saveCurrentAsPreset}
+                        className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs hover:bg-muted"
+                      >
+                        <Save className="size-3.5" />
+                        {t("Save current as preset…")}
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+              <Slider label={t("Repulsion")} min={0} max={60} step={1} value={repulsion} onChange={setRepulsion} />
+              <Slider label={t("Spring")} min={0} max={0.05} step={0.001} value={springStrength} onChange={setSpringStrength} fmt={(v) => v.toFixed(3)} />
+              <Slider label={t("Gravity")} min={0} max={0.01} step={0.0005} value={centerGravity} onChange={setCenterGravity} fmt={(v) => v.toFixed(4)} />
+              <Slider label={t("Damping")} min={0.5} max={0.99} step={0.01} value={damping} onChange={setDamping} fmt={(v) => v.toFixed(2)} />
+            </div>
+            <div className="ml-auto flex items-center gap-2">
+              <div className="flex items-center gap-1.5 rounded-md border border-border bg-muted/40 px-2 py-1 text-[11px] font-medium">
+                <span className="font-mono text-foreground">{selectedSet.size}</span>
+                <span className="text-muted-foreground">{t("selected")}</span>
+                {selectedSet.size > 1 && (
+                  <button
+                    onClick={() => {
+                      setSelectedSet(new Set([selected]));
+                    }}
+                    className="ml-1 rounded border border-border bg-card px-1.5 py-0.5 text-[10px] hover:bg-muted"
+                  >
+                    {t("Clear")}
+                  </button>
+                )}
+              </div>
+              <Legend />
+              <div className="relative">
+                <button
+                  onClick={() => setExportOpen((v) => !v)}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1.5 text-xs font-medium hover:bg-muted"
+                >
+                  <Download className="h-3.5 w-3.5" /> {t("Export")}
+                  <ChevronDown className="h-3 w-3 opacity-60" />
+                </button>
+                {exportOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setExportOpen(false)} />
+                    <div className="absolute right-0 top-full z-50 mt-1 w-64 overflow-hidden rounded-md border border-border bg-card shadow-lg">
+                      <div className="border-b border-border p-2">
+                        <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{t("Scope")}</div>
+                        <div className="grid grid-cols-2 gap-1">
+                          <button
+                            onClick={() => setExportScope("selection")}
+                            className={`rounded border px-2 py-1 text-[11px] font-medium transition ${exportScope === "selection" ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:bg-muted"}`}
+                          >
+                            {t("Selection")} ({selectedSet.size})
+                          </button>
+                          <button
+                            onClick={() => setExportScope("all")}
+                            className={`rounded border px-2 py-1 text-[11px] font-medium transition ${exportScope === "all" ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:bg-muted"}`}
+                          >
+                            {t("All")} ({NODES.length})
+                          </button>
+                        </div>
+                        <div className="mt-2 text-[10px] text-muted-foreground">
+                          {scopedCounts.nodes} {t("nodes")} · {scopedCounts.edges} {t("edges")}
+                        </div>
+                      </div>
+                      <button
+                        onClick={exportPng}
+                        disabled={exporting !== null || scopedCounts.nodes === 0}
+                        className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs font-medium hover:bg-muted disabled:opacity-50"
+                      >
+                        <ImageDown className="h-3.5 w-3.5" />
+                        <div className="flex flex-col">
+                          <span>{exporting === "png" ? t("Exporting…") : t("PNG image")}</span>
+                          <span className="text-[10px] text-muted-foreground">{t("Rendered graph snapshot")}</span>
+                        </div>
+                      </button>
+                      <button
+                        onClick={exportJson}
+                        disabled={exporting !== null || scopedCounts.nodes === 0}
+                        className="flex w-full items-center gap-2 border-t border-border px-3 py-2 text-left text-xs font-medium hover:bg-muted disabled:opacity-50"
+                      >
+                        <FileJson className="h-3.5 w-3.5" />
+                        <div className="flex flex-col">
+                          <span>{exporting === "json" ? t("Exporting…") : t("JSON snapshot")}</span>
+                          <span className="text-[10px] text-muted-foreground">{t("Nodes, edges, metadata")}</span>
+                        </div>
+                      </button>
+                      <div className="border-t border-border bg-muted/30 px-3 py-1.5 text-[10px] text-muted-foreground">
+                        {t("Tip: Shift-click nodes to add to selection")}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+              <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1.5 text-xs font-medium hover:bg-muted">
+                <Maximize2 className="h-3.5 w-3.5" /> {t("Fullscreen")}
+              </button>
+            </div>
+
+
+          </div>
+
+          {/* Graph */}
+          <div
+            className="relative flex-1 overflow-hidden bg-background text-foreground/20"
+            style={{
+              backgroundImage: "radial-gradient(currentColor 1.2px, transparent 1.2px)",
+              backgroundSize: "28px 28px",
+            }}
+          >
+            {/* Coordinate labels */}
+            <div className="pointer-events-none absolute left-3 top-3 z-10 space-y-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-foreground/40">
+              <div>SECTOR · 04-B</div>
+              <div>EGO · DEPTH 2</div>
+            </div>
+
+            {/* Range rings */}
+            <svg className="pointer-events-none absolute inset-0 h-full w-full" preserveAspectRatio="none">
+              <g stroke="currentColor" className="text-foreground/10" fill="none">
+                <circle cx="50%" cy="50%" r="110" strokeWidth="1.5" strokeDasharray="3 5" />
+                <circle cx="50%" cy="50%" r="200" strokeWidth="1.5" strokeDasharray="3 5" />
+                <circle cx="50%" cy="50%" r="300" strokeWidth="1.5" strokeDasharray="3 5" />
+              </g>
+            </svg>
+
+            {/* Graph SVG */}
+            <svg
+              ref={graphSvgRef}
+              viewBox={viewBox}
+              className="absolute inset-0 h-full w-full touch-none select-none text-foreground"
+              preserveAspectRatio="xMidYMid meet"
+              onPointerDown={onBgPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp()}
+              onPointerLeave={onPointerUp()}
+              onWheel={onWheel}
+              style={{ cursor: dragRef.current.panning ? "grabbing" : "grab" }}
+            >
+              {EDGES.map(([a, b], i) => {
+                const A = pos[a];
+                const B = pos[b];
+                if (!A || !B) return null;
+                const isCore = a === "S1" || b === "S1";
+                const inSelection = selectedSet.size > 1 && selectedSet.has(a) && selectedSet.has(b);
+                const dimmed = selectedSet.size > 1 && !inSelection;
+                return (
+                  <line
+                    key={i}
+                    x1={A.x}
+                    y1={A.y}
+                    x2={B.x}
+                    y2={B.y}
+                    stroke="currentColor"
+                    strokeOpacity={dimmed ? 0.08 : isCore ? 0.6 : 0.22}
+                    strokeWidth={isCore ? 0.32 : 0.18}
+                    strokeDasharray={isCore ? undefined : "0.6 0.6"}
+                  />
+                );
+              })}
+
+              {NODES.map((n) => {
+                const p = pos[n.id];
+                if (!p) return null;
+                const sel = n.id === selected;
+                const inSet = selectedSet.has(n.id);
+                const color = GROUP_COLOR[n.group];
+                const r = n.r / 10;
+                const isSeed = n.id === "S1";
+                const labelW = Math.max(n.label.length * 0.88, 6);
+                return (
+                  <g
+                    key={n.id}
+                    onClick={(e) => handleNodeClick(n.id, e)}
+                    onPointerDown={(e) => onNodePointerDown(n.id, e)}
+                    onPointerUp={onPointerUp(n.id)}
+                    className="cursor-grab active:cursor-grabbing"
+                  >
+                    {inSet && (
+                      <circle cx={p.x} cy={p.y} r={r + 1.4} fill="none" stroke="currentColor" strokeWidth={sel ? 0.45 : 0.3} strokeDasharray="0.5 0.5" />
+                    )}
+                    {isSeed && (
+                      <circle cx={p.x} cy={p.y} r={r + 2.4} fill={color} opacity="0.18" className="animate-pulse" />
+                    )}
+                    {GROUP_SHAPE[n.group] === "circle" && (
+                      <circle cx={p.x} cy={p.y} r={r} fill={color} stroke="currentColor" strokeWidth={isSeed ? 0.7 : 0.45} />
+                    )}
+                    {GROUP_SHAPE[n.group] === "square" && (
+                      <rect x={p.x - r} y={p.y - r} width={r * 2} height={r * 2} fill={color} stroke="currentColor" strokeWidth="0.45" />
+                    )}
+                    {GROUP_SHAPE[n.group] === "diamond" && (
+                      <polygon points={`${p.x},${p.y - r} ${p.x + r},${p.y} ${p.x},${p.y + r} ${p.x - r},${p.y}`} fill={color} stroke="currentColor" strokeWidth="0.45" />
+                    )}
+                    {GROUP_SHAPE[n.group] === "triangle" && (
+                      <polygon points={`${p.x},${p.y - r} ${p.x + r},${p.y + r} ${p.x - r},${p.y + r}`} fill={color} stroke="currentColor" strokeWidth="0.45" />
+                    )}
+                    {/* Label pill */}
+                    <g transform={`translate(${p.x}, ${p.y + r + 2.6})`} className="text-foreground">
+                      <rect
+                        x={-labelW / 2}
+                        y={-1.2}
+                        width={labelW}
+                        height="2.5"
+                        fill={isSeed ? "var(--foreground)" : "var(--secondary-background)"}
+                        stroke="currentColor"
+                        strokeWidth="0.18"
+                      />
+                      <text
+                        x="0"
+                        y="0.65"
+                        textAnchor="middle"
+                        fontSize="1.35"
+                        fontWeight={sel || isSeed ? 800 : 700}
+                        fill={isSeed ? "var(--background)" : "currentColor"}
+                        style={{ fontFamily: "ui-monospace, monospace", letterSpacing: "0.03em" }}
+                      >
+                        {n.label.toUpperCase()}
+                      </text>
+                    </g>
+                  </g>
+                );
+              })}
+            </svg>
+
+            {/* Live status HUD (bottom-left) */}
+            <div className="absolute bottom-4 left-4 z-10 flex items-center gap-3 rounded-[5px] border-2 border-foreground bg-foreground px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-background nb-shadow-sm">
+              <span className="flex items-center gap-1.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                </span>
+                {t("Live")}
+              </span>
+              <span className="h-3 w-px bg-background/30" />
+              <span className="font-mono">{NODES.length} NODES · {EDGES.length} EDGES</span>
+              <span className="h-3 w-px bg-background/30 hidden sm:inline-block" />
+              <span className="font-mono opacity-60 hidden sm:inline">Δ {frameMs.toFixed(1)}ms</span>
+              <span className="h-3 w-px bg-background/30 hidden md:inline-block" />
+              <span className="font-mono opacity-60 hidden md:inline">{(view.scale * 100).toFixed(0)}%</span>
+            </div>
+
+            {/* Zoom HUD (bottom-right) */}
+            <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1.5">
+              <button onClick={() => zoomBy(0.83)} className="grid h-8 w-8 place-items-center rounded-[5px] border-2 border-foreground bg-card text-foreground nb-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition" aria-label="Zoom in">
+                <span className="text-base font-black leading-none">+</span>
+              </button>
+              <button onClick={() => zoomBy(1.2)} className="grid h-8 w-8 place-items-center rounded-[5px] border-2 border-foreground bg-card text-foreground nb-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition" aria-label="Zoom out">
+                <span className="text-base font-black leading-none">−</span>
+              </button>
+              <button onClick={recenter} className="grid h-8 w-8 place-items-center rounded-[5px] border-2 border-foreground bg-card text-[11px] font-black text-foreground nb-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition" aria-label="Recenter">
+                ⊙
+              </button>
+            </div>
+          </div>
+        </section>
+
+
+        {/* Node inspector */}
+        <aside className="w-80 shrink-0 border-l border-border bg-card overflow-auto">
+          <div className="border-b border-border px-4 py-3">
+            <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{t("Node inspector")}</div>
+            <h3 className="text-sm font-semibold text-foreground">{node.label}</h3>
+          </div>
+          <div className="p-4 space-y-4">
+            <div className="grid grid-cols-2 gap-2">
+              <Stat label={t("Centrality")} value="0.81" />
+              <Stat label={t("Degree")} value="8" />
+              <Stat label={t("Community")} value="C-01" />
+              <Stat label={t("Risk")} value={t("High")} tone="red" />
+            </div>
+
+            <div>
+              <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("Role in network")}</div>
+              <p className="text-sm text-foreground/85">
+                {t("Hub node — appears in 8 FIRs across Whitefield zone. Likely organizer of a vehicle-theft ring (C-01).")}
+              </p>
+            </div>
+
+            <div>
+              <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("Linked cases")}</div>
+              <div className="space-y-1.5">
+                {["FIR-2024-08842", "FIR-2024-08711", "FIR-2024-08503", "FIR-2024-08144"].map((f) => (
+                  <button
+                    key={f}
+                    onClick={() => setDrawer(true)}
+                    className="flex w-full items-center justify-between rounded-md border border-border bg-muted/30 px-2.5 py-1.5 text-left text-sm hover:bg-muted"
+                  >
+                    <span className="font-mono text-foreground">{f}</span>
+                    <span className="text-[10px] text-muted-foreground">{t("Theft")}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              onClick={() => setDrawer(true)}
+              className="w-full rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
+            >
+              {t("Open case")}
+            </button>
+          </div>
+        </aside>
+      </div>
+
+      <CaseDrawer open={drawer} onClose={() => setDrawer(false)} />
+    </Shell>
+  );
+}
+
+function Control({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</div>
+      {children}
+    </div>
+  );
+}
+function Select({ options, value }: { options: string[]; value?: string }) {
+  return (
+    <div className="relative">
+      <select defaultValue={value} className="appearance-none rounded-md border border-input bg-card px-2.5 py-1.5 pr-7 text-sm text-foreground">
+        {options.map((o) => <option key={o}>{o}</option>)}
+      </select>
+      <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+    </div>
+  );
+}
+function Stat({ label, value, tone }: { label: string; value: string; tone?: "red" }) {
+  return (
+    <div className="rounded-md border border-border bg-muted/30 p-2">
+      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>
+      <div className={`text-sm font-semibold ${tone === "red" ? "text-destructive" : "text-foreground"}`}>{value}</div>
+    </div>
+  );
+}
+function Legend() {
+  const t = useT();
+  const items = [
+    { l: t("Person (C-01)"), c: GROUP_COLOR[0], s: "●" },
+    { l: t("Co-accused"), c: GROUP_COLOR[1], s: "■" },
+    { l: t("Location"), c: GROUP_COLOR[2], s: "◆" },
+    { l: t("Asset"), c: GROUP_COLOR[3], s: "▲" },
+  ];
+  return (
+    <div className="hidden lg:flex items-center gap-3 text-[10px]">
+      {items.map((i) => (
+        <div key={i.l} className="flex items-center gap-1">
+          <span style={{ color: i.c }} className="text-sm">{i.s}</span>
+          <span className="text-muted-foreground">{i.l}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Slider({
+  label,
+  min,
+  max,
+  step,
+  value,
+  onChange,
+  fmt,
+}: {
+  label: string;
+  min: number;
+  max: number;
+  step: number;
+  value: number;
+  onChange: (v: number) => void;
+  fmt?: (v: number) => string;
+}) {
+  const pct = ((value - min) / (max - min)) * 100;
+  return (
+    <div className="flex flex-col gap-0.5 w-28">
+      <div className="flex items-center justify-between">
+        <span className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</span>
+        <span className="text-[9px] font-mono text-foreground">{fmt ? fmt(value) : value}</span>
+      </div>
+      <div className="relative h-4 flex items-center">
+        <div className="absolute left-0 right-0 h-[3px] rounded-full bg-muted" />
+        <div
+          className="absolute h-[3px] rounded-full bg-primary"
+          style={{ left: 0, width: `${pct}%` }}
+        />
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(parseFloat(e.target.value))}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          aria-label={label}
+        />
+        <div
+          className="absolute h-3 w-3 rounded-full border-2 border-primary bg-card shadow-sm pointer-events-none"
+          style={{ left: `calc(${pct}% - 6px)` }}
+        />
+      </div>
+    </div>
+  );
+}
