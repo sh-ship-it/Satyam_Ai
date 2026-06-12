@@ -13,7 +13,7 @@ import { Route as TranscriptsRouteImport } from './routes/transcripts'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as NetworkRouteImport } from './routes/network'
 import { Route as MapRouteImport } from './routes/map'
-import { Route as LandingRouteImport } from './routes/landing'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ConsoleRouteImport } from './routes/console'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AboutRouteImport } from './routes/about'
@@ -39,9 +39,9 @@ const MapRoute = MapRouteImport.update({
   path: '/map',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LandingRoute = LandingRouteImport.update({
-  id: '/landing',
-  path: '/landing',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConsoleRoute = ConsoleRouteImport.update({
@@ -70,7 +70,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
   '/console': typeof ConsoleRoute
-  '/landing': typeof LandingRoute
+  '/login': typeof LoginRoute
   '/map': typeof MapRoute
   '/network': typeof NetworkRoute
   '/reports': typeof ReportsRoute
@@ -81,7 +81,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
   '/console': typeof ConsoleRoute
-  '/landing': typeof LandingRoute
+  '/login': typeof LoginRoute
   '/map': typeof MapRoute
   '/network': typeof NetworkRoute
   '/reports': typeof ReportsRoute
@@ -93,7 +93,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
   '/console': typeof ConsoleRoute
-  '/landing': typeof LandingRoute
+  '/login': typeof LoginRoute
   '/map': typeof MapRoute
   '/network': typeof NetworkRoute
   '/reports': typeof ReportsRoute
@@ -106,7 +106,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/audit'
     | '/console'
-    | '/landing'
+    | '/login'
     | '/map'
     | '/network'
     | '/reports'
@@ -117,7 +117,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/audit'
     | '/console'
-    | '/landing'
+    | '/login'
     | '/map'
     | '/network'
     | '/reports'
@@ -128,7 +128,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/audit'
     | '/console'
-    | '/landing'
+    | '/login'
     | '/map'
     | '/network'
     | '/reports'
@@ -140,7 +140,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuditRoute: typeof AuditRoute
   ConsoleRoute: typeof ConsoleRoute
-  LandingRoute: typeof LandingRoute
+  LoginRoute: typeof LoginRoute
   MapRoute: typeof MapRoute
   NetworkRoute: typeof NetworkRoute
   ReportsRoute: typeof ReportsRoute
@@ -177,11 +177,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MapRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/landing': {
-      id: '/landing'
-      path: '/landing'
-      fullPath: '/landing'
-      preLoaderRoute: typeof LandingRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/console': {
@@ -220,7 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AuditRoute: AuditRoute,
   ConsoleRoute: ConsoleRoute,
-  LandingRoute: LandingRoute,
+  LoginRoute: LoginRoute,
   MapRoute: MapRoute,
   NetworkRoute: NetworkRoute,
   ReportsRoute: ReportsRoute,

@@ -30,7 +30,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-30 border-b-2 border-foreground bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link to="/landing" className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3">
           <div className="grid h-10 w-10 place-items-center rounded-[5px] border-2 border-foreground bg-primary text-primary-foreground nb-shadow-sm">
             <Shield className="h-5 w-5" strokeWidth={2.5} />
           </div>
@@ -58,7 +58,7 @@ export function Header() {
             <span className="h-2 w-2 rounded-full bg-primary" />
             Theme
           </button>
-          <Link to="/" className="hover:underline underline-offset-4">
+          <Link to="/login" className="hover:underline underline-offset-4">
             Login
           </Link>
           <Link
