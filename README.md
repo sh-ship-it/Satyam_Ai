@@ -1,5 +1,7 @@
 # Satyam — Conversational AI for the KSP Crime Database
 
+Satyam (सत्यम्) is a Sanskrit word that primarily translates to "Truth"
+
 Satyam is a bilingual (English / Kannada), voice-enabled conversational AI workspace
 for police crime intelligence. Officers ask questions in natural language; Satyam
 translates them into **guarded, read-only SQL** and **grounded retrieval** over a
