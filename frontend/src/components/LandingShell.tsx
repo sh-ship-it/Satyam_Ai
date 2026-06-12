@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Shield, Palette } from "lucide-react";
+import { ThemePicker } from "./ThemePicker";
 
 export function NB({ className = "", children }: { className?: string; children: React.ReactNode }) {
   return (
@@ -53,11 +54,7 @@ export function Header() {
           <a href="#features" className="hover:underline underline-offset-4">
             Features
           </a>
-          <button className="flex items-center gap-2 rounded-[5px] border-2 border-foreground bg-secondary-background px-3 py-1.5 nb-shadow-sm transition hover:translate-x-[2px] hover:translate-y-[2px]">
-            <Palette className="h-4 w-4" />
-            <span className="h-2 w-2 rounded-full bg-primary" />
-            Theme
-          </button>
+          <ThemePicker />
           <Link to="/login" className="hover:underline underline-offset-4">
             Login
           </Link>
