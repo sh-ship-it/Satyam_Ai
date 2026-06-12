@@ -54,7 +54,7 @@ export function Header() {
           <a href="#features" className="hover:underline underline-offset-4">
             Features
           </a>
-          <ThemePicker />
+          <ThemePicker buttonClass="flex items-center gap-2 text-sm font-bold text-foreground hover:underline underline-offset-4 bg-transparent border-0 p-0 cursor-pointer" />
           <Link to="/login" className="hover:underline underline-offset-4">
             Login
           </Link>

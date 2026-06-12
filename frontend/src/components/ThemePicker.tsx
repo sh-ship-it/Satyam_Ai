@@ -29,7 +29,11 @@ function applyTheme(t: Theme) {
   root.style.setProperty("--background", t.background);
 }
 
-export function ThemePicker() {
+interface ThemePickerProps {
+  buttonClass?: string;
+}
+
+export function ThemePicker({ buttonClass }: ThemePickerProps) {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string>("default");
   const [dark, setDark] = useState(false);
@@ -70,7 +74,7 @@ export function ThemePicker() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1.5 rounded-[5px] border-2 border-header-foreground bg-secondary-background px-2.5 py-1.5 text-xs font-bold text-foreground hover:translate-x-[2px] hover:translate-y-[2px] transition"
+        className={buttonClass || "flex items-center gap-1.5 rounded-[5px] border-2 border-header-foreground bg-secondary-background px-2.5 py-1.5 text-xs font-bold text-foreground hover:translate-x-[2px] hover:translate-y-[2px] transition"}
         aria-label="Theme"
       >
         <Palette className="h-3.5 w-3.5" />
