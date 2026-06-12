@@ -1,16 +1,16 @@
 # Graph Report - Satyam  (2026-06-12)
 
 ## Corpus Check
-- 172 files · ~58,936 words
+- 172 files · ~58,967 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1066 nodes · 1614 edges · 93 communities (74 shown, 19 thin omitted)
+- 1067 nodes · 1617 edges · 96 communities (76 shown, 20 thin omitted)
 - Extraction: 81% EXTRACTED · 19% INFERRED · 0% AMBIGUOUS · INFERRED: 310 edges (avg confidence: 0.55)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `aa2917f5`
+- Built from commit: `c260449c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -96,6 +96,9 @@
 - [[_COMMUNITY_Community 80|Community 80]]
 - [[_COMMUNITY_Community 81|Community 81]]
 - [[_COMMUNITY_Community 82|Community 82]]
+- [[_COMMUNITY_Community 93|Community 93]]
+- [[_COMMUNITY_Community 94|Community 94]]
+- [[_COMMUNITY_Community 95|Community 95]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `cn()` - 69 edges
@@ -124,11 +127,11 @@
 ## Import Cycles
 - 1-file cycle: `backend/app/main.py -> backend/app/main.py`
 
-## Communities (93 total, 19 thin omitted)
+## Communities (96 total, 20 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.06
-Nodes (49): _BhashiniBase, BhashiniSTT, BhashiniTranslator, BhashiniTTS, Bhashini (Govt. of India) clients — PRIMARY Indic layer (Kannada STT/TTS/MT).  T, BlockedByModel, GeminiLLM, Gemini 2.5 Flash client (primary chat / Text-to-SQL lane).  Notes baked in from (+41 more)
+Nodes (46): _BhashiniBase, BhashiniSTT, BhashiniTranslator, BhashiniTTS, Bhashini (Govt. of India) clients — PRIMARY Indic layer (Kannada STT/TTS/MT).  T, BlockedByModel, GeminiLLM, Gemini 2.5 Flash client (primary chat / Text-to-SQL lane).  Notes baked in from (+38 more)
 
 ### Community 1 - "Community 1"
 Cohesion: 0.09
@@ -151,16 +154,16 @@ Cohesion: 0.09
 Nodes (31): Any, AuditLog, AsyncSession, Principal, AsyncSession, Principal, _digest(), Tamper-evident, hash-chained audit log.  Each entry stores sha256(prev_hash + ca (+23 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.07
-Nodes (28): devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-prettier, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals (+20 more)
+Cohesion: 0.12
+Nodes (17): devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-prettier, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals (+9 more)
 
 ### Community 7 - "Community 7"
 Cohesion: 0.07
-Nodes (17): Badge(), BadgeProps, badgeVariants, Checkbox, HoverCardContent, PopoverContent, Progress, RadioGroup (+9 more)
+Nodes (17): Avatar, AvatarFallback, AvatarImage, Checkbox, HoverCardContent, PopoverContent, Progress, RadioGroup (+9 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.09
-Nodes (23): api, Route, Login(), Route, Route, Route, Route, AboutRoute (+15 more)
+Cohesion: 0.11
+Nodes (23): Route, Route, Route, Route, Route, getRouter(), AboutRoute, AuditRoute (+15 more)
 
 ### Community 9 - "Community 9"
 Cohesion: 0.10
@@ -171,8 +174,8 @@ Cohesion: 0.08
 Nodes (25): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+17 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.13
-Nodes (16): ApiError, authHeaders(), ChatEvent, getAuthToken(), request(), Role, SessionUser, streamChat() (+8 more)
+Cohesion: 0.23
+Nodes (9): streamChat(), consumeLastCapturedError(), renderErrorPage(), fetch(), getServerEntry(), normalizeCatastrophicSsrResponse(), ServerEntry, errorMiddleware (+1 more)
 
 ### Community 12 - "Community 12"
 Cohesion: 0.14
@@ -191,20 +194,20 @@ Cohesion: 0.12
 Nodes (11): configure_logging(), Structured logging setup., create_app(), lifespan(), FastAPI application factory for Satyam., FastAPI, Audit-log endpoint with hash-chain verification badge (admin-only)., Conversational endpoint: grounded answers streamed over SSE.  The response is a (+3 more)
 
 ### Community 16 - "Community 16"
-Cohesion: 0.12
-Nodes (10): DarkModeToggle(), ParsedVoice, SCREEN_ROUTES, VoiceScreen, Theme, ThemePicker(), THEMES, Audit() (+2 more)
+Cohesion: 0.29
+Nodes (3): Audit(), DEMO_ROWS, Route
 
 ### Community 17 - "Community 17"
 Cohesion: 0.11
 Nodes (18): aliases, components, hooks, lib, ui, utils, iconLibrary, registries (+10 more)
 
 ### Community 18 - "Community 18"
-Cohesion: 0.14
-Nodes (11): Account, AccountManager(), FetchState, Account, ProfileMenu(), RELOAD_STEPS, SEED_ACCOUNTS, SwitchPhase (+3 more)
+Cohesion: 0.09
+Nodes (18): Account, AccountManager(), FetchState, DarkModeToggle(), Account, ProfileMenu(), RELOAD_STEPS, SEED_ACCOUNTS (+10 more)
 
 ### Community 19 - "Community 19"
-Cohesion: 0.16
-Nodes (7): Footer(), GridBg(), Header(), NB(), PipelineStep, Route, Route
+Cohesion: 0.18
+Nodes (6): Footer(), GridBg(), Header(), NB(), PipelineStep, Route
 
 ### Community 20 - "Community 20"
 Cohesion: 0.12
@@ -311,16 +314,16 @@ Cohesion: 0.29
 Nodes (6): Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle
 
 ### Community 46 - "Community 46"
-Cohesion: 0.33
-Nodes (5): ToggleGroup, ToggleGroupContext, ToggleGroupItem, Toggle, toggleVariants
+Cohesion: 0.17
+Nodes (11): name, private, scripts, build, build:dev, dev, format, lint (+3 more)
 
 ### Community 47 - "Community 47"
 Cohesion: 0.40
 Nodes (5): AsyncSession, ego_network(), hotspots(), Geospatial + network analytics tools (RLS-scoped reads)., Build an ego network: person -> shared cases -> co-involved persons.
 
 ### Community 48 - "Community 48"
-Cohesion: 0.33
-Nodes (3): Item, Reports(), Route
+Cohesion: 0.11
+Nodes (13): api, ApiError, authHeaders(), ChatEvent, getAuthToken(), request(), Role, SessionUser (+5 more)
 
 ### Community 49 - "Community 49"
 Cohesion: 0.33
@@ -371,19 +374,27 @@ Cohesion: 0.50
 Nodes (3): AccordionContent, AccordionItem, AccordionTrigger
 
 ### Community 63 - "Community 63"
+Cohesion: 0.67
+Nodes (3): _keyword_intent(), Intent router. Uses the LLM with a JSON schema, with a cheap keyword fallback so, route()
+
+### Community 93 - "Community 93"
+Cohesion: 0.67
+Nodes (3): Badge(), BadgeProps, badgeVariants
+
+### Community 94 - "Community 94"
 Cohesion: 0.50
-Nodes (3): Avatar, AvatarFallback, AvatarImage
+Nodes (3): TabsContent, TabsList, TabsTrigger
 
 ## Knowledge Gaps
-- **408 isolated node(s):** `AsyncSession`, `AsyncEngine`, `async_sessionmaker`, `AsyncSession`, `$schema` (+403 more)
+- **408 isolated node(s):** `TranscriptsRoute`, `ReportsRoute`, `NetworkRoute`, `MapRoute`, `LandingRoute` (+403 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 3` to `Community 25`?**
-  _High betweenness centrality (0.104) - this node is a cross-community bridge._
+  _High betweenness centrality (0.108) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 1` to `Community 3`, `Community 37`, `Community 5`?**
   _High betweenness centrality (0.062) - this node is a cross-community bridge._
 - **Are the 41 inferred relationships involving `Principal` (e.g. with `Any` and `AsyncSession`) actually correct?**
@@ -392,7 +403,7 @@ _Questions this graph is uniquely positioned to answer:_
   _`Permission` has 24 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 20 inferred relationships involving `AccessDenied` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`AccessDenied` has 20 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Satyam backend — conversational AI for the KSP crime database.`, `FastAPI dependencies: authenticated principal + RLS-scoped DB session.  The scop`, `Decode the bearer JWT into a Principal. Raises 401 on any problem.` to the rest of the system?**
+- **What connects `TranscriptsRoute`, `ReportsRoute`, `NetworkRoute` to the rest of the system?**
   _476 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.056022408963585436 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06018518518518518 - nodes in this community are weakly interconnected._
