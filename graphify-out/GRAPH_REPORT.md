@@ -1,16 +1,16 @@
 # Graph Report - Satyam  (2026-06-15)
 
 ## Corpus Check
-- 182 files · ~73,200 words
+- 182 files · ~74,168 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1226 nodes · 1826 edges · 107 communities (86 shown, 21 thin omitted)
+- 1242 nodes · 1842 edges · 107 communities (86 shown, 21 thin omitted)
 - Extraction: 81% EXTRACTED · 19% INFERRED · 0% AMBIGUOUS · INFERRED: 343 edges (avg confidence: 0.55)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4021ae00`
+- Built from commit: `db3a6f53`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -147,15 +147,15 @@ Nodes (11): Sarvam AI clients — PRIMARY voice layer (Kannada + English STT/TTS
 
 ### Community 1 - "Community 1"
 Cohesion: 0.07
-Nodes (64): Any, AsyncSession, Principal, AsyncSession, Principal, AsyncSession, Principal, AsyncSession (+56 more)
+Nodes (66): Any, AsyncSession, Principal, AsyncSession, Principal, AsyncSession, Principal, AsyncSession (+58 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.03
 Nodes (59): dependencies, class-variance-authority, clsx, cmdk, date-fns, embla-carousel-react, @hookform/resolvers, i18next (+51 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.19
-Nodes (11): _BhashiniBase, BhashiniSTT, BhashiniTranslator, BhashiniTTS, Bhashini (Govt. of India) clients — PRIMARY Indic layer (Kannada STT/TTS/MT).  T, Embedder, faster-whisper / IndicConformer STT. DEMO stub., WhisperSTT (+3 more)
+Cohesion: 0.26
+Nodes (8): _BhashiniBase, BhashiniSTT, BhashiniTranslator, BhashiniTTS, Bhashini (Govt. of India) clients — PRIMARY Indic layer (Kannada STT/TTS/MT).  T, get_translator(), Sarvam Translate (primary) → Bhashini NMT (fallback)., Translator
 
 ### Community 4 - "Community 4"
 Cohesion: 0.05
@@ -163,19 +163,19 @@ Nodes (38): useIsMobile(), Input, Separator, SheetContent, SheetContentProps, Sh
 
 ### Community 5 - "Community 5"
 Cohesion: 0.07
-Nodes (27): AuditLog, AsyncSession, AsyncSession, Principal, _digest(), Tamper-evident, hash-chained audit log.  Each entry stores sha256(prev_hash + ca, verify_chain(), write_audit() (+19 more)
+Nodes (28): AuditLog, AsyncSession, AsyncSession, Principal, _digest(), Tamper-evident, hash-chained audit log.  Each entry stores sha256(prev_hash + ca, verify_chain(), write_audit() (+20 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.12
-Nodes (17): devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-prettier, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals (+9 more)
+Cohesion: 0.07
+Nodes (28): devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-prettier, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals (+20 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.08
-Nodes (14): AccordionContent, AccordionItem, AccordionTrigger, Checkbox, HoverCardContent, PopoverContent, Progress, RadioGroup (+6 more)
+Cohesion: 0.07
+Nodes (17): AccordionContent, AccordionItem, AccordionTrigger, Avatar, AvatarFallback, AvatarImage, Checkbox, HoverCardContent (+9 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.09
-Nodes (26): Route, Route, Route, Route, Route, Route, Transcript, Transcripts() (+18 more)
+Cohesion: 0.08
+Nodes (27): Route, Route, Route, Route, Route, Route, Route, Transcript (+19 more)
 
 ### Community 9 - "Community 9"
 Cohesion: 0.10
@@ -218,8 +218,8 @@ Cohesion: 0.09
 Nodes (18): Account, AccountManager(), FetchState, DarkModeToggle(), Account, ProfileMenu(), RELOAD_STEPS, SEED_ACCOUNTS (+10 more)
 
 ### Community 19 - "Community 19"
-Cohesion: 0.10
-Nodes (19): 10. Audit log (tamper-evident), 11. Caching / Redis, 12. Data loading strategy, 13. Configuration (`.env`), 14. Security notes, 15. Summary of decisions, 1. Overview, 2. Engine choice: PostgreSQL everywhere (not SQLite) (+11 more)
+Cohesion: 0.06
+Nodes (35): 10. Hybrid search (semantic + keyword), 11. Authentication, 12. Audit log (tamper-evident hash chain), 13. Data loading, 14. Configuration (`.env`), 15. Security notes, 16. Summary of decisions, 1. Overview (+27 more)
 
 ### Community 20 - "Community 20"
 Cohesion: 0.12
@@ -242,8 +242,8 @@ Cohesion: 0.14
 Nodes (12): Carousel, CarouselApi, CarouselContent, CarouselContext, CarouselContextProps, CarouselItem, CarouselNext, CarouselOptions (+4 more)
 
 ### Community 25 - "Community 25"
-Cohesion: 0.18
-Nodes (6): Footer(), GridBg(), Header(), NB(), PipelineStep, Route
+Cohesion: 0.19
+Nodes (5): Footer(), GridBg(), Header(), NB(), PipelineStep
 
 ### Community 26 - "Community 26"
 Cohesion: 0.17
@@ -298,8 +298,8 @@ Cohesion: 0.25
 Nodes (7): graphify reference: extra exports and benchmark, Step 6b - Wiki (only if --wiki flag), Step 7 - Neo4j export (only if --neo4j or --neo4j-push flag), Step 7b - SVG export (only if --svg flag), Step 7c - GraphML export (only if --graphml flag), Step 7d - MCP server (only if --mcp flag), Step 8 - Token reduction benchmark (only if total_words > 5000)
 
 ### Community 39 - "Community 39"
-Cohesion: 0.20
-Nodes (7): AsyncSession, BgeM3Embedder, BGE-M3 embedder (sole embedder for the whole system).  Model: BAAI/bge-m3 — ~568, get_embedder(), Narrative retrieval (RAG) over pgvector, with reranking.  Embeds the query with, search_narratives(), _to_pgvector()
+Cohesion: 0.24
+Nodes (5): Embedder, BgeM3Embedder, BGE-M3 embedder (sole embedder for the whole system).  Model: BAAI/bge-m3 — ~568, get_embedder(), Factory that resolves the configured backend to concrete model instances.  Cache
 
 ### Community 40 - "Community 40"
 Cohesion: 0.25
@@ -334,8 +334,8 @@ Cohesion: 0.40
 Nodes (5): AsyncSession, ego_network(), hotspots(), Geospatial + network analytics tools (RLS-scoped reads) — new schema., Ego network: person → shared cases → co-involved persons.
 
 ### Community 48 - "Community 48"
-Cohesion: 0.11
-Nodes (14): api, ApiError, authHeaders(), ChatEvent, getAuthToken(), request(), Role, SessionUser (+6 more)
+Cohesion: 0.16
+Nodes (11): api, ApiError, authHeaders(), ChatEvent, getAuthToken(), request(), Role, SessionUser (+3 more)
 
 ### Community 49 - "Community 49"
 Cohesion: 0.33
@@ -387,15 +387,15 @@ Nodes (13): get_principal(), get_scoped_session(), FastAPI dependencies: authent
 
 ### Community 63 - "Community 63"
 Cohesion: 0.09
-Nodes (21): AsyncSession, Principal, AsyncSession, Principal, ConversationState, DICT, PipelineEvent, Router-first orchestration.  Given a user message + RLS-scoped session + princip (+13 more)
+Nodes (20): AsyncSession, Principal, DICT, _compose(), PipelineEvent, Router-first orchestration.  Given a user message + RLS-scoped session + princip, Grounded answer composition with Groq fallback on primary failure., _rows_context() (+12 more)
 
 ### Community 67 - "Community 67"
 Cohesion: 0.05
 Nodes (41): 1. PostgreSQL status confirmed, [2026-06-15] — Architecture Doc Revision: Saaras v3, GPU specs for BGE-M3 + Reranker, Demo-track clarification, [2026-06-15] — Architecture Update: Multi-Engine Support (Sarvam, Ollama Cloud, BRAIN_ENGINE, SQL_ENGINE, VOICE_BACKEND), [2026-06-15] — Full DB Rebuild + KSP RBAC + 100k Dataset Loaded, [2026-06-15] — Gitignore Update: Ignore Synthetic Dataset CSVs, [2026-06-15] — Initial Setup, [2026-06-15] — Local Database Setup: PostgreSQL 17 + pgvector 0.8.2 + Full Schema, [2026-06-15] — Neon Cloud Database Connected (+33 more)
 
 ### Community 93 - "Community 93"
-Cohesion: 0.16
-Nodes (13): GroqLLM, OllamaCloudLLM, OpenAI-compatible Ollama Cloud endpoint for qwen3-coder-next., LLM, get_fallback_llm(), get_llm(), get_sql_llm(), Factory that resolves the configured backend to concrete model instances.  Cache (+5 more)
+Cohesion: 0.23
+Nodes (8): GroqLLM, OllamaCloudLLM, OpenAI-compatible Ollama Cloud endpoint for qwen3-coder-next., LLM, get_fallback_llm(), get_sql_llm(), Low-latency fallback lane (always Groq) used on timeout / 429 from primary., Return the Text-to-SQL LLM.      Resolution order:       1. Explicit `engine` ar
 
 ### Community 94 - "Community 94"
 Cohesion: 0.25
@@ -406,8 +406,8 @@ Cohesion: 0.36
 Nodes (6): main(), Load synthetic data into Postgres and compute narrative embeddings.  Usage:  pyt, _seed_engine(), _vec_literal(), generate(), Synthetic KSP-style crime data generator.  IMPORTANT (spec risk R4): this is SYN
 
 ### Community 96 - "Community 96"
-Cohesion: 0.40
-Nodes (4): BgeReranker, bge-reranker-v2-m3 (cross-encoder reranker for RAG).  Model: BAAI/bge-reranker-v, get_reranker(), Reranker
+Cohesion: 0.22
+Nodes (8): AsyncSession, BgeReranker, bge-reranker-v2-m3 (cross-encoder reranker for RAG).  Model: BAAI/bge-reranker-v, get_reranker(), Reranker, Narrative retrieval (RAG) over pgvector, with reranking.  Embeds the query with, search_narratives(), _to_pgvector()
 
 ### Community 97 - "Community 97"
 Cohesion: 0.40
@@ -418,8 +418,12 @@ Cohesion: 0.33
 Nodes (5): ParlerTTS, Indic-Parler-TTS. DEMO stub., get_tts(), Sarvam Bulbul v3 (primary) → Bhashini (fallback) → local Parler-TTS.      Resolu, TextToSpeech
 
 ### Community 99 - "Community 99"
-Cohesion: 0.17
-Nodes (11): name, private, scripts, build, build:dev, dev, format, lint (+3 more)
+Cohesion: 0.33
+Nodes (3): Item, Reports(), Route
+
+### Community 100 - "Community 100"
+Cohesion: 0.33
+Nodes (4): LocalLLM, Local LLM via an OpenAI-compatible server (vLLM / Ollama). DEMO stub.  Point OPE, get_llm(), Return the brain LLM.      Resolution order:       1. Explicit `engine` arg (per
 
 ### Community 101 - "Community 101"
 Cohesion: 0.39
@@ -433,16 +437,12 @@ Nodes (3): Audit(), DEMO_ROWS, Route
 Cohesion: 0.43
 Nodes (6): get_url(), load_embedder(), main(), Satyam — BGE-M3 narrative embedding job.  Fills narratives.embedding (vector(1, Load BGE-M3.  Falls back to the deterministic demo stub if not installed., vec_literal()
 
-### Community 105 - "Community 105"
-Cohesion: 0.50
-Nodes (3): Avatar, AvatarFallback, AvatarImage
-
 ### Community 106 - "Community 106"
 Cohesion: 0.50
 Nodes (3): TabsContent, TabsList, TabsTrigger
 
 ## Knowledge Gaps
-- **474 isolated node(s):** `AsyncSession`, `AsyncSession`, `Connection`, `[2026-06-15] — Initial Setup`, `Summary` (+469 more)
+- **487 isolated node(s):** `1. Overview`, `2. Engine choice: PostgreSQL everywhere`, `3.1 Current state (already done)`, `3.2 Free-tier limits to respect`, `3.3 Altering the embedding column for Neon (halfvec)` (+482 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -450,16 +450,16 @@ Nodes (3): TabsContent, TabsList, TabsTrigger
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 63` to `Community 35`?**
-  _High betweenness centrality (0.102) - this node is a cross-community bridge._
+  _High betweenness centrality (0.100) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 1` to `Community 52`, `Community 5`, `Community 62`, `Community 63`?**
-  _High betweenness centrality (0.051) - this node is a cross-community bridge._
+  _High betweenness centrality (0.064) - this node is a cross-community bridge._
 - **Are the 41 inferred relationships involving `Principal` (e.g. with `Any` and `AsyncSession`) actually correct?**
   _`Principal` has 41 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 24 inferred relationships involving `Permission` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Permission` has 24 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 20 inferred relationships involving `AccessDenied` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`AccessDenied` has 20 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `FastAPI dependencies: authenticated principal + RLS-scoped DB session.  The JWT`, `Decode the bearer JWT into a Principal. Raises 401 on any problem.`, `Yield a transaction-scoped session stamped with the caller's RLS context.` to the rest of the system?**
-  _560 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `1. Overview`, `2. Engine choice: PostgreSQL everywhere`, `3.1 Current state (already done)` to the rest of the system?**
+  _573 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.06626706626706627 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0658876987990912 - nodes in this community are weakly interconnected._
