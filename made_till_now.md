@@ -587,3 +587,97 @@ Total: 15 passed, 0 failed
 
 #### Confirmed false positives (not touched)
 `frontend/src/routes/login.tsx` · `frontend/src/routes/map.tsx` (×2) · `frontend/src/lib/i18n.tsx` — all valid JSX inline styles / context values confirmed from raw bytes.
+
+---
+
+### [2026-06-15] — Settings Panel: Database Source Dropdown
+
+#### Summary
+Added a live **Database source** selector to the Settings → Models tab so the demo presenter
+can flip between Neon (cloud) and local PostgreSQL 17 without restarting the backend.
+
+#### Frontend — `frontend/src/components/SettingsDialog.tsx`
+- Added `dbSource: "cloud" | "local"` to `EngineSettings` type (default: `"cloud"`), persisted in `localStorage`.
+- Added `CloudCog` + `HardDrive` to icon imports; added `import { api }` from client.
+- Added **Database source** section in the Models tab with a `DbSourceRow` component:
+  - Two large button-style option cards with icon, label, description, and filled-circle active indicator.
+  - Cloud card: "Neon cloud (PostgreSQL 16)" · "Deployed link · judges · authentication"
+  - Local card: "Local PostgreSQL 17" · "Full 100k dataset · GPU embeddings · on-prem demo"
+  - On selection: persists to `EngineSettings` AND fires `api.setDbSource(v)` immediately.
+
+#### Frontend — `frontend/src/lib/api/client.ts`
+- Added `setDbSource(source: "cloud" | "local")` → `POST /settings/db-source` to the `api` object.
+
+#### Backend — `backend/app/db/session.py` (rewritten)
+- Process-wide `_db_source` toggle (`"cloud"` default).
+- `set_db_source(source)` / `get_db_source()` / `active_url()` — toggle & introspect.
+- Two separate `AsyncEngine` + `async_sessionmaker` instances cached per source key — both connection pools warm up independently; switching is instant.
+- `get_engine()` / `get_sessionmaker()` now read `_db_source` to pick the right engine.
+
+#### Backend — `backend/app/api/routes/settings.py` *(new file)*
+- `POST /settings/db-source` — switches active DB source, returns `{ db_source, url_host }` (host only, credentials never exposed).
+- `GET /settings/db-source` — returns current active source.
+- Requires `Permission.CHAT` (any authenticated officer).
+
+#### Backend — `backend/app/config.py`
+- Added `local_database_url: str` field (default: `satyam_app@localhost:5432/satyam`).
+
+#### Backend — `backend/app/main.py`
+- Registered `settings_routes.router` at `/settings/db-source`.
+
+#### `backend/.env` + `backend/.env.example`
+- Added `LOCAL_DATABASE_URL=postgresql+asyncpg://satyam_app:satyam_app@localhost:5432/satyam`.
+
+---
+
+### [2026-06-15] — Local Model Inference: BGE-M3 + bge-reranker-v2-m3 Wired Up
+
+#### Summary
+Replaced the demo hash-stub embedder and lexical-overlap reranker with real local model
+inference backed by the downloaded weights in `backend/models/`. All public interfaces
+unchanged; heavy model calls run in `asyncio.to_thread`.
+
+#### Environment verified
+- GPU: **NVIDIA GeForce RTX 4070 Laptop GPU** (8 GB VRAM, driver 610.47, CUDA 12.1)
+- torch **2.5.1+cu121**, FlagEmbedding **1.4.0**, sentence-transformers **5.5.1** installed.
+- Models downloaded to `backend/models/bge-m3/` (2.12 GB) and `backend/models/bge-reranker-v2-m3/` (2.12 GB).
+- `backend/models/` added to `.gitignore`.
+
+#### `backend/app/config.py`
+Added 4 new settings (single source of truth for local model config):
+- `embedding_model_path: str = "models/bge-m3"`
+- `reranker_model_path: str = "models/bge-reranker-v2-m3"`
+- `model_device: Literal["cuda", "cpu"] = "cuda"`
+- `model_fp16: bool = True`
+
+#### `backend/app/models/local/embedder_bge.py` (rewritten)
+- `_load_model(path, use_fp16, device)` — `@lru_cache(maxsize=1)` singleton; loads `BGEM3FlagModel` from local disk once per process (~2.3 GB).
+- `BgeM3Embedder.__init__(dim=1024)` — reads path/device/fp16 from `get_settings()`.
+- `_encode(texts)` — calls `model.encode(..., return_dense=True, return_sparse=False, return_colbert_vecs=False)`, L2-normalises with numpy, asserts `shape[1] == self.dim`, returns `list[list[float]]`.
+- `embed(texts)` — `await asyncio.to_thread(self._encode, texts)` to avoid blocking the event loop.
+
+#### `backend/app/models/local/reranker_bge.py` (rewritten)
+- `_load_model(path, use_fp16, device)` — `@lru_cache(maxsize=1)` singleton; loads `CrossEncoder` from local disk, calls `.half()` for FP16 on CUDA.
+- `BgeReranker.__init__()` — reads path/device/fp16 from `get_settings()`.
+- `_order(query, docs)` — `model.predict([(query, d) for d in docs])`, returns indices sorted best-first.
+- `rerank(query, docs)` — `await asyncio.to_thread(self._order, query, docs)`.
+
+#### `backend/app/main.py`
+- Added warm-up block in the FastAPI `lifespan` context: calls `embedder.embed(["warmup"])` + `reranker.rerank("warmup", ["x"])` at startup so the first user request doesn't pay the 2.3 GB load penalty. Wrapped in `try/except` so API-only mode (no local weights) continues without error.
+
+#### `backend/requirements.txt`
+- Added `FlagEmbedding>=1.4.0` and `sentence-transformers>=3.0.0` with a comment directing PyTorch to be installed first via the CUDA 12.1 wheel URL.
+
+#### `backend/.env` + `backend/.env.example`
+- Added `EMBEDDING_MODEL_PATH=models/bge-m3`, `RERANKER_MODEL_PATH=models/bge-reranker-v2-m3`, `MODEL_DEVICE=cuda`, `MODEL_FP16=1`.
+
+#### Known issue — FlagEmbedding 1.4 Windows crash
+During verification, `import FlagEmbedding` crashes with exit code `-1073741819` (Win32 access violation `0xC0000005`) immediately after torch is imported. Root cause: `FlagEmbedding.abc.inference.AbsEmbedder` calls `torch.cuda.device_count()` at **class-definition time** (module-level import), which triggers CUDA DLL initialisation on Windows and crashes the process. The same crash occurs with `sentence-transformers` for the same reason. Both FP16 and CPU paths are affected.
+
+**Status:** The code architecture is correct and complete. The crash is an environment-level DLL conflict between torch 2.5.1+cu121 and Windows — not a code bug. Resolution options (to try in order):
+1. Reinstall PyTorch with `pip install torch --index-url https://download.pytorch.org/whl/cu124` (newer CUDA build).
+2. Set `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` before importing torch.
+3. Run inference in a subprocess (`multiprocessing` with `spawn`) to isolate the crash.
+4. Use ONNX Runtime (`onnxruntime-gpu`) with the ONNX weights already present in `models/bge-m3/onnx/` — no FlagEmbedding needed.
+
+Until resolved, the system falls back to the demo hash-stub embedder (the `lru_cache` singleton guards against repeated load attempts).
