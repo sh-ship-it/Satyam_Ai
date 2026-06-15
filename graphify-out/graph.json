@@ -4,936 +4,6 @@
   "graph": {},
   "nodes": [
     {
-      "label": "chat.py",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/chat.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "routes_chat",
-      "community": 15,
-      "norm_label": "chat.py"
-    },
-    {
-      "label": "chat_stream()",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/chat.py",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "routes_chat_chat_stream",
-      "community": 1,
-      "norm_label": "chat_stream()"
-    },
-    {
-      "label": "ChatRequest",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/chat.py",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "chatrequest",
-      "community": 1,
-      "norm_label": "chatrequest"
-    },
-    {
-      "label": "AsyncSession",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/chat.py",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "backend_app_api_routes_chat_py_asyncsession",
-      "community": 1,
-      "norm_label": "asyncsession"
-    },
-    {
-      "label": "Principal",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/chat.py",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "backend_app_api_routes_chat_py_principal",
-      "community": 1,
-      "norm_label": "principal"
-    },
-    {
-      "label": "StreamingResponse",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/chat.py",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "streamingresponse",
-      "community": 1,
-      "norm_label": "streamingresponse"
-    },
-    {
-      "label": "Conversational endpoint: grounded answers streamed over SSE.  The response is a",
-      "file_type": "rationale",
-      "source_file": "backend/app/api/routes/chat.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "routes_chat_rationale_1",
-      "community": 15,
-      "norm_label": "conversational endpoint: grounded answers streamed over sse.  the response is a"
-    },
-    {
-      "label": "config.py",
-      "file_type": "code",
-      "source_file": "backend/app/config.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_config",
-      "community": 44,
-      "norm_label": "config.py"
-    },
-    {
-      "label": "Settings",
-      "file_type": "code",
-      "source_file": "backend/app/config.py",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "app_config_settings",
-      "community": 44,
-      "norm_label": "settings"
-    },
-    {
-      "label": "BaseSettings",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "basesettings",
-      "community": 44,
-      "norm_label": "basesettings"
-    },
-    {
-      "label": ".cors_origin_list()",
-      "file_type": "code",
-      "source_file": "backend/app/config.py",
-      "source_location": "L71",
-      "_origin": "ast",
-      "id": "app_config_settings_cors_origin_list",
-      "community": 44,
-      "norm_label": ".cors_origin_list()"
-    },
-    {
-      "label": ".demo_mode()",
-      "file_type": "code",
-      "source_file": "backend/app/config.py",
-      "source_location": "L75",
-      "_origin": "ast",
-      "id": "app_config_settings_demo_mode",
-      "community": 44,
-      "norm_label": ".demo_mode()"
-    },
-    {
-      "label": "get_settings()",
-      "file_type": "code",
-      "source_file": "backend/app/config.py",
-      "source_location": "L83",
-      "_origin": "ast",
-      "id": "app_config_get_settings",
-      "community": 44,
-      "norm_label": "get_settings()"
-    },
-    {
-      "label": "Application settings, loaded from environment / .env.",
-      "file_type": "rationale",
-      "source_file": "backend/app/config.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_config_rationale_1",
-      "community": 44,
-      "norm_label": "application settings, loaded from environment / .env."
-    },
-    {
-      "label": "No external model keys => run with deterministic stubs + fixtures.",
-      "file_type": "rationale",
-      "source_file": "backend/app/config.py",
-      "source_location": "L76",
-      "_origin": "ast",
-      "id": "app_config_rationale_76",
-      "community": 44,
-      "norm_label": "no external model keys => run with deterministic stubs + fixtures."
-    },
-    {
-      "label": "__init__.py",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/__init__.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "api_init",
-      "community": 69,
-      "norm_label": "__init__.py"
-    },
-    {
-      "label": "Hosted model clients (api lane).  Available adapters:   gemini       \u2014 GeminiLLM",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/__init__.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "api_init_rationale_1",
-      "community": 69,
-      "norm_label": "hosted model clients (api lane).  available adapters:   gemini       \u2014 geminillm"
-    },
-    {
-      "label": "ollama_cloud.py",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/ollama_cloud.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "api_ollama_cloud",
-      "community": 44,
-      "norm_label": "ollama_cloud.py"
-    },
-    {
-      "label": "OllamaCloudLLM",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/ollama_cloud.py",
-      "source_location": "L22",
-      "_origin": "ast",
-      "id": "api_ollama_cloud_ollamacloudllm",
-      "community": 44,
-      "norm_label": "ollamacloudllm"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/ollama_cloud.py",
-      "source_location": "L25",
-      "_origin": "ast",
-      "id": "api_ollama_cloud_ollamacloudllm_init",
-      "community": 44,
-      "norm_label": ".__init__()"
-    },
-    {
-      "label": ".complete()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/ollama_cloud.py",
-      "source_location": "L33",
-      "_origin": "ast",
-      "id": "api_ollama_cloud_ollamacloudllm_complete",
-      "community": 44,
-      "norm_label": ".complete()"
-    },
-    {
-      "label": ".stream()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/ollama_cloud.py",
-      "source_location": "L70",
-      "_origin": "ast",
-      "id": "api_ollama_cloud_ollamacloudllm_stream",
-      "community": 44,
-      "norm_label": ".stream()"
-    },
-    {
-      "label": "Ollama Cloud client \u2014 qwen3-coder-next Text-to-SQL option.  Model: qwen3-coder",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/ollama_cloud.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "api_ollama_cloud_rationale_1",
-      "community": 44,
-      "norm_label": "ollama cloud client \u2014 qwen3-coder-next text-to-sql option.  model: qwen3-coder"
-    },
-    {
-      "label": "OpenAI-compatible Ollama Cloud endpoint for qwen3-coder-next.",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/ollama_cloud.py",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "api_ollama_cloud_rationale_23",
-      "community": 44,
-      "norm_label": "openai-compatible ollama cloud endpoint for qwen3-coder-next."
-    },
-    {
-      "label": "sarvam.py",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "api_sarvam",
-      "community": 3,
-      "norm_label": "sarvam.py"
-    },
-    {
-      "label": "_SarvamBase",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L25",
-      "_origin": "ast",
-      "id": "api_sarvam_sarvambase",
-      "community": 3,
-      "norm_label": "_sarvambase"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L26",
-      "_origin": "ast",
-      "id": "api_sarvam_sarvambase_init",
-      "community": 3,
-      "norm_label": ".__init__()"
-    },
-    {
-      "label": "._auth()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "api_sarvam_sarvambase_auth",
-      "community": 3,
-      "norm_label": "._auth()"
-    },
-    {
-      "label": "SarvamSTT",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L35",
-      "_origin": "ast",
-      "id": "api_sarvam_sarvamstt",
-      "community": 0,
-      "norm_label": "sarvamstt"
-    },
-    {
-      "label": ".transcribe()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L38",
-      "_origin": "ast",
-      "id": "api_sarvam_sarvamstt_transcribe",
-      "community": 3,
-      "norm_label": ".transcribe()"
-    },
-    {
-      "label": "SarvamTTS",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L57",
-      "_origin": "ast",
-      "id": "api_sarvam_sarvamtts",
-      "community": 62,
-      "norm_label": "sarvamtts"
-    },
-    {
-      "label": ".synthesize()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L60",
-      "_origin": "ast",
-      "id": "api_sarvam_sarvamtts_synthesize",
-      "community": 3,
-      "norm_label": ".synthesize()"
-    },
-    {
-      "label": "SarvamTranslator",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L81",
-      "_origin": "ast",
-      "id": "api_sarvam_sarvamtranslator",
-      "community": 3,
-      "norm_label": "sarvamtranslator"
-    },
-    {
-      "label": ".translate()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L84",
-      "_origin": "ast",
-      "id": "api_sarvam_sarvamtranslator_translate",
-      "community": 3,
-      "norm_label": ".translate()"
-    },
-    {
-      "label": "Sarvam AI clients \u2014 PRIMARY voice layer (Kannada + English STT/TTS/MT).  Servi",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "api_sarvam_rationale_1",
-      "community": 3,
-      "norm_label": "sarvam ai clients \u2014 primary voice layer (kannada + english stt/tts/mt).  servi"
-    },
-    {
-      "label": "Sarvam Saaras v2 \u2014 speech-to-text for Kannada (kn-IN) and English (en-IN).",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L36",
-      "_origin": "ast",
-      "id": "api_sarvam_rationale_36",
-      "community": 0,
-      "norm_label": "sarvam saaras v2 \u2014 speech-to-text for kannada (kn-in) and english (en-in)."
-    },
-    {
-      "label": "Sarvam Bulbul v3 \u2014 text-to-speech for Kannada and English.",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L58",
-      "_origin": "ast",
-      "id": "api_sarvam_rationale_58",
-      "community": 62,
-      "norm_label": "sarvam bulbul v3 \u2014 text-to-speech for kannada and english."
-    },
-    {
-      "label": "Sarvam Translate \u2014 neural MT between Kannada and English.",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L82",
-      "_origin": "ast",
-      "id": "api_sarvam_rationale_82",
-      "community": 3,
-      "norm_label": "sarvam translate \u2014 neural mt between kannada and english."
-    },
-    {
-      "label": "registry.py",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "models_registry",
-      "community": 39,
-      "norm_label": "registry.py"
-    },
-    {
-      "label": "get_llm()",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L29",
-      "_origin": "ast",
-      "id": "models_registry_get_llm",
-      "community": 36,
-      "norm_label": "get_llm()"
-    },
-    {
-      "label": "LLM",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L29",
-      "_origin": "ast",
-      "id": "llm",
-      "community": 26,
-      "norm_label": "llm"
-    },
-    {
-      "label": "get_fallback_llm()",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L52",
-      "_origin": "ast",
-      "id": "models_registry_get_fallback_llm",
-      "community": 26,
-      "norm_label": "get_fallback_llm()"
-    },
-    {
-      "label": "get_sql_llm()",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L61",
-      "_origin": "ast",
-      "id": "models_registry_get_sql_llm",
-      "community": 44,
-      "norm_label": "get_sql_llm()"
-    },
-    {
-      "label": "get_embedder()",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L88",
-      "_origin": "ast",
-      "id": "models_registry_get_embedder",
-      "community": 39,
-      "norm_label": "get_embedder()"
-    },
-    {
-      "label": "Embedder",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L88",
-      "_origin": "ast",
-      "id": "embedder",
-      "community": 0,
-      "norm_label": "embedder"
-    },
-    {
-      "label": "get_reranker()",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L96",
-      "_origin": "ast",
-      "id": "models_registry_get_reranker",
-      "community": 39,
-      "norm_label": "get_reranker()"
-    },
-    {
-      "label": "Reranker",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L96",
-      "_origin": "ast",
-      "id": "reranker",
-      "community": 62,
-      "norm_label": "reranker"
-    },
-    {
-      "label": "get_stt()",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L104",
-      "_origin": "ast",
-      "id": "models_registry_get_stt",
-      "community": 0,
-      "norm_label": "get_stt()"
-    },
-    {
-      "label": "SpeechToText",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L104",
-      "_origin": "ast",
-      "id": "speechtotext",
-      "community": 0,
-      "norm_label": "speechtotext"
-    },
-    {
-      "label": "get_tts()",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L127",
-      "_origin": "ast",
-      "id": "models_registry_get_tts",
-      "community": 62,
-      "norm_label": "get_tts()"
-    },
-    {
-      "label": "TextToSpeech",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L127",
-      "_origin": "ast",
-      "id": "texttospeech",
-      "community": 62,
-      "norm_label": "texttospeech"
-    },
-    {
-      "label": "get_translator()",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L146",
-      "_origin": "ast",
-      "id": "models_registry_get_translator",
-      "community": 3,
-      "norm_label": "get_translator()"
-    },
-    {
-      "label": "Translator",
-      "file_type": "code",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L146",
-      "_origin": "ast",
-      "id": "translator",
-      "community": 3,
-      "norm_label": "translator"
-    },
-    {
-      "label": "Factory that resolves the configured backend to concrete model instances.  Cache",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "models_registry_rationale_1",
-      "community": 39,
-      "norm_label": "factory that resolves the configured backend to concrete model instances.  cache"
-    },
-    {
-      "label": "Return the brain LLM.      Resolution order:       1. Explicit `engine` arg (per",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L30",
-      "_origin": "ast",
-      "id": "models_registry_rationale_30",
-      "community": 36,
-      "norm_label": "return the brain llm.      resolution order:       1. explicit `engine` arg (per"
-    },
-    {
-      "label": "Low-latency fallback lane (always Groq) used on timeout / 429 from primary.",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L53",
-      "_origin": "ast",
-      "id": "models_registry_rationale_53",
-      "community": 26,
-      "norm_label": "low-latency fallback lane (always groq) used on timeout / 429 from primary."
-    },
-    {
-      "label": "Return the Text-to-SQL LLM.      Resolution order:       1. Explicit `engine` ar",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L62",
-      "_origin": "ast",
-      "id": "models_registry_rationale_62",
-      "community": 44,
-      "norm_label": "return the text-to-sql llm.      resolution order:       1. explicit `engine` ar"
-    },
-    {
-      "label": "Sarvam (primary) \u2192 Bhashini (fallback) \u2192 local Whisper.      Resolution order:",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L105",
-      "_origin": "ast",
-      "id": "models_registry_rationale_105",
-      "community": 0,
-      "norm_label": "sarvam (primary) \u2192 bhashini (fallback) \u2192 local whisper.      resolution order:"
-    },
-    {
-      "label": "Sarvam Bulbul v3 (primary) \u2192 Bhashini (fallback) \u2192 local Parler-TTS.      Resolu",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L128",
-      "_origin": "ast",
-      "id": "models_registry_rationale_128",
-      "community": 62,
-      "norm_label": "sarvam bulbul v3 (primary) \u2192 bhashini (fallback) \u2192 local parler-tts.      resolu"
-    },
-    {
-      "label": "Sarvam Translate (primary) \u2192 Bhashini NMT (fallback).",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L147",
-      "_origin": "ast",
-      "id": "models_registry_rationale_147",
-      "community": 3,
-      "norm_label": "sarvam translate (primary) \u2192 bhashini nmt (fallback)."
-    },
-    {
-      "label": "orchestrator.py",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/orchestrator.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "pipeline_orchestrator",
-      "community": 1,
-      "norm_label": "orchestrator.py"
-    },
-    {
-      "label": "PipelineEvent",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/orchestrator.py",
-      "source_location": "L29",
-      "_origin": "ast",
-      "id": "pipeline_orchestrator_pipelineevent",
-      "community": 1,
-      "norm_label": "pipelineevent"
-    },
-    {
-      "label": ".sse()",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/orchestrator.py",
-      "source_location": "L33",
-      "_origin": "ast",
-      "id": "pipeline_orchestrator_pipelineevent_sse",
-      "community": 1,
-      "norm_label": ".sse()"
-    },
-    {
-      "label": "_rows_context()",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/orchestrator.py",
-      "source_location": "L37",
-      "_origin": "ast",
-      "id": "pipeline_orchestrator_rows_context",
-      "community": 1,
-      "norm_label": "_rows_context()"
-    },
-    {
-      "label": "_compose()",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/orchestrator.py",
-      "source_location": "L41",
-      "_origin": "ast",
-      "id": "pipeline_orchestrator_compose",
-      "community": 36,
-      "norm_label": "_compose()"
-    },
-    {
-      "label": "run()",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/orchestrator.py",
-      "source_location": "L68",
-      "_origin": "ast",
-      "id": "pipeline_orchestrator_run",
-      "community": 1,
-      "norm_label": "run()"
-    },
-    {
-      "label": "Principal",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/orchestrator.py",
-      "source_location": "L68",
-      "_origin": "ast",
-      "id": "backend_app_pipeline_orchestrator_py_principal",
-      "community": 1,
-      "norm_label": "principal"
-    },
-    {
-      "label": "AsyncSession",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/orchestrator.py",
-      "source_location": "L68",
-      "_origin": "ast",
-      "id": "backend_app_pipeline_orchestrator_py_asyncsession",
-      "community": 1,
-      "norm_label": "asyncsession"
-    },
-    {
-      "label": "ConversationState",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/orchestrator.py",
-      "source_location": "L68",
-      "_origin": "ast",
-      "id": "conversationstate",
-      "community": 1,
-      "norm_label": "conversationstate"
-    },
-    {
-      "label": "Router-first orchestration.  Given a user message + RLS-scoped session + princip",
-      "file_type": "rationale",
-      "source_file": "backend/app/pipeline/orchestrator.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "pipeline_orchestrator_rationale_1",
-      "community": 1,
-      "norm_label": "router-first orchestration.  given a user message + rls-scoped session + princip"
-    },
-    {
-      "label": "Grounded answer composition with Groq fallback on primary failure.",
-      "file_type": "rationale",
-      "source_file": "backend/app/pipeline/orchestrator.py",
-      "source_location": "L47",
-      "_origin": "ast",
-      "id": "pipeline_orchestrator_rationale_47",
-      "community": 36,
-      "norm_label": "grounded answer composition with groq fallback on primary failure."
-    },
-    {
-      "label": "router.py",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/router.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "pipeline_router",
-      "community": 63,
-      "norm_label": "router.py"
-    },
-    {
-      "label": "_keyword_intent()",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/router.py",
-      "source_location": "L20",
-      "_origin": "ast",
-      "id": "pipeline_router_keyword_intent",
-      "community": 63,
-      "norm_label": "_keyword_intent()"
-    },
-    {
-      "label": "route()",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/router.py",
-      "source_location": "L30",
-      "_origin": "ast",
-      "id": "pipeline_router_route",
-      "community": 63,
-      "norm_label": "route()"
-    },
-    {
-      "label": "Intent router. Uses the LLM with a JSON schema, with a cheap keyword fallback so",
-      "file_type": "rationale",
-      "source_file": "backend/app/pipeline/router.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "pipeline_router_rationale_1",
-      "community": 63,
-      "norm_label": "intent router. uses the llm with a json schema, with a cheap keyword fallback so"
-    },
-    {
-      "label": "text_to_sql.py",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "tools_text_to_sql",
-      "community": 16,
-      "norm_label": "text_to_sql.py"
-    },
-    {
-      "label": "generate_sql()",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
-      "source_location": "L15",
-      "_origin": "ast",
-      "id": "tools_text_to_sql_generate_sql",
-      "community": 16,
-      "norm_label": "generate_sql()"
-    },
-    {
-      "label": "run_sql()",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "tools_text_to_sql_run_sql",
-      "community": 16,
-      "norm_label": "run_sql()"
-    },
-    {
-      "label": "AsyncSession",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "backend_app_pipeline_tools_text_to_sql_py_asyncsession",
-      "community": 16,
-      "norm_label": "asyncsession"
-    },
-    {
-      "label": "answer_with_sql()",
-      "file_type": "code",
-      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
-      "source_location": "L37",
-      "_origin": "ast",
-      "id": "tools_text_to_sql_answer_with_sql",
-      "community": 16,
-      "norm_label": "answer_with_sql()"
-    },
-    {
-      "label": "NL -> guarded SQL -> rows. Runs inside the caller's RLS-scoped session.",
-      "file_type": "rationale",
-      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "tools_text_to_sql_rationale_1",
-      "community": 16,
-      "norm_label": "nl -> guarded sql -> rows. runs inside the caller's rls-scoped session."
-    },
-    {
-      "label": "Return (safe_sql, rows). Raises UnsafeSQL if the model produced bad SQL.",
-      "file_type": "rationale",
-      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
-      "source_location": "L44",
-      "_origin": "ast",
-      "id": "tools_text_to_sql_rationale_44",
-      "community": 16,
-      "norm_label": "return (safe_sql, rows). raises unsafesql if the model produced bad sql."
-    },
-    {
-      "label": "chat.py",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/chat.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "schemas_chat",
-      "community": 12,
-      "norm_label": "chat.py"
-    },
-    {
-      "label": "ChatRequest",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/chat.py",
-      "source_location": "L8",
-      "_origin": "ast",
-      "id": "schemas_chat_chatrequest",
-      "community": 12,
-      "norm_label": "chatrequest"
-    },
-    {
-      "label": "BaseModel",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "basemodel",
-      "community": 12,
-      "norm_label": "basemodel"
-    },
-    {
-      "label": "Citation",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/chat.py",
-      "source_location": "L21",
-      "_origin": "ast",
-      "id": "schemas_chat_citation",
-      "community": 12,
-      "norm_label": "citation"
-    },
-    {
-      "label": "ChatResponse",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/chat.py",
-      "source_location": "L26",
-      "_origin": "ast",
-      "id": "schemas_chat_chatresponse",
-      "community": 12,
-      "norm_label": "chatresponse"
-    },
-    {
-      "label": "chat_service.py",
-      "file_type": "code",
-      "source_file": "backend/app/services/chat_service.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "services_chat_service",
-      "community": 1,
-      "norm_label": "chat_service.py"
-    },
-    {
-      "label": "stream_chat()",
-      "file_type": "code",
-      "source_file": "backend/app/services/chat_service.py",
-      "source_location": "L16",
-      "_origin": "ast",
-      "id": "services_chat_service_stream_chat",
-      "community": 1,
-      "norm_label": "stream_chat()"
-    },
-    {
-      "label": "Principal",
-      "file_type": "code",
-      "source_file": "backend/app/services/chat_service.py",
-      "source_location": "L16",
-      "_origin": "ast",
-      "id": "backend_app_services_chat_service_py_principal",
-      "community": 1,
-      "norm_label": "principal"
-    },
-    {
-      "label": "AsyncSession",
-      "file_type": "code",
-      "source_file": "backend/app/services/chat_service.py",
-      "source_location": "L16",
-      "_origin": "ast",
-      "id": "backend_app_services_chat_service_py_asyncsession",
-      "community": 1,
-      "norm_label": "asyncsession"
-    },
-    {
-      "label": "PipelineEvent",
-      "file_type": "code",
-      "source_file": "backend/app/services/chat_service.py",
-      "source_location": "L16",
-      "_origin": "ast",
-      "id": "pipelineevent",
-      "community": 1,
-      "norm_label": "pipelineevent"
-    },
-    {
-      "label": "Chat service: bridges the API to the orchestrator + conversation store + audit.",
-      "file_type": "rationale",
-      "source_file": "backend/app/services/chat_service.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "services_chat_service_rationale_1",
-      "community": 1,
-      "norm_label": "chat service: bridges the api to the orchestrator + conversation store + audit."
-    },
-    {
       "label": "SettingsDialog.tsx",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
@@ -1007,7 +77,7 @@
       "label": "Section()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L280",
+      "source_location": "L282",
       "_origin": "ast",
       "id": "components_settingsdialog_section",
       "community": 27,
@@ -1017,7 +87,7 @@
       "label": "Field()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L292",
+      "source_location": "L294",
       "_origin": "ast",
       "id": "components_settingsdialog_field",
       "community": 27,
@@ -1027,7 +97,7 @@
       "label": "Row()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L308",
+      "source_location": "L310",
       "_origin": "ast",
       "id": "components_settingsdialog_row",
       "community": 27,
@@ -1037,7 +107,7 @@
       "label": "Select()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L317",
+      "source_location": "L319",
       "_origin": "ast",
       "id": "components_settingsdialog_select",
       "community": 27,
@@ -1047,7 +117,7 @@
       "label": "Pill()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L325",
+      "source_location": "L327",
       "_origin": "ast",
       "id": "components_settingsdialog_pill",
       "community": 27,
@@ -1057,7 +127,7 @@
       "label": "Toggle()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L338",
+      "source_location": "L340",
       "_origin": "ast",
       "id": "components_settingsdialog_toggle",
       "community": 27,
@@ -1067,7 +137,7 @@
       "label": "Status",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L359",
+      "source_location": "L361",
       "_origin": "ast",
       "id": "components_settingsdialog_status",
       "community": 27,
@@ -1077,7 +147,7 @@
       "label": "ModelToggle()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L361",
+      "source_location": "L363",
       "_origin": "ast",
       "id": "components_settingsdialog_modeltoggle",
       "community": 27,
@@ -1087,7 +157,7 @@
       "label": "formatRemaining()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L391",
+      "source_location": "L393",
       "_origin": "ast",
       "id": "components_settingsdialog_formatremaining",
       "community": 27,
@@ -1097,11 +167,941 @@
       "label": "DataActions()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L401",
+      "source_location": "L403",
       "_origin": "ast",
       "id": "components_settingsdialog_dataactions",
       "community": 27,
       "norm_label": "dataactions()"
+    },
+    {
+      "label": "chat.py",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/chat.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 15,
+      "norm_label": "chat.py",
+      "id": "routes_chat"
+    },
+    {
+      "label": "chat_stream()",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/chat.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "chat_stream()",
+      "id": "routes_chat_chat_stream"
+    },
+    {
+      "label": "ChatRequest",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/chat.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "chatrequest",
+      "id": "chatrequest"
+    },
+    {
+      "label": "AsyncSession",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/chat.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "asyncsession",
+      "id": "backend_app_api_routes_chat_py_asyncsession"
+    },
+    {
+      "label": "Principal",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/chat.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "principal",
+      "id": "backend_app_api_routes_chat_py_principal"
+    },
+    {
+      "label": "StreamingResponse",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/chat.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "streamingresponse",
+      "id": "streamingresponse"
+    },
+    {
+      "label": "Conversational endpoint: grounded answers streamed over SSE.  The response is a",
+      "file_type": "rationale",
+      "source_file": "backend/app/api/routes/chat.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 15,
+      "norm_label": "conversational endpoint: grounded answers streamed over sse.  the response is a",
+      "id": "routes_chat_rationale_1"
+    },
+    {
+      "label": "config.py",
+      "file_type": "code",
+      "source_file": "backend/app/config.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": "config.py",
+      "id": "app_config"
+    },
+    {
+      "label": "Settings",
+      "file_type": "code",
+      "source_file": "backend/app/config.py",
+      "source_location": "L10",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": "settings",
+      "id": "app_config_settings"
+    },
+    {
+      "label": "BaseSettings",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": "basesettings",
+      "id": "basesettings"
+    },
+    {
+      "label": ".cors_origin_list()",
+      "file_type": "code",
+      "source_file": "backend/app/config.py",
+      "source_location": "L71",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": ".cors_origin_list()",
+      "id": "app_config_settings_cors_origin_list"
+    },
+    {
+      "label": ".demo_mode()",
+      "file_type": "code",
+      "source_file": "backend/app/config.py",
+      "source_location": "L75",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": ".demo_mode()",
+      "id": "app_config_settings_demo_mode"
+    },
+    {
+      "label": "get_settings()",
+      "file_type": "code",
+      "source_file": "backend/app/config.py",
+      "source_location": "L83",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": "get_settings()",
+      "id": "app_config_get_settings"
+    },
+    {
+      "label": "Application settings, loaded from environment / .env.",
+      "file_type": "rationale",
+      "source_file": "backend/app/config.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": "application settings, loaded from environment / .env.",
+      "id": "app_config_rationale_1"
+    },
+    {
+      "label": "No external model keys => run with deterministic stubs + fixtures.",
+      "file_type": "rationale",
+      "source_file": "backend/app/config.py",
+      "source_location": "L76",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": "no external model keys => run with deterministic stubs + fixtures.",
+      "id": "app_config_rationale_76"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 69,
+      "norm_label": "__init__.py",
+      "id": "api_init"
+    },
+    {
+      "label": "Hosted model clients (api lane).  Available adapters:   gemini       \u2014 GeminiLLM",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 69,
+      "norm_label": "hosted model clients (api lane).  available adapters:   gemini       \u2014 geminillm",
+      "id": "api_init_rationale_1"
+    },
+    {
+      "label": "ollama_cloud.py",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/ollama_cloud.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": "ollama_cloud.py",
+      "id": "api_ollama_cloud"
+    },
+    {
+      "label": "OllamaCloudLLM",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/ollama_cloud.py",
+      "source_location": "L22",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": "ollamacloudllm",
+      "id": "api_ollama_cloud_ollamacloudllm"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/ollama_cloud.py",
+      "source_location": "L25",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": ".__init__()",
+      "id": "api_ollama_cloud_ollamacloudllm_init"
+    },
+    {
+      "label": ".complete()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/ollama_cloud.py",
+      "source_location": "L33",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": ".complete()",
+      "id": "api_ollama_cloud_ollamacloudllm_complete"
+    },
+    {
+      "label": ".stream()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/ollama_cloud.py",
+      "source_location": "L70",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": ".stream()",
+      "id": "api_ollama_cloud_ollamacloudllm_stream"
+    },
+    {
+      "label": "Ollama Cloud client \u2014 qwen3-coder-next Text-to-SQL option.  Model: qwen3-coder",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/ollama_cloud.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": "ollama cloud client \u2014 qwen3-coder-next text-to-sql option.  model: qwen3-coder",
+      "id": "api_ollama_cloud_rationale_1"
+    },
+    {
+      "label": "OpenAI-compatible Ollama Cloud endpoint for qwen3-coder-next.",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/ollama_cloud.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": "openai-compatible ollama cloud endpoint for qwen3-coder-next.",
+      "id": "api_ollama_cloud_rationale_23"
+    },
+    {
+      "label": "sarvam.py",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "sarvam.py",
+      "id": "api_sarvam"
+    },
+    {
+      "label": "_SarvamBase",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L25",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "_sarvambase",
+      "id": "api_sarvam_sarvambase"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L26",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": ".__init__()",
+      "id": "api_sarvam_sarvambase_init"
+    },
+    {
+      "label": "._auth()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "._auth()",
+      "id": "api_sarvam_sarvambase_auth"
+    },
+    {
+      "label": "SarvamSTT",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "sarvamstt",
+      "id": "api_sarvam_sarvamstt"
+    },
+    {
+      "label": ".transcribe()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": ".transcribe()",
+      "id": "api_sarvam_sarvamstt_transcribe"
+    },
+    {
+      "label": "SarvamTTS",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L57",
+      "_origin": "ast",
+      "community": 62,
+      "norm_label": "sarvamtts",
+      "id": "api_sarvam_sarvamtts"
+    },
+    {
+      "label": ".synthesize()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L60",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": ".synthesize()",
+      "id": "api_sarvam_sarvamtts_synthesize"
+    },
+    {
+      "label": "SarvamTranslator",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L81",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "sarvamtranslator",
+      "id": "api_sarvam_sarvamtranslator"
+    },
+    {
+      "label": ".translate()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L84",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": ".translate()",
+      "id": "api_sarvam_sarvamtranslator_translate"
+    },
+    {
+      "label": "Sarvam AI clients \u2014 PRIMARY voice layer (Kannada + English STT/TTS/MT).  Servi",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "sarvam ai clients \u2014 primary voice layer (kannada + english stt/tts/mt).  servi",
+      "id": "api_sarvam_rationale_1"
+    },
+    {
+      "label": "Sarvam Saaras v2 \u2014 speech-to-text for Kannada (kn-IN) and English (en-IN).",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L36",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "sarvam saaras v2 \u2014 speech-to-text for kannada (kn-in) and english (en-in).",
+      "id": "api_sarvam_rationale_36"
+    },
+    {
+      "label": "Sarvam Bulbul v3 \u2014 text-to-speech for Kannada and English.",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L58",
+      "_origin": "ast",
+      "community": 62,
+      "norm_label": "sarvam bulbul v3 \u2014 text-to-speech for kannada and english.",
+      "id": "api_sarvam_rationale_58"
+    },
+    {
+      "label": "Sarvam Translate \u2014 neural MT between Kannada and English.",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L82",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "sarvam translate \u2014 neural mt between kannada and english.",
+      "id": "api_sarvam_rationale_82"
+    },
+    {
+      "label": "registry.py",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 39,
+      "norm_label": "registry.py",
+      "id": "models_registry"
+    },
+    {
+      "label": "get_llm()",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "community": 36,
+      "norm_label": "get_llm()",
+      "id": "models_registry_get_llm"
+    },
+    {
+      "label": "LLM",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "community": 26,
+      "norm_label": "llm",
+      "id": "llm"
+    },
+    {
+      "label": "get_fallback_llm()",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L52",
+      "_origin": "ast",
+      "community": 26,
+      "norm_label": "get_fallback_llm()",
+      "id": "models_registry_get_fallback_llm"
+    },
+    {
+      "label": "get_sql_llm()",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L61",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": "get_sql_llm()",
+      "id": "models_registry_get_sql_llm"
+    },
+    {
+      "label": "get_embedder()",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L88",
+      "_origin": "ast",
+      "community": 39,
+      "norm_label": "get_embedder()",
+      "id": "models_registry_get_embedder"
+    },
+    {
+      "label": "Embedder",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L88",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "embedder",
+      "id": "embedder"
+    },
+    {
+      "label": "get_reranker()",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L96",
+      "_origin": "ast",
+      "community": 39,
+      "norm_label": "get_reranker()",
+      "id": "models_registry_get_reranker"
+    },
+    {
+      "label": "Reranker",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L96",
+      "_origin": "ast",
+      "community": 62,
+      "norm_label": "reranker",
+      "id": "reranker"
+    },
+    {
+      "label": "get_stt()",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L104",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "get_stt()",
+      "id": "models_registry_get_stt"
+    },
+    {
+      "label": "SpeechToText",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L104",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "speechtotext",
+      "id": "speechtotext"
+    },
+    {
+      "label": "get_tts()",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L127",
+      "_origin": "ast",
+      "community": 62,
+      "norm_label": "get_tts()",
+      "id": "models_registry_get_tts"
+    },
+    {
+      "label": "TextToSpeech",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L127",
+      "_origin": "ast",
+      "community": 62,
+      "norm_label": "texttospeech",
+      "id": "texttospeech"
+    },
+    {
+      "label": "get_translator()",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L146",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "get_translator()",
+      "id": "models_registry_get_translator"
+    },
+    {
+      "label": "Translator",
+      "file_type": "code",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L146",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "translator",
+      "id": "translator"
+    },
+    {
+      "label": "Factory that resolves the configured backend to concrete model instances.  Cache",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 39,
+      "norm_label": "factory that resolves the configured backend to concrete model instances.  cache",
+      "id": "models_registry_rationale_1"
+    },
+    {
+      "label": "Return the brain LLM.      Resolution order:       1. Explicit `engine` arg (per",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "community": 36,
+      "norm_label": "return the brain llm.      resolution order:       1. explicit `engine` arg (per",
+      "id": "models_registry_rationale_30"
+    },
+    {
+      "label": "Low-latency fallback lane (always Groq) used on timeout / 429 from primary.",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L53",
+      "_origin": "ast",
+      "community": 26,
+      "norm_label": "low-latency fallback lane (always groq) used on timeout / 429 from primary.",
+      "id": "models_registry_rationale_53"
+    },
+    {
+      "label": "Return the Text-to-SQL LLM.      Resolution order:       1. Explicit `engine` ar",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L62",
+      "_origin": "ast",
+      "community": 44,
+      "norm_label": "return the text-to-sql llm.      resolution order:       1. explicit `engine` ar",
+      "id": "models_registry_rationale_62"
+    },
+    {
+      "label": "Sarvam (primary) \u2192 Bhashini (fallback) \u2192 local Whisper.      Resolution order:",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L105",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "sarvam (primary) \u2192 bhashini (fallback) \u2192 local whisper.      resolution order:",
+      "id": "models_registry_rationale_105"
+    },
+    {
+      "label": "Sarvam Bulbul v3 (primary) \u2192 Bhashini (fallback) \u2192 local Parler-TTS.      Resolu",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L128",
+      "_origin": "ast",
+      "community": 62,
+      "norm_label": "sarvam bulbul v3 (primary) \u2192 bhashini (fallback) \u2192 local parler-tts.      resolu",
+      "id": "models_registry_rationale_128"
+    },
+    {
+      "label": "Sarvam Translate (primary) \u2192 Bhashini NMT (fallback).",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L147",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "sarvam translate (primary) \u2192 bhashini nmt (fallback).",
+      "id": "models_registry_rationale_147"
+    },
+    {
+      "label": "orchestrator.py",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/orchestrator.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "orchestrator.py",
+      "id": "pipeline_orchestrator"
+    },
+    {
+      "label": "PipelineEvent",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/orchestrator.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "pipelineevent",
+      "id": "pipeline_orchestrator_pipelineevent"
+    },
+    {
+      "label": ".sse()",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/orchestrator.py",
+      "source_location": "L33",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".sse()",
+      "id": "pipeline_orchestrator_pipelineevent_sse"
+    },
+    {
+      "label": "_rows_context()",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/orchestrator.py",
+      "source_location": "L37",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "_rows_context()",
+      "id": "pipeline_orchestrator_rows_context"
+    },
+    {
+      "label": "_compose()",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/orchestrator.py",
+      "source_location": "L41",
+      "_origin": "ast",
+      "community": 36,
+      "norm_label": "_compose()",
+      "id": "pipeline_orchestrator_compose"
+    },
+    {
+      "label": "run()",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/orchestrator.py",
+      "source_location": "L68",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "run()",
+      "id": "pipeline_orchestrator_run"
+    },
+    {
+      "label": "Principal",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/orchestrator.py",
+      "source_location": "L68",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "principal",
+      "id": "backend_app_pipeline_orchestrator_py_principal"
+    },
+    {
+      "label": "AsyncSession",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/orchestrator.py",
+      "source_location": "L68",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "asyncsession",
+      "id": "backend_app_pipeline_orchestrator_py_asyncsession"
+    },
+    {
+      "label": "ConversationState",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/orchestrator.py",
+      "source_location": "L68",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "conversationstate",
+      "id": "conversationstate"
+    },
+    {
+      "label": "Router-first orchestration.  Given a user message + RLS-scoped session + princip",
+      "file_type": "rationale",
+      "source_file": "backend/app/pipeline/orchestrator.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "router-first orchestration.  given a user message + rls-scoped session + princip",
+      "id": "pipeline_orchestrator_rationale_1"
+    },
+    {
+      "label": "Grounded answer composition with Groq fallback on primary failure.",
+      "file_type": "rationale",
+      "source_file": "backend/app/pipeline/orchestrator.py",
+      "source_location": "L47",
+      "_origin": "ast",
+      "community": 36,
+      "norm_label": "grounded answer composition with groq fallback on primary failure.",
+      "id": "pipeline_orchestrator_rationale_47"
+    },
+    {
+      "label": "router.py",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/router.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 63,
+      "norm_label": "router.py",
+      "id": "pipeline_router"
+    },
+    {
+      "label": "_keyword_intent()",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/router.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "community": 63,
+      "norm_label": "_keyword_intent()",
+      "id": "pipeline_router_keyword_intent"
+    },
+    {
+      "label": "route()",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/router.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "community": 63,
+      "norm_label": "route()",
+      "id": "pipeline_router_route"
+    },
+    {
+      "label": "Intent router. Uses the LLM with a JSON schema, with a cheap keyword fallback so",
+      "file_type": "rationale",
+      "source_file": "backend/app/pipeline/router.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 63,
+      "norm_label": "intent router. uses the llm with a json schema, with a cheap keyword fallback so",
+      "id": "pipeline_router_rationale_1"
+    },
+    {
+      "label": "text_to_sql.py",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "text_to_sql.py",
+      "id": "tools_text_to_sql"
+    },
+    {
+      "label": "generate_sql()",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
+      "source_location": "L15",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "generate_sql()",
+      "id": "tools_text_to_sql_generate_sql"
+    },
+    {
+      "label": "run_sql()",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "run_sql()",
+      "id": "tools_text_to_sql_run_sql"
+    },
+    {
+      "label": "AsyncSession",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "asyncsession",
+      "id": "backend_app_pipeline_tools_text_to_sql_py_asyncsession"
+    },
+    {
+      "label": "answer_with_sql()",
+      "file_type": "code",
+      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
+      "source_location": "L37",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "answer_with_sql()",
+      "id": "tools_text_to_sql_answer_with_sql"
+    },
+    {
+      "label": "NL -> guarded SQL -> rows. Runs inside the caller's RLS-scoped session.",
+      "file_type": "rationale",
+      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "nl -> guarded sql -> rows. runs inside the caller's rls-scoped session.",
+      "id": "tools_text_to_sql_rationale_1"
+    },
+    {
+      "label": "Return (safe_sql, rows). Raises UnsafeSQL if the model produced bad SQL.",
+      "file_type": "rationale",
+      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
+      "source_location": "L44",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "return (safe_sql, rows). raises unsafesql if the model produced bad sql.",
+      "id": "tools_text_to_sql_rationale_44"
+    },
+    {
+      "label": "chat.py",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/chat.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 12,
+      "norm_label": "chat.py",
+      "id": "schemas_chat"
+    },
+    {
+      "label": "ChatRequest",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/chat.py",
+      "source_location": "L8",
+      "_origin": "ast",
+      "community": 12,
+      "norm_label": "chatrequest",
+      "id": "schemas_chat_chatrequest"
+    },
+    {
+      "label": "BaseModel",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 12,
+      "norm_label": "basemodel",
+      "id": "basemodel"
+    },
+    {
+      "label": "Citation",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/chat.py",
+      "source_location": "L21",
+      "_origin": "ast",
+      "community": 12,
+      "norm_label": "citation",
+      "id": "schemas_chat_citation"
+    },
+    {
+      "label": "ChatResponse",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/chat.py",
+      "source_location": "L26",
+      "_origin": "ast",
+      "community": 12,
+      "norm_label": "chatresponse",
+      "id": "schemas_chat_chatresponse"
+    },
+    {
+      "label": "chat_service.py",
+      "file_type": "code",
+      "source_file": "backend/app/services/chat_service.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "chat_service.py",
+      "id": "services_chat_service"
+    },
+    {
+      "label": "stream_chat()",
+      "file_type": "code",
+      "source_file": "backend/app/services/chat_service.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "stream_chat()",
+      "id": "services_chat_service_stream_chat"
+    },
+    {
+      "label": "Principal",
+      "file_type": "code",
+      "source_file": "backend/app/services/chat_service.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "principal",
+      "id": "backend_app_services_chat_service_py_principal"
+    },
+    {
+      "label": "AsyncSession",
+      "file_type": "code",
+      "source_file": "backend/app/services/chat_service.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "asyncsession",
+      "id": "backend_app_services_chat_service_py_asyncsession"
+    },
+    {
+      "label": "PipelineEvent",
+      "file_type": "code",
+      "source_file": "backend/app/services/chat_service.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "pipelineevent",
+      "id": "pipelineevent"
+    },
+    {
+      "label": "Chat service: bridges the API to the orchestrator + conversation store + audit.",
+      "file_type": "rationale",
+      "source_file": "backend/app/services/chat_service.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "chat service: bridges the api to the orchestrator + conversation store + audit.",
+      "id": "services_chat_service_rationale_1"
     },
     {
       "label": "client.ts",
@@ -1109,9 +1109,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "api_client",
       "community": 48,
-      "norm_label": "client.ts"
+      "norm_label": "client.ts",
+      "id": "api_client"
     },
     {
       "label": "getAuthToken()",
@@ -1119,9 +1119,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "api_client_getauthtoken",
       "community": 48,
-      "norm_label": "getauthtoken()"
+      "norm_label": "getauthtoken()",
+      "id": "api_client_getauthtoken"
     },
     {
       "label": "setAuthToken()",
@@ -1129,9 +1129,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "api_client_setauthtoken",
       "community": 48,
-      "norm_label": "setauthtoken()"
+      "norm_label": "setauthtoken()",
+      "id": "api_client_setauthtoken"
     },
     {
       "label": "authHeaders()",
@@ -1139,9 +1139,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L24",
       "_origin": "ast",
-      "id": "api_client_authheaders",
       "community": 48,
-      "norm_label": "authheaders()"
+      "norm_label": "authheaders()",
+      "id": "api_client_authheaders"
     },
     {
       "label": "ApiError",
@@ -1149,9 +1149,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L33",
       "_origin": "ast",
-      "id": "api_client_apierror",
       "community": 48,
-      "norm_label": "apierror"
+      "norm_label": "apierror",
+      "id": "api_client_apierror"
     },
     {
       "label": ".constructor()",
@@ -1159,9 +1159,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L34",
       "_origin": "ast",
-      "id": "api_client_apierror_constructor",
       "community": 48,
-      "norm_label": ".constructor()"
+      "norm_label": ".constructor()",
+      "id": "api_client_apierror_constructor"
     },
     {
       "label": "request()",
@@ -1169,9 +1169,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L40",
       "_origin": "ast",
-      "id": "api_client_request",
       "community": 48,
-      "norm_label": "request()"
+      "norm_label": "request()",
+      "id": "api_client_request"
     },
     {
       "label": "Role",
@@ -1179,9 +1179,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L58",
       "_origin": "ast",
-      "id": "api_client_role",
       "community": 48,
-      "norm_label": "role"
+      "norm_label": "role",
+      "id": "api_client_role"
     },
     {
       "label": "SessionUser",
@@ -1189,9 +1189,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L60",
       "_origin": "ast",
-      "id": "api_client_sessionuser",
       "community": 48,
-      "norm_label": "sessionuser"
+      "norm_label": "sessionuser",
+      "id": "api_client_sessionuser"
     },
     {
       "label": "api",
@@ -1199,9 +1199,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L68",
       "_origin": "ast",
-      "id": "api_client_api",
       "community": 48,
-      "norm_label": "api"
+      "norm_label": "api",
+      "id": "api_client_api"
     },
     {
       "label": "ChatEvent",
@@ -1209,9 +1209,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L110",
       "_origin": "ast",
-      "id": "api_client_chatevent",
       "community": 48,
-      "norm_label": "chatevent"
+      "norm_label": "chatevent",
+      "id": "api_client_chatevent"
     },
     {
       "label": "streamChat()",
@@ -1219,9 +1219,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L118",
       "_origin": "ast",
-      "id": "api_client_streamchat",
       "community": 48,
-      "norm_label": "streamchat()"
+      "norm_label": "streamchat()",
+      "id": "api_client_streamchat"
     },
     {
       "label": "ARCHITECTURE.md",
@@ -11046,6 +11046,232 @@
   ],
   "links": [
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L259",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_dataactions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_defaultenginesettings"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_enginesettings"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L180",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_field"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L249",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_formatremaining"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_loadenginesettings"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L361",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_modeltoggle"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L213",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_pill"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L196",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_row"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_saveenginesettings"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L168",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_section"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L205",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_select"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_settingsdialog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L244",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_status"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_tab"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L226",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "components_settingsdialog_toggle"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_shell",
+      "target": "components_settingsdialog"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "components_settingsdialog_settingsdialog",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_shell",
+      "target": "components_settingsdialog_settingsdialog"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L347",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog_dataactions",
+      "target": "components_settingsdialog_formatremaining"
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -11157,9 +11383,9 @@
       "source_file": "backend/app/api/routes/chat.py",
       "source_location": "L16",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "chatrequest",
-      "target": "chatrequest",
-      "confidence_score": 0.5
+      "target": "chatrequest"
     },
     {
       "relation": "uses",
@@ -11331,9 +11557,9 @@
       "source_file": "backend/app/models/api/ollama_cloud.py",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_ollama_cloud",
-      "target": "app_config",
-      "confidence_score": 1.0
+      "target": "app_config"
     },
     {
       "relation": "imports_from",
@@ -11342,9 +11568,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam",
-      "target": "app_config",
-      "confidence_score": 1.0
+      "target": "app_config"
     },
     {
       "relation": "contains",
@@ -11511,9 +11737,9 @@
       "source_file": "backend/app/config.py",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_config_rationale_76",
-      "target": "app_config_settings_demo_mode",
-      "confidence_score": 1.0
+      "target": "app_config_settings_demo_mode"
     },
     {
       "relation": "calls",
@@ -11741,9 +11967,9 @@
       "source_file": "backend/app/models/api/__init__.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_init_rationale_1",
-      "target": "api_init",
-      "confidence_score": 1.0
+      "target": "api_init"
     },
     {
       "relation": "contains",
@@ -11751,9 +11977,9 @@
       "source_file": "backend/app/models/api/ollama_cloud.py",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_ollama_cloud",
-      "target": "api_ollama_cloud_ollamacloudllm",
-      "confidence_score": 1.0
+      "target": "api_ollama_cloud_ollamacloudllm"
     },
     {
       "relation": "rationale_for",
@@ -11761,9 +11987,9 @@
       "source_file": "backend/app/models/api/ollama_cloud.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_ollama_cloud_rationale_1",
-      "target": "api_ollama_cloud",
-      "confidence_score": 1.0
+      "target": "api_ollama_cloud"
     },
     {
       "relation": "method",
@@ -11771,9 +11997,9 @@
       "source_file": "backend/app/models/api/ollama_cloud.py",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_ollama_cloud_ollamacloudllm",
-      "target": "api_ollama_cloud_ollamacloudllm_complete",
-      "confidence_score": 1.0
+      "target": "api_ollama_cloud_ollamacloudllm_complete"
     },
     {
       "relation": "method",
@@ -11781,9 +12007,9 @@
       "source_file": "backend/app/models/api/ollama_cloud.py",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_ollama_cloud_ollamacloudllm",
-      "target": "api_ollama_cloud_ollamacloudllm_init",
-      "confidence_score": 1.0
+      "target": "api_ollama_cloud_ollamacloudllm_init"
     },
     {
       "relation": "method",
@@ -11791,9 +12017,9 @@
       "source_file": "backend/app/models/api/ollama_cloud.py",
       "source_location": "L70",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_ollama_cloud_ollamacloudllm",
-      "target": "api_ollama_cloud_ollamacloudllm_stream",
-      "confidence_score": 1.0
+      "target": "api_ollama_cloud_ollamacloudllm_stream"
     },
     {
       "relation": "rationale_for",
@@ -11801,9 +12027,9 @@
       "source_file": "backend/app/models/api/ollama_cloud.py",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_ollama_cloud_rationale_23",
-      "target": "api_ollama_cloud_ollamacloudllm",
-      "confidence_score": 1.0
+      "target": "api_ollama_cloud_ollamacloudllm"
     },
     {
       "relation": "uses",
@@ -11811,9 +12037,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L78",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "embedder",
-      "target": "api_ollama_cloud_ollamacloudllm",
-      "confidence_score": 0.5
+      "target": "api_ollama_cloud_ollamacloudllm"
     },
     {
       "relation": "uses",
@@ -11821,9 +12047,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L78",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "llm",
-      "target": "api_ollama_cloud_ollamacloudllm",
-      "confidence_score": 0.5
+      "target": "api_ollama_cloud_ollamacloudllm"
     },
     {
       "relation": "calls",
@@ -11842,9 +12068,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L78",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "reranker",
-      "target": "api_ollama_cloud_ollamacloudllm",
-      "confidence_score": 0.5
+      "target": "api_ollama_cloud_ollamacloudllm"
     },
     {
       "relation": "uses",
@@ -11852,9 +12078,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L78",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "speechtotext",
-      "target": "api_ollama_cloud_ollamacloudllm",
-      "confidence_score": 0.5
+      "target": "api_ollama_cloud_ollamacloudllm"
     },
     {
       "relation": "uses",
@@ -11862,9 +12088,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L78",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "texttospeech",
-      "target": "api_ollama_cloud_ollamacloudllm",
-      "confidence_score": 0.5
+      "target": "api_ollama_cloud_ollamacloudllm"
     },
     {
       "relation": "uses",
@@ -11872,9 +12098,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L78",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "translator",
-      "target": "api_ollama_cloud_ollamacloudllm",
-      "confidence_score": 0.5
+      "target": "api_ollama_cloud_ollamacloudllm"
     },
     {
       "relation": "calls",
@@ -11883,9 +12109,9 @@
       "source_file": "backend/app/models/api/ollama_cloud.py",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_ollama_cloud_ollamacloudllm_stream",
-      "target": "api_ollama_cloud_ollamacloudllm_complete",
-      "confidence_score": 1.0
+      "target": "api_ollama_cloud_ollamacloudllm_complete"
     },
     {
       "relation": "contains",
@@ -11893,9 +12119,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam",
-      "target": "api_sarvam_sarvambase",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvambase"
     },
     {
       "relation": "contains",
@@ -11903,9 +12129,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam",
-      "target": "api_sarvam_sarvamstt",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvamstt"
     },
     {
       "relation": "contains",
@@ -11913,9 +12139,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam",
-      "target": "api_sarvam_sarvamtranslator",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
       "relation": "contains",
@@ -11923,9 +12149,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam",
-      "target": "api_sarvam_sarvamtts",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvamtts"
     },
     {
       "relation": "rationale_for",
@@ -11933,9 +12159,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_rationale_1",
-      "target": "api_sarvam",
-      "confidence_score": 1.0
+      "target": "api_sarvam"
     },
     {
       "relation": "method",
@@ -11943,9 +12169,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_sarvambase",
-      "target": "api_sarvam_sarvambase_auth",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvambase_auth"
     },
     {
       "relation": "method",
@@ -11953,9 +12179,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_sarvambase",
-      "target": "api_sarvam_sarvambase_init",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvambase_init"
     },
     {
       "relation": "inherits",
@@ -11963,9 +12189,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_sarvamstt",
-      "target": "api_sarvam_sarvambase",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvambase"
     },
     {
       "relation": "inherits",
@@ -11973,9 +12199,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L81",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_sarvamtranslator",
-      "target": "api_sarvam_sarvambase",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvambase"
     },
     {
       "relation": "inherits",
@@ -11983,9 +12209,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_sarvamtts",
-      "target": "api_sarvam_sarvambase",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvambase"
     },
     {
       "relation": "calls",
@@ -11994,9 +12220,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_sarvamstt_transcribe",
-      "target": "api_sarvam_sarvambase_auth",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvambase_auth"
     },
     {
       "relation": "calls",
@@ -12005,9 +12231,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_sarvamtranslator_translate",
-      "target": "api_sarvam_sarvambase_auth",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvambase_auth"
     },
     {
       "relation": "calls",
@@ -12016,9 +12242,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_sarvamtts_synthesize",
-      "target": "api_sarvam_sarvambase_auth",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvambase_auth"
     },
     {
       "relation": "rationale_for",
@@ -12026,9 +12252,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_rationale_36",
-      "target": "api_sarvam_sarvamstt",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvamstt"
     },
     {
       "relation": "method",
@@ -12036,9 +12262,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_sarvamstt",
-      "target": "api_sarvam_sarvamstt_transcribe",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvamstt_transcribe"
     },
     {
       "relation": "uses",
@@ -12046,9 +12272,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L122",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "embedder",
-      "target": "api_sarvam_sarvamstt",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamstt"
     },
     {
       "relation": "uses",
@@ -12056,9 +12282,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L122",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "llm",
-      "target": "api_sarvam_sarvamstt",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamstt"
     },
     {
       "relation": "calls",
@@ -12077,9 +12303,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L122",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "reranker",
-      "target": "api_sarvam_sarvamstt",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamstt"
     },
     {
       "relation": "uses",
@@ -12087,9 +12313,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L122",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "speechtotext",
-      "target": "api_sarvam_sarvamstt",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamstt"
     },
     {
       "relation": "uses",
@@ -12097,9 +12323,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L122",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "texttospeech",
-      "target": "api_sarvam_sarvamstt",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamstt"
     },
     {
       "relation": "uses",
@@ -12107,9 +12333,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L122",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "translator",
-      "target": "api_sarvam_sarvamstt",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamstt"
     },
     {
       "relation": "rationale_for",
@@ -12117,9 +12343,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_rationale_58",
-      "target": "api_sarvam_sarvamtts",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvamtts"
     },
     {
       "relation": "method",
@@ -12127,9 +12353,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_sarvamtts",
-      "target": "api_sarvam_sarvamtts_synthesize",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvamtts_synthesize"
     },
     {
       "relation": "uses",
@@ -12137,9 +12363,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L141",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "embedder",
-      "target": "api_sarvam_sarvamtts",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamtts"
     },
     {
       "relation": "uses",
@@ -12147,9 +12373,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L141",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "llm",
-      "target": "api_sarvam_sarvamtts",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamtts"
     },
     {
       "relation": "calls",
@@ -12168,9 +12394,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L141",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "reranker",
-      "target": "api_sarvam_sarvamtts",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamtts"
     },
     {
       "relation": "uses",
@@ -12178,9 +12404,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L141",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "speechtotext",
-      "target": "api_sarvam_sarvamtts",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamtts"
     },
     {
       "relation": "uses",
@@ -12188,9 +12414,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L141",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "texttospeech",
-      "target": "api_sarvam_sarvamtts",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamtts"
     },
     {
       "relation": "uses",
@@ -12198,9 +12424,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L141",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "translator",
-      "target": "api_sarvam_sarvamtts",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamtts"
     },
     {
       "relation": "rationale_for",
@@ -12208,9 +12434,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L82",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_rationale_82",
-      "target": "api_sarvam_sarvamtranslator",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
       "relation": "method",
@@ -12218,9 +12444,9 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L84",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_sarvam_sarvamtranslator",
-      "target": "api_sarvam_sarvamtranslator_translate",
-      "confidence_score": 1.0
+      "target": "api_sarvam_sarvamtranslator_translate"
     },
     {
       "relation": "uses",
@@ -12228,9 +12454,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L154",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "embedder",
-      "target": "api_sarvam_sarvamtranslator",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
       "relation": "uses",
@@ -12238,9 +12464,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L154",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "llm",
-      "target": "api_sarvam_sarvamtranslator",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
       "relation": "calls",
@@ -12259,9 +12485,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L154",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "reranker",
-      "target": "api_sarvam_sarvamtranslator",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
       "relation": "uses",
@@ -12269,9 +12495,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L154",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "speechtotext",
-      "target": "api_sarvam_sarvamtranslator",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
       "relation": "uses",
@@ -12279,9 +12505,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L154",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "texttospeech",
-      "target": "api_sarvam_sarvamtranslator",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
       "relation": "uses",
@@ -12289,9 +12515,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L154",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "translator",
-      "target": "api_sarvam_sarvamtranslator",
-      "confidence_score": 0.5
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
       "relation": "contains",
@@ -12339,9 +12565,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_registry",
-      "target": "models_registry_get_sql_llm",
-      "confidence_score": 1.0
+      "target": "models_registry_get_sql_llm"
     },
     {
       "relation": "contains",
@@ -12422,9 +12648,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_registry_rationale_30",
-      "target": "models_registry_get_llm",
-      "confidence_score": 1.0
+      "target": "models_registry_get_llm"
     },
     {
       "relation": "calls",
@@ -12637,9 +12863,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_registry_get_sql_llm",
-      "target": "llm",
-      "confidence_score": 1.0
+      "target": "llm"
     },
     {
       "relation": "calls",
@@ -12658,9 +12884,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_registry_rationale_53",
-      "target": "models_registry_get_fallback_llm",
-      "confidence_score": 1.0
+      "target": "models_registry_get_fallback_llm"
     },
     {
       "relation": "calls",
@@ -12679,9 +12905,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_registry_rationale_62",
-      "target": "models_registry_get_sql_llm",
-      "confidence_score": 1.0
+      "target": "models_registry_get_sql_llm"
     },
     {
       "relation": "calls",
@@ -13130,9 +13356,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L105",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_registry_rationale_105",
-      "target": "models_registry_get_stt",
-      "confidence_score": 1.0
+      "target": "models_registry_get_stt"
     },
     {
       "relation": "uses",
@@ -13333,9 +13559,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L128",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_registry_rationale_128",
-      "target": "models_registry_get_tts",
-      "confidence_score": 1.0
+      "target": "models_registry_get_tts"
     },
     {
       "relation": "uses",
@@ -13525,9 +13751,9 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "models_registry_rationale_147",
-      "target": "models_registry_get_translator",
-      "confidence_score": 1.0
+      "target": "models_registry_get_translator"
     },
     {
       "relation": "uses",
@@ -13837,9 +14063,9 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "pipeline_orchestrator_rationale_47",
-      "target": "pipeline_orchestrator_compose",
-      "confidence_score": 1.0
+      "target": "pipeline_orchestrator_compose"
     },
     {
       "relation": "calls",
@@ -14160,9 +14386,9 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tools_text_to_sql_rationale_44",
-      "target": "tools_text_to_sql_answer_with_sql",
-      "confidence_score": 1.0
+      "target": "tools_text_to_sql_answer_with_sql"
     },
     {
       "relation": "contains",
@@ -14487,232 +14713,6 @@
       "confidence_score": 0.5,
       "source": "pipelineevent",
       "target": "pipeline_slots_conversationstore"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L259",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_dataactions"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L18",
-      "weight": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_defaultenginesettings",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_enginesettings",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L180",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_field"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L249",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_formatremaining"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L26",
-      "weight": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_loadenginesettings",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L361",
-      "weight": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_modeltoggle",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L213",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_pill"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L196",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_row"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L35",
-      "weight": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_saveenginesettings",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L168",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_section"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L205",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_select"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_settingsdialog"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L244",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_status"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_tab"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L226",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "components_settingsdialog_toggle"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_shell",
-      "target": "components_settingsdialog"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "components_settingsdialog_settingsdialog",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_shell",
-      "target": "components_settingsdialog_settingsdialog"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L347",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog_dataactions",
-      "target": "components_settingsdialog_formatremaining"
     },
     {
       "relation": "contains",
@@ -28507,5 +28507,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "298fa155efa67a19cc9006bf6465fc01e00982f9"
+  "built_at_commit": "9a5ce6eacb21556d561f1551f601d199f2065ad2"
 }

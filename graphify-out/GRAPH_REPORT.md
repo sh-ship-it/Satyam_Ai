@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-15)
 
 ## Corpus Check
-- 174 files · ~61,725 words
+- 174 files · ~61,730 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `298fa155`
+- Built from commit: `9a5ce6ea`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -400,16 +400,16 @@ Nodes (3): Audit(), DEMO_ROWS, Route
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 1` to `Community 25`?**
-  _High betweenness centrality (0.106) - this node is a cross-community bridge._
+  _High betweenness centrality (0.104) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 1` to `Community 5`, `Community 15`?**
-  _High betweenness centrality (0.067) - this node is a cross-community bridge._
+  _High betweenness centrality (0.066) - this node is a cross-community bridge._
 - **Are the 41 inferred relationships involving `Principal` (e.g. with `Any` and `AsyncSession`) actually correct?**
   _`Principal` has 41 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 24 inferred relationships involving `Permission` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Permission` has 24 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 20 inferred relationships involving `LLM` (e.g. with `BhashiniSTT` and `BhashiniTranslator`) actually correct?**
   _`LLM` has 20 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Conversational endpoint: grounded answers streamed over SSE.  The response is a`, `Application settings, loaded from environment / .env.`, `No external model keys => run with deterministic stubs + fixtures.` to the rest of the system?**
+- **What connects `Tab`, `EngineSettings`, `defaultEngineSettings` to the rest of the system?**
   _492 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.055633473585787754 - nodes in this community are weakly interconnected._
