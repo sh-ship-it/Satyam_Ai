@@ -365,8 +365,8 @@
     "semantic_hash": ""
   },
   "frontend/package.json": {
-    "mtime": 1781282330.5012321,
-    "ast_hash": "1a13e16fefedad9e07f89d118a02736b",
+    "mtime": 1781506056.9405317,
+    "ast_hash": "e48debcdc5b0a78feff631b7e4a08e5f",
     "semantic_hash": ""
   },
   "frontend/src/assets/police.mp4.asset.json": {
@@ -892,6 +892,11 @@
   "made_till_now.md": {
     "mtime": 1781505210.4068427,
     "ast_hash": "e17577938e0bee3cc54972cc525eab36",
+    "semantic_hash": ""
+  },
+  "frontend/src/locales/en.json": {
+    "mtime": 1781506139.6226213,
+    "ast_hash": "b2798e7c600e9ff111b6716715aa1a5f",
     "semantic_hash": ""
   }
 }
