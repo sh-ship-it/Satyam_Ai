@@ -1,5 +1,10 @@
 """BGE-M3 embedder (sole embedder for the whole system).
 
+Model: BAAI/bge-m3 — ~568M params, ~1.3 GB FP16 (~2.2 GB FP32).
+Runs FP16 on the demo GPU (RTX 4070, 8 GB VRAM). CPU-capable but slower.
+Embedding dim: 1024. Query and document share one vector space — not
+swappable for a hosted API without re-embedding the entire narratives table.
+
 DEMO stub: deterministic hash-based pseudo-embedding so retrieval works without
 GPU/weights. Replace `embed` with:
 

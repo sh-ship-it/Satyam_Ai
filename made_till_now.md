@@ -24,8 +24,6 @@ Updated the entire codebase to match the revised `docs/ARCHITECTURE.md`. The pri
 - Three new runtime config flags: `BRAIN_ENGINE`, `SQL_ENGINE`, `VOICE_BACKEND`
 - Per-request engine overrides from the frontend Settings panel (sent with each chat request)
 
----
-
 #### Backend Changes
 
 **`backend/app/config.py`**
@@ -81,8 +79,6 @@ Updated the entire codebase to match the revised `docs/ARCHITECTURE.md`. The pri
 **`backend/app/api/routes/chat.py`**
 - SSE endpoint now reads `req.brain_engine` and `req.sql_engine` from the request and passes them to `chat_service.stream_chat()`.
 
----
-
 #### Environment Files
 
 **`.env.example`** (root, shared by docker-compose)
@@ -93,8 +89,6 @@ Updated the entire codebase to match the revised `docs/ARCHITECTURE.md`. The pri
 
 **`backend/.env.example`**
 - Same additions as root `.env.example`, minus Docker-compose-specific vars.
-
----
 
 #### Frontend Changes
 
@@ -116,11 +110,44 @@ Updated the entire codebase to match the revised `docs/ARCHITECTURE.md`. The pri
 - Exported `loadEngineSettings` so the chat console can read overrides and include them in each `streamChat` call.
 - Fixed parse error: missing `{tab === "preferences" && (` wrapper that was accidentally dropped during insertion.
 
----
-
 #### Architectural Decisions Recorded
-- **Sarvam is primary voice** (Bulbul v3 TTS, Saaras v2 STT, Sarvam Translate). Bhashini is the fallback (govt, free, no credit cap). Pre-caching scripted demo TTS is recommended to conserve Sarvam one-time free-tier credits.
+- **Sarvam is primary voice** (Bulbul v3 TTS, Saaras v2 STT, Sarvam Translate). Bhashini is the fallback (govt, free, no credit cap). Pre-caching scripted demo TTS recommended to conserve Sarvam one-time free-tier credits.
 - **BGE-M3 remains the sole embedder** — not configurable, always local.
 - **sqlglot guard applies identically** regardless of SQL_ENGINE choice — safety is engine-agnostic.
 - **Per-request overrides** from the Settings panel take precedence over server-side env defaults for that session only; they do not persist on the server.
 - **Phase 2 (on-prem / sovereign)** local model lane is stubbed and parked; `MODEL_BACKEND=local` still routes through the existing `LocalLLM` / `WhisperSTT` / `ParlerTTS` stubs.
+
+---
+
+### [2026-06-15] — Architecture Doc Revision: Saaras v3, GPU specs for BGE-M3 + Reranker, Demo-track clarification
+
+#### Summary
+`docs/ARCHITECTURE.md` was updated with more precise hardware specs, a corrected
+STT model version (Saaras v3), and a clearer two-track demo honesty section.
+All affected code files were updated to match.
+
+#### Changes
+
+**`backend/app/models/api/sarvam.py`**
+- Updated module docstring: **Saaras v2 → Saaras v3**.
+- Updated `SarvamSTT` class docstring: **Saaras v2 → Saaras v3**.
+- Updated Sarvam API model string in `transcribe()`: `"saaras:v2"` → `"saaras:v3"`.
+
+**`backend/app/models/local/embedder_bge.py`**
+- Expanded module docstring with hardware specs from the architecture doc:
+  - ~568M params, ~1.3 GB FP16 (~2.2 GB FP32).
+  - Runs FP16 on demo GPU (RTX 4070, 8 GB VRAM); CPU-capable but slower.
+  - Explicit note: not swappable for a hosted API without re-embedding the narratives table.
+
+**`backend/app/models/local/reranker_bge.py`**
+- Expanded module docstring with hardware specs from the architecture doc:
+  - ~568M params, ~1.1 GB FP16.
+  - CPU-capable; lives on demo GPU alongside BGE-M3 embedder.
+  - Combined weights with embedder: ~2.4 GB FP16; peak VRAM ~4–5 GB (comfortable in 8 GB).
+  - Added real replacement snippet using `sentence_transformers.CrossEncoder`.
+
+#### Architecture decisions recorded (from updated doc)
+- **Demo GPU (RTX 4070, 8 GB)** runs only the two always-local models: BGE-M3 embedder + bge-reranker-v2-m3 (both FP16, ~2.4 GB weights, ~4–5 GB peak). Brain/SQL/voice remain cloud API calls.
+- **Heavy local LLMs** (Qwen-Coder 30B, Llama 3.1-8B) deferred entirely to Phase 2 on-prem build — not run on the demo laptop.
+- **Two-phase rollout table** updated: Embeddings + rerank row now reads "BGE-M3 + bge-reranker (local, FP16 on GPU)" for both phases.
+- **Saaras v3** is the current Sarvam STT model (not v2 as initially coded).

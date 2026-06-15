@@ -1,7 +1,7 @@
 """Sarvam AI clients — PRIMARY voice layer (Kannada + English STT/TTS/MT).
 
 Services used:
-  - Saaras v2 (Sarvam's Whisper-based STT)   → POST /speech-to-text
+  - Saaras v3 (Sarvam's Whisper-based STT)   → POST /speech-to-text
   - Bulbul v3 TTS                             → POST /text-to-speech
   - Sarvam Translate                          → POST /translate
 
@@ -33,7 +33,7 @@ class _SarvamBase:
 
 
 class SarvamSTT(_SarvamBase):
-    """Sarvam Saaras v2 — speech-to-text for Kannada (kn-IN) and English (en-IN)."""
+    """Sarvam Saaras v3 — speech-to-text for Kannada (kn-IN) and English (en-IN)."""
 
     async def transcribe(self, audio: bytes, *, lang: str = "kn") -> str:
         if self._demo:
@@ -45,7 +45,7 @@ class SarvamSTT(_SarvamBase):
                 f"{_BASE}/speech-to-text",
                 headers={**_HEADERS, **self._auth()},
                 json={
-                    "model": "saaras:v2",
+                    "model": "saaras:v3",
                     "audio": audio_b64,
                     "language_code": bcp_lang,
                 },
