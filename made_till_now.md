@@ -151,3 +151,137 @@ All affected code files were updated to match.
 - **Heavy local LLMs** (Qwen-Coder 30B, Llama 3.1-8B) deferred entirely to Phase 2 on-prem build — not run on the demo laptop.
 - **Two-phase rollout table** updated: Embeddings + rerank row now reads "BGE-M3 + bge-reranker (local, FP16 on GPU)" for both phases.
 - **Saaras v3** is the current Sarvam STT model (not v2 as initially coded).
+
+---
+
+### [2026-06-15] — Security Update: Robust .env Ignore Rules
+
+#### Summary
+Updated the root `.gitignore` file to ensure all environment configuration files (`.env`, `.env.local`, `.env.production`, etc.) across both the root and all subdirectories (including `backend/` and `frontend/`) are explicitly and recursively ignored by Git, preventing any accidental credential leaks while keeping `.env.example` templates tracked.
+
+#### Changes
+
+**`.gitignore`** (root)
+- Added comprehensive recursive patterns: `.env.*`, `**/.env`, `**/.env.*`.
+- Added negative matches to ensure sample templates (`.env.example` and `**/.env.example`) remain tracked by Git.
+
+---
+
+### [2026-06-15] — Local Database Setup: PostgreSQL 17 + pgvector 0.8.2 + Full Schema
+
+#### Summary
+Read `DATABASE.md` and set up the complete local development database as documented.
+This implements the **local track** of the dual-database strategy (local = full 100k dataset
++ GPU embeddings; cloud Neon = subset + auth, set up by teammate separately).
+
+The setup required building pgvector from source due to two MSVC/PG17 incompatibilities
+that had no prebuilt binary workaround on Windows.
+
+---
+
+#### 1. PostgreSQL status confirmed
+- **PostgreSQL 17.7** already installed via EDB installer, running as Windows service `postgresql-x64-17`.
+- Data directory: `C:\Program Files\PostgreSQL\17`.
+- Runtime port: `5432` (default).
+- No pgvector extension was bundled — had to build from source.
+
+---
+
+#### 2. pgvector 0.8.2 — build from source (Windows, MSVC)
+
+**Why from source:** The EDB Windows installer does not ship pgvector. No prebuilt `.zip` was
+downloadable (network blocked). Had to compile using VS 2022 Build Tools already on the machine.
+
+**Build blockers hit and fixed:**
+
+| # | Error | Root Cause | Fix Applied |
+|---|-------|-----------|-------------|
+| 1 | `C2196: case value '4' already used` in `tupmacs.h` | MSVC does not reduce `sizeof(Datum)` inside `case` labels when `SIZEOF_DATUM == 8` guard is present — a PG17+MSVC preprocessor bug | Created a patched `include_override/access/tupmacs.h` with `case 8:` replacing `case sizeof(Datum):` in both affected switch blocks; injected the override dir first with `/I` |
+| 2 | `LNK4272: library machine type 'x64' conflicts with target machine type 'x86'` | `VsDevCmd.bat` defaults to x86 toolchain; PostgreSQL 17 ships x64 `postgres.lib` | Switched to `vcvars64.bat` (`VC\Auxiliary\Build\vcvars64.bat`) for x64 environment |
+
+**Build flags added to `Makefile.win`:**
+- `/Zc:preprocessor` — conformant MSVC preprocessor so macro guards resolve correctly.
+- `/D_CRT_SECURE_NO_WARNINGS` — suppress CRT deprecation noise.
+
+**Output:** `vector.dll` (274 KB), `vector.control`, `vector--0.8.2.sql` and upgrade scripts.
+
+**Installation** (required admin elevation to write to `Program Files`):
+- `vector.dll` → `C:\Program Files\PostgreSQL\17\lib\`
+- `vector*.sql` + `vector.control` → `C:\Program Files\PostgreSQL\17\share\extension\`
+
+**Verified:** `SELECT name, default_version FROM pg_available_extensions WHERE name = 'vector';`
+returned `vector | 0.8.2`. ✓
+
+---
+
+#### 3. Database creation
+
+```sql
+CREATE DATABASE satyam;
+```
+
+No custom locale — used PostgreSQL default to avoid `en_US.UTF-8` availability issues on Windows.
+
+---
+
+#### 4. Schema applied — `backend/migrations/001_init.sql`
+
+Ran as the `postgres` superuser against the `satyam` database. All DDL succeeded:
+
+| Object | Type | Notes |
+|--------|------|-------|
+| `stations` | Table | Reference / org |
+| `officers` | Table | Reference / org |
+| `app_users` | Table | Auth + RBAC |
+| `cases` | Table | Core; RLS enabled + forced |
+| `persons` | Table | PII; masked via `persons_v` |
+| `case_persons` | Table | Many-to-many |
+| `narratives` | Table | RAG; `embedding vector(1024)` column |
+| `audit_log` | Table | Hash-chained tamper-evident log |
+| `persons_v` | View | PII masking view (`security_invoker=on`) |
+| `satyam_mask_name()` | Function | Masks name field below clearance 2 |
+| `idx_narratives_embedding` | Index | HNSW, `vector_cosine_ops` |
+| `idx_cases_crime_type` | Index | btree |
+| `idx_cases_district` | Index | btree |
+| `idx_cases_jurisdiction` | Index | btree |
+| `idx_case_persons_person` | Index | btree |
+| `cases_select` | RLS Policy | Jurisdiction AND clearance gate (single policy, AND-joined to prevent privilege escalation) |
+| `narratives_select` | RLS Policy | Exists-check via cases |
+| `satyam_app` | Role | `NOSUPERUSER`, least-privilege runtime role |
+| `satyam` | Role | Owner / superuser for migrations + seeding |
+
+**Grants applied to `satyam_app`:**
+- `SELECT` on `stations, officers, cases, case_persons, narratives, persons, persons_v`
+- `SELECT, INSERT` on `audit_log` (append-only; no UPDATE/DELETE)
+- `USAGE, SELECT` on `audit_log_id_seq`
+
+---
+
+#### 5. Connectivity verified via Python (`asyncpg`)
+
+```
+Tables visible to satyam_app: audit_log, case_persons, cases, narratives,
+  officers, persons, persons_v, stations
+pgvector version: 0.8.2
+cases rows (through RLS): 0      ← empty, ready for seeding
+vector_dims test: 3               ← vector type is live
+All checks PASSED
+```
+
+---
+
+#### 6. Backend `.env` — no changes needed
+
+`backend/.env` already had the correct local connection strings from the initial setup:
+```
+DATABASE_URL=postgresql+asyncpg://satyam_app:satyam_app@localhost:5432/satyam
+SEED_DATABASE_URL=postgresql+asyncpg://satyam:satyam@localhost:5432/satyam
+```
+
+---
+
+#### Next steps (deferred)
+- Run `python -m seed.seed` (via `SEED_DATABASE_URL`) once the seed generator is ready to populate the 100k synthetic FIR dataset.
+- Embed narratives with BGE-M3 (FP16 on RTX 4070) → store as `vector(1024)` in `narratives.embedding`.
+- Cloud (Neon) track: teammate sets up Neon project, runs same migration with `halfvec(1024)` for the embedding column, pushes a subset of the data.
+- When Neon `DATABASE_URL` is available, flip `backend/.env` → `DATABASE_URL=<neon-url>` to switch tracks (no code changes required).
