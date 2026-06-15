@@ -1,6 +1,18 @@
 """FastAPI application factory for Satyam."""
 from __future__ import annotations
 
+# ── Windows/Python-3.10 import-chain fix ─────────────────────────────────────
+# sentence_transformers → sklearn → pandas._libs.tslibs creates a deeply nested
+# Cython import chain that exceeds the default recursion limit (1000) on Windows,
+# producing a native stack overflow with no Python traceback.
+# Pre-loading pandas and sklearn here (before any ML import) fills sys.modules
+# so that later imports are instant cache-hits.  Must be the very first imports.
+import sys as _sys
+_sys.setrecursionlimit(5000)
+import pandas as _pd   # noqa: F401  – pre-load for cache
+import sklearn as _sk  # noqa: F401  – pre-load for cache
+# ─────────────────────────────────────────────────────────────────────────────
+
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI

@@ -16,10 +16,17 @@ tenacity==9.0.0
 orjson==3.10.13
 structlog==24.4.0
 networkx==3.4.2
-numpy==2.2.1
+numpy==1.26.4               # torch 2.5.1 Windows wheel NOT NumPy-2 ABI compatible — keep <2
+pandas==2.2.3               # pandas 2.3+ compiled against NumPy 2 ABI → stack overflow with numpy 1.x
+scikit-learn==1.5.2         # sklearn 1.6+ compiled against NumPy 2 ABI → stack overflow with numpy 1.x
 pytest==8.3.4
 pytest-asyncio==0.25.0
 # ── Local model inference ────────────────────────────────────────────────────
-# Install PyTorch separately first (CUDA wheel, not on PyPI):
+# IMPORTANT: Install PyTorch separately first (CUDA wheel, not on PyPI):
 #   pip install torch --index-url https://download.pytorch.org/whl/cu121
-sentence-transformers>=3.0.0
+# Then install these pinned versions — they are tested together on Win/Py3.10/torch2.5.1:
+sentence-transformers==3.3.1  # 3.4+ pulled transformers 5.x which requires torch>=2.6
+transformers==4.46.3          # 4.50+ added check_torch_load_is_safe() blocking .bin w/ torch<2.6
+tokenizers==0.20.3            # matched to transformers 4.46.3
+huggingface-hub==0.36.2       # matched to transformers 4.46.3
+FlagEmbedding==1.4.0          # BGE-M3 reranker

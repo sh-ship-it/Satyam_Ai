@@ -1,4 +1,7 @@
 import sys
+sys.setrecursionlimit(5000)
+import pandas as _pd  # pre-load before sentence_transformers triggers sklearn
+import sklearn as _sk  # pre-load before sentence_transformers triggers it
 print("Python", sys.version, flush=True)
 
 import torch

@@ -1,5 +1,9 @@
 """§6 verification suite from satyam_flagembedding_fix.md"""
 import asyncio, sys
+# Windows/Py3.10 fix: pre-load pandas+sklearn before sentence_transformers triggers them
+sys.setrecursionlimit(5000)
+import pandas as _pd   # noqa: F401
+import sklearn as _sk  # noqa: F401
 
 print("=== A: Embedder dim ===", flush=True)
 from app.models.local.embedder_bge import BgeM3Embedder
