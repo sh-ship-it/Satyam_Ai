@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/LandingShell.tsx": {
-    "mtime": 1781282330.644357,
-    "ast_hash": "d6ba11e28691e678d3fc8cdde0cd01ef",
+    "mtime": 1781283743.1378553,
+    "ast_hash": "953de2f6e04015a67652e4b70dc78328",
     "semantic_hash": ""
   },
   "frontend/src/components/ProfileMenu.tsx": {
@@ -415,8 +415,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
-    "mtime": 1781282330.659365,
-    "ast_hash": "4c5dbaf8bd278e577ed86b92b0418a66",
+    "mtime": 1781283735.5054226,
+    "ast_hash": "4a1987d8e0cedcf0cafca1d0ea9002d8",
     "semantic_hash": ""
   },
   "frontend/src/components/ui/accordion.tsx": {
@@ -695,8 +695,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
-    "mtime": 1781282784.194794,
-    "ast_hash": "1dfc33d7d50eb0eee4e9f6f493013fa7",
+    "mtime": 1781283313.8958018,
+    "ast_hash": "d941bfe214b2baf81a5303b3c6747ed7",
     "semantic_hash": ""
   },
   "frontend/src/router.tsx": {
@@ -725,13 +725,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
-    "mtime": 1781282330.602365,
-    "ast_hash": "25eb677324fb07729f008e620df0f807",
-    "semantic_hash": ""
-  },
-  "frontend/src/routes/landing.tsx": {
-    "mtime": 1781282330.6063664,
-    "ast_hash": "3454f04c2703acd27ba303394e3ebbe6",
+    "mtime": 1781283308.939904,
+    "ast_hash": "50d423bd5c033cf98c8b6dcd0d2a1404",
     "semantic_hash": ""
   },
   "frontend/src/routes/map.tsx": {
@@ -840,8 +835,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1781282330.8905787,
-    "ast_hash": "b4aad1a628732223c7d40197adb3bdc9",
+    "mtime": 1781284241.5702906,
+    "ast_hash": "f6a2fd5a7f11640b15498e10363fb10b",
     "semantic_hash": ""
   },
   "backend/README.md": {
@@ -860,8 +855,8 @@
     "semantic_hash": ""
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1781282331.2608287,
-    "ast_hash": "604f38a552da699feef52d91414cdf7c",
+    "mtime": 1781502419.9299536,
+    "ast_hash": "9569b43a3ab9d9f69a7ae39294b6b1f0",
     "semantic_hash": ""
   },
   "frontend/src/routes/README.md": {
@@ -877,6 +872,11 @@
   "frontend/src/assets/avatar-kumar.jpg": {
     "mtime": 1781282330.569233,
     "ast_hash": "9ec9346636ec24adade394a5ef5a7c26",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/login.tsx": {
+    "mtime": 1781283301.7585955,
+    "ast_hash": "bfc9fd69348a43054301d98a70aef387",
     "semantic_hash": ""
   }
 }
