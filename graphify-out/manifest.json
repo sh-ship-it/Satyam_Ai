@@ -160,8 +160,8 @@
     "semantic_hash": ""
   },
   "backend/app/models/local/embedder_bge.py": {
-    "mtime": 1781543221.808984,
-    "ast_hash": "f79cc5f053c3b8f769ee8fc05333385e",
+    "mtime": 1781545443.0916567,
+    "ast_hash": "effdd9202245f68392e3658d55bd72b4",
     "semantic_hash": ""
   },
   "backend/app/models/local/llm_local.py": {
@@ -840,8 +840,8 @@
     "semantic_hash": ""
   },
   "backend/requirements.txt": {
-    "mtime": 1781543267.0152624,
-    "ast_hash": "d0094d6b50369423879f4ad148ea90d3",
+    "mtime": 1781545523.3010883,
+    "ast_hash": "0b5e48125853a634e652d99e03ce51f8",
     "semantic_hash": ""
   },
   "docker-compose.yml": {
@@ -930,8 +930,8 @@
     "semantic_hash": ""
   },
   "backend/seed/embed_narratives.py": {
-    "mtime": 1781527869.6477053,
-    "ast_hash": "9afd547e5ebc5024a5c261141fbe75a3",
+    "mtime": 1781545506.076216,
+    "ast_hash": "137cdddeca6502747223cd2d96526ed1",
     "semantic_hash": ""
   },
   "backend/seed/load_seed.py": {
@@ -952,6 +952,26 @@
   "SATYAM_FLAGEMBEDDING_FIX.md": {
     "mtime": 1781545161.7792976,
     "ast_hash": "cf13610b533868e199af60416064f538",
+    "semantic_hash": ""
+  },
+  "backend/verify_st.py": {
+    "mtime": 1781545568.14528,
+    "ast_hash": "5041c294a78ee5ac61903d4241fbe9a6",
+    "semantic_hash": ""
+  },
+  "backend/verify_st2.py": {
+    "mtime": 1781545615.6874845,
+    "ast_hash": "46d029397ec501ee6ac7683e5afd7742",
+    "semantic_hash": ""
+  },
+  "backend/verify_st3.py": {
+    "mtime": 1781545644.6430898,
+    "ast_hash": "32eb1dd1fb0b50e3f9125877e22e470a",
+    "semantic_hash": ""
+  },
+  "backend/verify_st4.py": {
+    "mtime": 1781545677.182316,
+    "ast_hash": "a6511ea3d226c025603f65fbe585c43f",
     "semantic_hash": ""
   }
 }
