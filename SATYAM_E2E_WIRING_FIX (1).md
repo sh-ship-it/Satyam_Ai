@@ -1402,3 +1402,297 @@ cd frontend && npm run build && npm run dev
 # 3. Console Data tab shows the By Station table populated from Postgres.
 # 4. Console Map tab shows heat/pins/grid hotspots; layers + filters update both tabs.
 ```
+
+
+---
+
+# PART D — Issue 10: Make the chat answer readable & organized
+
+**Symptom (your screenshot).** You asked *“Show cases in Cyber Crime Police Station”* and got one giant paragraph: `**FIR Number:** 0001/2023, **Year:** 2023, **Crime Type:** DOWRY PROHIBITION ACT, **Status:** Undetected [ref] * **FIR Number:** 0002/2023 …` — a comma run-on, with the `**` asterisks showing **literally** instead of rendering as bold.
+
+**Root cause is TWO bugs stacked:**
+
+| # | Layer | File | Problem |
+|---|-------|------|---------|
+| A | Backend prompt | `backend/app/pipeline/prompts.py` → `ANSWER_SYSTEM` | Says only “be concise and factual” — no layout rules, so the LLM dumps every field of every FIR into one comma-joined line. |
+| B | Frontend render | `frontend/src/routes/console.tsx` → `AiMsg` | Renders `{text}` as a **raw string** inside a `<div>`. There is no Markdown parser, so `**bold**`, line breaks, and tables are shown as literal characters. |
+
+You must fix **both** — fixing only the prompt still shows literal `**`; fixing only the renderer still shows a run-on.
+
+## 10.0 Best structural prompt (paste this to your coding agent)
+
+```
+The Satyam chat answer is rendered as one unreadable run-on paragraph and shows
+literal ** asterisks. Fix it end to end, in two places:
+
+1) BACKEND — backend/app/pipeline/prompts.py:
+   Rewrite ANSWER_SYSTEM so the model ALWAYS returns clean GitHub-flavoured
+   Markdown: a one-sentence summary, then a Markdown TABLE (one record per row,
+   columns FIR | Year | Crime Type | Status | Station, dropping empty columns),
+   or a short bulleted list when there are <=3 records. Never a comma run-on.
+   Keep FIR ids / IPC-BNS section numbers / station names / dates verbatim, and
+   keep inline [ref] citations.
+
+2) FRONTEND — frontend/src/routes/console.tsx (AiMsg component):
+   Render the AI text as Markdown (react-markdown + remark-gfm) inside a styled
+   prose container so tables, bold, and line breaks render. Stream-safe: it must
+   re-render correctly while tokens arrive. Keep the FQ avatar, citation chips,
+   “View SQL / sources” button, blinking cursor, and the action slot.
+
+Do not change the SSE event contract (token/citation/blocked/done/error).
+```
+
+## 10.1 Backend fix — `backend/app/pipeline/prompts.py`
+
+Replace the existing `ANSWER_SYSTEM` constant with:
+
+```python
+ANSWER_SYSTEM = (
+    "You are Satyam, a Karnataka State Police crime-intelligence assistant.\n"
+    "Answer the officer's question using ONLY the provided grounded data rows and "
+    "narrative snippets. Never invent facts. If the grounded data is empty, say you "
+    "found no matching records.\n\n"
+    "FORMATTING RULES (always follow):\n"
+    "1. Open with ONE short sentence summarising the result (total count + scope), "
+    "e.g. 'Found 12 FIRs registered at Cyber Crime Police Station.'\n"
+    "2. When you list cases/records, render them as a GitHub-flavoured Markdown TABLE "
+    "with a header row. Preferred columns: FIR | Year | Crime Type | Status | Station. "
+    "Drop any column that is empty for every row. ONE record per row — never a "
+    "comma-separated run-on sentence.\n"
+    "3. If there are 3 or fewer records, a short Markdown bullet list is fine — one "
+    "field per line.\n"
+    "4. Use **bold** only for the lead summary or table headers, NOT around every field.\n"
+    "5. Keep IPC/BNS section numbers, FIR identifiers, station names and dates exactly "
+    "as given.\n"
+    "6. Cite each grounded source inline as [ref].\n"
+    "7. If the list is longer than 10 rows, show the first 10 and end with a line like "
+    "'Showing 10 of 142 — ask to narrow by date, status, or crime type.'\n\n"
+    "For PROTECTED crime types (POCSO, RAPE, etc.), remind the officer that victim PII "
+    "is restricted and to consult their supervising officer."
+)
+```
+
+> The Kannada path already works: `orchestrator._compose()` appends a “Respond in Kannada” directive when `lang == 'kn'`, and it tells the model to keep FIR ids / sections / dates in original form. The table format above is language-agnostic, so Kannada answers will use the same clean table. (The reason KN answers don’t appear today is the frontend bug in Issue 11.1, not the prompt.)
+
+## 10.2 Frontend fix — render Markdown in `AiMsg`
+
+**Install once** (from `frontend/`):
+
+```bash
+npm install react-markdown remark-gfm
+```
+
+**Edit `frontend/src/routes/console.tsx`.** Add the imports near the top:
+
+```tsx
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+```
+
+Replace the whole `AiMsg` component with the version below. The only real change is that the raw `{text}` is swapped for a `<ReactMarkdown>` block wrapped in a styled container; everything else (avatar, streaming cursor, citations, button, action slot) is preserved.
+
+```tsx
+function AiMsg({
+  text, citations, streaming, action,
+}: { text: string; citations?: string[]; streaming?: boolean; action?: React.ReactNode }) {
+  const t = useT();
+  return (
+    <div className="flex gap-2">
+      <div className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-foreground text-background text-[10px] font-bold">
+        FQ
+      </div>
+      <div className="flex-1">
+        <div className="rounded-2xl rounded-tl-sm border border-border bg-muted/40 px-3.5 py-2.5 text-sm text-foreground">
+          <div className="prose prose-sm dark:prose-invert max-w-none
+                          prose-p:my-1.5 prose-headings:my-2 prose-li:my-0.5
+                          prose-table:my-2 prose-table:text-xs prose-table:block prose-table:overflow-x-auto
+                          prose-th:border prose-th:border-border prose-th:bg-muted/60 prose-th:px-2 prose-th:py-1 prose-th:text-left prose-th:font-semibold
+                          prose-td:border prose-td:border-border prose-td:px-2 prose-td:py-1 prose-td:align-top
+                          prose-code:rounded prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:text-[12px]">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {text || ""}
+            </ReactMarkdown>
+          </div>
+          {streaming && <span className="ml-1 inline-block h-3.5 w-1.5 translate-y-0.5 animate-pulse bg-primary" />}
+        </div>
+        {citations && (
+          <div className="mt-1.5 flex flex-wrap gap-1">
+            {citations.map((c) => (
+              <span key={c} className="rounded border border-border bg-card px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground">
+                ↳ {c}
+              </span>
+            ))}
+          </div>
+        )}
+        {citations && (
+          <button className="mt-1 text-[11px] text-primary hover:underline">{t("View SQL / sources →")}</button>
+        )}
+        {action}
+      </div>
+    </div>
+  );
+}
+```
+
+**If you use Tailwind’s typography plugin** (`prose` classes), make sure it is enabled in `tailwind.config`:
+
+```js
+// tailwind.config.{js,ts}
+plugins: [require("@tailwindcss/typography")],
+```
+
+Install it if missing: `npm install -D @tailwindcss/typography`.
+
+**Zero-dependency fallback** (if you would rather not add packages): at minimum add `whitespace-pre-wrap` to the bubble and have the backend emit newline-separated lines instead of a table — but this still won’t render `**bold**` or real tables, so `react-markdown` is the recommended fix.
+
+## 10.3 Result
+
+The same query now renders as:
+
+> Found 12 FIRs registered at Cyber Crime Police Station. [ref]
+>
+> | FIR | Year | Crime Type | Status |
+> |-----|------|-----------|--------|
+> | 0001/2023 | 2023 | Dowry Prohibition Act | Undetected |
+> | 0002/2023 | 2023 | Cyber Crime | Undetected |
+> | 0001/2022 | 2022 | Cheating | Pending Trial |
+
+## 10.4 Verify
+
+1. `cd backend && python -c "from app.pipeline.prompts import ANSWER_SYSTEM; print('TABLE' in ANSWER_SYSTEM)"` → `True`.
+2. `cd frontend && npm run build` — compiles with the new imports.
+3. Ask *“Show cases in Cyber Crime Police Station”* → answer is a one-line summary + a clean table, no literal `**`.
+4. Confirm streaming still looks right (table assembles as tokens arrive; cursor blinks).
+
+---
+
+# PART E — Issue 11: Kannada toggle changes nothing across screens
+
+**Honest diagnosis first.** The i18n machinery is actually wired correctly, so do **not** rewrite it blindly:
+
+- `frontend/src/lib/i18n.tsx` — `I18nProvider` holds `lang` state, persists to `localStorage("fq-lang")`, and `t = (s) => lang === "KN" ? (DICT[s] ?? s) : s`. ✓
+- `frontend/src/routes/__root.tsx` — `<I18nProvider>` wraps `<Outlet/>`, so every screen is inside the context. ✓
+- `frontend/src/components/Shell.tsx` — the `EN | ಕನ್ನಡ` header pill calls `setLang(lang === "EN" ? "KN" : "EN")`. ✓
+- Screens already call `t()` heavily (console 65, Shell 76, network 90 …). ✓
+
+So static labels that are wrapped in `t()` **and** present in `DICT` DO switch. What makes it *feel* like “nothing changes” are two real gaps:
+
+| # | Gap | Effect |
+|---|-----|--------|
+| A | **The chat answer ignores the global language.** In `console.tsx → sendMessage`, `reqLang` is derived ONLY from the voice option: `(opts?.lang||"").startsWith("kn") ? "kn" : "en"`. A typed query has no `opts`, so it ALWAYS sends `lang:"en"` — the AI replies in English even in Kannada mode. The chat is the biggest thing on screen, so it looks like nothing translated. |
+| B | **Untranslated literals / missing DICT keys.** Any visible string not wrapped in `t()`, or wrapped but missing from `DICT`, stays English — including the NEW merged Console/Map canvas strings from Issue 9. |
+
+## 11.0 Best structural prompt (paste this to your coding agent)
+
+```
+The Satyam Kannada toggle (EN | ಕನ್ನಡ) leaves most of the app in English. The i18n
+core (I18nProvider, setLang, t, DICT in lib/i18n.tsx) is correct — do NOT rewrite
+it. Fix the two real gaps:
+
+1) Chat answers must follow the GLOBAL UI language, not just voice. In
+   routes/console.tsx, read { lang } from useI18n() and make reqLang resolve to
+   "kn" when the global lang is "KN" (voice override still wins). The backend
+   already supports Kannada answers via the lang param.
+
+2) Translate every remaining user-visible string: wrap hardcoded JSX text in t(),
+   and add the missing English->Kannada entries to DICT in lib/i18n.tsx —
+   especially the merged Console/Map canvas strings (Crime overview, live, Data,
+   Map, All crime types, All districts, Cleared, Avg / day, Top hotspot, etc.).
+   Find untranslated text with the grep audit below and close every gap.
+
+Keep numbers, FIR ids, IPC/BNS sections, and proper station names verbatim.
+```
+
+## 11.1 Fix A — chat answers must respect the global language
+
+In `frontend/src/routes/console.tsx`:
+
+**(1)** Ensure `useI18n` is imported (the file already imports `useT`; switch/extend it):
+
+```tsx
+import { useT, useI18n } from "@/lib/i18n";
+```
+
+**(2)** Inside the `Console()` component body (near the other hooks, where `const t = useT()` is), add:
+
+```tsx
+const { lang } = useI18n();   // "EN" | "KN"
+```
+
+**(3)** In `sendMessage`, replace the `reqLang` line:
+
+```tsx
+// BEFORE
+const reqLang: "en" | "kn" =
+  (opts?.lang || "").toLowerCase().startsWith("kn") ? "kn" : "en";
+
+// AFTER — voice override wins, otherwise follow the global UI language
+const reqLang: "en" | "kn" =
+  (opts?.lang || "").toLowerCase().startsWith("kn")
+    ? "kn"
+    : lang === "KN"
+      ? "kn"
+      : "en";
+```
+
+Now typing a question while the app is in Kannada streams a Kannada answer (the orchestrator already appends the Kannada directive when `lang=="kn"`).
+
+> Also neutralize the English-only demo fallback so it doesn’t override Kannada: the `cannedFallback()` text is wrapped in `t(…)`, so just add its English string + Kannada value to `DICT` (see 11.2) and it will localise too.
+
+## 11.2 Fix B — add the missing DICT entries (merged canvas + chat)
+
+In `frontend/src/lib/i18n.tsx`, add these keys to the `DICT` object (extend, don’t replace). These cover the Issue 9 merged Console/Map canvas and the chat fallback:
+
+```ts
+  // Console — merged results canvas (Issue 9)
+  "Crime overview": "ಅರಾಧ ಅವಲೋಕನ",
+  "Data": "ಡೇಟಾ",
+  "All crime types": "ಎಲ್ಲಾ ಅರಾಧ ಪ್ರಕಾರಗಳು",
+  "All districts": "ಎಲ್ಲಾ ಜಿಲ್ಲೆಗಳು",
+  "Total FIRs": "ಒಟ್ಟು ಎಫ್‌ಐಆರ್‌ಗಳು",
+  "Cleared": "ಪರಿಹಾರ",
+  "Avg / day": "ಸರಾಸರಿ / ದಿನ",
+  "Top hotspot": "ಪ್ರಮುಖ ಹಾಟ್‌ಸ್ಪಾಟ್",
+  "Station": "ಠಾಣೆ",
+  "Top crime": "ಪ್ರಮುಖ ಅರಾಧ",
+  "Layers": "ಪ್ರಸ್ತರಗಳು",
+  "View": "ನೋಟ",
+
+  // Console — chat fallback / summary
+  "I found 142 theft FIRs across 6 stations in the Whitefield zone. Here is a summary table.":
+    "ವೈಟ್‌ಫೂ0ಲ್ಡ್ ವಲಯದ 6 ಠಾಣೆಗಳಲ್ಲಿ 142 ಕಳ್ಳತನ ಎಫ್‌ಐಆರ್‌ಗಳು ಕಂಡುಬಂದಿವೆ. ಇಲ್ಲಿ ಸಾರಾಂಶ ಕೋಷ್ಟಕ ಇದೆ.",
+```
+
+> Adjust the Kannada wording to taste — the important thing is that every key that appears in the UI exists in `DICT`, otherwise `t()` silently falls back to English.
+
+## 11.3 Close the remaining gaps — audit method
+
+Run this from `frontend/src` to find user-visible JSX text that is **not** wrapped in `t()` (review each hit and wrap it, then add its DICT entry):
+
+```bash
+# JSX text nodes that are plain English and not already inside t("…")
+grep -rnoE '>[A-Z][A-Za-z][^<>{}]{2,}<' routes components \
+  | grep -vE 't\(' \
+  | grep -vE '</' \
+  | head -80
+```
+
+For attributes that are visible (placeholder, aria-label, title, button labels), also check:
+
+```bash
+grep -rnoE '(placeholder|aria-label|title)="[^"]+"' routes components | head -60
+```
+
+Wrap each real string: `placeholder={t("Search by ID / alias")}` and add the key to `DICT`. Repeat the first grep until it returns only non-UI noise (icons, class names, single letters).
+
+## 11.4 Note on the standalone Map screen
+
+If you applied Issue 9 (merged Map into Console and deleted `routes/map.tsx`), do the i18n audit on the NEW merged canvas in `console.tsx`, not on the deleted `map.tsx`. The map-specific DICT keys already exist (Crime type, Theft, Burglary, heat, pins, grid, Intensity, etc.) — reuse them in the merged canvas.
+
+## 11.5 Verify
+
+1. `cd frontend && npm run build` — compiles.
+2. Toggle to `ಕನ್ನಡ`: header, nav rail, console labels, filters, table headers, stat cards, and the merged map controls all switch to Kannada.
+3. Type a question (e.g. *“Show cases in Cyber Crime Police Station”*) in Kannada mode → the streamed answer is in Kannada, with FIR ids / sections / dates kept in their original form.
+4. Reload the page → language persists (from `localStorage "fq-lang"`).
+5. Re-run the 11.3 grep → no remaining user-visible English literals.
