@@ -885,8 +885,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1781528169.9275534,
-    "ast_hash": "a8981e865a99706d4157713a4f8120ab",
+    "mtime": 1781545251.1760182,
+    "ast_hash": "cdb7e15988a4eb76aa268530902dc79e",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -949,49 +949,9 @@
     "ast_hash": "da3ab4a00c7a356e4a25d053cd3d7954",
     "semantic_hash": ""
   },
-  "backend/crash2.py": {
-    "mtime": 1781544137.3625886,
-    "ast_hash": "e0e200ff6b856642abc8b64a0ae238f0",
-    "semantic_hash": ""
-  },
-  "backend/crash3.py": {
-    "mtime": 1781544466.6166418,
-    "ast_hash": "87a17e978b4d1e0b2e1331c5897301c9",
-    "semantic_hash": ""
-  },
-  "backend/crash4.py": {
-    "mtime": 1781544493.5496318,
-    "ast_hash": "709949d60839320049c072e7cb38d712",
-    "semantic_hash": ""
-  },
-  "backend/crash5.py": {
-    "mtime": 1781544559.5577352,
-    "ast_hash": "0ac016fefa6b6755dfc3d1ef9fba496a",
-    "semantic_hash": ""
-  },
-  "backend/crash6.py": {
-    "mtime": 1781544592.7561147,
-    "ast_hash": "a2136fa4e2f5f1d279aa5b59f1a9d2a4",
-    "semantic_hash": ""
-  },
-  "backend/crash7.py": {
-    "mtime": 1781544624.4307172,
-    "ast_hash": "6b3d11a3680519b992ede8fd1edcb5c2",
-    "semantic_hash": ""
-  },
-  "backend/find_crash.py": {
-    "mtime": 1781543993.9608078,
-    "ast_hash": "90c902edff725328c83e6368a2c7b982",
-    "semantic_hash": ""
-  },
-  "backend/test_load.py": {
-    "mtime": 1781543664.2944224,
-    "ast_hash": "44597b87cc6d0cebd2d204471c673766",
-    "semantic_hash": ""
-  },
-  "backend/verify_models.py": {
-    "mtime": 1781543443.6500714,
-    "ast_hash": "f99337b6e657108f653032e6cec0cdba",
+  "SATYAM_FLAGEMBEDDING_FIX.md": {
+    "mtime": 1781545161.7792976,
+    "ast_hash": "cf13610b533868e199af60416064f538",
     "semantic_hash": ""
   }
 }

@@ -4,14 +4,944 @@
   "graph": {},
   "nodes": [
     {
+      "label": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "file_type": "document",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "satyam_flagembedding_fix",
+      "community": 35,
+      "norm_label": "satyam_flagembedding_fix.md"
+    },
+    {
+      "label": "Satyam \u2014 Local-Model Crash Fix (FlagEmbedding \u2192 sentence-transformers)",
+      "file_type": "document",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "satyam_flagembedding_fix_satyam_local_model_crash_fix_flagembedding_sentence_transformers",
+      "community": 35,
+      "norm_label": "satyam \u2014 local-model crash fix (flagembedding \u2192 sentence-transformers)"
+    },
+    {
+      "label": "0. Verdict on your theory",
+      "file_type": "document",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "satyam_flagembedding_fix_0_verdict_on_your_theory",
+      "community": 35,
+      "norm_label": "0. verdict on your theory"
+    },
+    {
+      "label": "Bug summary (deep scan)",
+      "file_type": "document",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "satyam_flagembedding_fix_bug_summary_deep_scan",
+      "community": 35,
+      "norm_label": "bug summary (deep scan)"
+    },
+    {
+      "label": "B1 \u2014 Replace `app/models/local/embedder_bge.py` (FULL FILE)",
+      "file_type": "document",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L56",
+      "_origin": "ast",
+      "id": "satyam_flagembedding_fix_b1_replace_app_models_local_embedder_bge_py_full_file",
+      "community": 35,
+      "norm_label": "b1 \u2014 replace `app/models/local/embedder_bge.py` (full file)"
+    },
+    {
+      "label": "Key API differences this fixes (FlagEmbedding \u2192 ST)",
+      "file_type": "document",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L133",
+      "_origin": "ast",
+      "id": "satyam_flagembedding_fix_key_api_differences_this_fixes_flagembedding_st",
+      "community": 35,
+      "norm_label": "key api differences this fixes (flagembedding \u2192 st)"
+    },
+    {
+      "label": "B3 \u2014 Fix the seed job `seed/embed_narratives.py`",
+      "file_type": "document",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L142",
+      "_origin": "ast",
+      "id": "satyam_flagembedding_fix_b3_fix_the_seed_job_seed_embed_narratives_py",
+      "community": 35,
+      "norm_label": "b3 \u2014 fix the seed job `seed/embed_narratives.py`"
+    },
+    {
+      "label": "B4 \u2014 Delete leftover debug scripts (from `backend/`)",
+      "file_type": "document",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L173",
+      "_origin": "ast",
+      "id": "satyam_flagembedding_fix_b4_delete_leftover_debug_scripts_from_backend",
+      "community": 35,
+      "norm_label": "b4 \u2014 delete leftover debug scripts (from `backend/`)"
+    },
+    {
+      "label": "B5 \u2014 `requirements.txt`: drop FlagEmbedding (optional but recommended)",
+      "file_type": "document",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L182",
+      "_origin": "ast",
+      "id": "satyam_flagembedding_fix_b5_requirements_txt_drop_flagembedding_optional_but_recommended",
+      "community": 35,
+      "norm_label": "b5 \u2014 `requirements.txt`: drop flagembedding (optional but recommended)"
+    },
+    {
+      "label": "5. Local vs Neon (S1) \u2014 leave for now if you're local",
+      "file_type": "document",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L194",
+      "_origin": "ast",
+      "id": "satyam_flagembedding_fix_5_local_vs_neon_s1_leave_for_now_if_you_re_local",
+      "community": 35,
+      "norm_label": "5. local vs neon (s1) \u2014 leave for now if you're local"
+    },
+    {
+      "label": "6. Verify it works (run from `backend/`, venv active)",
+      "file_type": "document",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L204",
+      "_origin": "ast",
+      "id": "satyam_flagembedding_fix_6_verify_it_works_run_from_backend_venv_active",
+      "community": 35,
+      "norm_label": "6. verify it works (run from `backend/`, venv active)"
+    },
+    {
+      "label": "Apply order",
+      "file_type": "document",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L251",
+      "_origin": "ast",
+      "id": "satyam_flagembedding_fix_apply_order",
+      "community": 35,
+      "norm_label": "apply order"
+    },
+    {
+      "label": "made_till_now.md",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "made_till_now",
+      "community": 27,
+      "norm_label": "made_till_now.md"
+    },
+    {
+      "label": "Satyam \u2014 Project Change Log (`made_till_now.md`)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "made_till_now_satyam_project_change_log_made_till_now_md",
+      "community": 27,
+      "norm_label": "satyam \u2014 project change log (`made_till_now.md`)"
+    },
+    {
+      "label": "Log of Changes",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "made_till_now_log_of_changes",
+      "community": 27,
+      "norm_label": "log of changes"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Initial Setup",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_initial_setup",
+      "community": 27,
+      "norm_label": "[2026-06-15] \u2014 initial setup"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Architecture Update: Multi-Engine Support (Sarvam, Ollama Cloud, BRAIN_ENGINE, SQL_ENGINE, VOICE_BACKEND)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
+      "community": 62,
+      "norm_label": "[2026-06-15] \u2014 architecture update: multi-engine support (sarvam, ollama cloud, brain_engine, sql_engine, voice_backend)"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "made_till_now_summary",
+      "community": 62,
+      "norm_label": "summary"
+    },
+    {
+      "label": "Backend Changes",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "made_till_now_backend_changes",
+      "community": 62,
+      "norm_label": "backend changes"
+    },
+    {
+      "label": "Environment Files",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L82",
+      "_origin": "ast",
+      "id": "made_till_now_environment_files",
+      "community": 62,
+      "norm_label": "environment files"
+    },
+    {
+      "label": "Frontend Changes",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L93",
+      "_origin": "ast",
+      "id": "made_till_now_frontend_changes",
+      "community": 62,
+      "norm_label": "frontend changes"
+    },
+    {
+      "label": "Architectural Decisions Recorded",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L113",
+      "_origin": "ast",
+      "id": "made_till_now_architectural_decisions_recorded",
+      "community": 62,
+      "norm_label": "architectural decisions recorded"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Architecture Doc Revision: Saaras v3, GPU specs for BGE-M3 + Reranker, Demo-track clarification",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L122",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_for_bge_m3_reranker_demo_track_clarification",
+      "community": 97,
+      "norm_label": "[2026-06-15] \u2014 architecture doc revision: saaras v3, gpu specs for bge-m3 + reranker, demo-track clarification"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L124",
+      "_origin": "ast",
+      "id": "made_till_now_summary_124",
+      "community": 97,
+      "norm_label": "summary"
+    },
+    {
+      "label": "Changes",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L129",
+      "_origin": "ast",
+      "id": "made_till_now_changes",
+      "community": 97,
+      "norm_label": "changes"
+    },
+    {
+      "label": "Architecture decisions recorded (from updated doc)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L149",
+      "_origin": "ast",
+      "id": "made_till_now_architecture_decisions_recorded_from_updated_doc",
+      "community": 97,
+      "norm_label": "architecture decisions recorded (from updated doc)"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Security Update: Robust .env Ignore Rules",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L157",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_security_update_robust_env_ignore_rules",
+      "community": 27,
+      "norm_label": "[2026-06-15] \u2014 security update: robust .env ignore rules"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L159",
+      "_origin": "ast",
+      "id": "made_till_now_summary_159",
+      "community": 27,
+      "norm_label": "summary"
+    },
+    {
+      "label": "Changes",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L162",
+      "_origin": "ast",
+      "id": "made_till_now_changes_162",
+      "community": 27,
+      "norm_label": "changes"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Local Database Setup: PostgreSQL 17 + pgvector 0.8.2 + Full Schema",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L170",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
+      "community": 67,
+      "norm_label": "[2026-06-15] \u2014 local database setup: postgresql 17 + pgvector 0.8.2 + full schema"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L172",
+      "_origin": "ast",
+      "id": "made_till_now_summary_172",
+      "community": 67,
+      "norm_label": "summary"
+    },
+    {
+      "label": "1. PostgreSQL status confirmed",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L182",
+      "_origin": "ast",
+      "id": "made_till_now_1_postgresql_status_confirmed",
+      "community": 67,
+      "norm_label": "1. postgresql status confirmed"
+    },
+    {
+      "label": "2. pgvector 0.8.2 \u2014 build from source (Windows, MSVC)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L190",
+      "_origin": "ast",
+      "id": "made_till_now_2_pgvector_0_8_2_build_from_source_windows_msvc",
+      "community": 67,
+      "norm_label": "2. pgvector 0.8.2 \u2014 build from source (windows, msvc)"
+    },
+    {
+      "label": "3. Database creation",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L217",
+      "_origin": "ast",
+      "id": "made_till_now_3_database_creation",
+      "community": 67,
+      "norm_label": "3. database creation"
+    },
+    {
+      "label": "4. Schema applied \u2014 `backend/migrations/001_init.sql`",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L227",
+      "_origin": "ast",
+      "id": "made_till_now_4_schema_applied_backend_migrations_001_init_sql",
+      "community": 67,
+      "norm_label": "4. schema applied \u2014 `backend/migrations/001_init.sql`"
+    },
+    {
+      "label": "5. Connectivity verified via Python (`asyncpg`)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L260",
+      "_origin": "ast",
+      "id": "made_till_now_5_connectivity_verified_via_python_asyncpg",
+      "community": 67,
+      "norm_label": "5. connectivity verified via python (`asyncpg`)"
+    },
+    {
+      "label": "6. Backend `.env` \u2014 no changes needed",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L273",
+      "_origin": "ast",
+      "id": "made_till_now_6_backend_env_no_changes_needed",
+      "community": 67,
+      "norm_label": "6. backend `.env` \u2014 no changes needed"
+    },
+    {
+      "label": "Next steps (deferred)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L283",
+      "_origin": "ast",
+      "id": "made_till_now_next_steps_deferred",
+      "community": 67,
+      "norm_label": "next steps (deferred)"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Neon Cloud Database Connected",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L291",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_neon_cloud_database_connected",
+      "community": 96,
+      "norm_label": "[2026-06-15] \u2014 neon cloud database connected"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L293",
+      "_origin": "ast",
+      "id": "made_till_now_summary_293",
+      "community": 96,
+      "norm_label": "summary"
+    },
+    {
+      "label": "What was confirmed",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L298",
+      "_origin": "ast",
+      "id": "made_till_now_what_was_confirmed",
+      "community": 96,
+      "norm_label": "what was confirmed"
+    },
+    {
+      "label": "Files changed",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L307",
+      "_origin": "ast",
+      "id": "made_till_now_files_changed",
+      "community": 96,
+      "norm_label": "files changed"
+    },
+    {
+      "label": "How to switch tracks",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L326",
+      "_origin": "ast",
+      "id": "made_till_now_how_to_switch_tracks",
+      "community": 96,
+      "norm_label": "how to switch tracks"
+    },
+    {
+      "label": "Security note",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L332",
+      "_origin": "ast",
+      "id": "made_till_now_security_note",
+      "community": 96,
+      "norm_label": "security note"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Gitignore Update: Ignore Synthetic Dataset CSVs",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L339",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_gitignore_update_ignore_synthetic_dataset_csvs",
+      "community": 105,
+      "norm_label": "[2026-06-15] \u2014 gitignore update: ignore synthetic dataset csvs"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L341",
+      "_origin": "ast",
+      "id": "made_till_now_summary_341",
+      "community": 105,
+      "norm_label": "summary"
+    },
+    {
+      "label": "Changes",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L344",
+      "_origin": "ast",
+      "id": "made_till_now_changes_344",
+      "community": 105,
+      "norm_label": "changes"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Full DB Rebuild + KSP RBAC + 100k Dataset Loaded",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L356",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
+      "community": 50,
+      "norm_label": "[2026-06-15] \u2014 full db rebuild + ksp rbac + 100k dataset loaded"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L358",
+      "_origin": "ast",
+      "id": "made_till_now_summary_358",
+      "community": 50,
+      "norm_label": "summary"
+    },
+    {
+      "label": "Files moved / created",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L363",
+      "_origin": "ast",
+      "id": "made_till_now_files_moved_created",
+      "community": 50,
+      "norm_label": "files moved / created"
+    },
+    {
+      "label": "Database changes",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L375",
+      "_origin": "ast",
+      "id": "made_till_now_database_changes",
+      "community": 50,
+      "norm_label": "database changes"
+    },
+    {
+      "label": "Backend code changes",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L404",
+      "_origin": "ast",
+      "id": "made_till_now_backend_code_changes",
+      "community": 50,
+      "norm_label": "backend code changes"
+    },
+    {
+      "label": "RLS verification (live test)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L452",
+      "_origin": "ast",
+      "id": "made_till_now_rls_verification_live_test",
+      "community": 50,
+      "norm_label": "rls verification (live test)"
+    },
+    {
+      "label": "Next steps",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L457",
+      "_origin": "ast",
+      "id": "made_till_now_next_steps",
+      "community": 50,
+      "norm_label": "next steps"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Architecture Doc Revision: Saaras v3, GPU Specs, Demo Clarification",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L464",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_demo_clarification",
+      "community": 27,
+      "norm_label": "[2026-06-15] \u2014 architecture doc revision: saaras v3, gpu specs, demo clarification"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L466",
+      "_origin": "ast",
+      "id": "made_till_now_summary_466",
+      "community": 27,
+      "norm_label": "summary"
+    },
+    {
+      "label": "Code changes",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L470",
+      "_origin": "ast",
+      "id": "made_till_now_code_changes",
+      "community": 27,
+      "norm_label": "code changes"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Neon Cloud Database Connected",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L477",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_neon_cloud_database_connected_477",
+      "community": 27,
+      "norm_label": "[2026-06-15] \u2014 neon cloud database connected"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L479",
+      "_origin": "ast",
+      "id": "made_till_now_summary_479",
+      "community": 27,
+      "norm_label": "summary"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Full DB Rebuild: Schema v2 + KSP RBAC + 100k Dataset",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L490",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset",
+      "community": 95,
+      "norm_label": "[2026-06-15] \u2014 full db rebuild: schema v2 + ksp rbac + 100k dataset"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L492",
+      "_origin": "ast",
+      "id": "made_till_now_summary_492",
+      "community": 95,
+      "norm_label": "summary"
+    },
+    {
+      "label": "Files",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L495",
+      "_origin": "ast",
+      "id": "made_till_now_files",
+      "community": 95,
+      "norm_label": "files"
+    },
+    {
+      "label": "Data loaded (Neon + local)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L504",
+      "_origin": "ast",
+      "id": "made_till_now_data_loaded_neon_local",
+      "community": 95,
+      "norm_label": "data loaded (neon + local)"
+    },
+    {
+      "label": "Key backend rewrites",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L507",
+      "_origin": "ast",
+      "id": "made_till_now_key_backend_rewrites",
+      "community": 95,
+      "norm_label": "key backend rewrites"
+    },
+    {
+      "label": "RLS verified live",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L525",
+      "_origin": "ast",
+      "id": "made_till_now_rls_verified_live",
+      "community": 95,
+      "norm_label": "rls verified live"
+    },
+    {
+      "label": "[2026-06-15] \u2014 DATABASE.md Rewritten",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L530",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_database_md_rewritten",
+      "community": 27,
+      "norm_label": "[2026-06-15] \u2014 database.md rewritten"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Bug Fix Sprint: 17 Bugs Fixed (SATYAM_BUG_FIXES.md \u2014 Rounds 1\u20134)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L538",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
+      "community": 44,
+      "norm_label": "[2026-06-15] \u2014 bug fix sprint: 17 bugs fixed (satyam_bug_fixes.md \u2014 rounds 1\u20134)"
+    },
+    {
+      "label": "Critical / High (crash or security)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L542",
+      "_origin": "ast",
+      "id": "made_till_now_critical_high_crash_or_security",
+      "community": 44,
+      "norm_label": "critical / high (crash or security)"
+    },
+    {
+      "label": "Medium",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L552",
+      "_origin": "ast",
+      "id": "made_till_now_medium",
+      "community": 44,
+      "norm_label": "medium"
+    },
+    {
+      "label": "Low",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L567",
+      "_origin": "ast",
+      "id": "made_till_now_low",
+      "community": 44,
+      "norm_label": "low"
+    },
+    {
+      "label": "Deleted",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L575",
+      "_origin": "ast",
+      "id": "made_till_now_deleted",
+      "community": 44,
+      "norm_label": "deleted"
+    },
+    {
+      "label": "Docstring / stale comment",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L578",
+      "_origin": "ast",
+      "id": "made_till_now_docstring_stale_comment",
+      "community": 44,
+      "norm_label": "docstring / stale comment"
+    },
+    {
+      "label": "Test results after all fixes",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L581",
+      "_origin": "ast",
+      "id": "made_till_now_test_results_after_all_fixes",
+      "community": 44,
+      "norm_label": "test results after all fixes"
+    },
+    {
+      "label": "Confirmed false positives (not touched)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L588",
+      "_origin": "ast",
+      "id": "made_till_now_confirmed_false_positives_not_touched",
+      "community": 44,
+      "norm_label": "confirmed false positives (not touched)"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Settings Panel: Database Source Dropdown",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L593",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_settings_panel_database_source_dropdown",
+      "community": 100,
+      "norm_label": "[2026-06-15] \u2014 settings panel: database source dropdown"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L595",
+      "_origin": "ast",
+      "id": "made_till_now_summary_595",
+      "community": 100,
+      "norm_label": "summary"
+    },
+    {
+      "label": "Frontend \u2014 `frontend/src/components/SettingsDialog.tsx`",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L599",
+      "_origin": "ast",
+      "id": "made_till_now_frontend_frontend_src_components_settingsdialog_tsx",
+      "community": 100,
+      "norm_label": "frontend \u2014 `frontend/src/components/settingsdialog.tsx`"
+    },
+    {
+      "label": "Frontend \u2014 `frontend/src/lib/api/client.ts`",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L608",
+      "_origin": "ast",
+      "id": "made_till_now_frontend_frontend_src_lib_api_client_ts",
+      "community": 100,
+      "norm_label": "frontend \u2014 `frontend/src/lib/api/client.ts`"
+    },
+    {
+      "label": "Backend \u2014 `backend/app/db/session.py` (rewritten)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L611",
+      "_origin": "ast",
+      "id": "made_till_now_backend_backend_app_db_session_py_rewritten",
+      "community": 100,
+      "norm_label": "backend \u2014 `backend/app/db/session.py` (rewritten)"
+    },
+    {
+      "label": "Backend \u2014 `backend/app/api/routes/settings.py` *(new file)*",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L617",
+      "_origin": "ast",
+      "id": "made_till_now_backend_backend_app_api_routes_settings_py_new_file",
+      "community": 100,
+      "norm_label": "backend \u2014 `backend/app/api/routes/settings.py` *(new file)*"
+    },
+    {
+      "label": "Backend \u2014 `backend/app/config.py`",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L622",
+      "_origin": "ast",
+      "id": "made_till_now_backend_backend_app_config_py",
+      "community": 100,
+      "norm_label": "backend \u2014 `backend/app/config.py`"
+    },
+    {
+      "label": "Backend \u2014 `backend/app/main.py`",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L625",
+      "_origin": "ast",
+      "id": "made_till_now_backend_backend_app_main_py",
+      "community": 100,
+      "norm_label": "backend \u2014 `backend/app/main.py`"
+    },
+    {
+      "label": "`backend/.env` + `backend/.env.example`",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L628",
+      "_origin": "ast",
+      "id": "made_till_now_backend_env_backend_env_example",
+      "community": 100,
+      "norm_label": "`backend/.env` + `backend/.env.example`"
+    },
+    {
+      "label": "[2026-06-15] \u2014 Local Model Inference: BGE-M3 + bge-reranker-v2-m3 Wired Up",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L633",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_15_local_model_inference_bge_m3_bge_reranker_v2_m3_wired_up",
+      "community": 98,
+      "norm_label": "[2026-06-15] \u2014 local model inference: bge-m3 + bge-reranker-v2-m3 wired up"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L635",
+      "_origin": "ast",
+      "id": "made_till_now_summary_635",
+      "community": 98,
+      "norm_label": "summary"
+    },
+    {
+      "label": "Environment verified",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L640",
+      "_origin": "ast",
+      "id": "made_till_now_environment_verified",
+      "community": 98,
+      "norm_label": "environment verified"
+    },
+    {
+      "label": "`backend/app/config.py`",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L646",
+      "_origin": "ast",
+      "id": "made_till_now_backend_app_config_py",
+      "community": 98,
+      "norm_label": "`backend/app/config.py`"
+    },
+    {
+      "label": "`backend/app/models/local/embedder_bge.py` (rewritten)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L653",
+      "_origin": "ast",
+      "id": "made_till_now_backend_app_models_local_embedder_bge_py_rewritten",
+      "community": 98,
+      "norm_label": "`backend/app/models/local/embedder_bge.py` (rewritten)"
+    },
+    {
+      "label": "`backend/app/models/local/reranker_bge.py` (rewritten)",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L659",
+      "_origin": "ast",
+      "id": "made_till_now_backend_app_models_local_reranker_bge_py_rewritten",
+      "community": 98,
+      "norm_label": "`backend/app/models/local/reranker_bge.py` (rewritten)"
+    },
+    {
+      "label": "`backend/app/main.py`",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L665",
+      "_origin": "ast",
+      "id": "made_till_now_backend_app_main_py",
+      "community": 98,
+      "norm_label": "`backend/app/main.py`"
+    },
+    {
+      "label": "`backend/requirements.txt`",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L668",
+      "_origin": "ast",
+      "id": "made_till_now_backend_requirements_txt",
+      "community": 98,
+      "norm_label": "`backend/requirements.txt`"
+    },
+    {
+      "label": "`backend/.env` + `backend/.env.example`",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L671",
+      "_origin": "ast",
+      "id": "made_till_now_backend_env_backend_env_example_671",
+      "community": 98,
+      "norm_label": "`backend/.env` + `backend/.env.example`"
+    },
+    {
+      "label": "Known issue \u2014 FlagEmbedding 1.4 Windows crash",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L674",
+      "_origin": "ast",
+      "id": "made_till_now_known_issue_flagembedding_1_4_windows_crash",
+      "community": 98,
+      "norm_label": "known issue \u2014 flagembedding 1.4 windows crash"
+    },
+    {
       "label": "config.py",
       "file_type": "code",
       "source_file": "backend/app/config.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_config",
       "community": 15,
-      "norm_label": "config.py"
+      "norm_label": "config.py",
+      "id": "app_config"
     },
     {
       "label": "Settings",
@@ -19,9 +949,9 @@
       "source_file": "backend/app/config.py",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "app_config_settings",
       "community": 109,
-      "norm_label": "settings"
+      "norm_label": "settings",
+      "id": "app_config_settings"
     },
     {
       "label": "BaseSettings",
@@ -29,9 +959,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "basesettings",
       "community": 109,
-      "norm_label": "basesettings"
+      "norm_label": "basesettings",
+      "id": "basesettings"
     },
     {
       "label": ".cors_origin_list()",
@@ -39,9 +969,9 @@
       "source_file": "backend/app/config.py",
       "source_location": "L87",
       "_origin": "ast",
-      "id": "app_config_settings_cors_origin_list",
       "community": 109,
-      "norm_label": ".cors_origin_list()"
+      "norm_label": ".cors_origin_list()",
+      "id": "app_config_settings_cors_origin_list"
     },
     {
       "label": ".demo_mode()",
@@ -49,9 +979,9 @@
       "source_file": "backend/app/config.py",
       "source_location": "L91",
       "_origin": "ast",
-      "id": "app_config_settings_demo_mode",
       "community": 109,
-      "norm_label": ".demo_mode()"
+      "norm_label": ".demo_mode()",
+      "id": "app_config_settings_demo_mode"
     },
     {
       "label": "get_settings()",
@@ -59,9 +989,9 @@
       "source_file": "backend/app/config.py",
       "source_location": "L99",
       "_origin": "ast",
-      "id": "app_config_get_settings",
       "community": 52,
-      "norm_label": "get_settings()"
+      "norm_label": "get_settings()",
+      "id": "app_config_get_settings"
     },
     {
       "label": "Application settings, loaded from environment / .env.",
@@ -69,9 +999,9 @@
       "source_file": "backend/app/config.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_config_rationale_1",
       "community": 15,
-      "norm_label": "application settings, loaded from environment / .env."
+      "norm_label": "application settings, loaded from environment / .env.",
+      "id": "app_config_rationale_1"
     },
     {
       "label": "No external model keys => run with deterministic stubs + fixtures.",
@@ -79,9 +1009,9 @@
       "source_file": "backend/app/config.py",
       "source_location": "L92",
       "_origin": "ast",
-      "id": "app_config_rationale_92",
       "community": 109,
-      "norm_label": "no external model keys => run with deterministic stubs + fixtures."
+      "norm_label": "no external model keys => run with deterministic stubs + fixtures.",
+      "id": "app_config_rationale_92"
     },
     {
       "label": "main.py",
@@ -89,9 +1019,9 @@
       "source_file": "backend/app/main.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_main",
       "community": 33,
-      "norm_label": "main.py"
+      "norm_label": "main.py",
+      "id": "app_main"
     },
     {
       "label": "lifespan()",
@@ -99,9 +1029,9 @@
       "source_file": "backend/app/main.py",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "app_main_lifespan",
       "community": 33,
-      "norm_label": "lifespan()"
+      "norm_label": "lifespan()",
+      "id": "app_main_lifespan"
     },
     {
       "label": "FastAPI",
@@ -109,9 +1039,9 @@
       "source_file": "backend/app/main.py",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "fastapi",
       "community": 33,
-      "norm_label": "fastapi"
+      "norm_label": "fastapi",
+      "id": "fastapi"
     },
     {
       "label": "create_app()",
@@ -119,9 +1049,9 @@
       "source_file": "backend/app/main.py",
       "source_location": "L48",
       "_origin": "ast",
-      "id": "app_main_create_app",
       "community": 33,
-      "norm_label": "create_app()"
+      "norm_label": "create_app()",
+      "id": "app_main_create_app"
     },
     {
       "label": "FastAPI application factory for Satyam.",
@@ -129,9 +1059,9 @@
       "source_file": "backend/app/main.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "app_main_rationale_1",
       "community": 33,
-      "norm_label": "fastapi application factory for satyam."
+      "norm_label": "fastapi application factory for satyam.",
+      "id": "app_main_rationale_1"
     },
     {
       "label": "embedder_bge.py",
@@ -139,9 +1069,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "local_embedder_bge",
       "community": 39,
-      "norm_label": "embedder_bge.py"
+      "norm_label": "embedder_bge.py",
+      "id": "local_embedder_bge"
     },
     {
       "label": "_load_model()",
@@ -149,9 +1079,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "local_embedder_bge_load_model",
       "community": 39,
-      "norm_label": "_load_model()"
+      "norm_label": "_load_model()",
+      "id": "local_embedder_bge_load_model"
     },
     {
       "label": "BgeM3Embedder",
@@ -159,9 +1089,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L27",
       "_origin": "ast",
-      "id": "local_embedder_bge_bgem3embedder",
       "community": 39,
-      "norm_label": "bgem3embedder"
+      "norm_label": "bgem3embedder",
+      "id": "local_embedder_bge_bgem3embedder"
     },
     {
       "label": ".__init__()",
@@ -169,9 +1099,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L30",
       "_origin": "ast",
-      "id": "local_embedder_bge_bgem3embedder_init",
       "community": 52,
-      "norm_label": ".__init__()"
+      "norm_label": ".__init__()",
+      "id": "local_embedder_bge_bgem3embedder_init"
     },
     {
       "label": "._encode()",
@@ -179,9 +1109,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L39",
       "_origin": "ast",
-      "id": "local_embedder_bge_bgem3embedder_encode",
       "community": 39,
-      "norm_label": "._encode()"
+      "norm_label": "._encode()",
+      "id": "local_embedder_bge_bgem3embedder_encode"
     },
     {
       "label": ".embed()",
@@ -189,9 +1119,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L63",
       "_origin": "ast",
-      "id": "local_embedder_bge_bgem3embedder_embed",
       "community": 39,
-      "norm_label": ".embed()"
+      "norm_label": ".embed()",
+      "id": "local_embedder_bge_bgem3embedder_embed"
     },
     {
       "label": "BGE-M3 embedder (sole embedder for the whole system).  Real local inference \u2014 lo",
@@ -199,9 +1129,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "local_embedder_bge_rationale_1",
       "community": 39,
-      "norm_label": "bge-m3 embedder (sole embedder for the whole system).  real local inference \u2014 lo"
+      "norm_label": "bge-m3 embedder (sole embedder for the whole system).  real local inference \u2014 lo",
+      "id": "local_embedder_bge_rationale_1"
     },
     {
       "label": "Load BGE-M3 once and cache for the process lifetime (~2.3 GB weights).",
@@ -209,9 +1139,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "local_embedder_bge_rationale_19",
       "community": 39,
-      "norm_label": "load bge-m3 once and cache for the process lifetime (~2.3 gb weights)."
+      "norm_label": "load bge-m3 once and cache for the process lifetime (~2.3 gb weights).",
+      "id": "local_embedder_bge_rationale_19"
     },
     {
       "label": "BGE-M3 dense embedder.  Registry calls BgeM3Embedder(dim=1024).",
@@ -219,9 +1149,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L28",
       "_origin": "ast",
-      "id": "local_embedder_bge_rationale_28",
       "community": 39,
-      "norm_label": "bge-m3 dense embedder.  registry calls bgem3embedder(dim=1024)."
+      "norm_label": "bge-m3 dense embedder.  registry calls bgem3embedder(dim=1024).",
+      "id": "local_embedder_bge_rationale_28"
     },
     {
       "label": "Return one L2-normalised 1024-float vector per input text.",
@@ -229,9 +1159,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L64",
       "_origin": "ast",
-      "id": "local_embedder_bge_rationale_64",
       "community": 39,
-      "norm_label": "return one l2-normalised 1024-float vector per input text."
+      "norm_label": "return one l2-normalised 1024-float vector per input text.",
+      "id": "local_embedder_bge_rationale_64"
     },
     {
       "label": "reranker_bge.py",
@@ -239,9 +1169,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "local_reranker_bge",
       "community": 108,
-      "norm_label": "reranker_bge.py"
+      "norm_label": "reranker_bge.py",
+      "id": "local_reranker_bge"
     },
     {
       "label": "_load_model()",
@@ -249,9 +1179,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L16",
       "_origin": "ast",
-      "id": "local_reranker_bge_load_model",
       "community": 108,
-      "norm_label": "_load_model()"
+      "norm_label": "_load_model()",
+      "id": "local_reranker_bge_load_model"
     },
     {
       "label": "BgeReranker",
@@ -259,9 +1189,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L29",
       "_origin": "ast",
-      "id": "local_reranker_bge_bgereranker",
       "community": 108,
-      "norm_label": "bgereranker"
+      "norm_label": "bgereranker",
+      "id": "local_reranker_bge_bgereranker"
     },
     {
       "label": ".__init__()",
@@ -269,9 +1199,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L32",
       "_origin": "ast",
-      "id": "local_reranker_bge_bgereranker_init",
       "community": 52,
-      "norm_label": ".__init__()"
+      "norm_label": ".__init__()",
+      "id": "local_reranker_bge_bgereranker_init"
     },
     {
       "label": "._order()",
@@ -279,9 +1209,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L40",
       "_origin": "ast",
-      "id": "local_reranker_bge_bgereranker_order",
       "community": 108,
-      "norm_label": "._order()"
+      "norm_label": "._order()",
+      "id": "local_reranker_bge_bgereranker_order"
     },
     {
       "label": ".rerank()",
@@ -289,9 +1219,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L47",
       "_origin": "ast",
-      "id": "local_reranker_bge_bgereranker_rerank",
       "community": 108,
-      "norm_label": ".rerank()"
+      "norm_label": ".rerank()",
+      "id": "local_reranker_bge_bgereranker_rerank"
     },
     {
       "label": "bge-reranker-v2-m3 cross-encoder reranker.  Real local inference \u2014 loads weights",
@@ -299,9 +1229,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "local_reranker_bge_rationale_1",
       "community": 108,
-      "norm_label": "bge-reranker-v2-m3 cross-encoder reranker.  real local inference \u2014 loads weights"
+      "norm_label": "bge-reranker-v2-m3 cross-encoder reranker.  real local inference \u2014 loads weights",
+      "id": "local_reranker_bge_rationale_1"
     },
     {
       "label": "Load CrossEncoder once and cache for the process lifetime (~1.1 GB weights).",
@@ -309,9 +1239,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L17",
       "_origin": "ast",
-      "id": "local_reranker_bge_rationale_17",
       "community": 108,
-      "norm_label": "load crossencoder once and cache for the process lifetime (~1.1 gb weights)."
+      "norm_label": "load crossencoder once and cache for the process lifetime (~1.1 gb weights).",
+      "id": "local_reranker_bge_rationale_17"
     },
     {
       "label": "bge-reranker-v2-m3 cross-encoder.  Registry calls BgeReranker().",
@@ -319,9 +1249,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L30",
       "_origin": "ast",
-      "id": "local_reranker_bge_rationale_30",
       "community": 108,
-      "norm_label": "bge-reranker-v2-m3 cross-encoder.  registry calls bgereranker()."
+      "norm_label": "bge-reranker-v2-m3 cross-encoder.  registry calls bgereranker().",
+      "id": "local_reranker_bge_rationale_30"
     },
     {
       "label": "Return document indices sorted best-first (rag.py does order[:k]).",
@@ -329,139 +1259,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L48",
       "_origin": "ast",
-      "id": "local_reranker_bge_rationale_48",
       "community": 108,
-      "norm_label": "return document indices sorted best-first (rag.py does order[:k])."
-    },
-    {
-      "label": "crash2.py",
-      "file_type": "code",
-      "source_file": "backend/crash2.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_crash2",
-      "community": 119,
-      "norm_label": "crash2.py"
-    },
-    {
-      "label": "crash3.py",
-      "file_type": "code",
-      "source_file": "backend/crash3.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_crash3",
-      "community": 120,
-      "norm_label": "crash3.py"
-    },
-    {
-      "label": "crash4.py",
-      "file_type": "code",
-      "source_file": "backend/crash4.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_crash4",
-      "community": 121,
-      "norm_label": "crash4.py"
-    },
-    {
-      "label": "crash5.py",
-      "file_type": "code",
-      "source_file": "backend/crash5.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_crash5",
-      "community": 118,
-      "norm_label": "crash5.py"
-    },
-    {
-      "label": "Test sentence-transformers path for both models.",
-      "file_type": "rationale",
-      "source_file": "backend/crash5.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_crash5_rationale_1",
-      "community": 118,
-      "norm_label": "test sentence-transformers path for both models."
-    },
-    {
-      "label": "crash6.py",
-      "file_type": "code",
-      "source_file": "backend/crash6.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_crash6",
-      "community": 122,
-      "norm_label": "crash6.py"
-    },
-    {
-      "label": "crash7.py",
-      "file_type": "code",
-      "source_file": "backend/crash7.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_crash7",
-      "community": 123,
-      "norm_label": "crash7.py"
-    },
-    {
-      "label": "find_crash.py",
-      "file_type": "code",
-      "source_file": "backend/find_crash.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_find_crash",
-      "community": 124,
-      "norm_label": "find_crash.py"
-    },
-    {
-      "label": "test_load.py",
-      "file_type": "code",
-      "source_file": "backend/test_load.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_test_load",
-      "community": 125,
-      "norm_label": "test_load.py"
-    },
-    {
-      "label": "verify_models.py",
-      "file_type": "code",
-      "source_file": "backend/verify_models.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_verify_models",
-      "community": 108,
-      "norm_label": "verify_models.py"
-    },
-    {
-      "label": "test_embedder()",
-      "file_type": "code",
-      "source_file": "backend/verify_models.py",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "backend_verify_models_test_embedder",
-      "community": 108,
-      "norm_label": "test_embedder()"
-    },
-    {
-      "label": "test_reranker()",
-      "file_type": "code",
-      "source_file": "backend/verify_models.py",
-      "source_location": "L15",
-      "_origin": "ast",
-      "id": "backend_verify_models_test_reranker",
-      "community": 108,
-      "norm_label": "test_reranker()"
-    },
-    {
-      "label": "Verify real local model inference works end-to-end.",
-      "file_type": "rationale",
-      "source_file": "backend/verify_models.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_verify_models_rationale_1",
-      "community": 108,
-      "norm_label": "verify real local model inference works end-to-end."
+      "norm_label": "return document indices sorted best-first (rag.py does order[:k]).",
+      "id": "local_reranker_bge_rationale_48"
     },
     {
       "label": "settings.py",
@@ -769,7 +1569,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 114,
+      "community": 99,
       "norm_label": "settingsdialog()",
       "id": "components_settingsdialog_settingsdialog"
     },
@@ -949,7 +1749,7 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 11,
+      "community": 48,
       "norm_label": "request()",
       "id": "api_client_request"
     },
@@ -979,7 +1779,7 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 48,
+      "community": 103,
       "norm_label": "api",
       "id": "api_client_api"
     },
@@ -1002,626 +1802,6 @@
       "community": 48,
       "norm_label": "streamchat()",
       "id": "api_client_streamchat"
-    },
-    {
-      "label": "made_till_now.md",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 27,
-      "norm_label": "made_till_now.md",
-      "id": "made_till_now"
-    },
-    {
-      "label": "Satyam \u2014 Project Change Log (`made_till_now.md`)",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 27,
-      "norm_label": "satyam \u2014 project change log (`made_till_now.md`)",
-      "id": "made_till_now_satyam_project_change_log_made_till_now_md"
-    },
-    {
-      "label": "Log of Changes",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L5",
-      "_origin": "ast",
-      "community": 27,
-      "norm_label": "log of changes",
-      "id": "made_till_now_log_of_changes"
-    },
-    {
-      "label": "[2026-06-15] \u2014 Initial Setup",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 27,
-      "norm_label": "[2026-06-15] \u2014 initial setup",
-      "id": "made_till_now_2026_06_15_initial_setup"
-    },
-    {
-      "label": "[2026-06-15] \u2014 Architecture Update: Multi-Engine Support (Sarvam, Ollama Cloud, BRAIN_ENGINE, SQL_ENGINE, VOICE_BACKEND)",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L18",
-      "_origin": "ast",
-      "community": 62,
-      "norm_label": "[2026-06-15] \u2014 architecture update: multi-engine support (sarvam, ollama cloud, brain_engine, sql_engine, voice_backend)",
-      "id": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend"
-    },
-    {
-      "label": "Summary",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L20",
-      "_origin": "ast",
-      "community": 62,
-      "norm_label": "summary",
-      "id": "made_till_now_summary"
-    },
-    {
-      "label": "Backend Changes",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L27",
-      "_origin": "ast",
-      "community": 62,
-      "norm_label": "backend changes",
-      "id": "made_till_now_backend_changes"
-    },
-    {
-      "label": "Environment Files",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L82",
-      "_origin": "ast",
-      "community": 62,
-      "norm_label": "environment files",
-      "id": "made_till_now_environment_files"
-    },
-    {
-      "label": "Frontend Changes",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L93",
-      "_origin": "ast",
-      "community": 62,
-      "norm_label": "frontend changes",
-      "id": "made_till_now_frontend_changes"
-    },
-    {
-      "label": "Architectural Decisions Recorded",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L113",
-      "_origin": "ast",
-      "community": 62,
-      "norm_label": "architectural decisions recorded",
-      "id": "made_till_now_architectural_decisions_recorded"
-    },
-    {
-      "label": "[2026-06-15] \u2014 Architecture Doc Revision: Saaras v3, GPU specs for BGE-M3 + Reranker, Demo-track clarification",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L122",
-      "_origin": "ast",
-      "community": 97,
-      "norm_label": "[2026-06-15] \u2014 architecture doc revision: saaras v3, gpu specs for bge-m3 + reranker, demo-track clarification",
-      "id": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_for_bge_m3_reranker_demo_track_clarification"
-    },
-    {
-      "label": "Summary",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L124",
-      "_origin": "ast",
-      "community": 97,
-      "norm_label": "summary",
-      "id": "made_till_now_summary_124"
-    },
-    {
-      "label": "Changes",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L129",
-      "_origin": "ast",
-      "community": 97,
-      "norm_label": "changes",
-      "id": "made_till_now_changes"
-    },
-    {
-      "label": "Architecture decisions recorded (from updated doc)",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L149",
-      "_origin": "ast",
-      "community": 97,
-      "norm_label": "architecture decisions recorded (from updated doc)",
-      "id": "made_till_now_architecture_decisions_recorded_from_updated_doc"
-    },
-    {
-      "label": "[2026-06-15] \u2014 Security Update: Robust .env Ignore Rules",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L157",
-      "_origin": "ast",
-      "community": 100,
-      "norm_label": "[2026-06-15] \u2014 security update: robust .env ignore rules",
-      "id": "made_till_now_2026_06_15_security_update_robust_env_ignore_rules"
-    },
-    {
-      "label": "Summary",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L159",
-      "_origin": "ast",
-      "community": 100,
-      "norm_label": "summary",
-      "id": "made_till_now_summary_159"
-    },
-    {
-      "label": "Changes",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L162",
-      "_origin": "ast",
-      "community": 100,
-      "norm_label": "changes",
-      "id": "made_till_now_changes_162"
-    },
-    {
-      "label": "[2026-06-15] \u2014 Local Database Setup: PostgreSQL 17 + pgvector 0.8.2 + Full Schema",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L170",
-      "_origin": "ast",
-      "community": 67,
-      "norm_label": "[2026-06-15] \u2014 local database setup: postgresql 17 + pgvector 0.8.2 + full schema",
-      "id": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema"
-    },
-    {
-      "label": "Summary",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L172",
-      "_origin": "ast",
-      "community": 67,
-      "norm_label": "summary",
-      "id": "made_till_now_summary_172"
-    },
-    {
-      "label": "1. PostgreSQL status confirmed",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L182",
-      "_origin": "ast",
-      "community": 67,
-      "norm_label": "1. postgresql status confirmed",
-      "id": "made_till_now_1_postgresql_status_confirmed"
-    },
-    {
-      "label": "2. pgvector 0.8.2 \u2014 build from source (Windows, MSVC)",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L190",
-      "_origin": "ast",
-      "community": 67,
-      "norm_label": "2. pgvector 0.8.2 \u2014 build from source (windows, msvc)",
-      "id": "made_till_now_2_pgvector_0_8_2_build_from_source_windows_msvc"
-    },
-    {
-      "label": "3. Database creation",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L217",
-      "_origin": "ast",
-      "community": 67,
-      "norm_label": "3. database creation",
-      "id": "made_till_now_3_database_creation"
-    },
-    {
-      "label": "4. Schema applied \u2014 `backend/migrations/001_init.sql`",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L227",
-      "_origin": "ast",
-      "community": 67,
-      "norm_label": "4. schema applied \u2014 `backend/migrations/001_init.sql`",
-      "id": "made_till_now_4_schema_applied_backend_migrations_001_init_sql"
-    },
-    {
-      "label": "5. Connectivity verified via Python (`asyncpg`)",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L260",
-      "_origin": "ast",
-      "community": 67,
-      "norm_label": "5. connectivity verified via python (`asyncpg`)",
-      "id": "made_till_now_5_connectivity_verified_via_python_asyncpg"
-    },
-    {
-      "label": "6. Backend `.env` \u2014 no changes needed",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L273",
-      "_origin": "ast",
-      "community": 67,
-      "norm_label": "6. backend `.env` \u2014 no changes needed",
-      "id": "made_till_now_6_backend_env_no_changes_needed"
-    },
-    {
-      "label": "Next steps (deferred)",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L283",
-      "_origin": "ast",
-      "community": 67,
-      "norm_label": "next steps (deferred)",
-      "id": "made_till_now_next_steps_deferred"
-    },
-    {
-      "label": "[2026-06-15] \u2014 Neon Cloud Database Connected",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L291",
-      "_origin": "ast",
-      "community": 96,
-      "norm_label": "[2026-06-15] \u2014 neon cloud database connected",
-      "id": "made_till_now_2026_06_15_neon_cloud_database_connected"
-    },
-    {
-      "label": "Summary",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L293",
-      "_origin": "ast",
-      "community": 96,
-      "norm_label": "summary",
-      "id": "made_till_now_summary_293"
-    },
-    {
-      "label": "What was confirmed",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L298",
-      "_origin": "ast",
-      "community": 96,
-      "norm_label": "what was confirmed",
-      "id": "made_till_now_what_was_confirmed"
-    },
-    {
-      "label": "Files changed",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L307",
-      "_origin": "ast",
-      "community": 96,
-      "norm_label": "files changed",
-      "id": "made_till_now_files_changed"
-    },
-    {
-      "label": "How to switch tracks",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L326",
-      "_origin": "ast",
-      "community": 96,
-      "norm_label": "how to switch tracks",
-      "id": "made_till_now_how_to_switch_tracks"
-    },
-    {
-      "label": "Security note",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L332",
-      "_origin": "ast",
-      "community": 96,
-      "norm_label": "security note",
-      "id": "made_till_now_security_note"
-    },
-    {
-      "label": "[2026-06-15] \u2014 Gitignore Update: Ignore Synthetic Dataset CSVs",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L339",
-      "_origin": "ast",
-      "community": 27,
-      "norm_label": "[2026-06-15] \u2014 gitignore update: ignore synthetic dataset csvs",
-      "id": "made_till_now_2026_06_15_gitignore_update_ignore_synthetic_dataset_csvs"
-    },
-    {
-      "label": "Summary",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L341",
-      "_origin": "ast",
-      "community": 27,
-      "norm_label": "summary",
-      "id": "made_till_now_summary_341"
-    },
-    {
-      "label": "Changes",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L344",
-      "_origin": "ast",
-      "community": 27,
-      "norm_label": "changes",
-      "id": "made_till_now_changes_344"
-    },
-    {
-      "label": "[2026-06-15] \u2014 Full DB Rebuild + KSP RBAC + 100k Dataset Loaded",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L356",
-      "_origin": "ast",
-      "community": 50,
-      "norm_label": "[2026-06-15] \u2014 full db rebuild + ksp rbac + 100k dataset loaded",
-      "id": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded"
-    },
-    {
-      "label": "Summary",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L358",
-      "_origin": "ast",
-      "community": 50,
-      "norm_label": "summary",
-      "id": "made_till_now_summary_358"
-    },
-    {
-      "label": "Files moved / created",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L363",
-      "_origin": "ast",
-      "community": 50,
-      "norm_label": "files moved / created",
-      "id": "made_till_now_files_moved_created"
-    },
-    {
-      "label": "Database changes",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L375",
-      "_origin": "ast",
-      "community": 50,
-      "norm_label": "database changes",
-      "id": "made_till_now_database_changes"
-    },
-    {
-      "label": "Backend code changes",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L404",
-      "_origin": "ast",
-      "community": 50,
-      "norm_label": "backend code changes",
-      "id": "made_till_now_backend_code_changes"
-    },
-    {
-      "label": "RLS verification (live test)",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L452",
-      "_origin": "ast",
-      "community": 50,
-      "norm_label": "rls verification (live test)",
-      "id": "made_till_now_rls_verification_live_test"
-    },
-    {
-      "label": "Next steps",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L457",
-      "_origin": "ast",
-      "community": 50,
-      "norm_label": "next steps",
-      "id": "made_till_now_next_steps"
-    },
-    {
-      "label": "[2026-06-15] \u2014 Architecture Doc Revision: Saaras v3, GPU Specs, Demo Clarification",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L464",
-      "_origin": "ast",
-      "community": 98,
-      "norm_label": "[2026-06-15] \u2014 architecture doc revision: saaras v3, gpu specs, demo clarification",
-      "id": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_demo_clarification"
-    },
-    {
-      "label": "Summary",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L466",
-      "_origin": "ast",
-      "community": 98,
-      "norm_label": "summary",
-      "id": "made_till_now_summary_466"
-    },
-    {
-      "label": "Code changes",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L470",
-      "_origin": "ast",
-      "community": 98,
-      "norm_label": "code changes",
-      "id": "made_till_now_code_changes"
-    },
-    {
-      "label": "[2026-06-15] \u2014 Neon Cloud Database Connected",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L477",
-      "_origin": "ast",
-      "community": 27,
-      "norm_label": "[2026-06-15] \u2014 neon cloud database connected",
-      "id": "made_till_now_2026_06_15_neon_cloud_database_connected_477"
-    },
-    {
-      "label": "Summary",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L479",
-      "_origin": "ast",
-      "community": 27,
-      "norm_label": "summary",
-      "id": "made_till_now_summary_479"
-    },
-    {
-      "label": "[2026-06-15] \u2014 Full DB Rebuild: Schema v2 + KSP RBAC + 100k Dataset",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L490",
-      "_origin": "ast",
-      "community": 95,
-      "norm_label": "[2026-06-15] \u2014 full db rebuild: schema v2 + ksp rbac + 100k dataset",
-      "id": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset"
-    },
-    {
-      "label": "Summary",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L492",
-      "_origin": "ast",
-      "community": 95,
-      "norm_label": "summary",
-      "id": "made_till_now_summary_492"
-    },
-    {
-      "label": "Files",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L495",
-      "_origin": "ast",
-      "community": 95,
-      "norm_label": "files",
-      "id": "made_till_now_files"
-    },
-    {
-      "label": "Data loaded (Neon + local)",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L504",
-      "_origin": "ast",
-      "community": 95,
-      "norm_label": "data loaded (neon + local)",
-      "id": "made_till_now_data_loaded_neon_local"
-    },
-    {
-      "label": "Key backend rewrites",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L507",
-      "_origin": "ast",
-      "community": 95,
-      "norm_label": "key backend rewrites",
-      "id": "made_till_now_key_backend_rewrites"
-    },
-    {
-      "label": "RLS verified live",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L525",
-      "_origin": "ast",
-      "community": 95,
-      "norm_label": "rls verified live",
-      "id": "made_till_now_rls_verified_live"
-    },
-    {
-      "label": "[2026-06-15] \u2014 DATABASE.md Rewritten",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L530",
-      "_origin": "ast",
-      "community": 27,
-      "norm_label": "[2026-06-15] \u2014 database.md rewritten",
-      "id": "made_till_now_2026_06_15_database_md_rewritten"
-    },
-    {
-      "label": "[2026-06-15] \u2014 Bug Fix Sprint: 17 Bugs Fixed (SATYAM_BUG_FIXES.md \u2014 Rounds 1\u20134)",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L538",
-      "_origin": "ast",
-      "community": 44,
-      "norm_label": "[2026-06-15] \u2014 bug fix sprint: 17 bugs fixed (satyam_bug_fixes.md \u2014 rounds 1\u20134)",
-      "id": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4"
-    },
-    {
-      "label": "Critical / High (crash or security)",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L542",
-      "_origin": "ast",
-      "community": 44,
-      "norm_label": "critical / high (crash or security)",
-      "id": "made_till_now_critical_high_crash_or_security"
-    },
-    {
-      "label": "Medium",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L552",
-      "_origin": "ast",
-      "community": 44,
-      "norm_label": "medium",
-      "id": "made_till_now_medium"
-    },
-    {
-      "label": "Low",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L567",
-      "_origin": "ast",
-      "community": 44,
-      "norm_label": "low",
-      "id": "made_till_now_low"
-    },
-    {
-      "label": "Deleted",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L575",
-      "_origin": "ast",
-      "community": 44,
-      "norm_label": "deleted",
-      "id": "made_till_now_deleted"
-    },
-    {
-      "label": "Docstring / stale comment",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L578",
-      "_origin": "ast",
-      "community": 44,
-      "norm_label": "docstring / stale comment",
-      "id": "made_till_now_docstring_stale_comment"
-    },
-    {
-      "label": "Test results after all fixes",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L581",
-      "_origin": "ast",
-      "community": 44,
-      "norm_label": "test results after all fixes",
-      "id": "made_till_now_test_results_after_all_fixes"
-    },
-    {
-      "label": "Confirmed false positives (not touched)",
-      "file_type": "document",
-      "source_file": "made_till_now.md",
-      "source_location": "L588",
-      "_origin": "ast",
-      "community": 44,
-      "norm_label": "confirmed false positives (not touched)",
-      "id": "made_till_now_confirmed_false_positives_not_touched"
     },
     {
       "label": "masking.py",
@@ -2009,7 +2189,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 37,
+      "community": 111,
       "norm_label": "registry.py",
       "id": "models_registry"
     },
@@ -2079,7 +2259,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 37,
+      "community": 111,
       "norm_label": "get_reranker()",
       "id": "models_registry_get_reranker"
     },
@@ -2099,7 +2279,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L104",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": "get_stt()",
       "id": "models_registry_get_stt"
     },
@@ -2109,7 +2289,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L104",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": "speechtotext",
       "id": "speechtotext"
     },
@@ -2139,7 +2319,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L146",
       "_origin": "ast",
-      "community": 3,
+      "community": 0,
       "norm_label": "get_translator()",
       "id": "models_registry_get_translator"
     },
@@ -2149,7 +2329,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L146",
       "_origin": "ast",
-      "community": 3,
+      "community": 0,
       "norm_label": "translator",
       "id": "translator"
     },
@@ -2159,7 +2339,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 37,
+      "community": 111,
       "norm_label": "factory that resolves the configured backend to concrete model instances.  cache",
       "id": "models_registry_rationale_1"
     },
@@ -2199,7 +2379,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L105",
       "_origin": "ast",
-      "community": 0,
+      "community": 3,
       "norm_label": "sarvam (primary) \u2192 bhashini (fallback) \u2192 local whisper.      resolution order:",
       "id": "models_registry_rationale_105"
     },
@@ -2219,7 +2399,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L147",
       "_origin": "ast",
-      "community": 3,
+      "community": 0,
       "norm_label": "sarvam translate (primary) \u2192 bhashini nmt (fallback).     falls back to bhashini",
       "id": "models_registry_rationale_147"
     },
@@ -2289,7 +2469,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L68",
       "_origin": "ast",
-      "community": 1,
+      "community": 112,
       "norm_label": "principal",
       "id": "backend_app_pipeline_orchestrator_py_principal"
     },
@@ -2299,7 +2479,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L68",
       "_origin": "ast",
-      "community": 1,
+      "community": 112,
       "norm_label": "asyncsession",
       "id": "backend_app_pipeline_orchestrator_py_asyncsession"
     },
@@ -2309,7 +2489,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L68",
       "_origin": "ast",
-      "community": 1,
+      "community": 112,
       "norm_label": "conversationstate",
       "id": "conversationstate"
     },
@@ -4629,7 +4809,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 115,
+      "community": 6,
       "norm_label": "package.json",
       "id": "frontend_package"
     },
@@ -4639,7 +4819,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L2",
       "_origin": "ast",
-      "community": 115,
+      "community": 6,
       "norm_label": "name",
       "id": "frontend_package_name"
     },
@@ -4649,7 +4829,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 115,
+      "community": 6,
       "norm_label": "private",
       "id": "frontend_package_private"
     },
@@ -4659,7 +4839,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 115,
+      "community": 6,
       "norm_label": "sideeffects",
       "id": "frontend_package_sideeffects"
     },
@@ -4669,7 +4849,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 115,
+      "community": 6,
       "norm_label": "type",
       "id": "frontend_package_type"
     },
@@ -4679,7 +4859,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 115,
+      "community": 6,
       "norm_label": "scripts",
       "id": "frontend_package_scripts"
     },
@@ -4689,7 +4869,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 115,
+      "community": 6,
       "norm_label": "dev",
       "id": "frontend_package_scripts_dev"
     },
@@ -4699,7 +4879,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 115,
+      "community": 6,
       "norm_label": "build",
       "id": "frontend_package_scripts_build"
     },
@@ -4709,7 +4889,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 115,
+      "community": 6,
       "norm_label": "build:dev",
       "id": "frontend_package_scripts_build_dev"
     },
@@ -4719,7 +4899,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 115,
+      "community": 6,
       "norm_label": "preview",
       "id": "frontend_package_scripts_preview"
     },
@@ -4729,7 +4909,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 115,
+      "community": 6,
       "norm_label": "lint",
       "id": "frontend_package_scripts_lint"
     },
@@ -4739,7 +4919,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 115,
+      "community": 6,
       "norm_label": "format",
       "id": "frontend_package_scripts_format"
     },
@@ -6139,7 +6319,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 1,
       "norm_label": "map.py",
       "id": "backend_app_api_routes_map_py_routes_map"
     },
@@ -6199,7 +6379,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 1,
       "norm_label": "geospatial hotspot endpoint.",
       "id": "routes_map_rationale_1"
     },
@@ -6209,7 +6389,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 1,
       "norm_label": "network.py",
       "id": "backend_app_api_routes_network_py_routes_network"
     },
@@ -6269,7 +6449,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 1,
       "norm_label": "link-analysis (ego network) endpoint.",
       "id": "routes_network_rationale_1"
     },
@@ -6929,7 +7109,7 @@
       "source_file": "backend/app/models/local/stt_whisper.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 105,
+      "community": 3,
       "norm_label": "stt_whisper.py",
       "id": "local_stt_whisper"
     },
@@ -6939,7 +7119,7 @@
       "source_file": "backend/app/models/local/stt_whisper.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 105,
+      "community": 3,
       "norm_label": "whisperstt",
       "id": "local_stt_whisper_whisperstt"
     },
@@ -6949,7 +7129,7 @@
       "source_file": "backend/app/models/local/stt_whisper.py",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 105,
+      "community": 3,
       "norm_label": ".transcribe()",
       "id": "local_stt_whisper_whisperstt_transcribe"
     },
@@ -6959,7 +7139,7 @@
       "source_file": "backend/app/models/local/stt_whisper.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 105,
+      "community": 3,
       "norm_label": "faster-whisper / indicconformer stt. demo stub.",
       "id": "local_stt_whisper_rationale_1"
     },
@@ -7949,7 +8129,7 @@
       "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "landingshell.tsx",
       "id": "components_landingshell"
     },
@@ -7959,7 +8139,7 @@
       "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "nb()",
       "id": "components_landingshell_nb"
     },
@@ -7969,7 +8149,7 @@
       "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "gridbg()",
       "id": "components_landingshell_gridbg"
     },
@@ -7979,7 +8159,7 @@
       "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "header()",
       "id": "components_landingshell_header"
     },
@@ -7989,7 +8169,7 @@
       "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L76",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "footercol()",
       "id": "components_landingshell_footercol"
     },
@@ -7999,7 +8179,7 @@
       "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "footer()",
       "id": "components_landingshell_footer"
     },
@@ -8149,7 +8329,7 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L92",
       "_origin": "ast",
-      "community": 114,
+      "community": 103,
       "norm_label": "shell()",
       "id": "components_shell_shell"
     },
@@ -11049,7 +11229,7 @@
       "source_file": "frontend/src/lib/error-reporting.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 35,
+      "community": 8,
       "norm_label": "error-reporting.ts",
       "id": "lib_error_reporting"
     },
@@ -11059,7 +11239,7 @@
       "source_file": "frontend/src/lib/error-reporting.ts",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 35,
+      "community": 8,
       "norm_label": "reporterror()",
       "id": "lib_error_reporting_reporterror"
     },
@@ -11069,7 +11249,7 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 35,
+      "community": 99,
       "norm_label": "i18n.tsx",
       "id": "lib_i18n"
     },
@@ -11079,7 +11259,7 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 35,
+      "community": 99,
       "norm_label": "lang",
       "id": "lib_i18n_lang"
     },
@@ -11099,7 +11279,7 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L232",
       "_origin": "ast",
-      "community": 35,
+      "community": 99,
       "norm_label": "ctx",
       "id": "lib_i18n_ctx"
     },
@@ -11109,7 +11289,7 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L233",
       "_origin": "ast",
-      "community": 35,
+      "community": 99,
       "norm_label": "i18nctx",
       "id": "lib_i18n_i18nctx"
     },
@@ -11119,7 +11299,7 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L235",
       "_origin": "ast",
-      "community": 35,
+      "community": 8,
       "norm_label": "i18nprovider()",
       "id": "lib_i18n_i18nprovider"
     },
@@ -11189,7 +11369,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 35,
+      "community": 8,
       "norm_label": "__root.tsx",
       "id": "routes_root"
     },
@@ -11199,7 +11379,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 35,
+      "community": 8,
       "norm_label": "notfoundcomponent()",
       "id": "routes_root_notfoundcomponent"
     },
@@ -11209,7 +11389,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 35,
+      "community": 8,
       "norm_label": "errorcomponent()",
       "id": "routes_root_errorcomponent"
     },
@@ -11229,7 +11409,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L101",
       "_origin": "ast",
-      "community": 35,
+      "community": 8,
       "norm_label": "rootshell()",
       "id": "routes_root_rootshell"
     },
@@ -11239,7 +11419,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L115",
       "_origin": "ast",
-      "community": 35,
+      "community": 8,
       "norm_label": "rootcomponent()",
       "id": "routes_root_rootcomponent"
     },
@@ -11249,7 +11429,7 @@
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "about.tsx",
       "id": "routes_about"
     },
@@ -11269,7 +11449,7 @@
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "pipelinestep",
       "id": "routes_about_pipelinestep"
     },
@@ -11279,7 +11459,7 @@
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L79",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "aboutpage()",
       "id": "routes_about_aboutpage"
     },
@@ -11419,7 +11599,7 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 9,
       "norm_label": "index.tsx",
       "id": "routes_index"
     },
@@ -11429,7 +11609,7 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 48,
+      "community": 8,
       "norm_label": "route",
       "id": "routes_index_route"
     },
@@ -11439,7 +11619,7 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 48,
+      "community": 9,
       "norm_label": "login()",
       "id": "routes_index_login"
     },
@@ -11449,7 +11629,7 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L219",
       "_origin": "ast",
-      "community": 48,
+      "community": 9,
       "norm_label": "trustbadge()",
       "id": "routes_index_trustbadge"
     },
@@ -11459,7 +11639,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "landing.tsx",
       "id": "routes_landing"
     },
@@ -11479,7 +11659,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "landing()",
       "id": "routes_landing_landing"
     },
@@ -11489,7 +11669,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "hero()",
       "id": "routes_landing_hero"
     },
@@ -11499,7 +11679,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L200",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "ministat()",
       "id": "routes_landing_ministat"
     },
@@ -11509,7 +11689,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L219",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "stats()",
       "id": "routes_landing_stats"
     },
@@ -11519,7 +11699,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L244",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "features()",
       "id": "routes_landing_features"
     },
@@ -11529,7 +11709,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L316",
       "_origin": "ast",
-      "community": 25,
+      "community": 8,
       "norm_label": "testimonials()",
       "id": "routes_landing_testimonials"
     },
@@ -11549,7 +11729,7 @@
       "source_file": "frontend/src/routes/map.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 23,
+      "community": 8,
       "norm_label": "route",
       "id": "routes_map_route"
     },
@@ -11639,7 +11819,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 9,
+      "community": 25,
       "norm_label": "network.tsx",
       "id": "frontend_src_routes_network_tsx_routes_network"
     },
@@ -11659,7 +11839,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 9,
+      "community": 25,
       "norm_label": "nodes",
       "id": "routes_network_nodes"
     },
@@ -11669,7 +11849,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 9,
+      "community": 25,
       "norm_label": "edges",
       "id": "routes_network_edges"
     },
@@ -11679,7 +11859,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 9,
+      "community": 25,
       "norm_label": "group_color",
       "id": "routes_network_group_color"
     },
@@ -11689,7 +11869,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 9,
+      "community": 25,
       "norm_label": "group_shape",
       "id": "routes_network_group_shape"
     },
@@ -11699,7 +11879,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 9,
+      "community": 25,
       "norm_label": "posmap",
       "id": "routes_network_posmap"
     },
@@ -11709,7 +11889,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 9,
+      "community": 25,
       "norm_label": "networkscreen()",
       "id": "routes_network_networkscreen"
     },
@@ -11719,7 +11899,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L822",
       "_origin": "ast",
-      "community": 9,
+      "community": 25,
       "norm_label": "control()",
       "id": "routes_network_control"
     },
@@ -11729,7 +11909,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L830",
       "_origin": "ast",
-      "community": 9,
+      "community": 25,
       "norm_label": "select()",
       "id": "routes_network_select"
     },
@@ -11739,7 +11919,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L840",
       "_origin": "ast",
-      "community": 9,
+      "community": 25,
       "norm_label": "stat()",
       "id": "routes_network_stat"
     },
@@ -11749,7 +11929,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L848",
       "_origin": "ast",
-      "community": 9,
+      "community": 25,
       "norm_label": "legend()",
       "id": "routes_network_legend"
     },
@@ -11759,7 +11939,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L868",
       "_origin": "ast",
-      "community": 9,
+      "community": 25,
       "norm_label": "slider()",
       "id": "routes_network_slider"
     },
@@ -11769,7 +11949,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 103,
       "norm_label": "reports.tsx",
       "id": "frontend_src_routes_reports_tsx_routes_reports"
     },
@@ -11779,7 +11959,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 48,
+      "community": 8,
       "norm_label": "route",
       "id": "routes_reports_route"
     },
@@ -11789,7 +11969,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 48,
+      "community": 103,
       "norm_label": "item",
       "id": "routes_reports_item"
     },
@@ -11799,7 +11979,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 48,
+      "community": 103,
       "norm_label": "reports()",
       "id": "routes_reports_reports"
     },
@@ -11809,7 +11989,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L195",
       "_origin": "ast",
-      "community": 48,
+      "community": 103,
       "norm_label": "itemicon()",
       "id": "routes_reports_itemicon"
     },
@@ -11819,7 +11999,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L203",
       "_origin": "ast",
-      "community": 48,
+      "community": 103,
       "norm_label": "section()",
       "id": "routes_reports_section"
     },
@@ -11829,7 +12009,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 114,
+      "community": 8,
       "norm_label": "transcripts.tsx",
       "id": "routes_transcripts"
     },
@@ -11849,7 +12029,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 114,
+      "community": 8,
       "norm_label": "transcript",
       "id": "routes_transcripts_transcript"
     },
@@ -11859,7 +12039,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 114,
+      "community": 8,
       "norm_label": "loadtranscripts()",
       "id": "routes_transcripts_loadtranscripts"
     },
@@ -11869,7 +12049,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 114,
+      "community": 8,
       "norm_label": "savetranscripts()",
       "id": "routes_transcripts_savetranscripts"
     },
@@ -11879,7 +12059,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 114,
+      "community": 8,
       "norm_label": "transcripts()",
       "id": "routes_transcripts_transcripts"
     },
@@ -13096,6 +13276,916 @@
   ],
   "links": [
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "satyam_flagembedding_fix",
+      "target": "satyam_flagembedding_fix_satyam_local_model_crash_fix_flagembedding_sentence_transformers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "satyam_flagembedding_fix_satyam_local_model_crash_fix_flagembedding_sentence_transformers",
+      "target": "satyam_flagembedding_fix_0_verdict_on_your_theory",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L194",
+      "weight": 1.0,
+      "source": "satyam_flagembedding_fix_satyam_local_model_crash_fix_flagembedding_sentence_transformers",
+      "target": "satyam_flagembedding_fix_5_local_vs_neon_s1_leave_for_now_if_you_re_local",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L204",
+      "weight": 1.0,
+      "source": "satyam_flagembedding_fix_satyam_local_model_crash_fix_flagembedding_sentence_transformers",
+      "target": "satyam_flagembedding_fix_6_verify_it_works_run_from_backend_venv_active",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L251",
+      "weight": 1.0,
+      "source": "satyam_flagembedding_fix_satyam_local_model_crash_fix_flagembedding_sentence_transformers",
+      "target": "satyam_flagembedding_fix_apply_order",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "satyam_flagembedding_fix_satyam_local_model_crash_fix_flagembedding_sentence_transformers",
+      "target": "satyam_flagembedding_fix_b1_replace_app_models_local_embedder_bge_py_full_file",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "satyam_flagembedding_fix_satyam_local_model_crash_fix_flagembedding_sentence_transformers",
+      "target": "satyam_flagembedding_fix_b3_fix_the_seed_job_seed_embed_narratives_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L173",
+      "weight": 1.0,
+      "source": "satyam_flagembedding_fix_satyam_local_model_crash_fix_flagembedding_sentence_transformers",
+      "target": "satyam_flagembedding_fix_b4_delete_leftover_debug_scripts_from_backend",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L182",
+      "weight": 1.0,
+      "source": "satyam_flagembedding_fix_satyam_local_model_crash_fix_flagembedding_sentence_transformers",
+      "target": "satyam_flagembedding_fix_b5_requirements_txt_drop_flagembedding_optional_but_recommended",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "satyam_flagembedding_fix_satyam_local_model_crash_fix_flagembedding_sentence_transformers",
+      "target": "satyam_flagembedding_fix_bug_summary_deep_scan",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_FLAGEMBEDDING_FIX.md",
+      "source_location": "L133",
+      "weight": 1.0,
+      "source": "satyam_flagembedding_fix_b1_replace_app_models_local_embedder_bge_py_full_file",
+      "target": "satyam_flagembedding_fix_key_api_differences_this_fixes_flagembedding_st",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now",
+      "target": "made_till_now_satyam_project_change_log_made_till_now_md"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_satyam_project_change_log_made_till_now_md",
+      "target": "made_till_now_log_of_changes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L464",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_demo_clarification"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L122",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_for_bge_m3_reranker_demo_track_clarification"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L538",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L530",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_database_md_rewritten"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L356",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L490",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L339",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_gitignore_update_ignore_synthetic_dataset_csvs"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_initial_setup"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L170",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L633",
+      "weight": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_local_model_inference_bge_m3_bge_reranker_v2_m3_wired_up",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L291",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_neon_cloud_database_connected"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L477",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_neon_cloud_database_connected_477"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L157",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_security_update_robust_env_ignore_rules"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L593",
+      "weight": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_15_settings_panel_database_source_dropdown",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L121",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
+      "target": "made_till_now_architectural_decisions_recorded"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
+      "target": "made_till_now_backend_changes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L86",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
+      "target": "made_till_now_environment_files"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L99",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
+      "target": "made_till_now_frontend_changes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
+      "target": "made_till_now_summary"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L149",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_for_bge_m3_reranker_demo_track_clarification",
+      "target": "made_till_now_architecture_decisions_recorded_from_updated_doc"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L129",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_for_bge_m3_reranker_demo_track_clarification",
+      "target": "made_till_now_changes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L124",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_for_bge_m3_reranker_demo_track_clarification",
+      "target": "made_till_now_summary_124"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L162",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_security_update_robust_env_ignore_rules",
+      "target": "made_till_now_changes_162"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L159",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_security_update_robust_env_ignore_rules",
+      "target": "made_till_now_summary_159"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L182",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
+      "target": "made_till_now_1_postgresql_status_confirmed"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L190",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
+      "target": "made_till_now_2_pgvector_0_8_2_build_from_source_windows_msvc"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L217",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
+      "target": "made_till_now_3_database_creation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L227",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
+      "target": "made_till_now_4_schema_applied_backend_migrations_001_init_sql"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L260",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
+      "target": "made_till_now_5_connectivity_verified_via_python_asyncpg"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L273",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
+      "target": "made_till_now_6_backend_env_no_changes_needed"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L283",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
+      "target": "made_till_now_next_steps_deferred"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L172",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
+      "target": "made_till_now_summary_172"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L307",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_neon_cloud_database_connected",
+      "target": "made_till_now_files_changed"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L326",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_neon_cloud_database_connected",
+      "target": "made_till_now_how_to_switch_tracks"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L332",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_neon_cloud_database_connected",
+      "target": "made_till_now_security_note"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L293",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_neon_cloud_database_connected",
+      "target": "made_till_now_summary_293"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L298",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_neon_cloud_database_connected",
+      "target": "made_till_now_what_was_confirmed"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L344",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_gitignore_update_ignore_synthetic_dataset_csvs",
+      "target": "made_till_now_changes_344"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L341",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_gitignore_update_ignore_synthetic_dataset_csvs",
+      "target": "made_till_now_summary_341"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L404",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
+      "target": "made_till_now_backend_code_changes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L375",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
+      "target": "made_till_now_database_changes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L363",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
+      "target": "made_till_now_files_moved_created"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L457",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
+      "target": "made_till_now_next_steps"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L452",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
+      "target": "made_till_now_rls_verification_live_test"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L358",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
+      "target": "made_till_now_summary_358"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L470",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_demo_clarification",
+      "target": "made_till_now_code_changes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L466",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_demo_clarification",
+      "target": "made_till_now_summary_466"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L479",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_neon_cloud_database_connected_477",
+      "target": "made_till_now_summary_479"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L504",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset",
+      "target": "made_till_now_data_loaded_neon_local"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L495",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset",
+      "target": "made_till_now_files"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L507",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset",
+      "target": "made_till_now_key_backend_rewrites"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L525",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset",
+      "target": "made_till_now_rls_verified_live"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L492",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset",
+      "target": "made_till_now_summary_492"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L588",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
+      "target": "made_till_now_confirmed_false_positives_not_touched"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L542",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
+      "target": "made_till_now_critical_high_crash_or_security"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L575",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
+      "target": "made_till_now_deleted"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L578",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
+      "target": "made_till_now_docstring_stale_comment"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L567",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
+      "target": "made_till_now_low"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L552",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
+      "target": "made_till_now_medium"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L581",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
+      "target": "made_till_now_test_results_after_all_fixes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L617",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_settings_panel_database_source_dropdown",
+      "target": "made_till_now_backend_backend_app_api_routes_settings_py_new_file",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L622",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_settings_panel_database_source_dropdown",
+      "target": "made_till_now_backend_backend_app_config_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L611",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_settings_panel_database_source_dropdown",
+      "target": "made_till_now_backend_backend_app_db_session_py_rewritten",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L625",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_settings_panel_database_source_dropdown",
+      "target": "made_till_now_backend_backend_app_main_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L628",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_settings_panel_database_source_dropdown",
+      "target": "made_till_now_backend_env_backend_env_example",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L599",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_settings_panel_database_source_dropdown",
+      "target": "made_till_now_frontend_frontend_src_components_settingsdialog_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L608",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_settings_panel_database_source_dropdown",
+      "target": "made_till_now_frontend_frontend_src_lib_api_client_ts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L595",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_settings_panel_database_source_dropdown",
+      "target": "made_till_now_summary_595",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L646",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_local_model_inference_bge_m3_bge_reranker_v2_m3_wired_up",
+      "target": "made_till_now_backend_app_config_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L665",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_local_model_inference_bge_m3_bge_reranker_v2_m3_wired_up",
+      "target": "made_till_now_backend_app_main_py",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L653",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_local_model_inference_bge_m3_bge_reranker_v2_m3_wired_up",
+      "target": "made_till_now_backend_app_models_local_embedder_bge_py_rewritten",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L659",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_local_model_inference_bge_m3_bge_reranker_v2_m3_wired_up",
+      "target": "made_till_now_backend_app_models_local_reranker_bge_py_rewritten",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L671",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_local_model_inference_bge_m3_bge_reranker_v2_m3_wired_up",
+      "target": "made_till_now_backend_env_backend_env_example_671",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L668",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_local_model_inference_bge_m3_bge_reranker_v2_m3_wired_up",
+      "target": "made_till_now_backend_requirements_txt",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L640",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_local_model_inference_bge_m3_bge_reranker_v2_m3_wired_up",
+      "target": "made_till_now_environment_verified",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L674",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_local_model_inference_bge_m3_bge_reranker_v2_m3_wired_up",
+      "target": "made_till_now_known_issue_flagembedding_1_4_windows_crash",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L635",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_15_local_model_inference_bge_m3_bge_reranker_v2_m3_wired_up",
+      "target": "made_till_now_summary_635",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -13220,9 +14310,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_embedder_bge",
-      "target": "app_config",
-      "confidence_score": 1.0
+      "target": "app_config"
     },
     {
       "relation": "imports_from",
@@ -13231,9 +14321,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_reranker_bge",
-      "target": "app_config",
-      "confidence_score": 1.0
+      "target": "app_config"
     },
     {
       "relation": "imports_from",
@@ -13337,9 +14427,9 @@
       "source_file": "backend/app/config.py",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_config_rationale_92",
-      "target": "app_config_settings_demo_mode",
-      "confidence_score": 1.0
+      "target": "app_config_settings_demo_mode"
     },
     {
       "relation": "calls",
@@ -13838,9 +14928,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_embedder_bge",
-      "target": "local_embedder_bge_load_model",
-      "confidence_score": 1.0
+      "target": "local_embedder_bge_load_model"
     },
     {
       "relation": "rationale_for",
@@ -13859,9 +14949,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_embedder_bge_bgem3embedder_encode",
-      "target": "local_embedder_bge_load_model",
-      "confidence_score": 1.0
+      "target": "local_embedder_bge_load_model"
     },
     {
       "relation": "rationale_for",
@@ -13869,20 +14959,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_embedder_bge_rationale_19",
-      "target": "local_embedder_bge_load_model",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/verify_models.py",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "backend_verify_models_test_embedder",
-      "target": "local_embedder_bge_bgem3embedder"
+      "target": "local_embedder_bge_load_model"
     },
     {
       "relation": "uses",
@@ -13920,9 +14999,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_embedder_bge_bgem3embedder",
-      "target": "local_embedder_bge_bgem3embedder_encode",
-      "confidence_score": 1.0
+      "target": "local_embedder_bge_bgem3embedder_encode"
     },
     {
       "relation": "method",
@@ -13940,9 +15019,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_embedder_bge_rationale_28",
-      "target": "local_embedder_bge_bgem3embedder",
-      "confidence_score": 1.0
+      "target": "local_embedder_bge_bgem3embedder"
     },
     {
       "relation": "calls",
@@ -14001,9 +15080,9 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L64",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_embedder_bge_rationale_64",
-      "target": "local_embedder_bge_bgem3embedder_embed",
-      "confidence_score": 1.0
+      "target": "local_embedder_bge_bgem3embedder_embed"
     },
     {
       "relation": "contains",
@@ -14021,9 +15100,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_reranker_bge",
-      "target": "local_reranker_bge_load_model",
-      "confidence_score": 1.0
+      "target": "local_reranker_bge_load_model"
     },
     {
       "relation": "rationale_for",
@@ -14042,9 +15121,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_reranker_bge_bgereranker_order",
-      "target": "local_reranker_bge_load_model",
-      "confidence_score": 1.0
+      "target": "local_reranker_bge_load_model"
     },
     {
       "relation": "rationale_for",
@@ -14052,20 +15131,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_reranker_bge_rationale_17",
-      "target": "local_reranker_bge_load_model",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/verify_models.py",
-      "source_location": "L17",
-      "weight": 1.0,
-      "source": "backend_verify_models_test_reranker",
-      "target": "local_reranker_bge_bgereranker"
+      "target": "local_reranker_bge_load_model"
     },
     {
       "relation": "uses",
@@ -14093,9 +15161,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_reranker_bge_bgereranker",
-      "target": "local_reranker_bge_bgereranker_init",
-      "confidence_score": 1.0
+      "target": "local_reranker_bge_bgereranker_init"
     },
     {
       "relation": "method",
@@ -14103,9 +15171,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_reranker_bge_bgereranker",
-      "target": "local_reranker_bge_bgereranker_order",
-      "confidence_score": 1.0
+      "target": "local_reranker_bge_bgereranker_order"
     },
     {
       "relation": "method",
@@ -14123,9 +15191,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_reranker_bge_rationale_30",
-      "target": "local_reranker_bge_bgereranker",
-      "confidence_score": 1.0
+      "target": "local_reranker_bge_bgereranker"
     },
     {
       "relation": "calls",
@@ -14184,49 +15252,9 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "local_reranker_bge_rationale_48",
-      "target": "local_reranker_bge_bgereranker_rerank",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/crash5.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "backend_crash5_rationale_1",
-      "target": "backend_crash5",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/verify_models.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "backend_verify_models",
-      "target": "backend_verify_models_test_embedder",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/verify_models.py",
-      "source_location": "L15",
-      "weight": 1.0,
-      "source": "backend_verify_models",
-      "target": "backend_verify_models_test_reranker",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/verify_models.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "backend_verify_models_rationale_1",
-      "target": "backend_verify_models",
-      "confidence_score": 1.0
+      "target": "local_reranker_bge_bgereranker_rerank"
     },
     {
       "relation": "contains",
@@ -15296,616 +16324,6 @@
       "confidence_score": 1.0,
       "source": "routes_console",
       "target": "api_client_streamchat"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now",
-      "target": "made_till_now_satyam_project_change_log_made_till_now_md"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_satyam_project_change_log_made_till_now_md",
-      "target": "made_till_now_log_of_changes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L464",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_demo_clarification"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L122",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_for_bge_m3_reranker_demo_track_clarification"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L18",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L538",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L530",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_database_md_rewritten"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L356",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L490",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L339",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_gitignore_update_ignore_synthetic_dataset_csvs"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_initial_setup"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L170",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L291",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_neon_cloud_database_connected"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L477",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_neon_cloud_database_connected_477"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L157",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_security_update_robust_env_ignore_rules"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L121",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
-      "target": "made_till_now_architectural_decisions_recorded"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
-      "target": "made_till_now_backend_changes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L86",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
-      "target": "made_till_now_environment_files"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L99",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
-      "target": "made_till_now_frontend_changes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
-      "target": "made_till_now_summary"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L149",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_for_bge_m3_reranker_demo_track_clarification",
-      "target": "made_till_now_architecture_decisions_recorded_from_updated_doc"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L129",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_for_bge_m3_reranker_demo_track_clarification",
-      "target": "made_till_now_changes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L124",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_for_bge_m3_reranker_demo_track_clarification",
-      "target": "made_till_now_summary_124"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L162",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_security_update_robust_env_ignore_rules",
-      "target": "made_till_now_changes_162"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L159",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_security_update_robust_env_ignore_rules",
-      "target": "made_till_now_summary_159"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L182",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
-      "target": "made_till_now_1_postgresql_status_confirmed"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L190",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
-      "target": "made_till_now_2_pgvector_0_8_2_build_from_source_windows_msvc"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L217",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
-      "target": "made_till_now_3_database_creation"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L227",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
-      "target": "made_till_now_4_schema_applied_backend_migrations_001_init_sql"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L260",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
-      "target": "made_till_now_5_connectivity_verified_via_python_asyncpg"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L273",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
-      "target": "made_till_now_6_backend_env_no_changes_needed"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L283",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
-      "target": "made_till_now_next_steps_deferred"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L172",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
-      "target": "made_till_now_summary_172"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L307",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_neon_cloud_database_connected",
-      "target": "made_till_now_files_changed"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L326",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_neon_cloud_database_connected",
-      "target": "made_till_now_how_to_switch_tracks"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L332",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_neon_cloud_database_connected",
-      "target": "made_till_now_security_note"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L293",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_neon_cloud_database_connected",
-      "target": "made_till_now_summary_293"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L298",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_neon_cloud_database_connected",
-      "target": "made_till_now_what_was_confirmed"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L344",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_gitignore_update_ignore_synthetic_dataset_csvs",
-      "target": "made_till_now_changes_344"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L341",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_gitignore_update_ignore_synthetic_dataset_csvs",
-      "target": "made_till_now_summary_341"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L404",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
-      "target": "made_till_now_backend_code_changes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L375",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
-      "target": "made_till_now_database_changes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L363",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
-      "target": "made_till_now_files_moved_created"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L457",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
-      "target": "made_till_now_next_steps"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L452",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
-      "target": "made_till_now_rls_verification_live_test"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L358",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
-      "target": "made_till_now_summary_358"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L470",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_demo_clarification",
-      "target": "made_till_now_code_changes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L466",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_demo_clarification",
-      "target": "made_till_now_summary_466"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L479",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_neon_cloud_database_connected_477",
-      "target": "made_till_now_summary_479"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L504",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset",
-      "target": "made_till_now_data_loaded_neon_local"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L495",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset",
-      "target": "made_till_now_files"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L507",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset",
-      "target": "made_till_now_key_backend_rewrites"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L525",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset",
-      "target": "made_till_now_rls_verified_live"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L492",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset",
-      "target": "made_till_now_summary_492"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L588",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
-      "target": "made_till_now_confirmed_false_positives_not_touched"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L542",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
-      "target": "made_till_now_critical_high_crash_or_security"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L575",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
-      "target": "made_till_now_deleted"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L578",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
-      "target": "made_till_now_docstring_stale_comment"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L567",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
-      "target": "made_till_now_low"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L552",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
-      "target": "made_till_now_medium"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "made_till_now.md",
-      "source_location": "L581",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
-      "target": "made_till_now_test_results_after_all_fixes"
     },
     {
       "relation": "contains",
@@ -32887,5 +33305,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "42a182d43767c753e00c1e1e6427485efe296975"
+  "built_at_commit": "27f9e5e4e36a4eed7581a3d157da2c2a46523db0"
 }
