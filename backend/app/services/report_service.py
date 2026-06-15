@@ -18,10 +18,13 @@ async def build(
 ) -> ReportResponse:
     sections: list[dict] = [
         {"type": "header", "title": req.title,
-         "prepared_by": principal.name, "role": principal.role.value}
+         "prepared_by": principal.name, "role": principal.rank}
     ]
     for fir in req.case_ids:
-        case = await case_service.get_case(session, principal, fir)
+        try:
+            case = await case_service.get_case(session, principal, int(fir))
+        except (ValueError, TypeError):
+            continue
         if case:
             sections.append({"type": "case", "data": case})
     if req.include_map:

@@ -58,7 +58,7 @@ class Officer(Base):
 class Case(Base):
     __tablename__ = "cases"
     case_id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    fir_number: Mapped[str] = mapped_column(Text, unique=True)
+    fir_number: Mapped[str] = mapped_column(Text)  # not globally unique (repeats per station/year)
     fir_year: Mapped[int] = mapped_column(Integer)
     station_id: Mapped[int] = mapped_column(ForeignKey("stations.station_id"))
     station_name: Mapped[str] = mapped_column(Text)

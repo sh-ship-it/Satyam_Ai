@@ -69,7 +69,7 @@ class SarvamTTS(_SarvamBase):
                     "inputs": [text],
                     "target_language_code": bcp_lang,
                     "speaker": "meera",  # default Kannada/Indian-English voice
-                    "model": "bulbul:v1",
+                    "model": "bulbul:v3",
                     "enable_preprocessing": True,
                 },
             )

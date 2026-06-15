@@ -43,14 +43,14 @@ function Audit() {
       .then((res: any) => {
         if (!active || !res || !Array.isArray(res.entries)) return;
         const mapped = res.entries.map((e: any) => ({
-          t: e.ts
-            ? new Date(e.ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+          t: e.ts ?? e.at
+            ? new Date(e.ts ?? e.at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
             : "—",
-          u: e.actor ?? "—",
-          role: e.role ?? "—",
-          action: "ALLOW",
-          query: e.detail ?? e.action ?? "",
-          result: e.resource ?? "",
+          u: e.user_id != null ? `user:${e.user_id}` : "—",
+          role: "—",
+          action: String(e.action ?? "").toUpperCase().includes("DENY") ? "DENY" : "ALLOW",
+          query: e.query_text ?? e.generated_sql ?? e.action ?? "",
+          result: e.reason ?? (e.case_id != null ? `case #${e.case_id}` : ""),
           src: e.action ?? "audit_log",
         }));
         if (mapped.length) setRows(mapped);

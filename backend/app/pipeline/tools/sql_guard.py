@@ -7,18 +7,17 @@ with sqlglot and rejected unless it is:
   - referencing only allow-listed tables,
   - free of multiple-statement / comment injection,
   - bounded by a LIMIT (auto-applied if missing).
-Row scoping (jurisdiction/clearance) is enforced separately by Postgres RLS.
+
+Row scoping (jurisdiction scope) is enforced separately by Postgres RLS policies.
+Column-level PII masking is applied by `text_to_sql._mask_rows()` after execution
+for callers below clearance L3 — the v2 schema uses the raw `persons` table
+(no `persons_v` view), so masking lives in the Python layer, not the DB.
 """
 from __future__ import annotations
 
 import sqlglot
 from sqlglot import exp
 
-# The Text-to-SQL lane is pointed at the MASKED view `persons_v` (never the raw
-# `persons` PII table). persons_v masks `name` in-database unless the caller's
-# clearance GUC is high enough, so even a perfectly-formed SELECT cannot
-# exfiltrate names a user is not cleared to see. `cases`/`narratives` are
-# additionally RLS-scoped by jurisdiction + clearance.
 ALLOWED_TABLES = {
     "cases", "persons", "case_persons", "stations", "officers", "narratives",
 }

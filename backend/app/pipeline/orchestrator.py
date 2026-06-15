@@ -98,11 +98,12 @@ async def run(
             yield PipelineEvent("tool", {"name": "text_to_sql", "status": "start"})
             try:
                 sql_used, rows = await answer_with_sql(
-                    session, message, state.slots, sql_engine=sql_engine
+                    session, message, state.slots,
+                    principal=principal, sql_engine=sql_engine
                 )
                 context = _rows_context(rows)
-                citations = [{"ref": r.get("fir_no", str(i)), "label": "case"}
-                             for i, r in enumerate(rows[:5]) if r.get("fir_no")]
+                citations = [{"ref": r.get("fir_number", str(i)), "label": "case"}
+                             for i, r in enumerate(rows[:5]) if r.get("fir_number")]
             except UnsafeSQL as e:
                 yield PipelineEvent("tool", {"name": "text_to_sql", "status": "end",
                                              "detail": f"rejected: {e}"})

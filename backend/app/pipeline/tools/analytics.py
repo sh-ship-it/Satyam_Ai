@@ -61,7 +61,15 @@ async def ego_network(
     try:
         pid = int(person_id)
     except (TypeError, ValueError):
-        pid = person_id  # type: ignore[assignment]
+        resolved = (
+            await session.execute(
+                text("SELECT person_id FROM persons WHERE name ILIKE :n ORDER BY person_id LIMIT 1"),
+                {"n": str(person_id)},
+            )
+        ).scalar_one_or_none()
+        if resolved is None:
+            return [], []
+        pid = resolved
     result = await session.execute(sql, {"pid": pid})
     rows = [dict(r) for r in result.mappings().all()]
 

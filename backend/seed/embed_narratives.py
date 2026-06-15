@@ -121,6 +121,8 @@ async def main() -> None:
             return
 
         done = 0
+        vt = get_settings().vector_type  # "vector" | "halfvec"
+
         while True:
             rows = await conn.fetch(
                 "SELECT narrative_id, body FROM narratives "
@@ -139,7 +141,7 @@ async def main() -> None:
             async with conn.transaction():
                 for row, vec in zip(rows, vecs):
                     await conn.execute(
-                        "UPDATE narratives SET embedding = $1::vector WHERE narrative_id = $2",
+                        f"UPDATE narratives SET embedding = $1::{vt} WHERE narrative_id = $2",
                         vec_literal(vec),
                         row["narrative_id"],
                     )
@@ -150,9 +152,14 @@ async def main() -> None:
 
         # Build HNSW index after all embeddings are populated
         print(f"\nBuilding HNSW index on narratives.embedding…")
+        import sys
+        sys.path.insert(0, str(Path(__file__).parent.parent))
+        from app.config import get_settings
+        vt = get_settings().vector_type  # "vector" | "halfvec"
+        ops = "halfvec_cosine_ops" if vt == "halfvec" else "vector_cosine_ops"
         await conn.execute(
-            "CREATE INDEX IF NOT EXISTS idx_nar_embedding "
-            "ON narratives USING hnsw (embedding vector_cosine_ops)"
+            f"CREATE INDEX IF NOT EXISTS idx_nar_embedding "
+            f"ON narratives USING hnsw (embedding {ops})"
         )
         print("Done.")
 

@@ -103,13 +103,13 @@ export function CaseDrawer({
                       p.role === "Victim" ? "bg-warning/20 text-warning-foreground" :
                       "bg-success/15 text-success"
                     }`}>
-                      {p.role[0]}
+                      {(p.role ?? "?")[0]}
                     </div>
                     <div>
                       <div className={`text-sm font-medium ${p.masked ? "font-mono text-foreground/60" : "text-foreground"}`}>
                         {p.name}
                       </div>
-                      <div className="text-[11px] text-muted-foreground">{t(p.role)}</div>
+                      <div className="text-[11px] text-muted-foreground">{t(p.role ?? "")}</div>
                     </div>
                   </div>
                   {p.masked && <Lock className="h-4 w-4 text-warning" />}

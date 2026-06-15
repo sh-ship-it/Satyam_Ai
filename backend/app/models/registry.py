@@ -144,8 +144,15 @@ def get_tts(backend: Literal["sarvam", "bhashini", "local"] | None = None) -> Te
 
 @lru_cache
 def get_translator(backend: Literal["sarvam", "bhashini"] | None = None) -> Translator:
-    """Sarvam Translate (primary) → Bhashini NMT (fallback)."""
+    """Sarvam Translate (primary) → Bhashini NMT (fallback).
+    Falls back to Bhashini stub in local/no-key mode (no local translator class).
+    """
     s = get_settings()
+    # In fully-local mode with no voice keys, fall back to Bhashini stub
+    # (no dedicated local translator — closest thing is Bhashini demo).
+    if s.model_backend == "local" and not s.sarvam_api_key:
+        from app.models.api.bhashini import BhashiniTranslator
+        return BhashiniTranslator()
     resolved = backend or s.voice_backend
     if resolved == "bhashini":
         from app.models.api.bhashini import BhashiniTranslator

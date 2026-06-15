@@ -27,6 +27,7 @@ async def stream_chat(
     await write_audit(
         session,
         action="chat.query",
+        user_id=principal.officer_id,
         query_text=message[:500],
     )
     async for event in run(

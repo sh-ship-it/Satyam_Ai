@@ -216,3 +216,30 @@ CREATE POLICY p_persons_scope ON persons
 -- Field-level masking (clearance L1-L4: mask victim/accused PII, redact protected-crime
 -- narratives, coarsen coordinates) is applied in the API serialization layer using
 -- app.clearance + the PROTECTED crime set, then surfaced as lock icons in the UI.
+
+-- ===================== APP ROLE + GRANTS + FORCE RLS ========================
+-- CRITICAL: without this block the app role doesn't exist, GRANTs are absent,
+-- and FORCE ROW LEVEL SECURITY is never set — so RLS policies silently do
+-- nothing when the connection is owned by the table owner (superuser bypass).
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'satyam_app') THEN
+        CREATE ROLE satyam_app LOGIN PASSWORD 'satyam_app'
+            NOSUPERUSER NOCREATEDB NOCREATEROLE;
+    END IF;
+END $$;
+
+GRANT USAGE ON SCHEMA public TO satyam_app;
+GRANT SELECT ON stations, officers, cases, case_persons, narratives, persons,
+                rank_access, users, v_officer_session TO satyam_app;
+GRANT SELECT, INSERT ON audit_log TO satyam_app;
+-- audit_id is BIGSERIAL → sequence name is audit_log_audit_id_seq (not audit_log_id_seq)
+GRANT USAGE, SELECT ON SEQUENCE audit_log_audit_id_seq TO satyam_app;
+
+-- Force RLS so even the table OWNER is subject to the jurisdiction policies.
+-- Without FORCE, a superuser or table-owner connection bypasses ALL policies.
+ALTER TABLE cases        FORCE ROW LEVEL SECURITY;
+ALTER TABLE narratives   FORCE ROW LEVEL SECURITY;
+ALTER TABLE persons      FORCE ROW LEVEL SECURITY;
+ALTER TABLE case_persons FORCE ROW LEVEL SECURITY;

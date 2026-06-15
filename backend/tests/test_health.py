@@ -14,9 +14,9 @@ def test_health_ok():
 
 
 def test_login_and_me():
-    r = client.post("/auth/login", json={"username": "officer1", "role": "investigator"})
+    r = client.post("/auth/login", json={"username": "officer1", "rank": "investigator"})
     assert r.status_code == 200
     token = r.json()["token"]
     me = client.get("/auth/me", headers={"Authorization": f"Bearer {token}"})
     assert me.status_code == 200
-    assert me.json()["role"] == "investigator"
+    assert me.json()["rank"] == "investigator"

@@ -60,17 +60,20 @@ export type Role = "admin" | "investigator" | "analyst" | "viewer";
 export type SessionUser = {
   id: string;
   name: string;
-  role: Role;
-  station_id?: string | null;
-  jurisdiction_id?: string | null;
+  rank: string;
+  scope: "state" | "range" | "district" | "station";
+  clearance: 1 | 2 | 3 | 4;
+  station_id?: number | null;
+  district?: string;
+  range_name?: string;
 };
 
 export const api = {
   // --- auth ---
-  async login(username: string, role?: Role): Promise<{ token: string; user: SessionUser }> {
+  async login(username: string, rank?: string): Promise<{ token: string; user: SessionUser }> {
     const out = await request<{ token: string; user: SessionUser }>("/auth/login", {
       method: "POST",
-      body: JSON.stringify({ username, role }),
+      body: JSON.stringify({ username, rank }),
     });
     setAuthToken(out.token);
     return out;

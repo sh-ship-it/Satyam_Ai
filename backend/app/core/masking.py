@@ -70,11 +70,10 @@ def mask_case(case: dict, principal: Principal) -> dict:
     # ── L2: PSI/SI/ASI ───────────────────────────────────────────────────
     if principal.clearance < 3:
         out["_masked"] = True
-        # Mask person PII
+        # Mask person PII (place_of_offence is case-level, not person-level)
         for p in out.get("persons", []) or []:
             p["name"]            = _mask_str(p.get("name"))
             p["age"]             = None
-            p["place_of_offence"] = _mask_str(p.get("place_of_offence"))
             p.setdefault("_masked", True)
         out["place_of_offence"] = _mask_str(out.get("place_of_offence"))
         # Redact PROTECTED narratives

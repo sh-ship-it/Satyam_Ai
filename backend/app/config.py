@@ -68,6 +68,9 @@ class Settings(BaseSettings):
 
     # Embeddings (always BGE-M3 local — not configurable)
     embedding_dim: int = 1024
+    # vector_type: "vector" for local (fp32), "halfvec" for Neon free tier (fp16)
+    # Set VECTOR_TYPE=halfvec in Neon env to match the altered column type.
+    vector_type: Literal["vector", "halfvec"] = "vector"
 
     @property
     def cors_origin_list(self) -> list[str]:
