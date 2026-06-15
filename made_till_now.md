@@ -333,3 +333,20 @@ track is preserved as commented-out lines for instant flip-back during on-prem d
 The Neon connection string contains real credentials. It lives **only** in
 `backend/.env`, which is covered by `.gitignore` rule `**/.env`. It is never
 printed in logs, never committed, and never echoed in any tracked file.
+
+---
+
+### [2026-06-15] — Gitignore Update: Ignore Synthetic Dataset CSVs
+
+#### Summary
+Updated the root `.gitignore` file to ensure all generated synthetic dataset CSV files inside `backend/seed/satyam_synthetic_dataset/` are ignored by Git. This prevents committing large data files (like `narratives.csv`, which is ~116MB and exceeds GitHub's limit) while ensuring the dataset generator/verifier scripts and documentation remain tracked.
+
+#### Changes
+
+**`.gitignore`** (root)
+- Added rule to ignore all files in `backend/seed/satyam_synthetic_dataset/`:
+  `backend/seed/satyam_synthetic_dataset/*`
+- Added exceptions to keep `.py` and `.md` files tracked:
+  `!backend/seed/satyam_synthetic_dataset/*.py`
+  `!backend/seed/satyam_synthetic_dataset/*.md`
+

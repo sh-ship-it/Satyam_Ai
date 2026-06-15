@@ -32,3 +32,9 @@ dist/
 # Data artifacts
 *.pdf
 !docs/**/*.pdf
+
+# Data / Seeding
+backend/seed/satyam_synthetic_dataset/*
+!backend/seed/satyam_synthetic_dataset/*.py
+!backend/seed/satyam_synthetic_dataset/*.md
+
