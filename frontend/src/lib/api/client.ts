@@ -106,6 +106,15 @@ export const api = {
     const q = new URLSearchParams(params as Record<string, string>).toString();
     return request(`/audit${q ? `?${q}` : ""}`);
   },
+
+  /** Switch the active database source on the backend for this session.
+   *  "cloud" → Neon (DATABASE_URL), "local" → localhost Postgres. */
+  setDbSource(source: "cloud" | "local"): Promise<{ db_source: string }> {
+    return request("/settings/db-source", {
+      method: "POST",
+      body: JSON.stringify({ source }),
+    });
+  },
 };
 
 // --- chat streaming (Server-Sent Events) ---

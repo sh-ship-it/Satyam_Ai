@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { X, User, Bell, Lock, Monitor, Database, Check, Download, Trash2, AlertTriangle, Cpu } from "lucide-react";
+import { X, User, Bell, Lock, Monitor, Database, Check, Download, Trash2, AlertTriangle, Cpu, CloudCog, HardDrive } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
+import { api } from "@/lib/api/client";
 
 type Tab = "profile" | "models" | "preferences" | "notifications" | "security" | "data";
 
@@ -11,6 +12,7 @@ export type EngineSettings = {
   brainEngine: "gemini" | "groq";
   sqlEngine: "gemini" | "qwen3-coder-next";
   voiceBackend: "sarvam" | "bhashini";
+  dbSource: "cloud" | "local";
 };
 
 const ENGINE_KEY = "satyam.engine-settings";
@@ -21,6 +23,7 @@ const defaultEngineSettings: EngineSettings = {
   brainEngine: "gemini",
   sqlEngine: "gemini",
   voiceBackend: "sarvam",
+  dbSource: "cloud",
 };
 
 export function loadEngineSettings(): EngineSettings {
@@ -199,6 +202,19 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                   </div>
                 </Row>
 
+                {/* Database source */}
+                <div className="space-y-2">
+                  <span className="block text-xs font-bold uppercase tracking-wide">Database source</span>
+                  <DbSourceRow
+                    value={engines.dbSource}
+                    onChange={(v) => {
+                      updateEngine("dbSource", v);
+                      // Notify backend so the active connection switches immediately
+                      api.setDbSource(v).catch(() => {/* backend may be down — setting persists for next request */});
+                    }}
+                  />
+                </div>
+
                 <div className="rounded-[5px] border-2 border-foreground bg-background p-3 text-[11px] font-bold text-muted-foreground">
                   {t("Changes apply to new requests in this session. Reload to reset to server defaults.")}
                 </div>
@@ -359,6 +375,66 @@ const DELETION_KEY = "satyam.account.deletionScheduledAt";
 const GRACE_MS = 7 * 24 * 60 * 60 * 1000;
 
 type Status = { kind: "idle" } | { kind: "exporting" } | { kind: "exported"; file: string } | { kind: "deleting" };
+
+function DbSourceRow({
+  value,
+  onChange,
+}: {
+  value: "cloud" | "local";
+  onChange: (v: "cloud" | "local") => void;
+}) {
+  const options: { val: "cloud" | "local"; label: string; sub: string; icon: React.ElementType }[] = [
+    {
+      val: "cloud",
+      label: "Neon cloud (PostgreSQL 16)",
+      sub: "Deployed link · judges · authentication",
+      icon: CloudCog,
+    },
+    {
+      val: "local",
+      label: "Local PostgreSQL 17",
+      sub: "Full 100k dataset · GPU embeddings · on-prem demo",
+      icon: HardDrive,
+    },
+  ];
+  return (
+    <div className="flex flex-col gap-2">
+      {options.map(({ val, label, sub, icon: Icon }) => {
+        const active = value === val;
+        return (
+          <button
+            key={val}
+            type="button"
+            onClick={() => onChange(val)}
+            className={`flex items-center gap-3 rounded-[5px] border-2 px-3 py-2.5 text-left transition ${
+              active
+                ? "border-foreground bg-primary/10 nb-shadow-sm"
+                : "border-foreground/40 bg-background hover:border-foreground"
+            }`}
+          >
+            <div
+              className={`grid h-8 w-8 shrink-0 place-items-center rounded-[5px] border-2 border-foreground ${
+                active ? "bg-primary text-primary-foreground" : "bg-secondary-background text-foreground/60"
+              }`}
+            >
+              <Icon className="h-4 w-4" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-bold">{label}</div>
+              <div className="text-[10px] text-muted-foreground">{sub}</div>
+            </div>
+            {/* active indicator */}
+            <div
+              className={`h-3 w-3 shrink-0 rounded-full border-2 border-foreground transition ${
+                active ? "bg-primary" : "bg-transparent"
+              }`}
+            />
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 function ModelToggle({
   label,

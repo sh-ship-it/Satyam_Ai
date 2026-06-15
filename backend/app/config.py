@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+asyncpg://satyam:satyam@localhost:5432/satyam"
     # Seed/migration URL — owner/superuser role, used ONLY by migrations + seed script.
     seed_database_url: str = "postgresql+asyncpg://satyam:satyam@localhost:5432/satyam"
+    # Local Postgres URL — used when the Settings panel switches to "local" source.
+    # Falls back to database_url if not set.
+    local_database_url: str = "postgresql+asyncpg://satyam_app:satyam_app@localhost:5432/satyam"
     redis_url: str = "redis://localhost:6379/0"
 
     # Auth
