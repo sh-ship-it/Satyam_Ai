@@ -458,3 +458,132 @@ Complete rebuild of the database schema, data pipeline, and RBAC system to match
 - Run `python -m seed.embed_narratives` (GPU preferred) to fill `narratives.embedding` and build the HNSW index — until then, RAG falls back to full-text search.
 - Implement real password auth in `users` table (currently demo JWT only).
 - Push a user to `users` table and wire `user_id` into audit log rows.
+
+---
+
+### [2026-06-15] — Architecture Doc Revision: Saaras v3, GPU Specs, Demo Clarification
+
+#### Summary
+`docs/ARCHITECTURE.md` revised with corrected STT version (Saaras v3), hardware specs
+for BGE-M3 and bge-reranker, and clearer two-track demo honesty section.
+
+#### Code changes
+- `backend/app/models/api/sarvam.py` — `"saaras:v2"` → `"saaras:v3"` in docstring, class docstring, and API model string.
+- `backend/app/models/local/embedder_bge.py` — docstring expanded: ~568M params, ~1.3 GB FP16, RTX 4070 target.
+- `backend/app/models/local/reranker_bge.py` — docstring expanded: ~568M params, ~1.1 GB FP16, ~2.4 GB combined, real `CrossEncoder` snippet.
+
+---
+
+### [2026-06-15] — Neon Cloud Database Connected
+
+#### Summary
+Backend connected to Neon cloud PostgreSQL. `DATABASE_URL` and `SEED_DATABASE_URL` both point at Neon.
+Local URLs preserved as commented-out lines for instant flip-back.
+
+- Endpoint: `ep-misty-haze-ad33z23j-pooler.c-2.us-east-1.aws.neon.tech`
+- PostgreSQL 16.14, pgvector 0.8.0 already installed.
+- `backend/app/config.py` — added `seed_database_url` field to `Settings`.
+- `backend/.env` — updated (gitignored).
+
+---
+
+### [2026-06-15] — Full DB Rebuild: Schema v2 + KSP RBAC + 100k Dataset
+
+#### Summary
+Complete schema rebuild, new RBAC model, and bulk data load. Applied to both Neon and local.
+
+#### Files
+| File | Action |
+|------|--------|
+| `schema.sql` (root) | moved → `backend/migrations/002_schema_v2.sql` |
+| `load_seed.sql` (root) | moved → `backend/seed/load_seed.sql` |
+| `backend/migrations/teardown.sql` | new — idempotent DROP of all v1 objects |
+| `backend/seed/load_seed.py` | new — asyncpg COPY bulk-loader |
+| `backend/seed/embed_narratives.py` | new — BGE-M3 embedding job, resumable |
+
+#### Data loaded (Neon + local)
+1,074 stations · 6,949 officers · 100,000 cases · 416,616 persons · 416,616 case_persons · 200,000 narratives
+
+#### Key backend rewrites
+- `db/models.py` — ORM matches v2 (INTEGER PKs, new columns, GENERATED cols skipped).
+- `db/rls.py` — `satyam.*` GUCs → `app.*` GUCs + `fn_scope_ok()`.
+- `core/rbac.py` — full KSP rank model: 14 ranks, `PROTECTED_CRIMES`, L1–L4 clearance, `should_mask_pii()` / `should_coarsen_coords()` / `can_see_narrative()`. `Role` enum removed.
+- `core/masking.py` — 4-tier masking; deep-copies persons list to avoid mutation.
+- `core/audit.py` — `audit_id` / `at` / `row_hash` / `case_id` / `reason`.
+- `core/security.py` — JWT carries `rank`, `scope`, `clearance`, `district`, `range`, `officer_id`.
+- `api/deps.py` — new JWT fields; calls updated `apply_rls_context()`.
+- `api/routes/auth.py` — demo login for all 14 KSP ranks.
+- `schemas/auth.py` — `SessionUser` has `rank`, `scope`, `clearance`, `district`, `range_name`.
+- `schemas/case.py` — v2 column names (`case_id int`, `fir_number`, `crime_category`, etc.).
+- `services/case_service.py` — v2 columns, loads English narrative, `status` filter.
+- `api/routes/cases.py` — `case_id: int` path param, `status` filter.
+- `pipeline/prompts.py` — `SQL_SYSTEM` updated for v2 schema.
+- `pipeline/tools/sql_guard.py` — `persons_v` → `persons` in allow-list.
+- `pipeline/tools/analytics.py` — `latitude/longitude`, quoted `"range"`, `range_name` filter.
+- `pipeline/tools/rag.py` — `narratives.body` (was `.text`).
+
+#### RLS verified live
+- PSI station-scoped: 1,029 / 100,000 cases. DGP state-scoped: 100,000 / 100,000 cases.
+
+---
+
+### [2026-06-15] — DATABASE.md Rewritten
+
+Fully rewrote `DATABASE.md` to reflect the v2 schema, actual row counts, pgvector 0.8.x versions,
+KSP rank model, 4-tier clearance table, `fn_scope_ok()` RLS implementation, `vector_type` config,
+embed job instructions, and updated configuration section. Old v1 DDL and references removed.
+
+---
+
+### [2026-06-15] — Bug Fix Sprint: 17 Bugs Fixed (SATYAM_BUG_FIXES.md — Rounds 1–4)
+
+All 17 confirmed bugs fixed. 4 false positives confirmed and left untouched.
+
+#### Critical / High (crash or security)
+
+| Bug | File | Fix |
+|-----|------|-----|
+| **A** | `docker-compose.yml` | Schema init mount changed from `001_init.sql` → `002_schema_v2.sql`; Docker now boots with the v2 schema. |
+| **D1** | `002_schema_v2.sql` | Appended missing security block: `CREATE ROLE satyam_app`, all GRANTs, correct sequence `audit_log_audit_id_seq`, and `FORCE ROW LEVEL SECURITY` on all 4 tables. Without this, RLS was silently bypassed. |
+| **B** | `services/report_service.py` | `principal.role.value` → `principal.rank` (`.role` is a `str` property, not an Enum; `.value` raised `AttributeError`). |
+| **C** | `services/report_service.py` | Case IDs cast with `int(fir)` before `get_case(..., int)` call; invalid IDs skipped with `continue`. |
+| **R3** | `pipeline/tools/text_to_sql.py` | Added `_mask_rows()`: bullets PII columns (`name`, `io_name`, `place_of_offence`, etc.) for callers below clearance L3. `answer_with_sql()` now requires `principal` kwarg. Orchestrator updated to pass `principal=principal`. |
+
+#### Medium
+
+| Bug | File | Fix |
+|-----|------|-----|
+| **D** | `services/chat_service.py` | `write_audit()` now passes `user_id=principal.officer_id` so audit rows are attributed. |
+| **R1** | `pipeline/orchestrator.py` | Citations use `r.get("fir_number")` not `r.get("fir_no")` — was always empty. |
+| **R4** | `pipeline/tools/analytics.py` | `ego_network()` resolves a person name string to `person_id` via `SELECT ... WHERE name ILIKE :n` before querying; returns `([], [])` on no match. |
+| **D2** | `config.py` + `pipeline/tools/rag.py` + `seed/embed_narratives.py` | Added `vector_type: Literal["vector","halfvec"]` config. RAG queries and embed UPDATE cast use `{vt}` dynamically. HNSW index uses `halfvec_cosine_ops` when `VECTOR_TYPE=halfvec`. Set `VECTOR_TYPE=halfvec` in Neon env. |
+| **E** | `frontend/src/routes/audit.tsx` | API field mapping fixed: `user_id`, `query_text`, `reason`, `case_id`; timestamp reads `e.ts ?? e.at`. |
+| **F** | `frontend/src/lib/api/client.ts` | `SessionUser` type replaced: `rank/scope/clearance/station_id(int)/district/range_name`. `login()` signature: `role?: Role` → `rank?: string`; body sends `{ username, rank }`. |
+| **G** | `backend/app/db/models.py` | Removed `unique=True` on `fir_number` — FIR numbers repeat across station/year. |
+| **H** | `backend/app/models/api/sarvam.py` | `"bulbul:v1"` → `"bulbul:v3"`. |
+| **T1** | `backend/tests/test_rbac.py` | Completely rewritten: imports `Permission, Principal, is_protected` (no `Role`), uses `rank=`/`scope=`/`clearance=` constructor, calls real methods. 13 new passing tests. |
+| **T1** | `backend/tests/test_health.py` | Login body: `"role"` → `"rank"`; assertion: `me.json()["role"]` → `me.json()["rank"]`. |
+
+#### Low
+
+| Bug | File | Fix |
+|-----|------|-----|
+| **R5** | `backend/app/core/masking.py` | Removed `p["place_of_offence"] = _mask_str(...)` from per-person loop in L2 branch — `place_of_offence` is a case-level field; the phantom key injection on person dicts is gone. |
+| **D3** | `backend/app/models/registry.py` | `get_translator()` now checks `model_backend == "local" and not sarvam_api_key` and falls back to Bhashini stub, matching `get_stt`/`get_tts` pattern. |
+| **T2** | `frontend/src/components/CaseDrawer.tsx` | `p.role[0]` → `(p.role ?? "?")[0]`; `t(p.role)` → `t(p.role ?? "")` — prevents crash when person has `role: null`. |
+
+#### Deleted
+- `backend/seed/seed.py` — **deleted** (BUG-R2). Entire file targeted v1 schema columns that no longer exist. Canonical loader is `seed/load_seed.py`.
+
+#### Docstring / stale comment
+- `pipeline/tools/sql_guard.py` — module docstring updated: removed false claim about `persons_v`; documents that column-level PII masking now lives in `text_to_sql._mask_rows()`.
+
+#### Test results after all fixes
+```
+tests/test_rbac.py   — 13 passed
+tests/test_health.py —  2 passed
+Total: 15 passed, 0 failed
+```
+
+#### Confirmed false positives (not touched)
+`frontend/src/routes/login.tsx` · `frontend/src/routes/map.tsx` (×2) · `frontend/src/lib/i18n.tsx` — all valid JSX inline styles / context values confirmed from raw bytes.
