@@ -10,6 +10,13 @@ class ChatRequest(BaseModel):
     conversation_id: Optional[str] = None
     lang: Literal["en", "kn"] = "en"
 
+    # Per-request engine overrides from the Settings panel.
+    # When set they take precedence over the server-side env defaults for this
+    # session only. None means "use the server default".
+    brain_engine: Optional[Literal["gemini", "groq"]] = None
+    sql_engine: Optional[Literal["gemini", "qwen3-coder-next"]] = None
+    voice_backend: Optional[Literal["sarvam", "bhashini"]] = None
+
 
 class Citation(BaseModel):
     ref: str

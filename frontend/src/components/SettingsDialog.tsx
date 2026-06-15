@@ -1,12 +1,53 @@
 import { useEffect, useState } from "react";
-import { X, User, Bell, Lock, Monitor, Database, LogOut, Check, Download, Trash2, AlertTriangle } from "lucide-react";
+import { X, User, Bell, Lock, Monitor, Database, Check, Download, Trash2, AlertTriangle, Cpu } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
-type Tab = "profile" | "preferences" | "notifications" | "security" | "data";
+type Tab = "profile" | "models" | "preferences" | "notifications" | "security" | "data";
+
+// Per-session engine overrides — persisted in localStorage and sent with each chat request.
+export type EngineSettings = {
+  apiModelEnabled: boolean;
+  localModelEnabled: boolean;
+  brainEngine: "gemini" | "groq";
+  sqlEngine: "gemini" | "qwen3-coder-next";
+  voiceBackend: "sarvam" | "bhashini";
+};
+
+const ENGINE_KEY = "satyam.engine-settings";
+
+const defaultEngineSettings: EngineSettings = {
+  apiModelEnabled: true,
+  localModelEnabled: false,
+  brainEngine: "gemini",
+  sqlEngine: "gemini",
+  voiceBackend: "sarvam",
+};
+
+export function loadEngineSettings(): EngineSettings {
+  if (typeof window === "undefined") return defaultEngineSettings;
+  try {
+    const raw = localStorage.getItem(ENGINE_KEY);
+    if (raw) return { ...defaultEngineSettings, ...JSON.parse(raw) };
+  } catch {}
+  return defaultEngineSettings;
+}
+
+function saveEngineSettings(s: EngineSettings) {
+  try { localStorage.setItem(ENGINE_KEY, JSON.stringify(s)); } catch {}
+}
 
 export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { t, lang, setLang } = useI18n();
   const [tab, setTab] = useState<Tab>("profile");
+  const [engines, setEngines] = useState<EngineSettings>(loadEngineSettings);
+
+  const updateEngine = <K extends keyof EngineSettings>(key: K, val: EngineSettings[K]) => {
+    setEngines((prev) => {
+      const next = { ...prev, [key]: val };
+      saveEngineSettings(next);
+      return next;
+    });
+  };
 
   // ESC to close
   useEffect(() => {
@@ -20,6 +61,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
 
   const tabs: { id: Tab; label: string; icon: React.ElementType }[] = [
     { id: "profile", label: t("Profile"), icon: User },
+    { id: "models", label: t("Models"), icon: Cpu },
     { id: "preferences", label: t("Preferences"), icon: Monitor },
     { id: "notifications", label: t("Notifications"), icon: Bell },
     { id: "security", label: t("Security"), icon: Lock },
@@ -91,7 +133,77 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
               </Section>
             )}
 
-            {tab === "preferences" && (
+            {tab === "models" && (
+              <Section title={t("Models & Backend")} subtitle={t("Live-switch engines without redeploying")}>
+                {/* Model backend toggles */}
+                <div className="space-y-2">
+                  <span className="block text-xs font-bold uppercase tracking-wide">{t("Model backend")}</span>
+                  <div className="flex flex-col gap-2">
+                    <ModelToggle
+                      label={t("API model (cloud)")}
+                      description="Gemini, Groq, Sarvam, Ollama Cloud"
+                      on={engines.apiModelEnabled}
+                      onToggle={(v) => updateEngine("apiModelEnabled", v)}
+                    />
+                    <ModelToggle
+                      label={t("Local model (on-prem)")}
+                      description="Phase 2 — GPU required; auto-falls back to API if unavailable"
+                      on={engines.localModelEnabled}
+                      onToggle={(v) => updateEngine("localModelEnabled", v)}
+                    />
+                  </div>
+                </div>
+
+                {/* Brain engine */}
+                <Row label={t("Brain engine")}>
+                  <div className="flex flex-col items-end gap-0.5">
+                    <select
+                      value={engines.brainEngine}
+                      onChange={(e) => updateEngine("brainEngine", e.target.value as EngineSettings["brainEngine"])}
+                      className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
+                    >
+                      <option value="gemini">Gemini 2.5 Flash</option>
+                      <option value="groq">Groq (low-latency / fallback)</option>
+                    </select>
+                    <span className="text-[10px] text-muted-foreground">chat · slots · routing</span>
+                  </div>
+                </Row>
+
+                {/* Text-to-SQL engine */}
+                <Row label={t("Text-to-SQL engine")}>
+                  <div className="flex flex-col items-end gap-0.5">
+                    <select
+                      value={engines.sqlEngine}
+                      onChange={(e) => updateEngine("sqlEngine", e.target.value as EngineSettings["sqlEngine"])}
+                      className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
+                    >
+                      <option value="gemini">Gemini 2.5 Flash</option>
+                      <option value="qwen3-coder-next">qwen3-coder-next (Ollama Cloud)</option>
+                    </select>
+                    <span className="text-[10px] text-muted-foreground">sqlglot guard applies to both</span>
+                  </div>
+                </Row>
+
+                {/* Voice backend */}
+                <Row label={t("Voice backend")}>
+                  <div className="flex flex-col items-end gap-0.5">
+                    <select
+                      value={engines.voiceBackend}
+                      onChange={(e) => updateEngine("voiceBackend", e.target.value as EngineSettings["voiceBackend"])}
+                      className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
+                    >
+                      <option value="sarvam">Sarvam (Bulbul v3 TTS · Saaras v2 STT)</option>
+                      <option value="bhashini">Bhashini (govt · free · no credit cap)</option>
+                    </select>
+                    <span className="text-[10px] text-muted-foreground">STT · TTS · translation</span>
+                  </div>
+                </Row>
+
+                <div className="rounded-[5px] border-2 border-foreground bg-background p-3 text-[11px] font-bold text-muted-foreground">
+                  {t("Changes apply to new requests in this session. Reload to reset to server defaults.")}
+                </div>
+              </Section>
+            )}
               <Section title={t("Preferences")} subtitle={t("Workspace appearance & language")}>
                 <Row label={t("Language")}>
                   <div className="flex gap-2">
@@ -241,10 +353,40 @@ function Toggle({ label, defaultOn }: { label: string; defaultOn?: boolean }) {
   );
 }
 
-type Status = { kind: "idle" } | { kind: "exporting" } | { kind: "exported"; file: string } | { kind: "deleting" };
-
 const DELETION_KEY = "satyam.account.deletionScheduledAt";
 const GRACE_MS = 7 * 24 * 60 * 60 * 1000;
+
+type Status = { kind: "idle" } | { kind: "exporting" } | { kind: "exported"; file: string } | { kind: "deleting" };
+
+function ModelToggle({
+  label,
+  description,
+  on,
+  onToggle,
+}: {
+  label: string;
+  description: string;
+  on: boolean;
+  onToggle: (v: boolean) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-4 rounded-[5px] border-2 border-foreground bg-background px-3 py-2.5 nb-shadow-sm">
+      <div>
+        <div className="text-sm font-bold">{label}</div>
+        <div className="text-[10px] text-muted-foreground">{description}</div>
+      </div>
+      <button
+        onClick={() => onToggle(!on)}
+        className={`relative h-6 w-11 shrink-0 rounded-[5px] border-2 border-foreground transition ${on ? "bg-primary" : "bg-secondary-background"}`}
+        aria-pressed={on}
+      >
+        <span
+          className={`absolute top-1/2 -translate-y-1/2 h-4 w-4 rounded-[3px] border-2 border-foreground bg-secondary-background transition-all ${on ? "left-[22px]" : "left-0.5"}`}
+        />
+      </button>
+    </div>
+  );
+}
 
 function formatRemaining(ms: number) {
   if (ms <= 0) return "0d 0h 0m 0s";

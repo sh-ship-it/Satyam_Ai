@@ -4,7 +4,6 @@ from __future__ import annotations
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -26,14 +25,46 @@ class Settings(BaseSettings):
     # CORS (comma-separated)
     cors_origins: str = "http://localhost:3000"
 
-    # Model adapter layer
+    # ── Model adapter layer ───────────────────────────────────────────────────
+    # MODEL_BACKEND: selects the overall compute plane (api | local).
     model_backend: Literal["api", "local"] = "api"
+
+    # BRAIN_ENGINE: which LLM drives chat / slots / routing (api lane).
+    #   gemini  → Gemini 2.5 Flash (default, best accuracy)
+    #   groq    → Groq low-latency / outage fallback
+    brain_engine: Literal["gemini", "groq"] = "gemini"
+
+    # SQL_ENGINE: which LLM generates Text-to-SQL (api lane).
+    #   gemini           → Gemini 2.5 Flash (default)
+    #   qwen3-coder-next → Ollama Cloud (qwen3-coder-next, 80B MoE / 3B active)
+    sql_engine: Literal["gemini", "qwen3-coder-next"] = "gemini"
+
+    # VOICE_BACKEND: which voice provider handles STT / TTS.
+    #   sarvam   → Sarvam (Bulbul v3 TTS, Saaras v3 STT) — primary
+    #   bhashini → Bhashini (govt, free, fallback)
+    voice_backend: Literal["sarvam", "bhashini"] = "sarvam"
+
+    # Gemini
     gemini_api_key: str = ""
     gemini_model: str = "gemini-2.5-flash"
+
+    # Groq
     groq_api_key: str = ""
     groq_model: str = "llama-3.3-70b-versatile"
+
+    # Sarvam (primary voice — Bulbul v3 TTS, Saaras v3 STT, Sarvam Translate MT)
+    sarvam_api_key: str = ""
+
+    # Bhashini (fallback voice — govt, free, no credit cap)
     bhashini_api_key: str = ""
     bhashini_user_id: str = ""
+
+    # Ollama Cloud (qwen3-coder-next Text-to-SQL option)
+    ollama_cloud_url: str = "https://api.ollama.com"
+    ollama_cloud_api_key: str = ""
+    ollama_cloud_sql_model: str = "qwen3-coder-next:cloud"
+
+    # Embeddings (always BGE-M3 local — not configurable)
     embedding_dim: int = 1024
 
     @property

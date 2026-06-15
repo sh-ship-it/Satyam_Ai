@@ -3,12 +3,15 @@
 Given a user message + RLS-scoped session + principal, route to a lane, call the
 appropriate grounded tool(s), compose a cited answer, and emit pipeline events.
 Events are consumed by the SSE endpoint for live streaming.
+
+Engine overrides (brain_engine, sql_engine) are passed from the per-request
+ChatRequest so the Settings panel can flip lanes live without redeploying.
 """
 from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from typing import AsyncIterator
+from typing import AsyncIterator, Literal
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -35,7 +38,12 @@ def _rows_context(rows: list[dict], limit: int = 25) -> str:
     return json.dumps(rows[:limit], default=str)
 
 
-async def _compose(question: str, context: str, lang: str = "en") -> str:
+async def _compose(
+    question: str,
+    context: str,
+    lang: str = "en",
+    brain_engine: Literal["gemini", "groq"] | None = None,
+) -> str:
     """Grounded answer composition with Groq fallback on primary failure."""
     lang_directive = (
         "\n\nRespond in Kannada (ಕನ್ನಡ). Keep IPC section numbers, FIR identifiers, "
@@ -45,17 +53,27 @@ async def _compose(question: str, context: str, lang: str = "en") -> str:
     )
     prompt = f"Question: {question}\n\nGrounded data:\n{context}{lang_directive}"
     try:
-        return await get_llm().complete(prompt, system=ANSWER_SYSTEM, temperature=0.2)
+        return await get_llm(brain_engine).complete(
+            prompt, system=ANSWER_SYSTEM, temperature=0.2
+        )
     except Exception:
         try:
-            return await get_fallback_llm().complete(prompt, system=ANSWER_SYSTEM, temperature=0.2)
+            return await get_fallback_llm().complete(
+                prompt, system=ANSWER_SYSTEM, temperature=0.2
+            )
         except Exception:
             return "I found the records below, but couldn't generate a summary just now."
 
 
 async def run(
-    *, message: str, principal: Principal, session: AsyncSession,
-    state: ConversationState, lang: str = "en",
+    *,
+    message: str,
+    principal: Principal,
+    session: AsyncSession,
+    state: ConversationState,
+    lang: str = "en",
+    brain_engine: Literal["gemini", "groq"] | None = None,
+    sql_engine: Literal["gemini", "qwen3-coder-next"] | None = None,
 ) -> AsyncIterator[PipelineEvent]:
     # 1) guardrails
     blocked = guardrails.precheck(message)
@@ -66,8 +84,8 @@ async def run(
 
     state.add_turn("user", message)
 
-    # 2) route
-    intent, slots = await route(message)
+    # 2) route (uses brain LLM with per-request override)
+    intent, slots = await route(message, brain_engine=brain_engine)
     state.merge_slots(slots)
     yield PipelineEvent("tool", {"name": "router", "status": "end", "detail": intent})
 
@@ -79,7 +97,9 @@ async def run(
         if intent == "sql_query":
             yield PipelineEvent("tool", {"name": "text_to_sql", "status": "start"})
             try:
-                sql_used, rows = await answer_with_sql(session, message, state.slots)
+                sql_used, rows = await answer_with_sql(
+                    session, message, state.slots, sql_engine=sql_engine
+                )
                 context = _rows_context(rows)
                 citations = [{"ref": r.get("fir_no", str(i)), "label": "case"}
                              for i, r in enumerate(rows[:5]) if r.get("fir_no")]
@@ -126,7 +146,7 @@ async def run(
             context = json.dumps({"help": "Ask about cases, hotspots, links, or reports."})
 
         # 3) compose grounded answer (token stream)
-        answer = await _compose(message, context, lang)
+        answer = await _compose(message, context, lang, brain_engine=brain_engine)
         for chunk in answer.split(" "):
             yield PipelineEvent("token", {"text": chunk + " "})
         for c in citations:

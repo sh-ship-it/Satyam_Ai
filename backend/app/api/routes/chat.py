@@ -37,6 +37,8 @@ async def chat_stream(
             lang=req.lang,
             principal=principal,
             session=session,
+            brain_engine=req.brain_engine,
+            sql_engine=req.sql_engine,
         ):
             yield event.sse()
 

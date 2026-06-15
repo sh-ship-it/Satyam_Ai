@@ -116,7 +116,14 @@ export type ChatEvent =
   | { type: "error"; message: string };
 
 export async function streamChat(
-  body: { message: string; conversation_id?: string; lang?: "en" | "kn" },
+  body: {
+    message: string;
+    conversation_id?: string;
+    lang?: "en" | "kn";
+    brain_engine?: "gemini" | "groq";
+    sql_engine?: "gemini" | "qwen3-coder-next";
+    voice_backend?: "sarvam" | "bhashini";
+  },
   onEvent: (event: ChatEvent) => void,
   signal?: AbortSignal,
 ): Promise<void> {

@@ -4,6 +4,7 @@ so routing still works in demo mode or on LLM failure.
 from __future__ import annotations
 
 import json
+from typing import Literal
 
 from app.models.registry import get_llm
 from app.pipeline.prompts import ROUTER_SCHEMA, ROUTER_SYSTEM
@@ -26,8 +27,11 @@ def _keyword_intent(message: str) -> str:
     return "smalltalk"
 
 
-async def route(message: str) -> tuple[str, dict]:
-    llm = get_llm()
+async def route(
+    message: str,
+    brain_engine: Literal["gemini", "groq"] | None = None,
+) -> tuple[str, dict]:
+    llm = get_llm(brain_engine)
     try:
         raw = await llm.complete(
             message, system=ROUTER_SYSTEM, temperature=0.0, json_schema=ROUTER_SCHEMA

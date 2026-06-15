@@ -2,17 +2,23 @@
 from __future__ import annotations
 
 import json
+from typing import Literal
 
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.registry import get_llm
+from app.models.registry import get_sql_llm
 from app.pipeline.prompts import SQL_SCHEMA, SQL_SYSTEM
 from app.pipeline.tools.sql_guard import UnsafeSQL, sanitize
 
 
-async def generate_sql(question: str, slots: dict | None = None) -> str:
-    llm = get_llm()
+async def generate_sql(
+    question: str,
+    slots: dict | None = None,
+    *,
+    sql_engine: Literal["gemini", "qwen3-coder-next"] | None = None,
+) -> str:
+    llm = get_sql_llm(sql_engine)
     prompt = question if not slots else f"{question}\n\nKnown filters: {json.dumps(slots)}"
     raw = await llm.complete(prompt, system=SQL_SYSTEM, temperature=0.0, json_schema=SQL_SCHEMA)
     try:
@@ -29,10 +35,14 @@ async def run_sql(session: AsyncSession, sql: str) -> list[dict]:
 
 
 async def answer_with_sql(
-    session: AsyncSession, question: str, slots: dict | None = None
+    session: AsyncSession,
+    question: str,
+    slots: dict | None = None,
+    *,
+    sql_engine: Literal["gemini", "qwen3-coder-next"] | None = None,
 ) -> tuple[str, list[dict]]:
     """Return (safe_sql, rows). Raises UnsafeSQL if the model produced bad SQL."""
-    sql = await generate_sql(question, slots)
+    sql = await generate_sql(question, slots, sql_engine=sql_engine)
     rows = await run_sql(session, sql)
     return sql, rows
 
