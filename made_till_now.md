@@ -285,3 +285,51 @@ SEED_DATABASE_URL=postgresql+asyncpg://satyam:satyam@localhost:5432/satyam
 - Embed narratives with BGE-M3 (FP16 on RTX 4070) → store as `vector(1024)` in `narratives.embedding`.
 - Cloud (Neon) track: teammate sets up Neon project, runs same migration with `halfvec(1024)` for the embedding column, pushes a subset of the data.
 - When Neon `DATABASE_URL` is available, flip `backend/.env` → `DATABASE_URL=<neon-url>` to switch tracks (no code changes required).
+
+---
+
+### [2026-06-15] — Neon Cloud Database Connected
+
+#### Summary
+Connected the backend to the Neon cloud PostgreSQL instance provided by the teammate.
+Both `DATABASE_URL` and `SEED_DATABASE_URL` now point at Neon. The local PostgreSQL
+track is preserved as commented-out lines for instant flip-back during on-prem demo.
+
+#### What was confirmed
+- **Neon endpoint:** `ep-misty-haze-ad33z23j-pooler.c-2.us-east-1.aws.neon.tech`
+- **Database:** `neondb` · **Region:** `us-east-1` (AWS)
+- **Server version:** PostgreSQL 16.14
+- **pgvector:** 0.8.0 — already installed on Neon
+- **Schema:** Full migration already applied — all 9 objects (`stations`, `officers`,
+  `app_users`, `cases`, `persons`, `case_persons`, `narratives`, `audit_log`, `persons_v`)
+  present and verified.
+
+#### Files changed
+
+**`backend/.env`** *(gitignored — credentials never committed)*
+- `DATABASE_URL` → Neon pooler URL with `ssl=require`
+- `SEED_DATABASE_URL` → same Neon URL (owner role, used only for migrations/seed)
+- Local URLs kept as comments for easy flip-back:
+  ```
+  # DATABASE_URL=postgresql+asyncpg://satyam_app:satyam_app@localhost:5432/satyam
+  # SEED_DATABASE_URL=postgresql+asyncpg://satyam:satyam@localhost:5432/satyam
+  ```
+- Also added the full new env vars from the architecture update
+  (`BRAIN_ENGINE`, `SQL_ENGINE`, `VOICE_BACKEND`, `SARVAM_API_KEY`, `OLLAMA_CLOUD_*`)
+  so the file is now fully in sync with `backend/.env.example`.
+
+**`backend/app/config.py`**
+- Added `seed_database_url: str` field to the `Settings` model so the seed script
+  can read it via `get_settings().seed_database_url` instead of raw `os.environ`.
+- Default value matches the local owner URL for local-only setups.
+
+#### How to switch tracks
+| Track | Change needed |
+|-------|--------------|
+| **Cloud (Neon)** — current | No change. `DATABASE_URL` = Neon URL |
+| **Local (on-prem demo)** | Uncomment the two local URLs in `backend/.env`, comment out the Neon lines |
+
+#### Security note
+The Neon connection string contains real credentials. It lives **only** in
+`backend/.env`, which is covered by `.gitignore` rule `**/.env`. It is never
+printed in logs, never committed, and never echoed in any tracked file.

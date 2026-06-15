@@ -15,6 +15,8 @@ class Settings(BaseSettings):
 
     # Infra
     database_url: str = "postgresql+asyncpg://satyam:satyam@localhost:5432/satyam"
+    # Seed/migration URL — owner/superuser role, used ONLY by migrations + seed script.
+    seed_database_url: str = "postgresql+asyncpg://satyam:satyam@localhost:5432/satyam"
     redis_url: str = "redis://localhost:6379/0"
 
     # Auth
