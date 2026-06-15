@@ -20,24 +20,30 @@ from app.schemas.auth import LoginRequest, LoginResponse, SessionUser
 router = APIRouter()
 
 # ── Demo station/district/range defaults ──────────────────────────────────
+# IMPORTANT: district and range must match real values in the synthetic dataset.
+# "Bengaluru City" and "Commissionerates" exist in the seeded data; the old
+# "Bengaluru Urban" / "Bengaluru Range" did NOT — causing RLS to filter out
+# all rows for district/station-scoped demo users (Issue 0).
+_BLR = {"district": "Bengaluru City", "range": "Commissionerates"}
+
 _DEMO_STATIONS: dict[str, dict] = {
-    "PC":    {"station_id": 1,   "district": "Bengaluru Urban", "range": "Bengaluru Range"},
-    "HC":    {"station_id": 1,   "district": "Bengaluru Urban", "range": "Bengaluru Range"},
-    "ASI":   {"station_id": 1,   "district": "Bengaluru Urban", "range": "Bengaluru Range"},
-    "SI":    {"station_id": 1,   "district": "Bengaluru Urban", "range": "Bengaluru Range"},
-    "PSI":   {"station_id": 1,   "district": "Bengaluru Urban", "range": "Bengaluru Range"},
-    "PI":    {"station_id": 1,   "district": "Bengaluru Urban", "range": "Bengaluru Range"},
-    "CI":    {"station_id": 1,   "district": "Bengaluru Urban", "range": "Bengaluru Range"},
-    "DySP":  {"station_id": None, "district": "Bengaluru Urban", "range": "Bengaluru Range"},
-    "SP":    {"station_id": None, "district": "Bengaluru Urban", "range": "Bengaluru Range"},
-    "DIG":   {"station_id": None, "district": "",               "range": "Bengaluru Range"},
-    "IGP":   {"station_id": None, "district": "",               "range": ""},
-    "DGP":   {"station_id": None, "district": "",               "range": ""},
+    "PC":    {"station_id": 1,    **_BLR},
+    "HC":    {"station_id": 1,    **_BLR},
+    "ASI":   {"station_id": 1,    **_BLR},
+    "SI":    {"station_id": 1,    **_BLR},
+    "PSI":   {"station_id": 1,    **_BLR},
+    "PI":    {"station_id": 1,    **_BLR},
+    "CI":    {"station_id": 1,    **_BLR},
+    "DySP":  {"station_id": None, **_BLR},
+    "SP":    {"station_id": None, **_BLR},
+    "DIG":   {"station_id": None, "district": "", "range": "Commissionerates"},
+    "IGP":   {"station_id": None, "district": "", "range": ""},
+    "DGP":   {"station_id": None, "district": "", "range": ""},
     # Legacy app-role aliases
     "admin":        {"station_id": None, "district": "", "range": ""},
-    "investigator": {"station_id": 1,   "district": "Bengaluru Urban", "range": "Bengaluru Range"},
-    "analyst":      {"station_id": None, "district": "Bengaluru Urban", "range": "Bengaluru Range"},
-    "viewer":       {"station_id": 1,   "district": "Bengaluru Urban", "range": "Bengaluru Range"},
+    "investigator": {"station_id": 1,    **_BLR},
+    "analyst":      {"station_id": None, "district": "", "range": ""},  # state scope → sees all
+    "viewer":       {"station_id": 1,    **_BLR},
 }
 
 

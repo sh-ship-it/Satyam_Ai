@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_principal, get_scoped_session
@@ -29,20 +29,28 @@ async def list_audit(
             select(AuditLog).order_by(AuditLog.audit_id.desc()).limit(min(limit, 500))
         )
     ).scalars().all()
+
+    # Total row count (for the hash-chain verification card / footer)
+    total: int = (
+        await session.execute(select(func.count()).select_from(AuditLog))
+    ).scalar_one()
+
     chain_valid = await verify_chain(session)
     return {
         "chain_valid": chain_valid,
+        "total": total,
         "count": len(rows),
         "entries": [
             {
-                "id":           r.audit_id,
-                "ts":           r.at.isoformat() if r.at else None,
-                "action":       r.action,
-                "case_id":      r.case_id,
-                "reason":       r.reason,
-                "query_text":   r.query_text,
+                "id":            r.audit_id,
+                "ts":            r.at.isoformat() if r.at else None,
+                "user_id":       r.user_id if hasattr(r, "user_id") else None,
+                "action":        r.action,
+                "case_id":       r.case_id,
+                "reason":        r.reason,
+                "query_text":    r.query_text,
                 "generated_sql": r.generated_sql,
-                "hash":         r.row_hash,
+                "hash":          r.row_hash,
             }
             for r in rows
         ],

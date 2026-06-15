@@ -108,4 +108,7 @@ async def get_case(
     }
     masked = mask_case(detail, principal)
     masked["masked"] = masked.pop("_masked", False)
+    # Promote per-person _masked sentinel so the frontend can display lock icons
+    for p in masked.get("persons") or []:
+        p["masked"] = p.pop("_masked", False)
     return masked

@@ -780,3 +780,110 @@ BgeM3Embedder BgeReranker ✓
 - Run `python -m seed.embed_narratives` with `PYTHONIOENCODING=utf-8` to embed the 200,000 narratives using BGE-M3 (the embedder now works end-to-end on the RTX 4070).
 - Start the FastAPI backend — `app/main.py` now pre-warms both models at startup via the `lifespan` context.
 - The `bge-m3` model could optionally be converted to `safetensors` format to remove the `transformers` version pin, but it is not required since pinning works.
+
+---
+
+### [2026-06-16] — E2E Frontend↔Backend Wiring (SATYAM_E2E_WIRING_FIX issues 0–6 + 9)
+
+#### Summary
+All hardcoded/fabricated demo data has been replaced with live API calls to the Postgres backend (RLS-scoped). Every issue from the `SATYAM_E2E_WIRING_FIX.md` roadmap is addressed.
+
+---
+
+#### Issue 0 — Demo jurisdiction fix (`backend/app/api/routes/auth.py`)
+- `_DEMO_STATIONS` updated: district `"Bengaluru City"`, range `"Commissionerates"` — matches real seeded dataset values.
+- Old `"Bengaluru Urban"` / `"Bengaluru Range"` caused RLS to filter out all rows for demo users scoped to district/station — **fixed**.
+
+---
+
+#### Issue 1 — CrimeMap live hotspots (`frontend/src/components/CrimeMap.tsx`)
+- Removed all hardcoded `BENGALURU_HOTSPOTS` array.
+- `CrimeMap` is now **prop-driven**: parent passes `points: Hotspot[]` and `mode`.
+- Leaflet init unchanged; layer is re-drawn on every `points` or `mode` change.
+- `fitBounds` auto-adjusts view to the returned live data.
+
+---
+
+#### Issue 2 — Network screen live ego graph (`frontend/src/routes/network.tsx`)
+- Added `DEMO_NODES` / `DEMO_EDGES` fallback (generic labels, no personal names).
+- Seed input + ▶ button calls `api.network({ entity_name, depth: 2 })` and maps the response into the canvas graph.
+- Inspector stats (degree, group, type, role) are now **derived from the rendered graph** rather than hardcoded.
+- Linked case list shows only cases in the node's `caseIds` array from the API; opens `CaseDrawer` by real `case_id`.
+- Voice "run-task" handler triggers `fetchGraph(d.task)`.
+
+---
+
+#### Issue 3 — Console results canvas live data (`frontend/src/routes/console.tsx`)
+- Default messages: **empty** (no fabricated demo conversations).
+- Neutral fallback response when backend unreachable — no fake data.
+- **Results Canvas** is a tabbed Data / Map view:
+  - **Data tab**: stat cards (Total FIRs, Avg/day, Cleared %) + station breakdown table, all from `api.stationBreakdown()`.
+  - **Map tab**: full `CrimeMap` with live hotspot points from `api.mapHotspots()`.
+- Shared filter bar (crime type + district) drives both API calls simultaneously.
+- Example prompts updated to real dataset jurisdiction names (no Whitefield).
+- "Add to report" button on rows wires to station name query.
+
+---
+
+#### Issue 4 — CaseDrawer live data (`frontend/src/components/CaseDrawer.tsx`)
+- Accepts `caseId?: number | string` prop (was hardcoded).
+- Fetches `api.caseById(caseId)` on open; resets tab on new case.
+- All fields (FIR number, crime type, status, station, sections, narrative, persons with mask icon) rendered from API response.
+- Lock icon shown when `case.masked === true` (server-side masking respected).
+
+---
+
+#### Issue 5 — Reports live data (`frontend/src/routes/reports.tsx`)
+- Default cart items: **empty** (no Whitefield demo items).
+- Preview pane section 2 "Distribution by Station" fetches live `api.stationBreakdown({ limit: 10 })`.
+- Section 1 executive summary derives from live station data.
+- Section 4 changed from hardcoded "Key Case" to dynamic "Items in Report" list.
+- Citations section uses `station_breakdown · RLS-scoped · <today>` and lists cart items.
+- Report title uses today's date (not `14 Aug 2024`).
+
+---
+
+#### Issue 6 — Audit live entry count (`frontend/src/routes/audit.tsx` + `backend/app/api/routes/audit.py`)
+- Backend now runs a `SELECT count(*)` for `total` (not just page `count`).
+- Backend also returns `user_id` per entry.
+- Frontend: hash-chain card shows `"VERIFIED · {total} entries"` when `liveTotal != null`; else "checking…".
+- Footer "Showing N of M entries" is now dynamic: `filteredRows.length` of `liveTotal`.
+
+---
+
+#### Issue 9 — Map integrated into Console canvas, map.tsx live wiring
+- `/map` standalone route retained (not removed) — wired to live API.
+- `map.tsx` filter panel: district select uses real dataset districts (no Whitefield).
+- `map.tsx` `fetchData()` calls both `api.mapHotspots` and `api.stationBreakdown({ limit: 1 })` — populates map + top hotspot card with real data.
+- Top hotspot card no longer shows hardcoded "Whitefield zone · 142 FIRs".
+- "Ask AI about this area" button queues the station name into `sessionStorage` and navigates to `/console`.
+- Console Results Canvas Map tab is the primary integrated map view (Issue 9.6).
+
+---
+
+#### New Backend Endpoints Added
+- **`POST /map/hotspots`** — geo hotspots (already existed via `analytics.hotspots`); now properly routed through `map_service.py`.
+- **`POST /map/station-breakdown`** — new: aggregated FIRs/cleared/trend per station with filter support; used by Console canvas and Reports preview.
+
+#### New Files
+| File | Purpose |
+|---|---|
+| `backend/app/schemas/map.py` | Pydantic schemas for hotspot + station breakdown |
+| `backend/app/services/map_service.py` | Service layer: `hotspots()` + `station_breakdown()` |
+| `backend/app/api/routes/map.py` | FastAPI router: `POST /map/hotspots`, `POST /map/station-breakdown` |
+
+#### Modified Files
+| File | What changed |
+|---|---|
+| `backend/app/api/routes/auth.py` | Fixed `_DEMO_STATIONS` jurisdiction values |
+| `backend/app/api/routes/audit.py` | Added `total` count + `user_id` fields |
+| `backend/app/services/case_service.py` | Surfaced per-person `masked` flag |
+| `frontend/src/lib/api/client.ts` | Added `HotspotResponse`, `StationRow`, `StationBreakdownResponse` types; added `stationBreakdown()` method |
+| `frontend/src/components/CrimeMap.tsx` | Prop-driven; no hardcoded data |
+| `frontend/src/components/CaseDrawer.tsx` | Fetches live data via `api.caseById(caseId)` |
+| `frontend/src/routes/console.tsx` | Full rewrite: empty default, live canvas, tabbed Data/Map |
+| `frontend/src/routes/map.tsx` | Full rewrite: live hotspots + real district filter options |
+| `frontend/src/routes/network.tsx` | Live ego graph via `api.network()`; real case IDs in inspector |
+| `frontend/src/routes/audit.tsx` | Dynamic total count in footer and hash-chain card |
+| `frontend/src/routes/reports.tsx` | Live station data in preview; empty default cart |
+

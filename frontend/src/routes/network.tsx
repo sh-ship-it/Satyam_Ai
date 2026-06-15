@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
 import { CaseDrawer } from "@/components/CaseDrawer";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { ChevronDown, Maximize2, Download, FileJson, ImageDown, Save, Trash2, Sliders } from "lucide-react";
 import { useT } from "@/lib/i18n";
+import { api } from "@/lib/api/client";
 
 
 export const Route = createFileRoute("/network")({
@@ -16,18 +17,19 @@ export const Route = createFileRoute("/network")({
   component: NetworkScreen,
 });
 
-const NODES = [
-  { id: "S1", x: 50, y: 50, r: 22, group: 0, label: "Seed: S. Manjunath", role: "seed" },
-  { id: "N1", x: 25, y: 30, r: 12, group: 1, label: "R. Iqbal" },
-  { id: "N2", x: 80, y: 32, r: 14, group: 1, label: "K. Devraj" },
-  { id: "N3", x: 80, y: 70, r: 10, group: 2, label: "Anon-04" },
-  { id: "N4", x: 22, y: 72, r: 16, group: 2, label: "P. Naidu" },
-  { id: "N5", x: 50, y: 14, r: 8, group: 1, label: "Vendor-12" },
-  { id: "N6", x: 50, y: 88, r: 9, group: 2, label: "Loc-Whitefield" },
-  { id: "N7", x: 13, y: 50, r: 7, group: 3, label: "Vehicle KA-05" },
-  { id: "N8", x: 92, y: 50, r: 7, group: 3, label: "Phone +91…" },
+// Built-in demo graph shown before the backend responds or when offline
+const DEMO_NODES = [
+  { id: "S1", x: 50, y: 50, r: 22, group: 0, label: "Seed entity", role: "seed" },
+  { id: "N1", x: 25, y: 30, r: 12, group: 1, label: "Person-01" },
+  { id: "N2", x: 80, y: 32, r: 14, group: 1, label: "Person-02" },
+  { id: "N3", x: 80, y: 70, r: 10, group: 2, label: "Person-03" },
+  { id: "N4", x: 22, y: 72, r: 16, group: 2, label: "Person-04" },
+  { id: "N5", x: 50, y: 14, r: 8, group: 1, label: "Person-05" },
+  { id: "N6", x: 50, y: 88, r: 9, group: 2, label: "Location-01" },
+  { id: "N7", x: 13, y: 50, r: 7, group: 3, label: "Vehicle-01" },
+  { id: "N8", x: 92, y: 50, r: 7, group: 3, label: "Device-01" },
 ];
-const EDGES = [
+const DEMO_EDGES: [string, string][] = [
   ["S1","N1"],["S1","N2"],["S1","N3"],["S1","N4"],["S1","N5"],["S1","N6"],["S1","N7"],["S1","N8"],
   ["N1","N5"],["N2","N3"],["N4","N6"],["N1","N7"],["N2","N8"],
 ];
@@ -41,8 +43,42 @@ function NetworkScreen() {
   const t = useT();
   const [selected, setSelected] = useState("S1");
   const [selectedSet, setSelectedSet] = useState<Set<string>>(() => new Set(["S1"]));
-  const [drawer, setDrawer] = useState(false);
+  const [drawerCaseId, setDrawerCaseId] = useState<number | null>(null);
   const [taskMsg, setTaskMsg] = useState<string | null>(null);
+
+  // Live graph data (falls back to demo when backend unreachable or loading)
+  const [NODES, setNODES] = useState(DEMO_NODES);
+  const [EDGES, setEDGES] = useState<[string,string][]>(DEMO_EDGES);
+  const [seedInput, setSeedInput] = useState("");
+  const [graphLoading, setGraphLoading] = useState(false);
+
+  const fetchGraph = useCallback(async (seedName: string) => {
+    setGraphLoading(true);
+    try {
+      const res: any = await api.network({ entity_name: seedName, depth: 2 });
+      if (!res?.nodes?.length) return;
+      // Map API nodes to our internal format
+      const mappedNodes = res.nodes.map((n: any, idx: number) => ({
+        id: String(n.id ?? idx),
+        x: 20 + (idx % 8) * 9 + Math.random() * 6,
+        y: 20 + Math.floor(idx / 8) * 14 + Math.random() * 6,
+        r: n.id === res.seed_id ? 22 : 8 + Math.min(n.degree ?? 1, 8),
+        group: n.entity_type === "person" ? (idx === 0 ? 0 : 1) : n.entity_type === "location" ? 2 : 3,
+        label: n.label ?? n.name ?? String(n.id),
+        role: n.id === res.seed_id ? "seed" : undefined,
+        caseIds: n.case_ids ?? [],
+      }));
+      const mappedEdges: [string,string][] = (res.edges ?? []).map((e: any) => [String(e.source), String(e.target)] as [string,string]);
+      setNODES(mappedNodes);
+      setEDGES(mappedEdges);
+      setSelected(String(res.seed_id ?? mappedNodes[0]?.id ?? "S1"));
+      setSelectedSet(new Set([String(res.seed_id ?? mappedNodes[0]?.id ?? "S1")]));
+    } catch {
+      // Keep existing (demo) graph when backend is down
+    } finally {
+      setGraphLoading(false);
+    }
+  }, []);
 
   // Voice command "open network for suspect …" lands here.
   useEffect(() => {
@@ -50,10 +86,11 @@ function NetworkScreen() {
       const d = (e as CustomEvent).detail;
       if (!d || d.route !== "/network") return;
       setTaskMsg(d.task || d.query || null);
+      if (d.task) fetchGraph(d.task);
     };
     window.addEventListener("satyam:run-task", onTask);
     return () => window.removeEventListener("satyam:run-task", onTask);
-  }, []);
+  }, [fetchGraph]);
   const [exportOpen, setExportOpen] = useState(false);
   const [exporting, setExporting] = useState<null | "png" | "json">(null);
   const [exportScope, setExportScope] = useState<"selection" | "all">("selection");
@@ -455,7 +492,20 @@ function NetworkScreen() {
           {/* Controls */}
           <div className="flex flex-wrap items-center gap-2 border-b border-border bg-card px-5 py-3 text-foreground">
             <Control label={t("Seed entity")}>
-              <input defaultValue="S. Manjunath" className="w-44 rounded-md border border-input bg-card px-2 py-1.5 text-sm text-foreground" />
+              <div className="flex items-center gap-1">
+                <input
+                  value={seedInput}
+                  onChange={(e) => setSeedInput(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter" && seedInput.trim()) fetchGraph(seedInput.trim()); }}
+                  placeholder={t("Enter name or ID…")}
+                  className="w-40 rounded-md border border-input bg-card px-2 py-1.5 text-sm text-foreground"
+                />
+                <button
+                  onClick={() => seedInput.trim() && fetchGraph(seedInput.trim())}
+                  disabled={graphLoading}
+                  className="rounded-md border border-border bg-card px-2 py-1.5 text-xs font-medium hover:bg-muted disabled:opacity-50"
+                >{graphLoading ? "…" : "▶"}</button>
+              </div>
             </Control>
             <Control label={t("Depth")}>
               <Select options={["1", "2", "3"]} value="2" />
@@ -741,6 +791,7 @@ function NetworkScreen() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
                 </span>
+                {graphLoading && <span className="animate-pulse">…</span>}
                 {t("Live")}
               </span>
               <span className="h-3 w-px bg-background/30" />
@@ -775,46 +826,38 @@ function NetworkScreen() {
           </div>
           <div className="p-4 space-y-4">
             <div className="grid grid-cols-2 gap-2">
-              <Stat label={t("Centrality")} value="0.81" />
-              <Stat label={t("Degree")} value="8" />
-              <Stat label={t("Community")} value="C-01" />
-              <Stat label={t("Risk")} value={t("High")} tone="red" />
+              <Stat label={t("Degree")} value={String(EDGES.filter(([a,b]) => a === selected || b === selected).length)} />
+              <Stat label={t("Group")} value={`G-${(NODES.find(n => n.id === selected)?.group ?? 0) + 1}`} />
+              <Stat label={t("Type")} value={(NODES.find(n => n.id === selected) as any)?.role === "seed" ? t("Seed") : `${t("Depth")} 1`} />
+              <Stat label={t("Role")} value={(NODES.find(n => n.id === selected) as any)?.role === "seed" ? t("Hub") : t("Associate")} tone="red" />
             </div>
 
-            <div>
-              <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("Role in network")}</div>
-              <p className="text-sm text-foreground/85">
-                {t("Hub node — appears in 8 FIRs across Whitefield zone. Likely organizer of a vehicle-theft ring (C-01).")}
-              </p>
-            </div>
-
-            <div>
-              <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("Linked cases")}</div>
-              <div className="space-y-1.5">
-                {["FIR-2024-08842", "FIR-2024-08711", "FIR-2024-08503", "FIR-2024-08144"].map((f) => (
-                  <button
-                    key={f}
-                    onClick={() => setDrawer(true)}
-                    className="flex w-full items-center justify-between rounded-md border border-border bg-muted/30 px-2.5 py-1.5 text-left text-sm hover:bg-muted"
-                  >
-                    <span className="font-mono text-foreground">{f}</span>
-                    <span className="text-[10px] text-muted-foreground">{t("Theft")}</span>
-                  </button>
-                ))}
+            {((NODES.find(n => n.id === selected) as any)?.caseIds?.length ?? 0) > 0 && (
+              <div>
+                <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("Linked cases")}</div>
+                <div className="space-y-1.5">
+                  {((NODES.find(n => n.id === selected) as any)?.caseIds ?? []).slice(0, 5).map((cid: number) => (
+                    <button
+                      key={cid}
+                      onClick={() => setDrawerCaseId(cid)}
+                      className="flex w-full items-center justify-between rounded-md border border-border bg-muted/30 px-2.5 py-1.5 text-left text-sm hover:bg-muted"
+                    >
+                      <span className="font-mono text-foreground">#{cid}</span>
+                      <span className="text-[10px] text-primary hover:underline">{t("Open")} →</span>
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            <button
-              onClick={() => setDrawer(true)}
-              className="w-full rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
-            >
-              {t("Open case")}
-            </button>
+            {((NODES.find(n => n.id === selected) as any)?.caseIds?.length ?? 0) === 0 && (
+              <p className="text-xs text-muted-foreground">{t("No linked cases found for this node.")}</p>
+            )}
           </div>
         </aside>
       </div>
 
-      <CaseDrawer open={drawer} onClose={() => setDrawer(false)} />
+      <CaseDrawer open={drawerCaseId != null} caseId={drawerCaseId ?? undefined} onClose={() => setDrawerCaseId(null)} />
     </Shell>
   );
 }

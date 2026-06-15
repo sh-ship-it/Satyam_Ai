@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Filter, Sparkles, Layers, ChevronDown } from "lucide-react";
 import { useT } from "@/lib/i18n";
 import { CrimeMap } from "@/components/CrimeMap";
+import { api, type HotspotPoint, type StationRow } from "@/lib/api/client";
 
 export const Route = createFileRoute("/map")({
   head: () => ({
@@ -22,8 +23,19 @@ function MapScreen() {
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [taskMsg, setTaskMsg] = useState<string | null>(null);
 
-  // Voice command "open map and show theft hotspots" lands here: apply the
-  // requested layer/view and surface the task.
+  // Filter state
+  const [crimeType, setCrimeType] = useState("");
+  const [district, setDistrict] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+
+  // Live data
+  const [points, setPoints] = useState<HotspotPoint[]>([]);
+  const [topStation, setTopStation] = useState<StationRow | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  // Voice command handler
   useEffect(() => {
     const onTask = (e: Event) => {
       const d = (e as CustomEvent).detail;
@@ -40,10 +52,43 @@ function MapScreen() {
     return () => window.removeEventListener("satyam:run-task", onTask);
   }, []);
 
+  // Fetch live data whenever filters change
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setErr(null);
+    const body: Record<string, unknown> = {
+      mode: view === "offender" ? "by_offender" : "by_crime",
+    };
+    if (crimeType) body.crime_type = crimeType;
+    if (district) body.district = district;
+    if (dateFrom) body.date_from = dateFrom;
+    if (dateTo) body.date_to = dateTo;
+    try {
+      const [hot, brk] = await Promise.all([
+        api.mapHotspots(body),
+        api.stationBreakdown({ ...body, limit: 1 }),
+      ]);
+      setPoints(hot.points || []);
+      setTopStation(brk.rows?.[0] ?? null);
+    } catch {
+      setErr(t("Backend unreachable — check login and API status."));
+      setPoints([]);
+      setTopStation(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [view, crimeType, district, dateFrom, dateTo, t]);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
+
+  const mapPoints = points.map((p) => ({
+    lat: p.lat, lng: p.lng, weight: p.weight, label: p.label ?? undefined,
+  }));
+
   return (
     <Shell>
       <div className="flex h-[calc(100vh-3.5rem-26px)]">
-        {/* Filters */}
+        {/* Filters panel */}
         {filtersOpen && (
           <aside className="w-72 shrink-0 border-r border-border bg-card overflow-auto">
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
@@ -56,21 +101,52 @@ function MapScreen() {
             </div>
             <div className="space-y-5 p-4">
               <FilterGroup label={t("Crime type")}>
-                {["Theft", "Burglary", "Assault", "Cyber fraud", "Narcotics"].map((c, i) => (
-                  <Check key={c} label={t(c)} defaultChecked={i < 2} />
-                ))}
+                <select
+                  value={crimeType}
+                  onChange={(e) => setCrimeType(e.target.value)}
+                  className="w-full rounded-md border border-input bg-card px-2 py-1.5 text-sm text-foreground"
+                >
+                  <option value="">{t("All")}</option>
+                  {["Theft", "Burglary", "Assault", "Cyber Crime", "Narcotics", "Murder"].map((c) => (
+                    <option key={c} value={c}>{t(c)}</option>
+                  ))}
+                </select>
+              </FilterGroup>
+              <FilterGroup label={t("District")}>
+                <select
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                  className="w-full rounded-md border border-input bg-card px-2 py-1.5 text-sm text-foreground"
+                >
+                  <option value="">{t("All districts")}</option>
+                  {[
+                    "Bengaluru City", "Bengaluru Dist", "Mysuru City",
+                    "Mangaluru City", "Hubballi Dharwad City",
+                    "Belagavi City", "Dakshina Kannada", "Shivamogga",
+                  ].map((d) => <option key={d} value={d}>{d}</option>)}
+                </select>
               </FilterGroup>
               <FilterGroup label={t("Date range")}>
-                <input type="date" defaultValue="2024-07-15" className="w-full rounded-md border border-input bg-card px-2 py-1.5 text-sm" />
-                <input type="date" defaultValue="2024-08-14" className="w-full rounded-md border border-input bg-card px-2 py-1.5 text-sm" />
+                <input
+                  type="date"
+                  value={dateFrom}
+                  onChange={(e) => setDateFrom(e.target.value)}
+                  className="w-full rounded-md border border-input bg-card px-2 py-1.5 text-sm"
+                />
+                <input
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => setDateTo(e.target.value)}
+                  className="w-full rounded-md border border-input bg-card px-2 py-1.5 text-sm mt-1.5"
+                />
               </FilterGroup>
-              <FilterGroup label={t("District / Zone")}>
-                <Select options={["Bengaluru Urban", "Bengaluru Rural", "Mysuru", "Mangaluru"]} />
-                <Select options={["Whitefield", "Koramangala", "Indiranagar", "Yelahanka"]} />
-              </FilterGroup>
-              <FilterGroup label={t("Offender")}>
-                <input placeholder={t("Search by ID / alias")} className="w-full rounded-md border border-input bg-card px-2 py-1.5 text-sm" />
-              </FilterGroup>
+              <button
+                onClick={fetchData}
+                className="w-full rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition"
+              >
+                {loading ? t("Loading…") : t("Apply filters")}
+              </button>
+              {err && <p className="text-xs text-destructive">{err}</p>}
             </div>
           </aside>
         )}
@@ -113,9 +189,7 @@ function MapScreen() {
           </div>
 
           <div className="relative flex-1 overflow-hidden">
-            {/* Real interactive map with hotspots */}
-            <CrimeMap mode={layer} />
-
+            <CrimeMap points={mapPoints} mode={layer} />
 
             {/* Legend */}
             <div className="absolute bottom-4 left-4 z-[400] rounded-lg border border-border bg-card/95 backdrop-blur px-3 py-2 text-xs shadow-lg">
@@ -124,37 +198,47 @@ function MapScreen() {
                 <div className="h-2 w-32 rounded-full" style={{ background: "linear-gradient(90deg, #3b82f6, #fbbf24, #f97316, #ef4444)" }} />
                 <span className="text-muted-foreground">{t("low → high")}</span>
               </div>
+              <div className="mt-1.5 text-[10px] text-muted-foreground">
+                {loading ? t("Loading…") : `${points.length} ${t("hotspot cells")}`}
+              </div>
             </div>
 
-            {/* Selected area card */}
+            {/* Selected area / top hotspot card */}
             <div className="absolute right-6 top-6 z-[400] w-80 rounded-xl border border-border bg-card/95 backdrop-blur p-4 shadow-xl">
               <div className="flex items-center justify-between">
-                <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{t("Selected area")}</div>
-                <span className="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-medium text-success">{t("live")}</span>
-              </div>
-              <h3 className="text-base font-semibold text-foreground">{t("Whitefield zone")}</h3>
-              <div className="mt-3 grid grid-cols-3 gap-2">
-                <Mini label={t("FIRs")} value="142" />
-                <Mini label={t("Δ 30d")} value="+12%" tone="up" />
-                <Mini label={t("Cleared")} value="27%" />
-              </div>
-              <div className="mt-3">
-                <div className="mb-1 text-[11px] font-medium text-muted-foreground">{t("Top crimes")}</div>
-                <div className="space-y-1.5">
-                  <Bar label={t("Theft")} pct={62} />
-                  <Bar label={t("Burglary")} pct={28} />
-                  <Bar label={t("Cyber fraud")} pct={18} />
+                <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                  {topStation ? t("Top hotspot") : t("Overview")}
                 </div>
+                <span className="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-medium text-success">
+                  {loading ? t("loading…") : t("live")}
+                </span>
               </div>
-              <div className="mt-3">
-                <div className="mb-1 text-[11px] font-medium text-muted-foreground">{t("7-day trend")}</div>
-                <div className="flex items-end gap-1 h-10">
-                  {[3, 5, 4, 7, 6, 8, 9].map((h, i) => (
-                    <div key={i} className="flex-1 rounded-sm bg-primary/70" style={{ height: `${h * 10}%` }} />
-                  ))}
-                </div>
-              </div>
-              <button className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition">
+              <h3 className="text-base font-semibold text-foreground">
+                {topStation?.station ?? (loading ? "…" : t("No data"))}
+              </h3>
+              {topStation && (
+                <>
+                  <div className="mt-3 grid grid-cols-3 gap-2">
+                    <Mini label={t("FIRs")} value={String(topStation.firs)} />
+                    <Mini label={t("Cleared")} value={String(topStation.cleared)} />
+                    <Mini label={t("Top crime")} value={topStation.top_legal_code ?? "—"} />
+                  </div>
+                  <div className="mt-3">
+                    <div className="mb-1 text-[11px] font-medium text-muted-foreground">{t("7-day trend")}</div>
+                    <Spark data={topStation.trend} />
+                  </div>
+                </>
+              )}
+              <button
+                onClick={() => {
+                  const q = topStation
+                    ? `Summarize crime patterns in ${topStation.station}`
+                    : "Summarize crime hotspots in Karnataka";
+                  try { sessionStorage.setItem("satyam:pending-voice", JSON.stringify({ text: q, speak: false })); } catch {}
+                  window.location.href = "/console";
+                }}
+                className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition"
+              >
                 <Sparkles className="h-3.5 w-3.5" /> {t("Ask AI about this area")}
               </button>
             </div>
@@ -165,46 +249,13 @@ function MapScreen() {
   );
 }
 
-function Hotspot({ x, y, size, intensity, label }: { x: string; y: string; size: number; intensity: number; label: string }) {
-  return (
-    <div className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: x, top: y }}>
-      <div
-        className="rounded-full"
-        style={{
-          width: size, height: size,
-          background: `radial-gradient(circle, oklch(0.6 0.22 25 / ${intensity}) 0%, oklch(0.7 0.18 50 / ${intensity * 0.6}) 35%, transparent 70%)`,
-        }}
-      />
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded bg-foreground px-1.5 py-0.5 text-[10px] font-medium text-background shadow">
-        {label}
-      </div>
-    </div>
-  );
-}
+// ── Helpers ───────────────────────────────────────────────────────────────
 
 function FilterGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
       <div className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</div>
       <div className="space-y-1.5">{children}</div>
-    </div>
-  );
-}
-function Check({ label, defaultChecked }: { label: string; defaultChecked?: boolean }) {
-  return (
-    <label className="flex items-center gap-2 text-sm text-foreground cursor-pointer">
-      <input type="checkbox" defaultChecked={defaultChecked} className="rounded border-input accent-[oklch(0.546_0.215_262)]" />
-      {label}
-    </label>
-  );
-}
-function Select({ options }: { options: string[] }) {
-  return (
-    <div className="relative">
-      <select className="w-full appearance-none rounded-md border border-input bg-card px-2 py-1.5 pr-7 text-sm">
-        {options.map((o) => <option key={o}>{o}</option>)}
-      </select>
-      <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
     </div>
   );
 }
@@ -219,19 +270,21 @@ function Segmented({ value, onChange, options }: { value: string; onChange: (v: 
     </div>
   );
 }
-function Mini({ label, value, tone }: { label: string; value: string; tone?: "up" }) {
+function Mini({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-md border border-border bg-card p-2">
       <div className="text-[9px] uppercase tracking-wider text-muted-foreground">{label}</div>
-      <div className={`text-sm font-semibold ${tone === "up" ? "text-success" : "text-foreground"}`}>{value}</div>
+      <div className="text-sm font-semibold text-foreground">{value}</div>
     </div>
   );
 }
-function Bar({ label, pct }: { label: string; pct: number }) {
+function Spark({ data }: { data: number[] }) {
+  const max = Math.max(1, ...data);
   return (
-    <div>
-      <div className="flex items-center justify-between text-[11px]"><span className="text-foreground">{label}</span><span className="text-muted-foreground">{pct}%</span></div>
-      <div className="h-1.5 rounded-full bg-muted overflow-hidden"><div className="h-full bg-primary" style={{ width: `${pct}%` }} /></div>
+    <div className="flex items-end gap-0.5 h-8">
+      {data.map((v, i) => (
+        <div key={i} className="flex-1 rounded-sm bg-primary/70" style={{ height: `${Math.max(8, (v / max) * 100)}%` }} />
+      ))}
     </div>
   );
 }

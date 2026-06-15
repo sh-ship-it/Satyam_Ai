@@ -33,6 +33,7 @@ function Audit() {
   const [query, setQuery] = useState("");
   const [rows, setRows] = useState(DEMO_ROWS);
   const [chainValid, setChainValid] = useState<boolean | null>(null);
+  const [liveTotal, setLiveTotal] = useState<number | null>(null);
 
   // Pull the real hash-chained audit log when the backend is reachable;
   // otherwise keep the demo rows so the screen still renders offline.
@@ -55,6 +56,7 @@ function Audit() {
         }));
         if (mapped.length) setRows(mapped);
         if (typeof res.chain_valid === "boolean") setChainValid(res.chain_valid);
+        if (typeof res.total === "number") setLiveTotal(res.total);
       })
       .catch(() => {
         /* backend down — keep demo rows */
@@ -100,7 +102,12 @@ function Audit() {
             <div>
               <div className="text-[11px] font-medium uppercase tracking-wider text-success">{t("Hash-chain integrity")}</div>
               <div className="text-sm font-semibold text-foreground flex items-center gap-1">
-                <Check className="h-4 w-4 text-success" /> {chainValid === false ? t("CHAIN BROKEN") : t("VERIFIED · 18,432 entries")}
+                <Check className="h-4 w-4 text-success" />
+                {chainValid === false
+                  ? t("CHAIN BROKEN")
+                  : liveTotal != null
+                    ? `${t("VERIFIED")} · ${liveTotal.toLocaleString()} ${t("entries")}`
+                    : t("VERIFIED · 18,432 entries")}
               </div>
             </div>
           </div>
@@ -185,7 +192,9 @@ function Audit() {
             </table>
           </div>
           <div className="flex items-center justify-between border-t border-border bg-muted/40 px-3 py-2 text-[11px] text-muted-foreground">
-            <span>{t("Showing 10 of 18,432 entries · Read-only · No edit controls exposed")}</span>
+            <span>
+              {t("Showing")} {filteredRows.length} {t("of")} {liveTotal?.toLocaleString() ?? rows.length} {t("entries")} · {t("Read-only · No edit controls exposed")}
+            </span>
             <span className="font-mono">SHA-256 head: 4f8b…a91c</span>
           </div>
         </div>

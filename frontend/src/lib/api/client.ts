@@ -68,6 +68,19 @@ export type SessionUser = {
   range_name?: string;
 };
 
+// Map types
+export type HotspotPoint = { lat: number; lng: number; weight: number; label?: string | null };
+export type HotspotResponse = { mode: string; points: HotspotPoint[]; total: number };
+
+export type StationRow = {
+  station: string;
+  firs: number;
+  cleared: number;
+  top_legal_code: string | null;
+  trend: number[];
+};
+export type StationBreakdownResponse = { rows: StationRow[]; total: number };
+
 export const api = {
   // --- auth ---
   async login(username: string, rank?: string): Promise<{ token: string; user: SessionUser }> {
@@ -93,8 +106,11 @@ export const api = {
   caseById(caseId: string) {
     return request(`/cases/${encodeURIComponent(caseId)}`);
   },
-  mapHotspots(body: Record<string, unknown>) {
-    return request("/map/hotspots", { method: "POST", body: JSON.stringify(body) });
+  mapHotspots(body: Record<string, unknown>): Promise<HotspotResponse> {
+    return request<HotspotResponse>("/map/hotspots", { method: "POST", body: JSON.stringify(body) });
+  },
+  stationBreakdown(body: Record<string, unknown>): Promise<StationBreakdownResponse> {
+    return request<StationBreakdownResponse>("/map/station-breakdown", { method: "POST", body: JSON.stringify(body) });
   },
   network(body: Record<string, unknown>) {
     return request("/network/ego", { method: "POST", body: JSON.stringify(body) });

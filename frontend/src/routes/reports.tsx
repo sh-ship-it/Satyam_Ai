@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
 import { useState, useEffect } from "react";
-import { X, FileDown, MapPin, Table2, FileText, GripVertical } from "lucide-react";
+import { X, FileDown, MapPin, Table2, FileText, GripVertical, Sparkles } from "lucide-react";
 import { useT } from "@/lib/i18n";
-import { api } from "@/lib/api/client";
+import { api, type StationRow } from "@/lib/api/client";
 
 export const Route = createFileRoute("/reports")({
   head: () => ({
@@ -19,13 +19,18 @@ type Item = { id: string; type: "table" | "map" | "case"; title: string; meta: s
 
 function Reports() {
   const t = useT();
-  const [items, setItems] = useState<Item[]>([
-    { id: "1", type: "table", title: "Theft FIRs · Whitefield zone (30d)", meta: "142 rows · 6 stations" },
-    { id: "2", type: "map", title: "Hotspot snapshot · Whitefield", meta: "Heat layer · 14 Aug 2024" },
-    { id: "3", type: "case", title: "Case FIR-2024-08842", meta: "Motor vehicle theft · ITPL Main Rd" },
-  ]);
+  const [items, setItems] = useState<Item[]>([]); // Start empty — user adds from other screens
   const [generating, setGenerating] = useState(false);
   const [genMsg, setGenMsg] = useState<string | null>(null);
+  const [previewStations, setPreviewStations] = useState<StationRow[]>([]);
+  const [reportTitle, setReportTitle] = useState("Karnataka Crime Intelligence Brief");
+
+  // Load top-10 stations for the preview pane
+  useEffect(() => {
+    api.stationBreakdown({ limit: 10 } as any)
+      .then((r) => setPreviewStations(r.rows || []))
+      .catch(() => {});
+  }, []);
 
   async function handleGenerate() {
     setGenerating(true);
@@ -33,16 +38,17 @@ function Reports() {
     try {
       const caseIds = items
         .filter((i) => i.type === "case")
-        .map((i) => i.title.match(/FIR-[0-9-]+/)?.[0] ?? i.title);
+        .map((i) => parseInt(i.id, 10))
+        .filter(Boolean);
       const res: any = await api.buildReport({
-        title: "Intelligence Brief — Whitefield Zone",
+        title: reportTitle,
         case_ids: caseIds,
         include_map: items.some((i) => i.type === "map"),
         include_network: false,
       });
       setGenMsg(t("Report ready") + ` · ${res?.report_id ?? "ok"}`);
     } catch {
-      setGenMsg(t("Preview ready (offline demo)"));
+      setGenMsg(t("Preview rendered (backend unreachable)"));
     } finally {
       setGenerating(false);
     }
@@ -118,11 +124,11 @@ function Reports() {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{t("Karnataka State Police")}</div>
-                  <h1 className="text-xl font-bold text-foreground">{t("Intelligence Brief — Whitefield Zone")}</h1>
+                  <h1 className="text-xl font-bold text-foreground">{reportTitle}</h1>
                 </div>
                 <div className="text-right text-[10px] text-muted-foreground">
-                  <div>{t("Ref: KSP/INT/2024/0814")}</div>
-                  <div>{t("Generated: 14 Aug 2024")}</div>
+                  <div>{t("Ref: KSP/INT/")} {new Date().getFullYear()}/{String(new Date().getMonth()+1).padStart(2,"0")}</div>
+                  <div>{t("Generated:")} {new Date().toLocaleDateString()}</div>
                 </div>
               </div>
             </div>
@@ -130,7 +136,9 @@ function Reports() {
             <div className="px-10 py-8 space-y-6 text-[13px] leading-relaxed">
               <Section title={t("1. Executive Summary")}>
                 <p>
-                  {t("Reported theft incidents in the Whitefield police zone increased 12% over the trailing 30-day period (n=142), led by Whitefield PS (47 cases) and Mahadevapura PS (38). Investigation has identified a probable organized cluster (community C-01) of 8 linked individuals operating along ITPL Main Road.")}
+                  {previewStations.length > 0
+                    ? `${t("Top station:")}: ${previewStations[0].station} (${previewStations[0].firs} ${t("FIRs")}, ${previewStations[0].cleared} ${t("cleared")}). ${t("Report covers")} ${previewStations.length} ${t("stations across the scoped jurisdiction.")}`
+                    : t("AI-grounded summary will appear here once items are added from Console, Map, or Network.")}
                   <sup className="text-primary">[1]</sup>
                 </p>
               </Section>
@@ -143,18 +151,20 @@ function Reports() {
                         <th className="px-2 py-1.5 font-semibold">{t("Station")}</th>
                         <th className="px-2 py-1.5 font-semibold">{t("FIRs")}</th>
                         <th className="px-2 py-1.5 font-semibold">{t("Cleared")}</th>
-                        <th className="px-2 py-1.5 font-semibold">{t("Top §")}</th>
+                        <th className="px-2 py-1.5 font-semibold">{t("Top crime")}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
-                      {[["Whitefield PS", 47, 14, 379], ["Mahadevapura", 38, 11, 379], ["KR Puram", 22, 6, 411], ["Marathahalli", 18, 4, 379]].map((r) => (
-                        <tr key={r[0] as string}>
-                          <td className="px-2 py-1.5">{r[0]}</td>
-                          <td className="px-2 py-1.5">{r[1]}</td>
-                          <td className="px-2 py-1.5">{r[2]}</td>
-                          <td className="px-2 py-1.5 font-mono">§{r[3]}</td>
-                        </tr>
-                      ))}
+                      {previewStations.length > 0
+                        ? previewStations.map((r) => (
+                            <tr key={r.station}>
+                              <td className="px-2 py-1.5">{r.station}</td>
+                              <td className="px-2 py-1.5">{r.firs}</td>
+                              <td className="px-2 py-1.5">{r.cleared}</td>
+                              <td className="px-2 py-1.5 font-mono">{r.top_legal_code ?? "—"}</td>
+                            </tr>
+                          ))
+                        : <tr><td colSpan={4} className="px-2 py-3 text-center text-muted-foreground text-[11px]">{t("Loading…")}</td></tr>}
                     </tbody>
                   </table>
                 </div>
@@ -166,22 +176,31 @@ function Reports() {
                 </div>
               </Section>
 
-              <Section title={t("4. Key Case")}>
-                <div className="rounded border border-border bg-muted/30 p-3">
-                  <div className="font-mono text-[11px] text-foreground">FIR-2024-08842</div>
-                  <div className="text-[11px] text-muted-foreground">{t("Motor vehicle theft · ITPL Main Rd")} · 14 Aug 2024</div>
-                  <div className="mt-1 flex gap-1">
-                    {["379","411","34"].map(s => <span key={s} className="rounded bg-accent px-1.5 py-0.5 text-[10px] font-mono">§{s}</span>)}
+              <Section title={t("4. Items in Report")}>
+                {items.length === 0 ? (
+                  <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center">
+                    <Sparkles className="h-5 w-5 text-primary/60" />
+                    <p className="text-sm text-muted-foreground">{t("Add items from Console, Map, or Network to include them here.")}</p>
                   </div>
-                </div>
+                ) : (
+                  <div className="space-y-2">
+                    {items.map((i) => (
+                      <div key={i.id} className="rounded border border-border bg-muted/30 p-2.5">
+                        <div className="font-mono text-[11px] text-foreground">{i.title}</div>
+                        <div className="text-[10px] text-muted-foreground">{i.meta}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </Section>
 
               <div className="pt-4 border-t border-border text-[10px] text-muted-foreground">
                 <div className="font-semibold text-foreground">{t("Citations")}</div>
                 <div className="mt-1 space-y-0.5 font-mono">
-                  <div>[1] network.community_id = C-01 · centrality.hub = S1</div>
-                  <div>[2] fir_records WHERE zone='Whitefield' AND date BETWEEN '2024-07-15' AND '2024-08-14'</div>
-                  <div>[3] geo.hotspots(layer='heat', view='by_crime', zone='Whitefield')</div>
+                  <div>[1] station_breakdown · RLS-scoped · {new Date().toISOString().slice(0,10)}</div>
+                  {items.map((it, idx) => (
+                    <div key={it.id}>[{idx+2}] {it.title}</div>
+                  ))}
                 </div>
               </div>
             </div>
