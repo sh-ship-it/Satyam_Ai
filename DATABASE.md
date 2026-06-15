@@ -2,196 +2,260 @@
 
 > Conversational AI over the KSP (Karnataka State Police) crime / FIR database.
 > This document is the single source of truth for the data layer: engine choice,
-> dual-database (local + Neon cloud) strategy, schema, extensions, hybrid search,
-> auth, audit, and configuration.
+> dual-database (local + Neon cloud) strategy, schema, extensions, RBAC, hybrid
+> search, auth, audit, and configuration.
+>
+> **Schema version:** `002_schema_v2.sql` (matches `satyam_synthetic_dataset` CSVs)
+> **Last updated:** 2026-06-15
 
 ---
 
 ## 1. Overview
 
-The data layer runs on **PostgreSQL 16 + pgvector** in two parallel deployments
+The data layer runs on **PostgreSQL + pgvector** in two parallel deployments
 with an **identical schema** — only the connection URL (`DATABASE_URL`) differs.
 
 | | **Local Postgres** | **Neon (Cloud Postgres)** |
 |---|---|---|
 | Role | Demo video / on-prem "sovereign" story | Deployed link for judges + authentication |
-| Data | **Full 100k** synthetic FIRs + embeddings | **A subset you push manually later** + `users` |
-| Embeddings | `vector(1024)`, embedded on the **RTX 4070 (FP16)** | `halfvec(1024)` to fit the free tier |
+| Data | **Full 100k** synthetic FIRs (loaded) | **100k loaded** — subset for production later |
+| Embeddings | `vector(1024)`, embedded on **RTX 4070 (FP16)** | `halfvec(1024)` to fit the free tier |
 | Reachable by | Your machine only | Anywhere (deployed app + judges) |
 | Cost / quota | ₹0, unlimited storage | Free tier (~0.5 GB), scale-to-zero |
-| Engine | PostgreSQL 16 + pgvector | PostgreSQL (Neon) + pgvector |
+| Engine | PostgreSQL 17 + pgvector 0.8.2 | PostgreSQL 16.14 + pgvector 0.8.0 |
 
 **Why two databases?** A deployed cloud app cannot reach a database on your
-laptop (it sits behind your home network). So anything the deployed app needs
-(auth + a data sample) lives in **Neon**; the full 100k corpus + GPU inference
-live **locally** for the on-prem demo. Same schema, same code, one env switch.
+laptop (behind your home network). So auth + a data sample live in **Neon**;
+the full 100k corpus + GPU inference live **locally** for the on-prem demo.
+Same schema, same code, one env switch.
 
 ---
 
-## 2. Engine choice: PostgreSQL everywhere (not SQLite)
+## 2. Engine choice: PostgreSQL everywhere
 
-Both local and cloud use **the same engine — PostgreSQL 16**. This is a hard
-requirement, not a preference:
+Both local and cloud use **PostgreSQL**. This is a hard requirement:
 
-- **Text-to-SQL consistency** — the app generates Postgres SQL. A different local
-  engine (e.g. SQLite) has a different dialect, so generated queries would behave
-  differently across tracks.
+- **Text-to-SQL consistency** — the app generates Postgres SQL. A different engine
+  (e.g. SQLite) has a different dialect, so queries would behave differently.
 - **Vector search** — SQLite has no `pgvector`; the entire RAG lane depends on it.
-- **One codebase** — identical schema + SQL means the only difference between
-  local and cloud is `DATABASE_URL`.
+- **RLS** — Postgres Row-Level Security enforces jurisdiction scope at the DB level.
+- **One codebase** — only `DATABASE_URL` changes between local and cloud.
 
 ---
 
 ## 3. Cloud database — Neon
 
-**Neon** = serverless PostgreSQL with first-class `pgvector`, the most generous
-free tier, scale-to-zero, a browser SQL editor, and a single shareable
-connection string.
+**Neon** = serverless PostgreSQL with first-class `pgvector`, scale-to-zero,
+a browser SQL editor, and a single shareable connection string.
 
-### 3.1 Setup (one-time)
-
-1. Sign up at console.neon.tech → **Create project** (region: choose the closest,
-   e.g. AWS `ap-south-1` Mumbai for India latency).
-2. Copy the connection string from the dashboard. It looks like:
-   ```
-   postgresql://<user>:<password>@<endpoint>.neon.tech/<db>?sslmode=require
-   ```
-3. Enable extensions (Neon SQL editor or psql):
-   ```sql
-   CREATE EXTENSION IF NOT EXISTS vector;
-   ```
-4. Run the schema in `Section 5` (use `halfvec(1024)` for the cloud embedding
-   column — see `Section 7`).
-5. Paste the URL into `.env` as `DATABASE_URL` and share that file **privately**
-   with your teammate (never commit it to a public repo).
+### 3.1 Current state (already done)
+- Project created on Neon (AWS `us-east-1`)
+- Schema `002_schema_v2.sql` applied
+- `satyam_synthetic_dataset` CSVs bulk-loaded via `seed/load_seed.py`:
+  - 1,074 stations · 6,949 officers · 100,000 cases
+  - 416,616 persons · 416,616 case_persons · 200,000 narratives
+- `embedding` column is currently `NULL` — fill with `seed/embed_narratives.py`
+  when ready (use `halfvec(1024)` on Neon to stay inside the free tier)
 
 ### 3.2 Free-tier limits to respect
-
 - ~**0.5 GB storage**, ~100 compute-hrs/month, shared 0.25 vCPU.
-- **Scale-to-zero**: idle compute sleeps and wakes in ~300–600 ms (ping it
-  before judging so the first query isn't cold).
-- Connection limit is comfortably enough for a 2-person team.
-- Upgrade path: Neon **Launch** (~10 GB) if you ever need the full 100k in cloud.
+- **Scale-to-zero**: idle compute wakes in ~300–600 ms. Ping before judging.
+- Upgrade path: Neon **Launch** (~10 GB) if you need the full embedded corpus in cloud.
 
----
-
-## 4. Local database — PostgreSQL + pgvector (no Docker)
-
-| OS | Install |
-|---|---|
-| Windows (i7-13650HX laptop) | EDB PostgreSQL 16 installer + `pgvector` prebuilt binary |
-| macOS | Postgres.app (bundles pgvector) |
-| Linux | `sudo dnf install postgresql16-server` (or apt), then build/install pgvector |
-
-Then, in `psql`:
+### 3.3 Altering the embedding column for Neon (halfvec)
+On the Neon SQL editor, after the schema is applied:
 ```sql
-CREATE EXTENSION IF NOT EXISTS vector;
+-- Switch from vector(1024) to halfvec(1024) to halve storage cost
+ALTER TABLE narratives ALTER COLUMN embedding TYPE halfvec(1024);
+-- Rebuild the HNSW index with the matching ops class
+DROP INDEX IF EXISTS idx_nar_embedding;
+CREATE INDEX idx_nar_embedding ON narratives USING hnsw (embedding halfvec_cosine_ops);
 ```
-Load the **full 100k** dataset here. Embeddings are generated on the **RTX 4070
-(FP16)** and stored as `vector(1024)`.
 
 ---
 
-## 5. Schema (DDL)
+## 4. Local database — PostgreSQL + pgvector
+
+| OS | Installed |
+|---|---|
+| Windows (this machine) | EDB PostgreSQL **17.7** + pgvector **0.8.2** (built from source) |
+| macOS | Postgres.app (bundles pgvector) |
+| Linux | `sudo apt install postgresql-16` + build pgvector from source |
+
+Both databases are live and loaded. Switch by changing `DATABASE_URL` only.
+
+---
+
+## 5. Schema (DDL) — `backend/migrations/002_schema_v2.sql`
+
+### Run order
+```
+migrations/teardown.sql       # drops all old objects (idempotent)
+migrations/002_schema_v2.sql  # creates fresh schema
+seed/load_seed.py             # bulk-loads CSVs via asyncpg COPY
+seed/embed_narratives.py      # fills narratives.embedding (BGE-M3, run after load)
+```
+
+### Extensions
+```sql
+CREATE EXTENSION IF NOT EXISTS vector;    -- pgvector (ANN search)
+CREATE EXTENSION IF NOT EXISTS pg_trgm;   -- trigram FTS (optional BM25 lane)
+```
+
+### Core data tables
 
 ```sql
--- ============ Extensions ============
-CREATE EXTENSION IF NOT EXISTS vector;
-
--- ============ Reference / org tables ============
 CREATE TABLE stations (
-    station_id   SERIAL PRIMARY KEY,
-    name         TEXT NOT NULL,
-    district     TEXT NOT NULL,
-    range_name   TEXT NOT NULL,            -- one of the 7 KSP ranges
-    latitude     DOUBLE PRECISION,
-    longitude    DOUBLE PRECISION,
-    created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+    station_id    INTEGER PRIMARY KEY,
+    station_name  TEXT NOT NULL,
+    district      TEXT NOT NULL,
+    "range"       TEXT NOT NULL,     -- quoted: RANGE is a SQL keyword
+    latitude      DOUBLE PRECISION,
+    longitude     DOUBLE PRECISION
 );
 
 CREATE TABLE officers (
-    officer_id   SERIAL PRIMARY KEY,
-    name         TEXT NOT NULL,
-    rank         TEXT NOT NULL,            -- PC / HC / ASI / SI / PI / DySP ...
-    station_id   INTEGER REFERENCES stations(station_id),
-    created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+    officer_id    INTEGER PRIMARY KEY,
+    name          TEXT NOT NULL,
+    rank          TEXT NOT NULL,     -- PC / HC / ASI / SI / PSI / PI / DySP / SP ...
+    station_id    INTEGER NOT NULL REFERENCES stations(station_id)
 );
 
--- ============ Core case tables ============
 CREATE TABLE cases (
-    case_id        SERIAL PRIMARY KEY,
-    fir_number     TEXT UNIQUE NOT NULL,   -- e.g. 'BNG-WF/2025/0042'
-    crime_type     TEXT NOT NULL,          -- theft, assault, murder, cybercrime ...
-    legal_code     TEXT NOT NULL,          -- 'IPC' (pre-2024) | 'BNS' (post-2024)
-    sections       TEXT[] NOT NULL,        -- e.g. '{"302","34"}'
-    status         TEXT NOT NULL,          -- registered / under_investigation /
-                                           -- chargesheeted / disposed
-    date_occurred  DATE,                   -- must be <= date_reported
-    date_reported  DATE NOT NULL,
-    station_id     INTEGER NOT NULL REFERENCES stations(station_id),
-    io_officer_id  INTEGER REFERENCES officers(officer_id),
-    created_at     TIMESTAMPTZ NOT NULL DEFAULT now()
+    case_id          INTEGER PRIMARY KEY,
+    fir_number       TEXT NOT NULL,
+    fir_year         INTEGER NOT NULL,
+    station_id       INTEGER NOT NULL REFERENCES stations(station_id),
+    station_name     TEXT NOT NULL,
+    district         TEXT NOT NULL,
+    "range"          TEXT NOT NULL,
+    crime_type       TEXT NOT NULL,
+    crime_category   TEXT NOT NULL CHECK (crime_category IN ('IPC','SLL')),
+    legal_code       TEXT NOT NULL CHECK (legal_code IN ('IPC','BNS')),
+    sections         TEXT,                          -- pipe-joined, e.g. '302|34'
+    fir_type         TEXT NOT NULL CHECK (fir_type IN ('Heinous','Non Heinous')),
+    status           TEXT NOT NULL,
+    complaint_mode   TEXT,
+    motive           TEXT,
+    incident_date    DATE,
+    incident_time    TEXT,
+    report_date      DATE NOT NULL,
+    latitude         DOUBLE PRECISION,
+    longitude        DOUBLE PRECISION,
+    place_of_offence TEXT,
+    io_officer_id    INTEGER REFERENCES officers(officer_id),
+    io_name          TEXT,
+    victim_count     INTEGER NOT NULL DEFAULT 0,
+    accused_count    INTEGER NOT NULL DEFAULT 0,
+    is_group         BOOLEAN NOT NULL DEFAULT FALSE,
+    arrested_count   INTEGER NOT NULL DEFAULT 0,
+    charge_sheeted   BOOLEAN NOT NULL DEFAULT FALSE,
+    convicted        BOOLEAN NOT NULL DEFAULT FALSE,
+    -- GENERATED: array form of pipe-joined sections (do NOT include in COPY)
+    sections_arr     TEXT[] GENERATED ALWAYS AS (string_to_array(sections,'|')) STORED,
+    CHECK (report_date >= incident_date),
+    CHECK (arrested_count <= accused_count)
 );
 
 CREATE TABLE persons (
-    person_id    SERIAL PRIMARY KEY,
-    full_name    TEXT NOT NULL,
+    person_id    INTEGER PRIMARY KEY,
+    name         TEXT NOT NULL,
     gender       TEXT,
     age          INTEGER,
-    address      TEXT,
-    phone        TEXT,
-    created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+    district     TEXT
 );
 
--- Many-to-many: a person can appear in many cases, with a role per case
 CREATE TABLE case_persons (
-    case_id    INTEGER NOT NULL REFERENCES cases(case_id) ON DELETE CASCADE,
+    case_id    INTEGER NOT NULL REFERENCES cases(case_id)   ON DELETE CASCADE,
     person_id  INTEGER NOT NULL REFERENCES persons(person_id) ON DELETE CASCADE,
-    role       TEXT NOT NULL,              -- complainant / accused / victim / witness
+    role       TEXT NOT NULL CHECK (role IN ('Complainant','Victim','Accused','Witness')),
     PRIMARY KEY (case_id, person_id, role)
 );
 
--- ============ RAG narratives ============
 CREATE TABLE narratives (
-    narrative_id  SERIAL PRIMARY KEY,
-    case_id       INTEGER NOT NULL REFERENCES cases(case_id) ON DELETE CASCADE,
-    language      TEXT NOT NULL,           -- 'en' | 'kn'
-    body          TEXT NOT NULL,           -- complaint / FIR free text
-    body_tsv      tsvector,                -- keyword lane (see Section 8)
-    embedding     vector(1024),            -- BGE-M3; use halfvec(1024) on Neon
-    created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
+    narrative_id INTEGER PRIMARY KEY,
+    case_id      INTEGER NOT NULL REFERENCES cases(case_id) ON DELETE CASCADE,
+    language     TEXT NOT NULL CHECK (language IN ('en','kn')),
+    body         TEXT NOT NULL,
+    -- LOCAL: vector(1024). NEON free tier: ALTER to halfvec(1024) after load.
+    embedding    vector(1024),
+    -- GENERATED: auto-maintained full-text search column (do NOT include in COPY)
+    body_tsv     tsvector GENERATED ALWAYS AS (to_tsvector('simple', body)) STORED
 );
+```
 
--- ============ Auth ============
+### RBAC tables
+
+```sql
+-- KSP rank → jurisdiction scope + clearance level
+CREATE TABLE rank_access (
+    rank         TEXT PRIMARY KEY,
+    scope_level  TEXT NOT NULL CHECK (scope_level IN ('state','range','district','station')),
+    clearance    SMALLINT NOT NULL CHECK (clearance BETWEEN 1 AND 4),
+    gazetted     BOOLEAN NOT NULL,
+    description  TEXT
+);
+-- Pre-populated with 14 KSP ranks (see schema file for full INSERT)
+
+-- App login accounts (tied to an officer row or carrying an assigned_rank override)
 CREATE TABLE users (
     user_id        SERIAL PRIMARY KEY,
-    email          TEXT UNIQUE NOT NULL,
-    password_hash  TEXT NOT NULL,          -- bcrypt / argon2
-    role           TEXT NOT NULL DEFAULT 'officer',  -- officer / admin
+    username       TEXT UNIQUE NOT NULL,
+    password_hash  TEXT NOT NULL,           -- argon2/bcrypt
+    officer_id     INTEGER REFERENCES officers(officer_id),
+    assigned_rank  TEXT REFERENCES rank_access(rank),
+    is_active      BOOLEAN NOT NULL DEFAULT TRUE,
     created_at     TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- ============ Hash-chained audit log ============
+-- Effective session view (used to build the JWT)
+CREATE VIEW v_officer_session AS
+SELECT u.user_id, u.username,
+       COALESCE(u.assigned_rank, o.rank)  AS rank,
+       ra.scope_level, ra.clearance,
+       o.officer_id, o.station_id,
+       s.district, s."range"             AS range_name
+FROM users u
+LEFT JOIN officers    o  ON o.officer_id = u.officer_id
+LEFT JOIN stations    s  ON s.station_id = o.station_id
+LEFT JOIN rank_access ra ON ra.rank = COALESCE(u.assigned_rank, o.rank);
+```
+
+### Audit log
+
+```sql
 CREATE TABLE audit_log (
     audit_id      BIGSERIAL PRIMARY KEY,
     user_id       INTEGER REFERENCES users(user_id),
-    action        TEXT NOT NULL,           -- login / nl_query / sql_exec / export ...
-    query_text    TEXT,                    -- the natural-language question
-    generated_sql TEXT,                    -- the SQL the model produced
-    created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
-    prev_hash     TEXT,                    -- hash of previous row
-    row_hash      TEXT NOT NULL            -- sha256(prev_hash || this row)
+    action        TEXT NOT NULL,      -- login / nl_query / sql_exec / view_case / export
+    case_id       INTEGER,            -- which case was accessed (for PROTECTED crimes)
+    reason        TEXT,               -- required when accessing PROTECTED-crime PII
+    query_text    TEXT,               -- the natural-language question
+    generated_sql TEXT,               -- the SQL the model produced
+    at            TIMESTAMPTZ NOT NULL DEFAULT now(),
+    prev_hash     TEXT,
+    row_hash      TEXT NOT NULL       -- sha256(prev_hash || row payload)
 );
+```
 
--- ============ Indexes ============
-CREATE INDEX idx_narratives_embedding
-    ON narratives USING hnsw (embedding vector_cosine_ops);
-CREATE INDEX idx_narratives_tsv
-    ON narratives USING gin (body_tsv);
-CREATE INDEX idx_cases_station   ON cases(station_id);
-CREATE INDEX idx_cases_status    ON cases(status);
-CREATE INDEX idx_cases_legalcode ON cases(legal_code);
-CREATE INDEX idx_case_persons_person ON case_persons(person_id);
+### Indexes (built by `load_seed.py` after data load)
+
+```sql
+CREATE INDEX idx_cases_district   ON cases (district);
+CREATE INDEX idx_cases_range      ON cases ("range");
+CREATE INDEX idx_cases_crime_type ON cases (crime_type);
+CREATE INDEX idx_cases_report_dt  ON cases (report_date);
+CREATE INDEX idx_cases_status     ON cases (status);
+CREATE INDEX idx_cases_station    ON cases (station_id);
+CREATE INDEX idx_cases_legalcode  ON cases (legal_code);
+CREATE INDEX idx_cp_case          ON case_persons (case_id);
+CREATE INDEX idx_cp_person        ON case_persons (person_id);
+CREATE INDEX idx_persons_district ON persons (district);
+CREATE INDEX idx_nar_case         ON narratives (case_id);
+CREATE INDEX idx_nar_bodytsv      ON narratives USING GIN (body_tsv);
+-- Built AFTER embeddings are populated by embed_narratives.py:
+-- CREATE INDEX idx_nar_embedding ON narratives USING hnsw (embedding vector_cosine_ops);
+-- On Neon (halfvec): USING hnsw (embedding halfvec_cosine_ops)
 ```
 
 ---
@@ -199,156 +263,293 @@ CREATE INDEX idx_case_persons_person ON case_persons(person_id);
 ## 6. Entity relationships
 
 ```
-stations 1──∞ officers
-stations 1──∞ cases ∞───case_persons───∞ persons
-cases    1──∞ narratives (en / kn)
-officers 1──∞ cases   (investigating officer)
-users    1──∞ audit_log
+stations  1──∞  officers
+stations  1──∞  cases ∞──case_persons──∞ persons
+cases     1──∞  narratives (en + kn)
+officers  1──∞  cases (investigating officer)
+officers  0──1  users (officer_id FK)
+rank_access 1──∞ users (assigned_rank FK)
+users     1──∞  audit_log
 ```
 
-- A **case** belongs to one **station** and (optionally) one investigating **officer**.
-- A **case** links to many **persons** via **case_persons**, each with a role.
-- A **case** has one or more **narratives** (English and/or Kannada) for RAG.
+- A **case** belongs to one **station** and optionally one investigating **officer**.
+- A **case** links to many **persons** via **case_persons** (each with a role).
+- A **case** has up to 2 **narratives** — one English (`language='en'`), one Kannada (`language='kn'`).
+- A **user** is tied to an **officer** (inheriting station/district/range/rank), or has an
+  `assigned_rank` override for state/range admins who are not in the officers table.
 
 ---
 
-## 7. Embeddings & vector storage
+## 7. KSP Rank model (RBAC + ABAC)
 
-- **Model:** BGE-M3 (sole embedder), **dim 1024**, ~568M params.
-- **Local:** `embedding vector(1024)` — FP32 on disk, generated on the RTX 4070 (FP16).
-- **Cloud (Neon):** use **`halfvec(1024)`** (pgvector ≥ 0.7, fp16 storage) to halve
-  vector size (~2 KB/row vs ~4 KB/row) so the subset fits the ~0.5 GB free tier.
-  Retrieval quality is effectively unchanged (cosine similarity tolerates fp16).
-- **Index:** HNSW with `vector_cosine_ops` (good recall + speed). Set `ef_search`
-  at query time to tune recall vs latency.
-- **Consistency rule:** embed the corpus and the live query with the **same**
-  precision/pipeline so vectors share one space.
+### Rank → scope + clearance
 
-### Storage budget (why the subset)
+| Rank | Type | Scope | Clearance |
+|------|------|-------|-----------|
+| DGP / ADGP / IGP | Gazetted | state | **L4** |
+| DIG | Gazetted | range | **L4** |
+| SP / Addl.SP | Gazetted | district | **L4** |
+| Dy.SP | Gazetted | district | **L3** |
+| CPI / PI / CI | Non-gazetted | station | **L3** |
+| PSI / SI | Non-gazetted | station | **L2** |
+| ASI | Non-gazetted | station | **L2** |
+| HC / PC | Non-gazetted | station | **L1** |
 
-| | Vectors only | Notes |
+### Jurisdiction scope (row-level, enforced by Postgres RLS)
+
+| Scope | Rows visible |
+|-------|-------------|
+| `state` | All rows nationwide |
+| `range` | Rows where `cases.range = officer.range` |
+| `district` | Rows where `cases.district = officer.district` |
+| `station` | Rows where `cases.station_id = officer.station_id` |
+
+The FastAPI dependency sets `app.*` GUCs per request:
+```sql
+SET LOCAL app.scope      = 'district';
+SET LOCAL app.range      = 'Bengaluru Range';
+SET LOCAL app.district   = 'Bengaluru Urban';
+SET LOCAL app.station_id = '764';
+SET LOCAL app.clearance  = '4';
+```
+`fn_scope_ok()` reads these in every RLS policy. Because the app connects as a
+**non-superuser role**, RLS is actually enforced — a superuser would bypass it.
+
+### Clearance levels (field-level ABAC masking)
+
+PROTECTED crime types: `POCSO, POCSO RAPE, RAPE, MOLESTATION, DOWRY DEATHS,
+SC/ST (ATROCITIES), SEXUAL HARASSMENT, STALKING, ASSAULT ON WOMEN,
+KIDNAPPING OF WOMEN AND GIRLS`
+
+| Level | Who | What they can see |
+|-------|-----|-------------------|
+| **L4** | SP+ | Everything — including victim identity on PROTECTED crimes (access logged with reason) |
+| **L3** | DySP / PI / CI | Operational fields; victim names on PROTECTED crimes masked |
+| **L2** | PSI / SI / ASI | All person PII (names, age, place_of_offence) masked; aggregates visible; PROTECTED narratives redacted |
+| **L1** | HC / PC | All names masked, coordinates coarsened (~10 km), PROTECTED narratives hidden; counts/categories only |
+
+Masking is applied **server-side** in `app/core/masking.py` before data leaves
+the API. Lock icons in the UI reflect masked fields.
+
+---
+
+## 8. Row-Level Security implementation
+
+```sql
+-- Helper: returns TRUE if the row is within the caller's jurisdiction scope
+CREATE OR REPLACE FUNCTION fn_scope_ok(p_range TEXT, p_district TEXT, p_station INTEGER)
+RETURNS BOOLEAN LANGUAGE sql STABLE AS $$
+  SELECT CASE current_setting('app.scope', true)
+           WHEN 'state'    THEN TRUE
+           WHEN 'range'    THEN p_range    = current_setting('app.range', true)
+           WHEN 'district' THEN p_district = current_setting('app.district', true)
+           WHEN 'station'  THEN p_station  = NULLIF(current_setting('app.station_id', true), '')::int
+           ELSE FALSE
+         END
+$$;
+
+-- RLS enabled + policies on all 4 row-bearing tables
+ALTER TABLE cases        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE narratives   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE persons      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE case_persons ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY p_cases_scope ON cases
+    USING (fn_scope_ok("range", district, station_id));
+
+CREATE POLICY p_narratives_scope ON narratives
+    USING (EXISTS (SELECT 1 FROM cases c
+                   WHERE c.case_id = narratives.case_id
+                     AND fn_scope_ok(c."range", c.district, c.station_id)));
+
+CREATE POLICY p_case_persons_scope ON case_persons
+    USING (EXISTS (SELECT 1 FROM cases c
+                   WHERE c.case_id = case_persons.case_id
+                     AND fn_scope_ok(c."range", c.district, c.station_id)));
+
+CREATE POLICY p_persons_scope ON persons
+    USING (EXISTS (SELECT 1 FROM case_persons cp JOIN cases c ON c.case_id = cp.case_id
+                   WHERE cp.person_id = persons.person_id
+                     AND fn_scope_ok(c."range", c.district, c.station_id)));
+```
+
+**Verified live:** PSI at station 1 sees 1,029 / 100,000 cases; DGP sees all 100,000.
+
+---
+
+## 9. Embeddings & vector storage
+
+- **Model:** BGE-M3 (sole embedder), dim 1024, ~568M params, FP16.
+- **Local:** `embedding vector(1024)` — generated on RTX 4070 (FP16).
+- **Cloud (Neon):** alter to `halfvec(1024)` after load to halve storage (~2 KB → 1 KB/row).
+- **Index:** HNSW with `vector_cosine_ops` (built after embeddings exist).
+- **Consistency rule:** embed corpus and live query with the same model/precision.
+
+### Run the embedding job
+```bash
+# GPU (recommended, ~8 min for 200k narratives on RTX 4070)
+python -m seed.embed_narratives
+
+# Local Postgres
+python -m seed.embed_narratives --local
+
+# Custom batch size
+python -m seed.embed_narratives --batch 128
+```
+
+### Storage budget
+
+| Scenario | Vectors only | Notes |
 |---|---|---|
-| 100k × `vector(1024)` (fp32) | ~400 MB | + text + HNSW index → exceeds 0.5 GB free tier |
-| 100k × `halfvec(1024)` (fp16) | ~200 MB | still tight with text + index |
-| Subset on Neon (`halfvec`) | depends on count | keep it within the free tier |
-
-**Decision:** full 100k local; on Neon, push a subset manually later (use `halfvec` there).
+| 200k × `vector(1024)` fp32 | ~800 MB | Exceeds Neon free tier |
+| 200k × `halfvec(1024)` fp16 | ~400 MB | Fits with room for text + index |
+| Subset (e.g. 50k) on Neon `halfvec` | ~100 MB | Comfortable in 0.5 GB free tier |
 
 ---
 
-## 8. Hybrid search (semantic + keyword)
+## 10. Hybrid search (semantic + keyword)
 
-Retrieval = **pgvector (semantic)** + **keyword lane**, fused (e.g. RRF), then
-reranked by **bge-reranker-v2-m3** (local GPU).
+Retrieval = **pgvector (ANN)** + **tsvector (keyword)**, fused, then reranked
+by **bge-reranker-v2-m3** (local GPU).
 
-- **Keyword lane = native Postgres full-text search** (`tsvector` + GIN). Works on
-  **both local and Neon**, free tier, zero extra setup. Populate `body_tsv`:
-  ```sql
-  UPDATE narratives SET body_tsv = to_tsvector('simple', body);
-  -- or maintain via a trigger on insert/update
-  ```
-  Query example (hybrid):
-  ```sql
-  -- semantic
-  SELECT case_id FROM narratives
-  ORDER BY embedding <=> $1 LIMIT 20;
-  -- keyword
-  SELECT case_id FROM narratives
-  WHERE body_tsv @@ plainto_tsquery('simple', $2)
-  ORDER BY ts_rank(body_tsv, plainto_tsquery('simple', $2)) DESC LIMIT 20;
-  ```
-- **Optional upgrades (not required for the demo):**
-  - **Neon:** `pg_search` (ParadeDB) for true **BM25** ranking.
-  - **Supabase (fallback platform):** **PGroonga** for multilingual FTS, or an
-    external ParadeDB replica for BM25.
-- **Decision:** ship with native `tsvector` FTS; treat BM25 (`pg_search`/PGroonga)
-  as a post-hackathon enhancement.
+`body_tsv` is a `GENERATED ALWAYS` column — automatically maintained:
+```sql
+-- body_tsv is auto-populated on INSERT/UPDATE; no manual maintenance needed.
+-- Query examples:
+
+-- Semantic (ANN)
+SELECT case_id, body FROM narratives
+ORDER BY embedding <=> $1::vector LIMIT 20;
+
+-- Keyword (FTS)
+SELECT case_id, body FROM narratives
+WHERE body_tsv @@ plainto_tsquery('simple', $2)
+ORDER BY ts_rank(body_tsv, plainto_tsquery('simple', $2)) DESC LIMIT 20;
+```
+
+Optional upgrade: `pg_search` (ParadeDB) on Neon for true BM25 ranking.
+Decision: ship with native `tsvector` FTS for the hackathon.
 
 ---
 
-## 9. Authentication
+## 11. Authentication
 
-- Lives in the **same Neon database** as the case subset (just the `users` table
-  + `audit_log`). No separate auth database needed.
-- **Flow:** email + password → hash with **bcrypt/argon2** → issue a **JWT** on
-  login → verify the JWT on each request. `role` drives RBAC (officer / admin).
-- Independent of the model/voice backends — purely a backend + DB concern.
-- *Alternative:* Neon's built-in Auth (or Supabase Auth) can replace hand-rolled
-  JWT if you want managed sessions — optional.
-
----
-
-## 10. Audit log (tamper-evident)
-
-Every sensitive action (login, NL query, generated SQL, export) is appended to
-`audit_log`. Each row stores `row_hash = sha256(prev_hash || serialized_row)`,
-forming a **hash chain** — any retroactive edit breaks the chain and is
-detectable. Store who, what NL question, what SQL, and when.
+- `users` table in the same database as cases.
+- Flow: username + password → `argon2/bcrypt` hash check → JWT issued.
+- JWT carries: `sub`, `name`, `rank`, `scope`, `clearance`, `station_id`,
+  `district`, `range`, `officer_id`.
+- Demo mode: `POST /auth/login` with `{"username": "test", "rank": "SP"}` mints
+  a JWT for any rank without password (disabled in `APP_ENV=production`).
+- Real auth: create a row in `users`, link to `officers.officer_id`, call
+  `v_officer_session` to read effective scope/clearance into the JWT.
 
 ---
 
-## 11. Caching / Redis
+## 12. Audit log (tamper-evident hash chain)
 
-- **Neither Neon nor Supabase hosts Redis.** If/when you need caching, rate
-  limiting, or session storage, add **Upstash Redis** (free tier) as a separate
-  service via `REDIS_URL`.
-- For the hackathon you can **skip Redis** and cache in-app; add Upstash later.
+Every sensitive action appends to `audit_log`:
+```
+row_hash = sha256(prev_hash || canonical_json(row_payload))
+```
+Any retroactive edit breaks the chain — detectable by a single verification pass
+(`GET /audit` returns `chain_valid: true/false`).
 
----
-
-## 12. Data loading strategy
-
-1. Run the seeded synthetic generator once → produces the full **100k** set.
-2. **Local:** load all 100k; embed on the RTX 4070 (FP16) → `vector(1024)`.
-3. **Neon:** push a subset manually later; store embeddings as `halfvec(1024)`.
-4. Same schema both sides → no code changes, only `DATABASE_URL`.
-5. Use `COPY` for fast bulk loads; build HNSW + GIN indexes **after** loading.
+PROTECTED-crime access additionally requires a `reason` field in the log row.
 
 ---
 
-## 13. Configuration (`.env`)
+## 13. Data loading
+
+### Loading the synthetic dataset
+```bash
+# Neon (default — uses SEED_DATABASE_URL from backend/.env)
+python -m seed.load_seed
+
+# Local Postgres
+python -m seed.load_seed --local
+
+# Custom CSV directory
+python -m seed.load_seed --dir /path/to/csvs
+```
+
+### What load_seed.py does
+1. TRUNCATE all tables (idempotent reset)
+2. COPY CSVs via asyncpg in FK-safe order:
+   `stations → officers → cases → persons → case_persons → narratives`
+3. Build btree + GIN indexes after load
+4. ANALYZE all tables
+
+### After loading — embed narratives
+```bash
+python -m seed.embed_narratives        # Neon
+python -m seed.embed_narratives --local  # local
+```
+
+### CSV files (`backend/seed/satyam_synthetic_dataset/`)
+| File | Rows | Notes |
+|------|------|-------|
+| `stations.csv` | 1,074 | station_id, station_name, district, range, latitude, longitude |
+| `officers.csv` | 6,949 | officer_id, name, rank, station_id |
+| `cases.csv` | 100,000 | 29 columns; `sections_arr` is GENERATED — not in COPY |
+| `persons.csv` | 416,616 | person_id, name, gender, age, district |
+| `case_persons.csv` | 416,616 | case_id, person_id, role |
+| `narratives.csv` | 200,000 | narrative_id, case_id, language, body; `body_tsv`/`embedding` not in COPY |
+
+> **Never commit these CSVs** — they are gitignored under `backend/seed/satyam_synthetic_dataset/`.
+
+---
+
+## 14. Configuration (`.env`)
 
 ```env
-# --- Database ---
-# Local (full 100k):
-# DATABASE_URL=postgresql://postgres:postgres@localhost:5432/satyam
-# Cloud (Neon, auth + subset):
-DATABASE_URL=postgresql://<user>:<password>@<endpoint>.neon.tech/<db>?sslmode=require
+# ── Database ─────────────────────────────────────────────────────────────────
+# ACTIVE: Neon cloud (runtime — least-privilege role)
+DATABASE_URL=postgresql+asyncpg://<user>:<pass>@<endpoint>.neon.tech/<db>?ssl=require
 
-# --- Auth ---
+# Migrations + seeding (owner/superuser role)
+SEED_DATABASE_URL=postgresql+asyncpg://<user>:<pass>@<endpoint>.neon.tech/<db>?ssl=require
+
+# LOCAL (flip back for on-prem demo):
+# DATABASE_URL=postgresql+asyncpg://satyam_app:satyam_app@localhost:5432/satyam
+# SEED_DATABASE_URL=postgresql+asyncpg://satyam:satyam@localhost:5432/satyam
+
+# ── Auth ──────────────────────────────────────────────────────────────────────
 JWT_SECRET=<random-long-secret>
-JWT_EXPIRY=3600
-
-# --- Optional cache ---
-# REDIS_URL=rediss://<token>@<endpoint>.upstash.io:6379
+JWT_EXPIRE_MINUTES=480
 ```
 
-Flip between local and cloud by changing `DATABASE_URL` only. Share `.env` with
-your teammate over a **private** channel — a leaked DB URL grants full read/write.
+Flip between local and cloud by swapping `DATABASE_URL` only. Share `.env`
+privately — a leaked DB URL grants full read/write access.
 
 ---
 
-## 14. Security notes
+## 15. Security notes
 
-- Never commit `.env` (add it to `.gitignore`).
-- Neon enforces `sslmode=require` — keep TLS on.
-- 100% **synthetic** data, **zero real PII** — this is what makes the public
-  deployed link legally safe (state it proactively to judges).
-- Hashed passwords only; never store plaintext.
+- **Never commit `.env`** — covered by `.gitignore` rule `**/.env`.
+- Neon enforces `sslmode=require` — always keep TLS on.
+- 100% **synthetic** data, **zero real PII** — state this proactively to judges.
+- Passwords hashed with argon2/bcrypt only — no plaintext storage.
+- App connects as a **non-superuser** role so RLS is actually enforced.
+- `FORCE ROW LEVEL SECURITY` on the 4 core tables defends against accidental
+  superuser connections.
 
 ---
 
-## 15. Summary of decisions
+## 16. Summary of decisions
 
 | Topic | Decision |
 |---|---|
-| Engine | PostgreSQL 16 + pgvector (local **and** Neon cloud) |
-| Cloud provider | **Neon** (Supabase = fallback if managed auth is wanted) |
-| Local install | Native Postgres + pgvector (no Docker) |
+| Engine | PostgreSQL + pgvector (local 17.7 · Neon 16.14) |
+| Cloud provider | **Neon** (Supabase = fallback if managed auth wanted) |
+| Local install | Native Postgres + pgvector 0.8.2 (built from source on Windows) |
+| Schema | `002_schema_v2.sql` — matches `satyam_synthetic_dataset` CSVs exactly |
 | Embeddings | BGE-M3, `vector(1024)` local / `halfvec(1024)` cloud, HNSW index |
-| Hybrid search | pgvector + native `tsvector` FTS (BM25 via pg_search optional) |
-| Auth | `users` table + bcrypt/argon2 + JWT, in Neon |
-| Audit | Hash-chained `audit_log` |
-| Cache | Upstash Redis (optional add-on) |
-| Data split | Full 100k local · subset pushed manually to Neon later |
-| Switch | Single `DATABASE_URL` env var |
+| Hybrid search | pgvector ANN + native `tsvector` GENERATED column (BM25 optional) |
+| RBAC | 14 KSP ranks → scope (state/range/district/station) + clearance L1–L4 |
+| RLS | `fn_scope_ok()` + `app.*` GUCs — jurisdiction enforced at DB level |
+| Field masking | 4-tier (`app/core/masking.py`) — server-side, never client-side |
+| Auth | `users` table + argon2/bcrypt + JWT with rank/scope/clearance |
+| Audit | Hash-chained `audit_log` (`audit_id`, `at`, `row_hash`, `case_id`, `reason`) |
+| Cache | Upstash Redis optional — skip for hackathon |
+| Data split | Full 100k local · same loaded on Neon (subset for production later) |
+| Switch | Single `DATABASE_URL` env var — no code changes needed |
