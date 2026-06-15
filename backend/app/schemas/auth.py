@@ -1,25 +1,23 @@
 from __future__ import annotations
-
-from typing import Literal, Optional
-
+from typing import Optional
 from pydantic import BaseModel
-
-Role = Literal["admin", "investigator", "analyst", "viewer"]
 
 
 class LoginRequest(BaseModel):
-    username: str
-    # Demo role switcher (dev only). In production this comes from the IdP/OIDC claims.
-    role: Optional[Role] = None
+    username: str = ""
+    role: Optional[str] = None      # legacy alias for rank
+    rank: Optional[str] = None      # preferred: KSP rank string
 
 
 class SessionUser(BaseModel):
     id: str
     name: str
-    role: Role
-    station_id: Optional[str] = None
-    jurisdiction_id: Optional[str] = None
-    clearance: int = 1
+    rank: str
+    scope: str
+    clearance: int
+    station_id: Optional[int] = None
+    district: str = ""
+    range_name: str = ""
 
 
 class LoginResponse(BaseModel):

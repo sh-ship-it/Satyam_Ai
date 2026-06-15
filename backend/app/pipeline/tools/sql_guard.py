@@ -20,7 +20,7 @@ from sqlglot import exp
 # exfiltrate names a user is not cleared to see. `cases`/`narratives` are
 # additionally RLS-scoped by jurisdiction + clearance.
 ALLOWED_TABLES = {
-    "cases", "persons_v", "case_persons", "stations", "officers", "narratives",
+    "cases", "persons", "case_persons", "stations", "officers", "narratives",
 }
 MAX_LIMIT = 200
 

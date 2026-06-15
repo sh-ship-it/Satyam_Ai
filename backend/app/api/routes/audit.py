@@ -1,4 +1,4 @@
-"""Audit-log endpoint with hash-chain verification badge (admin-only)."""
+"""Audit-log endpoint with hash-chain verification (admin/L3+ only)."""
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -23,9 +23,10 @@ async def list_audit(
         require(principal, Permission.READ_AUDIT)
     except AccessDenied as e:
         raise HTTPException(status_code=403, detail=str(e))
+
     rows = (
         await session.execute(
-            select(AuditLog).order_by(AuditLog.id.desc()).limit(min(limit, 500))
+            select(AuditLog).order_by(AuditLog.audit_id.desc()).limit(min(limit, 500))
         )
     ).scalars().all()
     chain_valid = await verify_chain(session)
@@ -34,14 +35,14 @@ async def list_audit(
         "count": len(rows),
         "entries": [
             {
-                "id": r.id,
-                "ts": r.ts.isoformat() if r.ts else None,
-                "actor": r.actor,
-                "role": r.role,
-                "action": r.action,
-                "resource": r.resource,
-                "detail": r.detail,
-                "hash": r.hash,
+                "id":           r.audit_id,
+                "ts":           r.at.isoformat() if r.at else None,
+                "action":       r.action,
+                "case_id":      r.case_id,
+                "reason":       r.reason,
+                "query_text":   r.query_text,
+                "generated_sql": r.generated_sql,
+                "hash":         r.row_hash,
             }
             for r in rows
         ],

@@ -1,0 +1,164 @@
+"""
+Satyam — BGE-M3 narrative embedding job.
+
+Fills narratives.embedding (vector(1024)) for all rows that currently have
+NULL embeddings.  Resumable: only processes un-embedded rows.
+
+Usage:
+    # Cloud (Neon) — uses SEED_DATABASE_URL
+    python -m seed.embed_narratives
+
+    # Local Postgres
+    python -m seed.embed_narratives --local
+
+    # Batch size override (default 64)
+    python -m seed.embed_narratives --batch 128
+
+Hardware:
+  - GPU (RTX 4070, FP16): ~25k rows/min → ~8 min for 200k narratives
+  - CPU only: ~1k rows/min → ~3 h for 200k narratives (feasible overnight)
+
+NOTE: Run load_seed.py FIRST to populate narratives without embeddings.
+NOTE: On Neon free tier the embedding column is halfvec(1024) — see DATABASE.md.
+      This script casts to the correct type automatically.
+"""
+from __future__ import annotations
+
+import asyncio
+import os
+import sys
+from pathlib import Path
+
+import asyncpg
+
+# ---------------------------------------------------------------------------
+# Config
+# ---------------------------------------------------------------------------
+
+DEFAULT_BATCH = 64
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+
+def get_url(local: bool) -> str:
+    if local:
+        return "postgresql://satyam:satyam@localhost:5432/satyam"
+    raw = os.environ.get("SEED_DATABASE_URL") or os.environ.get("DATABASE_URL")
+    if raw:
+        return raw.replace("postgresql+asyncpg://", "postgresql://")
+    from app.config import get_settings
+    return get_settings().seed_database_url.replace("postgresql+asyncpg://", "postgresql://")
+
+
+# ---------------------------------------------------------------------------
+# Embedding
+# ---------------------------------------------------------------------------
+
+def load_embedder():
+    """Load BGE-M3.  Falls back to the deterministic demo stub if not installed."""
+    try:
+        from FlagEmbedding import BGEM3FlagModel  # type: ignore
+        model = BGEM3FlagModel("BAAI/bge-m3", use_fp16=True)
+
+        async def embed(texts: list[str]) -> list[list[float]]:
+            vecs = model.encode(texts)["dense_vecs"]
+            return [v.tolist() for v in vecs]
+
+        return embed
+    except ImportError:
+        # Demo stub — deterministic hash-based vectors
+        import hashlib, math
+
+        def _vec(text: str, dim: int = 1024) -> list[float]:
+            seed = hashlib.sha256(text.lower().encode()).digest()
+            vals: list[float] = []
+            i = 0
+            while len(vals) < dim:
+                h = hashlib.sha256(seed + i.to_bytes(2, "big")).digest()
+                for b in h:
+                    if len(vals) >= dim:
+                        break
+                    vals.append((b / 255.0) * 2 - 1)
+                i += 1
+            norm = math.sqrt(sum(v * v for v in vals)) or 1.0
+            return [v / norm for v in vals]
+
+        async def embed_stub(texts: list[str]) -> list[list[float]]:
+            return [_vec(t) for t in texts]
+
+        print("  [WARN] FlagEmbedding not installed — using deterministic stub embeddings")
+        return embed_stub
+
+
+def vec_literal(v: list[float]) -> str:
+    return "[" + ",".join(f"{x:.6f}" for x in v) + "]"
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+async def main() -> None:
+    local = "--local" in sys.argv
+    batch_size = DEFAULT_BATCH
+    for i, arg in enumerate(sys.argv):
+        if arg == "--batch" and i + 1 < len(sys.argv):
+            batch_size = int(sys.argv[i + 1])
+
+    url = get_url(local)
+    target = url.split("@")[-1].split("/")[0]
+    print(f"Target: {target}  batch={batch_size}")
+
+    ssl = "require" if "neon.tech" in url else None
+    conn: asyncpg.Connection = await asyncpg.connect(url, ssl=ssl)
+    embed = load_embedder()
+
+    try:
+        total = await conn.fetchval("SELECT count(*) FROM narratives WHERE embedding IS NULL")
+        print(f"Narratives to embed: {total:,}")
+        if total == 0:
+            print("Nothing to do.")
+            return
+
+        done = 0
+        while True:
+            rows = await conn.fetch(
+                "SELECT narrative_id, body FROM narratives "
+                "WHERE embedding IS NULL "
+                "ORDER BY narrative_id "
+                "LIMIT $1",
+                batch_size,
+            )
+            if not rows:
+                break
+
+            texts = [r["body"] for r in rows]
+            vecs = await embed(texts)
+
+            # Bulk update
+            async with conn.transaction():
+                for row, vec in zip(rows, vecs):
+                    await conn.execute(
+                        "UPDATE narratives SET embedding = $1::vector WHERE narrative_id = $2",
+                        vec_literal(vec),
+                        row["narrative_id"],
+                    )
+
+            done += len(rows)
+            pct = done / total * 100 if total else 0
+            print(f"  {done:,}/{total:,} ({pct:.1f}%)", end="\r", flush=True)
+
+        # Build HNSW index after all embeddings are populated
+        print(f"\nBuilding HNSW index on narratives.embedding…")
+        await conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_nar_embedding "
+            "ON narratives USING hnsw (embedding vector_cosine_ops)"
+        )
+        print("Done.")
+
+    finally:
+        await conn.close()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

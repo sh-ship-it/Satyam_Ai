@@ -350,3 +350,111 @@ Updated the root `.gitignore` file to ensure all generated synthetic dataset CSV
   `!backend/seed/satyam_synthetic_dataset/*.py`
   `!backend/seed/satyam_synthetic_dataset/*.md`
 
+
+---
+
+### [2026-06-15] — Full DB Rebuild + KSP RBAC + 100k Dataset Loaded
+
+#### Summary
+Complete rebuild of the database schema, data pipeline, and RBAC system to match the authoritative `satyam_synthetic_dataset` CSVs and the new `schema.sql`/`load_seed.sql` provided. All changes applied to **both Neon (cloud) and local PostgreSQL**.
+
+---
+
+#### Files moved / created
+
+| File | Action | Notes |
+|------|--------|-------|
+| `schema.sql` (repo root) | → `backend/migrations/002_schema_v2.sql` | Canonical new schema |
+| `load_seed.sql` (repo root) | → `backend/seed/load_seed.sql` | psql bulk-load script |
+| `backend/migrations/teardown.sql` | **new** | Idempotent DROP of all old tables/views/functions |
+| `backend/seed/load_seed.py` | **new** | Python asyncpg COPY bulk-loader |
+| `backend/seed/embed_narratives.py` | **new** | BGE-M3 embedding job (resumable) |
+
+---
+
+#### Database changes
+
+**Schema v2 (`002_schema_v2.sql`) vs v1 (`001_init.sql`)**
+
+| Table | v1 | v2 |
+|-------|----|----|
+| `stations` | TEXT PK, zone/lat/lng | INTEGER PK, `station_name`, `district`, `range` (quoted keyword) |
+| `officers` | TEXT PK | INTEGER PK, NOT NULL FK |
+| `cases` | `fir_no` TEXT PK, `date`, `sensitivity_flag`, `jurisdiction_id` | `case_id` INT PK, `fir_number`, `fir_year`, `crime_category`, `legal_code` (IPC/BNS), `fir_type`, `report_date`, `incident_date`, `place_of_offence`, `victim_count/accused_count/arrested_count`, `is_group`, `charge_sheeted`, `convicted`; GENERATED cols: `sections_arr` |
+| `persons` | TEXT PK, `role_type` | INTEGER PK, no `role_type` (roles live in `case_persons`) |
+| `case_persons` | composite PK (case_id, person_id) | composite PK (case_id, person_id, **role**); role CHECK constraint |
+| `narratives` | `case_id` TEXT PK, `text` | `narrative_id` INT PK, `language` (en/kn), `body`; GENERATED: `body_tsv` tsvector |
+| `app_users` | v1 only | **dropped** |
+| `users` | not in v1 | `user_id` SERIAL, `username`, `password_hash`, `officer_id` FK, `assigned_rank` FK |
+| `rank_access` | not in v1 | **new** — 14 KSP ranks with `scope_level` + `clearance` + `gazetted` |
+| `v_officer_session` | not in v1 | **new** view — resolves effective rank/scope/clearance for a user |
+| RLS | `satyam.*` GUCs, jurisdiction+clearance | `app.*` GUCs (scope/range/district/station_id/clearance), `fn_scope_ok()` function |
+| `persons_v` masked view | clearance-based name masking | **dropped** — masking moved to API layer (`app/core/masking.py`) |
+
+**Data loaded (both Neon + local):**
+- stations: 1,074
+- officers: 6,949
+- cases: 100,000
+- persons: 416,616
+- case_persons: 416,616
+- narratives: 200,000 (embedding column NULL — run embed job when GPU available)
+
+---
+
+#### Backend code changes
+
+**`backend/app/db/models.py`** — Full rewrite. All ORM classes now match v2 schema (INTEGER PKs, new columns, GENERATED columns skipped, composite PK on `CasePerson`, `AuditLog` uses `audit_id`/`at`/`row_hash`).
+
+**`backend/app/db/rls.py`** — Switched from `satyam.*` GUCs to `app.*` GUCs matching `fn_scope_ok()` in the new schema.
+
+**`backend/app/core/rbac.py`** — Complete rewrite. Now implements the full KSP rank model:
+- 14 ranks (DGP → PC) with scope (state/range/district/station) and clearance L1–L4.
+- `PROTECTED_CRIMES` frozenset (POCSO, RAPE, etc.) triggers extra access controls.
+- `Principal.should_mask_pii()`, `should_coarsen_coords()`, `can_see_narrative()`.
+- Removed `Role` enum; uses `rank` string matching KSP insignia.
+
+**`backend/app/core/masking.py`** — Full rewrite. 4-tier masking (L1–L4):
+- L1: all names masked, coords coarsened, PROTECTED narratives hidden.
+- L2: person PII + place masked, PROTECTED narratives redacted.
+- L3: only victim/complainant names masked on PROTECTED crimes.
+- L4: full access. Deep-copies persons list to avoid mutating caller dict.
+
+**`backend/app/core/audit.py`** — Updated to new `AuditLog` schema (`audit_id`, `at`, `row_hash`, `case_id`, `reason`). Legacy aliases kept for smooth transition.
+
+**`backend/app/core/security.py`** — JWT now carries: `rank`, `scope`, `clearance`, `station_id`, `district`, `range`, `officer_id`.
+
+**`backend/app/api/deps.py`** — `get_principal()` reads new JWT fields. `get_scoped_session()` calls updated `apply_rls_context()` with scope/range/district/station_id/clearance.
+
+**`backend/app/api/routes/auth.py`** — Demo login now issues JWT with KSP rank instead of old app-role. `_DEMO_STATIONS` provides station/district/range for each rank. `LoginRequest` accepts `rank` field (+ `role` alias).
+
+**`backend/app/schemas/auth.py`** — `SessionUser` now has `rank`, `scope`, `clearance`, `district`, `range_name`.
+
+**`backend/app/schemas/case.py`** — Updated to v2 column names: `case_id` (int), `fir_number`, `crime_category`, `legal_code`, `range_name`, `report_date`, etc.
+
+**`backend/app/services/case_service.py`** — Rewired to new columns. `get_case()` loads first English narrative. `list_cases()` supports `status` filter.
+
+**`backend/app/api/routes/cases.py`** — `case_id: int` path param (was `fir_no: str`). Added `status` query filter.
+
+**`backend/app/api/routes/audit.py`** — Updated for new `AuditLog` fields.
+
+**`backend/app/pipeline/prompts.py`** — `SQL_SYSTEM` rewritten to describe v2 schema (new columns, `"range"` quoting note, no `sensitivity_flag`/`jurisdiction_id`).
+
+**`backend/app/pipeline/tools/sql_guard.py`** — `persons_v` removed from `ALLOWED_TABLES`; replaced with `persons` (masking now in API layer).
+
+**`backend/app/pipeline/tools/analytics.py`** — Column names updated: `latitude/longitude` (was `lat/lng`), `"range"` quoted, added `range_name` filter.
+
+**`backend/app/pipeline/tools/rag.py`** — `narratives.text` → `narratives.body`.
+
+**`backend/app/services/chat_service.py`** — `write_audit()` call updated to new signature.
+
+---
+
+#### RLS verification (live test)
+- PSI at station 1 (scope=station) sees **1,029 cases** (station-scoped).
+- DGP (scope=state) sees **100,000 cases** (all rows).
+- RBAC: PC cannot read audit; SP (L4) can read protected crimes; PC (L1) masks all PII.
+
+#### Next steps
+- Run `python -m seed.embed_narratives` (GPU preferred) to fill `narratives.embedding` and build the HNSW index — until then, RAG falls back to full-text search.
+- Implement real password auth in `users` table (currently demo JWT only).
+- Push a user to `users` table and wire `user_id` into audit log rows.

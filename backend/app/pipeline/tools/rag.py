@@ -23,7 +23,8 @@ async def search_narratives(
     [qvec] = await embedder.embed([query])
     sql = text(
         """
-        SELECT n.case_id, n.text, (n.embedding <=> (:qvec)::vector) AS distance
+        SELECT n.case_id, n.body AS text,
+               (n.embedding <=> (:qvec)::vector) AS distance
         FROM narratives n
         WHERE n.embedding IS NOT NULL
         ORDER BY n.embedding <=> (:qvec)::vector
@@ -36,7 +37,7 @@ async def search_narratives(
     except Exception:
         # Vector op unavailable (e.g. demo without pgvector) -> lexical fallback.
         result = await session.execute(
-            text("SELECT case_id, text FROM narratives LIMIT :k"), {"k": k * 3}
+            text("SELECT case_id, body AS text FROM narratives LIMIT :k"), {"k": k * 3}
         )
         rows = [dict(r) for r in result.mappings().all()]
 

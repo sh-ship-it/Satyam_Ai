@@ -1,10 +1,14 @@
-"""Row-Level Security helpers.
+"""Row-Level Security helpers — v2 schema.
 
-Every request runs as the Postgres role `satyam_app`. Before issuing any query
-we stamp the connection with the caller's identity via `SET LOCAL`, and the RLS
-policies in migrations/001_init.sql use those settings to scope rows by
-jurisdiction / station / clearance. This keeps the security boundary in the
-database, not just the app — see risk R-RLS in the spec (RLS on all lanes).
+The new schema uses `app.*` GUCs (app.scope, app.range, app.district,
+app.station_id, app.clearance, app.officer_id) instead of the old `satyam.*`
+namespace.  `fn_scope_ok()` in the DB reads these to enforce jurisdiction scope.
+
+Scope levels (from rank_access):
+  state    → all rows
+  range    → cases where "range" = officer's range
+  district → cases where district = officer's district
+  station  → cases where station_id = officer's station_id
 """
 from __future__ import annotations
 
@@ -15,27 +19,32 @@ from sqlalchemy.ext.asyncio import AsyncSession
 async def apply_rls_context(
     session: AsyncSession,
     *,
-    user_id: str,
-    role: str,
-    jurisdiction_id: str | None,
+    scope: str,          # state | range | district | station
+    range_name: str,
+    district: str,
+    station_id: int | None,
     clearance: int,
+    officer_id: int | None = None,
 ) -> None:
-    """Stamp the current transaction with the caller's security context."""
+    """Stamp the current transaction with the caller's jurisdiction context."""
     await session.execute(
         text(
-            "SELECT set_config('satyam.user_id', :uid, true),"
-            "       set_config('satyam.role', :role, true),"
-            "       set_config('satyam.jurisdiction_id', :jur, true),"
-            "       set_config('satyam.clearance', :clr, true),"
-            # Clamp every statement on this connection so a runaway Text-to-SQL
-            # query (e.g. an accidental cross join) cannot pin a DB connection.
-            "       set_config('statement_timeout', :stmt_timeout, true)"
+            "SELECT"
+            "  set_config('app.scope',      :scope,      true),"
+            "  set_config('app.range',      :range,      true),"
+            "  set_config('app.district',   :district,   true),"
+            "  set_config('app.station_id', :station_id, true),"
+            "  set_config('app.clearance',  :clearance,  true),"
+            "  set_config('app.officer_id', :officer_id, true),"
+            # Hard cap on runaway Text-to-SQL queries (5 s)
+            "  set_config('statement_timeout', '5000',  true)"
         ),
         {
-            "uid": user_id,
-            "role": role,
-            "jur": jurisdiction_id or "",
-            "clr": str(clearance),
-            "stmt_timeout": "5000",
+            "scope":      scope,
+            "range":      range_name or "",
+            "district":   district or "",
+            "station_id": str(station_id) if station_id is not None else "",
+            "clearance":  str(clearance),
+            "officer_id": str(officer_id) if officer_id is not None else "",
         },
     )

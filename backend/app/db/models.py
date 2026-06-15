@@ -1,30 +1,23 @@
-"""ORM models for the Satyam crime database.
+"""ORM models — matches 002_schema_v2.sql (satyam_synthetic_dataset).
 
-Schema mirrors the locked spec (~6 core tables). `narratives.embedding` is a
-pgvector column used for grounded retrieval (BGE-M3, 1024-dim).
+Tables: stations, officers, cases, persons, case_persons, narratives,
+        rank_access, users, audit_log, v_officer_session (view).
 """
 from __future__ import annotations
 
 import datetime as dt
+from typing import Optional
 
 from sqlalchemy import (
-    BigInteger,
-    Boolean,
-    Date,
-    DateTime,
-    Float,
-    ForeignKey,
-    Integer,
-    String,
-    Text,
+    BigInteger, Boolean, Date, DateTime, Float, ForeignKey,
+    Integer, SmallInteger, String, Text, UniqueConstraint,
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
-try:  # pgvector is optional at import time (e.g. unit tests without the ext)
+try:
     from pgvector.sqlalchemy import Vector
-
     _EMBED = Vector(1024)
-except Exception:  # pragma: no cover
+except Exception:
     _EMBED = Text  # type: ignore[assignment]
 
 
@@ -36,69 +29,85 @@ def _now() -> dt.datetime:
     return dt.datetime.now(dt.timezone.utc)
 
 
-class User(Base):
-    __tablename__ = "users"
-    id: Mapped[str] = mapped_column(String(64), primary_key=True)
-    name: Mapped[str] = mapped_column(String(200))
-    role: Mapped[str] = mapped_column(String(32), default="viewer")
-    station_id: Mapped[str | None] = mapped_column(ForeignKey("stations.station_id"))
-    jurisdiction_id: Mapped[str | None] = mapped_column(String(64))
-    clearance: Mapped[int] = mapped_column(Integer, default=1)
-    created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=_now)
-
+# ---------------------------------------------------------------------------
+# Reference / org tables
+# ---------------------------------------------------------------------------
 
 class Station(Base):
     __tablename__ = "stations"
-    station_id: Mapped[str] = mapped_column(String(64), primary_key=True)
-    name: Mapped[str] = mapped_column(String(200))
-    zone: Mapped[str | None] = mapped_column(String(120))
-    district: Mapped[str | None] = mapped_column(String(120))
-    lat: Mapped[float | None] = mapped_column(Float)
-    lng: Mapped[float | None] = mapped_column(Float)
+    station_id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    station_name: Mapped[str] = mapped_column(Text)
+    district: Mapped[str] = mapped_column(Text)
+    range_name: Mapped[str] = mapped_column("range", Text)  # quoted keyword
+    latitude: Mapped[Optional[float]] = mapped_column(Float)
+    longitude: Mapped[Optional[float]] = mapped_column(Float)
 
 
 class Officer(Base):
     __tablename__ = "officers"
-    officer_id: Mapped[str] = mapped_column(String(64), primary_key=True)
-    name: Mapped[str] = mapped_column(String(200))
-    rank: Mapped[str | None] = mapped_column(String(80))
-    station_id: Mapped[str | None] = mapped_column(ForeignKey("stations.station_id"))
+    officer_id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(Text)
+    rank: Mapped[str] = mapped_column(Text)
+    station_id: Mapped[int] = mapped_column(ForeignKey("stations.station_id"))
 
+
+# ---------------------------------------------------------------------------
+# Core crime tables
+# ---------------------------------------------------------------------------
 
 class Case(Base):
     __tablename__ = "cases"
-    fir_no: Mapped[str] = mapped_column(String(64), primary_key=True)
-    date: Mapped[dt.date | None] = mapped_column(Date)  # SQL column is DATE
-    ipc_sections: Mapped[str | None] = mapped_column(String(300))
-    crime_type: Mapped[str | None] = mapped_column(String(120), index=True)
-    status: Mapped[str | None] = mapped_column(String(60), index=True)
-    station_id: Mapped[str | None] = mapped_column(ForeignKey("stations.station_id"))
-    lat: Mapped[float | None] = mapped_column(Float)
-    lng: Mapped[float | None] = mapped_column(Float)
-    district: Mapped[str | None] = mapped_column(String(120), index=True)
-    zone: Mapped[str | None] = mapped_column(String(120))
-    sensitivity_flag: Mapped[int] = mapped_column(Integer, default=0)
-    jurisdiction_id: Mapped[str | None] = mapped_column(String(64), index=True)
+    case_id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    fir_number: Mapped[str] = mapped_column(Text, unique=True)
+    fir_year: Mapped[int] = mapped_column(Integer)
+    station_id: Mapped[int] = mapped_column(ForeignKey("stations.station_id"))
+    station_name: Mapped[str] = mapped_column(Text)
+    district: Mapped[str] = mapped_column(Text, index=True)
+    range_name: Mapped[str] = mapped_column("range", Text, index=True)
+    crime_type: Mapped[str] = mapped_column(Text, index=True)
+    crime_category: Mapped[str] = mapped_column(Text)  # IPC | SLL
+    legal_code: Mapped[str] = mapped_column(Text)       # IPC | BNS
+    sections: Mapped[Optional[str]] = mapped_column(Text)  # pipe-joined
+    fir_type: Mapped[str] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(Text, index=True)
+    complaint_mode: Mapped[Optional[str]] = mapped_column(Text)
+    motive: Mapped[Optional[str]] = mapped_column(Text)
+    incident_date: Mapped[Optional[dt.date]] = mapped_column(Date)
+    incident_time: Mapped[Optional[str]] = mapped_column(Text)
+    report_date: Mapped[dt.date] = mapped_column(Date)
+    latitude: Mapped[Optional[float]] = mapped_column(Float)
+    longitude: Mapped[Optional[float]] = mapped_column(Float)
+    place_of_offence: Mapped[Optional[str]] = mapped_column(Text)
+    io_officer_id: Mapped[Optional[int]] = mapped_column(ForeignKey("officers.officer_id"))
+    io_name: Mapped[Optional[str]] = mapped_column(Text)
+    victim_count: Mapped[int] = mapped_column(Integer, default=0)
+    accused_count: Mapped[int] = mapped_column(Integer, default=0)
+    is_group: Mapped[bool] = mapped_column(Boolean, default=False)
+    arrested_count: Mapped[int] = mapped_column(Integer, default=0)
+    charge_sheeted: Mapped[bool] = mapped_column(Boolean, default=False)
+    convicted: Mapped[bool] = mapped_column(Boolean, default=False)
+    # sections_arr is GENERATED ALWAYS — not mapped (read via raw SQL if needed)
 
     persons: Mapped[list["CasePerson"]] = relationship(back_populates="case")
-    narrative: Mapped["Narrative | None"] = relationship(back_populates="case", uselist=False)
+    narratives: Mapped[list["Narrative"]] = relationship(back_populates="case")
 
 
 class Person(Base):
     __tablename__ = "persons"
-    person_id: Mapped[str] = mapped_column(String(64), primary_key=True)
-    name: Mapped[str] = mapped_column(String(200))
-    age: Mapped[int | None] = mapped_column(Integer)
-    gender: Mapped[str | None] = mapped_column(String(20))
-    role_type: Mapped[str | None] = mapped_column(String(40))  # accused/victim/witness
+    person_id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(Text)
+    gender: Mapped[Optional[str]] = mapped_column(Text)
+    age: Mapped[Optional[int]] = mapped_column(Integer)
+    district: Mapped[Optional[str]] = mapped_column(Text)
 
 
 class CasePerson(Base):
     __tablename__ = "case_persons"
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
-    case_id: Mapped[str] = mapped_column(ForeignKey("cases.fir_no"))
-    person_id: Mapped[str] = mapped_column(ForeignKey("persons.person_id"))
-    role: Mapped[str | None] = mapped_column(String(40))
+    __table_args__ = (UniqueConstraint("case_id", "person_id", "role"),)
+    # No surrogate PK in schema; use composite
+    case_id: Mapped[int] = mapped_column(ForeignKey("cases.case_id", ondelete="CASCADE"), primary_key=True)
+    person_id: Mapped[int] = mapped_column(ForeignKey("persons.person_id", ondelete="CASCADE"), primary_key=True)
+    role: Mapped[str] = mapped_column(Text, primary_key=True)
 
     case: Mapped[Case] = relationship(back_populates="persons")
     person: Mapped[Person] = relationship()
@@ -106,21 +115,53 @@ class CasePerson(Base):
 
 class Narrative(Base):
     __tablename__ = "narratives"
-    case_id: Mapped[str] = mapped_column(ForeignKey("cases.fir_no"), primary_key=True)
-    text: Mapped[str] = mapped_column(Text)
+    narrative_id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    case_id: Mapped[int] = mapped_column(ForeignKey("cases.case_id", ondelete="CASCADE"))
+    language: Mapped[str] = mapped_column(Text)    # 'en' | 'kn'
+    body: Mapped[str] = mapped_column(Text)
     embedding = mapped_column(_EMBED, nullable=True)
+    # body_tsv is GENERATED ALWAYS — not mapped
 
-    case: Mapped[Case] = relationship(back_populates="narrative")
+    case: Mapped[Case] = relationship(back_populates="narratives")
 
+
+# ---------------------------------------------------------------------------
+# RBAC
+# ---------------------------------------------------------------------------
+
+class RankAccess(Base):
+    __tablename__ = "rank_access"
+    rank: Mapped[str] = mapped_column(Text, primary_key=True)
+    scope_level: Mapped[str] = mapped_column(Text)  # state|range|district|station
+    clearance: Mapped[int] = mapped_column(SmallInteger)
+    gazetted: Mapped[bool] = mapped_column(Boolean)
+    description: Mapped[Optional[str]] = mapped_column(Text)
+
+
+class User(Base):
+    __tablename__ = "users"
+    user_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    username: Mapped[str] = mapped_column(Text, unique=True)
+    password_hash: Mapped[str] = mapped_column(Text)
+    officer_id: Mapped[Optional[int]] = mapped_column(ForeignKey("officers.officer_id"))
+    assigned_rank: Mapped[Optional[str]] = mapped_column(ForeignKey("rank_access.rank"))
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=_now)
+
+
+# ---------------------------------------------------------------------------
+# Hash-chained audit log
+# ---------------------------------------------------------------------------
 
 class AuditLog(Base):
     __tablename__ = "audit_log"
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
-    ts: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=_now)
-    actor: Mapped[str] = mapped_column(String(64))
-    role: Mapped[str] = mapped_column(String(32))
-    action: Mapped[str] = mapped_column(String(80))
-    resource: Mapped[str | None] = mapped_column(String(200))
-    detail: Mapped[str | None] = mapped_column(Text)
-    prev_hash: Mapped[str | None] = mapped_column(String(64))
-    hash: Mapped[str] = mapped_column(String(64))
+    audit_id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    user_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.user_id"))
+    action: Mapped[str] = mapped_column(Text)
+    case_id: Mapped[Optional[int]] = mapped_column(Integer)
+    reason: Mapped[Optional[str]] = mapped_column(Text)
+    query_text: Mapped[Optional[str]] = mapped_column(Text)
+    generated_sql: Mapped[Optional[str]] = mapped_column(Text)
+    at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=_now)
+    prev_hash: Mapped[Optional[str]] = mapped_column(Text)
+    row_hash: Mapped[str] = mapped_column(Text)

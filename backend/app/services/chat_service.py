@@ -25,8 +25,9 @@ async def stream_chat(
 ) -> AsyncIterator[PipelineEvent]:
     state = await _store.load(conversation_id, owner_id=principal.id)
     await write_audit(
-        session, actor=principal.id, role=principal.role.value,
-        action="chat.query", resource=state.conversation_id, detail=message[:500],
+        session,
+        action="chat.query",
+        query_text=message[:500],
     )
     async for event in run(
         message=message,

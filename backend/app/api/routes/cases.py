@@ -15,6 +15,7 @@ router = APIRouter()
 async def list_cases(
     crime_type: str | None = None,
     district: str | None = None,
+    status: str | None = None,
     limit: int = 50,
     session: AsyncSession = Depends(get_scoped_session),
     principal: Principal = Depends(get_principal),
@@ -24,13 +25,13 @@ async def list_cases(
     except AccessDenied as e:
         raise HTTPException(status_code=403, detail=str(e))
     return await case_service.list_cases(
-        session, crime_type=crime_type, district=district, limit=limit
+        session, crime_type=crime_type, district=district, status=status, limit=limit
     )
 
 
-@router.get("/{fir_no}")
+@router.get("/{case_id}")
 async def get_case(
-    fir_no: str,
+    case_id: int,
     session: AsyncSession = Depends(get_scoped_session),
     principal: Principal = Depends(get_principal),
 ) -> dict:
@@ -38,7 +39,7 @@ async def get_case(
         require(principal, Permission.READ_CASE)
     except AccessDenied as e:
         raise HTTPException(status_code=403, detail=str(e))
-    case = await case_service.get_case(session, principal, fir_no)
+    case = await case_service.get_case(session, principal, case_id)
     if case is None:
         raise HTTPException(status_code=404, detail="case not found")
     return case
