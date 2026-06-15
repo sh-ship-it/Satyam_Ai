@@ -887,3 +887,28 @@ All hardcoded/fabricated demo data has been replaced with live API calls to the 
 | `frontend/src/routes/audit.tsx` | Dynamic total count in footer and hash-chain card |
 | `frontend/src/routes/reports.tsx` | Live station data in preview; empty default cart |
 
+
+### [2026-06-16] — E2E Formatting & Global Language Toggle (Issues 10 & 11)
+
+#### Summary
+Fixed the chat formatting and language toggle issues end-to-end. AI chat responses now output structured Markdown tables and bullet points with inline citations, rendered cleanly in the frontend console via a stream-safe ReactMarkdown parser. The chat queries now respect the global UI language toggle, and missing Kannada translations have been added to the dictionary.
+
+#### Backend Changes
+**`backend/app/pipeline/prompts.py`**
+- Updated `ANSWER_SYSTEM` system prompt with formatting rules that enforce GitHub-flavored Markdown tables and bullet points, inline `[ref]` citations, and summary guidelines.
+
+#### Frontend Changes
+**`frontend/package.json`**
+- Added `react-markdown` and `remark-gfm` to the dependencies to enable rendering of Markdown elements and tables in the console.
+
+**`frontend/src/routes/console.tsx`**
+- Integrated `react-markdown` and `remark-gfm` in the `AiMsg` component, defining a custom styling mapper for headings, paragraphs, lists, and tables to fit modern aesthetics without layout shift during token streaming.
+- Wired the `sendMessage` query logic to read the active language from `useI18n()` and set the request `lang` to `"kn"` if the global language is Kannada and no voice override is present.
+
+**`frontend/src/lib/i18n.tsx`**
+- Added missing translations to `DICT` for all new console controls, including `"Crime overview · live"`, `"All crimes"`, `"All districts"`, `"All crime types"`, `"Data"`, `"Top crime"`, `"Top hotspot"`, `"Trend"`, `"Live from Postgres (RLS-scoped). Click a station to drill into its FIRs."`, `"No data for this scope."`, `"Show cases in"`, and example prompts.
+- Removed duplicate keys (`"+ New"`, `"New conversation"`, `"Today"`, `"Yesterday"`, `"Last week"`, `"Delete"`) that were causing TypeScript compile errors.
+
+#### Verification
+- Ran TypeScript (`npx tsc --noEmit`) and client production builds (`npm run build`) successfully.
+- Verified all backend unit tests pass with `pytest`.
