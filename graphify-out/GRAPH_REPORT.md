@@ -1,16 +1,16 @@
 # Graph Report - Satyam  (2026-06-15)
 
 ## Corpus Check
-- 187 files · ~79,145 words
+- 186 files · ~78,615 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1332 nodes · 1951 edges · 116 communities (93 shown, 23 thin omitted)
+- 1320 nodes · 1940 edges · 118 communities (96 shown, 22 thin omitted)
 - Extraction: 82% EXTRACTED · 18% INFERRED · 0% AMBIGUOUS · INFERRED: 343 edges (avg confidence: 0.56)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `69c050e5`
+- Built from commit: `d337b05b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -112,10 +112,12 @@
 - [[_COMMUNITY_Community 106|Community 106]]
 - [[_COMMUNITY_Community 107|Community 107]]
 - [[_COMMUNITY_Community 108|Community 108]]
+- [[_COMMUNITY_Community 110|Community 110]]
 - [[_COMMUNITY_Community 111|Community 111]]
 - [[_COMMUNITY_Community 112|Community 112]]
 - [[_COMMUNITY_Community 113|Community 113]]
 - [[_COMMUNITY_Community 114|Community 114]]
+- [[_COMMUNITY_Community 115|Community 115]]
 - [[_COMMUNITY_Community 116|Community 116]]
 - [[_COMMUNITY_Community 117|Community 117]]
 
@@ -146,23 +148,23 @@
 ## Import Cycles
 - 1-file cycle: `backend/app/main.py -> backend/app/main.py`
 
-## Communities (116 total, 23 thin omitted)
+## Communities (118 total, 22 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.11
-Nodes (18): _BhashiniBase, BhashiniTranslator, BhashiniTTS, Bhashini (Govt. of India) clients — PRIMARY Indic layer (Kannada STT/TTS/MT).  T, Sarvam AI clients — PRIMARY voice layer (Kannada + English STT/TTS/MT).  Servi, Sarvam Bulbul v3 — text-to-speech for Kannada and English., Sarvam Translate — neural MT between Kannada and English., _SarvamBase (+10 more)
+Cohesion: 0.13
+Nodes (10): _BhashiniBase, BhashiniTranslator, Bhashini (Govt. of India) clients — PRIMARY Indic layer (Kannada STT/TTS/MT).  T, Sarvam AI clients — PRIMARY voice layer (Kannada + English STT/TTS/MT).  Servi, Sarvam Translate — neural MT between Kannada and English., _SarvamBase, SarvamTranslator, get_translator() (+2 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.08
-Nodes (56): AsyncSession, Principal, AsyncSession, Principal, AsyncSession, Principal, AsyncSession, HotspotRequest (+48 more)
+Cohesion: 0.21
+Nodes (19): AsyncSession, Principal, AsyncSession, Principal, AsyncSession, Principal, ChatRequest, AccessDenied (+11 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.03
 Nodes (59): dependencies, class-variance-authority, clsx, cmdk, date-fns, embla-carousel-react, @hookform/resolvers, i18next (+51 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.20
-Nodes (6): Ctx, I18nCtx, Lang, Item, Reports(), Route
+Cohesion: 0.18
+Nodes (8): reportError(), Ctx, DICT, I18nCtx, I18nProvider(), Lang, _MemoryStore, ErrorComponent()
 
 ### Community 4 - "Community 4"
 Cohesion: 0.05
@@ -173,36 +175,36 @@ Cohesion: 0.06
 Nodes (29): AuditLog, AsyncSession, AsyncSession, Principal, _digest(), Tamper-evident, hash-chained audit log.  Each entry stores sha256(prev_hash + ca, verify_chain(), write_audit() (+21 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.07
-Nodes (28): devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-prettier, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals (+20 more)
+Cohesion: 0.12
+Nodes (17): devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-prettier, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals (+9 more)
 
 ### Community 7 - "Community 7"
 Cohesion: 0.07
-Nodes (16): AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertTitle, alertVariants, Checkbox (+8 more)
+Nodes (17): AccordionContent, AccordionItem, AccordionTrigger, Avatar, AvatarFallback, AvatarImage, Checkbox, HoverCardContent (+9 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.05
-Nodes (36): Footer(), GridBg(), Header(), NB(), reportError(), I18nProvider(), PipelineStep, Route (+28 more)
+Cohesion: 0.09
+Nodes (26): Route, Route, Route, Route, Route, Route, Transcript, Transcripts() (+18 more)
 
 ### Community 9 - "Community 9"
 Cohesion: 0.18
-Nodes (3): AiMsg(), ChatMessage, Conversation
+Nodes (6): Footer(), GridBg(), Header(), NB(), PipelineStep, Route
 
 ### Community 10 - "Community 10"
 Cohesion: 0.08
 Nodes (25): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+17 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.23
-Nodes (9): request(), consumeLastCapturedError(), renderErrorPage(), fetch(), getServerEntry(), normalizeCatastrophicSsrResponse(), ServerEntry, errorMiddleware (+1 more)
+Cohesion: 0.26
+Nodes (8): consumeLastCapturedError(), renderErrorPage(), fetch(), getServerEntry(), normalizeCatastrophicSsrResponse(), ServerEntry, errorMiddleware, startInstance
 
 ### Community 12 - "Community 12"
 Cohesion: 0.07
 Nodes (38): async_sessionmaker, AsyncEngine, AsyncSession, BaseModel, active_url(), get_db_source(), _get_engine(), get_session() (+30 more)
 
 ### Community 13 - "Community 13"
-Cohesion: 0.17
-Nodes (17): cn(), Button, ButtonProps, buttonVariants, Calendar(), CalendarDayButton(), Pagination(), PaginationContent (+9 more)
+Cohesion: 0.14
+Nodes (20): cn(), Badge(), BadgeProps, badgeVariants, Button, ButtonProps, buttonVariants, Calendar() (+12 more)
 
 ### Community 14 - "Community 14"
 Cohesion: 0.10
@@ -210,7 +212,7 @@ Nodes (19): compilerOptions, allowImportingTsExtensions, jsx, lib, module, modul
 
 ### Community 15 - "Community 15"
 Cohesion: 0.15
-Nodes (12): get_settings(), Application settings, loaded from environment / .env., No external model keys => run with deterministic stubs + fixtures., Settings, AsyncSession, BaseSettings, create_access_token(), decode_token() (+4 more)
+Nodes (14): get_settings(), Application settings, loaded from environment / .env., No external model keys => run with deterministic stubs + fixtures., Settings, BaseSettings, create_access_token(), decode_token(), JWT issuing / verification. (+6 more)
 
 ### Community 16 - "Community 16"
 Cohesion: 0.09
@@ -249,12 +251,12 @@ Cohesion: 0.14
 Nodes (12): Carousel, CarouselApi, CarouselContent, CarouselContext, CarouselContextProps, CarouselItem, CarouselNext, CarouselOptions (+4 more)
 
 ### Community 25 - "Community 25"
-Cohesion: 0.15
-Nodes (10): CaseDrawer(), useT(), Console(), EDGES, GROUP_COLOR, GROUP_SHAPE, Legend(), NetworkScreen() (+2 more)
+Cohesion: 0.10
+Nodes (13): CaseDrawer(), useT(), AiMsg(), ChatMessage, Console(), Conversation, EDGES, GROUP_COLOR (+5 more)
 
 ### Community 26 - "Community 26"
-Cohesion: 0.13
-Nodes (17): BhashiniSTT, Sarvam Saaras v3 — speech-to-text for Kannada (kn-IN) and English (en-IN)., SarvamSTT, faster-whisper / IndicConformer STT. DEMO stub., WhisperSTT, Embedder, LLM, Abstract model interfaces shared by the api and local backends. (+9 more)
+Cohesion: 0.11
+Nodes (29): BhashiniSTT, BhashiniTTS, Sarvam Saaras v3 — speech-to-text for Kannada (kn-IN) and English (en-IN)., Sarvam Bulbul v3 — text-to-speech for Kannada and English., SarvamSTT, SarvamTTS, Embedder, LLM (+21 more)
 
 ### Community 27 - "Community 27"
 Cohesion: 0.15
@@ -281,32 +283,32 @@ Cohesion: 0.17
 Nodes (11): case_persons.csv (~410k rows), cases.csv (100,000 rows) — one row per FIR, Coverage (all verified PASS), How it was built, narratives.csv (200,000 rows) — bilingual, officers.csv (~6,900 rows), persons.csv (~410k rows), Satyam — Synthetic Karnataka Police Crime Dataset (+3 more)
 
 ### Community 33 - "Community 33"
-Cohesion: 0.06
-Nodes (31): get_principal(), get_scoped_session(), FastAPI dependencies: authenticated principal + RLS-scoped DB session.  The JWT, Decode the bearer JWT into a Principal. Raises 401 on any problem., Yield a transaction-scoped session stamped with the caller's RLS context., configure_logging(), Structured logging setup., create_app() (+23 more)
+Cohesion: 0.07
+Nodes (30): get_principal(), get_scoped_session(), FastAPI dependencies: authenticated principal + RLS-scoped DB session.  The JWT, Decode the bearer JWT into a Principal. Raises 401 on any problem., Yield a transaction-scoped session stamped with the caller's RLS context., configure_logging(), Structured logging setup., create_app() (+22 more)
 
 ### Community 34 - "Community 34"
 Cohesion: 0.14
 Nodes (13): 1. High-level, 2. Request lifecycle (chat), 3. Defense in depth, 4.1 Active lanes (build now — demo), 4.2 Parked as future fallback (Phase 2 — on-prem), 4. Model & API strategy, 5. Two-phase rollout (demo → sovereign), 6. Data model (frozen day one — R8) (+5 more)
 
 ### Community 35 - "Community 35"
-Cohesion: 0.17
-Nodes (11): 0. Verdict on your theory, 5. Local vs Neon (S1) — leave for now if you're local, 6. Verify it works (run from `backend/`, venv active), Apply order, B1 — Replace `app/models/local/embedder_bge.py` (FULL FILE), B3 — Fix the seed job `seed/embed_narratives.py`, B4 — Delete leftover debug scripts (from `backend/`), B5 — `requirements.txt`: drop FlagEmbedding (optional but recommended) (+3 more)
+Cohesion: 0.31
+Nodes (11): AsyncSession, HotspotRequest, HotspotResponse, Principal, AsyncSession, HotspotRequest, HotspotResponse, hotspots() (+3 more)
 
 ### Community 36 - "Community 36"
 Cohesion: 0.20
 Nodes (9): DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut(), DropdownMenuSubContent (+1 more)
 
 ### Community 37 - "Community 37"
-Cohesion: 0.33
-Nodes (3): OllamaCloudLLM, Ollama Cloud client — qwen3-coder-next Text-to-SQL option.  Model: qwen3-coder, OpenAI-compatible Ollama Cloud endpoint for qwen3-coder-next.
+Cohesion: 0.25
+Nodes (5): OllamaCloudLLM, Ollama Cloud client — qwen3-coder-next Text-to-SQL option.  Model: qwen3-coder, OpenAI-compatible Ollama Cloud endpoint for qwen3-coder-next., get_sql_llm(), Return the Text-to-SQL LLM.      Resolution order:       1. Explicit `engine` ar
 
 ### Community 38 - "Community 38"
 Cohesion: 0.25
 Nodes (7): graphify reference: extra exports and benchmark, Step 6b - Wiki (only if --wiki flag), Step 7 - Neo4j export (only if --neo4j or --neo4j-push flag), Step 7b - SVG export (only if --svg flag), Step 7c - GraphML export (only if --graphml flag), Step 7d - MCP server (only if --mcp flag), Step 8 - Token reduction benchmark (only if total_words > 5000)
 
 ### Community 39 - "Community 39"
-Cohesion: 0.24
-Nodes (7): Embedder, BgeM3Embedder, _load_model(), BGE-M3 embedder (sole embedder for the whole system).  Real local inference via, Load BGE-M3 once and cache for the process lifetime (~1.3 GB FP16)., BGE-M3 dense embedder.  Registry calls BgeM3Embedder(dim=1024)., get_embedder()
+Cohesion: 0.22
+Nodes (6): BgeM3Embedder, _load_model(), BGE-M3 embedder (sole embedder for the whole system).  Real local inference via, Load BGE-M3 once and cache for the process lifetime (~1.3 GB FP16)., BGE-M3 dense embedder.  Registry calls BgeM3Embedder(dim=1024)., Return one L2-normalised 1024-float vector per input text.
 
 ### Community 40 - "Community 40"
 Cohesion: 0.25
@@ -317,8 +319,8 @@ Cohesion: 0.25
 Nodes (6): DrawerContent, DrawerDescription, DrawerFooter(), DrawerHeader(), DrawerOverlay, DrawerTitle
 
 ### Community 42 - "Community 42"
-Cohesion: 0.67
-Nodes (3): Badge(), BadgeProps, badgeVariants
+Cohesion: 0.31
+Nodes (11): AsyncSession, EgoRequest, EgoResponse, Principal, AsyncSession, EgoRequest, EgoResponse, ego() (+3 more)
 
 ### Community 43 - "Community 43"
 Cohesion: 0.25
@@ -341,8 +343,8 @@ Cohesion: 0.40
 Nodes (5): AsyncSession, ego_network(), hotspots(), Geospatial + network analytics tools (RLS-scoped reads) — new schema., Ego network: person → shared cases → co-involved persons.
 
 ### Community 48 - "Community 48"
-Cohesion: 0.18
-Nodes (9): api, ApiError, authHeaders(), ChatEvent, getAuthToken(), Role, SessionUser, streamChat() (+1 more)
+Cohesion: 0.11
+Nodes (14): api, ApiError, authHeaders(), ChatEvent, getAuthToken(), request(), Role, SessionUser (+6 more)
 
 ### Community 49 - "Community 49"
 Cohesion: 0.33
@@ -351,6 +353,10 @@ Nodes (5): Model strategy (3 free lanes; ML added later), Monorepo layout, Quick
 ### Community 50 - "Community 50"
 Cohesion: 0.29
 Nodes (7): [2026-06-15] — Full DB Rebuild + KSP RBAC + 100k Dataset Loaded, Backend code changes, Database changes, Files moved / created, Next steps, RLS verification (live test), Summary
+
+### Community 51 - "Community 51"
+Cohesion: 0.28
+Nodes (12): AsyncSession, Principal, ReportRequest, ReportResponse, AsyncSession, Principal, ReportRequest, ReportResponse (+4 more)
 
 ### Community 53 - "Community 53"
 Cohesion: 0.40
@@ -409,8 +415,8 @@ Cohesion: 0.20
 Nodes (10): [2026-06-15] — Local Model Inference: BGE-M3 + bge-reranker-v2-m3 Wired Up, `backend/app/config.py`, `backend/app/main.py`, `backend/app/models/local/embedder_bge.py` (rewritten), `backend/app/models/local/reranker_bge.py` (rewritten), `backend/.env` + `backend/.env.example`, `backend/requirements.txt`, Environment verified (+2 more)
 
 ### Community 99 - "Community 99"
-Cohesion: 0.14
-Nodes (11): Account, AccountManager(), FetchState, Account, ProfileMenu(), RELOAD_STEPS, SEED_ACCOUNTS, SwitchPhase (+3 more)
+Cohesion: 0.09
+Nodes (18): Account, AccountManager(), FetchState, DarkModeToggle(), Account, ProfileMenu(), RELOAD_STEPS, SEED_ACCOUNTS (+10 more)
 
 ### Community 100 - "Community 100"
 Cohesion: 0.22
@@ -425,8 +431,8 @@ Cohesion: 0.25
 Nodes (4): Audit(), DEMO_ROWS, Audit-log endpoint with hash-chain verification (admin/L3+ only)., Route
 
 ### Community 104 - "Community 104"
-Cohesion: 0.31
-Nodes (7): Return one L2-normalised 1024-float vector per input text., get_url(), load_embedder(), main(), Satyam — BGE-M3 narrative embedding job.  Fills narratives.embedding (vector(1, Single source of truth: reuse the SAME embedder used at query time.      This, vec_literal()
+Cohesion: 0.17
+Nodes (11): name, private, scripts, build, build:dev, dev, format, lint (+3 more)
 
 ### Community 105 - "Community 105"
 Cohesion: 0.67
@@ -444,21 +450,29 @@ Nodes (5): ToggleGroup, ToggleGroupContext, ToggleGroupItem, Toggle, toggleVaria
 Cohesion: 0.22
 Nodes (6): BgeReranker, _load_model(), bge-reranker-v2-m3 cross-encoder reranker.  Real local inference — loads weights, Load CrossEncoder once and cache for the process lifetime (~1.1 GB weights)., bge-reranker-v2-m3 cross-encoder.  Registry calls BgeReranker()., Return document indices sorted best-first (rag.py does order[:k]).
 
+### Community 110 - "Community 110"
+Cohesion: 0.24
+Nodes (4): is_protected(), Principal, Legacy: return district as jurisdiction string., Can this principal see unmasked PII for a given crime type?
+
 ### Community 111 - "Community 111"
-Cohesion: 0.15
-Nodes (13): LLM, LocalLLM, Local LLM via an OpenAI-compatible server (vLLM / Ollama). DEMO stub.  Point OPE, get_fallback_llm(), get_llm(), get_reranker(), get_sql_llm(), Factory that resolves the configured backend to concrete model instances.  Cache (+5 more)
+Cohesion: 0.25
+Nodes (6): LocalLLM, Local LLM via an OpenAI-compatible server (vLLM / Ollama). DEMO stub.  Point OPE, get_llm(), Return the brain LLM.      Resolution order:       1. Explicit `engine` arg (per, _compose(), Grounded answer composition with Groq fallback on primary failure.
 
 ### Community 112 - "Community 112"
-Cohesion: 0.09
-Nodes (21): AsyncSession, Principal, AsyncSession, Principal, ConversationState, DICT, PipelineEvent, Router-first orchestration.  Given a user message + RLS-scoped session + princip (+13 more)
+Cohesion: 0.12
+Nodes (16): AsyncSession, Principal, AsyncSession, Principal, ConversationState, PipelineEvent, Router-first orchestration.  Given a user message + RLS-scoped session + princip, _rows_context() (+8 more)
 
 ### Community 113 - "Community 113"
-Cohesion: 0.50
-Nodes (3): Avatar, AvatarFallback, AvatarImage
+Cohesion: 0.28
+Nodes (7): AsyncSession, get_embedder(), get_reranker(), Factory that resolves the configured backend to concrete model instances.  Cache, Narrative retrieval (RAG) over pgvector, with reranking.  Embeds the query with, search_narratives(), _to_pgvector()
 
 ### Community 114 - "Community 114"
-Cohesion: 0.20
-Nodes (7): DarkModeToggle(), ParsedVoice, SCREEN_ROUTES, VoiceScreen, Theme, ThemePicker(), THEMES
+Cohesion: 0.40
+Nodes (4): Alert, AlertDescription, AlertTitle, alertVariants
+
+### Community 115 - "Community 115"
+Cohesion: 0.67
+Nodes (3): _keyword_intent(), Intent router. Uses the LLM with a JSON schema, with a cheap keyword fallback so, route()
 
 ### Community 116 - "Community 116"
 Cohesion: 0.22
@@ -469,18 +483,18 @@ Cohesion: 0.40
 Nodes (4): InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot
 
 ## Knowledge Gaps
-- **532 isolated node(s):** `0. Verdict on your theory`, `Bug summary (deep scan)`, `Key API differences this fixes (FlagEmbedding → ST)`, `B3 — Fix the seed job `seed/embed_narratives.py``, `B4 — Delete leftover debug scripts (from `backend/`)` (+527 more)
+- **523 isolated node(s):** `[2026-06-15] — Initial Setup`, `Summary`, `Backend Changes`, `Environment Files`, `Frontend Changes` (+518 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `FastAPI` connect `Community 33` to `Community 1`, `Community 12`, `Community 103`?**
-  _High betweenness centrality (0.065) - this node is a cross-community bridge._
-- **Why does `get_settings()` connect `Community 15` to `Community 0`, `Community 33`, `Community 37`, `Community 39`, `Community 104`, `Community 12`, `Community 108`, `Community 46`, `Community 111`, `Community 112`, `Community 26`, `Community 93`?**
-  _High betweenness centrality (0.039) - this node is a cross-community bridge._
-- **Why does `Principal` connect `Community 1` to `Community 16`, `Community 33`, `Community 112`, `Community 5`?**
+- **Why does `FastAPI` connect `Community 33` to `Community 1`, `Community 35`, `Community 103`, `Community 42`, `Community 12`?**
+  _High betweenness centrality (0.058) - this node is a cross-community bridge._
+- **Why does `get_settings()` connect `Community 15` to `Community 0`, `Community 33`, `Community 37`, `Community 39`, `Community 12`, `Community 108`, `Community 46`, `Community 111`, `Community 112`, `Community 113`, `Community 26`, `Community 93`?**
+  _High betweenness centrality (0.043) - this node is a cross-community bridge._
+- **Why does `Principal` connect `Community 110` to `Community 33`, `Community 1`, `Community 35`, `Community 5`, `Community 42`, `Community 16`, `Community 112`, `Community 51`?**
   _High betweenness centrality (0.039) - this node is a cross-community bridge._
 - **Are the 39 inferred relationships involving `Principal` (e.g. with `Any` and `AsyncSession`) actually correct?**
   _`Principal` has 39 INFERRED edges - model-reasoned connections that need verification._
@@ -489,4 +503,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 2 inferred relationships involving `get_settings()` (e.g. with `get_url()` and `main()`) actually correct?**
   _`get_settings()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `BGE-M3 embedder (sole embedder for the whole system).  Real local inference via`, `Load BGE-M3 once and cache for the process lifetime (~1.3 GB FP16).`, `BGE-M3 dense embedder.  Registry calls BgeM3Embedder(dim=1024).` to the rest of the system?**
-  _630 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _621 weakly-connected nodes found - possible documentation gaps or missing edges._
