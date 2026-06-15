@@ -204,6 +204,8 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                 </div>
               </Section>
             )}
+
+            {tab === "preferences" && (
               <Section title={t("Preferences")} subtitle={t("Workspace appearance & language")}>
                 <Row label={t("Language")}>
                   <div className="flex gap-2">
