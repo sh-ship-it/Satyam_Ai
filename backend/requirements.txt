@@ -19,3 +19,8 @@ networkx==3.4.2
 numpy==2.2.1
 pytest==8.3.4
 pytest-asyncio==0.25.0
+# ── Local model inference ────────────────────────────────────────────────────
+# Install PyTorch separately first (CUDA wheel, not on PyPI):
+#   pip install torch --index-url https://download.pytorch.org/whl/cu121
+FlagEmbedding>=1.4.0
+sentence-transformers>=3.0.0

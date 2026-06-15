@@ -72,8 +72,16 @@ class Settings(BaseSettings):
     # Embeddings (always BGE-M3 local — not configurable)
     embedding_dim: int = 1024
     # vector_type: "vector" for local (fp32), "halfvec" for Neon free tier (fp16)
-    # Set VECTOR_TYPE=halfvec in Neon env to match the altered column type.
     vector_type: Literal["vector", "halfvec"] = "vector"
+
+    # ── Local model weights (downloaded via huggingface-cli) ──────────────────
+    # Paths are relative to the backend/ working directory.
+    embedding_model_path: str = "models/bge-m3"
+    reranker_model_path: str = "models/bge-reranker-v2-m3"
+    # Device for local inference: "cuda" (RTX 4070) or "cpu"
+    model_device: Literal["cuda", "cpu"] = "cuda"
+    # Load models in FP16 (halves VRAM; cosine quality unchanged)
+    model_fp16: bool = True
 
     @property
     def cors_origin_list(self) -> list[str]:

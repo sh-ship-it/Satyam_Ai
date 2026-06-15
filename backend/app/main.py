@@ -25,6 +25,22 @@ async def lifespan(app: FastAPI):
         model_backend=settings.model_backend,
         demo_mode=settings.demo_mode,
     )
+    # ── Warm up local models so the first user request isn't slow ────────────
+    # Models are ~2.3 GB; loading them here avoids a cold-start penalty on the
+    # first chat/embed request.  Runs in the threadpool to stay non-blocking.
+    try:
+        from app.models.registry import get_embedder, get_reranker
+        import asyncio as _asyncio
+        embedder = get_embedder()
+        reranker = get_reranker()
+        await _asyncio.gather(
+            embedder.embed(["warmup"]),
+            reranker.rerank("warmup", ["x"]),
+        )
+        log.info("satyam.models_warmed_up", device=settings.model_device)
+    except Exception as exc:  # noqa: BLE001
+        # Non-fatal: demo/api mode has no local weights — log and continue.
+        log.info("satyam.model_warmup_skipped", reason=str(exc))
     yield
     log.info("satyam.shutdown")
 

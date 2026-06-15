@@ -1,42 +1,67 @@
 """BGE-M3 embedder (sole embedder for the whole system).
 
-Model: BAAI/bge-m3 — ~568M params, ~1.3 GB FP16 (~2.2 GB FP32).
-Runs FP16 on the demo GPU (RTX 4070, 8 GB VRAM). CPU-capable but slower.
-Embedding dim: 1024. Query and document share one vector space — not
-swappable for a hosted API without re-embedding the entire narratives table.
-
-DEMO stub: deterministic hash-based pseudo-embedding so retrieval works without
-GPU/weights. Replace `embed` with:
-
-    from FlagEmbedding import BGEM3FlagModel
-    self.model = BGEM3FlagModel("BAAI/bge-m3", use_fp16=True)
-    out = self.model.encode(texts)["dense_vecs"]
-
-Keep `dim` aligned with the pgvector column (1024).
+Real local inference — loads weights from disk, runs on GPU (FP16) or CPU.
+Model: BAAI/bge-m3, ~568M params, dim 1024.
+Path / device / precision come from Settings (single source of truth).
 """
 from __future__ import annotations
 
-import hashlib
-import math
+import asyncio
+from functools import lru_cache
+
+import numpy as np
+
+from app.config import get_settings
+
+
+@lru_cache(maxsize=1)
+def _load_model(path: str, use_fp16: bool, device: str):
+    """Load BGE-M3 once and cache for the process lifetime (~2.3 GB weights)."""
+    from FlagEmbedding import BGEM3FlagModel  # type: ignore[import]
+
+    # FlagEmbedding uses CUDA automatically; force CPU by passing device="cpu"
+    # via the underlying transformers config when fp16 is off.
+    return BGEM3FlagModel(path, use_fp16=use_fp16)
 
 
 class BgeM3Embedder:
+    """BGE-M3 dense embedder.  Registry calls BgeM3Embedder(dim=1024)."""
+
     def __init__(self, dim: int = 1024) -> None:
         self.dim = dim
+        s = get_settings()
+        self._path = s.embedding_model_path
+        self._device = s.model_device
+        self._use_fp16 = s.model_fp16
 
-    def _vec(self, text: str) -> list[float]:
-        seed = hashlib.sha256(text.lower().encode("utf-8")).digest()
-        vals: list[float] = []
-        i = 0
-        while len(vals) < self.dim:
-            h = hashlib.sha256(seed + i.to_bytes(2, "big")).digest()
-            for b in h:
-                if len(vals) >= self.dim:
-                    break
-                vals.append((b / 255.0) * 2 - 1)
-            i += 1
-        norm = math.sqrt(sum(v * v for v in vals)) or 1.0
-        return [v / norm for v in vals]
+    # ── sync heavy work, called inside asyncio.to_thread ─────────────────────
+
+    def _encode(self, texts: list[str]) -> list[list[float]]:
+        model = _load_model(self._path, self._use_fp16, self._device)
+        # batch_size=12 fits comfortably in 8 GB VRAM alongside the reranker
+        out = model.encode(
+            texts,
+            batch_size=12,
+            max_length=8192,
+            return_dense=True,
+            return_sparse=False,
+            return_colbert_vecs=False,
+        )["dense_vecs"]
+        arr = np.asarray(out, dtype="float32").reshape(len(texts), -1)
+        # L2-normalise so cosine distance == pgvector <=> operator
+        norms = np.linalg.norm(arr, axis=1, keepdims=True)
+        norms[norms == 0.0] = 1.0
+        arr = arr / norms
+        assert arr.shape[1] == self.dim, (
+            f"BGE-M3 returned {arr.shape[1]}-d vectors; expected {self.dim}. "
+            "Check EMBEDDING_MODEL_PATH points to the correct model."
+        )
+        return arr.tolist()
+
+    # ── public async interface (called from async request handlers) ───────────
 
     async def embed(self, texts: list[str]) -> list[list[float]]:
-        return [self._vec(t) for t in texts]
+        """Return one L2-normalised 1024-float vector per input text."""
+        if not texts:
+            return []
+        return await asyncio.to_thread(self._encode, texts)
