@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-15)
 
 ## Corpus Check
-- 175 files · ~62,623 words
+- 175 files · ~62,755 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `06bba727`
+- Built from commit: `3b537c0f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -416,7 +416,7 @@ Cohesion: 0.40
 Nodes (4): Alert, AlertDescription, AlertTitle, alertVariants
 
 ## Knowledge Gaps
-- **419 isolated node(s):** `[2026-06-15] — Initial Setup`, `Summary`, `Backend Changes`, `Environment Files`, `Frontend Changes` (+414 more)
+- **419 isolated node(s):** `1. High-level`, `2. Request lifecycle (chat)`, `3. Defense in depth`, `4.1 Active lanes (build now — demo)`, `4.2 Parked as future fallback (Phase 2 — on-prem)` (+414 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -424,16 +424,16 @@ Nodes (4): Alert, AlertDescription, AlertTitle, alertVariants
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `_MemoryStore` connect `Community 25` to `Community 1`?**
-  _High betweenness centrality (0.107) - this node is a cross-community bridge._
+  _High betweenness centrality (0.105) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 1` to `Community 96`, `Community 5`?**
-  _High betweenness centrality (0.057) - this node is a cross-community bridge._
+  _High betweenness centrality (0.056) - this node is a cross-community bridge._
 - **Are the 41 inferred relationships involving `Principal` (e.g. with `Any` and `AsyncSession`) actually correct?**
   _`Principal` has 41 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 24 inferred relationships involving `Permission` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Permission` has 24 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 20 inferred relationships involving `LLM` (e.g. with `BhashiniSTT` and `BhashiniTranslator`) actually correct?**
   _`LLM` has 20 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `[2026-06-15] — Initial Setup`, `Summary`, `Backend Changes` to the rest of the system?**
+- **What connects `1. High-level`, `2. Request lifecycle (chat)`, `3. Defense in depth` to the rest of the system?**
   _498 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.057631257631257635 - nodes in this community are weakly interconnected._

@@ -4,14 +4,154 @@
   "graph": {},
   "nodes": [
     {
+      "label": "ARCHITECTURE.md",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_architecture",
+      "community": 34,
+      "norm_label": "architecture.md"
+    },
+    {
+      "label": "Satyam \u2014 Architecture",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_architecture_satyam_architecture",
+      "community": 34,
+      "norm_label": "satyam \u2014 architecture"
+    },
+    {
+      "label": "1. High-level",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "docs_architecture_1_high_level",
+      "community": 34,
+      "norm_label": "1. high-level"
+    },
+    {
+      "label": "2. Request lifecycle (chat)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "docs_architecture_2_request_lifecycle_chat",
+      "community": 34,
+      "norm_label": "2. request lifecycle (chat)"
+    },
+    {
+      "label": "3. Defense in depth",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L57",
+      "_origin": "ast",
+      "id": "docs_architecture_3_defense_in_depth",
+      "community": 34,
+      "norm_label": "3. defense in depth"
+    },
+    {
+      "label": "4. Model & API strategy",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L70",
+      "_origin": "ast",
+      "id": "docs_architecture_4_model_api_strategy",
+      "community": 34,
+      "norm_label": "4. model & api strategy"
+    },
+    {
+      "label": "4.1 Active lanes (build now \u2014 demo)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L76",
+      "_origin": "ast",
+      "id": "docs_architecture_4_1_active_lanes_build_now_demo",
+      "community": 34,
+      "norm_label": "4.1 active lanes (build now \u2014 demo)"
+    },
+    {
+      "label": "4.2 Parked as future fallback (Phase 2 \u2014 on-prem)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L99",
+      "_origin": "ast",
+      "id": "docs_architecture_4_2_parked_as_future_fallback_phase_2_on_prem",
+      "community": 34,
+      "norm_label": "4.2 parked as future fallback (phase 2 \u2014 on-prem)"
+    },
+    {
+      "label": "5. Two-phase rollout (demo \u2192 sovereign)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L106",
+      "_origin": "ast",
+      "id": "docs_architecture_5_two_phase_rollout_demo_sovereign",
+      "community": 34,
+      "norm_label": "5. two-phase rollout (demo \u2192 sovereign)"
+    },
+    {
+      "label": "6. Data model (frozen day one \u2014 R8)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L121",
+      "_origin": "ast",
+      "id": "docs_architecture_6_data_model_frozen_day_one_r8",
+      "community": 34,
+      "norm_label": "6. data model (frozen day one \u2014 r8)"
+    },
+    {
+      "label": "7. Two-track demo honesty (R7)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L127",
+      "_origin": "ast",
+      "id": "docs_architecture_7_two_track_demo_honesty_r7",
+      "community": 34,
+      "norm_label": "7. two-track demo honesty (r7)"
+    },
+    {
+      "label": "8. Frontend",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L138",
+      "_origin": "ast",
+      "id": "docs_architecture_8_frontend",
+      "community": 34,
+      "norm_label": "8. frontend"
+    },
+    {
+      "label": "8.1 Settings panel",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L145",
+      "_origin": "ast",
+      "id": "docs_architecture_8_1_settings_panel",
+      "community": 34,
+      "norm_label": "8.1 settings panel"
+    },
+    {
+      "label": "9. Configuration flags",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L168",
+      "_origin": "ast",
+      "id": "docs_architecture_9_configuration_flags",
+      "community": 34,
+      "norm_label": "9. configuration flags"
+    },
+    {
       "label": "made_till_now.md",
       "file_type": "document",
       "source_file": "made_till_now.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "made_till_now",
       "community": 67,
-      "norm_label": "made_till_now.md"
+      "norm_label": "made_till_now.md",
+      "id": "made_till_now"
     },
     {
       "label": "Satyam \u2014 Project Change Log (`made_till_now.md`)",
@@ -19,9 +159,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "made_till_now_satyam_project_change_log_made_till_now_md",
       "community": 67,
-      "norm_label": "satyam \u2014 project change log (`made_till_now.md`)"
+      "norm_label": "satyam \u2014 project change log (`made_till_now.md`)",
+      "id": "made_till_now_satyam_project_change_log_made_till_now_md"
     },
     {
       "label": "Log of Changes",
@@ -29,9 +169,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "made_till_now_log_of_changes",
       "community": 67,
-      "norm_label": "log of changes"
+      "norm_label": "log of changes",
+      "id": "made_till_now_log_of_changes"
     },
     {
       "label": "[2026-06-15] \u2014 Initial Setup",
@@ -39,9 +179,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_initial_setup",
       "community": 67,
-      "norm_label": "[2026-06-15] \u2014 initial setup"
+      "norm_label": "[2026-06-15] \u2014 initial setup",
+      "id": "made_till_now_2026_06_15_initial_setup"
     },
     {
       "label": "[2026-06-15] \u2014 Architecture Update: Multi-Engine Support (Sarvam, Ollama Cloud, BRAIN_ENGINE, SQL_ENGINE, VOICE_BACKEND)",
@@ -49,9 +189,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
       "community": 67,
-      "norm_label": "[2026-06-15] \u2014 architecture update: multi-engine support (sarvam, ollama cloud, brain_engine, sql_engine, voice_backend)"
+      "norm_label": "[2026-06-15] \u2014 architecture update: multi-engine support (sarvam, ollama cloud, brain_engine, sql_engine, voice_backend)",
+      "id": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend"
     },
     {
       "label": "Summary",
@@ -59,9 +199,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "made_till_now_summary",
       "community": 67,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary"
     },
     {
       "label": "Backend Changes",
@@ -69,9 +209,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L29",
       "_origin": "ast",
-      "id": "made_till_now_backend_changes",
       "community": 67,
-      "norm_label": "backend changes"
+      "norm_label": "backend changes",
+      "id": "made_till_now_backend_changes"
     },
     {
       "label": "Environment Files",
@@ -79,9 +219,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L86",
       "_origin": "ast",
-      "id": "made_till_now_environment_files",
       "community": 67,
-      "norm_label": "environment files"
+      "norm_label": "environment files",
+      "id": "made_till_now_environment_files"
     },
     {
       "label": "Frontend Changes",
@@ -89,9 +229,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L99",
       "_origin": "ast",
-      "id": "made_till_now_frontend_changes",
       "community": 67,
-      "norm_label": "frontend changes"
+      "norm_label": "frontend changes",
+      "id": "made_till_now_frontend_changes"
     },
     {
       "label": "Architectural Decisions Recorded",
@@ -99,9 +239,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L121",
       "_origin": "ast",
-      "id": "made_till_now_architectural_decisions_recorded",
       "community": 67,
-      "norm_label": "architectural decisions recorded"
+      "norm_label": "architectural decisions recorded",
+      "id": "made_till_now_architectural_decisions_recorded"
     },
     {
       "label": "SettingsDialog.tsx",
@@ -1322,146 +1462,6 @@
       "community": 11,
       "norm_label": "streamchat()",
       "id": "api_client_streamchat"
-    },
-    {
-      "label": "ARCHITECTURE.md",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "architecture.md",
-      "id": "docs_architecture"
-    },
-    {
-      "label": "Satyam \u2014 Architecture",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "satyam \u2014 architecture",
-      "id": "docs_architecture_satyam_architecture"
-    },
-    {
-      "label": "1. High-level",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L13",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "1. high-level",
-      "id": "docs_architecture_1_high_level"
-    },
-    {
-      "label": "2. Request lifecycle (chat)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L33",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "2. request lifecycle (chat)",
-      "id": "docs_architecture_2_request_lifecycle_chat"
-    },
-    {
-      "label": "3. Defense in depth",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L57",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "3. defense in depth",
-      "id": "docs_architecture_3_defense_in_depth"
-    },
-    {
-      "label": "4. Model & API strategy",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L70",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "4. model & api strategy",
-      "id": "docs_architecture_4_model_api_strategy"
-    },
-    {
-      "label": "4.1 Active lanes (build now \u2014 demo)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L76",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "4.1 active lanes (build now \u2014 demo)",
-      "id": "docs_architecture_4_1_active_lanes_build_now_demo"
-    },
-    {
-      "label": "4.2 Parked as future fallback (Phase 2 \u2014 on-prem)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L98",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "4.2 parked as future fallback (phase 2 \u2014 on-prem)",
-      "id": "docs_architecture_4_2_parked_as_future_fallback_phase_2_on_prem"
-    },
-    {
-      "label": "5. Two-phase rollout (demo \u2192 sovereign)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L105",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "5. two-phase rollout (demo \u2192 sovereign)",
-      "id": "docs_architecture_5_two_phase_rollout_demo_sovereign"
-    },
-    {
-      "label": "6. Data model (frozen day one \u2014 R8)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L120",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "6. data model (frozen day one \u2014 r8)",
-      "id": "docs_architecture_6_data_model_frozen_day_one_r8"
-    },
-    {
-      "label": "7. Two-track demo honesty (R7)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L126",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "7. two-track demo honesty (r7)",
-      "id": "docs_architecture_7_two_track_demo_honesty_r7"
-    },
-    {
-      "label": "8. Frontend",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L133",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "8. frontend",
-      "id": "docs_architecture_8_frontend"
-    },
-    {
-      "label": "8.1 Settings panel",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L140",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "8.1 settings panel",
-      "id": "docs_architecture_8_1_settings_panel"
-    },
-    {
-      "label": "9. Configuration flags",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L163",
-      "_origin": "ast",
-      "community": 34,
-      "norm_label": "9. configuration flags",
-      "id": "docs_architecture_9_configuration_flags"
     },
     {
       "label": "routeTree.gen.ts",
@@ -11148,12 +11148,142 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture",
+      "target": "docs_architecture_satyam_architecture"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_architecture",
+      "target": "docs_architecture_1_high_level"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_architecture",
+      "target": "docs_architecture_2_request_lifecycle_chat"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L46",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_architecture",
+      "target": "docs_architecture_3_defense_in_depth"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L70",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_architecture",
+      "target": "docs_architecture_4_model_api_strategy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L105",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_architecture",
+      "target": "docs_architecture_5_two_phase_rollout_demo_sovereign"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L120",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_architecture",
+      "target": "docs_architecture_6_data_model_frozen_day_one_r8"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L126",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_architecture",
+      "target": "docs_architecture_7_two_track_demo_honesty_r7"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L133",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_architecture",
+      "target": "docs_architecture_8_frontend"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L163",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_architecture",
+      "target": "docs_architecture_9_configuration_flags"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L76",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_4_model_api_strategy",
+      "target": "docs_architecture_4_1_active_lanes_build_now_demo"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L98",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_4_model_api_strategy",
+      "target": "docs_architecture_4_2_parked_as_future_fallback_phase_2_on_prem"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L140",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_8_frontend",
+      "target": "docs_architecture_8_1_settings_panel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "made_till_now.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now",
-      "target": "made_till_now_satyam_project_change_log_made_till_now_md",
-      "confidence_score": 1.0
+      "target": "made_till_now_satyam_project_change_log_made_till_now_md"
     },
     {
       "relation": "contains",
@@ -11161,9 +11291,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_satyam_project_change_log_made_till_now_md",
-      "target": "made_till_now_log_of_changes",
-      "confidence_score": 1.0
+      "target": "made_till_now_log_of_changes"
     },
     {
       "relation": "contains",
@@ -11171,9 +11301,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
-      "confidence_score": 1.0
+      "target": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend"
     },
     {
       "relation": "contains",
@@ -11181,9 +11311,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_15_initial_setup",
-      "confidence_score": 1.0
+      "target": "made_till_now_2026_06_15_initial_setup"
     },
     {
       "relation": "contains",
@@ -11191,9 +11321,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L121",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
-      "target": "made_till_now_architectural_decisions_recorded",
-      "confidence_score": 1.0
+      "target": "made_till_now_architectural_decisions_recorded"
     },
     {
       "relation": "contains",
@@ -11201,9 +11331,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
-      "target": "made_till_now_backend_changes",
-      "confidence_score": 1.0
+      "target": "made_till_now_backend_changes"
     },
     {
       "relation": "contains",
@@ -11211,9 +11341,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L86",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
-      "target": "made_till_now_environment_files",
-      "confidence_score": 1.0
+      "target": "made_till_now_environment_files"
     },
     {
       "relation": "contains",
@@ -11221,9 +11351,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L99",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
-      "target": "made_till_now_frontend_changes",
-      "confidence_score": 1.0
+      "target": "made_till_now_frontend_changes"
     },
     {
       "relation": "contains",
@@ -11231,9 +11361,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
-      "target": "made_till_now_summary",
-      "confidence_score": 1.0
+      "target": "made_till_now_summary"
     },
     {
       "relation": "contains",
@@ -15167,136 +15297,6 @@
       "confidence_score": 1.0,
       "source": "routes_console",
       "target": "api_client_streamchat"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture",
-      "target": "docs_architecture_satyam_architecture"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_architecture",
-      "target": "docs_architecture_1_high_level"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_architecture",
-      "target": "docs_architecture_2_request_lifecycle_chat"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L46",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_architecture",
-      "target": "docs_architecture_3_defense_in_depth"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L70",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_architecture",
-      "target": "docs_architecture_4_model_api_strategy"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L105",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_architecture",
-      "target": "docs_architecture_5_two_phase_rollout_demo_sovereign"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L120",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_architecture",
-      "target": "docs_architecture_6_data_model_frozen_day_one_r8"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L126",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_architecture",
-      "target": "docs_architecture_7_two_track_demo_honesty_r7"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L133",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_architecture",
-      "target": "docs_architecture_8_frontend"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L163",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_architecture",
-      "target": "docs_architecture_9_configuration_flags"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L76",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_4_model_api_strategy",
-      "target": "docs_architecture_4_1_active_lanes_build_now_demo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L98",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_4_model_api_strategy",
-      "target": "docs_architecture_4_2_parked_as_future_fallback_phase_2_on_prem"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L140",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_8_frontend",
-      "target": "docs_architecture_8_1_settings_panel"
     },
     {
       "relation": "imports_from",
@@ -28697,5 +28697,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "06bba727da11ebbb91ef70c15fbb375ef7620db9"
+  "built_at_commit": "3b537c0f766fee1813cf8e57eb1b2d7ef8fa3cb7"
 }
