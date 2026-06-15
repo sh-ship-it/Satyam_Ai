@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/deps.py": {
-    "mtime": 1781282331.1706283,
-    "ast_hash": "405ded4228998e7baec21407a8b220d3",
+    "mtime": 1781520845.5056248,
+    "ast_hash": "515277d8b2007bfb43738ebe966ae2a0",
     "semantic_hash": ""
   },
   "backend/app/api/routes/__init__.py": {
@@ -25,18 +25,18 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/audit.py": {
-    "mtime": 1781282331.2048218,
-    "ast_hash": "a651a0229652a645fc72d998c54073c2",
+    "mtime": 1781521055.191646,
+    "ast_hash": "800b315e32884f8120038ec60e6fac5a",
     "semantic_hash": ""
   },
   "backend/app/api/routes/auth.py": {
-    "mtime": 1781282331.1846342,
-    "ast_hash": "24b26f49d724c5ed3ffdd9eeb772635b",
+    "mtime": 1781520865.2054908,
+    "ast_hash": "5ab6bdd497a8da66b8111cbfe147c791",
     "semantic_hash": ""
   },
   "backend/app/api/routes/cases.py": {
-    "mtime": 1781282331.1888216,
-    "ast_hash": "3f528d88db31953eb6e1c9a18b987ec0",
+    "mtime": 1781521066.2046177,
+    "ast_hash": "2d09b30cb4d86049eb00a95714b43450",
     "semantic_hash": ""
   },
   "backend/app/api/routes/chat.py": {
@@ -75,23 +75,23 @@
     "semantic_hash": ""
   },
   "backend/app/core/audit.py": {
-    "mtime": 1781282330.9920943,
-    "ast_hash": "2eb723bec86b1389df9540c51d172b80",
+    "mtime": 1781520941.9756258,
+    "ast_hash": "db1168a17f396e7dd22439d6f66895d3",
     "semantic_hash": ""
   },
   "backend/app/core/masking.py": {
-    "mtime": 1781282330.9845836,
-    "ast_hash": "6a693f473bf546184cde4de4ecab62cc",
+    "mtime": 1781521623.1340451,
+    "ast_hash": "6245dd7e7d3ee20424ffe2e6f0423831",
     "semantic_hash": ""
   },
   "backend/app/core/rbac.py": {
-    "mtime": 1781282330.980584,
-    "ast_hash": "e4bcf5cebf73feb15e18332a431767c6",
+    "mtime": 1781520829.811965,
+    "ast_hash": "19f82551dfc4447cdbb09f2ab5b7e79b",
     "semantic_hash": ""
   },
   "backend/app/core/security.py": {
-    "mtime": 1781282330.9765842,
-    "ast_hash": "8848825ebc11e7dfce48f5c23b7eb284",
+    "mtime": 1781520885.3703668,
+    "ast_hash": "efccb691b0ca97acee1e370b953f646c",
     "semantic_hash": ""
   },
   "backend/app/db/__init__.py": {
@@ -100,13 +100,13 @@
     "semantic_hash": ""
   },
   "backend/app/db/models.py": {
-    "mtime": 1781282330.9685783,
-    "ast_hash": "4f97b9d44a97d7d0117b1f802614e5ac",
+    "mtime": 1781520783.4937148,
+    "ast_hash": "5d56d8177b6477a477c1aaccec0b38c5",
     "semantic_hash": ""
   },
   "backend/app/db/rls.py": {
-    "mtime": 1781282330.9655786,
-    "ast_hash": "a81d8a002b971032d8f8616f866d04b9",
+    "mtime": 1781520800.0996203,
+    "ast_hash": "5ba9bd9516184174fa2acbf39fe0059c",
     "semantic_hash": ""
   },
   "backend/app/db/session.py": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/prompts.py": {
-    "mtime": 1781282331.105616,
-    "ast_hash": "2da7640ce4acdca87adbabc6c171688c",
+    "mtime": 1781520997.6547773,
+    "ast_hash": "657a9351371ce638cdb03d9b1afe171f",
     "semantic_hash": ""
   },
   "backend/app/pipeline/router.py": {
@@ -225,18 +225,18 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/analytics.py": {
-    "mtime": 1781282331.1316144,
-    "ast_hash": "7c075957649d8c1e6fb1085959a0294d",
+    "mtime": 1781521022.9418058,
+    "ast_hash": "d12b40329bbbfb9c124e4fe866ae7b36",
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/rag.py": {
-    "mtime": 1781282331.1276174,
-    "ast_hash": "99482a3b9d2a2a1df8ab275d8b31ff67",
+    "mtime": 1781521034.5874822,
+    "ast_hash": "b1b6a35e9c990f551613de426356521a",
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/sql_guard.py": {
-    "mtime": 1781282331.1196167,
-    "ast_hash": "811cb1f194638eb3e62ca975c1e5a4d5",
+    "mtime": 1781521004.4889114,
+    "ast_hash": "20a260273f7cee677b92821b92730183",
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/text_to_sql.py": {
@@ -250,13 +250,13 @@
     "semantic_hash": ""
   },
   "backend/app/schemas/auth.py": {
-    "mtime": 1781282331.0020945,
-    "ast_hash": "cb72707dcecaa314d5bcae3c705b51fa",
+    "mtime": 1781520874.5190387,
+    "ast_hash": "78fedb8ef9e3dfc2797d59375e7dac23",
     "semantic_hash": ""
   },
   "backend/app/schemas/case.py": {
-    "mtime": 1781282331.0100942,
-    "ast_hash": "ee9fdaf4f9745ef3eaad78d03c14a163",
+    "mtime": 1781520953.1761231,
+    "ast_hash": "fc1a3019fa3977f342c8f98e564e5225",
     "semantic_hash": ""
   },
   "backend/app/schemas/chat.py": {
@@ -285,13 +285,13 @@
     "semantic_hash": ""
   },
   "backend/app/services/case_service.py": {
-    "mtime": 1781282331.1516142,
-    "ast_hash": "b7d2a8fd3f0ca065be530d55fcced23d",
+    "mtime": 1781520971.701316,
+    "ast_hash": "7cef7756022ded5fc3cc90cac58edb6f",
     "semantic_hash": ""
   },
   "backend/app/services/chat_service.py": {
-    "mtime": 1781502843.2828336,
-    "ast_hash": "2dc6efa7d44bd9399255a88fc8889d64",
+    "mtime": 1781521042.8229516,
+    "ast_hash": "9916e4230ed5733108f514a72f8c6187",
     "semantic_hash": ""
   },
   "backend/app/services/map_service.py": {
@@ -890,8 +890,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1781518887.571631,
-    "ast_hash": "6da384db88fc30b0a4031edbe6177c3d",
+    "mtime": 1781521708.4401681,
+    "ast_hash": "fc93d56279f71d3cf46d248c4675b936",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -922,6 +922,31 @@
   "backend/seed/satyam_synthetic_dataset/DATA_DICTIONARY.md": {
     "mtime": 1781518423.8382847,
     "ast_hash": "fbc9942f7edf7b42f38cabfb29d7a3fd",
+    "semantic_hash": ""
+  },
+  "backend/migrations/002_schema_v2.sql": {
+    "mtime": 1781519633.444775,
+    "ast_hash": "f124723005e689580e701ee97a9e4858",
+    "semantic_hash": ""
+  },
+  "backend/migrations/teardown.sql": {
+    "mtime": 1781520471.586875,
+    "ast_hash": "a80a3e2d5aa194ea46e56ca9831cf36d",
+    "semantic_hash": ""
+  },
+  "backend/seed/embed_narratives.py": {
+    "mtime": 1781521206.7439387,
+    "ast_hash": "18052946e877f18f87aeef9ed4c54721",
+    "semantic_hash": ""
+  },
+  "backend/seed/load_seed.py": {
+    "mtime": 1781520556.5376446,
+    "ast_hash": "0530631f1c1622e7cea9ef4e38247214",
+    "semantic_hash": ""
+  },
+  "backend/seed/load_seed.sql": {
+    "mtime": 1781519633.4527962,
+    "ast_hash": "3d63a56322e0690ff16cadf2d0630ba2",
     "semantic_hash": ""
   }
 }
