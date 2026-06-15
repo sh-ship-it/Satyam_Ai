@@ -83,7 +83,8 @@ and `VOICE_BACKEND=sarvam|bhashini` switch lanes with the same application code.
 | Text-to-SQL (primary) | **Gemini 2.5 Flash** | Best accuracy, free tier |
 | Text-to-SQL (open-model option) | **`qwen3-coder-next:cloud`** (Ollama Cloud) | 80B total / 3B active, fast, tool-calling, 256K ctx; free-tier light usage |
 | Low-latency / outage fallback | **Groq** | Fast open-model lane + sensitive-narrative rephrasing |
-| Embeddings (RAG) | **BGE-M3** (local) | Sole embedder; query + doc share one space, so it stays local (not swappable for an API without re-embedding) |
+| Embeddings (RAG) | **BGE-M3** (local, FP16 on GPU) | Sole embedder, dim 1024; query + doc share one space, so it stays local (not swappable for an API without re-embedding). ~568M params, ~1.3 GB FP16 (~2.2 GB FP32). Runs on the RTX 4070 (8 GB) demo GPU. |
+| Reranking (RAG) | **bge-reranker-v2-m3** (local, FP16 on GPU) | ~568M params, ~1.1 GB FP16; reranks hybrid pgvector+BM25 candidates. CPU-capable but lives on the demo GPU beside the embedder (~2.4 GB weights total, ~4–5 GB peak — comfortable in 8 GB). |
 | Kannada / English voice | **Sarvam** (free tier) — primary | Bulbul v3 (TTS), Saaras v3 (STT), Sarvam Translate (MT) |
 | Voice fallback | **Bhashini** (govt) | Free, Indian, no credit cap → keeps voice up if Sarvam fails or credits run out |
 
@@ -109,7 +110,7 @@ bge-reranker-v2-m3.
 | Brain / chat / slots | Gemini 2.5 Flash | Sarvam-M / Sarvam 30B (Indian LLM) |
 | Text-to-SQL | Gemini 2.5 Flash + `qwen3-coder-next:cloud` | Local Qwen-Coder (on-prem) |
 | Kannada voice / translate | Sarvam (primary) → Bhashini (fallback) | Bhashini (govt) + Sarvam (Indian) |
-| Embeddings | BGE-M3 (local) | BGE-M3 (local) |
+| Embeddings + rerank | BGE-M3 + bge-reranker (local, FP16 on GPU) | BGE-M3 + bge-reranker (local) |
 | Hosting | External cloud OK (synthetic data, no real PII) | Fully on-prem / India-hosted, behind the firewall |
 
 **Sovereignty note:** external clouds (Gemini, Ollama Cloud, Sarvam) are
@@ -126,9 +127,13 @@ See `backend/migrations/001_init.sql`.
 ## 7. Two-track demo honesty (R7)
 
 - **Deployed link** — api lane + synthetic data (judge-accessible, low-cost).
-- **Demo video** — local lane on a GPU (e.g. RTX 4070) showing on-prem
-  inference. Both run the *same* code; only `MODEL_BACKEND` / `VOICE_BACKEND`
-  differ.
+- **Demo video** — the RTX 4070 (8 GB) laptop GPU runs only the two models that
+  stay local regardless: the **BGE-M3 embedder + bge-reranker-v2-m3, both FP16**
+  (~2.4 GB weights, ~4–5 GB peak — comfortable in 8 GB). The brain, Text-to-SQL,
+  and voice lanes call cloud APIs (Gemini / qwen3-coder-next:cloud / Sarvam /
+  Bhashini). Heavy local LLMs (Qwen-Coder, Llama 3.1-8B) are **deferred to the
+  Phase-2 on-prem build**, not run on the demo laptop. Both tracks run the
+  *same* code; only `MODEL_BACKEND` / `VOICE_BACKEND` differ.
 
 ## 8. Frontend
 
