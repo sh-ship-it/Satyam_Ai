@@ -31,13 +31,14 @@ from pathlib import Path
 
 import asyncpg
 
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from app.config import get_settings
+
 # ---------------------------------------------------------------------------
 # Config
 # ---------------------------------------------------------------------------
 
 DEFAULT_BATCH = 64
-
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
 def get_url(local: bool) -> str:
@@ -55,39 +56,20 @@ def get_url(local: bool) -> str:
 # ---------------------------------------------------------------------------
 
 def load_embedder():
-    """Load BGE-M3.  Falls back to the deterministic demo stub if not installed."""
-    try:
-        from FlagEmbedding import BGEM3FlagModel  # type: ignore
-        model = BGEM3FlagModel("BAAI/bge-m3", use_fp16=True)
+    """Single source of truth: reuse the SAME embedder used at query time.
 
-        async def embed(texts: list[str]) -> list[list[float]]:
-            vecs = model.encode(texts)["dense_vecs"]
-            return [v.tolist() for v in vecs]
+    This is the sentence-transformers BGE-M3 loaded from EMBEDDING_MODEL_PATH
+    (local folder, GPU FP16, L2-normalised). Reusing it guarantees seed-time and
+    query-time vectors live in the same space — no divergent embeddings.
+    """
+    from app.models.registry import get_embedder
 
-        return embed
-    except ImportError:
-        # Demo stub — deterministic hash-based vectors
-        import hashlib, math
+    embedder = get_embedder()
 
-        def _vec(text: str, dim: int = 1024) -> list[float]:
-            seed = hashlib.sha256(text.lower().encode()).digest()
-            vals: list[float] = []
-            i = 0
-            while len(vals) < dim:
-                h = hashlib.sha256(seed + i.to_bytes(2, "big")).digest()
-                for b in h:
-                    if len(vals) >= dim:
-                        break
-                    vals.append((b / 255.0) * 2 - 1)
-                i += 1
-            norm = math.sqrt(sum(v * v for v in vals)) or 1.0
-            return [v / norm for v in vals]
+    async def embed(texts: list[str]) -> list[list[float]]:
+        return await embedder.embed(texts)
 
-        async def embed_stub(texts: list[str]) -> list[list[float]]:
-            return [_vec(t) for t in texts]
-
-        print("  [WARN] FlagEmbedding not installed — using deterministic stub embeddings")
-        return embed_stub
+    return embed
 
 
 def vec_literal(v: list[float]) -> str:
@@ -152,8 +134,6 @@ async def main() -> None:
 
         # Build HNSW index after all embeddings are populated
         print(f"\nBuilding HNSW index on narratives.embedding…")
-        import sys
-        sys.path.insert(0, str(Path(__file__).parent.parent))
         from app.config import get_settings
         vt = get_settings().vector_type  # "vector" | "halfvec"
         ops = "halfvec_cosine_ops" if vt == "halfvec" else "vector_cosine_ops"
