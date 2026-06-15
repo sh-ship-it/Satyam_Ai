@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "backend/app/config.py": {
-    "mtime": 1781528457.230495,
-    "ast_hash": "a6c17ec4c12330e58b3e2db177ab6b97",
+    "mtime": 1781543199.75957,
+    "ast_hash": "3e66e4474bd9cbbc0bfdda39c40cc9c0",
     "semantic_hash": ""
   },
   "backend/app/core/__init__.py": {
@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1781528519.1231084,
-    "ast_hash": "56eec2021b7021776e2cdc2db9e641ff",
+    "mtime": 1781543255.0828557,
+    "ast_hash": "85433c0290347f0d1456293056352197",
     "semantic_hash": ""
   },
   "backend/app/models/__init__.py": {
@@ -160,8 +160,8 @@
     "semantic_hash": ""
   },
   "backend/app/models/local/embedder_bge.py": {
-    "mtime": 1781505140.765863,
-    "ast_hash": "0879c249d9999be7b509c46de7e944ed",
+    "mtime": 1781543221.808984,
+    "ast_hash": "f79cc5f053c3b8f769ee8fc05333385e",
     "semantic_hash": ""
   },
   "backend/app/models/local/llm_local.py": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "backend/app/models/local/reranker_bge.py": {
-    "mtime": 1781505148.7118626,
-    "ast_hash": "795488ac534b9308e7b034d7e73864bc",
+    "mtime": 1781543234.1691575,
+    "ast_hash": "d45eee827618cad09d00244d250cd202",
     "semantic_hash": ""
   },
   "backend/app/models/local/stt_whisper.py": {
@@ -840,8 +840,8 @@
     "semantic_hash": ""
   },
   "backend/requirements.txt": {
-    "mtime": 1781282330.9145784,
-    "ast_hash": "6ff966ca0889d944946b7edd498d2b5b",
+    "mtime": 1781543267.0152624,
+    "ast_hash": "d0094d6b50369423879f4ad148ea90d3",
     "semantic_hash": ""
   },
   "docker-compose.yml": {
@@ -947,6 +947,51 @@
   "backend/app/api/routes/settings.py": {
     "mtime": 1781528472.6630611,
     "ast_hash": "da3ab4a00c7a356e4a25d053cd3d7954",
+    "semantic_hash": ""
+  },
+  "backend/crash2.py": {
+    "mtime": 1781544137.3625886,
+    "ast_hash": "e0e200ff6b856642abc8b64a0ae238f0",
+    "semantic_hash": ""
+  },
+  "backend/crash3.py": {
+    "mtime": 1781544466.6166418,
+    "ast_hash": "87a17e978b4d1e0b2e1331c5897301c9",
+    "semantic_hash": ""
+  },
+  "backend/crash4.py": {
+    "mtime": 1781544493.5496318,
+    "ast_hash": "709949d60839320049c072e7cb38d712",
+    "semantic_hash": ""
+  },
+  "backend/crash5.py": {
+    "mtime": 1781544559.5577352,
+    "ast_hash": "0ac016fefa6b6755dfc3d1ef9fba496a",
+    "semantic_hash": ""
+  },
+  "backend/crash6.py": {
+    "mtime": 1781544592.7561147,
+    "ast_hash": "a2136fa4e2f5f1d279aa5b59f1a9d2a4",
+    "semantic_hash": ""
+  },
+  "backend/crash7.py": {
+    "mtime": 1781544624.4307172,
+    "ast_hash": "6b3d11a3680519b992ede8fd1edcb5c2",
+    "semantic_hash": ""
+  },
+  "backend/find_crash.py": {
+    "mtime": 1781543993.9608078,
+    "ast_hash": "90c902edff725328c83e6368a2c7b982",
+    "semantic_hash": ""
+  },
+  "backend/test_load.py": {
+    "mtime": 1781543664.2944224,
+    "ast_hash": "44597b87cc6d0cebd2d204471c673766",
+    "semantic_hash": ""
+  },
+  "backend/verify_models.py": {
+    "mtime": 1781543443.6500714,
+    "ast_hash": "f99337b6e657108f653032e6cec0cdba",
     "semantic_hash": ""
   }
 }
