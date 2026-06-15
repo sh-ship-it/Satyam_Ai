@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "backend/app/config.py": {
-    "mtime": 1781527825.646194,
-    "ast_hash": "f9a785042fef732214584b2ba39a90e4",
+    "mtime": 1781528457.230495,
+    "ast_hash": "a6c17ec4c12330e58b3e2db177ab6b97",
     "semantic_hash": ""
   },
   "backend/app/core/__init__.py": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "backend/app/db/session.py": {
-    "mtime": 1781282330.961579,
-    "ast_hash": "3e454785e7349b7a8d111408752b4dff",
+    "mtime": 1781528487.8527029,
+    "ast_hash": "6c5118b66b6e794e3109eb61eceacf31",
     "semantic_hash": ""
   },
   "backend/app/logging_config.py": {
@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1781282330.9435792,
-    "ast_hash": "51e1361ba56d2ae54d2936450535e05f",
+    "mtime": 1781528519.1231084,
+    "ast_hash": "56eec2021b7021776e2cdc2db9e641ff",
     "semantic_hash": ""
   },
   "backend/app/models/__init__.py": {
@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/SettingsDialog.tsx": {
-    "mtime": 1781503366.2381227,
-    "ast_hash": "2a119f3654a578c9c4272ba0bd008c9e",
+    "mtime": 1781528434.890268,
+    "ast_hash": "e3fa2a6b502a15a8bb3a3b9afcd35c57",
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/client.ts": {
-    "mtime": 1781527937.1206708,
-    "ast_hash": "cc237f0c47acef2abe3d5e11a524130b",
+    "mtime": 1781528445.476218,
+    "ast_hash": "c4057eb992f02a89125dea802d12d006",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/example.functions.ts": {
@@ -942,6 +942,11 @@
   "backend/seed/load_seed.sql": {
     "mtime": 1781519633.4527962,
     "ast_hash": "3d63a56322e0690ff16cadf2d0630ba2",
+    "semantic_hash": ""
+  },
+  "backend/app/api/routes/settings.py": {
+    "mtime": 1781528472.6630611,
+    "ast_hash": "da3ab4a00c7a356e4a25d053cd3d7954",
     "semantic_hash": ""
   }
 }
