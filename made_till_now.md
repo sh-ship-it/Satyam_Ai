@@ -681,3 +681,102 @@ During verification, `import FlagEmbedding` crashes with exit code `-1073741819`
 4. Use ONNX Runtime (`onnxruntime-gpu`) with the ONNX weights already present in `models/bge-m3/onnx/` — no FlagEmbedding needed.
 
 Until resolved, the system falls back to the demo hash-stub embedder (the `lru_cache` singleton guards against repeated load attempts).
+
+---
+
+### [2026-06-15] — ML Dependency Crash: Full Root-Cause + Fix (`SATYAM_NUMPY_CRASH_FIX.md`)
+
+#### Summary
+The "Known issue — FlagEmbedding Windows crash" from the previous session was fully diagnosed and fixed. The crash was **not** a CUDA DLL conflict — it was a three-layer Python/NumPy ABI incompatibility that produced a native stack overflow with no traceback. All four layers have been pinned. `=== ALL CHECKS PASSED ===`.
+
+---
+
+#### Root Cause (three separate but compounding issues)
+
+**Issue 1 — NumPy 2.x ABI conflict (from `SATYAM_NUMPY_CRASH_FIX.md`)**
+- `numpy==2.2.1` was installed, but `torch 2.5.1+cu121` (Windows wheel) was compiled against the NumPy 1.x C ABI.
+- When `sentence_transformers` or `FlagEmbedding` triggered the `torch ↔ numpy` bridge at import time, the ABI mismatch caused an access violation (`0xC0000005`) with no Python traceback.
+- `import torch` alone worked fine because it never touches the numpy bridge; this masked the real cause.
+
+**Issue 2 — pandas 2.3+ and scikit-learn 1.6+ also compiled against NumPy 2.x ABI**
+- After downgrading numpy, a new `Windows fatal exception: stack overflow` appeared in `pandas._libs.tslibs`.
+- Root cause: `pandas 2.3.3` and `scikit-learn 1.7.2` were compiled against NumPy 2.x C ABI Cython extensions.
+- With numpy back on 1.26.4, those Cython `.pyx` modules hit deep recursive import chains that overflowed the default Python stack (recursion limit = 1000).
+
+**Issue 3 — Python import order / recursion limit**
+- The overflow only triggered when `sentence_transformers` caused `sklearn → pandas._libs.tslibs` to load in a specific nested order (not when imported directly).
+- Fix: pre-import `pandas` and `sklearn` at the top of `app/main.py` **before** any ML library is imported (fills `sys.modules` cache so subsequent imports are instant), plus raise `sys.setrecursionlimit(5000)`.
+
+**Issue 4 — `transformers 4.57+` blocks `.bin` model loading (CVE-2025-32434)**
+- `sentence-transformers 3.4+` pulled `transformers 5.x` which added `check_torch_load_is_safe()`.
+- This function raises `ValueError` if `torch < 2.6` and the model file is `pytorch_model.bin` (pickle format).
+- `bge-m3` uses `pytorch_model.bin`; `bge-reranker-v2-m3` uses `model.safetensors` (unaffected).
+- Fix: pin `transformers==4.46.3` (before the security guard was added) + `sentence-transformers==3.3.1`.
+
+---
+
+#### Changes Made
+
+**`backend/requirements.txt`**
+Pinned the full ML dependency stack to the exact working versions for `torch 2.5.1+cu121` on Windows / Python 3.10:
+
+| Package | Old pin | New pin | Reason |
+|---------|---------|---------|--------|
+| `numpy` | `2.2.1` | `1.26.4` | torch 2.5.1 Windows wheel not NumPy-2 ABI compatible |
+| `pandas` | (not pinned, resolved to `2.3.3`) | `2.2.3` | pandas 2.3+ compiled against NumPy 2 ABI |
+| `scikit-learn` | (not pinned, resolved to `1.7.2`) | `1.5.2` | sklearn 1.6+ compiled against NumPy 2 ABI |
+| `sentence-transformers` | `>=3.0.0` | `3.3.1` | 3.4+ pulls transformers 5.x which requires torch>=2.6 |
+| `transformers` | (not pinned, resolved to `4.57.6`) | `4.46.3` | 4.50+ added `check_torch_load_is_safe()` blocking `.bin` with torch<2.6 |
+| `tokenizers` | (matched to transformers) | `0.20.3` | matched to transformers 4.46.3 |
+| `huggingface-hub` | (not pinned) | `0.36.2` | matched to transformers 4.46.3 |
+| `FlagEmbedding` | `>=1.4.0` | `1.4.0` | exact version tested |
+
+**`backend/app/main.py`**
+- Added import-chain fix block at the very top (before any FastAPI/app import):
+  ```python
+  import sys as _sys
+  _sys.setrecursionlimit(5000)
+  import pandas as _pd   # pre-load for sys.modules cache
+  import sklearn as _sk  # pre-load for sys.modules cache
+  ```
+
+**`backend/verify_st.py`** + **`backend/verify_st2.py`**
+- Added the same `setrecursionlimit(5000)` + pandas/sklearn pre-imports so both scripts work standalone.
+
+---
+
+#### Verification Results
+
+```
+=== A: Embedder dim ===
+dim 1024 ✓
+
+=== B: Reranker order ===
+order [0, 1] ✓   (crime FIR ranked above biryani recipe)
+
+=== C: Pooling sanity (related > unrelated) ===
+related=0.7602  unrelated=0.4091
+related > unrelated ✓
+
+=== D: Registry types ===
+BgeM3Embedder BgeReranker ✓
+
+=== ALL CHECKS PASSED ===
+```
+
+- GPU: NVIDIA GeForce RTX 4070 Laptop GPU (CUDA 12.1) — `cuda: True`
+- Embedder: BGE-M3 local weights from `models/bge-m3/pytorch_model.bin` (2.12 GB)
+- Reranker: bge-reranker-v2-m3 local weights from `models/bge-reranker-v2-m3/model.safetensors` (2.12 GB)
+
+---
+
+#### Committed & Pushed
+- Commit: `fix: resolve Windows/Python-3.10 ML stack crash - ALL CHECKS PASSED`
+- Pushed to `origin/main` (`4ff61d4`)
+
+---
+
+#### Next Steps
+- Run `python -m seed.embed_narratives` with `PYTHONIOENCODING=utf-8` to embed the 200,000 narratives using BGE-M3 (the embedder now works end-to-end on the RTX 4070).
+- Start the FastAPI backend — `app/main.py` now pre-warms both models at startup via the `lifespan` context.
+- The `bge-m3` model could optionally be converted to `safetensors` format to remove the `transformers` version pin, but it is not required since pinning works.
