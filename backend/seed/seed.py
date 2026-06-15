@@ -48,13 +48,17 @@ async def main() -> None:
                 "INSERT INTO persons(person_id,name,age,gender,role_type) "
                 "VALUES(:person_id,:name,:age,:gender,:role_type) "
                 "ON CONFLICT (person_id) DO NOTHING"), p)
+        import datetime
         for c in data["cases"]:
+            c_data = dict(c)
+            if isinstance(c_data.get("date"), str):
+                c_data["date"] = datetime.date.fromisoformat(c_data["date"])
             await conn.execute(text(
                 "INSERT INTO cases(fir_no,date,ipc_sections,crime_type,status,"
                 "station_id,lat,lng,district,zone,sensitivity_flag,jurisdiction_id) "
                 "VALUES(:fir_no,:date,:ipc_sections,:crime_type,:status,:station_id,"
                 ":lat,:lng,:district,:zone,:sensitivity_flag,:jurisdiction_id) "
-                "ON CONFLICT (fir_no) DO NOTHING"), c)
+                "ON CONFLICT (fir_no) DO NOTHING"), c_data)
         for cp in data["case_persons"]:
             await conn.execute(text(
                 "INSERT INTO case_persons(case_id,person_id,role) "
