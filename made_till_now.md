@@ -1399,3 +1399,113 @@ Addressed silent dropouts for quiet speakers during voice capture, created a bac
 - Ran backend checks and verified all STT endpoints are active.
 
 
+
+---
+
+### [2026-06-16] — Voice Input: Replace Web Audio with Browser SpeechRecognition Only
+
+#### Summary
+Removed the entire Web Audio / backend-STT capture path (`recorder.ts` + `armBackendStt`) from the live-mic flow. The `ScriptProcessorNode` was deprecated, produced no audio frames on most browsers, looped re-creating sessions, and leaked the mic stream. Replaced the recognition `useEffect` with a single clean `webkitSpeechRecognition`-only path that is reliable in Chrome/Edge.
+
+#### Files Changed
+- `frontend/src/components/Shell.tsx` — Recognition `useEffect` fully replaced; removed `startSttSession`, `isBackendSttSupported`, `type SttSession` and `loadEngineSettings` imports (no longer needed here). New effect: secure-context guard, `SpeechRecognition` only, `onaudiostart` log, `armSilence` auto-submits after 1.5 s silence regardless of conversation mode, `onend` guards against restart when turn already submitted, `continuous=false` for reliability with extensions.
+- `recorder.ts` kept on disk; no longer called from live-mic flow.
+
+---
+
+### [2026-06-16] — Settings: Show Downloaded Local Models (BGE-M3 + bge-reranker-v2-m3)
+
+#### Summary
+Settings → Models tab now shows the two downloaded local models with status indicators, and adds "Local LLM (on-prem · GPU)" to the Brain engine and Text-to-SQL engine dropdowns.
+
+#### Files Changed
+- `frontend/src/components/SettingsDialog.tsx`
+  - `EngineSettings.brainEngine` type widened to include `"local"`
+  - `EngineSettings.sqlEngine` type widened to include `"local"`
+  - `LocalToggle` description updated to mention BGE-M3 + bge-reranker + RTX 4070
+  - Added "Downloaded local models" info card showing `bge-m3` (Embedder, 2.12 GB, always on ✅) and `bge-reranker-v2-m3` (Reranker, 2.12 GB, always on ✅)
+  - Brain engine dropdown: added `Local LLM (on-prem · GPU)` option
+  - Text-to-SQL dropdown: added `Local LLM (on-prem · GPU)` option
+- `frontend/src/lib/api/client.ts` — `streamChat` `brain_engine` and `sql_engine` types widened to include `"local"`
+- `backend/app/schemas/chat.py` — `ChatRequest.brain_engine` and `.sql_engine` Literals widened to include `"local"`
+- `frontend/src/lib/i18n.tsx` — Added Kannada translations for local model card strings
+
+---
+
+### [2026-06-16] — Settings Dialog Layout Fix (Overflow)
+
+#### Summary
+Settings dialog was overflowing the screen on the Models tab. Fixed with four targeted Tailwind changes.
+
+#### Files Changed
+- `frontend/src/components/SettingsDialog.tsx`
+  - Outer box: `overflow-hidden` → `flex flex-col`, added `max-h-[calc(100vh-2rem)]`
+  - Body grid: `min-h-[440px]` → `min-h-0 flex-1 overflow-hidden`
+  - Sidebar: added `overflow-y-auto`
+  - Content area: `overflow-auto` → `overflow-y-auto`
+
+---
+
+### [2026-06-16] — Voice Input Self-Healing: No-Frames Watchdog + Auto-Submit + Fallback
+
+#### Summary
+Added a `framesSeen`-based 1200ms watchdog in `recorder.ts` (fires `onError("no-audio-frames")` → Shell's `onError` falls back to browser recognition). Added master 4000ms capture watchdog in Shell. Auto-submit on every final transcript regardless of conversation mode. Surfaced mic failures visibly in the UI. Added `console.debug("[voice] dispatchTurn", ...)`.
+
+#### Files Changed
+- `frontend/src/lib/voice/recorder.ts` — `framesSeen` flag, `frameWatchdog` (1200ms), session-start log, `cleanup()` clears both watchdogs, first frame clears `frameWatchdog`, `maxPeakRef` peak tracking, `hasSignal` logic, `console.debug("[stt] finalize", ...)`.
+- `frontend/src/components/Shell.tsx` — `dispatchTurn` log, auto-submit in both `armBackendStt.onResult` and `startBrowserRecognition.onresult` regardless of `conversationModeRef`, master 4000ms `captureWatchdog`, `startBrowserRecognition` shows actionable error when no SR available.
+
+---
+
+### [2026-06-16] — Network Screen: Fix `BUILTIN_PRESETS` Crash + i18n Duplicate Key + vite.config
+
+#### Summary
+Fixed all 3 remaining TypeScript compile errors, achieving a clean `tsc --noEmit` with zero errors.
+
+| Error | File | Fix |
+|-------|------|-----|
+| `BUILTIN_PRESETS` not defined | `network.tsx:637` | Renamed to `SIM_PRESETS` (the constant defined at the top of the file) |
+| Duplicate `"Role"` key | `i18n.tsx:244` | Removed second occurrence (first at line 200 is correct) |
+| `customViteReactPlugin`/`serverEntry` invalid | `vite.config.ts` | Replaced with `server: { entry: "./src/server.ts" }` per actual schema |
+
+---
+
+### [2026-06-16] — Model Routing Health Check + Startup Log + Gemini Per-Call Debug
+
+#### Summary
+Added `GET /health/models` endpoint, a startup routing log, and per-call debug log in `GeminiLLM`. Verified routing is correct: `GeminiLLM` → brain + SQL, `SarvamTTS` → TTS, `SarvamTranslator` → MT, `SarvamSTT` → STT.
+
+#### Verified output of `curl http://localhost:8000/health/models`
+```json
+{
+  "config": {
+    "model_backend": "api",
+    "brain_engine": "gemini",
+    "sql_engine": "gemini",
+    "voice_backend": "sarvam",
+    "gemini_model": "gemini-2.5-flash",
+    "gemini_key_present": true,
+    "sarvam_key_present": true,
+    "groq_key_present": true
+  },
+  "resolved": {
+    "brain_llm":  "GeminiLLM",
+    "sql_llm":    "GeminiLLM",
+    "translator": "SarvamTranslator",
+    "tts":        "SarvamTTS",
+    "stt":        "SarvamSTT"
+  }
+}
+```
+
+#### Startup log (printed once at every boot)
+```json
+{"brain": "GeminiLLM", "tts": "SarvamTTS", "translator": "SarvamTranslator", "event": "satyam.routing", ...}
+```
+
+#### Files Changed
+| File | Change |
+|------|--------|
+| `backend/app/api/routes/health.py` | Added `GET /health/models` — no auth, returns config + resolved class names |
+| `backend/app/main.py` | Added startup routing log: `satyam.routing` event with `brain`, `tts`, `translator` fields |
+| `backend/app/models/api/gemini.py` | Added `get_logger()` import + `self._log.debug("[brain] GeminiLLM model=%s", self._model)` at top of `complete()` |
