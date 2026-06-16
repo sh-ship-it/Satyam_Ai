@@ -18,6 +18,7 @@ import httpx
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 from app.config import get_settings
+from app.logging_config import get_logger
 
 _BASE = "https://generativelanguage.googleapis.com/v1beta"
 # Safety: high-block only; child-safety stays always-on server-side.
@@ -44,6 +45,7 @@ class GeminiLLM:
         self._key = s.gemini_api_key
         self._model = s.gemini_model
         self._demo = not self._key
+        self._log = get_logger()
 
     def _payload(self, prompt: str, system: str | None, temperature: float,
                  json_schema: dict | None) -> dict:
@@ -63,6 +65,7 @@ class GeminiLLM:
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(min=1, max=8), reraise=True)
     async def complete(self, prompt: str, *, system: str | None = None,
                        temperature: float = 0.0, json_schema: dict | None = None) -> str:
+        self._log.debug("[brain] GeminiLLM model=%s", self._model)
         if self._demo:
             return f"[demo:gemini] {prompt[:240]}"
         url = f"{_BASE}/models/{self._model}:generateContent?key={self._key}"

@@ -53,6 +53,18 @@ async def lifespan(app: FastAPI):
     except Exception as exc:  # noqa: BLE001
         # Non-fatal: demo/api mode has no local weights — log and continue.
         log.info("satyam.model_warmup_skipped", reason=str(exc))
+
+    # ── Log resolved routing so it's visible at every startup ────────────────
+    try:
+        from app.models.registry import get_llm, get_tts, get_translator
+        log.info(
+            "satyam.routing",
+            brain=type(get_llm()).__name__,
+            tts=type(get_tts()).__name__,
+            translator=type(get_translator()).__name__,
+        )
+    except Exception as exc:  # noqa: BLE001
+        log.info("satyam.routing_check_skipped", reason=str(exc))
     yield
     log.info("satyam.shutdown")
 
