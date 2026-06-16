@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1781597833.6959176,
-    "ast_hash": "3024e27854a14be763614359e9da3667",
+    "mtime": 1781607624.8301816,
+    "ast_hash": "97848b59b23b5473ee5703c0fb029325",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -680,7 +680,7 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781605332.8668242,
+    "mtime": 1781605356.216379,
     "ast_hash": "8653e14136e1c868a5d104d6ee419d1b",
     "semantic_hash": ""
   },
@@ -1020,8 +1020,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/voice/recorder.ts": {
-    "mtime": 1781604370.3989184,
-    "ast_hash": "242f2356963be5bc9b29bf43f67cdb54",
+    "mtime": 1781606608.5557501,
+    "ast_hash": "999c65acb5ee0846ea7866342958946a",
     "semantic_hash": ""
   },
   "SATYAM_MEDIARECORDER_STT_AUTODETECT_FIX.md": {
