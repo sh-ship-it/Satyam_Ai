@@ -11,7 +11,17 @@
 BEGIN;
 
 -- wipe any existing rows (idempotent reload)
-TRUNCATE narratives, case_persons, persons, cases, officers, stations RESTART IDENTITY CASCADE;
+-- Drop in FK-safe reverse order: financial children before parents.
+TRUNCATE financial_transactions,
+         financial_accounts,
+         district_socio_economic_indicators,
+         narratives,
+         case_persons,
+         persons,
+         cases,
+         officers,
+         stations
+RESTART IDENTITY CASCADE;
 
 -- 1) stations  (no FKs)
 \copy stations (station_id, station_name, district, "range", latitude, longitude) FROM 'stations.csv' WITH (FORMAT csv, HEADER true)
@@ -30,6 +40,15 @@ TRUNCATE narratives, case_persons, persons, cases, officers, stations RESTART ID
 
 -- 6) narratives  (FK -> cases).  embedding + body_tsv are filled later/generated.
 \copy narratives (narrative_id, case_id, language, body) FROM 'narratives.csv' WITH (FORMAT csv, HEADER true)
+
+-- 7) district_socio_economic_indicators  (no FKs — standalone aggregate table)
+\copy district_socio_economic_indicators (district, population, literacy_rate, urbanization_percent, income_index, unemployment_proxy) FROM 'district_socio_economic_indicators.csv' WITH (FORMAT csv, HEADER true)
+
+-- 8) financial_accounts  (FK -> persons)
+\copy financial_accounts (account_id, person_id, account_type, bank_name, district, opened_date, kyc_risk_level) FROM 'financial_accounts.csv' WITH (FORMAT csv, HEADER true)
+
+-- 9) financial_transactions  (FK -> financial_accounts, cases)
+\copy financial_transactions (transaction_id, from_account_id, to_account_id, amount, transaction_time, channel, case_id, pattern_flag, is_suspicious) FROM 'financial_transactions.csv' WITH (FORMAT csv, HEADER true)
 
 COMMIT;
 
@@ -52,12 +71,18 @@ CREATE INDEX IF NOT EXISTS idx_nar_bodytsv      ON narratives USING GIN (body_ts
 --   (Neon free tier: column is halfvec(1024) -> use halfvec_cosine_ops)
 
 ANALYZE stations; ANALYZE officers; ANALYZE cases; ANALYZE persons; ANALYZE case_persons; ANALYZE narratives;
+ANALYZE district_socio_economic_indicators; ANALYZE financial_accounts; ANALYZE financial_transactions;
 
 -- sanity counts (expect: stations 1074, officers 6949, cases 100000,
---                persons ~416k, case_persons ~416k, narratives 200000)
+--                persons ~416k, case_persons ~416k, narratives 200000,
+--                district_socio_economic_indicators 41,
+--                financial_accounts ~178517, financial_transactions ~179185)
 SELECT 'stations' t, count(*) FROM stations
-UNION ALL SELECT 'officers',     count(*) FROM officers
-UNION ALL SELECT 'cases',        count(*) FROM cases
-UNION ALL SELECT 'persons',      count(*) FROM persons
-UNION ALL SELECT 'case_persons', count(*) FROM case_persons
-UNION ALL SELECT 'narratives',   count(*) FROM narratives;
+UNION ALL SELECT 'officers',                          count(*) FROM officers
+UNION ALL SELECT 'cases',                             count(*) FROM cases
+UNION ALL SELECT 'persons',                           count(*) FROM persons
+UNION ALL SELECT 'case_persons',                      count(*) FROM case_persons
+UNION ALL SELECT 'narratives',                        count(*) FROM narratives
+UNION ALL SELECT 'district_socio_economic_indicators',count(*) FROM district_socio_economic_indicators
+UNION ALL SELECT 'financial_accounts',                count(*) FROM financial_accounts
+UNION ALL SELECT 'financial_transactions',            count(*) FROM financial_transactions;

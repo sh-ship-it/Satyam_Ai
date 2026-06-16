@@ -68,3 +68,65 @@ All crime types (46) · group **and** individual · victimless/suo-moto (drugs, 
 | status Pending Trial | 29.7% | 29.9% |
 
 Regenerate: `python3 generate_dataset.py 100000` · Verify: `python3 verify_dataset.py`
+
+---
+
+## PS4 Extension — district_socio_economic_indicators.csv (41 rows)
+
+District-level synthetic planning indicators. Used **only** for aggregate dashboards and correlation analysis (PS4 Socio-Economic Dashboard, social risk index, correlation scatter charts).
+
+| column | type | description |
+|---|---|---|
+| district | TEXT (PK) | KSP district name (matches districts in `cases.csv`) |
+| population | INTEGER | Synthetic district population estimate |
+| literacy_rate | DOUBLE PRECISION | Adult literacy rate (%) |
+| urbanization_percent | DOUBLE PRECISION | Urban population share (%) |
+| income_index | DOUBLE PRECISION | Relative per-capita income index (0–1) |
+| unemployment_proxy | DOUBLE PRECISION | Unemployment proxy rate (0–1) |
+
+> ⚠️ **IMPORTANT:** These fields are aggregate planning data only. They are **never** used for individual offender risk scoring. Using demographic or socio-economic attributes in individual risk scores is an ethics and fairness violation.
+
+---
+
+## PS7 Extension — financial_accounts.csv (~178,517 rows)
+
+Synthetic financial accounts linked to persons in `persons.csv`. Used for PS7 financial crime / money-trail analysis.
+
+| column | type | description |
+|---|---|---|
+| account_id | BIGINT (PK) | Unique account identifier |
+| person_id | INTEGER (FK → persons) | Account holder |
+| account_type | TEXT | Bank Account / UPI Handle / Wallet / etc. |
+| bank_name | TEXT | Synthetic Karnataka bank name |
+| district | TEXT | Account registration district |
+| opened_date | DATE | Account opening date |
+| kyc_risk_level | TEXT | `Low` / `Medium` / `High` — synthetic KYC risk classification |
+
+---
+
+## PS7 Extension — financial_transactions.csv (~179,185 rows)
+
+Synthetic transactions between financial accounts, optionally linked to criminal cases. Includes rule-based suspicious-pattern flags.
+
+| column | type | description |
+|---|---|---|
+| transaction_id | BIGINT (PK) | Unique transaction identifier |
+| from_account_id | BIGINT (FK → financial_accounts) | Sender account |
+| to_account_id | BIGINT (FK → financial_accounts) | Receiver account |
+| amount | NUMERIC(14,2) | Transaction amount (INR, ≥ 0) |
+| transaction_time | TIMESTAMPTZ | ISO 8601 timestamp |
+| channel | TEXT | Cash Deposit / UPI / NEFT / RTGS / Mobile Banking / etc. |
+| case_id | INTEGER (FK → cases, nullable) | Linked FIR case when the transaction is tied to a case |
+| pattern_flag | TEXT (nullable) | Rule-based suspicious pattern label (see below) |
+| is_suspicious | BOOLEAN | `true` when a pattern flag is present |
+
+### Suspicious pattern flags
+
+| flag | meaning |
+|---|---|
+| `high_value` | Amount > 1 lakh INR |
+| `near_incident_date` | Transaction within ±3 days of a linked case's incident date |
+| `rapid_repeated` | Multiple transactions between the same account pair within 24 hours |
+| `circular_flow` | Funds return to originating account within the same cluster |
+
+> ⚠️ **IMPORTANT:** Pattern flags are **investigative leads only**, not proof of guilt. All data in these tables is fully synthetic. No real financial data was used.

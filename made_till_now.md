@@ -1715,3 +1715,154 @@ Two separate issues fixed: (1) The Early Warning Alerts section always showed 0 
 - `GET /api/forecast/backtest` returns computed PAI=0.47, window="data_rolling_30d", real explanation with actual hit counts.
 - Frontend TypeScript: 0 errors.
 - Forecast screen renders alerts, grouped grid cells, expanded why-drawers, and backtest card from live backend data.
+
+---
+
+### [2026-06-17] — Dataset Schema Extension: PS4 Socio-Economic + PS7 Financial Tables
+
+#### Summary
+Extended the project schema, seed loader, ORM models, and data dictionary to support 3 new CSV files already present in the dataset:
+- `district_socio_economic_indicators.csv` (41 rows — PS4)
+- `financial_accounts.csv` (~178,517 rows — PS7)
+- `financial_transactions.csv` (~179,185 rows — PS7)
+
+All existing tables (stations, officers, cases, persons, case_persons, narratives, rank_access, users, audit_log), RLS policies, RBAC, and audit behavior are unchanged.
+
+---
+
+#### Files Changed
+
+**`backend/migrations/002_schema_v2.sql`**
+- Added DROP statements for the 3 new tables (before persons/cases to respect FK order):
+  ```sql
+  DROP TABLE IF EXISTS financial_transactions CASCADE;
+  DROP TABLE IF EXISTS financial_accounts CASCADE;
+  DROP TABLE IF EXISTS district_socio_economic_indicators CASCADE;
+  ```
+- Added `district_socio_economic_indicators` table (PS4 — aggregate-only, never for individual risk scoring)
+- Added `financial_accounts` table (PS7 — FK → persons, kyc_risk_level CHECK)
+- Added `financial_transactions` table (PS7 — FK → financial_accounts, cases, pattern_flag, is_suspicious)
+- Added 8 new indexes (idx_socio_district, idx_fin_acc_person, idx_fin_acc_district, idx_fin_txn_from/to/case/time/flag)
+- Added `GRANT SELECT` on all 3 new tables to `satyam_app`
+
+**`backend/seed/load_seed.sql`**
+- TRUNCATE statement extended to include all 3 new tables (in FK-safe reverse order: financial_transactions → financial_accounts → district_socio_economic_indicators → ...existing...)
+- Added 3 `\copy` commands for steps 7, 8, 9 (after narratives)
+- Added `ANALYZE` for all 3 new tables
+- Extended sanity-count query to include all 3 new tables with expected counts (41 / ~178k / ~179k)
+
+**`backend/app/db/models.py`**
+- Added `Numeric` to SQLAlchemy imports
+- Added `DistrictSocioEconomicIndicator` ORM model
+- Added `FinancialAccount` ORM model
+- Added `FinancialTransaction` ORM model (with `Numeric(14,2)` for amount, `TIMESTAMPTZ` for transaction_time)
+- `python -m py_compile`: ✅ OK
+
+**`backend/seed/satyam_synthetic_dataset/DATA_DICTIONARY.md`**
+- Added documentation section for `district_socio_economic_indicators.csv` with ethics notice
+- Added documentation section for `financial_accounts.csv`
+- Added documentation section for `financial_transactions.csv` with suspicious-flag table and investigative-leads notice
+
+---
+
+#### Verification Results
+```
+models.py compile:      OK
+Schema DROP statements: 3 new tables ✅
+Schema CREATE tables:   3 new tables ✅  
+Schema indexes:         8 new indexes ✅
+Schema grants:          3 new GRANT SELECT ✅
+load_seed.sql TRUNCATE: includes all 3 new tables ✅
+load_seed.sql \copy:    3 new copy commands ✅
+ORM classes:            DistrictSocioEconomicIndicator, FinancialAccount, FinancialTransaction ✅
+```
+
+#### After loading, expected row counts
+| Table | Expected |
+|-------|---------|
+| district_socio_economic_indicators | 41 |
+| financial_accounts | 178,517 |
+| financial_transactions | 179,185 |
+
+#### Ethics notes preserved in code
+- `district_socio_economic_indicators` docstring: "never use for individual offender risk scoring"
+- `financial_transactions` docstring: "investigative leads only, not proof of guilt"
+- Both documented in DATA_DICTIONARY.md with ⚠️ notices
+
+---
+
+### [2026-06-17] — PS4/PS7 Tables: Local + Neon Migration + Data Load
+
+#### Summary
+Applied migration 003 and loaded the 3 new CSV files to both databases. Created a reusable Python loader script.
+
+---
+
+#### New file: `backend/migrations/003_add_ps4_ps7_tables.sql`
+A standalone, idempotent migration (uses `CREATE TABLE IF NOT EXISTS`, `CREATE INDEX IF NOT EXISTS`, `ON CONFLICT DO NOTHING`) that can be safely applied to any database that already has `002_schema_v2` running. Does not drop or truncate existing data.
+
+#### New file: `backend/seed/load_new_tables.py`
+Python script using asyncpg to load the 3 new CSV files into Neon and/or local PostgreSQL.
+- Reads connection strings from `backend/.env` (SEED_DATABASE_URL for Neon, hardcoded localhost for local)
+- Batches of 5,000 rows with progress output
+- Runs FK verification after load (orphan count must be 0)
+- Usage: `python seed/load_new_tables.py --db both|neon|local`
+
+---
+
+#### Migration Results
+
+| Database | Action | Result |
+|----------|--------|--------|
+| **Local PostgreSQL 17** | `003_add_ps4_ps7_tables.sql` applied | ✅ All 3 tables created |
+| **Local PostgreSQL 17** | Data loaded via `load_new_tables.py` | ✅ socio=41, accounts=178,517, transactions=179,185 |
+| **Local PostgreSQL 17** | FK checks | ✅ All 0 orphans |
+| **Neon cloud** | `003_add_ps4_ps7_tables.sql` applied | ✅ All 3 tables created |
+| **Neon cloud** | `district_socio_economic_indicators` | ✅ 41 rows loaded |
+| **Neon cloud** | `financial_accounts` + `financial_transactions` | ⚠️ 0 rows — Neon free-tier 512 MB storage cap exceeded |
+
+#### Neon storage note
+The Neon free-tier project is at capacity (512 MB limit). The `financial_accounts` (~178k rows) and `financial_transactions` (~179k rows) tables were created on Neon but could not be populated. Both tables are fully loaded on **local PostgreSQL 17**.
+
+**For the datathon demo:** Switch to "Local PostgreSQL 17" in Settings → Models → Database source to access the full financial dataset. The PS4 socio dashboard works on both databases (41 rows is tiny).
+
+**To load financial data into Neon:** Upgrade to Neon Pro/Launch tier, then re-run `python seed/load_new_tables.py --db neon`.
+
+---
+
+### [2026-06-17] — Neon Cloud: Reseed with 60% Dataset to Free Storage Space
+
+#### Problem
+Neon free tier was at 512 MB capacity. The financial tables (PS7) couldn't be loaded. Root cause: `narratives` alone occupied 357 MB (200k rows × 2 languages × long text bodies).
+
+#### Solution
+Created `backend/seed/load_neon_60pct.py` — truncates Neon and reloads 60% of every table deterministically (rows where `index % 10 < 6`). FK-safe filtering ensures referential integrity: officers only from loaded stations, cases only from loaded stations, case_persons only for loaded case+person pairs, financial accounts only for loaded persons, financial transactions only where both account IDs are loaded.
+
+#### Final Neon row counts after reseed
+
+| Table | Rows | Notes |
+|-------|------|-------|
+| stations | 646 | 60% of 1,074 |
+| officers | 4,224 | filtered to loaded stations |
+| cases | 35,993 | ~60% of 100k |
+| persons | 249,972 | 60% of ~416k |
+| case_persons | 90,496 | filtered to loaded case+person pairs |
+| narratives | 71,986 | 2 per loaded case |
+| district_socio_economic_indicators | 41 | 100% (only 41 rows) |
+| financial_accounts | 64,127 | 60% of loaded persons |
+| financial_transactions | 16,353 | 60% filtered to loaded accounts |
+
+#### Storage
+- **Before:** ~480+ MB (hitting 512 MB cap)
+- **After:** **192 MB** (320 MB free, 62% headroom)
+
+#### FK verification
+- orphan accounts→persons: 0 ✅
+- orphan txn→accounts: 0 ✅
+- orphan txn→cases: 0 ✅
+
+#### New file
+`backend/seed/load_neon_60pct.py` — reusable, idempotent. Re-run any time to refresh Neon from local CSVs.
+
+#### Local PostgreSQL 17
+Unchanged — still has full 100% dataset (178,517 accounts, 179,185 transactions, all 100k cases).

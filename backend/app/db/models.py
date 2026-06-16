@@ -10,7 +10,7 @@ from typing import Optional
 
 from sqlalchemy import (
     BigInteger, Boolean, Date, DateTime, Float, ForeignKey,
-    Integer, SmallInteger, String, Text, UniqueConstraint,
+    Integer, Numeric, SmallInteger, String, Text, UniqueConstraint,
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
@@ -165,3 +165,55 @@ class AuditLog(Base):
     at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=_now)
     prev_hash: Mapped[Optional[str]] = mapped_column(Text)
     row_hash: Mapped[str] = mapped_column(Text)
+
+
+# ---------------------------------------------------------------------------
+# PS4 — Socio-economic indicators (aggregate / planning only)
+# IMPORTANT: never use for individual offender risk scoring
+# ---------------------------------------------------------------------------
+
+class DistrictSocioEconomicIndicator(Base):
+    __tablename__ = "district_socio_economic_indicators"
+
+    district:              Mapped[str]            = mapped_column(Text, primary_key=True)
+    population:            Mapped[Optional[int]]   = mapped_column(Integer)
+    literacy_rate:         Mapped[Optional[float]] = mapped_column(Float)
+    urbanization_percent:  Mapped[Optional[float]] = mapped_column(Float)
+    income_index:          Mapped[Optional[float]] = mapped_column(Float)
+    unemployment_proxy:    Mapped[Optional[float]] = mapped_column(Float)
+
+
+# ---------------------------------------------------------------------------
+# PS7 — Financial accounts (synthetic, for money-trail analysis)
+# ---------------------------------------------------------------------------
+
+class FinancialAccount(Base):
+    __tablename__ = "financial_accounts"
+
+    account_id:     Mapped[int]            = mapped_column(BigInteger, primary_key=True)
+    person_id:      Mapped[int]            = mapped_column(ForeignKey("persons.person_id", ondelete="CASCADE"))
+    account_type:   Mapped[str]            = mapped_column(Text)
+    bank_name:      Mapped[str]            = mapped_column(Text)
+    district:       Mapped[Optional[str]]  = mapped_column(Text)
+    opened_date:    Mapped[Optional[dt.date]] = mapped_column(Date)
+    kyc_risk_level: Mapped[Optional[str]]  = mapped_column(Text)  # Low | Medium | High
+
+
+# ---------------------------------------------------------------------------
+# PS7 — Financial transactions (synthetic, pattern-flagged)
+# pattern_flag values: high_value | near_incident_date | rapid_repeated | circular_flow
+# These are investigative leads, NOT proof of guilt.
+# ---------------------------------------------------------------------------
+
+class FinancialTransaction(Base):
+    __tablename__ = "financial_transactions"
+
+    transaction_id:   Mapped[int]             = mapped_column(BigInteger, primary_key=True)
+    from_account_id:  Mapped[int]             = mapped_column(ForeignKey("financial_accounts.account_id", ondelete="CASCADE"))
+    to_account_id:    Mapped[int]             = mapped_column(ForeignKey("financial_accounts.account_id", ondelete="CASCADE"))
+    amount            = mapped_column(Numeric(14, 2), nullable=False)
+    transaction_time: Mapped[dt.datetime]     = mapped_column(DateTime(timezone=True))
+    channel:          Mapped[str]             = mapped_column(Text)
+    case_id:          Mapped[Optional[int]]   = mapped_column(ForeignKey("cases.case_id", ondelete="SET NULL"))
+    pattern_flag:     Mapped[Optional[str]]   = mapped_column(Text)
+    is_suspicious:    Mapped[bool]            = mapped_column(Boolean, default=False)
