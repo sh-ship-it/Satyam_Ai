@@ -7,6 +7,19 @@ import { useT } from "@/lib/i18n";
 import { api } from "@/lib/api/client";
 import { createPortal } from "react-dom";
 
+type SimParams = { repulsion: number; spring: number; gravity: number; damping: number };
+const SIM_DEFAULTS: SimParams = { repulsion: 18, spring: 0.012, gravity: 0.0020, damping: 0.82 };
+const SIM_PRESETS: Record<string, SimParams> = {
+  Default: SIM_DEFAULTS,
+  Spread:  { repulsion: 36, spring: 0.008, gravity: 0.0010, damping: 0.85 },
+  Tight:   { repulsion: 10, spring: 0.020, gravity: 0.0040, damping: 0.75 },
+};
+const SLIDER_META = [
+  { key: "repulsion", label: "Repulsion", min: 0,  max: 60,   step: 1 },
+  { key: "spring",    label: "Spring",    min: 0,  max: 0.05, step: 0.001 },
+  { key: "gravity",   label: "Gravity",   min: 0,  max: 0.01, step: 0.0001 },
+  { key: "damping",   label: "Damping",   min: 0,  max: 1,    step: 0.01 },
+] as const;
 
 export const Route = createFileRoute("/network")({
   head: () => ({
@@ -119,25 +132,9 @@ function NetworkScreen() {
   }, [NODES, selected, t]);
 
   // ---- Physics tuning state ----
-  const [repulsion, setRepulsion] = useState(18);
-  const [springStrength, setSpringStrength] = useState(0.012);
-  const [centerGravity, setCenterGravity] = useState(0.002);
-  const [damping, setDamping] = useState(0.82);
-  const physicsRef = useRef({ repulsion, springStrength, centerGravity, damping });
-  physicsRef.current = { repulsion, springStrength, centerGravity, damping };
-
-  // ---- Physics presets ----
-  type Preset = { repulsion: number; springStrength: number; centerGravity: number; damping: number };
-  const BUILTIN_PRESETS: Record<string, Preset> = {
-    Default:   { repulsion: 18, springStrength: 0.012, centerGravity: 0.002, damping: 0.82 },
-    Tight:     { repulsion: 8,  springStrength: 0.030, centerGravity: 0.004, damping: 0.88 },
-    Spread:    { repulsion: 42, springStrength: 0.006, centerGravity: 0.001, damping: 0.80 },
-    Floaty:    { repulsion: 26, springStrength: 0.008, centerGravity: 0.0008, damping: 0.94 },
-    Snappy:    { repulsion: 22, springStrength: 0.022, centerGravity: 0.003, damping: 0.70 },
-  };
-  const PRESETS_KEY = "network.physics.presets.v1";
+  const PRESETS_KEY = "fq-network-presets";
   const ACTIVE_KEY = "network.physics.active.v1";
-  const [userPresets, setUserPresets] = useState<Record<string, Preset>>(() => {
+  const [userPresets, setUserPresets] = useState<Record<string, SimParams>>(() => {
     if (typeof window === "undefined") return {};
     try { return JSON.parse(localStorage.getItem(PRESETS_KEY) || "{}"); } catch { return {}; }
   });
@@ -145,6 +142,24 @@ function NetworkScreen() {
     if (typeof window === "undefined") return "Default";
     return localStorage.getItem(ACTIVE_KEY) || "Default";
   });
+
+  const allPresets = useMemo(() => ({ ...SIM_PRESETS, ...userPresets }), [userPresets]);
+
+  const [sim, setSim] = useState<SimParams>(() => {
+    if (typeof window === "undefined") return SIM_DEFAULTS;
+    try {
+      const active = localStorage.getItem(ACTIVE_KEY) || "Default";
+      const saved = JSON.parse(localStorage.getItem(PRESETS_KEY) || "{}");
+      const combined = { ...SIM_PRESETS, ...saved };
+      if (combined[active]) return combined[active];
+    } catch {}
+    return SIM_DEFAULTS;
+  });
+
+  const physicsRef = useRef<SimParams>(sim);
+  physicsRef.current = sim;
+
+  // ---- Physics presets menu and coordinates ----
   const [presetsOpen, setPresetsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [coords, setCoords] = useState({ top: 0, left: 0 });
@@ -176,15 +191,11 @@ function NetworkScreen() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [presetsOpen, updateCoords]);
-  const allPresets = useMemo(() => ({ ...BUILTIN_PRESETS, ...userPresets }), [userPresets]);
 
   const applyPreset = (name: string) => {
     const p = allPresets[name];
     if (!p) return;
-    setRepulsion(p.repulsion);
-    setSpringStrength(p.springStrength);
-    setCenterGravity(p.centerGravity);
-    setDamping(p.damping);
+    setSim(p);
     setActivePreset(name);
     try { localStorage.setItem(ACTIVE_KEY, name); } catch {}
     setPresetsOpen(false);
@@ -192,11 +203,11 @@ function NetworkScreen() {
   const saveCurrentAsPreset = () => {
     const name = (typeof window !== "undefined" ? window.prompt(t("Preset name"), "") : "")?.trim();
     if (!name) return;
-    if (name in BUILTIN_PRESETS) {
+    if (name in SIM_PRESETS) {
       if (typeof window !== "undefined") window.alert(t("That name is reserved"));
       return;
     }
-    const next = { ...userPresets, [name]: { repulsion, springStrength, centerGravity, damping } };
+    const next = { ...userPresets, [name]: sim };
     setUserPresets(next);
     setActivePreset(name);
     try {
@@ -205,7 +216,7 @@ function NetworkScreen() {
     } catch {}
   };
   const deletePreset = (name: string) => {
-    if (name in BUILTIN_PRESETS) return;
+    if (name in SIM_PRESETS) return;
     const { [name]: _, ...rest } = userPresets;
     setUserPresets(rest);
     try { localStorage.setItem(PRESETS_KEY, JSON.stringify(rest)); } catch {}
@@ -216,12 +227,12 @@ function NetworkScreen() {
     const p = allPresets[activePreset];
     if (!p) return;
     const drift =
-      p.repulsion !== repulsion ||
-      p.springStrength !== springStrength ||
-      p.centerGravity !== centerGravity ||
-      p.damping !== damping;
+      p.repulsion !== sim.repulsion ||
+      p.spring !== sim.spring ||
+      p.gravity !== sim.gravity ||
+      p.damping !== sim.damping;
     if (drift && activePreset !== "Custom") setActivePreset("Custom");
-  }, [repulsion, springStrength, centerGravity, damping, allPresets, activePreset]);
+  }, [sim, allPresets, activePreset]);
 
   // ---- Dynamic simulation state ----
   const nodesRef = useRef(NODES);
@@ -293,7 +304,7 @@ function NetworkScreen() {
         const isSeedA = nodesRef.current.find(n => n.id === a)?.role === "seed";
         const isSeedB = nodesRef.current.find(n => n.id === b)?.role === "seed";
         const rest = isSeedA || isSeedB ? 26 : 22;
-        const k = ph.springStrength * (d - rest);
+        const k = ph.spring * (d - rest);
         const fx = (dx / d) * k;
         const fy = (dy / d) * k;
         A.vx += fx;
@@ -305,8 +316,8 @@ function NetworkScreen() {
       ids.forEach((id) => {
         const n = p[id];
         if (!n) return;
-        n.vx += (50 - n.x) * ph.centerGravity;
-        n.vy += (50 - n.y) * ph.centerGravity;
+        n.vx += (50 - n.x) * ph.gravity;
+        n.vy += (50 - n.y) * ph.gravity;
         n.vx *= ph.damping;
         n.vy *= ph.damping;
         if (n.fx != null && n.fy != null) {
@@ -665,10 +676,25 @@ function NetworkScreen() {
                   document.body
                 )}
               </div>
-              <Slider label={t("Repulsion")} min={0} max={60} step={1} value={repulsion} onChange={setRepulsion} />
-              <Slider label={t("Spring")} min={0} max={0.05} step={0.001} value={springStrength} onChange={setSpringStrength} fmt={(v) => v.toFixed(3)} />
-              <Slider label={t("Gravity")} min={0} max={0.01} step={0.0005} value={centerGravity} onChange={setCenterGravity} fmt={(v) => v.toFixed(4)} />
-              <Slider label={t("Damping")} min={0.5} max={0.99} step={0.01} value={damping} onChange={setDamping} fmt={(v) => v.toFixed(2)} />
+              {SLIDER_META.map(({ key, label, min, max, step }) => {
+                let fmt: ((v: number) => string) | undefined;
+                if (key === "spring") fmt = (v) => v.toFixed(3);
+                else if (key === "gravity") fmt = (v) => v.toFixed(4);
+                else if (key === "damping") fmt = (v) => v.toFixed(2);
+                
+                return (
+                  <Slider
+                    key={key}
+                    label={t(label)}
+                    min={min}
+                    max={max}
+                    step={step}
+                    value={sim[key]}
+                    onChange={(val) => setSim((s) => ({ ...s, [key]: val }))}
+                    fmt={fmt}
+                  />
+                );
+              })}
             </div>
             <div className="ml-auto flex items-center gap-2">
               <div className="flex items-center gap-1.5 rounded-md border border-border bg-muted/40 px-2 py-1 text-[11px] font-medium">
