@@ -1509,3 +1509,75 @@ Added `GET /health/models` endpoint, a startup routing log, and per-call debug l
 | `backend/app/api/routes/health.py` | Added `GET /health/models` — no auth, returns config + resolved class names |
 | `backend/app/main.py` | Added startup routing log: `satyam.routing` event with `brain`, `tts`, `translator` fields |
 | `backend/app/models/api/gemini.py` | Added `get_logger()` import + `self._log.debug("[brain] GeminiLLM model=%s", self._model)` at top of `complete()` |
+
+---
+
+### [2026-06-16] — Voice Input: MediaRecorder → Pure SpeechRecognition + UI Redesign
+
+#### Summary
+Replaced the unreliable MediaRecorder → Sarvam STT loop with direct `webkitSpeechRecognition`. Added a standalone mic-test page. Redesigned the voice panel in Satyam's neobrutalist style.
+
+#### Root Cause of "not hearing me"
+The MediaRecorder path had an infinite failure loop: Sarvam returned an empty transcript for short/quiet audio → "Didn't catch that" → re-armed after 400ms → repeat forever, never falling back. `webkitSpeechRecognition` gives live interim results, is instant, requires no backend roundtrip, and is specifically designed for this use case in Chrome/Edge.
+
+#### Files Changed
+- `frontend/src/components/Shell.tsx`
+  - Recognition `useEffect` fully replaced with pure `SpeechRecognition` path: `continuous=true`, `interimResults=true`, silence auto-submit after 1.5 s, `onspeechstart`/`onaudiostart` hooks, mic-orb tap = force-submit, `unlockAudioPlayback()` called immediately before `rec.start()`.
+  - Removed `startSttSession`, `isBackendSttSupported`, `SttSession` imports from recorder.
+  - `sttSessionRef` type changed to inline `{ stop, cancel }`.
+  - Panel header now shows real-time state: "Listening…" / "🎙 Hearing you…" / "✓ Got it" / "⚠ Error".
+- `frontend/public/mic-test.html` — **new** standalone test page at `/mic-test.html` that exercises `webkitSpeechRecognition` directly, shows all events and errors, useful for diagnosing mic issues without Satyam's code.
+- `frontend/src/lib/voice/recorder.ts` — `handleStop` no longer transcodes to WAV; sends raw webm blob directly. File extension set from actual MIME type.
+- `frontend/src/lib/api/client.ts` — `sttTranscribe` filename set from blob MIME type (`audio.webm`, `audio.ogg`, `audio.mp4`, `audio.wav`).
+- `backend/app/models/api/sarvam.py` — `SarvamSTT.transcribe_with_lang` sniffs magic bytes to set correct MIME type in multipart upload (webm/ogg/wav).
+
+---
+
+### [2026-06-16] — Voice Panel UI Redesign (neobrutalist)
+
+#### Summary
+Replaced the plain blue/white voice panel with Satyam's neobrutalist style.
+
+#### New Layout
+| Section | Content |
+|---------|---------|
+| Header bar | bg-header strip, live status dot (ping=listening, green=speaking, red=error), real-time status text |
+| Mic orb | h-24/w-24, tap-to-stop, animated rings |
+| Waveform | 15 sine-shaped bars that animate while listening, flatten while processing |
+| Conversation toggle | Compact inline button |
+| Settings row | Compact 2-row (Speech output + Rate) with left-aligned labels |
+| Transcript box | nb-shadow-sm border, 3 fixed rows |
+| Action bar | border-t-2 border-foreground, Close button integrated at right |
+
+---
+
+### [2026-06-16] — Bug Fix: "Found no matching records" for "top crimes" queries
+
+#### Summary
+Diagnosed and fixed two issues causing all crime-statistics queries to return "Found no matching records": (1) intent mis-classification by the router, and (2) Gemini 429 rate-limit with no SQL-generation fallback.
+
+#### Root Cause 1 — Router mis-classification
+The word `"about"` was in the `narrative_search` keyword list. A query like "tell me **about** the top crimes in Bengaluru City" matched `narrative_search` → RAG searched the `narratives` table → 0 hits (embeddings are NULL, embedding job never run) → "Found no matching records."
+
+The LLM router prompt also lacked an explicit example distinguishing "top crimes" (sql_query) from "find cases about a robbery" (narrative_search), so Gemini also mis-classified it.
+
+#### Root Cause 2 — Gemini 429 with no SQL fallback
+`generate_sql()` in `text_to_sql.py` had no exception handling — when Gemini hit its free-tier 429 rate limit during SQL generation, the entire request failed with a safety-filter error message instead of falling back to Groq.
+
+#### Files Changed
+- `backend/app/pipeline/prompts.py`
+  - `ROUTER_SYSTEM` rewritten with explicit per-intent descriptions and a concrete example: `"tell me about top crimes" = sql_query, NOT narrative_search`.
+- `backend/app/pipeline/router.py`
+  - `_KEYWORDS` dict: removed `"about"` and `"describe"` from `narrative_search` (too broad); `narrative_search` now only matches explicit narrative/modus patterns.
+  - `_keyword_intent()` rewritten: SQL aggregation signals (`"top "`, `"crime type"`, `"most"`, `"highest"`, `"common crime"`, etc.) checked **before** the keyword loop so they always win.
+- `backend/app/pipeline/tools/text_to_sql.py`
+  - `generate_sql()` now has a try/except that falls back to `get_fallback_llm()` (Groq) when the primary SQL LLM 429s or times out — mirrors the same pattern already used in `_compose()`.
+
+#### Verified
+- "tell me about the top crimes in Bengaluru City" → `sql_query` ✅
+- "top crime types in Mysuru" → `sql_query` ✅
+- "how many theft cases" → `sql_query` ✅
+- "show me the latest FIRs" → `sql_query` ✅
+
+#### Known Limitation
+- `narrative_search` (RAG) will return 0 hits until `python -m seed.embed_narratives` is run to fill the `narratives.embedding` column. This is a Phase 2 GPU job — all other query types (sql_query, hotspot, network) work correctly without it.
