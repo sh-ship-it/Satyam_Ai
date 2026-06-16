@@ -211,8 +211,8 @@ export async function streamChat(
     message: string;
     conversation_id?: string;
     lang?: "en" | "kn";
-    brain_engine?: "gemini" | "groq";
-    sql_engine?: "gemini" | "qwen3-coder-next";
+    brain_engine?: "gemini" | "groq" | "local";
+    sql_engine?: "gemini" | "qwen3-coder-next" | "local";
     voice_backend?: "sarvam" | "google" | "bhashini";
   },
   onEvent: (event: ChatEvent) => void,

@@ -9,8 +9,8 @@ type Tab = "profile" | "models" | "preferences" | "notifications" | "security" |
 export type EngineSettings = {
   apiModelEnabled: boolean;
   localModelEnabled: boolean;
-  brainEngine: "gemini" | "groq";
-  sqlEngine: "gemini" | "qwen3-coder-next";
+  brainEngine: "gemini" | "groq" | "local";
+  sqlEngine: "gemini" | "qwen3-coder-next" | "local";
   voiceBackend: "sarvam" | "google" | "webspeech";
   dbSource: "cloud" | "local";
 };
@@ -84,7 +84,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
       onClick={onClose}
     >
       <div
-        className="w-full max-w-4xl overflow-hidden rounded-[5px] border-2 border-foreground bg-secondary-background nb-shadow-lg"
+        className="w-full max-w-4xl flex flex-col rounded-[5px] border-2 border-foreground bg-secondary-background nb-shadow-lg max-h-[calc(100vh-2rem)] overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -99,9 +99,9 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
           </button>
         </div>
 
-        <div className="grid grid-cols-[200px_1fr] min-h-[440px]">
+        <div className="grid grid-cols-[200px_1fr] min-h-0 flex-1 overflow-hidden">
           {/* Sidebar */}
-          <aside className="border-r-2 border-foreground bg-background p-3">
+          <aside className="border-r-2 border-foreground bg-background p-3 overflow-y-auto">
             <nav className="flex flex-col gap-1.5">
               {tabs.map(({ id, label, icon: Icon }) => {
                 const active = tab === id;
@@ -124,7 +124,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
           </aside>
 
           {/* Content */}
-          <div className="overflow-auto p-6">
+          <div className="overflow-y-auto p-6">
             {tab === "profile" && (
               <Section title={t("Profile")} subtitle={t("Your investigator details")}>
                 <div className="flex items-center gap-4">
@@ -159,11 +159,56 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                     />
                     <ModelToggle
                       label={t("Local model (on-prem)")}
-                      description="Phase 2 — GPU required; auto-falls back to API if unavailable"
+                      description="BGE-M3 embedder + bge-reranker · RTX 4070 · FP16"
                       on={engines.localModelEnabled}
                       onToggle={(v) => updateEngine("localModelEnabled", v)}
                     />
                   </div>
+                </div>
+
+                {/* Local models status card */}
+                <div className="rounded-[5px] border-2 border-foreground bg-background p-3 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <HardDrive className="h-3.5 w-3.5 text-success shrink-0" />
+                    <span className="text-xs font-bold uppercase tracking-wide">{t("Downloaded local models")}</span>
+                  </div>
+                  <div className="space-y-1.5">
+                    {([
+                      {
+                        name: "BGE-M3",
+                        path: "models/bge-m3",
+                        role: t("Embedder — RAG semantic search"),
+                        size: "2.12 GB · FP16 · 1024-dim",
+                        always: true,
+                      },
+                      {
+                        name: "bge-reranker-v2-m3",
+                        path: "models/bge-reranker-v2-m3",
+                        role: t("Reranker — cross-encoder scoring"),
+                        size: "2.12 GB · FP16",
+                        always: true,
+                      },
+                    ]).map((m) => (
+                      <div key={m.name} className="flex items-start justify-between gap-2 rounded-[3px] bg-muted/40 px-2.5 py-2">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[11px] font-bold font-mono text-foreground">{m.name}</span>
+                            {m.always && (
+                              <span className="rounded-[3px] bg-success/15 px-1 py-0.5 text-[9px] font-bold uppercase tracking-wide text-success">
+                                always on
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[10px] text-muted-foreground">{m.role}</div>
+                          <div className="text-[10px] font-mono text-muted-foreground/70">{m.size}</div>
+                        </div>
+                        <div className="h-2 w-2 mt-1 shrink-0 rounded-full bg-success" title="Downloaded" />
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-[10px] text-muted-foreground">
+                    {t("Both models run on the RTX 4070 (8 GB VRAM) and are always active — they are not switchable.")}
+                  </p>
                 </div>
 
                 {/* Brain engine */}
@@ -174,8 +219,9 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                       onChange={(e) => updateEngine("brainEngine", e.target.value as EngineSettings["brainEngine"])}
                       className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
                     >
-                      <option value="gemini">Gemini 2.5 Flash</option>
-                      <option value="groq">Groq (low-latency / fallback)</option>
+                      <option value="gemini">Gemini 2.5 Flash (cloud)</option>
+                      <option value="groq">Groq llama-3.3-70b (cloud · fast)</option>
+                      <option value="local">Local LLM (on-prem · GPU)</option>
                     </select>
                     <span className="text-[10px] text-muted-foreground">chat · slots · routing</span>
                   </div>
@@ -189,10 +235,11 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                       onChange={(e) => updateEngine("sqlEngine", e.target.value as EngineSettings["sqlEngine"])}
                       className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
                     >
-                      <option value="gemini">Gemini 2.5 Flash</option>
+                      <option value="gemini">Gemini 2.5 Flash (cloud)</option>
                       <option value="qwen3-coder-next">qwen3-coder-next (Ollama Cloud)</option>
+                      <option value="local">Local LLM (on-prem · GPU)</option>
                     </select>
-                    <span className="text-[10px] text-muted-foreground">sqlglot guard applies to both</span>
+                    <span className="text-[10px] text-muted-foreground">sqlglot guard applies to all</span>
                   </div>
                 </Row>
 
