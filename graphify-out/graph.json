@@ -4,116 +4,6 @@
   "graph": {},
   "nodes": [
     {
-      "label": "test_stt_api.py",
-      "file_type": "code",
-      "source_file": "backend/test_stt_api.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_test_stt_api",
-      "community": 15,
-      "norm_label": "test_stt_api.py"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "backend/test_stt_api.py",
-      "source_location": "L11",
-      "_origin": "ast",
-      "id": "backend_test_stt_api_main",
-      "community": 15,
-      "norm_label": "main()"
-    },
-    {
-      "label": "recorder.ts",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "voice_recorder",
-      "community": 113,
-      "norm_label": "recorder.ts"
-    },
-    {
-      "label": "SttCallbacks",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L15",
-      "_origin": "ast",
-      "id": "voice_recorder_sttcallbacks",
-      "community": 113,
-      "norm_label": "sttcallbacks"
-    },
-    {
-      "label": "SttSession",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "voice_recorder_sttsession",
-      "community": 113,
-      "norm_label": "sttsession"
-    },
-    {
-      "label": "SttSessionOptions",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "voice_recorder_sttsessionoptions",
-      "community": 113,
-      "norm_label": "sttsessionoptions"
-    },
-    {
-      "label": "isBackendSttSupported()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L46",
-      "_origin": "ast",
-      "id": "voice_recorder_isbackendsttsupported",
-      "community": 113,
-      "norm_label": "isbackendsttsupported()"
-    },
-    {
-      "label": "startSttSession()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L55",
-      "_origin": "ast",
-      "id": "voice_recorder_startsttsession",
-      "community": 113,
-      "norm_label": "startsttsession()"
-    },
-    {
-      "label": "flatten()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L178",
-      "_origin": "ast",
-      "id": "voice_recorder_flatten",
-      "community": 113,
-      "norm_label": "flatten()"
-    },
-    {
-      "label": "downsample()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L187",
-      "_origin": "ast",
-      "id": "voice_recorder_downsample",
-      "community": 113,
-      "norm_label": "downsample()"
-    },
-    {
-      "label": "encodeWav()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L202",
-      "_origin": "ast",
-      "id": "voice_recorder_encodewav",
-      "community": 113,
-      "norm_label": "encodewav()"
-    },
-    {
       "label": "made_till_now.md",
       "file_type": "document",
       "source_file": "made_till_now.md",
@@ -1644,14 +1534,14 @@
       "norm_label": "verification"
     },
     {
-      "label": "[2026-06-16] \u2014 Voice VAD Sensitivity & Fallback Transcription Fix",
+      "label": "[2026-06-16] \u2014 Voice VAD Sensitivity, API Testing Utility & Graphify Analysis",
       "file_type": "document",
       "source_file": "made_till_now.md",
       "source_location": "L1380",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_voice_vad_sensitivity_fallback_transcription_fix",
+      "id": "made_till_now_2026_06_16_voice_vad_sensitivity_api_testing_utility_graphify_analysis",
       "community": 111,
-      "norm_label": "[2026-06-16] \u2014 voice vad sensitivity & fallback transcription fix"
+      "norm_label": "[2026-06-16] \u2014 voice vad sensitivity, api testing utility & graphify analysis"
     },
     {
       "label": "Summary",
@@ -1677,11 +1567,121 @@
       "label": "Verification",
       "file_type": "document",
       "source_file": "made_till_now.md",
-      "source_location": "L1391",
+      "source_location": "L1396",
       "_origin": "ast",
-      "id": "made_till_now_verification_1391",
+      "id": "made_till_now_verification_1396",
       "community": 111,
       "norm_label": "verification"
+    },
+    {
+      "label": "test_stt_api.py",
+      "file_type": "code",
+      "source_file": "backend/test_stt_api.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 15,
+      "norm_label": "test_stt_api.py",
+      "id": "backend_test_stt_api"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "backend/test_stt_api.py",
+      "source_location": "L11",
+      "_origin": "ast",
+      "community": 15,
+      "norm_label": "main()",
+      "id": "backend_test_stt_api_main"
+    },
+    {
+      "label": "recorder.ts",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "recorder.ts",
+      "id": "voice_recorder"
+    },
+    {
+      "label": "SttCallbacks",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L15",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "sttcallbacks",
+      "id": "voice_recorder_sttcallbacks"
+    },
+    {
+      "label": "SttSession",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L24",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "sttsession",
+      "id": "voice_recorder_sttsession"
+    },
+    {
+      "label": "SttSessionOptions",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "sttsessionoptions",
+      "id": "voice_recorder_sttsessionoptions"
+    },
+    {
+      "label": "isBackendSttSupported()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L46",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "isbackendsttsupported()",
+      "id": "voice_recorder_isbackendsttsupported"
+    },
+    {
+      "label": "startSttSession()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L55",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "startsttsession()",
+      "id": "voice_recorder_startsttsession"
+    },
+    {
+      "label": "flatten()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L178",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "flatten()",
+      "id": "voice_recorder_flatten"
+    },
+    {
+      "label": "downsample()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L187",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "downsample()",
+      "id": "voice_recorder_downsample"
+    },
+    {
+      "label": "encodeWav()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L202",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "encodewav()",
+      "id": "voice_recorder_encodewav"
     },
     {
       "label": "SATYAM_MEDIARECORDER_STT_AUTODETECT_FIX.md",
@@ -15896,184 +15896,6 @@
   ],
   "links": [
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/test_stt_api.py",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "backend_test_stt_api",
-      "target": "app_config",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/test_stt_api.py",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "backend_test_stt_api",
-      "target": "backend_test_stt_api_main",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_shell",
-      "target": "voice_recorder"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "voice_recorder",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "voice_recorder",
-      "target": "api_client_stttranscribe"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L183",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "voice_recorder",
-      "target": "voice_recorder_downsample"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L198",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "voice_recorder",
-      "target": "voice_recorder_encodewav"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L174",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "voice_recorder",
-      "target": "voice_recorder_flatten"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L46",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "voice_recorder",
-      "target": "voice_recorder_isbackendsttsupported"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L55",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "voice_recorder",
-      "target": "voice_recorder_startsttsession"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "voice_recorder",
-      "target": "voice_recorder_sttcallbacks"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "voice_recorder",
-      "target": "voice_recorder_sttsession"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L31",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "voice_recorder",
-      "target": "voice_recorder_sttsessionoptions"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_shell",
-      "target": "voice_recorder_sttsession"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_shell",
-      "target": "voice_recorder_isbackendsttsupported"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_shell",
-      "target": "voice_recorder_startsttsession"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L199",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "voice_recorder_encodewav",
-      "target": "voice_recorder_downsample"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "made_till_now.md",
@@ -16370,7 +16192,7 @@
       "source_location": "L1380",
       "weight": 1.0,
       "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_16_voice_vad_sensitivity_fallback_transcription_fix",
+      "target": "made_till_now_2026_06_16_voice_vad_sensitivity_api_testing_utility_graphify_analysis",
       "confidence_score": 1.0
     },
     {
@@ -17609,7 +17431,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1385",
       "weight": 1.0,
-      "source": "made_till_now_2026_06_16_voice_vad_sensitivity_fallback_transcription_fix",
+      "source": "made_till_now_2026_06_16_voice_vad_sensitivity_api_testing_utility_graphify_analysis",
       "target": "made_till_now_changes_1385",
       "confidence_score": 1.0
     },
@@ -17619,7 +17441,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1382",
       "weight": 1.0,
-      "source": "made_till_now_2026_06_16_voice_vad_sensitivity_fallback_transcription_fix",
+      "source": "made_till_now_2026_06_16_voice_vad_sensitivity_api_testing_utility_graphify_analysis",
       "target": "made_till_now_summary_1382",
       "confidence_score": 1.0
     },
@@ -17627,11 +17449,189 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "made_till_now.md",
-      "source_location": "L1391",
+      "source_location": "L1396",
       "weight": 1.0,
-      "source": "made_till_now_2026_06_16_voice_vad_sensitivity_fallback_transcription_fix",
-      "target": "made_till_now_verification_1391",
+      "source": "made_till_now_2026_06_16_voice_vad_sensitivity_api_testing_utility_graphify_analysis",
+      "target": "made_till_now_verification_1396",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/test_stt_api.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_test_stt_api",
+      "target": "app_config"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/test_stt_api.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_test_stt_api",
+      "target": "backend_test_stt_api_main"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_shell",
+      "target": "voice_recorder"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_recorder",
+      "target": "api_client"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_recorder",
+      "target": "api_client_stttranscribe"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L183",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_recorder",
+      "target": "voice_recorder_downsample"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L198",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_recorder",
+      "target": "voice_recorder_encodewav"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L174",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_recorder",
+      "target": "voice_recorder_flatten"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L46",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_recorder",
+      "target": "voice_recorder_isbackendsttsupported"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L55",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_recorder",
+      "target": "voice_recorder_startsttsession"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_recorder",
+      "target": "voice_recorder_sttcallbacks"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_recorder",
+      "target": "voice_recorder_sttsession"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_recorder",
+      "target": "voice_recorder_sttsessionoptions"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_shell",
+      "target": "voice_recorder_sttsession"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_shell",
+      "target": "voice_recorder_isbackendsttsupported"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_shell",
+      "target": "voice_recorder_startsttsession"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/voice/recorder.ts",
+      "source_location": "L199",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_recorder_encodewav",
+      "target": "voice_recorder_downsample"
     },
     {
       "relation": "contains",
@@ -40385,5 +40385,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "9a565f73cf770894909e2aadf5da8b1cc3453e2f"
+  "built_at_commit": "1be50b0eebbd4c05b3947e6f5a07418e22f37368"
 }
