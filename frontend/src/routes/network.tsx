@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { ChevronDown, Maximize2, Download, FileJson, ImageDown, Save, Trash2, Sliders } from "lucide-react";
 import { useT } from "@/lib/i18n";
 import { api } from "@/lib/api/client";
+import { createPortal } from "react-dom";
 
 
 export const Route = createFileRoute("/network")({
@@ -145,6 +146,36 @@ function NetworkScreen() {
     return localStorage.getItem(ACTIVE_KEY) || "Default";
   });
   const [presetsOpen, setPresetsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const [coords, setCoords] = useState({ top: 0, left: 0 });
+
+  const updateCoords = useCallback(() => {
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setCoords({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!presetsOpen) return;
+    updateCoords();
+    window.addEventListener("resize", updateCoords);
+    window.addEventListener("scroll", updateCoords, true);
+    
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPresetsOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    
+    return () => {
+      window.removeEventListener("resize", updateCoords);
+      window.removeEventListener("scroll", updateCoords, true);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [presetsOpen, updateCoords]);
   const allPresets = useMemo(() => ({ ...BUILTIN_PRESETS, ...userPresets }), [userPresets]);
 
   const applyPreset = (name: string) => {
@@ -571,40 +602,48 @@ function NetworkScreen() {
             <div className="hidden xl:flex items-center gap-3 border-l border-border pl-3">
               <div className="relative">
                 <button
+                  ref={triggerRef}
                   onClick={() => setPresetsOpen((v) => !v)}
                   className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2 py-1.5 text-[11px] font-medium hover:bg-muted"
                   title={t("Physics presets")}
                 >
                   <Sliders className="size-3.5" />
-                  <span className="max-w-[90px] truncate">{activePreset}</span>
+                  <span className="max-w-[90px] truncate">{t(activePreset)}</span>
                   <ChevronDown className="size-3" />
                 </button>
-                {presetsOpen && (
+                {presetsOpen && createPortal(
                   <>
-                    <div className="fixed inset-0 z-30" onClick={() => setPresetsOpen(false)} />
-                    <div className="absolute right-0 z-40 mt-1 w-56 rounded-md border border-border bg-popover p-1 shadow-lg">
-                      <div className="px-2 py-1 text-[10px] uppercase tracking-wide text-muted-foreground">{t("Built-in")}</div>
+                    <div className="fixed inset-0 z-[9999]" onClick={() => setPresetsOpen(false)} />
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: `${coords.top + 4}px`,
+                        left: `${coords.left}px`,
+                      }}
+                      className="z-[10000] w-56 max-h-[60vh] overflow-y-auto rounded-[5px] border-2 border-foreground bg-secondary-background p-1 nb-shadow"
+                    >
+                      <div className="px-2 py-1 text-[10px] uppercase tracking-wide text-muted-foreground whitespace-nowrap">{t("Built-in")}</div>
                       {Object.keys(BUILTIN_PRESETS).map((name) => (
                         <button
                           key={name}
                           onClick={() => applyPreset(name)}
-                          className={`flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-xs hover:bg-muted ${activePreset === name ? "bg-muted" : ""}`}
+                          className={`flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-xs hover:bg-muted whitespace-nowrap ${activePreset === name ? "bg-muted" : ""}`}
                         >
-                          <span>{name}</span>
-                          {activePreset === name && <span className="text-[10px] text-muted-foreground">✓</span>}
+                          <span className="truncate">{t(name)}</span>
+                          {activePreset === name && <span className="ml-2 text-[10px] text-muted-foreground shrink-0">✓</span>}
                         </button>
                       ))}
                       {Object.keys(userPresets).length > 0 && (
                         <>
-                          <div className="mt-1 px-2 py-1 text-[10px] uppercase tracking-wide text-muted-foreground">{t("Saved")}</div>
+                          <div className="mt-1 px-2 py-1 text-[10px] uppercase tracking-wide text-muted-foreground whitespace-nowrap">{t("Saved")}</div>
                           {Object.keys(userPresets).map((name) => (
-                            <div key={name} className={`group flex items-center justify-between rounded px-2 py-1.5 text-xs hover:bg-muted ${activePreset === name ? "bg-muted" : ""}`}>
-                              <button onClick={() => applyPreset(name)} className="flex-1 text-left truncate">
-                                {name}
+                            <div key={name} className={`group flex items-center justify-between rounded px-2 py-1.5 text-xs hover:bg-muted whitespace-nowrap ${activePreset === name ? "bg-muted" : ""}`}>
+                              <button onClick={() => applyPreset(name)} className="flex-1 text-left truncate mr-1">
+                                {t(name)}
                               </button>
                               <button
                                 onClick={() => deletePreset(name)}
-                                className="ml-1 rounded p-1 text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-card hover:text-destructive"
+                                className="ml-1 rounded p-1 text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-card hover:text-destructive shrink-0"
                                 title={t("Delete preset")}
                               >
                                 <Trash2 className="size-3" />
@@ -616,13 +655,14 @@ function NetworkScreen() {
                       <div className="my-1 h-px bg-border" />
                       <button
                         onClick={saveCurrentAsPreset}
-                        className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs hover:bg-muted"
+                        className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs hover:bg-muted whitespace-nowrap"
                       >
-                        <Save className="size-3.5" />
-                        {t("Save current as preset…")}
+                        <Save className="size-3.5 shrink-0" />
+                        <span>{t("Save current as preset…")}</span>
                       </button>
                     </div>
-                  </>
+                  </>,
+                  document.body
                 )}
               </div>
               <Slider label={t("Repulsion")} min={0} max={60} step={1} value={repulsion} onChange={setRepulsion} />
