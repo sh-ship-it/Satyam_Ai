@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-16)
 
 ## Corpus Check
-- 196 files · ~99,043 words
+- 196 files · ~98,854 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `55b895b2`
+- Built from commit: `3f7dfa47`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -550,7 +550,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.035) - this node is a cross-community bridge._
 - **Are the 37 inferred relationships involving `Principal` (e.g. with `Any` and `AsyncSession`) actually correct?**
   _`Principal` has 37 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Sarvam AI clients — PRIMARY voice layer (Kannada + English STT/TTS/MT).  Servi`, `Trim to <= limit chars, preferring the last sentence boundary.`, `Saaras v3 speech-to-text. /speech-to-text is multipart/form-data.      Sends l` to the rest of the system?**
+- **What connects `VoiceScreen`, `SCREEN_ROUTES`, `ParsedVoice` to the rest of the system?**
   _731 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.14035087719298245 - nodes in this community are weakly interconnected._

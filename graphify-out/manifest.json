@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1781613816.1776774,
-    "ast_hash": "e8479a50fe6f129a1c46f63abbb0b387",
+    "mtime": 1781626786.5343301,
+    "ast_hash": "b1d48f928b1ed24884570ad3a32b049a",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
