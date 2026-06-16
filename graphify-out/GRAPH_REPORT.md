@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-16)
 
 ## Corpus Check
-- 194 files · ~97,314 words
+- 194 files · ~97,389 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3c210884`
+- Built from commit: `ac8125df`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -143,10 +143,10 @@
   backend/app/core/masking.py → backend/app/core/rbac.py
 - `AsyncSession` --uses--> `Principal`  [INFERRED]
   backend/app/api/deps.py → backend/app/core/rbac.py
-- `tts()` --calls--> `get_tts()`  [INFERRED]
-  backend/app/api/routes/voice.py → backend/app/models/registry.py
-- `stt()` --calls--> `get_stt()`  [INFERRED]
-  backend/app/api/routes/voice.py → backend/app/models/registry.py
+- `Reranker` --uses--> `GoogleTTS`  [INFERRED]
+  backend/app/models/registry.py → backend/app/models/api/google_voice.py
+- `Translator` --uses--> `GoogleTTS`  [INFERRED]
+  backend/app/models/registry.py → backend/app/models/api/google_voice.py
 
 ## Import Cycles
 - 1-file cycle: `backend/app/main.py -> backend/app/main.py`
@@ -498,7 +498,7 @@ Cohesion: 0.16
 Nodes (10): LocalLLM, Local LLM via an OpenAI-compatible server (vLLM / Ollama). DEMO stub.  Point OPE, get_embedder(), get_fallback_llm(), get_llm(), Factory that resolves the configured backend to concrete model instances.  Cache, Return the brain LLM.      Resolution order:       1. Explicit `engine` arg (per, Low-latency fallback lane (always Groq) used on timeout / 429 from primary. (+2 more)
 
 ## Knowledge Gaps
-- **617 isolated node(s):** `0) TL;DR — the real root cause (read this first)`, `1) End-to-end pipeline status (verified against source)`, `External-contract caveats (confirm against your Sarvam dashboard — I cannot call the live API from here)`, `3) The fix — architecture`, `A1. New file — `backend/app/schemas/voice.py`` (+612 more)
+- **617 isolated node(s):** `VoiceScreen`, `SCREEN_ROUTES`, `ParsedVoice`, `ChatMessage`, `Conversation` (+612 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -506,14 +506,14 @@ Nodes (10): LocalLLM, Local LLM via an OpenAI-compatible server (vLLM / Ollama).
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 42` to `Community 3`?**
-  _High betweenness centrality (0.094) - this node is a cross-community bridge._
+  _High betweenness centrality (0.090) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 42` to `Community 16`, `Community 33`, `Community 116`, `Community 5`?**
-  _High betweenness centrality (0.037) - this node is a cross-community bridge._
+  _High betweenness centrality (0.046) - this node is a cross-community bridge._
 - **Are the 37 inferred relationships involving `Principal` (e.g. with `Any` and `AsyncSession`) actually correct?**
   _`Principal` has 37 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `get_settings()` (e.g. with `get_url()` and `main()`) actually correct?**
   _`get_settings()` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `0) TL;DR — the real root cause (read this first)`, `1) End-to-end pipeline status (verified against source)`, `External-contract caveats (confirm against your Sarvam dashboard — I cannot call the live API from here)` to the rest of the system?**
+- **What connects `Google Cloud voice adapters (API-key auth, REST).  TextToSpeech  → https://tex`, `Google Cloud Text-to-Speech. Returns MP3 audio bytes.`, `Google Cloud Speech-to-Text. Expects WEBM/Opus audio (MediaRecorder default).` to the rest of the system?**
   _725 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.03389830508474576 - nodes in this community are weakly interconnected._
