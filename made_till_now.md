@@ -1053,3 +1053,80 @@ muted during `processing` and `speaking` to prevent echo.
 
 #### Verification
 - `npx tsc --noEmit --skipLibCheck` — 0 new errors (3 pre-existing unrelated errors in i18n.tsx, network.tsx, vite.config.ts remain unchanged).
+
+---
+
+### [2026-06-16] — Voice Pipeline Fix: Route TTS/STT through Sarvam + Google Provider (SATYAM_VOICE_PIPELINE_SARVAM_FIX.md)
+
+#### Summary
+Wired the complete voice lane end-to-end. The frontend was using the browser's Web Speech API
+(`window.speechSynthesis`) for all spoken output — Sarvam was fully built in the backend but
+completely unreachable (no HTTP endpoint, no frontend client call). This session:
+- Created a `/voice` router on the backend exposing TTS, STT, and MT.
+- Added a Google Cloud voice adapter alongside Sarvam.
+- Created a provider-aware frontend TTS library that reads the Settings choice at call time.
+- Swapped both `speak()` (console.tsx) and `speakText()` (Shell.tsx) to use the new library.
+- Added a three-way voice picker (Sarvam / Google / Web Speech) to the Settings → Models tab.
+
+---
+
+#### Root Cause (per spec diagnosis)
+The browser Web Speech API on Chrome/Edge uses Google's online neural voices, which sounded
+like "Gemini speaking". No Gemini API key was involved — just the browser's built-in synthesis.
+Sarvam was configured and implemented but had no HTTP endpoint and no frontend caller.
+
+---
+
+#### New Files
+
+| File | Purpose |
+|------|---------|
+| `backend/app/schemas/voice.py` | Pydantic schemas: `TTSRequest`, `TTSResponse`, `STTResponse`, `TranslateRequest`, `TranslateResponse` |
+| `backend/app/api/routes/voice.py` | FastAPI router: `POST /voice/tts`, `POST /voice/stt`, `POST /voice/translate`. Guarded by `Permission.CHAT` (clearance ≥ 1). Provider-agnostic via registry. |
+| `backend/app/models/api/google_voice.py` | `GoogleTTS` (Cloud TTS → MP3) + `GoogleSTT` (Cloud STT). API-key auth. Demo-safe when key is empty. |
+| `frontend/src/lib/voice/tts.ts` | Provider-aware TTS library. Reads `loadEngineSettings().voiceBackend`. Routes `sarvam`/`google` to backend `/voice/tts`; `webspeech` to browser directly. Per-phrase cache (credit-safe). Browser fallback on any error. `speakViaSarvam` alias for back-compat. |
+
+---
+
+#### Modified Files
+
+**Backend:**
+- `backend/app/main.py` — Added `voice` import + `app.include_router(voice.router, prefix="/voice")`.
+- `backend/app/config.py` — Widened `voice_backend` Literal to include `"google"`. Added `google_tts_api_key` + `google_tts_voice` settings.
+- `backend/app/models/registry.py` — Added `google` branch in `get_tts()` and `get_stt()`. Widened type hints to `Literal["sarvam", "google", "bhashini", "local"]`.
+- `backend/.env.example` — Added `GOOGLE_TTS_API_KEY`, `GOOGLE_TTS_VOICE`, updated `VOICE_BACKEND` comment.
+
+**Frontend:**
+- `frontend/src/lib/api/client.ts` — Added `TtsResult`, `SttResult` types; `ttsSynthesize()` (with `backend` param); `sttTranscribe()` (multipart FormData, no JSON wrapper). Widened `streamChat` `voice_backend` to include `"google"`.
+- `frontend/src/routes/console.tsx` — Added `speakViaSarvam` import. Replaced `speak()` body: now calls `speakViaSarvam(text, lang, rate, { onStart, onEnd })`. Same `satyam:ai-state` contract preserved.
+- `frontend/src/components/Shell.tsx` — Added `speakViaSarvam`, `cancelSpeech`, `isSpeechActive` imports. `speakText()` now calls `speakViaSarvam`. Speech-end poll uses `isSpeechActive()` (tracks backend audio clip, not just `speechSynthesis`). `stopConversation()` calls `cancelSpeech()`. "Stop speech" button calls `cancelSpeech()`.
+- `frontend/src/components/SettingsDialog.tsx` — `EngineSettings.voiceBackend` widened to `"sarvam" | "google" | "webspeech"`. Old `<select>` replaced with three-button card picker (Sarvam API / Google API / Web Speech API).
+- `frontend/src/lib/i18n.tsx` — Added Kannada translations for `"Voice (Text-to-Speech)"`, `"Which engine speaks replies aloud."`, `"Best Kannada (default)"`, `"Cloud Neural voices"`, `"Browser, offline"`.
+
+---
+
+#### Architecture: Provider-Agnostic Bridge
+
+```
+Browser speak() → speakViaSarvam() → reads Settings.voiceBackend
+  sarvam/google → POST /voice/tts → registry.get_tts(backend) → SarvamTTS / GoogleTTS
+  webspeech     → window.speechSynthesis (no backend call)
+  any error     → browser fallback (never stalls the conversation loop)
+```
+
+- MIME: Sarvam/Bhashini → `audio/wav`; Google → `audio/mpeg`. Both decoded by `<audio>`.
+- Cache: per `(provider, lang, text)` → object URLs. Repeated phrases never re-bill.
+- `cancelSpeech()` stops both the backend audio element and browser synthesis.
+- `isSpeechActive()` checks both so the mic re-open poll is accurate.
+- `webspeech` is rejected by the backend (Pydantic Literal) — browser-only, defence in depth.
+
+---
+
+#### Verification
+- `npx tsc --noEmit --skipLibCheck` — 0 new errors (same 3 pre-existing).
+- Backend routes confirm: `POST /voice/tts`, `POST /voice/stt`, `POST /voice/translate`.
+- With `SARVAM_API_KEY` set: `/voice/tts` returns `provider: "SarvamTTS"`, WAV audio.
+- With `GOOGLE_TTS_API_KEY` set and Google selected: returns `provider: "GoogleTTS"`, MP3 audio.
+- With empty keys: demo stub → `audio.onerror` → browser fallback, loop continues.
+- Settings → Models → Voice picker: three cards, Sarvam default. Persists to localStorage.
+- Conversation loop unchanged: `satyam:ai-state` contract (thinking→speaking→done) preserved.

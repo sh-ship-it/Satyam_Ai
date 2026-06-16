@@ -11,7 +11,7 @@ export type EngineSettings = {
   localModelEnabled: boolean;
   brainEngine: "gemini" | "groq";
   sqlEngine: "gemini" | "qwen3-coder-next";
-  voiceBackend: "sarvam" | "bhashini";
+  voiceBackend: "sarvam" | "google" | "webspeech";
   dbSource: "cloud" | "local";
 };
 
@@ -196,20 +196,36 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                   </div>
                 </Row>
 
-                {/* Voice backend */}
-                <Row label={t("Voice backend")}>
-                  <div className="flex flex-col items-end gap-0.5">
-                    <select
-                      value={engines.voiceBackend}
-                      onChange={(e) => updateEngine("voiceBackend", e.target.value as EngineSettings["voiceBackend"])}
-                      className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
-                    >
-                      <option value="sarvam">Sarvam (Bulbul v3 TTS · Saaras v2 STT)</option>
-                      <option value="bhashini">Bhashini (govt · free · no credit cap)</option>
-                    </select>
-                    <span className="text-[10px] text-muted-foreground">STT · TTS · translation</span>
+                {/* Voice provider — three-way picker */}
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-foreground">{t("Voice (Text-to-Speech)")}</label>
+                  <p className="text-xs text-muted-foreground">{t("Which engine speaks replies aloud.")}</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {([
+                      { id: "sarvam" as const, label: "Sarvam API", hint: t("Best Kannada (default)") },
+                      { id: "google" as const, label: "Google API", hint: t("Cloud Neural voices") },
+                      { id: "webspeech" as const, label: "Web Speech API", hint: t("Browser, offline") },
+                    ]).map((opt) => (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => updateEngine("voiceBackend", opt.id)}
+                        className={
+                          "rounded-[5px] border-2 border-foreground px-3 py-2 text-left text-xs font-bold transition hover:translate-x-[2px] hover:translate-y-[2px] " +
+                          (engines.voiceBackend === opt.id
+                            ? "bg-primary text-primary-foreground nb-shadow-sm"
+                            : "bg-secondary-background text-foreground")
+                        }
+                      >
+                        <span className="flex items-center gap-1">
+                          {engines.voiceBackend === opt.id && <Check className="h-3 w-3" />}
+                          {opt.label}
+                        </span>
+                        <span className="mt-0.5 block font-normal text-[10px] opacity-70">{opt.hint}</span>
+                      </button>
+                    ))}
                   </div>
-                </Row>
+                </div>
 
                 {/* Database source */}
                 <div className="space-y-2">

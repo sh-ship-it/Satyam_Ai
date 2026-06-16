@@ -9,6 +9,7 @@ import {
 import { useT, useI18n } from "@/lib/i18n";
 import { streamChat, type ChatEvent, api, type StationRow } from "@/lib/api/client";
 import { CrimeMap, type Hotspot } from "@/components/CrimeMap";
+import { speakViaSarvam } from "@/lib/voice/tts";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -248,22 +249,15 @@ function Console() {
       window.dispatchEvent(new CustomEvent("satyam:ai-state", { detail: { state } }));
     // Only voice turns participate in the conversation loop.
     if (!opts?.speak) return;
-    if (typeof window === "undefined" || !("speechSynthesis" in window) || !text.trim()) {
-      emit("done"); // nothing to say — hand the turn back so the mic re-opens
-      return;
-    }
-    try {
-      window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = (opts?.lang || "").toLowerCase().startsWith("kn") ? "kn-IN" : "en-IN";
-      utter.rate = opts?.rate ?? 1;
-      utter.onstart = () => emit("speaking");
-      utter.onend = () => emit("done");
-      utter.onerror = () => emit("done");
-      window.speechSynthesis.speak(utter);
-    } catch {
-      emit("done");
-    }
+    const lang: "en" | "kn" =
+      (opts?.lang || "").toLowerCase().startsWith("kn") ? "kn" : "en";
+    // Sarvam Bulbul (or the selected provider) via backend; browser voice is the
+    // automatic fallback. The ai-state contract (speaking/done) is preserved
+    // exactly, so the hands-free conversation loop keeps working unchanged.
+    void speakViaSarvam(text, lang, opts?.rate ?? 1, {
+      onStart: () => emit("speaking"),
+      onEnd: () => emit("done"),
+    });
   }
 
   async function sendMessage(text: string, opts?: { speak?: boolean; lang?: string; rate?: number }) {

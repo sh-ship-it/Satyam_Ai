@@ -20,7 +20,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import audit, auth, cases, chat, health
 from app.api.routes import map as map_routes
-from app.api.routes import network, reports, settings as settings_routes
+from app.api.routes import network, reports, settings as settings_routes, voice
 from app.config import get_settings
 from app.logging_config import configure_logging, get_logger
 
@@ -82,6 +82,7 @@ def create_app() -> FastAPI:
     app.include_router(reports.router, prefix="/reports", tags=["reports"])
     app.include_router(audit.router, prefix="/audit", tags=["audit"])
     app.include_router(settings_routes.router, prefix="/settings/db-source", tags=["settings"])
+    app.include_router(voice.router, prefix="/voice", tags=["voice"])
     return app
 
 

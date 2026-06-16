@@ -152,7 +152,39 @@ export const api = {
   },
 };
 
-// --- chat streaming (Server-Sent Events) ---
+export type TtsResult = { audio_base64: string; mime: string; provider: string };
+export type SttResult = { transcript: string; provider: string };
+
+/** Synthesize speech via the backend voice provider (Sarvam by default). */
+export async function ttsSynthesize(
+  text: string,
+  lang: "en" | "kn",
+  backend?: "sarvam" | "google" | "bhashini",
+): Promise<TtsResult> {
+  return request<TtsResult>("/voice/tts", {
+    method: "POST",
+    body: JSON.stringify({ text, lang, backend }),
+  });
+}
+
+/** Transcribe a recorded audio blob via the backend voice provider. */
+export async function sttTranscribe(
+  audio: Blob,
+  lang: "en" | "kn",
+): Promise<SttResult> {
+  const fd = new FormData();
+  fd.append("file", audio, "audio.webm");
+  fd.append("lang", lang);
+  const token = getAuthToken();
+  // No content-type header — browser sets the multipart boundary.
+  const res = await fetch(`${API_BASE}/voice/stt`, {
+    method: "POST",
+    headers: token ? { authorization: `Bearer ${token}` } : {},
+    body: fd,
+  });
+  if (!res.ok) throw new ApiError(res.status, `STT failed: ${res.status}`);
+  return (await res.json()) as SttResult;
+}
 // The backend streams grounded answers token-by-token over SSE.
 export type ChatEvent =
   | { type: "token"; text: string }
@@ -169,7 +201,7 @@ export async function streamChat(
     lang?: "en" | "kn";
     brain_engine?: "gemini" | "groq";
     sql_engine?: "gemini" | "qwen3-coder-next";
-    voice_backend?: "sarvam" | "bhashini";
+    voice_backend?: "sarvam" | "google" | "bhashini";
   },
   onEvent: (event: ChatEvent) => void,
   signal?: AbortSignal,

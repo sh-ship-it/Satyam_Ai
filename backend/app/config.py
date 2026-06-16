@@ -44,10 +44,13 @@ class Settings(BaseSettings):
     #   qwen3-coder-next → Ollama Cloud (qwen3-coder-next, 80B MoE / 3B active)
     sql_engine: Literal["gemini", "qwen3-coder-next"] = "gemini"
 
-    # VOICE_BACKEND: which voice provider handles STT / TTS.
-    #   sarvam   → Sarvam (Bulbul v3 TTS, Saaras v3 STT) — primary
+    # VOICE_BACKEND: server-side default voice provider for STT / TTS.
+    #   sarvam   → Sarvam (Bulbul v3 TTS, Saaras v3 STT) — primary / default
+    #   google   → Google Cloud Text-to-Speech / Speech-to-Text
     #   bhashini → Bhashini (govt, free, fallback)
-    voice_backend: Literal["sarvam", "bhashini"] = "sarvam"
+    # NOTE: "webspeech" is a browser-only provider and is intentionally NOT a
+    # server value — the frontend handles it client-side and never calls /voice.
+    voice_backend: Literal["sarvam", "google", "bhashini"] = "sarvam"
 
     # Gemini
     gemini_api_key: str = ""
@@ -59,6 +62,10 @@ class Settings(BaseSettings):
 
     # Sarvam (primary voice — Bulbul v3 TTS, Saaras v3 STT, Sarvam Translate MT)
     sarvam_api_key: str = ""
+
+    # Google Cloud voice (Text-to-Speech + Speech-to-Text REST, API-key auth)
+    google_tts_api_key: str = ""
+    google_tts_voice: str = ""  # optional e.g. "en-IN-Neural2-A"; blank = language-default
 
     # Bhashini (fallback voice — govt, free, no credit cap)
     bhashini_api_key: str = ""

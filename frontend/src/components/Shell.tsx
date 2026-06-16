@@ -22,6 +22,7 @@ import { DarkModeToggle } from "./DarkModeToggle";
 import { SettingsDialog } from "./SettingsDialog";
 import { ProfileMenu } from "./ProfileMenu";
 import { useI18n } from "@/lib/i18n";
+import { speakViaSarvam, cancelSpeech, isSpeechActive } from "@/lib/voice/tts";
 
 type VoiceScreen = { to: string; words: RegExp };
 const SCREEN_ROUTES: VoiceScreen[] = [
@@ -163,7 +164,7 @@ export function Shell({ children }: { children: ReactNode }) {
     clearSilenceTimer();
     clearThinkWatchdog();
     phaseRef.current = "listening";
-    if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
+    cancelSpeech(); // stops the Sarvam/Google clip AND the browser fallback
   }, [clearSilenceTimer, clearThinkWatchdog]);
 
   useEffect(() => {
@@ -182,15 +183,12 @@ export function Shell({ children }: { children: ReactNode }) {
   // speaks confirmations in the chosen language.
   useEffect(() => {
     const speakText = (text: string, speechLang: string, rate: number) => {
-      if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-      try {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = speechLang;
-        u.rate = rate;
-        setIsSpeaking(true);
-        window.speechSynthesis.speak(u);
-      } catch {}
+      const lang: "en" | "kn" = speechLang.toLowerCase().startsWith("kn") ? "kn" : "en";
+      setIsSpeaking(true);
+      void speakViaSarvam(text, lang, rate, {
+        onStart: () => setIsSpeaking(true),
+        onEnd: () => setIsSpeaking(false),
+      });
     };
 
     const NAV_LABEL: Record<string, string> = {
@@ -388,7 +386,7 @@ export function Shell({ children }: { children: ReactNode }) {
     if (!isSpeaking) return;
     const id = setInterval(() => {
       if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
+        if (!isSpeechActive()) {
           setIsSpeaking(false);
           setIsPaused(false);
           resumeListening(); // hands-free: listen for the next reply
@@ -636,9 +634,7 @@ export function Shell({ children }: { children: ReactNode }) {
                       </button>
                       <button
                         onClick={() => {
-                          if (typeof window !== "undefined" && "speechSynthesis" in window) {
-                            window.speechSynthesis.cancel();
-                          }
+                          cancelSpeech();
                           setIsSpeaking(false);
                           setIsPaused(false);
                           setMicActive(true);

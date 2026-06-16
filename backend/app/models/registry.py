@@ -101,8 +101,8 @@ def get_reranker() -> Reranker:
 # ── Voice (STT / TTS / MT) ───────────────────────────────────────────────────
 
 @lru_cache
-def get_stt(backend: Literal["sarvam", "bhashini", "local"] | None = None) -> SpeechToText:
-    """Sarvam (primary) → Bhashini (fallback) → local Whisper.
+def get_stt(backend: Literal["sarvam", "google", "bhashini", "local"] | None = None) -> SpeechToText:
+    """Sarvam (primary) → Google → Bhashini (fallback) → local Whisper.
 
     Resolution order:
       1. Explicit `backend` arg (per-request override).
@@ -115,6 +115,9 @@ def get_stt(backend: Literal["sarvam", "bhashini", "local"] | None = None) -> Sp
     if resolved == "local":
         from app.models.local.stt_whisper import WhisperSTT
         return WhisperSTT()
+    if resolved == "google":
+        from app.models.api.google_voice import GoogleSTT
+        return GoogleSTT()
     if resolved == "bhashini":
         from app.models.api.bhashini import BhashiniSTT
         return BhashiniSTT()
@@ -124,8 +127,8 @@ def get_stt(backend: Literal["sarvam", "bhashini", "local"] | None = None) -> Sp
 
 
 @lru_cache
-def get_tts(backend: Literal["sarvam", "bhashini", "local"] | None = None) -> TextToSpeech:
-    """Sarvam Bulbul v3 (primary) → Bhashini (fallback) → local Parler-TTS.
+def get_tts(backend: Literal["sarvam", "google", "bhashini", "local"] | None = None) -> TextToSpeech:
+    """Sarvam Bulbul v3 (primary) → Google → Bhashini (fallback) → local Parler-TTS.
 
     Resolution order same as get_stt.
     """
@@ -134,6 +137,9 @@ def get_tts(backend: Literal["sarvam", "bhashini", "local"] | None = None) -> Te
     if resolved == "local":
         from app.models.local.tts_parler import ParlerTTS
         return ParlerTTS()
+    if resolved == "google":
+        from app.models.api.google_voice import GoogleTTS
+        return GoogleTTS()
     if resolved == "bhashini":
         from app.models.api.bhashini import BhashiniTTS
         return BhashiniTTS()
