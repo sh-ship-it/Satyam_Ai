@@ -25,13 +25,13 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/audit.py": {
-    "mtime": 1781552048.29257,
-    "ast_hash": "9291ee80e18a24960884dca0724541cf",
+    "mtime": 1781580537.806859,
+    "ast_hash": "7ede2579a185f703cb4a25b86583541e",
     "semantic_hash": ""
   },
   "backend/app/api/routes/auth.py": {
-    "mtime": 1781551541.521207,
-    "ast_hash": "ef347ecacb306fe28b54a3713d9a5dc6",
+    "mtime": 1781580450.4268944,
+    "ast_hash": "9e0755678de523b5e56bcb181c7731a2",
     "semantic_hash": ""
   },
   "backend/app/api/routes/cases.py": {
@@ -50,8 +50,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/map.py": {
-    "mtime": 1781551595.7599728,
-    "ast_hash": "ffa19f29f9725e6e42828f1a4a282285",
+    "mtime": 1781580587.2796018,
+    "ast_hash": "7105e655b56cec02793f54fbecdfd35c",
     "semantic_hash": ""
   },
   "backend/app/api/routes/network.py": {
@@ -200,13 +200,13 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/orchestrator.py": {
-    "mtime": 1781527764.7066536,
-    "ast_hash": "98f732bab24a3d62e64eeb7aecc6023c",
+    "mtime": 1781580666.0378754,
+    "ast_hash": "47ace2251d4323cb17efd641978e3a9a",
     "semantic_hash": ""
   },
   "backend/app/pipeline/prompts.py": {
-    "mtime": 1781553779.7347713,
-    "ast_hash": "94d0848ec4c8f9763b07bef8db4d503a",
+    "mtime": 1781580675.1271844,
+    "ast_hash": "d21a607a80c984a1aea6aaa19c23c4b5",
     "semantic_hash": ""
   },
   "backend/app/pipeline/router.py": {
@@ -225,8 +225,8 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/analytics.py": {
-    "mtime": 1781527718.1050985,
-    "ast_hash": "1af0bcead6a21e17c63ef1ff173de72d",
+    "mtime": 1781580576.190239,
+    "ast_hash": "9e60c66a0dd7149267992d2c4e7b8b07",
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/rag.py": {
@@ -250,8 +250,8 @@
     "semantic_hash": ""
   },
   "backend/app/schemas/auth.py": {
-    "mtime": 1781520874.5190387,
-    "ast_hash": "78fedb8ef9e3dfc2797d59375e7dac23",
+    "mtime": 1781580432.2925584,
+    "ast_hash": "8dab4a8e155d30c962b8ae428c511ab3",
     "semantic_hash": ""
   },
   "backend/app/schemas/case.py": {
@@ -265,13 +265,13 @@
     "semantic_hash": ""
   },
   "backend/app/schemas/map.py": {
-    "mtime": 1781551552.5004232,
-    "ast_hash": "5c94ca7db401194f643a1fa15c84bcad",
+    "mtime": 1781580569.3741984,
+    "ast_hash": "40f6a73cb0a53846e236526f31f91c85",
     "semantic_hash": ""
   },
   "backend/app/schemas/network.py": {
-    "mtime": 1781552341.1620142,
-    "ast_hash": "e0f5c81e77d50c5b4c4577dd06d62655",
+    "mtime": 1781580646.480644,
+    "ast_hash": "723927c9fe7825f8911ccadd5114f02c",
     "semantic_hash": ""
   },
   "backend/app/schemas/report.py": {
@@ -300,8 +300,8 @@
     "semantic_hash": ""
   },
   "backend/app/services/network_service.py": {
-    "mtime": 1781552359.7734766,
-    "ast_hash": "73978285988659d2109c56186e45ce34",
+    "mtime": 1781580657.3011084,
+    "ast_hash": "1d2b0876d6ed944f9606d8768ff31819",
     "semantic_hash": ""
   },
   "backend/app/services/report_service.py": {
@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
-    "mtime": 1781551653.5441656,
-    "ast_hash": "8e455c3cdd5b81772d4acb1067717f7d",
+    "mtime": 1781580600.1992686,
+    "ast_hash": "6a3675d54ad030b3010acc49c681546e",
     "semantic_hash": ""
   },
   "frontend/src/components/DarkModeToggle.tsx": {
@@ -395,18 +395,18 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ProfileMenu.tsx": {
-    "mtime": 1781282330.6483574,
-    "ast_hash": "18821f36231f427da030885a534df4bb",
+    "mtime": 1781580943.2572505,
+    "ast_hash": "b9df6f6a53f7a1bd035a86cdf4235a59",
     "semantic_hash": ""
   },
   "frontend/src/components/SettingsDialog.tsx": {
-    "mtime": 1781528434.890268,
-    "ast_hash": "e3fa2a6b502a15a8bb3a3b9afcd35c57",
+    "mtime": 1781580949.6003952,
+    "ast_hash": "286f3a8297cb118ff99307f72b7e7db7",
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1781282330.656359,
-    "ast_hash": "632ae1d2e50bdf33d4ae6efa007bbde5",
+    "mtime": 1781580524.9375117,
+    "ast_hash": "fc6f0078e76b1b68112eb14852c476df",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/client.ts": {
-    "mtime": 1781551627.952238,
-    "ast_hash": "c7813744fcd20c110070b65d49dc5a47",
+    "mtime": 1781580480.3121245,
+    "ast_hash": "5e6eecb19bf5a50a421feebbe2d6086b",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/example.functions.ts": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781553849.7008646,
-    "ast_hash": "2a322dee35de784a89e228a382a4071a",
+    "mtime": 1781580463.3130703,
+    "ast_hash": "9f40e7880d1540906328727fe00eec0f",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
-    "mtime": 1781283313.8958018,
-    "ast_hash": "d941bfe214b2baf81a5303b3c6747ed7",
+    "mtime": 1781581011.3231933,
+    "ast_hash": "e8a760c497726914ef652257b47a174e",
     "semantic_hash": ""
   },
   "frontend/src/router.tsx": {
@@ -710,13 +710,13 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/audit.tsx": {
-    "mtime": 1781552029.2348683,
-    "ast_hash": "64778723e9bc82ebc7acac6747d91aea",
+    "mtime": 1781580982.5904608,
+    "ast_hash": "a3424d09c6e3c3c8a70fb55b6c3130b7",
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
-    "mtime": 1781553787.8292391,
-    "ast_hash": "5ccc54deb25720a46a5baea946ead7da",
+    "mtime": 1781580959.8294096,
+    "ast_hash": "2f50ada6e1b574d3b08d57cc012547cb",
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
@@ -724,14 +724,9 @@
     "ast_hash": "50d423bd5c033cf98c8b6dcd0d2a1404",
     "semantic_hash": ""
   },
-  "frontend/src/routes/map.tsx": {
-    "mtime": 1781552791.346902,
-    "ast_hash": "ba8fcc88f8870afec2359090867f372c",
-    "semantic_hash": ""
-  },
   "frontend/src/routes/network.tsx": {
-    "mtime": 1781551991.9686284,
-    "ast_hash": "851185718d9443da9150ee91bafb6a4e",
+    "mtime": 1781580972.3722723,
+    "ast_hash": "6566f4d9cd65f05e45f59be6d0905e8b",
     "semantic_hash": ""
   },
   "frontend/src/routes/reports.tsx": {
@@ -870,8 +865,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/login.tsx": {
-    "mtime": 1781283301.7585955,
-    "ast_hash": "bfc9fd69348a43054301d98a70aef387",
+    "mtime": 1781581005.4521375,
+    "ast_hash": "710236635751bb90733319c5ec754a24",
     "semantic_hash": ""
   },
   "backend/app/models/api/ollama_cloud.py": {
@@ -885,8 +880,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1781554087.8446937,
-    "ast_hash": "9e83973e01386d5e340ddd9cb5a262cf",
+    "mtime": 1781581023.0207908,
+    "ast_hash": "ada704e029da74bbdddd69284f80c494",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -972,6 +967,26 @@
   "SATYAM_E2E_WIRING_FIX (1).md": {
     "mtime": 1781553633.6520827,
     "ast_hash": "74e9e23e0a8297329ee64d86dc4996d3",
+    "semantic_hash": ""
+  },
+  "backend/check_audit.py": {
+    "mtime": 1781580344.6002884,
+    "ast_hash": "3f11148356dd6a9dbae5660c9f3df975",
+    "semantic_hash": ""
+  },
+  "backend/check_insert.py": {
+    "mtime": 1781580403.4836578,
+    "ast_hash": "d16ad62f6b6c2d101d3856920fd8e9b9",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/CreateAccountDialog.tsx": {
+    "mtime": 1781580469.0386784,
+    "ast_hash": "09626fb2df10f801086243b8d7c3bb10",
+    "semantic_hash": ""
+  },
+  "SATYAM_AUTH_AUDIT_MAP_NETWORK_FIX.md": {
+    "mtime": 1781580171.9863696,
+    "ast_hash": "d72bdb1fc5607742fc67d734a25acd30",
     "semantic_hash": ""
   }
 }
