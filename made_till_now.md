@@ -1374,3 +1374,21 @@ The `AudioContext` was created **after** `await navigator.mediaDevices.getUserMe
 - `npx tsc --noEmit --skipLibCheck` — 0 new errors.
 - Backend curl: TTS, STT, chat (both voice_backend values) all HTTP 200.
 - Note: `network.tsx:637 BUILTIN_PRESETS` remains a pre-existing, unrelated compile error on the /network route (not touched — out of scope for the voice fix).
+
+---
+
+### [2026-06-16] — Voice VAD Sensitivity & Fallback Transcription Fix
+
+#### Summary
+Addressed silent dropouts for quiet speakers during voice capture. Lowered the VAD threshold to make speech detection more sensitive, and introduced a fallback path that transcribes quiet sessions rather than discarding them when the RMS threshold isn't hit but sound is present.
+
+#### Changes
+- **`frontend/src/lib/voice/recorder.ts`**
+  - Lowered `VOICE_RMS_THRESHOLD` from `0.005` to `0.002` to increase mic sensitivity for softer speaking voices.
+  - Added `maxRms` state variable to track the maximum RMS signal level seen during a recording session.
+  - Modified the `finalize` function to allow transcription when `speechStarted` is false, provided that `maxRms >= 0.001` (representing quiet speech rather than absolute silence or a muted mic). This prevents discarding quiet speech at the 15-second timeout or manual stop.
+
+#### Verification
+- Checked TypeScript compilation (`npx tsc --noEmit --skipLibCheck`): 0 errors.
+- Built the production package (`npm run build`): successfully bundled.
+

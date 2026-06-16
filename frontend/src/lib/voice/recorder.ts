@@ -41,7 +41,7 @@ export type SttSessionOptions = {
 };
 
 const TARGET_RATE = 16000;
-const VOICE_RMS_THRESHOLD = 0.012; // empirically separates speech from room noise
+const VOICE_RMS_THRESHOLD = 0.002; // empirically separates speech from room noise (more sensitive)
 
 export function isBackendSttSupported(): boolean {
   return (
@@ -94,6 +94,7 @@ export async function startSttSession(
   const chunks: Float32Array[] = [];
   const inputRate = ctx.sampleRate;
   let speechStarted = false;
+  let maxRms = 0;               // track maximum RMS seen during the session
   let audioFrames = 0;          // how many onaudioprocess callbacks fired
   let lastVoiceTs = Date.now();
   const startTs = Date.now();
@@ -125,7 +126,9 @@ export async function startSttSession(
     cleanup();
     if (!transcribe) return;
     // Require some real speech to avoid empty/near-empty uploads.
-    if (!speechStarted) {
+    // If speechStarted is false, but we have chunks and maxRms >= 0.001,
+    // let's still transcribe to capture quiet speakers!
+    if (!speechStarted && maxRms < 0.001) {
       callbacks.onResult?.("", null);
       return;
     }
@@ -150,6 +153,7 @@ export async function startSttSession(
     let sum = 0;
     for (let i = 0; i < input.length; i++) sum += input[i] * input[i];
     const rms = Math.sqrt(sum / input.length);
+    if (rms > maxRms) maxRms = rms; // track maximum RMS
     const now = Date.now();
     if (rms > VOICE_RMS_THRESHOLD) {
       if (!speechStarted) {
