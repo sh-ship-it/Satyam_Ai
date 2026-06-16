@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1781592868.4913197,
-    "ast_hash": "bb54904f665ab03043ef0cabf61a12b6",
+    "mtime": 1781594528.9313884,
+    "ast_hash": "f2594daadd122d1c9bd8809ebd155470",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/client.ts": {
-    "mtime": 1781589968.4593968,
-    "ast_hash": "a710a8521657c10a35e5f1c5e8ab61f6",
+    "mtime": 1781594411.046057,
+    "ast_hash": "4e79e29f1d0fe8773805d844fe467f48",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/example.functions.ts": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781590087.8799777,
-    "ast_hash": "b2df3b3d7024198afeeed983ffe085e8",
+    "mtime": 1781594550.931308,
+    "ast_hash": "44997075639ab882c02c670b0ac15c26",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
-    "mtime": 1781591009.1419134,
-    "ast_hash": "02a7e4e453c96bb5749918d04762161d",
+    "mtime": 1781594465.9797997,
+    "ast_hash": "891dde7cfff5373f5d17489e57644d78",
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
@@ -875,13 +875,13 @@
     "semantic_hash": ""
   },
   "backend/app/models/api/sarvam.py": {
-    "mtime": 1781592791.1354518,
-    "ast_hash": "1abd011e5fc04270d81c57abfef1d67a",
+    "mtime": 1781594370.882723,
+    "ast_hash": "eee4f42ea15549d692d18ce53380f77a",
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1781593085.6286244,
-    "ast_hash": "52252a001948b11493194e3c3cbb295e",
+    "mtime": 1781594718.84031,
+    "ast_hash": "2aa4a2daad62772209d527ee2ec1e8d2",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -985,8 +985,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/voice.py": {
-    "mtime": 1781592888.0557427,
-    "ast_hash": "bf8ab2480bc5bc6439c4590e8f4dbd78",
+    "mtime": 1781594393.387176,
+    "ast_hash": "f6403c7f18262161d4fd7f126f05a7da",
     "semantic_hash": ""
   },
   "backend/app/models/api/google_voice.py": {
@@ -995,13 +995,13 @@
     "semantic_hash": ""
   },
   "backend/app/schemas/voice.py": {
-    "mtime": 1781589858.5493886,
-    "ast_hash": "10a04e388ecdd343e2ff0613dbb724df",
+    "mtime": 1781594360.0138836,
+    "ast_hash": "35a42eefc35030f3f72141db7a8b04e4",
     "semantic_hash": ""
   },
   "frontend/src/lib/voice/tts.ts": {
-    "mtime": 1781592832.1031609,
-    "ast_hash": "16c64a308f567be4ed21cda62ba4e307",
+    "mtime": 1781594418.6794236,
+    "ast_hash": "d36d427d53ff0a8d5277c377f8bf2623",
     "semantic_hash": ""
   },
   "SATYAM_VOICE_PIPELINE_SARVAM_FIX.md": {
@@ -1010,8 +1010,13 @@
     "semantic_hash": ""
   },
   "SATYAM_VOICE_OUTPUT_INPUT_FIX.md": {
-    "mtime": 1781592711.134146,
+    "mtime": 1781593813.340344,
     "ast_hash": "aed8833adc40052182c5921c74965e53",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/voice/lang.ts": {
+    "mtime": 1781594351.6364293,
+    "ast_hash": "47bdb4255068c28565cd7daa21f997dc",
     "semantic_hash": ""
   }
 }
