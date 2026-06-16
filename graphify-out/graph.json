@@ -4,14 +4,214 @@
   "graph": {},
   "nodes": [
     {
+      "label": "health.py",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "routes_health",
+      "community": 3,
+      "norm_label": "health.py"
+    },
+    {
+      "label": "health()",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "routes_health_health",
+      "community": 3,
+      "norm_label": "health()"
+    },
+    {
+      "label": "models()",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "routes_health_models",
+      "community": 3,
+      "norm_label": "models()"
+    },
+    {
+      "label": "Liveness / readiness probe + model-routing diagnostics.",
+      "file_type": "rationale",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "routes_health_rationale_1",
+      "community": 3,
+      "norm_label": "liveness / readiness probe + model-routing diagnostics."
+    },
+    {
+      "label": "Model-routing diagnostics \u2014 no auth, dev only.      Returns the resolved impleme",
+      "file_type": "rationale",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "routes_health_rationale_27",
+      "community": 3,
+      "norm_label": "model-routing diagnostics \u2014 no auth, dev only.      returns the resolved impleme"
+    },
+    {
+      "label": "main.py",
+      "file_type": "code",
+      "source_file": "backend/app/main.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_main",
+      "community": 3,
+      "norm_label": "main.py"
+    },
+    {
+      "label": "lifespan()",
+      "file_type": "code",
+      "source_file": "backend/app/main.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "app_main_lifespan",
+      "community": 15,
+      "norm_label": "lifespan()"
+    },
+    {
+      "label": "FastAPI",
+      "file_type": "code",
+      "source_file": "backend/app/main.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "fastapi",
+      "community": 3,
+      "norm_label": "fastapi"
+    },
+    {
+      "label": "create_app()",
+      "file_type": "code",
+      "source_file": "backend/app/main.py",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "app_main_create_app",
+      "community": 3,
+      "norm_label": "create_app()"
+    },
+    {
+      "label": "FastAPI application factory for Satyam.",
+      "file_type": "rationale",
+      "source_file": "backend/app/main.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "app_main_rationale_1",
+      "community": 3,
+      "norm_label": "fastapi application factory for satyam."
+    },
+    {
+      "label": "gemini.py",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "api_gemini",
+      "community": 46,
+      "norm_label": "gemini.py"
+    },
+    {
+      "label": "BlockedByModel",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "api_gemini_blockedbymodel",
+      "community": 46,
+      "norm_label": "blockedbymodel"
+    },
+    {
+      "label": "Exception",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "exception",
+      "community": 16,
+      "norm_label": "exception"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "api_gemini_blockedbymodel_init",
+      "community": 46,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "GeminiLLM",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "api_gemini_geminillm",
+      "community": 46,
+      "norm_label": "geminillm"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "api_gemini_geminillm_init",
+      "community": 46,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._payload()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "api_gemini_geminillm_payload",
+      "community": 46,
+      "norm_label": "._payload()"
+    },
+    {
+      "label": ".complete()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L66",
+      "_origin": "ast",
+      "id": "api_gemini_geminillm_complete",
+      "community": 46,
+      "norm_label": ".complete()"
+    },
+    {
+      "label": ".stream()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L84",
+      "_origin": "ast",
+      "id": "api_gemini_geminillm_stream",
+      "community": 46,
+      "norm_label": ".stream()"
+    },
+    {
+      "label": "Gemini 2.5 Flash client (primary chat / Text-to-SQL lane).  Notes baked in from",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "api_gemini_rationale_1",
+      "community": 46,
+      "norm_label": "gemini 2.5 flash client (primary chat / text-to-sql lane).  notes baked in from"
+    },
+    {
       "label": "chat.py",
       "file_type": "code",
       "source_file": "backend/app/schemas/chat.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "schemas_chat",
       "community": 35,
-      "norm_label": "chat.py"
+      "norm_label": "chat.py",
+      "id": "schemas_chat"
     },
     {
       "label": "ChatRequest",
@@ -19,9 +219,9 @@
       "source_file": "backend/app/schemas/chat.py",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "schemas_chat_chatrequest",
       "community": 35,
-      "norm_label": "chatrequest"
+      "norm_label": "chatrequest",
+      "id": "schemas_chat_chatrequest"
     },
     {
       "label": "BaseModel",
@@ -29,9 +229,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "basemodel",
       "community": 35,
-      "norm_label": "basemodel"
+      "norm_label": "basemodel",
+      "id": "basemodel"
     },
     {
       "label": "Citation",
@@ -39,9 +239,9 @@
       "source_file": "backend/app/schemas/chat.py",
       "source_location": "L21",
       "_origin": "ast",
-      "id": "schemas_chat_citation",
       "community": 35,
-      "norm_label": "citation"
+      "norm_label": "citation",
+      "id": "schemas_chat_citation"
     },
     {
       "label": "ChatResponse",
@@ -49,9 +249,9 @@
       "source_file": "backend/app/schemas/chat.py",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "schemas_chat_chatresponse",
       "community": 35,
-      "norm_label": "chatresponse"
+      "norm_label": "chatresponse",
+      "id": "schemas_chat_chatresponse"
     },
     {
       "label": "SettingsDialog.tsx",
@@ -59,9 +259,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "components_settingsdialog",
       "community": 18,
-      "norm_label": "settingsdialog.tsx"
+      "norm_label": "settingsdialog.tsx",
+      "id": "components_settingsdialog"
     },
     {
       "label": "Tab",
@@ -69,9 +269,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "components_settingsdialog_tab",
       "community": 18,
-      "norm_label": "tab"
+      "norm_label": "tab",
+      "id": "components_settingsdialog_tab"
     },
     {
       "label": "EngineSettings",
@@ -79,9 +279,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "components_settingsdialog_enginesettings",
       "community": 18,
-      "norm_label": "enginesettings"
+      "norm_label": "enginesettings",
+      "id": "components_settingsdialog_enginesettings"
     },
     {
       "label": "defaultEngineSettings",
@@ -89,9 +289,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "components_settingsdialog_defaultenginesettings",
       "community": 18,
-      "norm_label": "defaultenginesettings"
+      "norm_label": "defaultenginesettings",
+      "id": "components_settingsdialog_defaultenginesettings"
     },
     {
       "label": "loadEngineSettings()",
@@ -99,9 +299,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L29",
       "_origin": "ast",
-      "id": "components_settingsdialog_loadenginesettings",
       "community": 113,
-      "norm_label": "loadenginesettings()"
+      "norm_label": "loadenginesettings()",
+      "id": "components_settingsdialog_loadenginesettings"
     },
     {
       "label": "saveEngineSettings()",
@@ -109,9 +309,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "components_settingsdialog_saveenginesettings",
       "community": 18,
-      "norm_label": "saveenginesettings()"
+      "norm_label": "saveenginesettings()",
+      "id": "components_settingsdialog_saveenginesettings"
     },
     {
       "label": "SettingsDialog()",
@@ -119,9 +319,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "components_settingsdialog_settingsdialog",
       "community": 103,
-      "norm_label": "settingsdialog()"
+      "norm_label": "settingsdialog()",
+      "id": "components_settingsdialog_settingsdialog"
     },
     {
       "label": "Section()",
@@ -129,9 +329,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L370",
       "_origin": "ast",
-      "id": "components_settingsdialog_section",
       "community": 18,
-      "norm_label": "section()"
+      "norm_label": "section()",
+      "id": "components_settingsdialog_section"
     },
     {
       "label": "Field()",
@@ -139,9 +339,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L382",
       "_origin": "ast",
-      "id": "components_settingsdialog_field",
       "community": 18,
-      "norm_label": "field()"
+      "norm_label": "field()",
+      "id": "components_settingsdialog_field"
     },
     {
       "label": "Row()",
@@ -149,9 +349,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L398",
       "_origin": "ast",
-      "id": "components_settingsdialog_row",
       "community": 18,
-      "norm_label": "row()"
+      "norm_label": "row()",
+      "id": "components_settingsdialog_row"
     },
     {
       "label": "Select()",
@@ -159,9 +359,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L407",
       "_origin": "ast",
-      "id": "components_settingsdialog_select",
       "community": 18,
-      "norm_label": "select()"
+      "norm_label": "select()",
+      "id": "components_settingsdialog_select"
     },
     {
       "label": "Pill()",
@@ -169,9 +369,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L415",
       "_origin": "ast",
-      "id": "components_settingsdialog_pill",
       "community": 18,
-      "norm_label": "pill()"
+      "norm_label": "pill()",
+      "id": "components_settingsdialog_pill"
     },
     {
       "label": "Toggle()",
@@ -179,9 +379,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L428",
       "_origin": "ast",
-      "id": "components_settingsdialog_toggle",
       "community": 18,
-      "norm_label": "toggle()"
+      "norm_label": "toggle()",
+      "id": "components_settingsdialog_toggle"
     },
     {
       "label": "Status",
@@ -189,9 +389,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L449",
       "_origin": "ast",
-      "id": "components_settingsdialog_status",
       "community": 18,
-      "norm_label": "status"
+      "norm_label": "status",
+      "id": "components_settingsdialog_status"
     },
     {
       "label": "DbSourceRow()",
@@ -199,9 +399,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L451",
       "_origin": "ast",
-      "id": "components_settingsdialog_dbsourcerow",
       "community": 18,
-      "norm_label": "dbsourcerow()"
+      "norm_label": "dbsourcerow()",
+      "id": "components_settingsdialog_dbsourcerow"
     },
     {
       "label": "ModelToggle()",
@@ -209,9 +409,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L511",
       "_origin": "ast",
-      "id": "components_settingsdialog_modeltoggle",
       "community": 18,
-      "norm_label": "modeltoggle()"
+      "norm_label": "modeltoggle()",
+      "id": "components_settingsdialog_modeltoggle"
     },
     {
       "label": "formatRemaining()",
@@ -219,9 +419,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L541",
       "_origin": "ast",
-      "id": "components_settingsdialog_formatremaining",
       "community": 18,
-      "norm_label": "formatremaining()"
+      "norm_label": "formatremaining()",
+      "id": "components_settingsdialog_formatremaining"
     },
     {
       "label": "DataActions()",
@@ -229,9 +429,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L551",
       "_origin": "ast",
-      "id": "components_settingsdialog_dataactions",
       "community": 18,
-      "norm_label": "dataactions()"
+      "norm_label": "dataactions()",
+      "id": "components_settingsdialog_dataactions"
     },
     {
       "label": "client.ts",
@@ -239,9 +439,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "api_client",
       "community": 1,
-      "norm_label": "client.ts"
+      "norm_label": "client.ts",
+      "id": "api_client"
     },
     {
       "label": "getAuthToken()",
@@ -249,9 +449,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "api_client_getauthtoken",
       "community": 1,
-      "norm_label": "getauthtoken()"
+      "norm_label": "getauthtoken()",
+      "id": "api_client_getauthtoken"
     },
     {
       "label": "setAuthToken()",
@@ -259,9 +459,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "api_client_setauthtoken",
       "community": 1,
-      "norm_label": "setauthtoken()"
+      "norm_label": "setauthtoken()",
+      "id": "api_client_setauthtoken"
     },
     {
       "label": "authHeaders()",
@@ -269,9 +469,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L24",
       "_origin": "ast",
-      "id": "api_client_authheaders",
       "community": 1,
-      "norm_label": "authheaders()"
+      "norm_label": "authheaders()",
+      "id": "api_client_authheaders"
     },
     {
       "label": "ApiError",
@@ -279,9 +479,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L33",
       "_origin": "ast",
-      "id": "api_client_apierror",
       "community": 1,
-      "norm_label": "apierror"
+      "norm_label": "apierror",
+      "id": "api_client_apierror"
     },
     {
       "label": ".constructor()",
@@ -289,9 +489,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L34",
       "_origin": "ast",
-      "id": "api_client_apierror_constructor",
       "community": 1,
-      "norm_label": ".constructor()"
+      "norm_label": ".constructor()",
+      "id": "api_client_apierror_constructor"
     },
     {
       "label": "request()",
@@ -299,9 +499,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L40",
       "_origin": "ast",
-      "id": "api_client_request",
       "community": 1,
-      "norm_label": "request()"
+      "norm_label": "request()",
+      "id": "api_client_request"
     },
     {
       "label": "Role",
@@ -309,9 +509,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L58",
       "_origin": "ast",
-      "id": "api_client_role",
       "community": 1,
-      "norm_label": "role"
+      "norm_label": "role",
+      "id": "api_client_role"
     },
     {
       "label": "SessionUser",
@@ -319,9 +519,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L60",
       "_origin": "ast",
-      "id": "api_client_sessionuser",
       "community": 103,
-      "norm_label": "sessionuser"
+      "norm_label": "sessionuser",
+      "id": "api_client_sessionuser"
     },
     {
       "label": "HotspotPoint",
@@ -329,9 +529,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L72",
       "_origin": "ast",
-      "id": "api_client_hotspotpoint",
       "community": 1,
-      "norm_label": "hotspotpoint"
+      "norm_label": "hotspotpoint",
+      "id": "api_client_hotspotpoint"
     },
     {
       "label": "HotspotResponse",
@@ -339,9 +539,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L73",
       "_origin": "ast",
-      "id": "api_client_hotspotresponse",
       "community": 1,
-      "norm_label": "hotspotresponse"
+      "norm_label": "hotspotresponse",
+      "id": "api_client_hotspotresponse"
     },
     {
       "label": "StationRow",
@@ -349,9 +549,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L75",
       "_origin": "ast",
-      "id": "api_client_stationrow",
-      "community": 1,
-      "norm_label": "stationrow"
+      "community": 48,
+      "norm_label": "stationrow",
+      "id": "api_client_stationrow"
     },
     {
       "label": "StationBreakdownResponse",
@@ -359,9 +559,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L82",
       "_origin": "ast",
-      "id": "api_client_stationbreakdownresponse",
       "community": 1,
-      "norm_label": "stationbreakdownresponse"
+      "norm_label": "stationbreakdownresponse",
+      "id": "api_client_stationbreakdownresponse"
     },
     {
       "label": "api",
@@ -369,9 +569,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L84",
       "_origin": "ast",
-      "id": "api_client_api",
       "community": 51,
-      "norm_label": "api"
+      "norm_label": "api",
+      "id": "api_client_api"
     },
     {
       "label": "TtsResult",
@@ -379,9 +579,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L155",
       "_origin": "ast",
-      "id": "api_client_ttsresult",
       "community": 1,
-      "norm_label": "ttsresult"
+      "norm_label": "ttsresult",
+      "id": "api_client_ttsresult"
     },
     {
       "label": "SttResult",
@@ -389,9 +589,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L156",
       "_origin": "ast",
-      "id": "api_client_sttresult",
       "community": 1,
-      "norm_label": "sttresult"
+      "norm_label": "sttresult",
+      "id": "api_client_sttresult"
     },
     {
       "label": "ttsSynthesize()",
@@ -399,9 +599,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L159",
       "_origin": "ast",
-      "id": "api_client_ttssynthesize",
       "community": 1,
-      "norm_label": "ttssynthesize()"
+      "norm_label": "ttssynthesize()",
+      "id": "api_client_ttssynthesize"
     },
     {
       "label": "sttTranscribe()",
@@ -409,9 +609,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L174",
       "_origin": "ast",
-      "id": "api_client_stttranscribe",
       "community": 1,
-      "norm_label": "stttranscribe()"
+      "norm_label": "stttranscribe()",
+      "id": "api_client_stttranscribe"
     },
     {
       "label": "loadEngineSettingsForDebug()",
@@ -419,9 +619,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L193",
       "_origin": "ast",
-      "id": "api_client_loadenginesettingsfordebug",
       "community": 1,
-      "norm_label": "loadenginesettingsfordebug()"
+      "norm_label": "loadenginesettingsfordebug()",
+      "id": "api_client_loadenginesettingsfordebug"
     },
     {
       "label": "ChatEvent",
@@ -429,9 +629,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L201",
       "_origin": "ast",
-      "id": "api_client_chatevent",
-      "community": 1,
-      "norm_label": "chatevent"
+      "community": 48,
+      "norm_label": "chatevent",
+      "id": "api_client_chatevent"
     },
     {
       "label": "streamChat()",
@@ -439,9 +639,9 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L209",
       "_origin": "ast",
-      "id": "api_client_streamchat",
       "community": 1,
-      "norm_label": "streamchat()"
+      "norm_label": "streamchat()",
+      "id": "api_client_streamchat"
     },
     {
       "label": "i18n.tsx",
@@ -449,9 +649,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_i18n",
       "community": 51,
-      "norm_label": "i18n.tsx"
+      "norm_label": "i18n.tsx",
+      "id": "lib_i18n"
     },
     {
       "label": "Lang",
@@ -459,9 +659,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "lib_i18n_lang",
       "community": 51,
-      "norm_label": "lang"
+      "norm_label": "lang",
+      "id": "lib_i18n_lang"
     },
     {
       "label": "DICT",
@@ -469,9 +669,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "lib_i18n_dict",
-      "community": 42,
-      "norm_label": "dict"
+      "community": 51,
+      "norm_label": "dict",
+      "id": "lib_i18n_dict"
     },
     {
       "label": "Ctx",
@@ -479,9 +679,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L318",
       "_origin": "ast",
-      "id": "lib_i18n_ctx",
       "community": 51,
-      "norm_label": "ctx"
+      "norm_label": "ctx",
+      "id": "lib_i18n_ctx"
     },
     {
       "label": "I18nCtx",
@@ -489,9 +689,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L319",
       "_origin": "ast",
-      "id": "lib_i18n_i18nctx",
       "community": 51,
-      "norm_label": "i18nctx"
+      "norm_label": "i18nctx",
+      "id": "lib_i18n_i18nctx"
     },
     {
       "label": "I18nProvider()",
@@ -499,9 +699,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L321",
       "_origin": "ast",
-      "id": "lib_i18n_i18nprovider",
-      "community": 116,
-      "norm_label": "i18nprovider()"
+      "community": 8,
+      "norm_label": "i18nprovider()",
+      "id": "lib_i18n_i18nprovider"
     },
     {
       "label": "useI18n()",
@@ -509,9 +709,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L344",
       "_origin": "ast",
-      "id": "lib_i18n_usei18n",
       "community": 103,
-      "norm_label": "usei18n()"
+      "norm_label": "usei18n()",
+      "id": "lib_i18n_usei18n"
     },
     {
       "label": "useT()",
@@ -519,9 +719,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L345",
       "_origin": "ast",
-      "id": "lib_i18n_uset",
       "community": 51,
-      "norm_label": "uset()"
+      "norm_label": "uset()",
+      "id": "lib_i18n_uset"
     },
     {
       "label": "Shell.tsx",
@@ -579,7 +779,7 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L99",
       "_origin": "ast",
-      "community": 51,
+      "community": 9,
       "norm_label": "shell()",
       "id": "components_shell_shell"
     },
@@ -1099,7 +1299,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L464",
       "_origin": "ast",
-      "community": 27,
+      "community": 126,
       "norm_label": "[2026-06-15] \u2014 architecture doc revision: saaras v3, gpu specs, demo clarification",
       "id": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_demo_clarification"
     },
@@ -1109,7 +1309,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L466",
       "_origin": "ast",
-      "community": 27,
+      "community": 126,
       "norm_label": "summary",
       "id": "made_till_now_summary_466"
     },
@@ -1119,7 +1319,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L470",
       "_origin": "ast",
-      "community": 27,
+      "community": 126,
       "norm_label": "code changes",
       "id": "made_till_now_code_changes"
     },
@@ -1739,7 +1939,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L918",
       "_origin": "ast",
-      "community": 27,
+      "community": 114,
       "norm_label": "[2026-06-16] \u2014 secure auth, live audit, map trails, victim network & hardcoded values cleanup (satyam_auth_audit_map_network_fix issues 1\u20135)",
       "id": "made_till_now_2026_06_16_secure_auth_live_audit_map_trails_victim_network_hardcoded_values_cleanup_satyam_auth_audit_map_network_fix_issues_1_5"
     },
@@ -1749,7 +1949,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L920",
       "_origin": "ast",
-      "community": 27,
+      "community": 114,
       "norm_label": "summary",
       "id": "made_till_now_summary_920"
     },
@@ -1759,7 +1959,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L923",
       "_origin": "ast",
-      "community": 27,
+      "community": 114,
       "norm_label": "frontend changes",
       "id": "made_till_now_frontend_changes_923"
     },
@@ -1769,7 +1969,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L945",
       "_origin": "ast",
-      "community": 27,
+      "community": 114,
       "norm_label": "verification",
       "id": "made_till_now_verification_945"
     },
@@ -1779,7 +1979,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L951",
       "_origin": "ast",
-      "community": 114,
+      "community": 27,
       "norm_label": "[2026-06-16] \u2014 physics preset dropdown positioning & viewport overflow fix",
       "id": "made_till_now_2026_06_16_physics_preset_dropdown_positioning_viewport_overflow_fix"
     },
@@ -1789,7 +1989,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L953",
       "_origin": "ast",
-      "community": 114,
+      "community": 27,
       "norm_label": "summary",
       "id": "made_till_now_summary_953"
     },
@@ -1799,7 +1999,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L956",
       "_origin": "ast",
-      "community": 114,
+      "community": 27,
       "norm_label": "changes",
       "id": "made_till_now_changes_956"
     },
@@ -2209,7 +2409,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1380",
       "_origin": "ast",
-      "community": 111,
+      "community": 27,
       "norm_label": "[2026-06-16] \u2014 voice vad sensitivity, api testing utility & graphify analysis",
       "id": "made_till_now_2026_06_16_voice_vad_sensitivity_api_testing_utility_graphify_analysis"
     },
@@ -2219,7 +2419,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1382",
       "_origin": "ast",
-      "community": 111,
+      "community": 27,
       "norm_label": "summary",
       "id": "made_till_now_summary_1382"
     },
@@ -2229,7 +2429,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1385",
       "_origin": "ast",
-      "community": 111,
+      "community": 27,
       "norm_label": "changes",
       "id": "made_till_now_changes_1385"
     },
@@ -2239,7 +2439,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1396",
       "_origin": "ast",
-      "community": 111,
+      "community": 27,
       "norm_label": "verification",
       "id": "made_till_now_verification_1396"
     },
@@ -2459,7 +2659,7 @@
       "source_file": "backend/app/models/api/google_voice.py",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 117,
+      "community": 26,
       "norm_label": "googlestt",
       "id": "api_google_voice_googlestt"
     },
@@ -2469,7 +2669,7 @@
       "source_file": "backend/app/models/api/google_voice.py",
       "source_location": "L59",
       "_origin": "ast",
-      "community": 117,
+      "community": 15,
       "norm_label": ".__init__()",
       "id": "api_google_voice_googlestt_init"
     },
@@ -2509,7 +2709,7 @@
       "source_file": "backend/app/models/api/google_voice.py",
       "source_location": "L56",
       "_origin": "ast",
-      "community": 117,
+      "community": 26,
       "norm_label": "google cloud speech-to-text. expects 16 khz mono 16-bit pcm wav (linear16),",
       "id": "api_google_voice_rationale_56"
     },
@@ -2519,7 +2719,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 104,
+      "community": 51,
       "norm_label": "network.tsx",
       "id": "routes_network"
     },
@@ -2529,7 +2729,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 104,
+      "community": 51,
       "norm_label": "simparams",
       "id": "routes_network_simparams"
     },
@@ -2539,7 +2739,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 104,
+      "community": 51,
       "norm_label": "sim_defaults",
       "id": "routes_network_sim_defaults"
     },
@@ -2549,7 +2749,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 104,
+      "community": 51,
       "norm_label": "sim_presets",
       "id": "routes_network_sim_presets"
     },
@@ -2559,7 +2759,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 104,
+      "community": 51,
       "norm_label": "slider_meta",
       "id": "routes_network_slider_meta"
     },
@@ -2579,7 +2779,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 104,
+      "community": 51,
       "norm_label": "group_color",
       "id": "routes_network_group_color"
     },
@@ -2589,7 +2789,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 104,
+      "community": 51,
       "norm_label": "group_shape",
       "id": "routes_network_group_shape"
     },
@@ -2599,7 +2799,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L39",
       "_origin": "ast",
-      "community": 104,
+      "community": 51,
       "norm_label": "posmap",
       "id": "routes_network_posmap"
     },
@@ -2619,7 +2819,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1019",
       "_origin": "ast",
-      "community": 104,
+      "community": 51,
       "norm_label": "control()",
       "id": "routes_network_control"
     },
@@ -2629,7 +2829,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1027",
       "_origin": "ast",
-      "community": 104,
+      "community": 51,
       "norm_label": "select()",
       "id": "routes_network_select"
     },
@@ -2639,7 +2839,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1037",
       "_origin": "ast",
-      "community": 104,
+      "community": 51,
       "norm_label": "stat()",
       "id": "routes_network_stat"
     },
@@ -2659,7 +2859,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1065",
       "_origin": "ast",
-      "community": 104,
+      "community": 51,
       "norm_label": "slider()",
       "id": "routes_network_slider"
     },
@@ -2869,7 +3069,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 15,
+      "community": 110,
       "norm_label": ".__init__()",
       "id": "api_sarvam_sarvambase_init"
     },
@@ -2889,7 +3089,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 110,
+      "community": 26,
       "norm_label": "sarvamstt",
       "id": "api_sarvam_sarvamstt"
     },
@@ -2939,7 +3139,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L131",
       "_origin": "ast",
-      "community": 26,
+      "community": 40,
       "norm_label": "sarvamtranslator",
       "id": "api_sarvam_sarvamtranslator"
     },
@@ -2979,7 +3179,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 110,
+      "community": 26,
       "norm_label": "saaras v3 speech-to-text. /speech-to-text is multipart/form-data.      sends l",
       "id": "api_sarvam_rationale_62"
     },
@@ -3019,7 +3219,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L132",
       "_origin": "ast",
-      "community": 26,
+      "community": 40,
       "norm_label": "mayura v1 \u2014 neural mt between kannada and english.",
       "id": "api_sarvam_rationale_132"
     },
@@ -3379,7 +3579,7 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L796",
       "_origin": "ast",
-      "community": 51,
+      "community": 48,
       "norm_label": "aimsg()",
       "id": "routes_console_aimsg"
     },
@@ -3419,7 +3619,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L239",
       "_origin": "ast",
-      "community": 113,
+      "community": 48,
       "norm_label": "speakviasarvam",
       "id": "voice_tts_speakviasarvam"
     },
@@ -4004,62 +4204,12 @@
       "id": "app_config_rationale_51"
     },
     {
-      "label": "main.py",
-      "file_type": "code",
-      "source_file": "backend/app/main.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 33,
-      "norm_label": "main.py",
-      "id": "app_main"
-    },
-    {
-      "label": "lifespan()",
-      "file_type": "code",
-      "source_file": "backend/app/main.py",
-      "source_location": "L31",
-      "_origin": "ast",
-      "community": 33,
-      "norm_label": "lifespan()",
-      "id": "app_main_lifespan"
-    },
-    {
-      "label": "FastAPI",
-      "file_type": "code",
-      "source_file": "backend/app/main.py",
-      "source_location": "L31",
-      "_origin": "ast",
-      "community": 33,
-      "norm_label": "fastapi",
-      "id": "fastapi"
-    },
-    {
-      "label": "create_app()",
-      "file_type": "code",
-      "source_file": "backend/app/main.py",
-      "source_location": "L60",
-      "_origin": "ast",
-      "community": 33,
-      "norm_label": "create_app()",
-      "id": "app_main_create_app"
-    },
-    {
-      "label": "FastAPI application factory for Satyam.",
-      "file_type": "rationale",
-      "source_file": "backend/app/main.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 33,
-      "norm_label": "fastapi application factory for satyam.",
-      "id": "app_main_rationale_1"
-    },
-    {
       "label": "registry.py",
       "file_type": "code",
       "source_file": "backend/app/models/registry.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
+      "community": 122,
       "norm_label": "registry.py",
       "id": "models_registry"
     },
@@ -4079,7 +4229,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 26,
+      "community": 122,
       "norm_label": "llm",
       "id": "llm"
     },
@@ -4089,7 +4239,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L52",
       "_origin": "ast",
-      "community": 93,
+      "community": 122,
       "norm_label": "get_fallback_llm()",
       "id": "models_registry_get_fallback_llm"
     },
@@ -4099,7 +4249,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 37,
+      "community": 122,
       "norm_label": "get_sql_llm()",
       "id": "models_registry_get_sql_llm"
     },
@@ -4109,7 +4259,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 39,
+      "community": 15,
       "norm_label": "get_embedder()",
       "id": "models_registry_get_embedder"
     },
@@ -4129,7 +4279,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 39,
+      "community": 15,
       "norm_label": "get_reranker()",
       "id": "models_registry_get_reranker"
     },
@@ -4149,7 +4299,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L104",
       "_origin": "ast",
-      "community": 117,
+      "community": 26,
       "norm_label": "get_stt()",
       "id": "models_registry_get_stt"
     },
@@ -4189,7 +4339,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L152",
       "_origin": "ast",
-      "community": 26,
+      "community": 40,
       "norm_label": "get_translator()",
       "id": "models_registry_get_translator"
     },
@@ -4199,7 +4349,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L152",
       "_origin": "ast",
-      "community": 26,
+      "community": 40,
       "norm_label": "translator",
       "id": "translator"
     },
@@ -4209,7 +4359,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
+      "community": 122,
       "norm_label": "factory that resolves the configured backend to concrete model instances.  cache",
       "id": "models_registry_rationale_1"
     },
@@ -4229,7 +4379,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 93,
+      "community": 122,
       "norm_label": "low-latency fallback lane (always groq) used on timeout / 429 from primary.",
       "id": "models_registry_rationale_53"
     },
@@ -4239,7 +4389,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 37,
+      "community": 122,
       "norm_label": "return the text-to-sql llm.      resolution order:       1. explicit `engine` ar",
       "id": "models_registry_rationale_62"
     },
@@ -4249,7 +4399,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L105",
       "_origin": "ast",
-      "community": 117,
+      "community": 26,
       "norm_label": "sarvam (primary) \u2192 google \u2192 bhashini (fallback) \u2192 local whisper.      resolution",
       "id": "models_registry_rationale_105"
     },
@@ -4269,7 +4419,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L153",
       "_origin": "ast",
-      "community": 26,
+      "community": 40,
       "norm_label": "sarvam translate (primary) \u2192 bhashini nmt (fallback).     falls back to bhashini",
       "id": "models_registry_rationale_153"
     },
@@ -4509,7 +4659,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "audit.py",
       "id": "backend_app_api_routes_audit_py_routes_audit"
     },
@@ -4549,7 +4699,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "audit-log endpoint with hash-chain verification (admin/l3+ only).",
       "id": "routes_audit_rationale_1"
     },
@@ -4709,7 +4859,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 42,
+      "community": 3,
       "norm_label": "map.py",
       "id": "routes_map"
     },
@@ -4719,7 +4869,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 42,
+      "community": 3,
       "norm_label": "hotspots()",
       "id": "routes_map_hotspots"
     },
@@ -4729,7 +4879,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 42,
+      "community": 3,
       "norm_label": "hotspotrequest",
       "id": "hotspotrequest"
     },
@@ -4739,7 +4889,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 42,
+      "community": 3,
       "norm_label": "asyncsession",
       "id": "backend_app_api_routes_map_py_asyncsession"
     },
@@ -4749,7 +4899,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 42,
+      "community": 3,
       "norm_label": "principal",
       "id": "backend_app_api_routes_map_py_principal"
     },
@@ -4759,7 +4909,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 42,
+      "community": 3,
       "norm_label": "hotspotresponse",
       "id": "hotspotresponse"
     },
@@ -4769,7 +4919,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 42,
+      "community": 3,
       "norm_label": "station_breakdown()",
       "id": "routes_map_station_breakdown"
     },
@@ -4779,7 +4929,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 42,
+      "community": 3,
       "norm_label": "stationbreakdownrequest",
       "id": "stationbreakdownrequest"
     },
@@ -4789,7 +4939,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 42,
+      "community": 3,
       "norm_label": "stationbreakdownresponse",
       "id": "stationbreakdownresponse"
     },
@@ -4799,7 +4949,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 42,
+      "community": 3,
       "norm_label": "offender_trail()",
       "id": "routes_map_offender_trail"
     },
@@ -4809,7 +4959,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 42,
+      "community": 3,
       "norm_label": "offendertrailrequest",
       "id": "offendertrailrequest"
     },
@@ -4819,7 +4969,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 42,
+      "community": 3,
       "norm_label": "offendertrailresponse",
       "id": "offendertrailresponse"
     },
@@ -4829,7 +4979,7 @@
       "source_file": "backend/app/api/routes/map.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 42,
+      "community": 3,
       "norm_label": "geospatial hotspot endpoint.",
       "id": "routes_map_rationale_1"
     },
@@ -5719,7 +5869,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 51,
+      "community": 108,
       "norm_label": "audit.tsx",
       "id": "frontend_src_routes_audit_tsx_routes_audit"
     },
@@ -5729,7 +5879,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 8,
+      "community": 108,
       "norm_label": "route",
       "id": "routes_audit_route"
     },
@@ -5739,7 +5889,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 51,
+      "community": 108,
       "norm_label": "auditrow",
       "id": "routes_audit_auditrow"
     },
@@ -5749,7 +5899,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 51,
+      "community": 108,
       "norm_label": "audit()",
       "id": "routes_audit_audit"
     },
@@ -5759,7 +5909,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L219",
       "_origin": "ast",
-      "community": 51,
+      "community": 108,
       "norm_label": "th()",
       "id": "routes_audit_th"
     },
@@ -5769,7 +5919,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L222",
       "_origin": "ast",
-      "community": 51,
+      "community": 108,
       "norm_label": "filter()",
       "id": "routes_audit_filter"
     },
@@ -5779,7 +5929,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L230",
       "_origin": "ast",
-      "community": 51,
+      "community": 108,
       "norm_label": "select()",
       "id": "routes_audit_select"
     },
@@ -5879,7 +6029,7 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L70",
       "_origin": "ast",
-      "community": 15,
+      "community": 39,
       "norm_label": ".embed()",
       "id": "local_embedder_bge_bgem3embedder_embed"
     },
@@ -5919,7 +6069,7 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 15,
+      "community": 39,
       "norm_label": "return one l2-normalised 1024-float vector per input text.",
       "id": "local_embedder_bge_rationale_71"
     },
@@ -5929,7 +6079,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 15,
+      "community": 39,
       "norm_label": "embed_narratives.py",
       "id": "seed_embed_narratives"
     },
@@ -5939,7 +6089,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L44",
       "_origin": "ast",
-      "community": 15,
+      "community": 39,
       "norm_label": "get_url()",
       "id": "seed_embed_narratives_get_url"
     },
@@ -5949,7 +6099,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L58",
       "_origin": "ast",
-      "community": 15,
+      "community": 39,
       "norm_label": "load_embedder()",
       "id": "seed_embed_narratives_load_embedder"
     },
@@ -5959,7 +6109,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 15,
+      "community": 39,
       "norm_label": "vec_literal()",
       "id": "seed_embed_narratives_vec_literal"
     },
@@ -5969,7 +6119,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L83",
       "_origin": "ast",
-      "community": 15,
+      "community": 39,
       "norm_label": "main()",
       "id": "seed_embed_narratives_main"
     },
@@ -5979,7 +6129,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 15,
+      "community": 39,
       "norm_label": "satyam \u2014 bge-m3 narrative embedding job.  fills narratives.embedding (vector(1",
       "id": "seed_embed_narratives_rationale_1"
     },
@@ -5989,7 +6139,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L59",
       "_origin": "ast",
-      "community": 15,
+      "community": 39,
       "norm_label": "single source of truth: reuse the same embedder used at query time.      this",
       "id": "seed_embed_narratives_rationale_59"
     },
@@ -6049,7 +6199,7 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 108,
+      "community": 15,
       "norm_label": "reranker_bge.py",
       "id": "local_reranker_bge"
     },
@@ -6059,7 +6209,7 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 108,
+      "community": 15,
       "norm_label": "_load_model()",
       "id": "local_reranker_bge_load_model"
     },
@@ -6069,7 +6219,7 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 108,
+      "community": 15,
       "norm_label": "bgereranker",
       "id": "local_reranker_bge_bgereranker"
     },
@@ -6079,7 +6229,7 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L32",
       "_origin": "ast",
-      "community": 108,
+      "community": 15,
       "norm_label": ".__init__()",
       "id": "local_reranker_bge_bgereranker_init"
     },
@@ -6089,7 +6239,7 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 108,
+      "community": 15,
       "norm_label": "._order()",
       "id": "local_reranker_bge_bgereranker_order"
     },
@@ -6099,7 +6249,7 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 108,
+      "community": 15,
       "norm_label": ".rerank()",
       "id": "local_reranker_bge_bgereranker_rerank"
     },
@@ -6109,7 +6259,7 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 108,
+      "community": 15,
       "norm_label": "bge-reranker-v2-m3 cross-encoder reranker.  real local inference \u2014 loads weights",
       "id": "local_reranker_bge_rationale_1"
     },
@@ -6119,7 +6269,7 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 108,
+      "community": 15,
       "norm_label": "load crossencoder once and cache for the process lifetime (~1.1 gb weights).",
       "id": "local_reranker_bge_rationale_17"
     },
@@ -6129,7 +6279,7 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 108,
+      "community": 15,
       "norm_label": "bge-reranker-v2-m3 cross-encoder.  registry calls bgereranker().",
       "id": "local_reranker_bge_rationale_30"
     },
@@ -6139,7 +6289,7 @@
       "source_file": "backend/app/models/local/reranker_bge.py",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 108,
+      "community": 15,
       "norm_label": "return document indices sorted best-first (rag.py does order[:k]).",
       "id": "local_reranker_bge_rationale_48"
     },
@@ -6609,7 +6759,7 @@
       "source_file": "backend/app/pipeline/tools/rag.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
+      "community": 15,
       "norm_label": "rag.py",
       "id": "tools_rag"
     },
@@ -6619,7 +6769,7 @@
       "source_file": "backend/app/pipeline/tools/rag.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 39,
+      "community": 15,
       "norm_label": "_to_pgvector()",
       "id": "tools_rag_to_pgvector"
     },
@@ -6629,7 +6779,7 @@
       "source_file": "backend/app/pipeline/tools/rag.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 39,
+      "community": 15,
       "norm_label": "search_narratives()",
       "id": "tools_rag_search_narratives"
     },
@@ -6639,7 +6789,7 @@
       "source_file": "backend/app/pipeline/tools/rag.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 39,
+      "community": 15,
       "norm_label": "asyncsession",
       "id": "backend_app_pipeline_tools_rag_py_asyncsession"
     },
@@ -6649,7 +6799,7 @@
       "source_file": "backend/app/pipeline/tools/rag.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
+      "community": 15,
       "norm_label": "narrative retrieval (rag) over pgvector, with reranking.  embeds the query with",
       "id": "tools_rag_rationale_1"
     },
@@ -6672,16 +6822,6 @@
       "community": 16,
       "norm_label": "unsafesql",
       "id": "tools_sql_guard_unsafesql"
-    },
-    {
-      "label": "Exception",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "community": 16,
-      "norm_label": "exception",
-      "id": "exception"
     },
     {
       "label": "sanitize()",
@@ -6939,7 +7079,7 @@
       "source_file": "backend/tests/test_health.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "test_health.py",
       "id": "tests_test_health"
     },
@@ -6949,7 +7089,7 @@
       "source_file": "backend/tests/test_health.py",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "test_health_ok()",
       "id": "tests_test_health_test_health_ok"
     },
@@ -6959,7 +7099,7 @@
       "source_file": "backend/tests/test_health.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "test_login_and_me()",
       "id": "tests_test_health_test_login_and_me"
     },
@@ -7139,7 +7279,7 @@
       "source_file": "frontend/src/components/CaseDrawer.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 48,
+      "community": 51,
       "norm_label": "casedrawer.tsx",
       "id": "components_casedrawer"
     },
@@ -7149,7 +7289,7 @@
       "source_file": "frontend/src/components/CaseDrawer.tsx",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 48,
+      "community": 51,
       "norm_label": "casedrawer()",
       "id": "components_casedrawer_casedrawer"
     },
@@ -7159,7 +7299,7 @@
       "source_file": "frontend/src/components/CaseDrawer.tsx",
       "source_location": "L150",
       "_origin": "ast",
-      "community": 48,
+      "community": 51,
       "norm_label": "field()",
       "id": "components_casedrawer_field"
     },
@@ -7939,7 +8079,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 15,
+      "community": 33,
       "norm_label": "security.py",
       "id": "core_security"
     },
@@ -7949,7 +8089,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 15,
+      "community": 33,
       "norm_label": "create_access_token()",
       "id": "core_security_create_access_token"
     },
@@ -7959,7 +8099,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 15,
+      "community": 33,
       "norm_label": "decode_token()",
       "id": "core_security_decode_token"
     },
@@ -7969,7 +8109,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 15,
+      "community": 33,
       "norm_label": "jwt issuing / verification.",
       "id": "core_security_rationale_1"
     },
@@ -8519,7 +8659,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 6,
       "norm_label": "package.json",
       "id": "frontend_package"
     },
@@ -8529,7 +8669,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L2",
       "_origin": "ast",
-      "community": 3,
+      "community": 6,
       "norm_label": "name",
       "id": "frontend_package_name"
     },
@@ -8539,7 +8679,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 3,
+      "community": 6,
       "norm_label": "private",
       "id": "frontend_package_private"
     },
@@ -8549,7 +8689,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 3,
+      "community": 6,
       "norm_label": "sideeffects",
       "id": "frontend_package_sideeffects"
     },
@@ -8559,7 +8699,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 3,
+      "community": 6,
       "norm_label": "type",
       "id": "frontend_package_type"
     },
@@ -8569,7 +8709,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 3,
+      "community": 6,
       "norm_label": "scripts",
       "id": "frontend_package_scripts"
     },
@@ -8579,7 +8719,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 3,
+      "community": 6,
       "norm_label": "dev",
       "id": "frontend_package_scripts_dev"
     },
@@ -8589,7 +8729,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 3,
+      "community": 6,
       "norm_label": "build",
       "id": "frontend_package_scripts_build"
     },
@@ -8599,7 +8739,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 3,
+      "community": 6,
       "norm_label": "build:dev",
       "id": "frontend_package_scripts_build_dev"
     },
@@ -8609,7 +8749,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 3,
+      "community": 6,
       "norm_label": "preview",
       "id": "frontend_package_scripts_preview"
     },
@@ -8619,7 +8759,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 3,
+      "community": 6,
       "norm_label": "lint",
       "id": "frontend_package_scripts_lint"
     },
@@ -8629,7 +8769,7 @@
       "source_file": "frontend/package.json",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 3,
+      "community": 6,
       "norm_label": "format",
       "id": "frontend_package_scripts_format"
     },
@@ -9539,7 +9679,7 @@
       "source_file": "backend/app/api/routes/chat.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "chat.py",
       "id": "routes_chat"
     },
@@ -9599,7 +9739,7 @@
       "source_file": "backend/app/api/routes/chat.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "conversational endpoint: grounded answers streamed over sse.  the response is a",
       "id": "routes_chat_rationale_1"
     },
@@ -9774,42 +9914,12 @@
       "id": "routes_init"
     },
     {
-      "label": "health.py",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "health.py",
-      "id": "routes_health"
-    },
-    {
-      "label": "health()",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L12",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "health()",
-      "id": "routes_health_health"
-    },
-    {
-      "label": "Liveness / readiness probe.",
-      "file_type": "rationale",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 15,
-      "norm_label": "liveness / readiness probe.",
-      "id": "routes_health_rationale_1"
-    },
-    {
       "label": "network.py",
       "file_type": "code",
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "network.py",
       "id": "backend_app_api_routes_network_py_routes_network"
     },
@@ -9869,7 +9979,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "link-analysis (ego network) endpoint.",
       "id": "routes_network_rationale_1"
     },
@@ -9879,7 +9989,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "reports.py",
       "id": "backend_app_api_routes_reports_py_routes_reports"
     },
@@ -9939,7 +10049,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "report builder endpoint.",
       "id": "routes_reports_rationale_1"
     },
@@ -9989,7 +10099,7 @@
       "source_file": "backend/app/logging_config.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "logging_config.py",
       "id": "app_logging_config"
     },
@@ -9999,7 +10109,7 @@
       "source_file": "backend/app/logging_config.py",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "configure_logging()",
       "id": "app_logging_config_configure_logging"
     },
@@ -10009,7 +10119,7 @@
       "source_file": "backend/app/logging_config.py",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "get_logger()",
       "id": "app_logging_config_get_logger"
     },
@@ -10019,7 +10129,7 @@
       "source_file": "backend/app/logging_config.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "structured logging setup.",
       "id": "app_logging_config_rationale_1"
     },
@@ -10049,7 +10159,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 26,
+      "community": 40,
       "norm_label": "bhashini.py",
       "id": "api_bhashini"
     },
@@ -10059,7 +10169,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 26,
+      "community": 40,
       "norm_label": "_bhashinibase",
       "id": "api_bhashini_bhashinibase"
     },
@@ -10069,7 +10179,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 15,
+      "community": 40,
       "norm_label": ".__init__()",
       "id": "api_bhashini_bhashinibase_init"
     },
@@ -10119,7 +10229,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 26,
+      "community": 40,
       "norm_label": "bhashinitranslator",
       "id": "api_bhashini_bhashinitranslator"
     },
@@ -10129,7 +10239,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 26,
+      "community": 40,
       "norm_label": ".translate()",
       "id": "api_bhashini_bhashinitranslator_translate"
     },
@@ -10139,99 +10249,9 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 26,
+      "community": 40,
       "norm_label": "bhashini (govt. of india) clients \u2014 primary indic layer (kannada stt/tts/mt).  t",
       "id": "api_bhashini_rationale_1"
-    },
-    {
-      "label": "gemini.py",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 46,
-      "norm_label": "gemini.py",
-      "id": "api_gemini"
-    },
-    {
-      "label": "BlockedByModel",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L35",
-      "_origin": "ast",
-      "community": 46,
-      "norm_label": "blockedbymodel",
-      "id": "api_gemini_blockedbymodel"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L36",
-      "_origin": "ast",
-      "community": 46,
-      "norm_label": ".__init__()",
-      "id": "api_gemini_blockedbymodel_init"
-    },
-    {
-      "label": "GeminiLLM",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L41",
-      "_origin": "ast",
-      "community": 46,
-      "norm_label": "geminillm",
-      "id": "api_gemini_geminillm"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L42",
-      "_origin": "ast",
-      "community": 46,
-      "norm_label": ".__init__()",
-      "id": "api_gemini_geminillm_init"
-    },
-    {
-      "label": "._payload()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L48",
-      "_origin": "ast",
-      "community": 46,
-      "norm_label": "._payload()",
-      "id": "api_gemini_geminillm_payload"
-    },
-    {
-      "label": ".complete()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L64",
-      "_origin": "ast",
-      "community": 46,
-      "norm_label": ".complete()",
-      "id": "api_gemini_geminillm_complete"
-    },
-    {
-      "label": ".stream()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L81",
-      "_origin": "ast",
-      "community": 46,
-      "norm_label": ".stream()",
-      "id": "api_gemini_geminillm_stream"
-    },
-    {
-      "label": "Gemini 2.5 Flash client (primary chat / Text-to-SQL lane).  Notes baked in from",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 46,
-      "norm_label": "gemini 2.5 flash client (primary chat / text-to-sql lane).  notes baked in from",
-      "id": "api_gemini_rationale_1"
     },
     {
       "label": "groq.py",
@@ -10529,7 +10549,7 @@
       "source_file": "backend/app/models/local/stt_whisper.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 126,
+      "community": 26,
       "norm_label": "stt_whisper.py",
       "id": "local_stt_whisper"
     },
@@ -10559,7 +10579,7 @@
       "source_file": "backend/app/models/local/stt_whisper.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 126,
+      "community": 26,
       "norm_label": "faster-whisper / indicconformer stt. demo stub.",
       "id": "local_stt_whisper_rationale_1"
     },
@@ -10569,7 +10589,7 @@
       "source_file": "backend/app/models/local/tts_parler.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 127,
+      "community": 26,
       "norm_label": "tts_parler.py",
       "id": "local_tts_parler"
     },
@@ -10599,7 +10619,7 @@
       "source_file": "backend/app/models/local/tts_parler.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 127,
+      "community": 26,
       "norm_label": "indic-parler-tts. demo stub.",
       "id": "local_tts_parler_rationale_1"
     },
@@ -10719,7 +10739,7 @@
       "source_file": "backend/app/pipeline/slots.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 42,
+      "community": 51,
       "norm_label": "_memorystore",
       "id": "pipeline_slots_memorystore"
     },
@@ -11349,7 +11369,7 @@
       "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "landingshell.tsx",
       "id": "components_landingshell"
     },
@@ -11359,7 +11379,7 @@
       "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "nb()",
       "id": "components_landingshell_nb"
     },
@@ -11369,7 +11389,7 @@
       "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "gridbg()",
       "id": "components_landingshell_gridbg"
     },
@@ -11379,7 +11399,7 @@
       "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "header()",
       "id": "components_landingshell_header"
     },
@@ -11389,7 +11409,7 @@
       "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L76",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "footercol()",
       "id": "components_landingshell_footercol"
     },
@@ -11399,7 +11419,7 @@
       "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L93",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "footer()",
       "id": "components_landingshell_footer"
     },
@@ -11459,7 +11479,7 @@
       "source_file": "frontend/src/components/ui/accordion.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 7,
+      "community": 115,
       "norm_label": "accordion.tsx",
       "id": "ui_accordion"
     },
@@ -11469,7 +11489,7 @@
       "source_file": "frontend/src/components/ui/accordion.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 7,
+      "community": 115,
       "norm_label": "accordionitem",
       "id": "ui_accordion_accordionitem"
     },
@@ -11479,7 +11499,7 @@
       "source_file": "frontend/src/components/ui/accordion.tsx",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 7,
+      "community": 115,
       "norm_label": "accordiontrigger",
       "id": "ui_accordion_accordiontrigger"
     },
@@ -11489,7 +11509,7 @@
       "source_file": "frontend/src/components/ui/accordion.tsx",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 7,
+      "community": 115,
       "norm_label": "accordioncontent",
       "id": "ui_accordion_accordioncontent"
     },
@@ -12499,7 +12519,7 @@
       "source_file": "frontend/src/components/ui/drawer.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 13,
+      "community": 104,
       "norm_label": "drawer.tsx",
       "id": "ui_drawer"
     },
@@ -12509,7 +12529,7 @@
       "source_file": "frontend/src/components/ui/drawer.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 13,
+      "community": 104,
       "norm_label": "drawer()",
       "id": "ui_drawer_drawer"
     },
@@ -12519,7 +12539,7 @@
       "source_file": "frontend/src/components/ui/drawer.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 13,
+      "community": 104,
       "norm_label": "draweroverlay",
       "id": "ui_drawer_draweroverlay"
     },
@@ -12529,7 +12549,7 @@
       "source_file": "frontend/src/components/ui/drawer.tsx",
       "source_location": "L32",
       "_origin": "ast",
-      "community": 13,
+      "community": 104,
       "norm_label": "drawercontent",
       "id": "ui_drawer_drawercontent"
     },
@@ -12539,7 +12559,7 @@
       "source_file": "frontend/src/components/ui/drawer.tsx",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 13,
+      "community": 104,
       "norm_label": "drawerheader()",
       "id": "ui_drawer_drawerheader"
     },
@@ -12549,7 +12569,7 @@
       "source_file": "frontend/src/components/ui/drawer.tsx",
       "source_location": "L58",
       "_origin": "ast",
-      "community": 13,
+      "community": 104,
       "norm_label": "drawerfooter()",
       "id": "ui_drawer_drawerfooter"
     },
@@ -12559,7 +12579,7 @@
       "source_file": "frontend/src/components/ui/drawer.tsx",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 13,
+      "community": 104,
       "norm_label": "drawertitle",
       "id": "ui_drawer_drawertitle"
     },
@@ -12569,7 +12589,7 @@
       "source_file": "frontend/src/components/ui/drawer.tsx",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 13,
+      "community": 104,
       "norm_label": "drawerdescription",
       "id": "ui_drawer_drawerdescription"
     },
@@ -12819,7 +12839,7 @@
       "source_file": "frontend/src/components/ui/input-otp.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 40,
+      "community": 7,
       "norm_label": "input-otp.tsx",
       "id": "ui_input_otp"
     },
@@ -12829,7 +12849,7 @@
       "source_file": "frontend/src/components/ui/input-otp.tsx",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 40,
+      "community": 7,
       "norm_label": "inputotp",
       "id": "ui_input_otp_inputotp"
     },
@@ -12839,7 +12859,7 @@
       "source_file": "frontend/src/components/ui/input-otp.tsx",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 40,
+      "community": 7,
       "norm_label": "inputotpgroup",
       "id": "ui_input_otp_inputotpgroup"
     },
@@ -12849,7 +12869,7 @@
       "source_file": "frontend/src/components/ui/input-otp.tsx",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 40,
+      "community": 7,
       "norm_label": "inputotpslot",
       "id": "ui_input_otp_inputotpslot"
     },
@@ -12859,7 +12879,7 @@
       "source_file": "frontend/src/components/ui/input-otp.tsx",
       "source_location": "L59",
       "_origin": "ast",
-      "community": 40,
+      "community": 7,
       "norm_label": "inputotpseparator",
       "id": "ui_input_otp_inputotpseparator"
     },
@@ -14039,7 +14059,7 @@
       "source_file": "frontend/src/components/ui/tabs.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 7,
+      "community": 116,
       "norm_label": "tabs.tsx",
       "id": "ui_tabs"
     },
@@ -14049,7 +14069,7 @@
       "source_file": "frontend/src/components/ui/tabs.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 7,
+      "community": 116,
       "norm_label": "tabslist",
       "id": "ui_tabs_tabslist"
     },
@@ -14059,7 +14079,7 @@
       "source_file": "frontend/src/components/ui/tabs.tsx",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 7,
+      "community": 116,
       "norm_label": "tabstrigger",
       "id": "ui_tabs_tabstrigger"
     },
@@ -14069,7 +14089,7 @@
       "source_file": "frontend/src/components/ui/tabs.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 7,
+      "community": 116,
       "norm_label": "tabscontent",
       "id": "ui_tabs_tabscontent"
     },
@@ -14099,7 +14119,7 @@
       "source_file": "frontend/src/components/ui/toggle-group.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 7,
+      "community": 111,
       "norm_label": "toggle-group.tsx",
       "id": "ui_toggle_group"
     },
@@ -14109,7 +14129,7 @@
       "source_file": "frontend/src/components/ui/toggle-group.tsx",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 7,
+      "community": 111,
       "norm_label": "togglegroupcontext",
       "id": "ui_toggle_group_togglegroupcontext"
     },
@@ -14119,7 +14139,7 @@
       "source_file": "frontend/src/components/ui/toggle-group.tsx",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 7,
+      "community": 111,
       "norm_label": "togglegroup",
       "id": "ui_toggle_group_togglegroup"
     },
@@ -14129,7 +14149,7 @@
       "source_file": "frontend/src/components/ui/toggle-group.tsx",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 7,
+      "community": 111,
       "norm_label": "togglegroupitem",
       "id": "ui_toggle_group_togglegroupitem"
     },
@@ -14139,7 +14159,7 @@
       "source_file": "frontend/src/components/ui/toggle.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 7,
+      "community": 111,
       "norm_label": "toggle.tsx",
       "id": "ui_toggle"
     },
@@ -14149,7 +14169,7 @@
       "source_file": "frontend/src/components/ui/toggle.tsx",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 7,
+      "community": 111,
       "norm_label": "togglevariants",
       "id": "ui_toggle_togglevariants"
     },
@@ -14159,7 +14179,7 @@
       "source_file": "frontend/src/components/ui/toggle.tsx",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 7,
+      "community": 111,
       "norm_label": "toggle",
       "id": "ui_toggle_toggle"
     },
@@ -14299,7 +14319,7 @@
       "source_file": "frontend/src/lib/error-reporting.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 116,
+      "community": 8,
       "norm_label": "error-reporting.ts",
       "id": "lib_error_reporting"
     },
@@ -14309,7 +14329,7 @@
       "source_file": "frontend/src/lib/error-reporting.ts",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 116,
+      "community": 8,
       "norm_label": "reporterror()",
       "id": "lib_error_reporting_reporterror"
     },
@@ -14359,7 +14379,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 116,
+      "community": 8,
       "norm_label": "__root.tsx",
       "id": "routes_root"
     },
@@ -14369,7 +14389,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 116,
+      "community": 8,
       "norm_label": "notfoundcomponent()",
       "id": "routes_root_notfoundcomponent"
     },
@@ -14379,7 +14399,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 116,
+      "community": 8,
       "norm_label": "errorcomponent()",
       "id": "routes_root_errorcomponent"
     },
@@ -14399,7 +14419,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L101",
       "_origin": "ast",
-      "community": 116,
+      "community": 8,
       "norm_label": "rootshell()",
       "id": "routes_root_rootshell"
     },
@@ -14409,7 +14429,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L115",
       "_origin": "ast",
-      "community": 116,
+      "community": 8,
       "norm_label": "rootcomponent()",
       "id": "routes_root_rootcomponent"
     },
@@ -14419,7 +14439,7 @@
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "about.tsx",
       "id": "routes_about"
     },
@@ -14429,7 +14449,7 @@
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "route",
       "id": "routes_about_route"
     },
@@ -14439,7 +14459,7 @@
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "pipelinestep",
       "id": "routes_about_pipelinestep"
     },
@@ -14449,7 +14469,7 @@
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L79",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "aboutpage()",
       "id": "routes_about_aboutpage"
     },
@@ -14459,7 +14479,7 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 8,
+      "community": 51,
       "norm_label": "index.tsx",
       "id": "routes_index"
     },
@@ -14469,7 +14489,7 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 8,
+      "community": 51,
       "norm_label": "route",
       "id": "routes_index_route"
     },
@@ -14479,7 +14499,7 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 8,
+      "community": 51,
       "norm_label": "login()",
       "id": "routes_index_login"
     },
@@ -14489,7 +14509,7 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L219",
       "_origin": "ast",
-      "community": 8,
+      "community": 51,
       "norm_label": "trustbadge()",
       "id": "routes_index_trustbadge"
     },
@@ -14499,7 +14519,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "landing.tsx",
       "id": "routes_landing"
     },
@@ -14509,7 +14529,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "route",
       "id": "routes_landing_route"
     },
@@ -14519,7 +14539,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "landing()",
       "id": "routes_landing_landing"
     },
@@ -14529,7 +14549,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "hero()",
       "id": "routes_landing_hero"
     },
@@ -14539,7 +14559,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L200",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "ministat()",
       "id": "routes_landing_ministat"
     },
@@ -14549,7 +14569,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L219",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "stats()",
       "id": "routes_landing_stats"
     },
@@ -14559,7 +14579,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L244",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "features()",
       "id": "routes_landing_features"
     },
@@ -14569,7 +14589,7 @@
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L316",
       "_origin": "ast",
-      "community": 9,
+      "community": 8,
       "norm_label": "testimonials()",
       "id": "routes_landing_testimonials"
     },
@@ -14579,7 +14599,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 51,
+      "community": 9,
       "norm_label": "reports.tsx",
       "id": "frontend_src_routes_reports_tsx_routes_reports"
     },
@@ -14589,7 +14609,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 51,
+      "community": 8,
       "norm_label": "route",
       "id": "routes_reports_route"
     },
@@ -14599,7 +14619,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 51,
+      "community": 9,
       "norm_label": "item",
       "id": "routes_reports_item"
     },
@@ -14609,7 +14629,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 51,
+      "community": 9,
       "norm_label": "reports()",
       "id": "routes_reports_reports"
     },
@@ -14619,7 +14639,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L195",
       "_origin": "ast",
-      "community": 51,
+      "community": 9,
       "norm_label": "itemicon()",
       "id": "routes_reports_itemicon"
     },
@@ -14629,7 +14649,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L203",
       "_origin": "ast",
-      "community": 51,
+      "community": 9,
       "norm_label": "section()",
       "id": "routes_reports_section"
     },
@@ -14639,7 +14659,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 51,
+      "community": 9,
       "norm_label": "transcripts.tsx",
       "id": "routes_transcripts"
     },
@@ -14649,7 +14669,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 51,
+      "community": 9,
       "norm_label": "route",
       "id": "routes_transcripts_route"
     },
@@ -14659,7 +14679,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 51,
+      "community": 9,
       "norm_label": "transcript",
       "id": "routes_transcripts_transcript"
     },
@@ -14669,7 +14689,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 51,
+      "community": 9,
       "norm_label": "loadtranscripts()",
       "id": "routes_transcripts_loadtranscripts"
     },
@@ -14679,7 +14699,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 51,
+      "community": 9,
       "norm_label": "savetranscripts()",
       "id": "routes_transcripts_savetranscripts"
     },
@@ -14689,7 +14709,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 51,
+      "community": 9,
       "norm_label": "transcripts()",
       "id": "routes_transcripts_transcripts"
     },
@@ -15895,6 +15915,609 @@
     }
   ],
   "links": [
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_health",
+      "target": "app_config"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "routes_health",
+      "target": "app_logging_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_health",
+      "target": "fastapi"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_health",
+      "target": "routes_health_health"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "routes_health",
+      "target": "routes_health_models",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_health_rationale_1",
+      "target": "routes_health"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "routes_health_health",
+      "target": "app_config_get_settings"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "routes_health_rationale_27",
+      "target": "routes_health_models",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/main.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_main",
+      "target": "app_config"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/main.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_main",
+      "target": "app_logging_config"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/main.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_main",
+      "target": "app_main_create_app"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/main.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_main",
+      "target": "app_main_lifespan"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/main.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_main",
+      "target": "fastapi"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/main.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_main_rationale_1",
+      "target": "app_main"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/tests/test_health.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_health",
+      "target": "app_main"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/app/main.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "app_main_lifespan",
+      "target": "app_config_get_settings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/app/main.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "app_main_lifespan",
+      "target": "app_logging_config_configure_logging"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/main.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_main_lifespan",
+      "target": "fastapi"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/main.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "app_main_lifespan",
+      "target": "models_registry_get_embedder"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/main.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "app_main_lifespan",
+      "target": "models_registry_get_reranker"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/deps.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_deps",
+      "target": "fastapi"
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/main.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_main_create_app",
+      "target": "fastapi"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/audit.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_app_api_routes_audit_py_routes_audit",
+      "target": "fastapi"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/network.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_app_api_routes_network_py_routes_network",
+      "target": "fastapi"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/reports.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "backend_app_api_routes_reports_py_routes_reports",
+      "target": "fastapi"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/auth.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_auth",
+      "target": "fastapi"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/cases.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_cases",
+      "target": "fastapi"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/chat.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_chat",
+      "target": "fastapi"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/map.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_map",
+      "target": "fastapi"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/settings.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_settings",
+      "target": "fastapi"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/voice.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_voice",
+      "target": "fastapi"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/app/main.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "app_main_create_app",
+      "target": "app_config_get_settings"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini",
+      "target": "api_gemini_blockedbymodel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini",
+      "target": "api_gemini_geminillm"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini",
+      "target": "app_config"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "api_gemini",
+      "target": "app_logging_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini_rationale_1",
+      "target": "api_gemini"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini_blockedbymodel",
+      "target": "api_gemini_blockedbymodel_init"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini_blockedbymodel",
+      "target": "exception"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini_geminillm_complete",
+      "target": "api_gemini_blockedbymodel"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/core/rbac.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_rbac_accessdenied",
+      "target": "exception"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/pipeline/tools/sql_guard.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_sql_guard_unsafesql",
+      "target": "exception"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini_blockedbymodel_init",
+      "target": "api_gemini_geminillm_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini_geminillm",
+      "target": "api_gemini_geminillm_complete"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini_geminillm",
+      "target": "api_gemini_geminillm_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini_geminillm",
+      "target": "api_gemini_geminillm_payload"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini_geminillm",
+      "target": "api_gemini_geminillm_stream"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L22",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "embedder",
+      "target": "api_gemini_geminillm"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L22",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "llm",
+      "target": "api_gemini_geminillm"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "models_registry_get_llm",
+      "target": "api_gemini_geminillm"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L22",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "reranker",
+      "target": "api_gemini_geminillm"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L22",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "speechtotext",
+      "target": "api_gemini_geminillm"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L22",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "texttospeech",
+      "target": "api_gemini_geminillm"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L22",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "translator",
+      "target": "api_gemini_geminillm"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "api_gemini_geminillm_init",
+      "target": "app_config_get_settings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini_geminillm_complete",
+      "target": "api_gemini_geminillm_payload"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/gemini.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_gemini_geminillm_stream",
+      "target": "api_gemini_geminillm_complete"
+    },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
@@ -20328,17 +20951,6 @@
       "target": "app_config"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/voice.py",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_voice",
-      "target": "fastapi"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/voice.py",
@@ -22498,17 +23110,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini",
-      "target": "app_config"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "backend/app/models/api/groq.py",
       "source_location": "L13",
       "weight": 1.0,
@@ -22565,17 +23166,6 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "app_config_rationale_51",
-      "target": "app_config"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/main.py",
-      "source_location": "L12",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_main",
       "target": "app_config"
     },
     {
@@ -22653,17 +23243,6 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "routes_auth",
-      "target": "app_config"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health",
       "target": "app_config"
     },
     {
@@ -22755,17 +23334,6 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L43",
-      "weight": 1.0,
-      "source": "api_gemini_geminillm_init",
-      "target": "app_config_get_settings"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
       "source_file": "backend/app/models/api/groq.py",
       "source_location": "L20",
       "weight": 1.0,
@@ -22781,28 +23349,6 @@
       "source_location": "L26",
       "weight": 1.0,
       "source": "api_ollama_cloud_ollamacloudllm_init",
-      "target": "app_config_get_settings"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/app/main.py",
-      "source_location": "L33",
-      "weight": 1.0,
-      "source": "app_main_create_app",
-      "target": "app_config_get_settings"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/app/main.py",
-      "source_location": "L21",
-      "weight": 1.0,
-      "source": "app_main_lifespan",
       "target": "app_config_get_settings"
     },
     {
@@ -22962,17 +23508,6 @@
     {
       "relation": "calls",
       "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L13",
-      "weight": 1.0,
-      "source": "routes_health_health",
-      "target": "app_config_get_settings"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "backend/seed/embed_narratives.py",
@@ -23002,234 +23537,6 @@
       "weight": 1.0,
       "source": "tools_rag_search_narratives",
       "target": "app_config_get_settings"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/main.py",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_main",
-      "target": "app_logging_config"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/main.py",
-      "source_location": "L32",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_main",
-      "target": "app_main_create_app"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/main.py",
-      "source_location": "L19",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_main",
-      "target": "app_main_lifespan"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/main.py",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_main",
-      "target": "fastapi"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/main.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_main_rationale_1",
-      "target": "app_main"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/tests/test_health.py",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_health",
-      "target": "app_main"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/app/main.py",
-      "source_location": "L20",
-      "weight": 1.0,
-      "source": "app_main_lifespan",
-      "target": "app_logging_config_configure_logging"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/main.py",
-      "source_location": "L19",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_main_lifespan",
-      "target": "fastapi"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/main.py",
-      "source_location": "L46",
-      "weight": 1.0,
-      "source": "app_main_lifespan",
-      "target": "models_registry_get_embedder"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/main.py",
-      "source_location": "L47",
-      "weight": 1.0,
-      "source": "app_main_lifespan",
-      "target": "models_registry_get_reranker"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/deps.py",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_deps",
-      "target": "fastapi"
-    },
-    {
-      "relation": "references",
-      "context": "return_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/main.py",
-      "source_location": "L32",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "app_main_create_app",
-      "target": "fastapi"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/audit.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_app_api_routes_audit_py_routes_audit",
-      "target": "fastapi"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/network.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_app_api_routes_network_py_routes_network",
-      "target": "fastapi"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/reports.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "backend_app_api_routes_reports_py_routes_reports",
-      "target": "fastapi"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/auth.py",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_auth",
-      "target": "fastapi"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/cases.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_cases",
-      "target": "fastapi"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/chat.py",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_chat",
-      "target": "fastapi"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health",
-      "target": "fastapi"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/map.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_map",
-      "target": "fastapi"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/settings.py",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_settings",
-      "target": "fastapi"
     },
     {
       "relation": "contains",
@@ -23320,17 +23627,6 @@
       "confidence_score": 1.0,
       "source": "models_registry_rationale_1",
       "target": "models_registry"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "source": "models_registry_get_llm",
-      "target": "api_gemini_geminillm"
     },
     {
       "relation": "references",
@@ -23426,16 +23722,6 @@
       "confidence_score": 0.5,
       "source": "llm",
       "target": "api_bhashini_bhashinitts"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L22",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "llm",
-      "target": "api_gemini_geminillm"
     },
     {
       "relation": "uses",
@@ -23720,16 +24006,6 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "backend/app/models/registry.py",
-      "source_location": "L22",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "embedder",
-      "target": "api_gemini_geminillm"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
       "source_location": "L29",
       "weight": 0.8,
       "confidence_score": 0.5,
@@ -23918,16 +24194,6 @@
       "confidence_score": 0.5,
       "source": "reranker",
       "target": "api_bhashini_bhashinitts"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L22",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "reranker",
-      "target": "api_gemini_geminillm"
     },
     {
       "relation": "uses",
@@ -24136,16 +24402,6 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "backend/app/models/registry.py",
-      "source_location": "L22",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "speechtotext",
-      "target": "api_gemini_geminillm"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
       "source_location": "L29",
       "weight": 0.8,
       "confidence_score": 0.5,
@@ -24349,16 +24605,6 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "backend/app/models/registry.py",
-      "source_location": "L22",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "texttospeech",
-      "target": "api_gemini_geminillm"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
       "source_location": "L29",
       "weight": 0.8,
       "confidence_score": 0.5,
@@ -24546,16 +24792,6 @@
       "confidence_score": 0.5,
       "source": "translator",
       "target": "api_bhashini_bhashinitts"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L22",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "translator",
-      "target": "api_gemini_geminillm"
     },
     {
       "relation": "uses",
@@ -29082,36 +29318,6 @@
       "target": "tools_sql_guard_unsafesql"
     },
     {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/pipeline/tools/sql_guard.py",
-      "source_location": "L28",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tools_sql_guard_unsafesql",
-      "target": "exception"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L35",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini_blockedbymodel",
-      "target": "exception"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/core/rbac.py",
-      "source_location": "L77",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_rbac_accessdenied",
-      "target": "exception"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "INFERRED",
@@ -33142,26 +33348,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L12",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health",
-      "target": "routes_health_health"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health_rationale_1",
-      "target": "routes_health"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L16",
       "weight": 1.0,
@@ -33616,130 +33802,6 @@
       "confidence_score": 1.0,
       "source": "api_bhashini_bhashinitranslator",
       "target": "api_bhashini_bhashinitranslator_translate"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L35",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini",
-      "target": "api_gemini_blockedbymodel"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L41",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini",
-      "target": "api_gemini_geminillm"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini_rationale_1",
-      "target": "api_gemini"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L36",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini_blockedbymodel",
-      "target": "api_gemini_blockedbymodel_init"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L75",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini_geminillm_complete",
-      "target": "api_gemini_blockedbymodel"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L38",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini_blockedbymodel_init",
-      "target": "api_gemini_geminillm_init"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L64",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini_geminillm",
-      "target": "api_gemini_geminillm_complete"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L42",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini_geminillm",
-      "target": "api_gemini_geminillm_init"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L48",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini_geminillm",
-      "target": "api_gemini_geminillm_payload"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L81",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini_geminillm",
-      "target": "api_gemini_geminillm_stream"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L70",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini_geminillm_complete",
-      "target": "api_gemini_geminillm_payload"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/gemini.py",
-      "source_location": "L85",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_gemini_geminillm_stream",
-      "target": "api_gemini_geminillm_complete"
     },
     {
       "relation": "contains",
@@ -40385,5 +40447,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "68fd4e8838d0dd32aa57eea3fee7578ee8811f87"
+  "built_at_commit": "d62728041195b500b9f63635ac37c57e74789213"
 }
