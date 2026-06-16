@@ -1377,18 +1377,25 @@ The `AudioContext` was created **after** `await navigator.mediaDevices.getUserMe
 
 ---
 
-### [2026-06-16] — Voice VAD Sensitivity & Fallback Transcription Fix
+### [2026-06-16] — Voice VAD Sensitivity, API Testing Utility & Graphify Analysis
 
 #### Summary
-Addressed silent dropouts for quiet speakers during voice capture. Lowered the VAD threshold to make speech detection more sensitive, and introduced a fallback path that transcribes quiet sessions rather than discarding them when the RMS threshold isn't hit but sound is present.
+Addressed silent dropouts for quiet speakers during voice capture, created a backend STT API testing script, and updated the Graphify dependency graph and project report.
 
 #### Changes
 - **`frontend/src/lib/voice/recorder.ts`**
   - Lowered `VOICE_RMS_THRESHOLD` from `0.005` to `0.002` to increase mic sensitivity for softer speaking voices.
   - Added `maxRms` state variable to track the maximum RMS signal level seen during a recording session.
   - Modified the `finalize` function to allow transcription when `speechStarted` is false, provided that `maxRms >= 0.001` (representing quiet speech rather than absolute silence or a muted mic). This prevents discarding quiet speech at the 15-second timeout or manual stop.
+- **`backend/test_stt_api.py`** [NEW]
+  - Created a script to test the Sarvam speech-to-text API credentials directly. Generates a tiny, 16 kHz mono WAV header with silence and sends it to the configured STT engine to verify connectivity and responses.
+- **`graphify-out/`**
+  - Regenerated the AST and project dependency graph using the Graphify code-memory analysis tool.
+  - Updated `graphify-out/graph.json`, `graphify-out/graph.html`, and `graphify-out/GRAPH_REPORT.md` to map the latest code updates and project communities.
 
 #### Verification
 - Checked TypeScript compilation (`npx tsc --noEmit --skipLibCheck`): 0 errors.
 - Built the production package (`npm run build`): successfully bundled.
+- Ran backend checks and verified all STT endpoints are active.
+
 
