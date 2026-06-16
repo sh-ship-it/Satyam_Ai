@@ -52,7 +52,14 @@ async def generate_sql(
 ) -> str:
     llm = get_sql_llm(sql_engine)
     prompt = question if not slots else f"{question}\n\nKnown filters: {json.dumps(slots)}"
-    raw = await llm.complete(prompt, system=SQL_SYSTEM, temperature=0.0, json_schema=SQL_SCHEMA)
+    try:
+        raw = await llm.complete(prompt, system=SQL_SYSTEM, temperature=0.0, json_schema=SQL_SCHEMA)
+    except Exception:
+        # Gemini 429 / timeout → fall back to Groq for SQL generation
+        from app.models.registry import get_fallback_llm
+        raw = await get_fallback_llm().complete(
+            prompt, system=SQL_SYSTEM, temperature=0.0, json_schema=SQL_SCHEMA
+        )
     try:
         candidate = json.loads(raw).get("sql", "")
     except Exception:

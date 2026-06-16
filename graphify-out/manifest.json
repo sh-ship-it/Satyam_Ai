@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1781626786.5343301,
-    "ast_hash": "b1d48f928b1ed24884570ad3a32b049a",
+    "mtime": 1781632886.561032,
+    "ast_hash": "2c97cc1f919c96062262ed78227af055",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -1017,6 +1017,11 @@
   "VOICE_FIX_CODE.md": {
     "mtime": 1781611235.5760326,
     "ast_hash": "94efcdcb4e7c557fe19ef975f7eaca1a",
+    "semantic_hash": ""
+  },
+  "frontend/public/mic-test.html": {
+    "mtime": 1781632807.4810565,
+    "ast_hash": "2e8e4ba6635970b745477a8137075f4d",
     "semantic_hash": ""
   }
 }
