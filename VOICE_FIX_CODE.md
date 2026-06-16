@@ -1,3 +1,19 @@
+# Satyam — Voice Input Fix (MediaRecorder STT)
+
+This fixes the "mic records nothing / Waiting for speech…" bug. Two files change.
+
+## Root cause
+- Old `ScriptProcessor` capture needed a **running** `AudioContext`; created after `await getUserMedia()` it starts **suspended**, so `onaudioprocess` never fires → **zero audio**, no error.
+- Browser `SpeechRecognition` depends on Google servers + is extension-sensitive → "Listening…" forever, no error.
+
+## Fix
+`MediaRecorder` records the stream directly (immune to the suspended-context bug) → decode offline → re-encode to **16 kHz mono WAV** → POST to the working Sarvam `/voice/stt` (auto-detects EN/KN). Browser recognition kept as automatic fallback. Every stage is shown on-screen.
+
+---
+
+## 1. REPLACE entire file: `frontend/src/lib/voice/recorder.ts`
+
+```ts
 /**
  * Microphone capture for server-side STT — MediaRecorder edition.
  *
@@ -399,11 +415,11 @@ function encodeWav(
   writeStr(8, "WAVE");
   writeStr(12, "fmt ");
   view.setUint32(16, 16, true); // PCM chunk size
-  view.setUint16(20, 1, true);  // PCM format
-  view.setUint16(22, 1, true);  // mono
-  view.setUint32(24, outRate, true);     // sample rate
-  view.setUint32(28, outRate * 2, true); // byte rate
-  view.setUint16(32, 2, true);  // block align
+  view.setUint16(20, 1, true); // PCM format
+  view.setUint16(22, 1, true); // mono
+  view.setUint32(24, outRate, true); // sample rate
+  view.setUint32(28, outRate * 2, true); // byte rate (rate * blockAlign)
+  view.setUint16(32, 2, true); // block align (mono * 16-bit)
   view.setUint16(34, 16, true); // bits per sample
   writeStr(36, "data");
   view.setUint32(40, pcm.length * 2, true);
@@ -415,3 +431,256 @@ function encodeWav(
   }
   return new Blob([view], { type: "audio/wav" });
 }
+
+```
+
+---
+
+## 2. Edits in `frontend/src/components/Shell.tsx`
+
+### 2a. Add import (after the `@/lib/voice/lang` import)
+
+```tsx
+import {
+  startSttSession,
+  isBackendSttSupported,
+  type SttSession,
+} from "@/lib/voice/recorder";
+```
+
+### 2b. Add state (next to the other `useState` declarations, near `speechError`)
+
+```tsx
+  const [captureStatus, setCaptureStatus] = useState<string | null>(null);
+```
+(line ~117)
+
+### 2c. Add ref (right after `const recognitionRef = useRef<any>(null);`)
+
+```tsx
+  const sttSessionRef = useRef<SttSession | null>(null);
+```
+(line ~141)
+
+### 2d. REPLACE the whole listening `useEffect` (the old browser-SpeechRecognition effect) with:
+
+```tsx
+  useEffect(() => {
+    if (!listening || !micActive) return;
+    setFinalTranscript("");
+    setInterimTranscript("");
+    setEditableTranscript("");
+    setSpeechError(null);
+    setSaved(false);
+    setCaptureStatus(null);
+    liveFinalRef.current = "";
+    liveInterimRef.current = "";
+    turnSubmittedRef.current = false;
+    phaseRef.current = "listening";
+
+    // Secure-context guard: mic is blocked on plain http://<LAN-IP>.
+    if (typeof window !== "undefined" && !window.isSecureContext &&
+        location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
+      setSpeechError("Microphone needs https or localhost. Open the app at http://localhost:3000.");
+      return;
+    }
+
+    let disposed = false;
+
+    // Backend STT language: "auto" lets Saaras v3 auto-detect EN/KN.
+    const sttLang: "auto" | "en" | "kn" =
+      voiceLang === "auto"
+        ? "auto"
+        : voiceLang.toLowerCase().startsWith("kn") ? "kn" : "en";
+
+    const dispatchTurn = (rawText: string, detected: string | null) => {
+      if (turnSubmittedRef.current) return;
+      const text = rawText.trim();
+      if (!text) return;
+      turnSubmittedRef.current = true;
+      clearSilenceTimer();
+      phaseRef.current = "processing";
+      setMicActive(false); // mute mic while the agent works/talks
+      // Provider-detected language (e.g. "kn-IN"/"en-IN") wins; otherwise keep
+      // the "auto" sentinel so Console detects the reply language from text.
+      const turnLang = detected || voiceLangRef.current;
+      console.debug("[voice] dispatchTurn", { text, detected, turnLang });
+      window.dispatchEvent(new CustomEvent("satyam:voice-command", {
+        detail: { text, lang: turnLang, rate: speechRateRef.current, speak: true },
+      }));
+    };
+
+    // ---- Fallback: browser SpeechRecognition (only used if MediaRecorder
+    //      capture is unsupported or fails to produce audio) ----------------
+    const startBrowserRecognition = () => {
+      const SR: any =
+        (typeof window !== "undefined" &&
+          ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) || null;
+      if (!SR) {
+        setSpeechError("Microphone capture failed and this browser has no speech recognition. Use Chrome or Edge on http://localhost.");
+        return;
+      }
+      setCaptureStatus("Listening (browser recognizer)\u2026");
+      console.debug("[voice] browser recognition fallback", { voiceLang, uiLang: lang });
+      const rec = new SR();
+      rec.continuous = false;
+      rec.interimResults = true;
+      rec.lang =
+        voiceLang === "auto"
+          ? (lang === "KN" ? "kn-IN" : "en-IN")
+          : (coerceVoiceLang(voiceLang) || "en-IN");
+      const armSilence = () => {
+        if (turnSubmittedRef.current) return;
+        clearSilenceTimer();
+        silenceTimerRef.current = setTimeout(() => {
+          dispatchTurn(`${liveFinalRef.current} ${liveInterimRef.current}`.trim(), null);
+        }, 1500);
+      };
+      rec.onstart = () => { setSpeechError(null); };
+      rec.onaudiostart = () => { setCaptureStatus("Recording (browser)\u2026"); };
+      rec.onresult = (e: any) => {
+        let interim = "", finals = "";
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          const r = e.results[i];
+          if (r.isFinal) finals += r[0].transcript; else interim += r[0].transcript;
+        }
+        if (finals) {
+          const add = finals.trim();
+          setFinalTranscript((p) => (p ? p + " " : "") + add);
+          setEditableTranscript((p) => { const n = (p ? p + " " : "") + add; liveFinalRef.current = n; return n; });
+        }
+        liveInterimRef.current = interim;
+        setInterimTranscript(interim);
+        armSilence();
+      };
+      rec.onerror = (e: any) => {
+        if (e.error === "not-allowed" || e.error === "service-not-allowed")
+          setSpeechError("Microphone permission denied. Allow mic access in the browser.");
+        else if (e.error === "audio-capture")
+          setSpeechError("No microphone found, or it is used by another app.");
+        else if (e.error === "no-speech") { /* keep waiting */ }
+        else setSpeechError(`Mic error: ${e.error}`);
+      };
+      rec.onend = () => {
+        if (recognitionRef.current !== rec || turnSubmittedRef.current || disposed) return;
+        setTimeout(() => {
+          if (recognitionRef.current !== rec || turnSubmittedRef.current || disposed) return;
+          try { rec.start(); } catch { /* re-created by effect if needed */ }
+        }, 250);
+      };
+      recognitionRef.current = rec;
+      sttSessionRef.current = {
+        stop: () => { try { rec.stop(); } catch { /* noop */ } },
+        cancel: () => { recognitionRef.current = null; try { rec.onend = null; rec.stop(); } catch { /* noop */ } },
+      };
+      try { rec.start(); } catch (err) { console.debug("[voice] rec.start failed", err); }
+    };
+
+    // ---- Primary: MediaRecorder capture -> Sarvam /voice/stt --------------
+    // Re-arms a fresh session if a capture returns an empty transcript while
+    // still listening (handles a missed first word, brief silence, etc.).
+    const armStt = () => {
+      if (disposed || turnSubmittedRef.current) return;
+      startSttSession({
+        lang: sttLang,
+        silenceMs: 1500,
+        maxMs: 15000,
+        manual: false, // auto-stop on silence; tapping the mic also force-stops
+        callbacks: {
+          onStatus: (s) => { if (!disposed) setCaptureStatus(s); },
+          onSpeechStart: () => { if (!disposed) setInterimTranscript("\u2026"); },
+          onResult: (transcript, detected) => {
+            if (disposed) return;
+            const clean = (transcript || "").trim();
+            if (clean) {
+              setCaptureStatus(null);
+              setFinalTranscript(clean);
+              setEditableTranscript(clean);
+              liveFinalRef.current = clean;
+              dispatchTurn(clean, detected);
+            } else {
+              // Captured audio but no words: gentle hint + re-arm so the user
+              // can simply speak again without reopening the panel.
+              setCaptureStatus(null);
+              setSpeechError("Didn't catch that \u2014 please speak a bit louder, then try again.");
+              if (!disposed && listeningRef.current && !turnSubmittedRef.current) {
+                setTimeout(() => armStt(), 400);
+              }
+            }
+          },
+          onError: (msg) => {
+            if (disposed) return;
+            console.debug("[voice] MediaRecorder STT error", msg);
+            // Capture-engine problems -> try the browser recognizer instead.
+            if (/no live audio|MediaRecorder|Recorder error|Could not start|No audio was recorded/i.test(msg)) {
+              setCaptureStatus("Switching to browser microphone\u2026");
+              startBrowserRecognition();
+            } else {
+              // Permission / device / network errors: show the exact reason.
+              setSpeechError(msg);
+              setCaptureStatus(null);
+            }
+          },
+        },
+      }).then((session) => {
+        if (disposed) { session.cancel(); return; }
+        sttSessionRef.current = session;
+      }).catch((err) => {
+        console.debug("[voice] startSttSession threw", err);
+        if (!disposed) startBrowserRecognition();
+      });
+    };
+
+    if (isBackendSttSupported()) {
+      console.debug("[voice] MediaRecorder STT primary", { sttLang });
+      armStt();
+    } else {
+      startBrowserRecognition();
+    }
+
+    return () => {
+      disposed = true;
+      // Null the recognizer ref FIRST so any onend timeout can't restart it.
+      recognitionRef.current = null;
+      clearSilenceTimer();
+      try { sttSessionRef.current?.cancel(); } catch { /* noop */ }
+      sttSessionRef.current = null;
+    };
+  }, [listening, micActive, lang, voiceLang, clearSilenceTimer]);
+```
+
+### 2e. Mic circle = tap-to-stop + visible status line (replace the mic `<div>` block)
+
+```tsx
+            <div
+              className={`relative grid h-20 w-20 place-items-center ${!isSpeaking ? "cursor-pointer" : ""}`}
+              role="button"
+              title={t("Tap to stop & send")}
+              onClick={() => {
+                if (!isSpeaking) {
+                  setCaptureStatus("Finishing\u2026");
+                  try { sttSessionRef.current?.stop(); } catch { /* noop */ }
+                }
+              }}
+            >
+              {!isSpeaking ? (
+                <>
+                  <span className="absolute inset-0 animate-ping rounded-full bg-primary/40" />
+                  <span className="absolute inset-2 animate-pulse rounded-full bg-primary/60" />
+                  <div className="relative grid h-16 w-16 place-items-center rounded-full border-2 border-foreground bg-primary text-primary-foreground">
+                    <Mic className="h-7 w-7" />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span className="absolute inset-0 animate-pulse rounded-full bg-primary/30" />
+                  <div className="relative grid h-16 w-16 place-items-center rounded-full border-2 border-foreground bg-primary text-primary-foreground">
+                    <Volume2 className="h-7 w-7" />
+                  </div>
+                </>
+              )}
+            </div>
+            {captureStatus && !speechError && (
+              <p className="text-center text-xs font-bold text-primary">{captureStatus}</p>
+            )}
+```

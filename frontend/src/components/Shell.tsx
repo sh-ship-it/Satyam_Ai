@@ -31,6 +31,11 @@ import {
   unlockAudioPlayback,
 } from "@/lib/voice/tts";
 import { resolveLang } from "@/lib/voice/lang";
+import {
+  startSttSession,
+  isBackendSttSupported,
+  type SttSession,
+} from "@/lib/voice/recorder";
 
 type VoiceScreen = { to: string; words: RegExp };
 const SCREEN_ROUTES: VoiceScreen[] = [
@@ -109,6 +114,7 @@ export function Shell({ children }: { children: ReactNode }) {
   const [interimTranscript, setInterimTranscript] = useState("");
   const [editableTranscript, setEditableTranscript] = useState("");
   const [speechError, setSpeechError] = useState<string | null>(null);
+  const [captureStatus, setCaptureStatus] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
   // Supported voice locales: "auto" = detect from text, plus the two explicit locales.
@@ -132,6 +138,7 @@ export function Shell({ children }: { children: ReactNode }) {
     return lang === "KN" ? 0.9 : 1;
   });
   const recognitionRef = useRef<any>(null);
+  const sttSessionRef = useRef<SttSession | null>(null);
 
   const [conversationMode, setConversationMode] = useState(false);
 
@@ -310,6 +317,7 @@ export function Shell({ children }: { children: ReactNode }) {
     setEditableTranscript("");
     setSpeechError(null);
     setSaved(false);
+    setCaptureStatus(null);
     liveFinalRef.current = "";
     liveInterimRef.current = "";
     turnSubmittedRef.current = false;
@@ -322,95 +330,164 @@ export function Shell({ children }: { children: ReactNode }) {
       return;
     }
 
-    const SR: any =
-      (typeof window !== "undefined" &&
-        ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) || null;
-    if (!SR) {
-      setSpeechError("This browser has no speech recognition. Use Chrome or Edge.");
-      return;
-    }
+    let disposed = false;
 
-    console.debug("[voice] browser recognition start", { voiceLang, uiLang: lang });
-
-    const rec = new SR();
-    rec.continuous = false;  // one utterance per session — more reliable across browsers/extensions
-    rec.interimResults = true;
-    // Browser needs a concrete input language. "auto" → use the UI language as
-    // the hint; the REPLY language is still auto-detected from the text below.
-    rec.lang =
+    // Backend STT language: "auto" lets Saaras v3 auto-detect EN/KN.
+    const sttLang: "auto" | "en" | "kn" =
       voiceLang === "auto"
-        ? (lang === "KN" ? "kn-IN" : "en-IN")
-        : (coerceVoiceLang(voiceLang) || "en-IN");
+        ? "auto"
+        : voiceLang.toLowerCase().startsWith("kn") ? "kn" : "en";
 
-    const dispatchTurn = (rawText: string) => {
+    const dispatchTurn = (rawText: string, detected: string | null) => {
       if (turnSubmittedRef.current) return;
       const text = rawText.trim();
       if (!text) return;
       turnSubmittedRef.current = true;
       clearSilenceTimer();
       phaseRef.current = "processing";
-      setMicActive(false); // mute mic while agent works/talks
-      // Preserve "auto" so Console detects the reply language from the answer.
-      const turnLang = voiceLangRef.current; // already "auto" | "kn-IN" | "en-IN"
-      console.debug("[voice] dispatchTurn", { text, turnLang });
+      setMicActive(false); // mute mic while the agent works/talks
+      // Provider-detected language (e.g. "kn-IN"/"en-IN") wins; otherwise keep
+      // the "auto" sentinel so Console detects the reply language from text.
+      const turnLang = detected || voiceLangRef.current;
+      console.debug("[voice] dispatchTurn", { text, detected, turnLang });
       window.dispatchEvent(new CustomEvent("satyam:voice-command", {
         detail: { text, lang: turnLang, rate: speechRateRef.current, speak: true },
       }));
     };
 
-    const armSilence = () => {
-      if (turnSubmittedRef.current) return;
-      clearSilenceTimer();
-      silenceTimerRef.current = setTimeout(() => {
-        dispatchTurn(`${liveFinalRef.current} ${liveInterimRef.current}`.trim());
-      }, 1500); // auto-submit ~1.5s after you stop speaking (works in conversation AND manual)
-    };
-
-    rec.onstart = () => { setSpeechError(null); };
-    rec.onaudiostart = () => { console.debug("[voice] audio captured"); };
-    rec.onresult = (e: any) => {
-      let interim = "", finals = "";
-      for (let i = e.resultIndex; i < e.results.length; i++) {
-        const r = e.results[i];
-        if (r.isFinal) finals += r[0].transcript; else interim += r[0].transcript;
+    // ---- Fallback: browser SpeechRecognition (only used if MediaRecorder
+    //      capture is unsupported or fails to produce audio) ----------------
+    const startBrowserRecognition = () => {
+      const SR: any =
+        (typeof window !== "undefined" &&
+          ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) || null;
+      if (!SR) {
+        setSpeechError("Microphone capture failed and this browser has no speech recognition. Use Chrome or Edge on http://localhost.");
+        return;
       }
-      if (finals) {
-        const add = finals.trim();
-        setFinalTranscript((p) => (p ? p + " " : "") + add);
-        setEditableTranscript((p) => { const n = (p ? p + " " : "") + add; liveFinalRef.current = n; return n; });
-      }
-      liveInterimRef.current = interim;
-      setInterimTranscript(interim);
-      armSilence(); // any speech resets the end-of-utterance timer
-    };
-    rec.onerror = (e: any) => {
-      if (e.error === "not-allowed" || e.error === "service-not-allowed")
-        setSpeechError("Microphone permission denied. Allow mic access in the browser.");
-      else if (e.error === "audio-capture")
-        setSpeechError("No microphone found, or it is used by another app.");
-      else if (e.error === "no-speech") { /* keep waiting */ }
-      else setSpeechError(`Mic error: ${e.error}`);
-    };
-    rec.onend = () => {
-      // Don't restart if: this isn't the current recognizer, a turn was already
-      // submitted, or the panel was closed (recognitionRef nulled by cleanup).
-      if (recognitionRef.current !== rec) return;
-      if (turnSubmittedRef.current) return;
-      setTimeout(() => {
-        if (recognitionRef.current !== rec) return;
+      setCaptureStatus("Listening (browser recognizer)\u2026");
+      console.debug("[voice] browser recognition fallback", { voiceLang, uiLang: lang });
+      const rec = new SR();
+      rec.continuous = false;
+      rec.interimResults = true;
+      rec.lang =
+        voiceLang === "auto"
+          ? (lang === "KN" ? "kn-IN" : "en-IN")
+          : (coerceVoiceLang(voiceLang) || "en-IN");
+      const armSilence = () => {
         if (turnSubmittedRef.current) return;
-        try { rec.start(); } catch { /* re-created by effect if needed */ }
-      }, 250);
+        clearSilenceTimer();
+        silenceTimerRef.current = setTimeout(() => {
+          dispatchTurn(`${liveFinalRef.current} ${liveInterimRef.current}`.trim(), null);
+        }, 1500);
+      };
+      rec.onstart = () => { setSpeechError(null); };
+      rec.onaudiostart = () => { setCaptureStatus("Recording (browser)\u2026"); };
+      rec.onresult = (e: any) => {
+        let interim = "", finals = "";
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          const r = e.results[i];
+          if (r.isFinal) finals += r[0].transcript; else interim += r[0].transcript;
+        }
+        if (finals) {
+          const add = finals.trim();
+          setFinalTranscript((p) => (p ? p + " " : "") + add);
+          setEditableTranscript((p) => { const n = (p ? p + " " : "") + add; liveFinalRef.current = n; return n; });
+        }
+        liveInterimRef.current = interim;
+        setInterimTranscript(interim);
+        armSilence();
+      };
+      rec.onerror = (e: any) => {
+        if (e.error === "not-allowed" || e.error === "service-not-allowed")
+          setSpeechError("Microphone permission denied. Allow mic access in the browser.");
+        else if (e.error === "audio-capture")
+          setSpeechError("No microphone found, or it is used by another app.");
+        else if (e.error === "no-speech") { /* keep waiting */ }
+        else setSpeechError(`Mic error: ${e.error}`);
+      };
+      rec.onend = () => {
+        if (recognitionRef.current !== rec || turnSubmittedRef.current || disposed) return;
+        setTimeout(() => {
+          if (recognitionRef.current !== rec || turnSubmittedRef.current || disposed) return;
+          try { rec.start(); } catch { /* re-created by effect if needed */ }
+        }, 250);
+      };
+      recognitionRef.current = rec;
+      sttSessionRef.current = {
+        stop: () => { try { rec.stop(); } catch { /* noop */ } },
+        cancel: () => { recognitionRef.current = null; try { rec.onend = null; rec.stop(); } catch { /* noop */ } },
+      };
+      try { rec.start(); } catch (err) { console.debug("[voice] rec.start failed", err); }
     };
 
-    recognitionRef.current = rec;
-    try { rec.start(); } catch (err) { console.debug("[voice] rec.start failed", err); }
+    // ---- Primary: MediaRecorder capture -> Sarvam /voice/stt --------------
+    // Re-arms a fresh session if a capture returns an empty transcript while
+    // still listening (handles a missed first word, brief silence, etc.).
+    const armStt = () => {
+      if (disposed || turnSubmittedRef.current) return;
+      startSttSession({
+        lang: sttLang,
+        silenceMs: 1500,
+        maxMs: 15000,
+        manual: false,
+        callbacks: {
+          onStatus: (s) => { if (!disposed) setCaptureStatus(s); },
+          onSpeechStart: () => { if (!disposed) setInterimTranscript("\u2026"); },
+          onResult: (transcript, detected) => {
+            if (disposed) return;
+            const clean = (transcript || "").trim();
+            if (clean) {
+              setCaptureStatus(null);
+              setFinalTranscript(clean);
+              setEditableTranscript(clean);
+              liveFinalRef.current = clean;
+              dispatchTurn(clean, detected);
+            } else {
+              // Captured audio but no words: gentle hint + re-arm.
+              setCaptureStatus(null);
+              setSpeechError("Didn't catch that \u2014 please speak a bit louder, then try again.");
+              if (!disposed && listeningRef.current && !turnSubmittedRef.current) {
+                setTimeout(() => armStt(), 400);
+              }
+            }
+          },
+          onError: (msg) => {
+            if (disposed) return;
+            console.debug("[voice] MediaRecorder STT error", msg);
+            // Capture-engine problems -> try the browser recognizer instead.
+            if (/no live audio|MediaRecorder|Recorder error|Could not start|No audio was recorded/i.test(msg)) {
+              setCaptureStatus("Switching to browser microphone\u2026");
+              startBrowserRecognition();
+            } else {
+              setSpeechError(msg);
+              setCaptureStatus(null);
+            }
+          },
+        },
+      }).then((session) => {
+        if (disposed) { session.cancel(); return; }
+        sttSessionRef.current = session;
+      }).catch((err) => {
+        console.debug("[voice] startSttSession threw", err);
+        if (!disposed) startBrowserRecognition();
+      });
+    };
+
+    if (isBackendSttSupported()) {
+      console.debug("[voice] MediaRecorder STT primary", { sttLang });
+      armStt();
+    } else {
+      startBrowserRecognition();
+    }
 
     return () => {
-      // Null the ref FIRST so the onend timeout can't restart this instance.
+      disposed = true;
+      // Null the recognizer ref FIRST so any onend timeout can't restart it.
       recognitionRef.current = null;
       clearSilenceTimer();
-      try { rec.onend = null; rec.stop(); } catch { /* noop */ }
+      try { sttSessionRef.current?.cancel(); } catch { /* noop */ }
+      sttSessionRef.current = null;
     };
   }, [listening, micActive, lang, voiceLang, clearSilenceTimer]);
 
@@ -520,6 +597,7 @@ export function Shell({ children }: { children: ReactNode }) {
             setIsSpeaking(false);
             setIsPaused(false);
             setConversationMode(false);
+            setCaptureStatus(null);
             stopConversation();
             if (typeof window !== "undefined" && "speechSynthesis" in window) {
               window.speechSynthesis.cancel();
@@ -530,7 +608,17 @@ export function Shell({ children }: { children: ReactNode }) {
             className="relative flex w-[min(540px,92vw)] flex-col items-center gap-5 rounded-[10px] border-2 border-foreground bg-card px-8 py-7 text-foreground nb-shadow-sm"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative grid h-20 w-20 place-items-center">
+            <div
+              className={`relative grid h-20 w-20 place-items-center ${!isSpeaking ? "cursor-pointer" : ""}`}
+              role="button"
+              title={t("Tap to stop & send")}
+              onClick={() => {
+                if (!isSpeaking) {
+                  setCaptureStatus("Finishing\u2026");
+                  try { sttSessionRef.current?.stop(); } catch { /* noop */ }
+                }
+              }}
+            >
               {!isSpeaking ? (
                 <>
                   <span className="absolute inset-0 animate-ping rounded-full bg-primary/40" />
@@ -548,6 +636,9 @@ export function Shell({ children }: { children: ReactNode }) {
                 </>
               )}
             </div>
+            {captureStatus && !speechError && (
+              <p className="text-center text-xs font-bold text-primary">{captureStatus}</p>
+            )}
             <div className="text-center">
               <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
                 {isSpeaking
@@ -770,6 +861,7 @@ export function Shell({ children }: { children: ReactNode }) {
                 setIsSpeaking(false);
                 setIsPaused(false);
                 setConversationMode(false);
+                setCaptureStatus(null);
                 stopConversation();
                 if (typeof window !== "undefined" && "speechSynthesis" in window) {
                   window.speechSynthesis.cancel();

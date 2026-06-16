@@ -7,7 +7,7 @@ import {
   Map as MapIcon, Layers, Filter,
 } from "lucide-react";
 import { useT, useI18n } from "@/lib/i18n";
-import { streamChat, type ChatEvent, api, type StationRow } from "@/lib/api/client";
+import { streamChat, type ChatEvent, api, type StationRow, getAuthToken } from "@/lib/api/client";
 import { CrimeMap, type Hotspot } from "@/components/CrimeMap";
 import { speakViaSarvam } from "@/lib/voice/tts";
 import { detectLang, resolveLang } from "@/lib/voice/lang";
@@ -132,6 +132,16 @@ function Console() {
     if (crimeType) body.crime_type = crimeType;
     if (district) body.district = district;
     (async () => {
+      // Auto-login with a default demo rank if no token is stored yet.
+      // This ensures the canvas loads even when the user navigated directly to
+      // /console without going through the login page.
+      if (!getAuthToken()) {
+        try {
+          await api.login("demo", "DGP");
+        } catch {
+          /* backend unreachable — requests will fail below with a clear message */
+        }
+      }
       try {
         const [hot, brk] = await Promise.all([
           api.mapHotspots(body),
@@ -142,9 +152,18 @@ function Console() {
           lat: p.lat, lng: p.lng, weight: p.weight, label: p.label ?? undefined,
         })));
         setStations(brk.rows || []);
-      } catch {
+      } catch (err: any) {
         if (!cancelled) {
-          setCanvasErr("Could not load live data — check you are signed in and the API is reachable.");
+          const status: number | undefined = err?.status;
+          const msg =
+            status === 401
+              ? "Session expired — please sign out and sign in again."
+              : status === 403
+                ? "Your rank does not have permission to view analytics. Sign in with a higher rank (SP or above)."
+                : status != null
+                  ? `API error ${status} — check the backend is running.`
+                  : "Could not reach the API — make sure the backend is running on http://localhost:8000.";
+          setCanvasErr(msg);
           setHotspots([]);
           setStations([]);
         }
