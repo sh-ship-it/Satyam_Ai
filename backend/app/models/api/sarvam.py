@@ -59,7 +59,7 @@ class SarvamTTS(_SarvamBase):
 
     async def synthesize(self, text: str, *, lang: str = "kn") -> bytes:
         if self._demo:
-            return b"RIFF....demo-wav-sarvam"
+            return b""  # demo mode: no key → backend returns 502 → frontend uses browser fallback
         bcp_lang = "kn-IN" if lang == "kn" else "en-IN"
         async with httpx.AsyncClient(timeout=30) as client:
             r = await client.post(

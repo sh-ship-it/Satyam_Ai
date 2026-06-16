@@ -184,7 +184,8 @@ export function Shell({ children }: { children: ReactNode }) {
   useEffect(() => {
     const speakText = (text: string, speechLang: string, rate: number) => {
       const lang: "en" | "kn" = speechLang.toLowerCase().startsWith("kn") ? "kn" : "en";
-      setIsSpeaking(true);
+      // Don't set isSpeaking here — speakViaSarvam fires onStart when audio actually begins.
+      // Setting it early causes the poll to start before audio is in flight.
       void speakViaSarvam(text, lang, rate, {
         onStart: () => setIsSpeaking(true),
         onEnd: () => setIsSpeaking(false),
@@ -385,12 +386,10 @@ export function Shell({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!isSpeaking) return;
     const id = setInterval(() => {
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        if (!isSpeechActive()) {
-          setIsSpeaking(false);
-          setIsPaused(false);
-          resumeListening(); // hands-free: listen for the next reply
-        }
+      if (!isSpeechActive()) {
+        setIsSpeaking(false);
+        setIsPaused(false);
+        resumeListening(); // hands-free: listen for the next reply
       }
     }, 300);
     return () => clearInterval(id);
@@ -413,9 +412,15 @@ export function Shell({ children }: { children: ReactNode }) {
         setIsPaused(false);
       } else if (state === "done") {
         clearThinkWatchdog();
-        setIsSpeaking(false);
-        setIsPaused(false);
-        resumeListening();
+        // If the TTS library already started playing (isSpeaking=true), the 300ms
+        // poll owns the transition — it will call resumeListening() when the audio
+        // actually finishes. Only resume here when nothing is / was playing
+        // (empty text, provider error before onStart, or non-speaking turns).
+        if (!isSpeechActive()) {
+          setIsSpeaking(false);
+          setIsPaused(false);
+          resumeListening();
+        }
       }
     };
     window.addEventListener("satyam:ai-state", onState);

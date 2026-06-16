@@ -249,11 +249,10 @@ function Console() {
       window.dispatchEvent(new CustomEvent("satyam:ai-state", { detail: { state } }));
     // Only voice turns participate in the conversation loop.
     if (!opts?.speak) return;
+    // Normalize to the two supported values ("en" | "kn") — opts.lang may be
+    // a BCP-47 locale like "kn-IN" from the voice-command handler.
     const lang: "en" | "kn" =
       (opts?.lang || "").toLowerCase().startsWith("kn") ? "kn" : "en";
-    // Sarvam Bulbul (or the selected provider) via backend; browser voice is the
-    // automatic fallback. The ai-state contract (speaking/done) is preserved
-    // exactly, so the hands-free conversation loop keeps working unchanged.
     void speakViaSarvam(text, lang, opts?.rate ?? 1, {
       onStart: () => emit("speaking"),
       onEnd: () => emit("done"),

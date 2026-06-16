@@ -35,7 +35,7 @@ class GoogleTTS:
 
     async def synthesize(self, text: str, *, lang: str = "kn") -> bytes:
         if not self._key:
-            return b"RIFF....demo-wav-google"  # demo stub — frontend falls back to Web Speech
+            return b""  # demo mode: no key → backend returns 502 → frontend uses browser fallback
         code = _lang_code(lang)
         voice: dict = {"languageCode": code, "ssmlGender": "FEMALE"}
         if self._voice:
