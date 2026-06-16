@@ -964,11 +964,6 @@
     "ast_hash": "a6511ea3d226c025603f65fbe585c43f",
     "semantic_hash": ""
   },
-  "SATYAM_E2E_WIRING_FIX (1).md": {
-    "mtime": 1781553633.6520827,
-    "ast_hash": "74e9e23e0a8297329ee64d86dc4996d3",
-    "semantic_hash": ""
-  },
   "backend/check_audit.py": {
     "mtime": 1781580344.6002884,
     "ast_hash": "3f11148356dd6a9dbae5660c9f3df975",
