@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1781607624.8301816,
-    "ast_hash": "97848b59b23b5473ee5703c0fb029325",
+    "mtime": 1781611540.3638747,
+    "ast_hash": "0ed441f4b711f2c8c743655ffbe41b1c",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
-    "mtime": 1781594465.9797997,
-    "ast_hash": "891dde7cfff5373f5d17489e57644d78",
+    "mtime": 1781612341.6232307,
+    "ast_hash": "9684a5fcaffa76333b7148a026046abd",
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
@@ -979,11 +979,6 @@
     "ast_hash": "09626fb2df10f801086243b8d7c3bb10",
     "semantic_hash": ""
   },
-  "SATYAM_VOICE_CONVERSATION_FEATURE.md": {
-    "mtime": 1781585338.105049,
-    "ast_hash": "d0b2ed02f324eea4c6c84168a9a38e0e",
-    "semantic_hash": ""
-  },
   "backend/app/api/routes/voice.py": {
     "mtime": 1781594393.387176,
     "ast_hash": "f6403c7f18262161d4fd7f126f05a7da",
@@ -1004,34 +999,24 @@
     "ast_hash": "d36d427d53ff0a8d5277c377f8bf2623",
     "semantic_hash": ""
   },
-  "SATYAM_VOICE_PIPELINE_SARVAM_FIX.md": {
-    "mtime": 1781589691.4679685,
-    "ast_hash": "ac1aaea4b48e8619a841c6efa4dbb805",
-    "semantic_hash": ""
-  },
-  "SATYAM_VOICE_OUTPUT_INPUT_FIX.md": {
-    "mtime": 1781593813.340344,
-    "ast_hash": "aed8833adc40052182c5921c74965e53",
-    "semantic_hash": ""
-  },
   "frontend/src/lib/voice/lang.ts": {
     "mtime": 1781594351.6364293,
     "ast_hash": "47bdb4255068c28565cd7daa21f997dc",
     "semantic_hash": ""
   },
   "frontend/src/lib/voice/recorder.ts": {
-    "mtime": 1781606608.5557501,
-    "ast_hash": "999c65acb5ee0846ea7866342958946a",
-    "semantic_hash": ""
-  },
-  "SATYAM_MEDIARECORDER_STT_AUTODETECT_FIX.md": {
-    "mtime": 1781597610.0179236,
-    "ast_hash": "b2a42a2110d15848c2e4c5bb5c7a5bd1",
+    "mtime": 1781611406.055465,
+    "ast_hash": "3e87f1485ed8294dfea11db2ffa64fc0",
     "semantic_hash": ""
   },
   "backend/test_stt_api.py": {
     "mtime": 1781604133.576067,
     "ast_hash": "533119ca207c2c5ea1611d3fa550bdf9",
+    "semantic_hash": ""
+  },
+  "VOICE_FIX_CODE.md": {
+    "mtime": 1781611235.5760326,
+    "ast_hash": "94efcdcb4e7c557fe19ef975f7eaca1a",
     "semantic_hash": ""
   }
 }
