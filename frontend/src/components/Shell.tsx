@@ -504,6 +504,8 @@ export function Shell({ children }: { children: ReactNode }) {
   const NAV = [
     { to: "/console", icon: MessageSquare, label: t("Console") },
     { to: "/network", icon: Network, label: t("Network") },
+    { to: "/forecast", icon: ShieldCheck, label: t("Forecast") },
+    { to: "/trends", icon: FileText, label: t("Trends") },
     { to: "/reports", icon: FileText, label: t("Reports") },
     { to: "/audit", icon: ShieldCheck, label: t("Audit") },
     { to: "/transcripts", icon: ClipboardList, label: t("Transcripts") },

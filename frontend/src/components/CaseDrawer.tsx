@@ -1,15 +1,22 @@
-import { X, Lock, FileDown, Plus } from "lucide-react";
+import { X, Lock, FileDown, Plus, Clock, Sparkles, Network } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { useT } from "@/lib/i18n";
 import { api } from "@/lib/api/client";
+import { intelligence, type SimilarCaseMatch, type TimelineEvent } from "@/lib/api/intelligence";
 
 export function CaseDrawer({
   open, onClose, caseId,
 }: { open: boolean; onClose: () => void; caseId?: number | string }) {
   const t = useT();
-  const [tab, setTab] = useState<"summary" | "persons" | "map">("summary");
+  const navigate = useNavigate();
+  const [tab, setTab] = useState<"summary" | "persons" | "similar" | "timeline" | "map">("summary");
   const [data, setData] = useState<any | null>(null);
   const [loading, setLoading] = useState(false);
+  const [similar, setSimilar] = useState<SimilarCaseMatch[]>([]);
+  const [similarLoading, setSimilarLoading] = useState(false);
+  const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
+  const [timelineLoading, setTimelineLoading] = useState(false);
 
   useEffect(() => {
     if (!open || caseId == null) return;
@@ -23,9 +30,23 @@ export function CaseDrawer({
     return () => { active = false; };
   }, [open, caseId]);
 
-  // Reset tab when opening a new case
+  // Load similar cases + timeline lazily when tab selected
   useEffect(() => {
-    if (open) setTab("summary");
+    if (!open || caseId == null) return;
+    const id = Number(caseId);
+    if (isNaN(id)) return;
+    if (tab === "similar" && similar.length === 0) {
+      setSimilarLoading(true);
+      intelligence.getSimilarCases(id).then(r => setSimilar(r.matches)).catch(() => {}).finally(() => setSimilarLoading(false));
+    }
+    if (tab === "timeline" && timeline.length === 0) {
+      setTimelineLoading(true);
+      intelligence.getCaseTimeline(id).then(r => setTimeline(r.events)).catch(() => {}).finally(() => setTimelineLoading(false));
+    }
+  }, [tab, open, caseId]);
+
+  useEffect(() => {
+    if (open) { setTab("summary"); setSimilar([]); setTimeline([]); }
   }, [open, caseId]);
 
   if (!open) return null;
@@ -42,31 +63,30 @@ export function CaseDrawer({
               {data?.fir_number ?? (loading ? t("Loading…") : "—")}
             </h2>
           </div>
-          <button onClick={onClose} className="rounded-md p-1.5 text-muted-foreground hover:bg-muted">
-            <X className="h-5 w-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button onClick={() => caseId && navigate({ to: "/network", search: { case: Number(caseId) } as any })}
+              className="rounded-md border border-border px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted flex items-center gap-1">
+              <Network className="h-3 w-3" /> Network
+            </button>
+            <button onClick={onClose} className="rounded-md p-1.5 text-muted-foreground hover:bg-muted">
+              <X className="h-5 w-5" />
+            </button>
+          </div>
         </div>
 
-        <div className="flex gap-1 border-b border-border bg-muted/40 px-3">
-          {(["summary", "persons", "map"] as const).map((tb) => (
-            <button
-              key={tb}
-              onClick={() => setTab(tb)}
-              className={`px-4 py-2.5 text-sm font-medium capitalize border-b-2 transition ${
-                tab === tb ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {t(tb)}
+        <div className="flex gap-0.5 border-b border-border bg-muted/40 px-3 overflow-x-auto">
+          {(["summary", "persons", "timeline", "similar", "map"] as const).map((tb) => (
+            <button key={tb} onClick={() => setTab(tb)}
+              className={`px-3 py-2.5 text-xs font-medium whitespace-nowrap capitalize border-b-2 transition ${
+                tab === tb ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}>
+              {tb === "similar" ? "Similar Cases" : tb === "timeline" ? "Timeline" : t(tb)}
             </button>
           ))}
         </div>
 
         <div className="flex-1 overflow-auto p-5 space-y-4">
           {loading && <div className="text-sm text-muted-foreground">{t("Loading…")}</div>}
-
-          {!loading && !data && caseId != null && (
-            <div className="text-sm text-muted-foreground">{t("Could not load case data.")}</div>
-          )}
+          {!loading && !data && caseId != null && <div className="text-sm text-muted-foreground">{t("Could not load case data.")}</div>}
 
           {!loading && data && tab === "summary" && (
             <>
@@ -82,22 +102,17 @@ export function CaseDrawer({
                 <div className="mb-1.5 text-xs font-medium text-muted-foreground">{t("Sections")}</div>
                 <div className="flex flex-wrap gap-1.5">
                   {String(data.sections ?? "").split("|").filter(Boolean).map((s: string) => (
-                    <span key={s} className="rounded-md bg-accent px-2 py-1 text-xs font-mono font-semibold text-accent-foreground">
-                      § {s}
-                    </span>
+                    <span key={s} className="rounded-md bg-accent px-2 py-1 text-xs font-mono font-semibold text-accent-foreground">§ {s}</span>
                   ))}
                 </div>
               </div>
               <div>
                 <div className="mb-1.5 text-xs font-medium text-muted-foreground">{t("Narrative")}</div>
-                <p className="text-sm text-foreground/80 leading-relaxed whitespace-pre-wrap">
-                  {data.narrative ?? "—"}
-                </p>
+                <p className="text-sm text-foreground/80 leading-relaxed whitespace-pre-wrap">{data.narrative ?? "—"}</p>
               </div>
               {data.masked && (
                 <div className="flex items-center gap-2 rounded-lg border border-warning/40 bg-warning/10 px-3 py-2 text-xs">
-                  <Lock className="h-4 w-4 text-warning" />
-                  {t("Some fields masked for your clearance level.")}
+                  <Lock className="h-4 w-4 text-warning" />{t("Some fields masked for your clearance level.")}
                 </div>
               )}
             </>
@@ -108,18 +123,63 @@ export function CaseDrawer({
               {persons.map((p, i) => (
                 <div key={i} className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2.5">
                   <div>
-                    <div className={`text-sm font-medium ${p.masked ? "font-mono text-foreground/60" : "text-foreground"}`}>
-                      {p.name}
-                    </div>
-                    <div className="text-[11px] text-muted-foreground">
-                      {t(p.role ?? "")}{p.age ? ` · ${p.age}` : ""}
-                    </div>
+                    <div className={`text-sm font-medium ${p.masked ? "font-mono text-foreground/60" : "text-foreground"}`}>{p.name}</div>
+                    <div className="text-[11px] text-muted-foreground">{t(p.role ?? "")}{p.age ? ` · ${p.age}` : ""}</div>
                   </div>
-                  {p.masked && <Lock className="h-4 w-4 text-warning" />}
+                  <div className="flex items-center gap-2">
+                    {p.masked && <Lock className="h-4 w-4 text-warning" />}
+                    {p.person_id && (
+                      <button onClick={() => navigate({ to: "/profile/$personId", params: { personId: String(p.person_id) } })}
+                        className="text-[10px] text-primary hover:underline">Profile</button>
+                    )}
+                  </div>
                 </div>
               ))}
-              {persons.length === 0 && (
-                <div className="text-sm text-muted-foreground">{t("No person records.")}</div>
+              {persons.length === 0 && <div className="text-sm text-muted-foreground">{t("No person records.")}</div>}
+            </div>
+          )}
+
+          {tab === "timeline" && (
+            <div className="space-y-2">
+              {timelineLoading && <div className="text-sm text-muted-foreground">Loading timeline…</div>}
+              {timeline.map((e, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className="w-20 text-[10px] text-muted-foreground shrink-0 mt-1">{e.date?.slice(0, 10) || "—"}</div>
+                  <div className="flex-1 border-l-2 border-border pl-3 pb-3">
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-3 w-3 text-muted-foreground shrink-0" />
+                      <span className="text-xs font-medium">{e.title}</span>
+                    </div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">{e.type}</div>
+                  </div>
+                </div>
+              ))}
+              {!timelineLoading && timeline.length === 0 && <div className="text-sm text-muted-foreground">No timeline events found.</div>}
+            </div>
+          )}
+
+          {tab === "similar" && (
+            <div className="space-y-3">
+              {similarLoading && <div className="text-sm text-muted-foreground">Finding similar cases…</div>}
+              {similar.map(m => (
+                <div key={m.case_id} className="rounded-[5px] border-2 border-foreground bg-card p-3 nb-shadow-sm">
+                  <div className="flex items-start justify-between gap-2 mb-1">
+                    <div>
+                      <span className="text-xs font-bold">{m.fir_number || `Case #${m.case_id}`}</span>
+                      <span className="ml-2 text-xs text-muted-foreground">{m.crime_type}</span>
+                    </div>
+                    <span className="text-xs font-bold text-primary">{m.similarity_percent}% match</span>
+                  </div>
+                  <div className="text-[10px] text-muted-foreground mb-1.5">{m.district}</div>
+                  <div className="flex flex-wrap gap-1">
+                    {m.why_similar.map(w => <span key={w} className="rounded-[3px] bg-muted px-1.5 py-0.5 text-[10px]">{w}</span>)}
+                  </div>
+                </div>
+              ))}
+              {!similarLoading && similar.length === 0 && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Sparkles className="h-4 w-4" />No similar cases found.
+                </div>
               )}
             </div>
           )}
