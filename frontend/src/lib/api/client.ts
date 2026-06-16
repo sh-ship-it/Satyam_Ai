@@ -176,7 +176,12 @@ export async function sttTranscribe(
   lang: "en" | "kn" | "auto" = "auto",
 ): Promise<SttResult> {
   const fd = new FormData();
-  fd.append("file", audio, "audio.wav");
+  // Use the actual MIME type as filename hint so Sarvam/Google can sniff format.
+  const ext = audio.type.includes("webm") ? "webm"
+    : audio.type.includes("ogg") ? "ogg"
+    : audio.type.includes("mp4") ? "mp4"
+    : "wav";
+  fd.append("file", audio, `audio.${ext}`);
   fd.append("lang", lang);
   const token = getAuthToken();
   // No content-type header — browser sets the multipart boundary.

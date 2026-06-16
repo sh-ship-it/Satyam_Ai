@@ -195,13 +195,11 @@ export async function startSttSession(
       return;
     }
     status(`Transcribing\u2026 (${Math.round(blob.size / 1024)} KB)`);
-    let payload: Blob = blob;
-    try {
-      payload = await blobToWav(blob, TARGET_RATE);
-    } catch (e) {
-      // Decode failed -> send the raw recorded blob; Sarvam may still accept it.
-      console.debug("[stt] WAV transcode failed, sending raw blob", e);
-    }
+    // Send the raw recorded blob directly — decoding+re-encoding to WAV is
+    // unreliable on some browsers (Chrome's webm/opus isn't always decodable
+    // by decodeAudioData). The backend accepts webm/opus via multipart and
+    // Sarvam Saaras handles it directly.
+    const payload = blob;
     try {
       const { transcript, detected_lang } = await sttTranscribe(payload, lang);
       callbacks.onResult?.((transcript || "").trim(), detected_lang ?? null);

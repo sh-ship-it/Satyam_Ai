@@ -82,7 +82,20 @@ class SarvamSTT(_SarvamBase):
             return "[demo:sarvam-stt] ಕನ್ನಡ ಪ್ರಶ್ನೆ", "kn-IN"
         # Use "unknown" to let Saaras v3 auto-detect the spoken language.
         lang_code = "unknown" if lang in ("auto", "unknown") else _bcp(lang)
-        files = {"file": ("audio.wav", audio, "audio/wav")}
+        # Sniff the container from magic bytes to set the right MIME type.
+        # Saaras v3 accepts webm/opus (MediaRecorder default) and WAV.
+        mime = "audio/wav"
+        if len(audio) >= 4:
+            if audio[:4] in (b"\x1a\x45\xdf\xa3",) or audio[:4] == b"webm":
+                mime = "audio/webm"
+            elif audio[:4] == b"OggS":
+                mime = "audio/ogg"
+        filename = (
+            "audio.webm" if "webm" in mime else
+            "audio.ogg"  if "ogg"  in mime else
+            "audio.wav"
+        )
+        files = {"file": (filename, audio, mime)}
         data = {"model": "saaras:v3", "language_code": lang_code}
         async with httpx.AsyncClient(timeout=30) as client:
             r = await client.post(
