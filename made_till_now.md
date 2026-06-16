@@ -943,7 +943,41 @@ Completed the implementation of all items in `SATYAM_AUTH_AUDIT_MAP_NETWORK_FIX.
   - Verified that TanStack router generated the new tree without standalone `/map` page route and the build successfully compiles.
 
 #### Verification
-- Successfully ran `npm run build` in the frontend showing all chunks compiled and bundled successfully.
 - Verified backend routes imports compile cleanly: `python -c "import app.api.routes.auth, app.api.routes.map, app.api.routes.audit, app.services.network_service"`.
 - Checked and verified that all hardcoded grep occurrences of `Whitefield`, `S. Manjunath`, `18,432`, `142`, `FIR-2024-08842` have been eliminated from all `.tsx` and `.ts` source files in the project (excluding i18n translations).
+
+---
+
+### [2026-06-16] — Physics Preset Dropdown Positioning & Viewport Overflow Fix
+
+#### Summary
+Fixed a viewport overflow issue where the physics preset dropdown menu opened by the "Default" button was clipped off the left/top edges of the screen. The dropdown is now rendered in a React Portal and positioned dynamically relative to the trigger button's viewport coordinates.
+
+#### Changes
+- **`frontend/src/routes/network.tsx`**
+  - Bound the trigger button to `triggerRef`.
+  - Wrapped the preset dropdown JSX inside React's `createPortal` targeting `document.body` to lift it out of any overflow-restricted parent containers.
+  - Dynamically tracked viewport changes inside a `scroll`/`resize` event listener, computing coordinates via `getBoundingClientRect()` to position the absolute portal popup perfectly.
+  - Added a full-viewport transparent backdrop wrapper (`fixed inset-0 z-[9999]`) and an Escape key listener to handle dismissals.
+  - Constrained dropdown dimensions using `w-56`, `max-h-[60vh]`, and `overflow-y-auto` classes, and applied `whitespace-nowrap` to prevent item wrapping.
+  - Maintained neobrutalist aesthetics by using `border-2 border-foreground bg-secondary-background nb-shadow` styling.
+
+---
+
+### [2026-06-16] — Physics Parameter Configuration Refactoring
+
+#### Summary
+Refactored physics sliders and presets in the network graph route into a single, typed configuration object. The individual state variables were consolidated into a single unified `sim` state, which drives both the visual sliders and the force-simulation loop dynamically.
+
+#### Changes
+- **`frontend/src/routes/network.tsx`**
+  - Defined the `SimParams` type, `SIM_DEFAULTS`, `SIM_PRESETS`, and `SLIDER_META` metadata descriptors at the top of the file.
+  - Replaced four individual states (`repulsion`, `springStrength`, `centerGravity`, `damping`) with a single `sim` state variable initialized from active local storage values or `SIM_DEFAULTS`.
+  - Updated the force-simulation tick loop to read `repulsion`, `spring`, `gravity`, and `damping` dynamically from `physicsRef.current` (tracking the live `sim` state).
+  - Dynamically rendered the physics parameters by mapping over the `SLIDER_META` configuration array.
+  - Updated local storage hooks and preset modifiers (`applyPreset`, `saveCurrentAsPreset`, `deletePreset`) to work with `SimParams` and the new `"fq-network-presets"` localStorage key.
+- **`frontend/src/lib/i18n.tsx`**
+  - Wrapped slider and preset labels in `t()`.
+  - Added Kannada translation mappings for `"Repulsion"`, `"Spring"`, `"Gravity"`, `"Damping"`, `"Default"`, `"Tight"`, `"Spread"`, `"Floaty"`, `"Snappy"`, `"Custom"`, `"Save current as preset…"`, `"Preset name"`, and `"That name is reserved"` to `DICT`.
+
 
