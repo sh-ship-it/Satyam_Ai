@@ -4,114 +4,204 @@
   "graph": {},
   "nodes": [
     {
-      "label": "VOICE_FIX_CODE.md",
-      "file_type": "document",
-      "source_file": "VOICE_FIX_CODE.md",
+      "label": "sarvam.py",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "voice_fix_code",
-      "community": 97,
-      "norm_label": "voice_fix_code.md"
+      "id": "api_sarvam",
+      "community": 110,
+      "norm_label": "sarvam.py"
     },
     {
-      "label": "Satyam \u2014 Voice Input Fix (MediaRecorder STT)",
-      "file_type": "document",
-      "source_file": "VOICE_FIX_CODE.md",
+      "label": "_bcp()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "api_sarvam_bcp",
+      "community": 110,
+      "norm_label": "_bcp()"
+    },
+    {
+      "label": "_trim_for_tts()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "api_sarvam_trim_for_tts",
+      "community": 110,
+      "norm_label": "_trim_for_tts()"
+    },
+    {
+      "label": "_SarvamBase",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L48",
+      "_origin": "ast",
+      "id": "api_sarvam_sarvambase",
+      "community": 110,
+      "norm_label": "_sarvambase"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L49",
+      "_origin": "ast",
+      "id": "api_sarvam_sarvambase_init",
+      "community": 110,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._auth()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L54",
+      "_origin": "ast",
+      "id": "api_sarvam_sarvambase_auth",
+      "community": 110,
+      "norm_label": "._auth()"
+    },
+    {
+      "label": "SarvamSTT",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L61",
+      "_origin": "ast",
+      "id": "api_sarvam_sarvamstt",
+      "community": 26,
+      "norm_label": "sarvamstt"
+    },
+    {
+      "label": ".transcribe()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L69",
+      "_origin": "ast",
+      "id": "api_sarvam_sarvamstt_transcribe",
+      "community": 110,
+      "norm_label": ".transcribe()"
+    },
+    {
+      "label": ".transcribe_with_lang()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "api_sarvam_sarvamstt_transcribe_with_lang",
+      "community": 110,
+      "norm_label": ".transcribe_with_lang()"
+    },
+    {
+      "label": "SarvamTTS",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L115",
+      "_origin": "ast",
+      "id": "api_sarvam_sarvamtts",
+      "community": 26,
+      "norm_label": "sarvamtts"
+    },
+    {
+      "label": ".synthesize()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L120",
+      "_origin": "ast",
+      "id": "api_sarvam_sarvamtts_synthesize",
+      "community": 110,
+      "norm_label": ".synthesize()"
+    },
+    {
+      "label": "SarvamTranslator",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L144",
+      "_origin": "ast",
+      "id": "api_sarvam_sarvamtranslator",
+      "community": 40,
+      "norm_label": "sarvamtranslator"
+    },
+    {
+      "label": ".translate()",
+      "file_type": "code",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L147",
+      "_origin": "ast",
+      "id": "api_sarvam_sarvamtranslator_translate",
+      "community": 110,
+      "norm_label": ".translate()"
+    },
+    {
+      "label": "Sarvam AI clients \u2014 PRIMARY voice layer (Kannada + English STT/TTS/MT).  Servi",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "voice_fix_code_satyam_voice_input_fix_mediarecorder_stt",
-      "community": 97,
-      "norm_label": "satyam \u2014 voice input fix (mediarecorder stt)"
+      "id": "api_sarvam_rationale_1",
+      "community": 110,
+      "norm_label": "sarvam ai clients \u2014 primary voice layer (kannada + english stt/tts/mt).  servi"
     },
     {
-      "label": "Root cause",
-      "file_type": "document",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L5",
+      "label": "Trim to <= limit chars, preferring the last sentence boundary.",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L34",
       "_origin": "ast",
-      "id": "voice_fix_code_root_cause",
-      "community": 97,
-      "norm_label": "root cause"
+      "id": "api_sarvam_rationale_34",
+      "community": 110,
+      "norm_label": "trim to <= limit chars, preferring the last sentence boundary."
     },
     {
-      "label": "Fix",
-      "file_type": "document",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L9",
+      "label": "Saaras v3 speech-to-text. /speech-to-text is multipart/form-data.      Sends l",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L62",
       "_origin": "ast",
-      "id": "voice_fix_code_fix",
-      "community": 97,
-      "norm_label": "fix"
+      "id": "api_sarvam_rationale_62",
+      "community": 26,
+      "norm_label": "saaras v3 speech-to-text. /speech-to-text is multipart/form-data.      sends l"
     },
     {
-      "label": "1. REPLACE entire file: `frontend/src/lib/voice/recorder.ts`",
-      "file_type": "document",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L14",
+      "label": "Kept for Protocol compatibility \u2014 use transcribe_with_lang for auto-detect.",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L70",
       "_origin": "ast",
-      "id": "voice_fix_code_1_replace_entire_file_frontend_src_lib_voice_recorder_ts",
-      "community": 97,
-      "norm_label": "1. replace entire file: `frontend/src/lib/voice/recorder.ts`"
+      "id": "api_sarvam_rationale_70",
+      "community": 110,
+      "norm_label": "kept for protocol compatibility \u2014 use transcribe_with_lang for auto-detect."
     },
     {
-      "label": "2. Edits in `frontend/src/components/Shell.tsx`",
-      "file_type": "document",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L439",
+      "label": "Transcribe and return (transcript, detected_lang_bcp47).          lang=\"auto\"",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L77",
       "_origin": "ast",
-      "id": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx",
-      "community": 97,
-      "norm_label": "2. edits in `frontend/src/components/shell.tsx`"
+      "id": "api_sarvam_rationale_77",
+      "community": 110,
+      "norm_label": "transcribe and return (transcript, detected_lang_bcp47).          lang=\"auto\""
     },
     {
-      "label": "2a. Add import (after the `@/lib/voice/lang` import)",
-      "file_type": "document",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L441",
+      "label": "Bulbul v2 text-to-speech for Kannada and English. Returns WAV bytes.",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L116",
       "_origin": "ast",
-      "id": "voice_fix_code_2a_add_import_after_the_lib_voice_lang_import",
-      "community": 97,
-      "norm_label": "2a. add import (after the `@/lib/voice/lang` import)"
+      "id": "api_sarvam_rationale_116",
+      "community": 26,
+      "norm_label": "bulbul v2 text-to-speech for kannada and english. returns wav bytes."
     },
     {
-      "label": "2b. Add state (next to the other `useState` declarations, near `speechError`)",
-      "file_type": "document",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L451",
+      "label": "Mayura v1 \u2014 neural MT between Kannada and English.",
+      "file_type": "rationale",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L145",
       "_origin": "ast",
-      "id": "voice_fix_code_2b_add_state_next_to_the_other_usestate_declarations_near_speecherror",
-      "community": 97,
-      "norm_label": "2b. add state (next to the other `usestate` declarations, near `speecherror`)"
-    },
-    {
-      "label": "2c. Add ref (right after `const recognitionRef = useRef<any>(null);`)",
-      "file_type": "document",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L458",
-      "_origin": "ast",
-      "id": "voice_fix_code_2c_add_ref_right_after_const_recognitionref_useref_any_null",
-      "community": 97,
-      "norm_label": "2c. add ref (right after `const recognitionref = useref<any>(null);`)"
-    },
-    {
-      "label": "2d. REPLACE the whole listening `useEffect` (the old browser-SpeechRecognition effect) with:",
-      "file_type": "document",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L465",
-      "_origin": "ast",
-      "id": "voice_fix_code_2d_replace_the_whole_listening_useeffect_the_old_browser_speechrecognition_effect_with",
-      "community": 97,
-      "norm_label": "2d. replace the whole listening `useeffect` (the old browser-speechrecognition effect) with:"
-    },
-    {
-      "label": "2e. Mic circle = tap-to-stop + visible status line (replace the mic `<div>` block)",
-      "file_type": "document",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L652",
-      "_origin": "ast",
-      "id": "voice_fix_code_2e_mic_circle_tap_to_stop_visible_status_line_replace_the_mic_div_block",
-      "community": 97,
-      "norm_label": "2e. mic circle = tap-to-stop + visible status line (replace the mic `<div>` block)"
+      "id": "api_sarvam_rationale_145",
+      "community": 40,
+      "norm_label": "mayura v1 \u2014 neural mt between kannada and english."
     },
     {
       "label": "Shell.tsx",
@@ -172,6 +262,216 @@
       "id": "components_shell_shell",
       "community": 23,
       "norm_label": "shell()"
+    },
+    {
+      "label": "client.ts",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "api_client",
+      "community": 1,
+      "norm_label": "client.ts"
+    },
+    {
+      "label": "getAuthToken()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "api_client_getauthtoken",
+      "community": 1,
+      "norm_label": "getauthtoken()"
+    },
+    {
+      "label": "setAuthToken()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "api_client_setauthtoken",
+      "community": 1,
+      "norm_label": "setauthtoken()"
+    },
+    {
+      "label": "authHeaders()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "api_client_authheaders",
+      "community": 1,
+      "norm_label": "authheaders()"
+    },
+    {
+      "label": "ApiError",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L33",
+      "_origin": "ast",
+      "id": "api_client_apierror",
+      "community": 1,
+      "norm_label": "apierror"
+    },
+    {
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "api_client_apierror_constructor",
+      "community": 1,
+      "norm_label": ".constructor()"
+    },
+    {
+      "label": "request()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "api_client_request",
+      "community": 1,
+      "norm_label": "request()"
+    },
+    {
+      "label": "Role",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L58",
+      "_origin": "ast",
+      "id": "api_client_role",
+      "community": 1,
+      "norm_label": "role"
+    },
+    {
+      "label": "SessionUser",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L60",
+      "_origin": "ast",
+      "id": "api_client_sessionuser",
+      "community": 103,
+      "norm_label": "sessionuser"
+    },
+    {
+      "label": "HotspotPoint",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L72",
+      "_origin": "ast",
+      "id": "api_client_hotspotpoint",
+      "community": 1,
+      "norm_label": "hotspotpoint"
+    },
+    {
+      "label": "HotspotResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L73",
+      "_origin": "ast",
+      "id": "api_client_hotspotresponse",
+      "community": 1,
+      "norm_label": "hotspotresponse"
+    },
+    {
+      "label": "StationRow",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "api_client_stationrow",
+      "community": 1,
+      "norm_label": "stationrow"
+    },
+    {
+      "label": "StationBreakdownResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L82",
+      "_origin": "ast",
+      "id": "api_client_stationbreakdownresponse",
+      "community": 1,
+      "norm_label": "stationbreakdownresponse"
+    },
+    {
+      "label": "api",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L84",
+      "_origin": "ast",
+      "id": "api_client_api",
+      "community": 51,
+      "norm_label": "api"
+    },
+    {
+      "label": "TtsResult",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L155",
+      "_origin": "ast",
+      "id": "api_client_ttsresult",
+      "community": 1,
+      "norm_label": "ttsresult"
+    },
+    {
+      "label": "SttResult",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L156",
+      "_origin": "ast",
+      "id": "api_client_sttresult",
+      "community": 1,
+      "norm_label": "sttresult"
+    },
+    {
+      "label": "ttsSynthesize()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L159",
+      "_origin": "ast",
+      "id": "api_client_ttssynthesize",
+      "community": 1,
+      "norm_label": "ttssynthesize()"
+    },
+    {
+      "label": "sttTranscribe()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L174",
+      "_origin": "ast",
+      "id": "api_client_stttranscribe",
+      "community": 1,
+      "norm_label": "stttranscribe()"
+    },
+    {
+      "label": "loadEngineSettingsForDebug()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L198",
+      "_origin": "ast",
+      "id": "api_client_loadenginesettingsfordebug",
+      "community": 1,
+      "norm_label": "loadenginesettingsfordebug()"
+    },
+    {
+      "label": "ChatEvent",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L206",
+      "_origin": "ast",
+      "id": "api_client_chatevent",
+      "community": 1,
+      "norm_label": "chatevent"
+    },
+    {
+      "label": "streamChat()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L214",
+      "_origin": "ast",
+      "id": "api_client_streamchat",
+      "community": 1,
+      "norm_label": "streamchat()"
     },
     {
       "label": "recorder.ts",
@@ -247,7 +547,7 @@
       "label": "blobToWav()",
       "file_type": "code",
       "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L310",
+      "source_location": "L308",
       "_origin": "ast",
       "id": "voice_recorder_blobtowav",
       "community": 99,
@@ -257,7 +557,7 @@
       "label": "decodeAudio()",
       "file_type": "code",
       "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L335",
+      "source_location": "L333",
       "_origin": "ast",
       "id": "voice_recorder_decodeaudio",
       "community": 99,
@@ -267,7 +567,7 @@
       "label": "downsample()",
       "file_type": "code",
       "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L363",
+      "source_location": "L361",
       "_origin": "ast",
       "id": "voice_recorder_downsample",
       "community": 99,
@@ -277,11 +577,121 @@
       "label": "encodeWav()",
       "file_type": "code",
       "source_file": "frontend/src/lib/voice/recorder.ts",
-      "source_location": "L386",
+      "source_location": "L384",
       "_origin": "ast",
       "id": "voice_recorder_encodewav",
       "community": 99,
       "norm_label": "encodewav()"
+    },
+    {
+      "label": "VOICE_FIX_CODE.md",
+      "file_type": "document",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 97,
+      "norm_label": "voice_fix_code.md",
+      "id": "voice_fix_code"
+    },
+    {
+      "label": "Satyam \u2014 Voice Input Fix (MediaRecorder STT)",
+      "file_type": "document",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 97,
+      "norm_label": "satyam \u2014 voice input fix (mediarecorder stt)",
+      "id": "voice_fix_code_satyam_voice_input_fix_mediarecorder_stt"
+    },
+    {
+      "label": "Root cause",
+      "file_type": "document",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "community": 97,
+      "norm_label": "root cause",
+      "id": "voice_fix_code_root_cause"
+    },
+    {
+      "label": "Fix",
+      "file_type": "document",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L9",
+      "_origin": "ast",
+      "community": 97,
+      "norm_label": "fix",
+      "id": "voice_fix_code_fix"
+    },
+    {
+      "label": "1. REPLACE entire file: `frontend/src/lib/voice/recorder.ts`",
+      "file_type": "document",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L14",
+      "_origin": "ast",
+      "community": 97,
+      "norm_label": "1. replace entire file: `frontend/src/lib/voice/recorder.ts`",
+      "id": "voice_fix_code_1_replace_entire_file_frontend_src_lib_voice_recorder_ts"
+    },
+    {
+      "label": "2. Edits in `frontend/src/components/Shell.tsx`",
+      "file_type": "document",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L439",
+      "_origin": "ast",
+      "community": 97,
+      "norm_label": "2. edits in `frontend/src/components/shell.tsx`",
+      "id": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx"
+    },
+    {
+      "label": "2a. Add import (after the `@/lib/voice/lang` import)",
+      "file_type": "document",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L441",
+      "_origin": "ast",
+      "community": 97,
+      "norm_label": "2a. add import (after the `@/lib/voice/lang` import)",
+      "id": "voice_fix_code_2a_add_import_after_the_lib_voice_lang_import"
+    },
+    {
+      "label": "2b. Add state (next to the other `useState` declarations, near `speechError`)",
+      "file_type": "document",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L451",
+      "_origin": "ast",
+      "community": 97,
+      "norm_label": "2b. add state (next to the other `usestate` declarations, near `speecherror`)",
+      "id": "voice_fix_code_2b_add_state_next_to_the_other_usestate_declarations_near_speecherror"
+    },
+    {
+      "label": "2c. Add ref (right after `const recognitionRef = useRef<any>(null);`)",
+      "file_type": "document",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L458",
+      "_origin": "ast",
+      "community": 97,
+      "norm_label": "2c. add ref (right after `const recognitionref = useref<any>(null);`)",
+      "id": "voice_fix_code_2c_add_ref_right_after_const_recognitionref_useref_any_null"
+    },
+    {
+      "label": "2d. REPLACE the whole listening `useEffect` (the old browser-SpeechRecognition effect) with:",
+      "file_type": "document",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L465",
+      "_origin": "ast",
+      "community": 97,
+      "norm_label": "2d. replace the whole listening `useeffect` (the old browser-speechrecognition effect) with:",
+      "id": "voice_fix_code_2d_replace_the_whole_listening_useeffect_the_old_browser_speechrecognition_effect_with"
+    },
+    {
+      "label": "2e. Mic circle = tap-to-stop + visible status line (replace the mic `<div>` block)",
+      "file_type": "document",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L652",
+      "_origin": "ast",
+      "community": 97,
+      "norm_label": "2e. mic circle = tap-to-stop + visible status line (replace the mic `<div>` block)",
+      "id": "voice_fix_code_2e_mic_circle_tap_to_stop_visible_status_line_replace_the_mic_div_block"
     },
     {
       "label": "console.tsx",
@@ -289,9 +699,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_console",
       "community": 48,
-      "norm_label": "console.tsx"
+      "norm_label": "console.tsx",
+      "id": "routes_console"
     },
     {
       "label": "ChatMessage",
@@ -299,9 +709,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "routes_console_chatmessage",
       "community": 48,
-      "norm_label": "chatmessage"
+      "norm_label": "chatmessage",
+      "id": "routes_console_chatmessage"
     },
     {
       "label": "Conversation",
@@ -309,9 +719,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L22",
       "_origin": "ast",
-      "id": "routes_console_conversation",
       "community": 48,
-      "norm_label": "conversation"
+      "norm_label": "conversation",
+      "id": "routes_console_conversation"
     },
     {
       "label": "generateId()",
@@ -319,9 +729,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L32",
       "_origin": "ast",
-      "id": "routes_console_generateid",
       "community": 48,
-      "norm_label": "generateid()"
+      "norm_label": "generateid()",
+      "id": "routes_console_generateid"
     },
     {
       "label": "getDefaultMessages()",
@@ -329,9 +739,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "routes_console_getdefaultmessages",
       "community": 48,
-      "norm_label": "getdefaultmessages()"
+      "norm_label": "getdefaultmessages()",
+      "id": "routes_console_getdefaultmessages"
     },
     {
       "label": "loadConversations()",
@@ -339,9 +749,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L40",
       "_origin": "ast",
-      "id": "routes_console_loadconversations",
       "community": 48,
-      "norm_label": "loadconversations()"
+      "norm_label": "loadconversations()",
+      "id": "routes_console_loadconversations"
     },
     {
       "label": "saveConversations()",
@@ -349,9 +759,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L48",
       "_origin": "ast",
-      "id": "routes_console_saveconversations",
       "community": 48,
-      "norm_label": "saveconversations()"
+      "norm_label": "saveconversations()",
+      "id": "routes_console_saveconversations"
     },
     {
       "label": "generateTitle()",
@@ -359,9 +769,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L54",
       "_origin": "ast",
-      "id": "routes_console_generatetitle",
       "community": 48,
-      "norm_label": "generatetitle()"
+      "norm_label": "generatetitle()",
+      "id": "routes_console_generatetitle"
     },
     {
       "label": "Route",
@@ -369,9 +779,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L61",
       "_origin": "ast",
-      "id": "routes_console_route",
       "community": 8,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_console_route"
     },
     {
       "label": "Console()",
@@ -379,9 +789,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L71",
       "_origin": "ast",
-      "id": "routes_console_console",
       "community": 103,
-      "norm_label": "console()"
+      "norm_label": "console()",
+      "id": "routes_console_console"
     },
     {
       "label": "UserMsg()",
@@ -389,9 +799,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L805",
       "_origin": "ast",
-      "id": "routes_console_usermsg",
       "community": 48,
-      "norm_label": "usermsg()"
+      "norm_label": "usermsg()",
+      "id": "routes_console_usermsg"
     },
     {
       "label": "AiMsg()",
@@ -399,9 +809,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L815",
       "_origin": "ast",
-      "id": "routes_console_aimsg",
       "community": 51,
-      "norm_label": "aimsg()"
+      "norm_label": "aimsg()",
+      "id": "routes_console_aimsg"
     },
     {
       "label": "Stat()",
@@ -409,9 +819,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L879",
       "_origin": "ast",
-      "id": "routes_console_stat",
       "community": 48,
-      "norm_label": "stat()"
+      "norm_label": "stat()",
+      "id": "routes_console_stat"
     },
     {
       "label": "Spark()",
@@ -419,9 +829,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L895",
       "_origin": "ast",
-      "id": "routes_console_spark",
       "community": 48,
-      "norm_label": "spark()"
+      "norm_label": "spark()",
+      "id": "routes_console_spark"
     },
     {
       "label": "Mini()",
@@ -429,9 +839,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L910",
       "_origin": "ast",
-      "id": "routes_console_mini",
       "community": 48,
-      "norm_label": "mini()"
+      "norm_label": "mini()",
+      "id": "routes_console_mini"
     },
     {
       "label": "made_till_now.md",
@@ -2624,216 +3034,6 @@
       "id": "components_settingsdialog_dataactions"
     },
     {
-      "label": "client.ts",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "client.ts",
-      "id": "api_client"
-    },
-    {
-      "label": "getAuthToken()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L13",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "getauthtoken()",
-      "id": "api_client_getauthtoken"
-    },
-    {
-      "label": "setAuthToken()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L18",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "setauthtoken()",
-      "id": "api_client_setauthtoken"
-    },
-    {
-      "label": "authHeaders()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L24",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "authheaders()",
-      "id": "api_client_authheaders"
-    },
-    {
-      "label": "ApiError",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L33",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "apierror",
-      "id": "api_client_apierror"
-    },
-    {
-      "label": ".constructor()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L34",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": ".constructor()",
-      "id": "api_client_apierror_constructor"
-    },
-    {
-      "label": "request()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L40",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "request()",
-      "id": "api_client_request"
-    },
-    {
-      "label": "Role",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L58",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "role",
-      "id": "api_client_role"
-    },
-    {
-      "label": "SessionUser",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L60",
-      "_origin": "ast",
-      "community": 103,
-      "norm_label": "sessionuser",
-      "id": "api_client_sessionuser"
-    },
-    {
-      "label": "HotspotPoint",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L72",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "hotspotpoint",
-      "id": "api_client_hotspotpoint"
-    },
-    {
-      "label": "HotspotResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L73",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "hotspotresponse",
-      "id": "api_client_hotspotresponse"
-    },
-    {
-      "label": "StationRow",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L75",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "stationrow",
-      "id": "api_client_stationrow"
-    },
-    {
-      "label": "StationBreakdownResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L82",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "stationbreakdownresponse",
-      "id": "api_client_stationbreakdownresponse"
-    },
-    {
-      "label": "api",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L84",
-      "_origin": "ast",
-      "community": 51,
-      "norm_label": "api",
-      "id": "api_client_api"
-    },
-    {
-      "label": "TtsResult",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L155",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "ttsresult",
-      "id": "api_client_ttsresult"
-    },
-    {
-      "label": "SttResult",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L156",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "sttresult",
-      "id": "api_client_sttresult"
-    },
-    {
-      "label": "ttsSynthesize()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L159",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "ttssynthesize()",
-      "id": "api_client_ttssynthesize"
-    },
-    {
-      "label": "sttTranscribe()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L174",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "stttranscribe()",
-      "id": "api_client_stttranscribe"
-    },
-    {
-      "label": "loadEngineSettingsForDebug()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L193",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "loadenginesettingsfordebug()",
-      "id": "api_client_loadenginesettingsfordebug"
-    },
-    {
-      "label": "ChatEvent",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L201",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "chatevent",
-      "id": "api_client_chatevent"
-    },
-    {
-      "label": "streamChat()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L209",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "streamchat()",
-      "id": "api_client_streamchat"
-    },
-    {
       "label": "i18n.tsx",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
@@ -3352,206 +3552,6 @@
       "community": 12,
       "norm_label": "collapse any locale string to the two supported voice languages.",
       "id": "routes_voice_rationale_32"
-    },
-    {
-      "label": "sarvam.py",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": "sarvam.py",
-      "id": "api_sarvam"
-    },
-    {
-      "label": "_bcp()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L29",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": "_bcp()",
-      "id": "api_sarvam_bcp"
-    },
-    {
-      "label": "_trim_for_tts()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L33",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": "_trim_for_tts()",
-      "id": "api_sarvam_trim_for_tts"
-    },
-    {
-      "label": "_SarvamBase",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L48",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": "_sarvambase",
-      "id": "api_sarvam_sarvambase"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L49",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": ".__init__()",
-      "id": "api_sarvam_sarvambase_init"
-    },
-    {
-      "label": "._auth()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L54",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": "._auth()",
-      "id": "api_sarvam_sarvambase_auth"
-    },
-    {
-      "label": "SarvamSTT",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L61",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "sarvamstt",
-      "id": "api_sarvam_sarvamstt"
-    },
-    {
-      "label": ".transcribe()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L69",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": ".transcribe()",
-      "id": "api_sarvam_sarvamstt_transcribe"
-    },
-    {
-      "label": ".transcribe_with_lang()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L74",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": ".transcribe_with_lang()",
-      "id": "api_sarvam_sarvamstt_transcribe_with_lang"
-    },
-    {
-      "label": "SarvamTTS",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L102",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "sarvamtts",
-      "id": "api_sarvam_sarvamtts"
-    },
-    {
-      "label": ".synthesize()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L107",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": ".synthesize()",
-      "id": "api_sarvam_sarvamtts_synthesize"
-    },
-    {
-      "label": "SarvamTranslator",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L131",
-      "_origin": "ast",
-      "community": 40,
-      "norm_label": "sarvamtranslator",
-      "id": "api_sarvam_sarvamtranslator"
-    },
-    {
-      "label": ".translate()",
-      "file_type": "code",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L134",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": ".translate()",
-      "id": "api_sarvam_sarvamtranslator_translate"
-    },
-    {
-      "label": "Sarvam AI clients \u2014 PRIMARY voice layer (Kannada + English STT/TTS/MT).  Servi",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": "sarvam ai clients \u2014 primary voice layer (kannada + english stt/tts/mt).  servi",
-      "id": "api_sarvam_rationale_1"
-    },
-    {
-      "label": "Trim to <= limit chars, preferring the last sentence boundary.",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L34",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": "trim to <= limit chars, preferring the last sentence boundary.",
-      "id": "api_sarvam_rationale_34"
-    },
-    {
-      "label": "Saaras v3 speech-to-text. /speech-to-text is multipart/form-data.      Sends l",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L62",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "saaras v3 speech-to-text. /speech-to-text is multipart/form-data.      sends l",
-      "id": "api_sarvam_rationale_62"
-    },
-    {
-      "label": "Kept for Protocol compatibility \u2014 use transcribe_with_lang for auto-detect.",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L70",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": "kept for protocol compatibility \u2014 use transcribe_with_lang for auto-detect.",
-      "id": "api_sarvam_rationale_70"
-    },
-    {
-      "label": "Transcribe and return (transcript, detected_lang_bcp47).          lang=\"auto\"",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L77",
-      "_origin": "ast",
-      "community": 110,
-      "norm_label": "transcribe and return (transcript, detected_lang_bcp47).          lang=\"auto\"",
-      "id": "api_sarvam_rationale_77"
-    },
-    {
-      "label": "Bulbul v2 text-to-speech for Kannada and English. Returns WAV bytes.",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L103",
-      "_origin": "ast",
-      "community": 26,
-      "norm_label": "bulbul v2 text-to-speech for kannada and english. returns wav bytes.",
-      "id": "api_sarvam_rationale_103"
-    },
-    {
-      "label": "Mayura v1 \u2014 neural MT between Kannada and English.",
-      "file_type": "rationale",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L132",
-      "_origin": "ast",
-      "community": 40,
-      "norm_label": "mayura v1 \u2014 neural mt between kannada and english.",
-      "id": "api_sarvam_rationale_132"
     },
     {
       "label": "voice.py",
@@ -15378,102 +15378,567 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "VOICE_FIX_CODE.md",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam",
+      "target": "api_sarvam_bcp"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam",
+      "target": "api_sarvam_sarvambase"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam",
+      "target": "api_sarvam_sarvamstt"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam",
+      "target": "api_sarvam_sarvamtranslator"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam",
+      "target": "api_sarvam_sarvamtts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam",
+      "target": "api_sarvam_trim_for_tts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam",
+      "target": "app_config"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L1",
       "weight": 1.0,
-      "source": "voice_fix_code",
-      "target": "voice_fix_code_satyam_voice_input_fix_mediarecorder_stt",
+      "confidence_score": 1.0,
+      "source": "api_sarvam_rationale_1",
+      "target": "api_sarvam"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamstt_transcribe",
+      "target": "api_sarvam_bcp"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L84",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamstt_transcribe_with_lang",
+      "target": "api_sarvam_bcp"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamtranslator_translate",
+      "target": "api_sarvam_bcp"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L97",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamtts_synthesize",
+      "target": "api_sarvam_bcp"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_rationale_34",
+      "target": "api_sarvam_trim_for_tts"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamtts_synthesize",
+      "target": "api_sarvam_trim_for_tts"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvambase",
+      "target": "api_sarvam_sarvambase_auth"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvambase",
+      "target": "api_sarvam_sarvambase_init"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamstt",
+      "target": "api_sarvam_sarvambase"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamtranslator",
+      "target": "api_sarvam_sarvambase"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamtts",
+      "target": "api_sarvam_sarvambase"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "api_sarvam_sarvambase_init",
+      "target": "app_config_get_settings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamstt_transcribe",
+      "target": "api_sarvam_sarvambase_auth"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L90",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamstt_transcribe_with_lang",
+      "target": "api_sarvam_sarvambase_auth"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L92",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamtranslator_translate",
+      "target": "api_sarvam_sarvambase_auth"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L67",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamtts_synthesize",
+      "target": "api_sarvam_sarvambase_auth"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_rationale_62",
+      "target": "api_sarvam_sarvamstt"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamstt",
+      "target": "api_sarvam_sarvamstt_transcribe"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamstt",
+      "target": "api_sarvam_sarvamstt_transcribe_with_lang"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L122",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "embedder",
+      "target": "api_sarvam_sarvamstt"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L122",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "llm",
+      "target": "api_sarvam_sarvamstt"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "models_registry_get_stt",
+      "target": "api_sarvam_sarvamstt"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L122",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "reranker",
+      "target": "api_sarvam_sarvamstt"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L122",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "speechtotext",
+      "target": "api_sarvam_sarvamstt"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L122",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "texttospeech",
+      "target": "api_sarvam_sarvamstt"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L122",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "translator",
+      "target": "api_sarvam_sarvamstt"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_rationale_70",
+      "target": "api_sarvam_sarvamstt_transcribe"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamstt_transcribe",
+      "target": "api_sarvam_sarvamstt_transcribe_with_lang"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_sarvam_rationale_77",
+      "target": "api_sarvam_sarvamstt_transcribe_with_lang"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "api_sarvam_rationale_116",
+      "target": "api_sarvam_sarvamtts",
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
+      "relation": "method",
       "confidence": "EXTRACTED",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L14",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L60",
       "weight": 1.0,
-      "source": "voice_fix_code_satyam_voice_input_fix_mediarecorder_stt",
-      "target": "voice_fix_code_1_replace_entire_file_frontend_src_lib_voice_recorder_ts",
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamtts",
+      "target": "api_sarvam_sarvamtts_synthesize"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L141",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "embedder",
+      "target": "api_sarvam_sarvamtts"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L141",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "llm",
+      "target": "api_sarvam_sarvamtts"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "models_registry_get_tts",
+      "target": "api_sarvam_sarvamtts"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L141",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "reranker",
+      "target": "api_sarvam_sarvamtts"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L141",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "speechtotext",
+      "target": "api_sarvam_sarvamtts"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L141",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "texttospeech",
+      "target": "api_sarvam_sarvamtts"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L141",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "translator",
+      "target": "api_sarvam_sarvamtts"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L145",
+      "weight": 1.0,
+      "source": "api_sarvam_rationale_145",
+      "target": "api_sarvam_sarvamtranslator",
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
+      "relation": "method",
       "confidence": "EXTRACTED",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L439",
+      "source_file": "backend/app/models/api/sarvam.py",
+      "source_location": "L84",
       "weight": 1.0,
-      "source": "voice_fix_code_satyam_voice_input_fix_mediarecorder_stt",
-      "target": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "api_sarvam_sarvamtranslator",
+      "target": "api_sarvam_sarvamtranslator_translate"
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L9",
-      "weight": 1.0,
-      "source": "voice_fix_code_satyam_voice_input_fix_mediarecorder_stt",
-      "target": "voice_fix_code_fix",
-      "confidence_score": 1.0
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L154",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "embedder",
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "voice_fix_code_satyam_voice_input_fix_mediarecorder_stt",
-      "target": "voice_fix_code_root_cause",
-      "confidence_score": 1.0
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L154",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "llm",
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L441",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L155",
       "weight": 1.0,
-      "source": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx",
-      "target": "voice_fix_code_2a_add_import_after_the_lib_voice_lang_import",
-      "confidence_score": 1.0
+      "source": "models_registry_get_translator",
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L451",
-      "weight": 1.0,
-      "source": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx",
-      "target": "voice_fix_code_2b_add_state_next_to_the_other_usestate_declarations_near_speecherror",
-      "confidence_score": 1.0
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L154",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "reranker",
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L458",
-      "weight": 1.0,
-      "source": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx",
-      "target": "voice_fix_code_2c_add_ref_right_after_const_recognitionref_useref_any_null",
-      "confidence_score": 1.0
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L154",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "speechtotext",
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L465",
-      "weight": 1.0,
-      "source": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx",
-      "target": "voice_fix_code_2d_replace_the_whole_listening_useeffect_the_old_browser_speechrecognition_effect_with",
-      "confidence_score": 1.0
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L154",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "texttospeech",
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "VOICE_FIX_CODE.md",
-      "source_location": "L652",
-      "weight": 1.0,
-      "source": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx",
-      "target": "voice_fix_code_2e_mic_circle_tap_to_stop_visible_status_line_replace_the_mic_div_block",
-      "confidence_score": 1.0
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/models/registry.py",
+      "source_location": "L154",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "translator",
+      "target": "api_sarvam_sarvamtranslator"
     },
     {
       "relation": "imports_from",
@@ -15911,6 +16376,295 @@
       "target": "components_shell_shell"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_apierror"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_authheaders"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L110",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_chatevent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_getauthtoken"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L72",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_hotspotpoint"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L73",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_hotspotresponse"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L193",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_loadenginesettingsfordebug"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_request"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L58",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_role"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L60",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_sessionuser"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_setauthtoken"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L82",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_stationbreakdownresponse"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L75",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_stationrow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L118",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_streamchat"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L156",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_sttresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L171",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_stttranscribe"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L155",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_ttsresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L159",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client",
+      "target": "api_client_ttssynthesize"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_createaccountdialog",
+      "target": "api_client"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ProfileMenu.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_profilemenu",
+      "target": "api_client"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "api_client"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/audit.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "frontend_src_routes_audit_tsx_routes_audit",
+      "target": "api_client"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "frontend_src_routes_reports_tsx_routes_reports",
+      "target": "api_client"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "api_client"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "api_client"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/login.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_login",
+      "target": "api_client"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_network",
+      "target": "api_client"
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -15920,6 +16674,269 @@
       "confidence_score": 1.0,
       "source": "voice_recorder",
       "target": "api_client"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/voice/tts.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_tts",
+      "target": "api_client"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client_authheaders",
+      "target": "api_client_getauthtoken"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L178",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client_stttranscribe",
+      "target": "api_client_getauthtoken"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "api_client_getauthtoken"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client_request",
+      "target": "api_client_authheaders"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L125",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client_streamchat",
+      "target": "api_client_authheaders"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client_apierror",
+      "target": "api_client_apierror_constructor"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "api_client_request",
+      "target": "src_server_fetch"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L164",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client_ttssynthesize",
+      "target": "api_client_request"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ProfileMenu.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_profilemenu",
+      "target": "api_client_sessionuser"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "api_client_sessionuser"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "api_client_stationrow"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_createaccountdialog",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ProfileMenu.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_profilemenu",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/audit.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "frontend_src_routes_audit_tsx_routes_audit",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "frontend_src_routes_reports_tsx_routes_reports",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/login.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_login",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_network",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L165",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_client_ttssynthesize",
+      "target": "api_client_loadenginesettingsfordebug"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/voice/tts.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_tts",
+      "target": "api_client_ttssynthesize"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/lib/voice/tts.ts",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "voice_tts_speak",
+      "target": "api_client_ttssynthesize"
     },
     {
       "relation": "imports",
@@ -15933,14 +16950,47 @@
       "target": "api_client_stttranscribe"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "api_client_chatevent"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/lib/api/client.ts",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "api_client_streamchat",
+      "target": "src_server_fetch"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "api_client_streamchat"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L310",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "voice_recorder",
-      "target": "voice_recorder_blobtowav",
-      "confidence_score": 1.0
+      "target": "voice_recorder_blobtowav"
     },
     {
       "relation": "contains",
@@ -15948,9 +16998,9 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L335",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "voice_recorder",
-      "target": "voice_recorder_decodeaudio",
-      "confidence_score": 1.0
+      "target": "voice_recorder_decodeaudio"
     },
     {
       "relation": "contains",
@@ -15988,9 +17038,9 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L69",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "voice_recorder",
-      "target": "voice_recorder_pickmimetype",
-      "confidence_score": 1.0
+      "target": "voice_recorder_pickmimetype"
     },
     {
       "relation": "contains",
@@ -16039,9 +17089,9 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L137",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "voice_recorder_startsttsession",
-      "target": "voice_recorder_pickmimetype",
-      "confidence_score": 1.0
+      "target": "voice_recorder_pickmimetype"
     },
     {
       "relation": "calls",
@@ -16050,9 +17100,9 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L316",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "voice_recorder_blobtowav",
-      "target": "voice_recorder_decodeaudio",
-      "confidence_score": 1.0
+      "target": "voice_recorder_decodeaudio"
     },
     {
       "relation": "calls",
@@ -16061,9 +17111,9 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L324",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "voice_recorder_blobtowav",
-      "target": "voice_recorder_encodewav",
-      "confidence_score": 1.0
+      "target": "voice_recorder_encodewav"
     },
     {
       "relation": "calls",
@@ -16077,70 +17127,104 @@
       "target": "voice_recorder_downsample"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_fix_code",
+      "target": "voice_fix_code_satyam_voice_input_fix_mediarecorder_stt"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_fix_code_satyam_voice_input_fix_mediarecorder_stt",
+      "target": "voice_fix_code_1_replace_entire_file_frontend_src_lib_voice_recorder_ts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L439",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_fix_code_satyam_voice_input_fix_mediarecorder_stt",
+      "target": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "VOICE_FIX_CODE.md",
       "source_location": "L9",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "api_client"
+      "source": "voice_fix_code_satyam_voice_input_fix_mediarecorder_stt",
+      "target": "voice_fix_code_fix"
     },
     {
-      "relation": "imports",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L10",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L5",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "api_client_api"
+      "source": "voice_fix_code_satyam_voice_input_fix_mediarecorder_stt",
+      "target": "voice_fix_code_root_cause"
     },
     {
-      "relation": "imports",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L9",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L441",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "api_client_chatevent"
+      "source": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx",
+      "target": "voice_fix_code_2a_add_import_after_the_lib_voice_lang_import"
     },
     {
-      "relation": "imports",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "routes_console",
-      "target": "api_client_getauthtoken",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L10",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L451",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "api_client_stationrow"
+      "source": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx",
+      "target": "voice_fix_code_2b_add_state_next_to_the_other_usestate_declarations_near_speecherror"
     },
     {
-      "relation": "imports",
-      "context": "import",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L9",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L458",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "api_client_streamchat"
+      "source": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx",
+      "target": "voice_fix_code_2c_add_ref_right_after_const_recognitionref_useref_any_null"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L465",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx",
+      "target": "voice_fix_code_2d_replace_the_whole_listening_useeffect_the_old_browser_speechrecognition_effect_with"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "VOICE_FIX_CODE.md",
+      "source_location": "L652",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "voice_fix_code_2_edits_in_frontend_src_components_shell_tsx",
+      "target": "voice_fix_code_2e_mic_circle_tap_to_stop_visible_status_line_replace_the_mic_div_block"
     },
     {
       "relation": "imports_from",
@@ -19196,39 +20280,6 @@
       "target": "basemodel"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "api_client_sessionuser"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
@@ -19474,492 +20525,6 @@
       "confidence_score": 1.0,
       "source": "components_settingsdialog_dataactions",
       "target": "components_settingsdialog_formatremaining"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L68",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L33",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_apierror"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_authheaders"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L110",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_chatevent"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_getauthtoken"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L72",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_hotspotpoint"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L73",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_hotspotresponse"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L193",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_loadenginesettingsfordebug"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L40",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_request"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L58",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_role"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L60",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_sessionuser"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L18",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_setauthtoken"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L82",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_stationbreakdownresponse"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L75",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_stationrow"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L118",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_streamchat"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L156",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_sttresult"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L171",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_stttranscribe"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L155",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_ttsresult"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L159",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client",
-      "target": "api_client_ttssynthesize"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_createaccountdialog",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ProfileMenu.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_profilemenu",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/audit.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_audit_tsx_routes_audit",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/login.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_login",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_network",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/voice/tts.ts",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "voice_tts",
-      "target": "api_client"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client_authheaders",
-      "target": "api_client_getauthtoken"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L178",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client_stttranscribe",
-      "target": "api_client_getauthtoken"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L43",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client_request",
-      "target": "api_client_authheaders"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L125",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client_streamchat",
-      "target": "api_client_authheaders"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L34",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client_apierror",
-      "target": "api_client_apierror_constructor"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L41",
-      "weight": 1.0,
-      "source": "api_client_request",
-      "target": "src_server_fetch"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L164",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client_ttssynthesize",
-      "target": "api_client_request"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ProfileMenu.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_profilemenu",
-      "target": "api_client_sessionuser"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_createaccountdialog",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ProfileMenu.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_profilemenu",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/audit.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_audit_tsx_routes_audit",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/login.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_login",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_network",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L165",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_client_ttssynthesize",
-      "target": "api_client_loadenginesettingsfordebug"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/voice/tts.ts",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "voice_tts",
-      "target": "api_client_ttssynthesize"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/lib/voice/tts.ts",
-      "source_location": "L103",
-      "weight": 1.0,
-      "source": "voice_tts_speak",
-      "target": "api_client_ttssynthesize"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/lib/api/client.ts",
-      "source_location": "L123",
-      "weight": 1.0,
-      "source": "api_client_streamchat",
-      "target": "src_server_fetch"
     },
     {
       "relation": "imports_from",
@@ -21489,571 +22054,6 @@
       "confidence_score": 0.5,
       "source": "translateresponse",
       "target": "translateresponse"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam",
-      "target": "api_sarvam_bcp"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam",
-      "target": "api_sarvam_sarvambase"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L35",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam",
-      "target": "api_sarvam_sarvamstt"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L81",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam",
-      "target": "api_sarvam_sarvamtranslator"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L57",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam",
-      "target": "api_sarvam_sarvamtts"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L33",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam",
-      "target": "api_sarvam_trim_for_tts"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L19",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam",
-      "target": "app_config"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_rationale_1",
-      "target": "api_sarvam"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L68",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamstt_transcribe",
-      "target": "api_sarvam_bcp"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L84",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamstt_transcribe_with_lang",
-      "target": "api_sarvam_bcp"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L121",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamtranslator_translate",
-      "target": "api_sarvam_bcp"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L97",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamtts_synthesize",
-      "target": "api_sarvam_bcp"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L34",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_rationale_34",
-      "target": "api_sarvam_trim_for_tts"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L88",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamtts_synthesize",
-      "target": "api_sarvam_trim_for_tts"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L31",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvambase",
-      "target": "api_sarvam_sarvambase_auth"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvambase",
-      "target": "api_sarvam_sarvambase_init"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L35",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamstt",
-      "target": "api_sarvam_sarvambase"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L81",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamtranslator",
-      "target": "api_sarvam_sarvambase"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L57",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamtts",
-      "target": "api_sarvam_sarvambase"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L27",
-      "weight": 1.0,
-      "source": "api_sarvam_sarvambase_init",
-      "target": "app_config_get_settings"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L46",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamstt_transcribe",
-      "target": "api_sarvam_sarvambase_auth"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L90",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamstt_transcribe_with_lang",
-      "target": "api_sarvam_sarvambase_auth"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L92",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamtranslator_translate",
-      "target": "api_sarvam_sarvambase_auth"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L67",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamtts_synthesize",
-      "target": "api_sarvam_sarvambase_auth"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L62",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_rationale_62",
-      "target": "api_sarvam_sarvamstt"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L38",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamstt",
-      "target": "api_sarvam_sarvamstt_transcribe"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L74",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamstt",
-      "target": "api_sarvam_sarvamstt_transcribe_with_lang"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L122",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "embedder",
-      "target": "api_sarvam_sarvamstt"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L122",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "llm",
-      "target": "api_sarvam_sarvamstt"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L123",
-      "weight": 1.0,
-      "source": "models_registry_get_stt",
-      "target": "api_sarvam_sarvamstt"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L122",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "reranker",
-      "target": "api_sarvam_sarvamstt"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L122",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "speechtotext",
-      "target": "api_sarvam_sarvamstt"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L122",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "texttospeech",
-      "target": "api_sarvam_sarvamstt"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L122",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "translator",
-      "target": "api_sarvam_sarvamstt"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L70",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_rationale_70",
-      "target": "api_sarvam_sarvamstt_transcribe"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L71",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamstt_transcribe",
-      "target": "api_sarvam_sarvamstt_transcribe_with_lang"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L77",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_rationale_77",
-      "target": "api_sarvam_sarvamstt_transcribe_with_lang"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L103",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_rationale_103",
-      "target": "api_sarvam_sarvamtts"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L60",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamtts",
-      "target": "api_sarvam_sarvamtts_synthesize"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L141",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "embedder",
-      "target": "api_sarvam_sarvamtts"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L141",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "llm",
-      "target": "api_sarvam_sarvamtts"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L142",
-      "weight": 1.0,
-      "source": "models_registry_get_tts",
-      "target": "api_sarvam_sarvamtts"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L141",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "reranker",
-      "target": "api_sarvam_sarvamtts"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L141",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "speechtotext",
-      "target": "api_sarvam_sarvamtts"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L141",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "texttospeech",
-      "target": "api_sarvam_sarvamtts"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L141",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "translator",
-      "target": "api_sarvam_sarvamtts"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L132",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_rationale_132",
-      "target": "api_sarvam_sarvamtranslator"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/models/api/sarvam.py",
-      "source_location": "L84",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_sarvam_sarvamtranslator",
-      "target": "api_sarvam_sarvamtranslator_translate"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L154",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "embedder",
-      "target": "api_sarvam_sarvamtranslator"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L154",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "llm",
-      "target": "api_sarvam_sarvamtranslator"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L155",
-      "weight": 1.0,
-      "source": "models_registry_get_translator",
-      "target": "api_sarvam_sarvamtranslator"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L154",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "reranker",
-      "target": "api_sarvam_sarvamtranslator"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L154",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "speechtotext",
-      "target": "api_sarvam_sarvamtranslator"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L154",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "texttospeech",
-      "target": "api_sarvam_sarvamtranslator"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/models/registry.py",
-      "source_location": "L154",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "translator",
-      "target": "api_sarvam_sarvamtranslator"
     },
     {
       "relation": "contains",
@@ -39441,5 +39441,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "084f9d5c3881436ed4b0eb646af33807040a9638"
+  "built_at_commit": "55b895b2943c8757680ce5215756ebdb067f0fbe"
 }

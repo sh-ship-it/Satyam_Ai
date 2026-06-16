@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-16)
 
 ## Corpus Check
-- 196 files · ~98,674 words
+- 196 files · ~99,043 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `084f9d5c`
+- Built from commit: `55b895b2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -152,8 +152,8 @@
   backend/app/core/masking.py → backend/app/core/rbac.py
 - `AsyncSession` --uses--> `Principal`  [INFERRED]
   backend/app/api/deps.py → backend/app/core/rbac.py
-- `health()` --calls--> `get_settings()`  [EXTRACTED]
-  backend/app/api/routes/health.py → backend/app/config.py
+- `Embedder` --uses--> `SarvamSTT`  [INFERRED]
+  backend/app/models/registry.py → backend/app/models/api/sarvam.py
 
 ## Import Cycles
 - 1-file cycle: `backend/app/main.py -> backend/app/main.py`
@@ -537,7 +537,7 @@ Cohesion: 0.67
 Nodes (3): [2026-06-16] — Settings Dialog Layout Fix (Overflow), Files Changed, Summary
 
 ## Knowledge Gaps
-- **619 isolated node(s):** `Root cause`, `Fix`, `1. REPLACE entire file: `frontend/src/lib/voice/recorder.ts``, `2a. Add import (after the `@/lib/voice/lang` import)`, `2b. Add state (next to the other `useState` declarations, near `speechError`)` (+614 more)
+- **619 isolated node(s):** `VoiceScreen`, `SCREEN_ROUTES`, `ParsedVoice`, `Role`, `HotspotPoint` (+614 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -545,12 +545,12 @@ Nodes (3): [2026-06-16] — Settings Dialog Layout Fix (Overflow), Files Changed
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `_MemoryStore` connect `Community 51` to `Community 42`?**
-  _High betweenness centrality (0.075) - this node is a cross-community bridge._
+  _High betweenness centrality (0.078) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 42` to `Community 16`, `Community 33`, `Community 5`, `Community 0`?**
-  _High betweenness centrality (0.034) - this node is a cross-community bridge._
+  _High betweenness centrality (0.035) - this node is a cross-community bridge._
 - **Are the 37 inferred relationships involving `Principal` (e.g. with `Any` and `AsyncSession`) actually correct?**
   _`Principal` has 37 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Root cause`, `Fix`, `1. REPLACE entire file: `frontend/src/lib/voice/recorder.ts`` to the rest of the system?**
+- **What connects `Sarvam AI clients — PRIMARY voice layer (Kannada + English STT/TTS/MT).  Servi`, `Trim to <= limit chars, preferring the last sentence boundary.`, `Saaras v3 speech-to-text. /speech-to-text is multipart/form-data.      Sends l` to the rest of the system?**
   _731 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.14035087719298245 - nodes in this community are weakly interconnected._
