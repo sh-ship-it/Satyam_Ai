@@ -1,14 +1,12 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
   MessageSquare,
-  Map as MapIcon,
   Network,
   FileText,
   ShieldCheck,
   Mic,
   Settings,
   Languages,
-  AlertTriangle,
   Copy,
   Check,
   Save,
@@ -28,7 +26,7 @@ import { useI18n } from "@/lib/i18n";
 type VoiceScreen = { to: string; words: RegExp };
 const SCREEN_ROUTES: VoiceScreen[] = [
   { to: "/console", words: /(console|chat|assistant|conversation)|ಕನ್ಸೋಲ್|ಸಂಭಾಷಣೆ/i },
-  { to: "/map", words: /(map|hotspot|heat ?map|geospatial)|ನಕ್ಷೆ/i },
+  { to: "/console", words: /(map|hotspot|heat ?map|geospatial)|ನಕ್ಷೆ/i },
   { to: "/network", words: /(network|graph|ego|link analysis|connections?)|ನೆಟ್‌ವರ್ಕ್/i },
   { to: "/reports", words: /(report|reports|brief|dossier|pdf)|ವರದಿ/i },
   { to: "/audit", words: /(audit|compliance|chain|logs?)|ಆಡಿಟ್/i },
@@ -324,7 +322,6 @@ export function Shell({ children }: { children: ReactNode }) {
 
   const NAV = [
     { to: "/console", icon: MessageSquare, label: t("Console") },
-    { to: "/map", icon: MapIcon, label: t("Map") },
     { to: "/network", icon: Network, label: t("Network") },
     { to: "/reports", icon: FileText, label: t("Reports") },
     { to: "/audit", icon: ShieldCheck, label: t("Audit") },
@@ -333,11 +330,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      {/* Synthetic data banner */}
-      <div className="flex items-center justify-center gap-2 border-b-2 border-foreground bg-warning px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-warning-foreground">
-        <AlertTriangle className="h-3.5 w-3.5" />
-        {t("Synthetic / demo data — not real case records")}
-      </div>
+
 
       {/* Top bar */}
       <header className="flex h-14 items-center justify-between border-b-2 border-foreground bg-header px-5 text-header-foreground">

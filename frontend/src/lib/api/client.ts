@@ -91,12 +91,27 @@ export const api = {
     setAuthToken(out.token);
     return out;
   },
+  async register(body: {
+    name: string;
+    email: string;
+    role: string;
+    password: string;
+    photo_b64?: string;
+  }): Promise<{ token: string; user: SessionUser }> {
+    const out = await request<{ token: string; user: SessionUser }>("/auth/register", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+    setAuthToken(out.token);
+    return out;
+  },
   me(): Promise<SessionUser> {
     return request<SessionUser>("/auth/me");
   },
   logout() {
     setAuthToken(null);
   },
+
 
   // --- read APIs (grounded; backed by Postgres + RLS) ---
   cases(params: Record<string, string | number> = {}) {
@@ -112,7 +127,11 @@ export const api = {
   stationBreakdown(body: Record<string, unknown>): Promise<StationBreakdownResponse> {
     return request<StationBreakdownResponse>("/map/station-breakdown", { method: "POST", body: JSON.stringify(body) });
   },
+  offenderTrail(body: { person_id?: string; entity_name?: string }): Promise<{ person_id: string; label: string; points: { lat: number; lng: number; date?: string; fir_number?: string; crime_type?: string; station?: string }[] }> {
+    return request("/map/offender-trail", { method: "POST", body: JSON.stringify(body) });
+  },
   network(body: Record<string, unknown>) {
+
     return request("/network/ego", { method: "POST", body: JSON.stringify(body) });
   },
   buildReport(body: Record<string, unknown>) {

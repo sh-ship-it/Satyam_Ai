@@ -9,9 +9,14 @@ from app.schemas.network import EgoRequest, EgoResponse, GraphEdge, GraphNode
 
 async def ego(session: AsyncSession, req: EgoRequest) -> EgoResponse:
     # person_id is normalised by the validator (entity_name → person_id)
-    nodes_raw, edges_raw = await analytics.ego_network(
-        session, person_id=req.person_id, depth=req.depth
-    )
+    if (req.focus or "").lower() == "victim":
+        nodes_raw, edges_raw = await analytics.victim_offender_network(
+            session, person_id=req.person_id
+        )
+    else:
+        nodes_raw, edges_raw = await analytics.ego_network(
+            session, person_id=req.person_id, depth=req.depth
+        )
 
     # Build case_ids per person node so the frontend can open the CaseDrawer
     person_case_ids: dict[str, list[int]] = {}
@@ -38,6 +43,8 @@ async def ego(session: AsyncSession, req: EgoRequest) -> EgoResponse:
             entity_type=kind,
             degree=n.get("degree", 0),
             case_ids=person_case_ids.get(nid, []),
+            role=n.get("role"),
+            crime_type=n.get("crime_type"),
         ))
 
     return EgoResponse(

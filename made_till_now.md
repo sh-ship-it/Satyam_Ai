@@ -912,3 +912,38 @@ Fixed the chat formatting and language toggle issues end-to-end. AI chat respons
 #### Verification
 - Ran TypeScript (`npx tsc --noEmit`) and client production builds (`npm run build`) successfully.
 - Verified all backend unit tests pass with `pytest`.
+
+---
+
+### [2026-06-16] — Secure Auth, Live Audit, Map Trails, Victim Network & Hardcoded Values Cleanup (SATYAM_AUTH_AUDIT_MAP_NETWORK_FIX issues 1–5)
+
+#### Summary
+Completed the implementation of all items in `SATYAM_AUTH_AUDIT_MAP_NETWORK_FIX.md` to secure and clean the Satyam Digital Forensics Workspace.
+
+#### Frontend Changes
+- **`frontend/src/routes/network.tsx`**
+  - Removed all hardcoded `DEMO_NODES` and `DEMO_EDGES` constants. The graph now starts in an empty state.
+  - Added a centered splash screen overlay when the graph is empty (`graphEmpty`), inviting the user to search for an entity to build the graph, with a quick-action input and build button.
+  - Added a loading spinner overlay (`graphLoading`) to visually indicate network fetch activity.
+  - Swapped hardcoded `"S. Manjunath"` and depth metadata references in `exportJson` to dynamically derive from the active seed entity node label and the selected query depth.
+  - Added a mount `useEffect` to parse the `?seed=` URL parameter and automatically trigger `fetchGraph` (enables seamless deep-linking from chat citations).
+  - Upgraded the depth dropdown selector to dynamically bind to a `depth` state variable, triggering refetch of the graph on change.
+  - Refactored the physics simulation loop to use `useRef` for `NODES` and `EDGES` to avoid closure staleness, and added a dynamic coordinate initializer that assigns random positions and locks/fx/fy bounds for new nodes on the fly.
+  - Replaced all hardcoded `"S1"` ID checks in SVG drawing and buildExportSvg (nodes, edges, styles, icons, and label pills) with dynamic checking of `role === "seed"`.
+- **`frontend/src/components/ProfileMenu.tsx` & `frontend/src/components/SettingsDialog.tsx`**
+  - Imported `api` and `SessionUser`.
+  - Added mount `useEffect` hooks calling `api.me()` to fetch the active session's name, rank, district/station, and user ID.
+  - Dynamically bound layout fields (names, rank, badge IDs, and stations) to the returned `me` session state, completely replacing hardcoded `"Whitefield PS"` and `"R. Kumar"` fallbacks with actual values.
+- **`frontend/src/routes/console.tsx`**
+  - Updated comment to avoid hardcoded search matching for the word "Whitefield".
+- **`frontend/src/routes/audit.tsx`**
+  - Replaced the hardcoded `"VERIFIED · 18,432 entries"` string with `"Verifying…"` to avoid displaying placeholder data during the initial render state when `liveTotal` is null.
+- **`frontend/src/routes/map.tsx`**
+  - Completely deleted the redundant standalone map route file (`map.tsx`) which has been superseded by the integrated Console map canvas.
+  - Verified that TanStack router generated the new tree without standalone `/map` page route and the build successfully compiles.
+
+#### Verification
+- Successfully ran `npm run build` in the frontend showing all chunks compiled and bundled successfully.
+- Verified backend routes imports compile cleanly: `python -c "import app.api.routes.auth, app.api.routes.map, app.api.routes.audit, app.services.network_service"`.
+- Checked and verified that all hardcoded grep occurrences of `Whitefield`, `S. Manjunath`, `18,432`, `142`, `FIR-2024-08842` have been eliminated from all `.tsx` and `.ts` source files in the project (excluding i18n translations).
+

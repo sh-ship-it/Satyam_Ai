@@ -10,11 +10,12 @@ import {
   EyeOff,
   ArrowLeft,
   Activity,
-  AlertTriangle,
   Fingerprint,
 } from "lucide-react";
 import { useT } from "@/lib/i18n";
 import { api } from "@/lib/api/client";
+import { CreateAccountDialog, ROLE_OPTIONS } from "@/components/CreateAccountDialog";
+
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -31,6 +32,8 @@ function Login() {
   const navigate = useNavigate();
   const [showPw, setShowPw] = useState(false);
   const [remember, setRemember] = useState(false);
+  const [role, setRole] = useState("CI");
+  const [showCreate, setShowCreate] = useState(false);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-background text-foreground">
@@ -45,11 +48,6 @@ function Login() {
         }}
       />
 
-      {/* Synthetic data banner */}
-      <div className="relative z-10 flex items-center justify-center gap-2 border-b-2 border-foreground bg-warning px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-warning-foreground">
-        <AlertTriangle className="h-3.5 w-3.5" />
-        {t("Synthetic / demo data — not real case records")}
-      </div>
 
       {/* Main split layout */}
       <div className="relative z-10 mx-auto grid min-h-[calc(100vh-32px)] max-w-7xl grid-cols-1 items-center gap-10 px-6 py-12 lg:grid-cols-2 lg:px-12">
@@ -111,7 +109,7 @@ function Login() {
                 // API is unreachable (offline pitch mode).
                 const username = email ? email.split("@")[0] : "officer";
                 try {
-                  await api.login(username, "investigator");
+                  await api.login(username, role);
                 } catch {
                   /* backend down — continue to console as demo */
                 }
@@ -158,6 +156,27 @@ function Login() {
                 </div>
               </div>
 
+              <div>
+                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide">
+                  {t("Role")}
+                </label>
+                <div className="relative">
+                  <Shield className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/50" />
+                  <select
+                    name="role"
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="h-11 w-full appearance-none rounded-[5px] border-2 border-foreground bg-background pl-9 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring nb-shadow-sm"
+                  >
+                    {ROLE_OPTIONS.map((r) => (
+                      <option key={r.value} value={r.value}>
+                        {t(r.label)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
               <div className="flex items-center justify-between pt-1">
                 <label className="flex cursor-pointer items-center gap-2 text-sm font-medium">
                   <button
@@ -196,9 +215,13 @@ function Login() {
 
               <p className="pt-2 text-center text-sm text-foreground/70">
                 {t("Don't have an account?")}{" "}
-                <a href="#" className="font-bold underline-offset-4 hover:underline">
-                  {t("Request access")}
-                </a>
+                <button
+                  type="button"
+                  onClick={() => setShowCreate(true)}
+                  className="font-bold underline-offset-4 hover:underline cursor-pointer"
+                >
+                  {t("Create account")}
+                </button>
               </p>
             </form>
           </div>
@@ -212,6 +235,15 @@ function Login() {
           </Link>
         </div>
       </div>
+
+      <CreateAccountDialog
+        open={showCreate}
+        onClose={() => setShowCreate(false)}
+        onCreated={() => {
+          setShowCreate(false);
+          navigate({ to: "/console" });
+        }}
+      />
     </div>
   );
 }

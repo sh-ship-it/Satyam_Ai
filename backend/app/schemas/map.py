@@ -46,3 +46,24 @@ class StationRow(BaseModel):
 class StationBreakdownResponse(BaseModel):
     rows: list[StationRow] = []
     total: int = 0
+
+
+class OffenderTrailRequest(BaseModel):
+    person_id: Optional[str] = None
+    entity_name: Optional[str] = None
+
+
+class TrailPoint(BaseModel):
+    lat: float
+    lng: float
+    date: Optional[str] = None
+    fir_number: Optional[str] = None
+    crime_type: Optional[str] = None
+    station: Optional[str] = None
+
+
+class OffenderTrailResponse(BaseModel):
+    person_id: str
+    label: str
+    points: list[TrailPoint] = []
+

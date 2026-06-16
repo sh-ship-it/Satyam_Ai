@@ -11,6 +11,7 @@ class EgoRequest(BaseModel):
     person_id: Optional[str] = None
     entity_name: Optional[str] = None
     depth: int = 1
+    focus: Optional[str] = None
 
     @model_validator(mode="after")
     def _require_one(self) -> "EgoRequest":
@@ -31,6 +32,9 @@ class GraphNode(BaseModel):
     entity_type: Optional[str] = None   # person | location | …
     case_ids: list[int] = []
     seed_id: Optional[str] = None
+    role: Optional[str] = None
+    crime_type: Optional[str] = None
+
 
 
 class GraphEdge(BaseModel):

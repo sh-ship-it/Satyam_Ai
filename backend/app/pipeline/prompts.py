@@ -17,7 +17,9 @@ ROUTER_SYSTEM = (
     "assistant.  Classify the user's request into exactly one intent and extract "
     "slots.  Intents: sql_query (counts/lists/filters over the crime DB), "
     "narrative_search (free-text 'find cases about...'), "
-    "hotspot (map/geography/hotspots), network (links between people/cases), "
+    "hotspot (map/geography/hotspots), network (links between people/cases, including "
+    "offenders who acted against a victim, e.g. 'who attacked X', 'offenders against Y', "
+    "'crimes committed against Z'), "
     "report (generate a document), smalltalk (greetings/help). "
     "Return ONLY JSON matching the schema."
 )

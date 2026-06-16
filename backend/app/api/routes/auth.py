@@ -10,12 +10,16 @@ changes at the flip of APP_ENV.
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select, func
 
 from app.api.deps import get_principal
 from app.config import get_settings
 from app.core.rbac import Principal, resolve_clearance, resolve_scope
 from app.core.security import create_access_token
-from app.schemas.auth import LoginRequest, LoginResponse, SessionUser
+from app.schemas.auth import LoginRequest, LoginResponse, SessionUser, RegisterRequest
+from app.db.session import get_sessionmaker
+from app.db.models import User, Officer
+
 
 router = APIRouter()
 
@@ -45,6 +49,50 @@ _DEMO_STATIONS: dict[str, dict] = {
     "analyst":      {"station_id": None, "district": "", "range": ""},  # state scope → sees all
     "viewer":       {"station_id": 1,    **_BLR},
 }
+from sqlalchemy.ext.asyncio import AsyncSession
+
+def get_db_rank(rank: str) -> str:
+    if rank == "CI":
+        return "PI"
+    if rank == "DySP":
+        return "Dy.SP"
+    return rank
+
+
+async def get_or_create_user(session: AsyncSession, username: str, rank: str, name: str) -> User:
+    stmt = select(User).where(User.username == username)
+    user = (await session.execute(stmt)).scalar_one_or_none()
+    if user:
+        return user
+
+    db_rank = get_db_rank(rank)
+    officer_stmt = select(Officer).where(Officer.rank == db_rank).limit(1)
+    officer = (await session.execute(officer_stmt)).scalar_one_or_none()
+
+    if not officer:
+        max_id_res = await session.execute(select(func.max(Officer.officer_id)))
+        new_officer_id = (max_id_res.scalar() or 0) + 1
+        geo = _DEMO_STATIONS.get(rank, _DEMO_STATIONS["investigator"])
+        station_id = geo.get("station_id", 1) or 1
+        officer = Officer(
+            officer_id=new_officer_id,
+            name=name,
+            rank=db_rank,
+            station_id=station_id,
+        )
+        session.add(officer)
+        await session.flush()
+
+    new_user = User(
+        username=username,
+        password_hash="demo_pwd",
+        officer_id=officer.officer_id,
+        assigned_rank=db_rank,
+        is_active=True,
+    )
+    session.add(new_user)
+    await session.flush()
+    return new_user
 
 
 @router.post("/login", response_model=LoginResponse)
@@ -59,6 +107,14 @@ async def login(req: LoginRequest) -> LoginResponse:
     geo = _DEMO_STATIONS.get(rank, _DEMO_STATIONS["investigator"])
 
     uid = req.username.strip() or f"demo-{rank}"
+
+    # Get or create database user
+    sessionmaker = get_sessionmaker()
+    async with sessionmaker() as session:
+        async with session.begin():
+            db_user = await get_or_create_user(session, uid, rank, uid.title())
+            user_id = db_user.user_id
+
     user = SessionUser(
         id=uid,
         name=req.username.strip() or rank.title(),
@@ -78,6 +134,51 @@ async def login(req: LoginRequest) -> LoginResponse:
         station_id=geo["station_id"],
         district=geo["district"],
         range_name=geo["range"],
+        officer_id=user_id,
+    )
+    return LoginResponse(token=token, user=user)
+
+
+@router.post("/register", response_model=LoginResponse)
+async def register(req: RegisterRequest) -> LoginResponse:
+    settings = get_settings()
+    if settings.app_env == "production":
+        raise HTTPException(status_code=403, detail="self-registration disabled in production")
+
+    rank = req.role or req.rank or "investigator"
+    clearance = resolve_clearance(rank)
+    scope = resolve_scope(rank)
+    geo = _DEMO_STATIONS.get(rank, _DEMO_STATIONS["investigator"])
+
+    uid = (req.email.split("@")[0] if req.email else "").strip() or f"demo-{rank}"
+
+    # Get or create database user
+    sessionmaker = get_sessionmaker()
+    async with sessionmaker() as session:
+        async with session.begin():
+            db_user = await get_or_create_user(session, uid, rank, req.name.strip() or uid.title())
+            user_id = db_user.user_id
+
+    user = SessionUser(
+        id=uid,
+        name=req.name.strip() or uid.title(),
+        rank=rank,
+        scope=scope,
+        clearance=clearance,
+        station_id=geo["station_id"],
+        district=geo["district"],
+        range_name=geo["range"],
+    )
+    token = create_access_token(
+        subject=user.id,
+        name=user.name,
+        rank=rank,
+        scope=scope,
+        clearance=clearance,
+        station_id=geo["station_id"],
+        district=geo["district"],
+        range_name=geo["range"],
+        officer_id=user_id,
     )
     return LoginResponse(token=token, user=user)
 
@@ -94,3 +195,4 @@ async def me(principal: Principal = Depends(get_principal)) -> SessionUser:
         district=principal.district,
         range_name=principal.range_name,
     )
+

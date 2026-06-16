@@ -17,22 +17,7 @@ export const Route = createFileRoute("/network")({
   component: NetworkScreen,
 });
 
-// Built-in demo graph shown before the backend responds or when offline
-const DEMO_NODES = [
-  { id: "S1", x: 50, y: 50, r: 22, group: 0, label: "Seed entity", role: "seed" },
-  { id: "N1", x: 25, y: 30, r: 12, group: 1, label: "Person-01" },
-  { id: "N2", x: 80, y: 32, r: 14, group: 1, label: "Person-02" },
-  { id: "N3", x: 80, y: 70, r: 10, group: 2, label: "Person-03" },
-  { id: "N4", x: 22, y: 72, r: 16, group: 2, label: "Person-04" },
-  { id: "N5", x: 50, y: 14, r: 8, group: 1, label: "Person-05" },
-  { id: "N6", x: 50, y: 88, r: 9, group: 2, label: "Location-01" },
-  { id: "N7", x: 13, y: 50, r: 7, group: 3, label: "Vehicle-01" },
-  { id: "N8", x: 92, y: 50, r: 7, group: 3, label: "Device-01" },
-];
-const DEMO_EDGES: [string, string][] = [
-  ["S1","N1"],["S1","N2"],["S1","N3"],["S1","N4"],["S1","N5"],["S1","N6"],["S1","N7"],["S1","N8"],
-  ["N1","N5"],["N2","N3"],["N4","N6"],["N1","N7"],["N2","N8"],
-];
+// Demo nodes and edges removed. Graph starts empty.
 
 const GROUP_COLOR = ["oklch(0.546 0.215 262)", "oklch(0.65 0.17 150)", "oklch(0.7 0.18 50)", "oklch(0.58 0.22 27)"];
 const GROUP_SHAPE = ["circle", "square", "diamond", "triangle"];
@@ -41,22 +26,30 @@ type PosMap = Record<string, { x: number; y: number; vx: number; vy: number; fx?
 
 function NetworkScreen() {
   const t = useT();
-  const [selected, setSelected] = useState("S1");
-  const [selectedSet, setSelectedSet] = useState<Set<string>>(() => new Set(["S1"]));
+  const [selected, setSelected] = useState("");
+  const [selectedSet, setSelectedSet] = useState<Set<string>>(() => new Set());
   const [drawerCaseId, setDrawerCaseId] = useState<number | null>(null);
   const [taskMsg, setTaskMsg] = useState<string | null>(null);
 
-  // Live graph data (falls back to demo when backend unreachable or loading)
-  const [NODES, setNODES] = useState(DEMO_NODES);
-  const [EDGES, setEDGES] = useState<[string,string][]>(DEMO_EDGES);
+  // Live graph data
+  const [NODES, setNODES] = useState<any[]>([]);
+  const [EDGES, setEDGES] = useState<[string,string][]>([]);
   const [seedInput, setSeedInput] = useState("");
   const [graphLoading, setGraphLoading] = useState(false);
+  const [graphEmpty, setGraphEmpty] = useState(true);
+  const [depth, setDepth] = useState(2);
 
-  const fetchGraph = useCallback(async (seedName: string) => {
+  const fetchGraph = useCallback(async (seedName: string, queryDepth: number = depth) => {
     setGraphLoading(true);
+    setGraphEmpty(false);
     try {
-      const res: any = await api.network({ entity_name: seedName, depth: 2 });
-      if (!res?.nodes?.length) return;
+      const res: any = await api.network({ entity_name: seedName, depth: queryDepth });
+      if (!res?.nodes?.length) {
+        setNODES([]);
+        setEDGES([]);
+        setGraphEmpty(true);
+        return;
+      }
       // Map API nodes to our internal format
       const mappedNodes = res.nodes.map((n: any, idx: number) => ({
         id: String(n.id ?? idx),
@@ -71,14 +64,25 @@ function NetworkScreen() {
       const mappedEdges: [string,string][] = (res.edges ?? []).map((e: any) => [String(e.source), String(e.target)] as [string,string]);
       setNODES(mappedNodes);
       setEDGES(mappedEdges);
-      setSelected(String(res.seed_id ?? mappedNodes[0]?.id ?? "S1"));
-      setSelectedSet(new Set([String(res.seed_id ?? mappedNodes[0]?.id ?? "S1")]));
+      const newSeedId = String(res.seed_id ?? mappedNodes[0]?.id ?? "");
+      setSelected(newSeedId);
+      setSelectedSet(new Set(newSeedId ? [newSeedId] : []));
+      setGraphEmpty(mappedNodes.length === 0);
     } catch {
-      // Keep existing (demo) graph when backend is down
+      setNODES([]);
+      setEDGES([]);
+      setGraphEmpty(true);
     } finally {
       setGraphLoading(false);
     }
-  }, []);
+  }, [depth]);
+
+  const handleDepthChange = (newDepth: number) => {
+    setDepth(newDepth);
+    if (seedInput.trim()) {
+      fetchGraph(seedInput.trim(), newDepth);
+    }
+  };
 
   // Voice command "open network for suspect …" lands here.
   useEffect(() => {
@@ -91,11 +95,27 @@ function NetworkScreen() {
     window.addEventListener("satyam:run-task", onTask);
     return () => window.removeEventListener("satyam:run-task", onTask);
   }, [fetchGraph]);
+  useEffect(() => {
+    const seed = new URLSearchParams(window.location.search).get("seed");
+    if (seed) {
+      setSeedInput(seed);
+      fetchGraph(seed);
+    }
+  }, [fetchGraph]);
+
   const [exportOpen, setExportOpen] = useState(false);
   const [exporting, setExporting] = useState<null | "png" | "json">(null);
   const [exportScope, setExportScope] = useState<"selection" | "all">("selection");
   const graphSvgRef = useRef<SVGSVGElement>(null);
-  const node = NODES.find((n) => n.id === selected)!;
+  const node = useMemo(() => {
+    return NODES.find((n) => n.id === selected) || {
+      id: "",
+      label: t("No selection"),
+      group: 0,
+      role: "",
+      caseIds: [],
+    };
+  }, [NODES, selected, t]);
 
   // ---- Physics tuning state ----
   const [repulsion, setRepulsion] = useState(18);
@@ -173,13 +193,12 @@ function NetworkScreen() {
   }, [repulsion, springStrength, centerGravity, damping, allPresets, activePreset]);
 
   // ---- Dynamic simulation state ----
-  const [pos, setPos] = useState<PosMap>(() => {
-    const o: PosMap = {};
-    NODES.forEach((n) => {
-      o[n.id] = { x: n.x, y: n.y, vx: 0, vy: 0, fx: n.id === "S1" ? n.x : null, fy: n.id === "S1" ? n.y : null };
-    });
-    return o;
-  });
+  const nodesRef = useRef(NODES);
+  nodesRef.current = NODES;
+  const edgesRef = useRef(EDGES);
+  edgesRef.current = EDGES;
+
+  const [pos, setPos] = useState<PosMap>({});
   const posRef = useRef(pos);
   posRef.current = pos;
   const [view, setView] = useState({ x: 0, y: 0, scale: 1 });
@@ -196,12 +215,28 @@ function NetworkScreen() {
       setFrameMs(dt);
       const ph = physicsRef.current;
       const p = { ...posRef.current };
-      const ids = NODES.map((n) => n.id);
+
+      // Ensure all nodes have a position
+      nodesRef.current.forEach((n) => {
+        if (!p[n.id]) {
+          p[n.id] = {
+            x: n.x,
+            y: n.y,
+            vx: 0,
+            vy: 0,
+            fx: n.role === "seed" ? n.x : null,
+            fy: n.role === "seed" ? n.y : null,
+          };
+        }
+      });
+
+      const ids = nodesRef.current.map((n) => n.id);
       // Repulsion
       for (let i = 0; i < ids.length; i++) {
         for (let j = i + 1; j < ids.length; j++) {
           const a = p[ids[i]];
           const b = p[ids[j]];
+          if (!a || !b) continue;
           let dx = b.x - a.x;
           let dy = b.y - a.y;
           let d2 = dx * dx + dy * dy;
@@ -217,13 +252,16 @@ function NetworkScreen() {
         }
       }
       // Edge springs
-      EDGES.forEach(([a, b]) => {
+      edgesRef.current.forEach(([a, b]) => {
         const A = p[a];
         const B = p[b];
+        if (!A || !B) return;
         const dx = B.x - A.x;
         const dy = B.y - A.y;
         const d = Math.sqrt(dx * dx + dy * dy) || 0.01;
-        const rest = a === "S1" || b === "S1" ? 26 : 22;
+        const isSeedA = nodesRef.current.find(n => n.id === a)?.role === "seed";
+        const isSeedB = nodesRef.current.find(n => n.id === b)?.role === "seed";
+        const rest = isSeedA || isSeedB ? 26 : 22;
         const k = ph.springStrength * (d - rest);
         const fx = (dx / d) * k;
         const fy = (dy / d) * k;
@@ -235,6 +273,7 @@ function NetworkScreen() {
       // Center gravity + integration
       ids.forEach((id) => {
         const n = p[id];
+        if (!n) return;
         n.vx += (50 - n.x) * ph.centerGravity;
         n.vy += (50 - n.y) * ph.centerGravity;
         n.vx *= ph.damping;
@@ -364,8 +403,8 @@ function NetworkScreen() {
     const { nodes, edges } = getScopedData(exportScope);
     const snapshot = {
       generatedAt: new Date().toISOString(),
-      seedEntity: "S. Manjunath",
-      depth: 2,
+      seedEntity: NODES.find((n) => (n as any).role === "seed")?.label ?? seedInput ?? selected,
+      depth: depth,
       scope: exportScope,
       selection: Array.from(selectedSet),
       primarySelection: selected,
@@ -398,7 +437,9 @@ function NetworkScreen() {
       .map(([a, b]) => {
         const A = nodeMap.get(a)!;
         const B = nodeMap.get(b)!;
-        const isCore = a === "S1" || b === "S1";
+        const isSeedA = nodes.find(n => n.id === a)?.role === "seed";
+        const isSeedB = nodes.find(n => n.id === b)?.role === "seed";
+        const isCore = isSeedA || isSeedB;
         return `<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="#1a1f2e" stroke-opacity="${isCore ? 0.6 : 0.25}" stroke-width="${isCore ? 0.32 : 0.18}" ${isCore ? "" : 'stroke-dasharray="0.6 0.6"'}/>`;
       })
       .join("");
@@ -407,7 +448,7 @@ function NetworkScreen() {
         const r = n.r / 10;
         const color = GROUP_COLOR[n.group];
         const shape = GROUP_SHAPE[n.group];
-        const isSeed = n.id === "S1";
+        const isSeed = (n as any).role === "seed";
         let shapeXml = "";
         if (shape === "circle") shapeXml = `<circle cx="${n.x}" cy="${n.y}" r="${r}" fill="${color}" stroke="#1a1f2e" stroke-width="${isSeed ? 0.7 : 0.45}"/>`;
         else if (shape === "square") shapeXml = `<rect x="${n.x - r}" y="${n.y - r}" width="${r * 2}" height="${r * 2}" fill="${color}" stroke="#1a1f2e" stroke-width="0.45"/>`;
@@ -508,7 +549,18 @@ function NetworkScreen() {
               </div>
             </Control>
             <Control label={t("Depth")}>
-              <Select options={["1", "2", "3"]} value="2" />
+              <div className="relative">
+                <select
+                  value={depth}
+                  onChange={(e) => handleDepthChange(Number(e.target.value))}
+                  className="appearance-none rounded-md border border-input bg-card px-2.5 py-1.5 pr-7 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+                >
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+                <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+              </div>
             </Control>
             <Control label={t("Edge type")}>
               <Select options={[t("All"), t("Co-accused"), t("Phone"), t("Vehicle"), t("Location")]} />
@@ -671,10 +723,44 @@ function NetworkScreen() {
               backgroundSize: "28px 28px",
             }}
           >
+            {graphEmpty && !graphLoading && (
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-background/85 p-6 text-center">
+                <div className="max-w-md rounded-[5px] border-2 border-foreground bg-secondary-background p-6 nb-shadow-md text-foreground">
+                  <h3 className="text-lg font-extrabold uppercase tracking-wide mb-2">{t("Seed Entity Link Graph")}</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {t("Enter a suspect, victim, case, or vehicle in the search bar above to build and explore the criminal relationship network.")}
+                  </p>
+                  <div className="flex justify-center">
+                    <input
+                      value={seedInput}
+                      onChange={(e) => setSeedInput(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === "Enter" && seedInput.trim()) fetchGraph(seedInput.trim()); }}
+                      placeholder={t("Enter suspect name…")}
+                      className="w-48 rounded-[5px] border-2 border-foreground bg-background px-3 py-1.5 text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                    />
+                    <button
+                      onClick={() => seedInput.trim() && fetchGraph(seedInput.trim())}
+                      className="ml-2 rounded-[5px] border-2 border-foreground bg-primary px-4 py-1.5 text-sm font-extrabold text-primary-foreground nb-shadow-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+                    >
+                      {t("Build")}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {graphLoading && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/50">
+                <div className="rounded-[5px] border-2 border-foreground bg-secondary-background px-6 py-4 nb-shadow-md text-foreground font-extrabold flex items-center gap-3">
+                  <span className="animate-spin">🌀</span> {t("Building Network Graph…")}
+                </div>
+              </div>
+            )}
+
             {/* Coordinate labels */}
             <div className="pointer-events-none absolute left-3 top-3 z-10 space-y-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-foreground/40">
               <div>SECTOR · 04-B</div>
-              <div>EGO · DEPTH 2</div>
+              <div>EGO · DEPTH {depth}</div>
             </div>
 
             {/* Range rings */}
@@ -703,7 +789,9 @@ function NetworkScreen() {
                 const A = pos[a];
                 const B = pos[b];
                 if (!A || !B) return null;
-                const isCore = a === "S1" || b === "S1";
+                const isSeedA = NODES.find(n => n.id === a)?.role === "seed";
+                const isSeedB = NODES.find(n => n.id === b)?.role === "seed";
+                const isCore = isSeedA || isSeedB;
                 const inSelection = selectedSet.size > 1 && selectedSet.has(a) && selectedSet.has(b);
                 const dimmed = selectedSet.size > 1 && !inSelection;
                 return (
@@ -728,7 +816,7 @@ function NetworkScreen() {
                 const inSet = selectedSet.has(n.id);
                 const color = GROUP_COLOR[n.group];
                 const r = n.r / 10;
-                const isSeed = n.id === "S1";
+                const isSeed = n.role === "seed";
                 const labelW = Math.max(n.label.length * 0.88, 6);
                 return (
                   <g

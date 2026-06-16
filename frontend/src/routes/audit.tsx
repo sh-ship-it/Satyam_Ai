@@ -15,51 +15,51 @@ export const Route = createFileRoute("/audit")({
   component: Audit,
 });
 
-const DEMO_ROWS = [
-  { t: "14:32:08", u: "r.kumar", role: "Inspector", action: "ALLOW", query: "SELECT * FROM fir_records WHERE zone='Whitefield' …", result: "142 rows", src: "fir_records" },
-  { t: "14:31:55", u: "r.kumar", role: "Inspector", action: "ALLOW", query: "SELECT count(*) FROM fir_records GROUP BY station_id", result: "6 rows", src: "fir_records" },
-  { t: "14:30:11", u: "p.shetty", role: "Constable", action: "DENY",  query: "SELECT person.name FROM persons WHERE fir='FIR-2024-08842'", result: "Restricted — role", src: "persons (PII)" },
-  { t: "14:28:42", u: "r.kumar", role: "Inspector", action: "ALLOW", query: "graph.ego(seed='S. Manjunath', depth=2)", result: "9 nodes / 13 edges", src: "graph_index" },
-  { t: "14:25:09", u: "admin",    role: "Admin",     action: "ALLOW", query: "EXPORT report.pdf id=KSP/INT/2024/0814", result: "1 file", src: "reports" },
-  { t: "14:22:33", u: "p.shetty", role: "Constable", action: "DENY",  query: "SELECT * FROM cctv_evidence", result: "Restricted — scope", src: "cctv_evidence" },
-  { t: "14:19:01", u: "r.kumar", role: "Inspector", action: "ALLOW", query: "SELECT * FROM fir_records WHERE date >= '2024-08-01'", result: "418 rows", src: "fir_records" },
-  { t: "14:15:48", u: "n.iyer",   role: "Inspector", action: "ALLOW", query: "geo.hotspots(zone='Mysuru', layer='heat')", result: "1 artifact", src: "geo.hotspots" },
-  { t: "14:12:20", u: "n.iyer",   role: "Inspector", action: "DENY",  query: "UPDATE fir_records SET status='cleared' WHERE id=88421", result: "Read-only role", src: "fir_records" },
-  { t: "14:08:55", u: "admin",    role: "Admin",     action: "ALLOW", query: "audit.verify_chain(from='2024-08-13T00:00')", result: "✓ verified · 18,432 entries", src: "audit_log" },
-];
+type AuditRow = {
+  t: string;
+  u: string;
+  role: string;
+  action: string;
+  query: string;
+  result: string;
+  src: string;
+};
 
 function Audit() {
   const t = useT();
   const [query, setQuery] = useState("");
-  const [rows, setRows] = useState(DEMO_ROWS);
+  const [rows, setRows] = useState<AuditRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [chainValid, setChainValid] = useState<boolean | null>(null);
   const [liveTotal, setLiveTotal] = useState<number | null>(null);
 
-  // Pull the real hash-chained audit log when the backend is reachable;
-  // otherwise keep the demo rows so the screen still renders offline.
   useEffect(() => {
     let active = true;
+    setLoading(true);
+    setLoadError(false);
     api
       .audit({ limit: 100 })
       .then((res: any) => {
-        if (!active || !res || !Array.isArray(res.entries)) return;
-        const mapped = res.entries.map((e: any) => ({
-          t: e.ts ?? e.at
-            ? new Date(e.ts ?? e.at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
-            : "—",
-          u: e.user_id != null ? `user:${e.user_id}` : "—",
-          role: "—",
-          action: String(e.action ?? "").toUpperCase().includes("DENY") ? "DENY" : "ALLOW",
-          query: e.query_text ?? e.generated_sql ?? e.action ?? "",
-          result: e.reason ?? (e.case_id != null ? `case #${e.case_id}` : ""),
-          src: e.action ?? "audit_log",
+        if (!active) return;
+        const mapped = (res?.entries ?? []).map((e: any) => ({
+          t: e.ts ? new Date(e.ts).toLocaleString() : "—",
+          u: e.user ?? "—",
+          role: e.role ?? "—",
+          action: e.action ?? "ALLOW",
+          query: e.query ?? "",
+          result: e.result ?? "",
+          src: e.src ?? "audit_log",
         }));
-        if (mapped.length) setRows(mapped);
-        if (typeof res.chain_valid === "boolean") setChainValid(res.chain_valid);
-        if (typeof res.total === "number") setLiveTotal(res.total);
+        setRows(mapped);
+        if (typeof res?.chain_valid === "boolean") setChainValid(res.chain_valid);
+        if (typeof res?.total === "number") setLiveTotal(res.total);
       })
       .catch(() => {
-        /* backend down — keep demo rows */
+        if (active) setLoadError(true);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
       });
     return () => {
       active = false;
@@ -107,7 +107,7 @@ function Audit() {
                   ? t("CHAIN BROKEN")
                   : liveTotal != null
                     ? `${t("VERIFIED")} · ${liveTotal.toLocaleString()} ${t("entries")}`
-                    : t("VERIFIED · 18,432 entries")}
+                    : t("Verifying…")}
               </div>
             </div>
           </div>
@@ -157,35 +157,48 @@ function Audit() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {filteredRows.map((r, i) => {
-                  const deny = r.action === "DENY";
-                  return (
-                    <tr key={i} className={`${deny ? "bg-destructive/5" : "hover:bg-muted/30"}`}>
-                      <td className="px-3 py-2 font-mono text-[12px] text-muted-foreground whitespace-nowrap">{r.t}</td>
-                      <td className="px-3 py-2 font-medium text-foreground">{r.u}</td>
-                      <td className="px-3 py-2 text-muted-foreground">{t(r.role)}</td>
-                      <td className="px-3 py-2">
-                        <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
-                          deny ? "bg-destructive/15 text-destructive" : "bg-success/15 text-success"
-                        }`}>
-                          {deny && <Lock className="h-3 w-3" />}
-                          {r.action}
-                        </span>
-                      </td>
-                      <td className="px-3 py-2 font-mono text-[12px] text-foreground/80 max-w-[420px] truncate" title={r.query}>
-                        {r.query}
-                      </td>
-                      <td className="px-3 py-2 text-foreground/80 whitespace-nowrap">{r.result}</td>
-                      <td className="px-3 py-2 text-[12px] font-mono text-muted-foreground">{r.src}</td>
-                    </tr>
-                  );
-                })}
-                {filteredRows.length === 0 && (
+                {loading ? (
+                  <tr>
+                    <td colSpan={7} className="px-3 py-8 text-center text-sm text-muted-foreground">
+                      {t("Loading audit log…")}
+                    </td>
+                  </tr>
+                ) : loadError ? (
+                  <tr>
+                    <td colSpan={7} className="px-3 py-8 text-center text-sm text-destructive font-semibold">
+                      {t("Couldn't load the audit log.")}
+                    </td>
+                  </tr>
+                ) : filteredRows.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="px-3 py-8 text-center text-sm text-muted-foreground">
                       {t("No entries match your search.")}
                     </td>
                   </tr>
+                ) : (
+                  filteredRows.map((r, i) => {
+                    const deny = r.action === "DENY";
+                    return (
+                      <tr key={i} className={`${deny ? "bg-destructive/5" : "hover:bg-muted/30"}`}>
+                        <td className="px-3 py-2 font-mono text-[12px] text-muted-foreground whitespace-nowrap">{r.t}</td>
+                        <td className="px-3 py-2 font-medium text-foreground">{r.u}</td>
+                        <td className="px-3 py-2 text-muted-foreground">{t(r.role)}</td>
+                        <td className="px-3 py-2">
+                          <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+                            deny ? "bg-destructive/15 text-destructive" : "bg-success/15 text-success"
+                          }`}>
+                            {deny && <Lock className="h-3 w-3" />}
+                            {r.action}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2 font-mono text-[12px] text-foreground/80 max-w-[420px] truncate" title={r.query}>
+                          {r.query}
+                        </td>
+                        <td className="px-3 py-2 text-foreground/80 whitespace-nowrap">{r.result}</td>
+                        <td className="px-3 py-2 text-[12px] font-mono text-muted-foreground">{r.src}</td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
 

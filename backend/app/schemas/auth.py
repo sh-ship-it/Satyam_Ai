@@ -23,3 +23,13 @@ class SessionUser(BaseModel):
 class LoginResponse(BaseModel):
     token: str
     user: SessionUser
+
+
+class RegisterRequest(BaseModel):
+    name: str = ""
+    email: str = ""
+    role: Optional[str] = None
+    rank: Optional[str] = None
+    password: str = ""
+    photo_b64: Optional[str] = None
+

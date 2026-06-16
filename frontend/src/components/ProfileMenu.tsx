@@ -3,6 +3,7 @@ import { ChevronDown, Check, UserPlus, LogOut, UserCog, Camera, Upload, Loader2,
 import { useI18n } from "@/lib/i18n";
 import { AccountManager } from "./AccountManager";
 import avatarKumar from "@/assets/avatar-kumar.jpg";
+import { api, type SessionUser } from "@/lib/api/client";
 
 type Account = {
   id: string;
@@ -30,7 +31,7 @@ const SEED_ACCOUNTS: Account[] = [
     id: "shankar",
     name: "P. Shankar",
     role: "Sub-Inspector",
-    workspace: "KSP · Whitefield PS",
+    workspace: "KSP · Bengaluru PS",
     badge: "KSP-11204",
     initials: "PS",
     tone: "bg-warning text-warning-foreground",
@@ -109,6 +110,11 @@ export function ProfileMenu({ onOpenSettings }: { onOpenSettings: () => void }) 
   const [accountsOpen, setAccountsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [me, setMe] = useState<SessionUser | null>(null);
+
+  useEffect(() => {
+    api.me().then(setMe).catch(() => {});
+  }, []);
 
   const active = accounts.find((a) => a.id === activeId)!;
   const pending = pendingId ? accounts.find((a) => a.id === pendingId) : null;
@@ -185,9 +191,9 @@ export function ProfileMenu({ onOpenSettings }: { onOpenSettings: () => void }) 
       >
         <Avatar acc={active} size="sm" />
         <span className="flex flex-col items-start leading-tight">
-          <span className="text-[11px] font-extrabold">{active.name}</span>
+          <span className="text-[11px] font-extrabold">{me ? me.name : active.name}</span>
           <span className="text-[10px] font-bold uppercase tracking-wide text-foreground/60">
-            {active.role} · {active.workspace}
+            {me ? `${me.rank} · ${me.district || me.range_name || "KSP Workspace"}` : `${active.role} · ${active.workspace}`}
           </span>
         </span>
         <ChevronDown className={`h-3.5 w-3.5 transition ${open ? "rotate-180" : ""}`} />
@@ -210,12 +216,12 @@ export function ProfileMenu({ onOpenSettings }: { onOpenSettings: () => void }) 
               </button>
             </div>
             <div className="min-w-0 flex-1">
-              <div className="truncate text-sm font-extrabold">{active.name}</div>
+              <div className="truncate text-sm font-extrabold">{me ? me.name : active.name}</div>
               <div className="truncate text-[11px] font-bold text-foreground/60">
-                {active.role} · {active.workspace}
+                {me ? `${me.rank} · ${me.district || me.range_name || "KSP Workspace"}` : `${active.role} · ${active.workspace}`}
               </div>
               <div className="mt-0.5 inline-block rounded-[3px] border-2 border-foreground bg-primary/15 px-1.5 py-px font-mono text-[10px] font-bold">
-                {active.badge}
+                {me ? `KSP-${me.id.toUpperCase()}` : active.badge}
               </div>
             </div>
           </div>

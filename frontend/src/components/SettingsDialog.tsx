@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { X, User, Bell, Lock, Monitor, Database, Check, Download, Trash2, AlertTriangle, Cpu, CloudCog, HardDrive } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
-import { api } from "@/lib/api/client";
+import { api, type SessionUser } from "@/lib/api/client";
 
 type Tab = "profile" | "models" | "preferences" | "notifications" | "security" | "data";
 
@@ -43,6 +43,13 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
   const { t, lang, setLang } = useI18n();
   const [tab, setTab] = useState<Tab>("profile");
   const [engines, setEngines] = useState<EngineSettings>(loadEngineSettings);
+  const [me, setMe] = useState<SessionUser | null>(null);
+
+  useEffect(() => {
+    if (open) {
+      api.me().then(setMe).catch(() => {});
+    }
+  }, [open]);
 
   const updateEngine = <K extends keyof EngineSettings>(key: K, val: EngineSettings[K]) => {
     setEngines((prev) => {
@@ -122,17 +129,19 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
               <Section title={t("Profile")} subtitle={t("Your investigator details")}>
                 <div className="flex items-center gap-4">
                   <div className="grid h-16 w-16 place-items-center rounded-[5px] border-2 border-foreground bg-primary text-lg font-extrabold text-primary-foreground nb-shadow-sm">
-                    RK
+                    {me?.name ? me.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2) : "RK"}
                   </div>
                   <div>
-                    <div className="text-base font-bold">R. Kumar</div>
-                    <div className="text-sm text-foreground/60">Inspector · KSP Workspace</div>
+                    <div className="text-base font-bold">{me?.name || "R. Kumar"}</div>
+                    <div className="text-sm text-foreground/60">
+                      {me?.rank || "Inspector"} · {me?.range_name || "KSP Workspace"}
+                    </div>
                   </div>
                 </div>
-                <Field label={t("Full name")} defaultValue="R. Kumar" />
-                <Field label={t("Email")} defaultValue="r.kumar@ksp.gov.in" />
-                <Field label={t("Badge ID")} defaultValue="KSP-08842" />
-                <Field label={t("Station")} defaultValue="Whitefield PS" />
+                <Field key={me?.name} label={t("Full name")} defaultValue={me?.name || "R. Kumar"} />
+                <Field key={me?.id} label={t("Email")} defaultValue={me?.id ? `${me.id}@ksp.gov.in` : "r.kumar@ksp.gov.in"} />
+                <Field key={me?.id ? "badge" : "default"} label={t("Badge ID")} defaultValue={me?.id ? `KSP-${me.id.toUpperCase()}` : "KSP-08842"} />
+                <Field key={me?.district || me?.range_name} label={t("Station")} defaultValue={me?.district || me?.range_name || "Bengaluru PS"} />
               </Section>
             )}
 

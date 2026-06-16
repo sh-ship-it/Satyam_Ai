@@ -136,8 +136,13 @@ async def run(
         elif intent == "network":
             person = state.slots.get("person")
             if person:
-                nodes, edges = await analytics.ego_network(session, person_id=person)
+                victim_framed = any(w in message.lower() for w in ("against", "victim", "targeted", "attacked"))
+                if victim_framed:
+                    nodes, edges = await analytics.victim_offender_network(session, person_id=person)
+                else:
+                    nodes, edges = await analytics.ego_network(session, person_id=person)
                 context = json.dumps({"nodes": nodes, "edges": edges}, default=str)
+                yield PipelineEvent("citation", {"ref": f"/network?seed={person}", "label": "Open network"})
             yield PipelineEvent("tool", {"name": "analytics.network", "status": "end"})
 
         elif intent == "report":

@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TranscriptsRouteImport } from './routes/transcripts'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as NetworkRouteImport } from './routes/network'
-import { Route as MapRouteImport } from './routes/map'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ConsoleRouteImport } from './routes/console'
 import { Route as AuditRouteImport } from './routes/audit'
@@ -32,11 +31,6 @@ const ReportsRoute = ReportsRouteImport.update({
 const NetworkRoute = NetworkRouteImport.update({
   id: '/network',
   path: '/network',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MapRoute = MapRouteImport.update({
-  id: '/map',
-  path: '/map',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -71,7 +65,6 @@ export interface FileRoutesByFullPath {
   '/audit': typeof AuditRoute
   '/console': typeof ConsoleRoute
   '/login': typeof LoginRoute
-  '/map': typeof MapRoute
   '/network': typeof NetworkRoute
   '/reports': typeof ReportsRoute
   '/transcripts': typeof TranscriptsRoute
@@ -82,7 +75,6 @@ export interface FileRoutesByTo {
   '/audit': typeof AuditRoute
   '/console': typeof ConsoleRoute
   '/login': typeof LoginRoute
-  '/map': typeof MapRoute
   '/network': typeof NetworkRoute
   '/reports': typeof ReportsRoute
   '/transcripts': typeof TranscriptsRoute
@@ -94,7 +86,6 @@ export interface FileRoutesById {
   '/audit': typeof AuditRoute
   '/console': typeof ConsoleRoute
   '/login': typeof LoginRoute
-  '/map': typeof MapRoute
   '/network': typeof NetworkRoute
   '/reports': typeof ReportsRoute
   '/transcripts': typeof TranscriptsRoute
@@ -107,7 +98,6 @@ export interface FileRouteTypes {
     | '/audit'
     | '/console'
     | '/login'
-    | '/map'
     | '/network'
     | '/reports'
     | '/transcripts'
@@ -118,7 +108,6 @@ export interface FileRouteTypes {
     | '/audit'
     | '/console'
     | '/login'
-    | '/map'
     | '/network'
     | '/reports'
     | '/transcripts'
@@ -129,7 +118,6 @@ export interface FileRouteTypes {
     | '/audit'
     | '/console'
     | '/login'
-    | '/map'
     | '/network'
     | '/reports'
     | '/transcripts'
@@ -141,7 +129,6 @@ export interface RootRouteChildren {
   AuditRoute: typeof AuditRoute
   ConsoleRoute: typeof ConsoleRoute
   LoginRoute: typeof LoginRoute
-  MapRoute: typeof MapRoute
   NetworkRoute: typeof NetworkRoute
   ReportsRoute: typeof ReportsRoute
   TranscriptsRoute: typeof TranscriptsRoute
@@ -168,13 +155,6 @@ declare module '@tanstack/react-router' {
       path: '/network'
       fullPath: '/network'
       preLoaderRoute: typeof NetworkRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/map': {
-      id: '/map'
-      path: '/map'
-      fullPath: '/map'
-      preLoaderRoute: typeof MapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -221,7 +201,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuditRoute: AuditRoute,
   ConsoleRoute: ConsoleRoute,
   LoginRoute: LoginRoute,
-  MapRoute: MapRoute,
   NetworkRoute: NetworkRoute,
   ReportsRoute: ReportsRoute,
   TranscriptsRoute: TranscriptsRoute,

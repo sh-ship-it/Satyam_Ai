@@ -88,6 +88,25 @@ function Console() {
   const [stations, setStations] = useState<StationRow[]>([]);
   const [canvasLoading, setCanvasLoading] = useState(false);
   const [canvasErr, setCanvasErr] = useState<string | null>(null);
+  const [trail, setTrail] = useState<Hotspot[] | undefined>(undefined);
+  const [trailKey, setTrailKey] = useState(0);
+
+  const connectDots = async (seed: string) => {
+    try {
+      const res = await api.offenderTrail({ entity_name: seed });
+      setTrail(res.points.map((p) => ({
+        lat: p.lat,
+        lng: p.lng,
+        weight: 1,
+        label: p.fir_number ?? p.crime_type ?? "CrimePoint"
+      })));
+      setTrailKey((k) => k + 1);
+      setCanvasTab("map");
+    } catch {
+      // ignore
+    }
+  };
+
 
   // Open the Map tab if a voice "show map" intent navigated here
   useEffect(() => {
@@ -239,6 +258,14 @@ function Console() {
   async function sendMessage(text: string, opts?: { speak?: boolean; lang?: string; rate?: number }) {
     const trimmed = text.trim();
     if (!trimmed) return;
+
+    const m = trimmed.toLowerCase();
+    if (m.includes("connect the dots") || m.includes("ಚುಕ್ಕಿಗಳನ್ನು ಸಂಪರ್ಕ")) {
+      const who = (trimmed.match(/(?:for|of|about|against|by)\s+(.+)$/i)?.[1] || "").trim();
+      await connectDots(who);
+      return;
+    }
+
     const userMsg: ChatMessage = { role: "user", text: trimmed };
     const baseMessages = [...messages, userMsg];
     setMessages([...baseMessages, { role: "ai", text: "", streaming: true }]);
@@ -362,7 +389,7 @@ function Console() {
     return d.toLocaleDateString();
   }
 
-  // Dataset-real example prompts (no Whitefield)
+  // Dataset-real example prompts
   const EXAMPLES = [
     t("Theft cases in Bengaluru City this year"),
     t("Top crime types in Mysuru City"),
@@ -658,9 +685,18 @@ function Console() {
                     </button>
                   ))}
                 </div>
+                <button
+                  onClick={() => {
+                    const seed = prompt(t("Enter offender name or ID:"), "");
+                    if (seed) connectDots(seed);
+                  }}
+                  className="rounded-md border border-border bg-card/95 px-2.5 py-1 text-xs font-semibold text-foreground shadow hover:bg-muted"
+                >
+                  {t("Connect the dots")}
+                </button>
               </div>
 
-              <CrimeMap points={hotspots} mode={mapMode} />
+              <CrimeMap points={hotspots} mode={mapMode} trail={trail} animateKey={trailKey} />
 
               {/* Legend */}
               <div className="absolute bottom-4 left-4 z-[400] rounded-lg border border-border bg-card/95 backdrop-blur px-3 py-2 text-xs shadow-lg">
