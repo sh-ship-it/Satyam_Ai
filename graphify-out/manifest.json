@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1781580524.9375117,
-    "ast_hash": "fc6f0078e76b1b68112eb14852c476df",
+    "mtime": 1781585602.0388637,
+    "ast_hash": "2cffddbf09108528b778d1a8173b0c56",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781582017.5014863,
-    "ast_hash": "3d7d1f4a00e96a0a62c4a74d1ef4060a",
+    "mtime": 1781586158.334695,
+    "ast_hash": "13936c053ecc21f39e0782ea21e8688d",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
-    "mtime": 1781580959.8294096,
-    "ast_hash": "2f50ada6e1b574d3b08d57cc012547cb",
+    "mtime": 1781585631.9986098,
+    "ast_hash": "2b27c21433b5c3dd41c452da62b1884d",
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
@@ -880,8 +880,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1781583191.2293725,
-    "ast_hash": "f1e6baa6fd4555cbab77e671048b9a4c",
+    "mtime": 1781586301.3081598,
+    "ast_hash": "e72493e980725ae92a7465580cd52358",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -977,6 +977,11 @@
   "frontend/src/components/CreateAccountDialog.tsx": {
     "mtime": 1781580469.0386784,
     "ast_hash": "09626fb2df10f801086243b8d7c3bb10",
+    "semantic_hash": ""
+  },
+  "SATYAM_VOICE_CONVERSATION_FEATURE.md": {
+    "mtime": 1781585338.105049,
+    "ast_hash": "d0b2ed02f324eea4c6c84168a9a38e0e",
     "semantic_hash": ""
   }
 }
