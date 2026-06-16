@@ -16,7 +16,7 @@ import {
   Pause,
   Play,
 } from "lucide-react";
-import { type ReactNode, useState, useEffect, useRef } from "react";
+import { type ReactNode, useState, useEffect, useRef, useCallback } from "react";
 import { ThemePicker } from "./ThemePicker";
 import { DarkModeToggle } from "./DarkModeToggle";
 import { SettingsDialog } from "./SettingsDialog";
@@ -102,11 +102,15 @@ export function Shell({ children }: { children: ReactNode }) {
   const [speechError, setSpeechError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [voiceLang, setVoiceLang] = useState(() => {
-    try {
-      const saved = localStorage.getItem("satyam-voice-lang");
-      if (saved) return saved;
-    } catch {}
+  // The only two supported voice locales, app-wide.
+  const VOICE_LANGS = ["en-IN", "kn-IN"] as const;
+  const coerceVoiceLang = (v: string | null | undefined): string => {
+    if (v && (VOICE_LANGS as readonly string[]).includes(v)) return v;
+    if (v && v.toLowerCase().startsWith("kn")) return "kn-IN";
+    return "en-IN";
+  };
+  const [voiceLang, setVoiceLang] = useState<string>(() => {
+    try { return coerceVoiceLang(localStorage.getItem("satyam-voice-lang")); } catch {}
     return lang === "KN" ? "kn-IN" : "en-IN";
   });
   const [speechRate, setSpeechRate] = useState(() => {
@@ -117,6 +121,50 @@ export function Shell({ children }: { children: ReactNode }) {
     return lang === "KN" ? 0.9 : 1;
   });
   const recognitionRef = useRef<any>(null);
+
+  const [conversationMode, setConversationMode] = useState(false);
+
+  // —— turn-taking machine ——
+  const phaseRef = useRef<"listening" | "processing" | "speaking">("listening");
+  const conversationModeRef = useRef(false);
+  const listeningRef = useRef(false);
+  const voiceLangRef = useRef(voiceLang);
+  const speechRateRef = useRef(speechRate);
+  const liveFinalRef = useRef("");      // finalized speech this turn
+  const liveInterimRef = useRef("");    // latest interim words
+  const turnSubmittedRef = useRef(false);
+  const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const thinkWatchdogRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => { conversationModeRef.current = conversationMode; }, [conversationMode]);
+  useEffect(() => { listeningRef.current = listening; }, [listening]);
+  useEffect(() => { voiceLangRef.current = voiceLang; }, [voiceLang]);
+  useEffect(() => { speechRateRef.current = speechRate; }, [speechRate]);
+
+  const clearSilenceTimer = useCallback(() => {
+    if (silenceTimerRef.current) { clearTimeout(silenceTimerRef.current); silenceTimerRef.current = null; }
+  }, []);
+  const clearThinkWatchdog = useCallback(() => {
+    if (thinkWatchdogRef.current) { clearTimeout(thinkWatchdogRef.current); thinkWatchdogRef.current = null; }
+  }, []);
+
+  // Re-open the mic for the user's next turn. Idempotent and self-gating.
+  const resumeListening = useCallback(() => {
+    clearThinkWatchdog();
+    if (!conversationModeRef.current || !listeningRef.current) return;
+    phaseRef.current = "listening";
+    setIsSpeaking(false);
+    setIsPaused(false);
+    setMicActive(true); // re-runs the recognition effect (fresh transcript)
+  }, [clearThinkWatchdog]);
+
+  // Stop fully (Close / Conversation OFF).
+  const stopConversation = useCallback(() => {
+    clearSilenceTimer();
+    clearThinkWatchdog();
+    phaseRef.current = "listening";
+    if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
+  }, [clearSilenceTimer, clearThinkWatchdog]);
 
   useEffect(() => {
     const open = () => {
@@ -173,14 +221,10 @@ export function Shell({ children }: { children: ReactNode }) {
       } else if (cmd.explicitLang && cmd.lang === "en") {
         setLang("EN");
       }
-      const speechLang =
-        resolved === "kn"
-          ? "kn-IN"
-          : detail.lang && !detail.lang.toLowerCase().startsWith("kn")
-            ? detail.lang
-            : "en-IN";
+      const speechLang = resolved === "kn" ? "kn-IN" : "en-IN";
       const rate = detail.rate ?? speechRate;
       const closePanel = () => {
+        if (conversationModeRef.current) { setMicActive(false); return; }
         setListening(false);
         setMicActive(false);
       };
@@ -210,7 +254,6 @@ export function Shell({ children }: { children: ReactNode }) {
         }
         return;
       }
-      // 2) Screen + task (non-console): open it and let the screen run the task.
       if (cmd.route && cmd.route !== "/console") {
         navigate({ to: cmd.route });
         window.dispatchEvent(
@@ -219,6 +262,7 @@ export function Shell({ children }: { children: ReactNode }) {
           }),
         );
         closePanel();
+        if (conversationModeRef.current) setTimeout(() => resumeListening(), 700);
         return;
       }
       // 3) Data query -> Console (grounded answer, spoken in chosen language).
@@ -237,7 +281,7 @@ export function Shell({ children }: { children: ReactNode }) {
     const onCmd = (e: Event) => handle((e as CustomEvent).detail || {});
     window.addEventListener("satyam:voice-command", onCmd);
     return () => window.removeEventListener("satyam:voice-command", onCmd);
-  }, [pathname, lang, voiceLang, speechRate, navigate, setLang, t]);
+  }, [pathname, lang, voiceLang, speechRate, navigate, setLang, t, resumeListening]);
 
   useEffect(() => {
     try { localStorage.setItem("satyam-voice-lang", voiceLang); } catch {}
@@ -254,6 +298,10 @@ export function Shell({ children }: { children: ReactNode }) {
     setEditableTranscript("");
     setSpeechError(null);
     setSaved(false);
+    liveFinalRef.current = "";
+    liveInterimRef.current = "";
+    turnSubmittedRef.current = false;
+    phaseRef.current = "listening";
 
     const SR: any =
       (typeof window !== "undefined" &&
@@ -268,6 +316,28 @@ export function Shell({ children }: { children: ReactNode }) {
     rec.continuous = true;
     rec.interimResults = true;
     rec.lang = lang === "KN" ? "kn-IN" : "en-IN";
+
+    // Auto-submit one turn ~1.6s after the user stops speaking (conversation mode only).
+    const submitTurn = () => {
+      if (turnSubmittedRef.current) return;
+      const text = `${liveFinalRef.current} ${liveInterimRef.current}`.trim();
+      if (!text) return;
+      turnSubmittedRef.current = true;
+      clearSilenceTimer();
+      phaseRef.current = "processing";
+      setMicActive(false); // mute the mic while the agent works/talks
+      window.dispatchEvent(
+        new CustomEvent("satyam:voice-command", {
+          detail: { text, lang: voiceLangRef.current, rate: speechRateRef.current, speak: true },
+        }),
+      );
+    };
+    const armSilence = () => {
+      if (!conversationModeRef.current || turnSubmittedRef.current) return;
+      clearSilenceTimer();
+      silenceTimerRef.current = setTimeout(submitTurn, 1600);
+    };
+
     rec.onresult = (e: any) => {
       let interim = "";
       let finals = "";
@@ -277,10 +347,17 @@ export function Shell({ children }: { children: ReactNode }) {
         else interim += res[0].transcript;
       }
       if (finals) {
-        setFinalTranscript((prev) => (prev ? prev + " " : "") + finals.trim());
-        setEditableTranscript((prev) => (prev ? prev + " " : "") + finals.trim());
+        const add = finals.trim();
+        setFinalTranscript((prev) => (prev ? prev + " " : "") + add);
+        setEditableTranscript((prev) => {
+          const next = (prev ? prev + " " : "") + add;
+          liveFinalRef.current = next;
+          return next;
+        });
       }
+      liveInterimRef.current = interim;
       setInterimTranscript(interim);
+      armSilence(); // any speech (interim or final) resets the pause clock
     };
     rec.onerror = (e: any) => {
       if (e.error === "not-allowed" || e.error === "service-not-allowed") {
@@ -292,7 +369,6 @@ export function Shell({ children }: { children: ReactNode }) {
       }
     };
     rec.onend = () => {
-      // auto-restart while popup still open
       if (recognitionRef.current === rec) {
         try { rec.start(); } catch {}
       }
@@ -303,9 +379,10 @@ export function Shell({ children }: { children: ReactNode }) {
 
     return () => {
       recognitionRef.current = null;
+      clearSilenceTimer();
       try { rec.onend = null; rec.stop(); } catch {}
     };
-  }, [listening, micActive, lang]);
+  }, [listening, micActive, lang, clearSilenceTimer]);
 
   useEffect(() => {
     if (!isSpeaking) return;
@@ -314,11 +391,38 @@ export function Shell({ children }: { children: ReactNode }) {
         if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
           setIsSpeaking(false);
           setIsPaused(false);
+          resumeListening(); // hands-free: listen for the next reply
         }
       }
     }, 300);
     return () => clearInterval(id);
-  }, [isSpeaking]);
+  }, [isSpeaking, resumeListening]);
+
+  // Single source of truth for the agent's turn lifecycle. Console (and Shell's
+  // own confirmations) drive: thinking → speaking → done.
+  useEffect(() => {
+    const onState = (e: Event) => {
+      const state = (e as CustomEvent).detail?.state;
+      if (state === "thinking") {
+        phaseRef.current = "processing";
+        clearThinkWatchdog();
+        // Safety net: if the backend never responds, recover the conversation.
+        thinkWatchdogRef.current = setTimeout(() => resumeListening(), 25000);
+      } else if (state === "speaking") {
+        phaseRef.current = "speaking";
+        clearThinkWatchdog();
+        setIsSpeaking(true);
+        setIsPaused(false);
+      } else if (state === "done") {
+        clearThinkWatchdog();
+        setIsSpeaking(false);
+        setIsPaused(false);
+        resumeListening();
+      }
+    };
+    window.addEventListener("satyam:ai-state", onState);
+    return () => window.removeEventListener("satyam:ai-state", onState);
+  }, [resumeListening, clearThinkWatchdog]);
 
   const NAV = [
     { to: "/console", icon: MessageSquare, label: t("Console") },
@@ -381,6 +485,8 @@ export function Shell({ children }: { children: ReactNode }) {
             setMicActive(false);
             setIsSpeaking(false);
             setIsPaused(false);
+            setConversationMode(false);
+            stopConversation();
             if (typeof window !== "undefined" && "speechSynthesis" in window) {
               window.speechSynthesis.cancel();
             }
@@ -416,8 +522,46 @@ export function Shell({ children }: { children: ReactNode }) {
                 {isSpeaking ? t("Speaking…") : t("Listening…")}
               </div>
               <div className="mt-1 text-xs text-muted-foreground">
-                {isSpeaking ? t("Tap Pause to pause, Stop to end.") : t("Speak now. Tap anywhere to stop.")}
+                {conversationMode
+                  ? phaseRef.current === "processing"
+                    ? t("Thinking…")
+                    : isSpeaking
+                      ? t("Speaking… (mic paused)")
+                      : t("Conversation mode · just talk, the agent replies and listens again.")
+                  : isSpeaking
+                    ? t("Tap Pause to pause, Stop to end.")
+                    : t("Speak now. Tap anywhere to stop.")}
               </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const SRsupported =
+                    typeof window !== "undefined" &&
+                    ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
+                  if (!SRsupported) {
+                    setSpeechError("Speech recognition is not supported in this browser.");
+                    return;
+                  }
+                  setConversationMode((on) => {
+                    const next = !on;
+                    if (next) {
+                      phaseRef.current = "listening";
+                      setIsSpeaking(false);
+                      setIsPaused(false);
+                      setMicActive(true);
+                    } else {
+                      stopConversation();
+                    }
+                    return next;
+                  });
+                }}
+                className={`mt-3 inline-flex items-center gap-1.5 rounded-[5px] border-2 border-foreground px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide nb-shadow-sm transition ${
+                  conversationMode ? "bg-primary text-primary-foreground" : "bg-secondary-background text-foreground"
+                }`}
+              >
+                <Volume2 className="h-3.5 w-3.5" />
+                {conversationMode ? t("Conversation: ON") : t("Start conversation")}
+              </button>
             </div>
 
             <div className="w-full flex flex-col gap-2">
@@ -425,17 +569,11 @@ export function Shell({ children }: { children: ReactNode }) {
                 <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground whitespace-nowrap">{t("Speech output")}</span>
                 <select
                   value={voiceLang}
-                  onChange={(e) => setVoiceLang(e.target.value)}
+                  onChange={(e) => setVoiceLang(coerceVoiceLang(e.target.value))}
                   className="flex-1 rounded-[5px] border-2 border-foreground bg-background px-2 py-1 text-xs text-foreground outline-none"
                 >
                   <option value="en-IN">English (India)</option>
-                  <option value="en-US">English (US)</option>
-                  <option value="en-GB">English (UK)</option>
                   <option value="kn-IN">Kannada (ಕನ್ನಡ)</option>
-                  <option value="hi-IN">Hindi (हिन्दी)</option>
-                  <option value="ta-IN">Tamil (தமಿ಴்)</option>
-                  <option value="te-IN">Telugu (తెలుగు)</option>
-                  <option value="ml-IN">Malayalam (മലയാളം)</option>
                 </select>
               </div>
               <div className="w-full flex items-center gap-2">
@@ -459,11 +597,11 @@ export function Shell({ children }: { children: ReactNode }) {
                   value={editableTranscript + (interimTranscript ? (editableTranscript ? " " : "") + interimTranscript : "")}
                   onChange={(e) => {
                     const val = e.target.value;
-                    // If user deletes into interim portion, just accept the edit
                     setEditableTranscript(val);
-                    // Update finalTranscript so future speech appends correctly
                     setFinalTranscript(val);
                     setInterimTranscript("");
+                    liveFinalRef.current = val;
+                    liveInterimRef.current = "";
                   }}
                   className="w-full min-h-[88px] max-h-48 overflow-y-auto bg-transparent px-4 py-3 text-sm leading-relaxed text-foreground resize-none outline-none"
                   placeholder={t("Waiting for speech…")}
@@ -597,6 +735,8 @@ export function Shell({ children }: { children: ReactNode }) {
                 setMicActive(false);
                 setIsSpeaking(false);
                 setIsPaused(false);
+                setConversationMode(false);
+                stopConversation();
                 if (typeof window !== "undefined" && "speechSynthesis" in window) {
                   window.speechSynthesis.cancel();
                 }

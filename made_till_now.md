@@ -981,3 +981,75 @@ Refactored physics sliders and presets in the network graph route into a single,
   - Added Kannada translation mappings for `"Repulsion"`, `"Spring"`, `"Gravity"`, `"Damping"`, `"Default"`, `"Tight"`, `"Spread"`, `"Floaty"`, `"Snappy"`, `"Custom"`, `"Save current as preset…"`, `"Preset name"`, and `"That name is reserved"` to `DICT`.
 
 
+
+---
+
+### [2026-06-16] — Voice v2: Two-Language Lock + Hands-Free Conversation Agent (SATYAM_VOICE_CONVERSATION_FEATURE.md)
+
+#### Summary
+Implemented the full Voice v2 feature as specified in `SATYAM_VOICE_CONVERSATION_FEATURE.md`.
+Fixes 3 real bugs found in the v1 design and adds a hands-free conversation loop with a
+proper turn-taking state machine.
+
+---
+
+#### Bug Fixes
+
+| Bug | Description | Fix |
+|-----|-------------|-----|
+| BUG 1 | `closePanel()` ran `setListening(false)` in every branch → dialog closed after turn 1 in conversation mode | `closePanel()` now only calls `setMicActive(false)` when `conversationModeRef.current` is true |
+| BUG 2 | `if (!blocked) speak(...)` → blocked/RBAC answer never spoke, loop stalled forever | Removed the `!blocked` guard; `speak()` always fires (RBAC answer is now spoken aloud) |
+| BUG 3 | "Connect the dots" branch returned before speaking → same stall | Branch now speaks a confirmation ("Connecting the dots for X") before returning |
+
+---
+
+#### Architecture: Turn-Taking State Machine
+
+One `phaseRef` in Shell.tsx owns the mic lifecycle. Mic is **only** live in `listening`;
+muted during `processing` and `speaking` to prevent echo.
+
+**Signal protocol (`satyam:ai-state` event, `detail.state`):**
+- `thinking` — Console emits at start of voice turn; Shell arms 25s safety watchdog
+- `speaking` — Console/Shell when TTS starts; watchdog cleared
+- `done` — Console/Shell when TTS ends, skipped, blocked, or errors; mic re-opens
+
+---
+
+#### Changes
+
+**`frontend/src/components/Shell.tsx`**
+
+*Issue 1 — Lock voice/speech to English (India) + Kannada only:*
+- Added `VOICE_LANGS`, `coerceVoiceLang()` helper — sanitizes any stored locale (`en-US`, `hi-IN`, etc.) to `en-IN` or `kn-IN`.
+- `voiceLang` initializer now calls `coerceVoiceLang(localStorage.getItem(...))`.
+- `<select>` for Speech output reduced to two options: `en-IN` + `kn-IN`; `onChange` calls `coerceVoiceLang`.
+- `speechLang` inside the command handler collapsed to: `resolved === "kn" ? "kn-IN" : "en-IN"`.
+
+*Issue 2 — Hands-free conversation agent:*
+- Added `useCallback` to React import.
+- Added state: `conversationMode`, refs: `phaseRef`, `conversationModeRef`, `listeningRef`, `voiceLangRef`, `speechRateRef`, `liveFinalRef`, `liveInterimRef`, `turnSubmittedRef`, `silenceTimerRef`, `thinkWatchdogRef`.
+- Added sync effects for all refs.
+- Added helper callbacks: `clearSilenceTimer`, `clearThinkWatchdog`, `resumeListening` (idempotent mic re-open), `stopConversation` (cancels synthesis + clears timers).
+- **Recognition effect** fully replaced: silence-based auto-submit (1.6s after speech pause), `armSilence()`, `submitTurn()` with `turnSubmittedRef` double-submit guard. `voiceLang`/`speechRate`/`conversationMode` read through refs so changing them doesn't restart recognition mid-sentence.
+- **Textarea `onChange`** updated to sync `liveFinalRef` and `liveInterimRef` so edited text is what auto-submits.
+- **Speech-end poll** updated to call `resumeListening()` and depend on `[isSpeaking, resumeListening]`.
+- **Agent-state listener** added: single `satyam:ai-state` effect drives `thinking → speaking → done` transitions and arms/clears the 25s safety watchdog.
+- **`closePanel()`** BUG 1 fix: keeps dialog open (only mutes mic) during conversation mode.
+- **Screen+task navigation** branch: calls `setTimeout(() => resumeListening(), 700)` after route settles so conversation continues after navigation.
+- **Voice-command effect deps** updated to include `resumeListening`.
+- **Dialog subtitle** dynamically shows Thinking… / Speaking… (mic paused) / Conversation mode hint.
+- **"Start conversation" / "Conversation: ON" toggle button** added to dialog UI.
+- **Both close paths** (overlay onClick + Close button) now also call `setConversationMode(false)` + `stopConversation()`.
+
+**`frontend/src/routes/console.tsx`**
+
+- **`speak()`** fully rewritten: emits `satyam:ai-state` `speaking` on TTS start and `done` on end/error/empty. No-ops (no event) for non-voice turns. Immediately emits `done` if synthesis unavailable or text empty.
+- **`sendMessage()`**: emits `thinking` at the start of every voice turn. "Connect the dots" branch now speaks a confirmation and emits the chain. Final `speak()` call no longer guarded by `!blocked` — RBAC-blocked answers are now spoken aloud and the loop continues.
+
+**`frontend/src/lib/i18n.tsx`**
+- Added Kannada translations for: `"Speak now. Tap anywhere to stop."`, `"Thinking…"`, `"Speaking… (mic paused)"`, `"Conversation mode · just talk, the agent replies and listens again."`, `"Start conversation"`, `"Conversation: ON"`.
+
+---
+
+#### Verification
+- `npx tsc --noEmit --skipLibCheck` — 0 new errors (3 pre-existing unrelated errors in i18n.tsx, network.tsx, vite.config.ts remain unchanged).

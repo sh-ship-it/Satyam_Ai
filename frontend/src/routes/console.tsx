@@ -244,14 +244,25 @@ function Console() {
   }
 
   function speak(text: string, opts?: { speak?: boolean; lang?: string; rate?: number }) {
-    if (opts?.speak && typeof window !== "undefined" && "speechSynthesis" in window) {
-      try {
-        window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = opts?.lang || "en-IN";
-        utter.rate = opts?.rate ?? 1;
-        window.speechSynthesis.speak(utter);
-      } catch {}
+    const emit = (state: "speaking" | "done") =>
+      window.dispatchEvent(new CustomEvent("satyam:ai-state", { detail: { state } }));
+    // Only voice turns participate in the conversation loop.
+    if (!opts?.speak) return;
+    if (typeof window === "undefined" || !("speechSynthesis" in window) || !text.trim()) {
+      emit("done"); // nothing to say — hand the turn back so the mic re-opens
+      return;
+    }
+    try {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = (opts?.lang || "").toLowerCase().startsWith("kn") ? "kn-IN" : "en-IN";
+      utter.rate = opts?.rate ?? 1;
+      utter.onstart = () => emit("speaking");
+      utter.onend = () => emit("done");
+      utter.onerror = () => emit("done");
+      window.speechSynthesis.speak(utter);
+    } catch {
+      emit("done");
     }
   }
 
@@ -259,10 +270,24 @@ function Console() {
     const trimmed = text.trim();
     if (!trimmed) return;
 
+    const isVoiceTurn = !!opts?.speak;
+    const speechLang = (opts?.lang || "").toLowerCase().startsWith("kn") ? "kn-IN" : "en-IN";
+    if (isVoiceTurn) {
+      window.dispatchEvent(new CustomEvent("satyam:ai-state", { detail: { state: "thinking" } }));
+    }
+
     const m = trimmed.toLowerCase();
     if (m.includes("connect the dots") || m.includes("ಚುಕ್ಕಿಗಳನ್ನು ಸಂಪರ್ಕ")) {
       const who = (trimmed.match(/(?:for|of|about|against|by)\s+(.+)$/i)?.[1] || "").trim();
       await connectDots(who);
+      if (isVoiceTurn) {
+        speak(
+          speechLang === "kn-IN"
+            ? `${who || "ಅಪರಾಧಿ"} ಗಾಗಿ ಚುಕ್ಕಿಗಳನ್ನು ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ`
+            : `Connecting the dots for ${who || "the offender"}.`,
+          { speak: true, lang: speechLang, rate: opts?.rate },
+        );
+      }
       return;
     }
 
@@ -334,7 +359,7 @@ function Console() {
     setMessages(finalMessages);
     persistMessages(finalMessages);
     setStreamingIdx(null);
-    if (!blocked) speak(finalAi.text, opts);
+    speak(finalAi.text, opts);
   }
 
   function handleSend() { sendMessage(input); }
