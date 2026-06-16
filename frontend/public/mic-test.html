@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Mic Test</title>
+<style>body{font-family:monospace;padding:20px;max-width:600px}
+button{padding:12px 24px;font-size:16px;font-weight:bold;cursor:pointer;margin:8px 4px;border:2px solid #000}
+#start{background:#4ade80}#stop{background:#f87171}
+#log{background:#f1f5f9;border:2px solid #000;padding:12px;min-height:120px;margin-top:12px;white-space:pre-wrap;font-size:13px}
+.ok{color:#16a34a}.err{color:#dc2626}.info{color:#2563eb}</style>
+</head>
+<body>
+<h2>🎤 Satyam Mic Test</h2>
+<p>Tests <code>webkitSpeechRecognition</code> directly. Open at <strong>http://localhost:3000/mic-test.html</strong> in Chrome/Edge.</p>
+<button id="start">▶ Start Listening</button>
+<button id="stop" disabled>⏹ Stop</button>
+<button onclick="document.getElementById('log').textContent=''">Clear</button>
+<div id="log">Waiting…</div>
+<script>
+const log = (msg, cls) => {
+  const el = document.getElementById('log');
+  const line = document.createElement('div');
+  line.className = cls || '';
+  line.textContent = new Date().toLocaleTimeString() + '  ' + msg;
+  el.appendChild(line);
+  el.scrollTop = el.scrollHeight;
+};
+
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+if (!SR) { log('❌ SpeechRecognition NOT available in this browser. Use Chrome/Edge.', 'err'); }
+else { log('✅ SpeechRecognition available', 'ok'); }
+
+log('isSecureContext = ' + window.isSecureContext + '  (must be true)', window.isSecureContext ? 'ok' : 'err');
+log('hostname = ' + location.hostname, 'info');
+
+let rec = null;
+document.getElementById('start').onclick = () => {
+  if (!SR) { log('No SR engine', 'err'); return; }
+  rec = new SR();
+  rec.continuous = true;
+  rec.interimResults = true;
+  rec.lang = 'en-IN';
+  rec.onstart = () => log('🟢 onstart — recognition started', 'ok');
+  rec.onaudiostart = () => log('🎙️ onaudiostart — mic opened', 'ok');
+  rec.onspeechstart = () => log('🗣️ onspeechstart — voice detected!', 'ok');
+  rec.onresult = (e) => {
+    let finals = '', interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) finals += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    if (finals) log('✅ FINAL: "' + finals + '"', 'ok');
+    if (interim) log('   interim: ' + interim, 'info');
+  };
+  rec.onerror = (e) => log('❌ ERROR: ' + e.error, 'err');
+  rec.onend = () => { log('⚪ onend', 'info'); document.getElementById('stop').disabled = true; document.getElementById('start').disabled = false; };
+  try {
+    rec.start();
+    document.getElementById('start').disabled = true;
+    document.getElementById('stop').disabled = false;
+    log('rec.start() called', 'info');
+  } catch(e) { log('❌ rec.start() threw: ' + e, 'err'); }
+};
+document.getElementById('stop').onclick = () => {
+  if (rec) { try { rec.stop(); } catch(e) {} }
+};
+</script>
+</body>
+</html>

@@ -439,10 +439,14 @@ export function Shell({ children }: { children: ReactNode }) {
     };
 
     try {
+      // Call unlockAudioPlayback again right before rec.start() — the gesture
+      // chain may have broken between the panel opening and the effect running.
+      unlockAudioPlayback();
       rec.start();
+      console.debug("[voice] rec.start() OK, lang=", rec.lang);
     } catch (err) {
       console.debug("[voice] rec.start() failed:", err);
-      setSpeechError("Could not start microphone. Reload and try again.");
+      setSpeechError("Could not start microphone. Reload the page and try again.");
     }
 
     return () => {
@@ -573,15 +577,25 @@ export function Shell({ children }: { children: ReactNode }) {
             {/* Header bar */}
             <div className="flex items-center justify-between border-b-2 border-foreground bg-header px-5 py-3 text-header-foreground">
               <div className="flex items-center gap-2">
-                <div className={`h-2 w-2 rounded-full ${isSpeaking ? "bg-success animate-pulse" : "bg-primary animate-ping"}`} />
+                <div className={`h-2 w-2 rounded-full ${isSpeaking ? "bg-success animate-pulse" : speechError ? "bg-destructive" : interimTranscript ? "bg-success animate-ping" : "bg-primary animate-ping"}`} />
                 <span className="text-xs font-extrabold uppercase tracking-wider">
-                  {isSpeaking ? t("Speaking…") : captureStatus ? captureStatus : t("Listening…")}
+                  {isSpeaking
+                    ? t("Speaking…")
+                    : speechError
+                      ? "⚠ Error"
+                      : interimTranscript && interimTranscript !== "…"
+                        ? "🎙 Hearing you…"
+                        : captureStatus
+                          ? captureStatus
+                          : finalTranscript
+                            ? "✓ Got it — processing…"
+                            : "Listening…"}
                 </span>
               </div>
               <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider opacity-60">
                 <span>{isSpeaking ? t("Speech output") : t("Voice input")}</span>
                 <span>·</span>
-                <span>{voiceLang === "auto" ? t("Auto") : voiceLang}</span>
+                <span>{voiceLang === "auto" ? "en-IN (auto)" : voiceLang}</span>
               </div>
             </div>
 
