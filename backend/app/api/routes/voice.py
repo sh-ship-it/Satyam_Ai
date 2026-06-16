@@ -14,7 +14,6 @@ import base64
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 
 from app.api.deps import get_principal
-from app.config import get_settings
 from app.core.rbac import AccessDenied, Permission, Principal, require
 from app.models.registry import get_stt, get_translator, get_tts
 from app.schemas.voice import (
@@ -73,8 +72,6 @@ async def stt(
     principal: Principal = Depends(get_principal),
 ) -> STTResponse:
     _guard(principal)
-    s = get_settings()
-    provider = backend or s.voice_backend
     audio = await file.read()
     if not audio:
         raise HTTPException(status_code=400, detail="empty audio upload")
@@ -83,7 +80,7 @@ async def stt(
         transcript = await engine.transcribe(audio, lang=_norm_lang(lang))
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"STT provider error: {e}")
-    return STTResponse(transcript=transcript, provider=provider)
+    return STTResponse(transcript=transcript, provider=type(engine).__name__)
 
 
 @router.post("/translate", response_model=TranslateResponse)

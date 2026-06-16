@@ -1,15 +1,16 @@
 /**
  * Provider-aware text-to-speech for Satyam.
  *
- * Reads the user's choice from Settings (sarvam | google | webspeech).
- *   sarvam / google → POST /voice/tts (browser fallback on any error)
- *   webspeech       → browser speechSynthesis only (no backend call)
+ * Settings choice (sarvam | google | webspeech):
+ *   sarvam / google → POST /voice/tts  (browser fallback on ANY error)
+ *   webspeech       → browser speechSynthesis only
  *
- * Keeps ONE audio element in flight at a time and caches synthesized clips
- * per (provider, lang, text) — so repeated phrases never re-bill API credits.
- *
- * The `speakViaSarvam` export is a back-compat alias so the console.tsx /
- * Shell.tsx call-sites from the Voice v2 spec need zero further changes.
+ * Fixes:
+ *  - V2: browser voices load async; pick the best voice for the language.
+ *  - V3: unlock audio playback on a user gesture so fetched clips can play.
+ *  - V4: pauseSpeech()/resumeSpeech() control BOTH the <audio> clip and the
+ *        browser voice.
+ * Always fires exactly one terminal onEnd so the conversation loop never stalls.
  */
 import { ttsSynthesize } from "../api/client";
 import { loadEngineSettings } from "@/components/SettingsDialog";
@@ -19,7 +20,60 @@ export type SpeakHooks = { onStart?: () => void; onEnd?: () => void };
 let currentAudio: HTMLAudioElement | null = null;
 const cache = new Map<string, string>(); // `${provider}::${lang}::${text}` → objectURL
 
-/** Stop any in-flight speech — Sarvam/Google clip AND browser voice. */
+// ── browser voice pre-loading (V2) ───────────────────────────────────────────
+let voicesCache: SpeechSynthesisVoice[] = [];
+function warmVoices(): void {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  const load = () => { voicesCache = window.speechSynthesis.getVoices() || []; };
+  load();
+  // Chrome populates voices asynchronously.
+  window.speechSynthesis.onvoiceschanged = load;
+}
+warmVoices();
+
+function pickVoice(lang: "en" | "kn"): SpeechSynthesisVoice | null {
+  const all = voicesCache.length
+    ? voicesCache
+    : (typeof window !== "undefined" && "speechSynthesis" in window
+        ? window.speechSynthesis.getVoices()
+        : []);
+  if (!all || !all.length) return null;
+  const exact  = lang === "kn" ? "kn-in" : "en-in";
+  const prefix = lang === "kn" ? "kn"    : "en";
+  return (
+    all.find((v) => v.lang?.toLowerCase() === exact) ||
+    all.find((v) => v.lang?.toLowerCase().startsWith(prefix)) ||
+    all.find((v) => v.lang?.toLowerCase().startsWith("en")) ||
+    all[0] ||
+    null
+  );
+}
+
+// ── autoplay unlock (V3) ─────────────────────────────────────────────────────
+let audioUnlocked = false;
+/**
+ * Call synchronously inside a click/tap handler (mic-open, conversation-start).
+ * Satisfies the browser autoplay policy so subsequent async audio.play() calls
+ * are allowed.
+ */
+export function unlockAudioPlayback(): void {
+  if (audioUnlocked || typeof window === "undefined") return;
+  try {
+    // Play a 0-length silent WAV to "spend" the gesture token.
+    const a = new Audio(
+      "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=",
+    );
+    a.volume = 0;
+    void a.play().then(() => { a.pause(); }).catch(() => {});
+    audioUnlocked = true;
+  } catch { /* noop */ }
+  // Also nudge speechSynthesis so the first utterance isn't swallowed on Chrome.
+  try { window.speechSynthesis?.resume(); } catch { /* noop */ }
+}
+
+// ── public controls ──────────────────────────────────────────────────────────
+
+/** Stop any in-flight speech — fetched clip AND browser voice. */
 export function cancelSpeech(): void {
   if (currentAudio) {
     try { currentAudio.pause(); currentAudio.src = ""; } catch { /* noop */ }
@@ -30,7 +84,27 @@ export function cancelSpeech(): void {
   }
 }
 
-/** True while either the backend audio clip or the browser voice is playing. */
+/** Pause whichever channel is active (V4). */
+export function pauseSpeech(): void {
+  if (currentAudio && !currentAudio.paused) {
+    try { currentAudio.pause(); } catch { /* noop */ }
+  }
+  if (typeof window !== "undefined" && "speechSynthesis" in window) {
+    try { if (window.speechSynthesis.speaking) window.speechSynthesis.pause(); } catch { /* noop */ }
+  }
+}
+
+/** Resume whichever channel was paused (V4). */
+export function resumeSpeech(): void {
+  if (currentAudio && currentAudio.paused && currentAudio.src) {
+    void currentAudio.play().catch(() => {});
+  }
+  if (typeof window !== "undefined" && "speechSynthesis" in window) {
+    try { window.speechSynthesis.resume(); } catch { /* noop */ }
+  }
+}
+
+/** True while either the fetched clip or the browser voice is playing. */
 export function isSpeechActive(): boolean {
   if (currentAudio && !currentAudio.paused && !currentAudio.ended) return true;
   if (typeof window !== "undefined" && "speechSynthesis" in window) {
@@ -38,6 +112,8 @@ export function isSpeechActive(): boolean {
   }
   return false;
 }
+
+// ── internal helpers ─────────────────────────────────────────────────────────
 
 /** Browser Web Speech fallback — always fires exactly one onEnd. */
 function browserSpeak(
@@ -50,17 +126,44 @@ function browserSpeak(
     hooks?.onEnd?.();
     return;
   }
-  try {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = lang === "kn" ? "kn-IN" : "en-IN";
-    u.rate = rate;
-    u.onstart = () => hooks?.onStart?.();
-    u.onend = () => hooks?.onEnd?.();
-    u.onerror = () => hooks?.onEnd?.();
-    window.speechSynthesis.speak(u);
-  } catch {
-    hooks?.onEnd?.();
+  const run = () => {
+    try {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = lang === "kn" ? "kn-IN" : "en-IN";
+      u.rate = Math.max(0.5, Math.min(2, rate || 1));
+      const v = pickVoice(lang);
+      if (v) u.voice = v;
+      if (lang === "kn" && (!v || !v.lang?.toLowerCase().startsWith("kn"))) {
+        // No Kannada voice installed on this device — Sarvam is the reliable path.
+        console.warn("[tts] no kn-IN browser voice; output may be silent. Use Sarvam/Google.");
+      }
+      u.onstart = () => hooks?.onStart?.();
+      u.onend   = () => hooks?.onEnd?.();
+      u.onerror = () => hooks?.onEnd?.();
+      window.speechSynthesis.speak(u);
+      // Chrome bug: long utterances pause themselves ~15 s in. Kick resume every 8 s.
+      const kick = setInterval(() => {
+        if (!window.speechSynthesis.speaking) { clearInterval(kick); return; }
+        try { window.speechSynthesis.resume(); } catch { /* noop */ }
+      }, 8000);
+    } catch {
+      hooks?.onEnd?.();
+    }
+  };
+  // Ensure voices are loaded before speaking (V2 async loading).
+  if (!voicesCache.length && window.speechSynthesis.getVoices().length === 0) {
+    let fired = false;
+    const once = () => {
+      if (fired) return;
+      fired = true;
+      voicesCache = window.speechSynthesis.getVoices();
+      run();
+    };
+    window.speechSynthesis.onvoiceschanged = once;
+    setTimeout(once, 250); // fallback if the event never fires
+  } else {
+    run();
   }
 }
 
@@ -70,6 +173,8 @@ function b64ToBlob(b64: string, mime: string): Blob {
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
   return new Blob([bytes], { type: mime });
 }
+
+// ── main entry point ─────────────────────────────────────────────────────────
 
 /**
  * Speak `text` using the provider chosen in Settings.
@@ -122,13 +227,12 @@ export async function speak(
       // Provider audio failed — degrade to browser voice, never strand the loop.
       browserSpeak(text, lang, rate, hooks);
     };
-    await audio.play();
+    await audio.play(); // may reject if autoplay not unlocked → caught below
   } catch {
     // Network / CORS / autoplay block — always fall back, never stall.
     browserSpeak(text, lang, rate, hooks);
   }
 }
 
-// Back-compat alias — console.tsx and Shell.tsx import `speakViaSarvam`
-// from the Voice v2 spec; that call-site is unchanged.
+// Back-compat alias — console.tsx and Shell.tsx import `speakViaSarvam`.
 export const speakViaSarvam = speak;

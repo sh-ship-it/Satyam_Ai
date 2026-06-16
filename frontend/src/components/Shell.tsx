@@ -22,7 +22,14 @@ import { DarkModeToggle } from "./DarkModeToggle";
 import { SettingsDialog } from "./SettingsDialog";
 import { ProfileMenu } from "./ProfileMenu";
 import { useI18n } from "@/lib/i18n";
-import { speakViaSarvam, cancelSpeech, isSpeechActive } from "@/lib/voice/tts";
+import {
+  speakViaSarvam,
+  cancelSpeech,
+  isSpeechActive,
+  pauseSpeech,
+  resumeSpeech,
+  unlockAudioPlayback,
+} from "@/lib/voice/tts";
 
 type VoiceScreen = { to: string; words: RegExp };
 const SCREEN_ROUTES: VoiceScreen[] = [
@@ -169,6 +176,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const open = () => {
+      unlockAudioPlayback(); // V3: enable fetched-audio playback within the gesture
       setListening(true);
       setMicActive(true);
       setIsSpeaking(false);
@@ -314,7 +322,9 @@ export function Shell({ children }: { children: ReactNode }) {
     const rec = new SR();
     rec.continuous = true;
     rec.interimResults = true;
-    rec.lang = lang === "KN" ? "kn-IN" : "en-IN";
+    // Recognition follows the Speech-output (voiceLang) selector, then the UI
+    // language, so choosing Kannada actually makes the mic listen in kn-IN.
+    rec.lang = coerceVoiceLang(voiceLang) || (lang === "KN" ? "kn-IN" : "en-IN");
 
     // Auto-submit one turn ~1.6s after the user stops speaking (conversation mode only).
     const submitTurn = () => {
@@ -368,9 +378,13 @@ export function Shell({ children }: { children: ReactNode }) {
       }
     };
     rec.onend = () => {
-      if (recognitionRef.current === rec) {
-        try { rec.start(); } catch {}
-      }
+      // Only restart if THIS recognizer is still active and we are still meant to
+      // be listening. A short delay avoids Chrome's "already started" throttle.
+      if (recognitionRef.current !== rec) return;
+      setTimeout(() => {
+        if (recognitionRef.current !== rec) return;
+        try { rec.start(); } catch { /* will be re-created by the effect if needed */ }
+      }, 250);
     };
 
     recognitionRef.current = rec;
@@ -381,7 +395,7 @@ export function Shell({ children }: { children: ReactNode }) {
       clearSilenceTimer();
       try { rec.onend = null; rec.stop(); } catch {}
     };
-  }, [listening, micActive, lang, clearSilenceTimer]);
+  }, [listening, micActive, lang, voiceLang, clearSilenceTimer]);
 
   useEffect(() => {
     if (!isSpeaking) return;
@@ -545,6 +559,7 @@ export function Shell({ children }: { children: ReactNode }) {
                     setSpeechError("Speech recognition is not supported in this browser.");
                     return;
                   }
+                  unlockAudioPlayback(); // V3: satisfy autoplay within this click
                   setConversationMode((on) => {
                     const next = !on;
                     if (next) {
@@ -622,14 +637,12 @@ export function Shell({ children }: { children: ReactNode }) {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => {
-                          if (typeof window !== "undefined" && "speechSynthesis" in window) {
-                            if (isPaused) {
-                              window.speechSynthesis.resume();
-                              setIsPaused(false);
-                            } else {
-                              window.speechSynthesis.pause();
-                              setIsPaused(true);
-                            }
+                          if (isPaused) {
+                            resumeSpeech();
+                            setIsPaused(false);
+                          } else {
+                            pauseSpeech();
+                            setIsPaused(true);
                           }
                         }}
                         className="flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-secondary-background px-2.5 py-1 text-[11px] font-bold text-foreground hover:translate-x-[2px] hover:translate-y-[2px] transition"

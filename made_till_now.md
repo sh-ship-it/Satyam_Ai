@@ -1130,3 +1130,62 @@ Browser speak() → speakViaSarvam() → reads Settings.voiceBackend
 - With empty keys: demo stub → `audio.onerror` → browser fallback, loop continues.
 - Settings → Models → Voice picker: three cards, Sarvam default. Persists to localStorage.
 - Conversation loop unchanged: `satyam:ai-state` contract (thinking→speaking→done) preserved.
+
+---
+
+### [2026-06-16] — Voice Output + Input Bug Fix (SATYAM_VOICE_OUTPUT_INPUT_FIX.md)
+
+#### Summary
+Fixed all 8 voice bugs identified in the spec. AI now speaks via Sarvam (bulbul:v2+anushka),
+mic correctly listens in the selected language, Pause/Resume works for fetched audio clips,
+and autoplay policy is satisfied on the first user gesture.
+
+---
+
+#### Bugs Fixed
+
+| ID | Symptom | Root Cause | Fix |
+|----|---------|-----------|-----|
+| **V1** | AI never speaks via Sarvam | `speaker:"meera"` + `model:"bulbul:v3"` is an invalid pair — Sarvam returns 400 → 502 → frontend falls back to browser | Changed to `model:"bulbul:v2"` + `speaker:"anushka"` (documented stable pair for kn-IN + en-IN). Added `_trim_for_tts()` to respect the ~500-char v2 limit. |
+| **V2** | Kannada output silent on browser fallback | `speechSynthesis.getVoices()` is async; old code spoke before voices loaded, and picked no voice | Added `warmVoices()` with `onvoiceschanged` handler. `browserSpeak()` now waits for voices and calls `pickVoice(lang)` with best-match fallback chain. |
+| **V3** | First spoken reply never plays | Browser autoplay policy blocks `audio.play()` after async fetch breaks the user-gesture chain | Added `unlockAudioPlayback()` — plays a silent 0-length WAV synchronously inside the click handler. Called in `open()` (panel open) and inside the conversation toggle. |
+| **V4** | Pause/Resume does nothing for Sarvam/Google clips | Buttons called `speechSynthesis.pause/resume()` only, never the `<audio>` element | Added `pauseSpeech()` / `resumeSpeech()` that control both channels. Pause/Resume buttons now call these. |
+| **H1** | Mic doesn't understand Kannada | `rec.lang` derived from UI `lang` state, ignoring the "Speech output" `voiceLang` selector | `rec.lang` now uses `coerceVoiceLang(voiceLang)` — picks `kn-IN` when Kannada is selected. Added `voiceLang` to recognition effect deps so changing the selector restarts recognition. |
+| **H2** | Mic stops / spins after a stretch | `rec.onend` called `rec.start()` immediately → Chrome throttles and recognition dies | `rec.onend` now debounces with `setTimeout(250ms)` and guards on `recognitionRef.current === rec`. |
+| **T1** | `/voice/stt` always errors | `SarvamSTT` sent JSON+base64 with forced `Content-Type: application/json`, but Sarvam `/speech-to-text` is multipart/form-data | Rewrote `SarvamSTT.transcribe()` to use `files=` + `data=` (httpx multipart). `_auth()` no longer sets Content-Type. |
+| **T2** | STT response shows wrong provider label | Returned the *requested* backend string, not the engine class that ran | `STTResponse.provider` now uses `type(engine).__name__` (mirrors TTS handler). Removed unused `get_settings` import from `voice.py`. |
+
+---
+
+#### Files Changed
+
+**`backend/app/models/api/sarvam.py`** — Full rewrite:
+- `SarvamTTS`: `bulbul:v3`+`meera` → `bulbul:v2`+`anushka`; added `_trim_for_tts()` (480-char limit); added `mime = "audio/wav"` class attr; demo stub returns `b""`.
+- `SarvamSTT`: JSON base64 → multipart (`files=`/`data=`); `_auth()` no longer injects `Content-Type`.
+- `SarvamTranslator`: added inline `Content-Type: application/json` header (was relying on removed `_HEADERS`).
+- Added `_bcp()` and `_trim_for_tts()` helpers; removed `_HEADERS` module-level constant.
+
+**`backend/app/api/routes/voice.py`**:
+- `stt` handler: removed `s = get_settings()` / `provider = backend or s.voice_backend`; `provider=` → `type(engine).__name__`.
+- Removed unused `from app.config import get_settings` import.
+
+**`frontend/src/lib/voice/tts.ts`** — Full rewrite:
+- Added `warmVoices()`, `pickVoice()`, `voicesCache` (V2 async voice loading).
+- Added `unlockAudioPlayback()` (V3 autoplay unlock).
+- Added `pauseSpeech()` / `resumeSpeech()` (V4 Pause/Resume for both channels).
+- `browserSpeak()`: waits for voices before speaking; picks best voice; logs warning if no kn-IN voice; Chrome 15-s resume kick.
+- `speak()` / `speakViaSarvam` alias unchanged in signature.
+
+**`frontend/src/components/Shell.tsx`**:
+- Import: added `pauseSpeech`, `resumeSpeech`, `unlockAudioPlayback`.
+- `open()` handler: calls `unlockAudioPlayback()` (V3).
+- Conversation toggle: calls `unlockAudioPlayback()` (V3).
+- Recognition effect: `rec.lang` uses `coerceVoiceLang(voiceLang)` (H1); `rec.onend` debounced 250ms (H2); added `voiceLang` to deps array.
+- Pause/Resume buttons: call `pauseSpeech()` / `resumeSpeech()` (V4).
+
+---
+
+#### Verification
+- `npx tsc --noEmit --skipLibCheck` — 0 new errors.
+- Backend curl test: `POST /voice/tts` with `backend:sarvam` → `provider: "SarvamTTS"`, `mime: "audio/wav"`, large `audio_base64`.
+- Frontend: open mic panel → conversation reply plays via Sarvam WAV; Pause/Resume controls the clip; Kannada selector makes mic listen in kn-IN.

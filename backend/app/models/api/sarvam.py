@@ -1,14 +1,18 @@
 """Sarvam AI clients — PRIMARY voice layer (Kannada + English STT/TTS/MT).
 
 Services used:
-  - Saaras v3 (Sarvam's Whisper-based STT)   → POST /speech-to-text
-  - Bulbul v3 TTS                             → POST /text-to-speech
-  - Sarvam Translate                          → POST /translate
+  - Saaras v3 (STT)        → POST /speech-to-text   (multipart/form-data!)
+  - Bulbul v2 (TTS)        → POST /text-to-speech    (JSON)
+  - Mayura v1 (Translate)  → POST /translate         (JSON)
 
-Free-tier credits are a one-time grant (do not auto-renew). Pre-cache scripted
-demo TTS at demo time to conserve credits.
+If SARVAM_API_KEY is unset the client runs in demo mode (deterministic stubs);
+TTS demo returns b"" so the route 502s and the frontend uses its browser fallback.
 
-If SARVAM_API_KEY is unset the client runs in demo mode (deterministic stubs).
+VALID speaker/model pairs (speakers are NOT interchangeable across versions):
+  - bulbul:v2  → anushka, manisha, vidya, arya (F) / abhilash, karun, hitesh (M)
+  - bulbul:v3  → ritu, priya, neha, pooja, shreya, ... (different catalog)
+We use bulbul:v2 + anushka (documented, stable, supports kn-IN & en-IN).
+v2 caps a single input at ~500 chars, so we trim on a sentence boundary.
 """
 from __future__ import annotations
 
@@ -19,7 +23,26 @@ import httpx
 from app.config import get_settings
 
 _BASE = "https://api.sarvam.ai"
-_HEADERS = {"Content-Type": "application/json"}
+_TTS_MAX_CHARS = 480  # safety margin under Bulbul v2's ~500-char per-input limit
+
+
+def _bcp(lang: str) -> str:
+    return "kn-IN" if str(lang or "").lower().startswith("kn") else "en-IN"
+
+
+def _trim_for_tts(text: str, limit: int = _TTS_MAX_CHARS) -> str:
+    """Trim to <= limit chars, preferring the last sentence boundary."""
+    t = (text or "").strip()
+    if len(t) <= limit:
+        return t
+    head = t[:limit]
+    cut = max(
+        head.rfind(". "),
+        head.rfind("? "),
+        head.rfind("! "),
+        head.rfind("\u0964"),  # Devanagari/Kannada danda
+    )
+    return (head[: cut + 1] if cut > 80 else head).strip()
 
 
 class _SarvamBase:
@@ -29,71 +52,74 @@ class _SarvamBase:
         self._demo = not self._key
 
     def _auth(self) -> dict[str, str]:
+        # ONLY the subscription key header. Do NOT set Content-Type here:
+        #  - httpx sets application/json automatically for `json=`
+        #  - httpx sets the multipart boundary automatically for `files=`
         return {"api-subscription-key": self._key}
 
 
 class SarvamSTT(_SarvamBase):
-    """Sarvam Saaras v3 — speech-to-text for Kannada (kn-IN) and English (en-IN)."""
+    """Saaras v3 speech-to-text. /speech-to-text is multipart/form-data."""
 
     async def transcribe(self, audio: bytes, *, lang: str = "kn") -> str:
         if self._demo:
-            return "[demo:sarvam-stt] ಕನ್ನಡ ಪ್ರಶ್ನೆ"  # 'Kannada question'
-        bcp_lang = "kn-IN" if lang == "kn" else "en-IN"
-        audio_b64 = base64.b64encode(audio).decode()
+            return "[demo:sarvam-stt] ಕನ್ನಡ ಪ್ರಶ್ನೆ"
+        files = {"file": ("audio.wav", audio, "audio/wav")}
+        data = {"model": "saaras:v3", "language_code": _bcp(lang)}
         async with httpx.AsyncClient(timeout=30) as client:
             r = await client.post(
                 f"{_BASE}/speech-to-text",
-                headers={**_HEADERS, **self._auth()},
-                json={
-                    "model": "saaras:v3",
-                    "audio": audio_b64,
-                    "language_code": bcp_lang,
-                },
+                headers=self._auth(),   # NO Content-Type → multipart boundary preserved
+                files=files,
+                data=data,
             )
             r.raise_for_status()
-        return r.json().get("transcript", "")
+        return (r.json() or {}).get("transcript", "")
 
 
 class SarvamTTS(_SarvamBase):
-    """Sarvam Bulbul v3 — text-to-speech for Kannada and English."""
+    """Bulbul v2 text-to-speech for Kannada and English. Returns WAV bytes."""
+
+    mime = "audio/wav"
 
     async def synthesize(self, text: str, *, lang: str = "kn") -> bytes:
         if self._demo:
-            return b""  # demo mode: no key → backend returns 502 → frontend uses browser fallback
-        bcp_lang = "kn-IN" if lang == "kn" else "en-IN"
+            return b""  # no key → 502 → frontend browser fallback
+        spoken = _trim_for_tts(text)
+        if not spoken:
+            return b""
         async with httpx.AsyncClient(timeout=30) as client:
             r = await client.post(
                 f"{_BASE}/text-to-speech",
-                headers={**_HEADERS, **self._auth()},
+                headers={"Content-Type": "application/json", **self._auth()},
                 json={
-                    "inputs": [text],
-                    "target_language_code": bcp_lang,
-                    "speaker": "meera",  # default Kannada/Indian-English voice
-                    "model": "bulbul:v3",
+                    "inputs": [spoken],
+                    "target_language_code": _bcp(lang),
+                    "speaker": "anushka",       # valid bulbul:v2 female voice (kn-IN + en-IN)
+                    "model": "bulbul:v2",       # was the invalid bulbul:v3 + meera pair
+                    "speech_sample_rate": 22050,
                     "enable_preprocessing": True,
                 },
             )
             r.raise_for_status()
-        audio_b64 = r.json().get("audios", [""])[0]
+        audio_b64 = (r.json() or {}).get("audios", [""])[0]
         return base64.b64decode(audio_b64) if audio_b64 else b""
 
 
 class SarvamTranslator(_SarvamBase):
-    """Sarvam Translate — neural MT between Kannada and English."""
+    """Mayura v1 — neural MT between Kannada and English."""
 
     async def translate(self, text: str, *, src: str, tgt: str) -> str:
         if self._demo:
             return f"[demo:sarvam-mt {src}->{tgt}] {text}"
-        src_bcp = "kn-IN" if src == "kn" else "en-IN"
-        tgt_bcp = "kn-IN" if tgt == "kn" else "en-IN"
         async with httpx.AsyncClient(timeout=20) as client:
             r = await client.post(
                 f"{_BASE}/translate",
-                headers={**_HEADERS, **self._auth()},
+                headers={"Content-Type": "application/json", **self._auth()},
                 json={
                     "input": text,
-                    "source_language_code": src_bcp,
-                    "target_language_code": tgt_bcp,
+                    "source_language_code": _bcp(src),
+                    "target_language_code": _bcp(tgt),
                     "speaker_gender": "Female",
                     "mode": "formal",
                     "model": "mayura:v1",
@@ -101,4 +127,4 @@ class SarvamTranslator(_SarvamBase):
                 },
             )
             r.raise_for_status()
-        return r.json().get("translated_text", text)
+        return (r.json() or {}).get("translated_text", text)
