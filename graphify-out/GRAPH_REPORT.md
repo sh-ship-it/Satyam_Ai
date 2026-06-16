@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-16)
 
 ## Corpus Check
-- 188 files · ~83,688 words
+- 188 files · ~83,799 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `eb146f8a`
+- Built from commit: `40770418`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -140,8 +140,8 @@
   backend/app/core/masking.py → backend/app/core/rbac.py
 - `AsyncSession` --uses--> `Principal`  [INFERRED]
   backend/app/api/deps.py → backend/app/core/rbac.py
-- `list_audit()` --calls--> `verify_chain()`  [INFERRED]
-  backend/app/api/routes/audit.py → backend/app/core/audit.py
+- `NetworkScreen()` --calls--> `useT()`  [INFERRED]
+  frontend/src/routes/network.tsx → frontend/src/lib/i18n.tsx
 
 ## Import Cycles
 - 1-file cycle: `backend/app/main.py -> backend/app/main.py`
@@ -473,7 +473,7 @@ Cohesion: 0.50
 Nodes (4): [2026-06-16] — Secure Auth, Live Audit, Map Trails, Victim Network & Hardcoded Values Cleanup (SATYAM_AUTH_AUDIT_MAP_NETWORK_FIX issues 1–5), Frontend Changes, Summary, Verification
 
 ## Knowledge Gaps
-- **549 isolated node(s):** `Mode`, `KARNATAKA_CENTER`, `Account`, `SEED_ACCOUNTS`, `SwitchPhase` (+544 more)
+- **549 isolated node(s):** `GROUP_COLOR`, `GROUP_SHAPE`, `PosMap`, `Mode`, `KARNATAKA_CENTER` (+544 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -481,16 +481,16 @@ Nodes (4): [2026-06-16] — Secure Auth, Live Audit, Map Trails, Victim Network 
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 112` to `Community 25`?**
-  _High betweenness centrality (0.110) - this node is a cross-community bridge._
+  _High betweenness centrality (0.106) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 112` to `Community 16`, `Community 33`, `Community 116`, `Community 5`?**
-  _High betweenness centrality (0.063) - this node is a cross-community bridge._
+  _High betweenness centrality (0.066) - this node is a cross-community bridge._
 - **Are the 37 inferred relationships involving `Principal` (e.g. with `Any` and `AsyncSession`) actually correct?**
   _`Principal` has 37 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `get_settings()` (e.g. with `get_url()` and `main()`) actually correct?**
   _`get_settings()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 22 inferred relationships involving `Permission` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Permission` has 22 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Audit-log endpoint with hash-chain verification (admin/L3+ only).`, `Authentication routes.  Demo login: mints a JWT for any username/rank combo so j`, `# IMPORTANT: district and range must match real values in the synthetic dataset.` to the rest of the system?**
+- **What connects `GROUP_COLOR`, `GROUP_SHAPE`, `PosMap` to the rest of the system?**
   _650 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.03389830508474576 - nodes in this community are weakly interconnected._

@@ -725,8 +725,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
-    "mtime": 1781580972.3722723,
-    "ast_hash": "6566f4d9cd65f05e45f59be6d0905e8b",
+    "mtime": 1781581854.311268,
+    "ast_hash": "a34e291f7277ce1e96c99853c7cb4d96",
     "semantic_hash": ""
   },
   "frontend/src/routes/reports.tsx": {
