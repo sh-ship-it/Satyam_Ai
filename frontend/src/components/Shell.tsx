@@ -30,6 +30,7 @@ import {
   resumeSpeech,
   unlockAudioPlayback,
 } from "@/lib/voice/tts";
+import { resolveLang } from "@/lib/voice/lang";
 
 type VoiceScreen = { to: string; words: RegExp };
 const SCREEN_ROUTES: VoiceScreen[] = [
@@ -110,16 +111,18 @@ export function Shell({ children }: { children: ReactNode }) {
   const [speechError, setSpeechError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(false);
-  // The only two supported voice locales, app-wide.
-  const VOICE_LANGS = ["en-IN", "kn-IN"] as const;
+  // Supported voice locales: "auto" = detect from text, plus the two explicit locales.
+  const VOICE_LANGS = ["auto", "en-IN", "kn-IN"] as const;
   const coerceVoiceLang = (v: string | null | undefined): string => {
-    if (v && (VOICE_LANGS as readonly string[]).includes(v)) return v;
+    if (v === "auto") return "auto";
+    if (v && (["en-IN", "kn-IN"] as string[]).includes(v)) return v;
     if (v && v.toLowerCase().startsWith("kn")) return "kn-IN";
-    return "en-IN";
+    if (v && v.toLowerCase().startsWith("en")) return "en-IN";
+    return "auto"; // default to auto-detect
   };
   const [voiceLang, setVoiceLang] = useState<string>(() => {
     try { return coerceVoiceLang(localStorage.getItem("satyam-voice-lang")); } catch {}
-    return lang === "KN" ? "kn-IN" : "en-IN";
+    return "auto";
   });
   const [speechRate, setSpeechRate] = useState(() => {
     try {
@@ -191,9 +194,8 @@ export function Shell({ children }: { children: ReactNode }) {
   // speaks confirmations in the chosen language.
   useEffect(() => {
     const speakText = (text: string, speechLang: string, rate: number) => {
-      const lang: "en" | "kn" = speechLang.toLowerCase().startsWith("kn") ? "kn" : "en";
-      // Don't set isSpeaking here — speakViaSarvam fires onStart when audio actually begins.
-      // Setting it early causes the poll to start before audio is in flight.
+      // TASK 2A: resolve "auto" to detectLang(text); otherwise parse the BCP-47 locale.
+      const lang: "en" | "kn" = resolveLang(speechLang, text);
       void speakViaSarvam(text, lang, rate, {
         onStart: () => setIsSpeaking(true),
         onEnd: () => setIsSpeaking(false),
@@ -322,9 +324,14 @@ export function Shell({ children }: { children: ReactNode }) {
     const rec = new SR();
     rec.continuous = true;
     rec.interimResults = true;
-    // Recognition follows the Speech-output (voiceLang) selector, then the UI
-    // language, so choosing Kannada actually makes the mic listen in kn-IN.
-    rec.lang = coerceVoiceLang(voiceLang) || (lang === "KN" ? "kn-IN" : "en-IN");
+    // TASK 2A/H1: Recognition follows the Speech-output (voiceLang) selector.
+    // "auto" → use the UI language as the starting point; the transcript's
+    // detected language (via detectLang) will correct the TTS reply anyway.
+    // Explicit kn-IN / en-IN → use it directly.
+    rec.lang =
+      voiceLang === "auto"
+        ? (lang === "KN" ? "kn-IN" : "en-IN")
+        : coerceVoiceLang(voiceLang) || "en-IN";
 
     // Auto-submit one turn ~1.6s after the user stops speaking (conversation mode only).
     const submitTurn = () => {
@@ -533,7 +540,9 @@ export function Shell({ children }: { children: ReactNode }) {
             </div>
             <div className="text-center">
               <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                {isSpeaking ? `${t("Speech output")} · ${voiceLang}` : `${t("Voice input")} · ${lang === "KN" ? "kn-IN" : "en-IN"}`}
+                {isSpeaking
+                  ? `${t("Speech output")} · ${voiceLang === "auto" ? t("Auto (detect)") : voiceLang}`
+                  : `${t("Voice input")} · ${voiceLang === "auto" ? (lang === "KN" ? "kn-IN" : "en-IN") + " " + t("(auto)") : voiceLang}`}
               </div>
               <div className="mt-1 text-lg font-semibold">
                 {isSpeaking ? t("Speaking…") : t("Listening…")}
@@ -590,6 +599,7 @@ export function Shell({ children }: { children: ReactNode }) {
                   onChange={(e) => setVoiceLang(coerceVoiceLang(e.target.value))}
                   className="flex-1 rounded-[5px] border-2 border-foreground bg-background px-2 py-1 text-xs text-foreground outline-none"
                 >
+                  <option value="auto">{t("Auto (detect)")}</option>
                   <option value="en-IN">English (India)</option>
                   <option value="kn-IN">Kannada (ಕನ್ನಡ)</option>
                 </select>

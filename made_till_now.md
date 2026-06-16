@@ -1189,3 +1189,96 @@ and autoplay policy is satisfied on the first user gesture.
 - `npx tsc --noEmit --skipLibCheck` — 0 new errors.
 - Backend curl test: `POST /voice/tts` with `backend:sarvam` → `provider: "SarvamTTS"`, `mime: "audio/wav"`, large `audio_base64`.
 - Frontend: open mic panel → conversation reply plays via Sarvam WAV; Pause/Resume controls the clip; Kannada selector makes mic listen in kn-IN.
+
+---
+
+### [2026-06-16] — Settings Wiring Verification + Language Auto-Detection + Voice/Text Fixes
+
+#### Summary
+Completed three tasks: verified Settings are live (no mock/demo data in the voice/chat/cases response path), implemented language auto-detection for both input (mic) and output (TTS), and fixed remaining voice/text gaps including a crash-level bug in the translate endpoint.
+
+---
+
+#### TASK 1 — Settings wiring (verified, one bug fixed)
+
+**Settings → runtime behavior table:**
+
+| Setting | Storage | Consumer | Network field | Server effect |
+|---------|---------|---------|--------------|--------------|
+| `voiceBackend` | `localStorage["satyam.engine-settings"].voiceBackend` | `tts.ts speak()` reads `loadEngineSettings().voiceBackend` on every call | `POST /voice/tts` body `backend` field | `registry.get_tts(backend)` selects `SarvamTTS` / `GoogleTTS` / browser only |
+| `brainEngine` | same key | `console.tsx sendMessage()` reads `loadEngineSettings().brainEngine` and passes to `streamChat` | `POST /chat/stream` body `brain_engine` | `orchestrator.run(brain_engine=...)` → `registry.get_llm(brain_engine)` |
+| `sqlEngine` | same key | `console.tsx sendMessage()` | `sql_engine` in chat body | `registry.get_sql_llm(sql_engine)` |
+| `dbSource` | same key | `SettingsDialog DbSourceRow.onChange` | `POST /settings/db-source` body `source` | `session.set_db_source()` → `active_url()` switches engine pool; response includes `url_host` |
+
+**Mock/demo data audit — all hits explained:**
+| File:line | Type | Status |
+|-----------|------|--------|
+| `console.tsx:302` `cannedFallback()` | Real error message shown to user when backend is unreachable | ✅ Correct fallback, not fake data |
+| `auth.py:33` `_DEMO_STATIONS` | Demo login only — maps rank → jurisdiction for the demo JWT | ✅ Expected for datathon demo |
+| `auth.py:88` `password_hash="demo_pwd"` | Demo auth only | ✅ Expected |
+| `config.py:98` `demo_mode` property | Guards API-call stubs when no API keys set | ✅ Expected |
+| `routes/index.tsx:148` `{/* Right — investigation mock */}` | Comment in landing page JSX | ✅ Cosmetic comment, not data |
+| `CrimeMap.tsx:15` `no hardcoded arrays` | Doc comment confirming no hardcoded data | ✅ |
+
+**Bug fixed: `voice.py` translate endpoint was missing `from app.config import get_settings`** — the `translate` handler called `s = get_settings()` but the import was missing. This caused a `NameError` crash on every `/voice/translate` call.
+
+Added `console.debug("[tts] speak provider=", provider, "lang=", lang)` in `tts.ts speak()` and `console.debug("[tts] ttsSynthesize provider=", ...)` in `client.ts` for live verification.
+
+---
+
+#### TASK 2 — Language auto-detection
+
+**New file: `frontend/src/lib/voice/lang.ts`**
+- `detectLang(text): "en" | "kn"` — Kannada Unicode block heuristic (U+0C80–U+0CFF).
+- `resolveLang(voiceLang, text): "en" | "kn"` — `"auto"`/falsy → `detectLang(text)`; `"kn-IN"` → `"kn"`; else `"en"`.
+
+**A. Output language (TTS) — auto-detect from reply text:**
+- `console.tsx speak()`: now calls `resolveLang(opts?.lang, text)` instead of parsing `opts.lang` as BCP-47 only. When `opts.lang` is `"auto"` or absent, `detectLang(text)` runs on the actual AI reply text.
+- `Shell.tsx speakText()`: now calls `resolveLang(speechLang, text)`. Navigation confirmations (`"Opening Network"` vs `"ಕನ್ಸೋಲ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ"`) are auto-classified.
+
+**B. Input language (mic) — Saaras v3 auto-detect:**
+- `sarvam.py SarvamSTT`: added `transcribe_with_lang(audio, lang="auto")` that sends `language_code: "unknown"` to Saaras v3 (triggers auto-detect), returns `(transcript, detected_lang_bcp47)`.
+- `schemas/voice.py STTResponse`: added `detected_lang: str | None`.
+- `voice.py /stt` handler: default `lang` changed from `"en"` to `"auto"`; uses `transcribe_with_lang` when available; passes `detected_lang` through to response.
+- `client.ts sttTranscribe`: `lang` param now `"en" | "kn" | "auto"`, defaults to `"auto"`.
+- `client.ts SttResult`: added `detected_lang: string | null`.
+
+**C. Speech output dropdown — "Auto (detect)" as default:**
+- `Shell.tsx voiceLang`: default changed from `"en-IN"` to `"auto"`. `coerceVoiceLang` now handles `"auto"` as a valid value.
+- Dropdown: `<option value="auto">Auto (detect)</option>` added as first/default option.
+- Recognition `rec.lang`: when `voiceLang === "auto"`, uses `lang === "KN" ? "kn-IN" : "en-IN"` (UI language as starting hint; `detectLang` corrects TTS output side anyway).
+- Status label: shows "Auto (detect)" or "en-IN (auto)" in the voice panel header.
+- i18n: added Kannada translations `"Auto (detect)"` → `"ಸ್ವಯಂ (ಪತ್ತೆ)"`, `"(auto)"` → `"(ಸ್ವಯಂ)"`.
+
+---
+
+#### TASK 3 — Voice + text wiring gaps fixed
+
+- **`console.tsx sendMessage()`**: now reads `loadEngineSettings()` and passes `brain_engine`, `sql_engine`, `voice_backend` to `streamChat()`. `webspeech` is mapped to `undefined` (not a server-side value). Previously these settings had no effect on chat requests.
+- **`sendMessage` reqLang**: now uses `detectLang(trimmed)` as a first-pass auto-detection of the user's query language, before falling back to `opts.lang` and the UI language toggle. This means Kannada queries auto-route to `lang: "kn"` even without the UI language being set.
+- **`voice.py` translate `get_settings` import**: fixed (was `NameError` crash — import was removed in a previous session).
+
+---
+
+#### Files Changed
+
+| File | Changes |
+|------|---------|
+| `frontend/src/lib/voice/lang.ts` | **new** — `detectLang()`, `resolveLang()` |
+| `frontend/src/lib/voice/tts.ts` | Added `console.debug` in `speak()` |
+| `frontend/src/lib/api/client.ts` | `SttResult.detected_lang`; `sttTranscribe` defaults to `"auto"`; `ttsSynthesize` debug log |
+| `frontend/src/routes/console.tsx` | Imports `detectLang`, `resolveLang`, `loadEngineSettings`; `speak()` uses `resolveLang`; `sendMessage` uses `detectLang` for `reqLang` and forwards engine settings to `streamChat` |
+| `frontend/src/components/Shell.tsx` | Imports `resolveLang`; `coerceVoiceLang` handles `"auto"`; default voiceLang = `"auto"`; dropdown adds "Auto (detect)" option; `speakText` uses `resolveLang`; `rec.lang` handles `"auto"` |
+| `frontend/src/lib/i18n.tsx` | Added `"Auto (detect)"` + `"(auto)"` Kannada translations |
+| `backend/app/api/routes/voice.py` | Re-added `from app.config import get_settings`; `/stt` default `lang="auto"`, uses `transcribe_with_lang`; passes `detected_lang` through |
+| `backend/app/schemas/voice.py` | `STTResponse.detected_lang: str \| None` |
+| `backend/app/models/api/sarvam.py` | `SarvamSTT.transcribe_with_lang(audio, lang="auto")` with `language_code: "unknown"` for Saaras v3 auto-detect |
+
+---
+
+#### Verification
+- `npx tsc --noEmit --skipLibCheck` — 0 new errors.
+- `console.debug("[tts] speak provider=", ...)` logs in browser DevTools confirm provider changes when Settings radio is switched.
+- `POST /settings/db-source` response includes `url_host` — changes between cloud/local endpoints.
+- Speaking Kannada → `detectLang` returns `"kn"` → `reqLang: "kn"` in chat → backend answers in Kannada → TTS speaks Kannada (Sarvam Bulbul v2, `kn-IN`).
+- `POST /voice/stt` with `lang=auto` → Saaras v3 detects language → response includes `detected_lang`.

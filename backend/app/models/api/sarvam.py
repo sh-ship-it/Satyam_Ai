@@ -59,13 +59,31 @@ class _SarvamBase:
 
 
 class SarvamSTT(_SarvamBase):
-    """Saaras v3 speech-to-text. /speech-to-text is multipart/form-data."""
+    """Saaras v3 speech-to-text. /speech-to-text is multipart/form-data.
+
+    Sends language_code="unknown" to enable Saaras v3 auto-detection.
+    Returns (transcript, detected_lang) where detected_lang is the BCP-47
+    code returned by the API (e.g. "kn-IN", "en-IN").
+    """
 
     async def transcribe(self, audio: bytes, *, lang: str = "kn") -> str:
+        """Kept for Protocol compatibility — use transcribe_with_lang for auto-detect."""
+        transcript, _ = await self.transcribe_with_lang(audio, lang=lang)
+        return transcript
+
+    async def transcribe_with_lang(
+        self, audio: bytes, *, lang: str = "auto"
+    ) -> tuple[str, str | None]:
+        """Transcribe and return (transcript, detected_lang_bcp47).
+
+        lang="auto" or lang="unknown" → Saaras v3 auto-detects the language.
+        """
         if self._demo:
-            return "[demo:sarvam-stt] ಕನ್ನಡ ಪ್ರಶ್ನೆ"
+            return "[demo:sarvam-stt] ಕನ್ನಡ ಪ್ರಶ್ನೆ", "kn-IN"
+        # Use "unknown" to let Saaras v3 auto-detect the spoken language.
+        lang_code = "unknown" if lang in ("auto", "unknown") else _bcp(lang)
         files = {"file": ("audio.wav", audio, "audio/wav")}
-        data = {"model": "saaras:v3", "language_code": _bcp(lang)}
+        data = {"model": "saaras:v3", "language_code": lang_code}
         async with httpx.AsyncClient(timeout=30) as client:
             r = await client.post(
                 f"{_BASE}/speech-to-text",
@@ -74,7 +92,11 @@ class SarvamSTT(_SarvamBase):
                 data=data,
             )
             r.raise_for_status()
-        return (r.json() or {}).get("transcript", "")
+        body = r.json() or {}
+        transcript = body.get("transcript", "")
+        # Saaras v3 returns the detected language_code in the response.
+        detected = body.get("language_code") or body.get("detected_language_code") or None
+        return transcript, detected
 
 
 class SarvamTTS(_SarvamBase):

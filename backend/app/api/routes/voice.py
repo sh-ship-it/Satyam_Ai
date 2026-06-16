@@ -14,6 +14,7 @@ import base64
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 
 from app.api.deps import get_principal
+from app.config import get_settings
 from app.core.rbac import AccessDenied, Permission, Principal, require
 from app.models.registry import get_stt, get_translator, get_tts
 from app.schemas.voice import (
@@ -67,7 +68,7 @@ async def tts(
 @router.post("/stt", response_model=STTResponse)
 async def stt(
     file: UploadFile = File(...),
-    lang: str = Form("en"),
+    lang: str = Form("auto"),       # "auto" → Saaras v3 auto-detects the language
     backend: str | None = Form(None),
     principal: Principal = Depends(get_principal),
 ) -> STTResponse:
@@ -76,11 +77,25 @@ async def stt(
     if not audio:
         raise HTTPException(status_code=400, detail="empty audio upload")
     engine = get_stt(backend)  # type: ignore[arg-type]
+
+    # Use auto-detect path when available (SarvamSTT), else fall back to the
+    # standard `transcribe()` Protocol method.
+    detected_lang: str | None = None
     try:
-        transcript = await engine.transcribe(audio, lang=_norm_lang(lang))
+        if hasattr(engine, "transcribe_with_lang"):
+            transcript, detected_lang = await engine.transcribe_with_lang(
+                audio, lang=lang
+            )
+        else:
+            transcript = await engine.transcribe(audio, lang=_norm_lang(lang))
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"STT provider error: {e}")
-    return STTResponse(transcript=transcript, provider=type(engine).__name__)
+
+    return STTResponse(
+        transcript=transcript,
+        detected_lang=detected_lang,
+        provider=type(engine).__name__,
+    )
 
 
 @router.post("/translate", response_model=TranslateResponse)

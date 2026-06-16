@@ -21,6 +21,7 @@ class TTSResponse(BaseModel):
 
 class STTResponse(BaseModel):
     transcript: str
+    detected_lang: str | None = None  # language detected by the provider (e.g. "en-IN", "kn-IN")
     provider: str
 
 

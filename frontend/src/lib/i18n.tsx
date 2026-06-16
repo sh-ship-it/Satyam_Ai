@@ -299,6 +299,8 @@ const DICT: Record<string, string> = {
   "Conversation mode · just talk, the agent replies and listens again.": "ಸಂಭಾಷಣೆ ಮೋಡ್ · ಮಾತನಾಡಿ, ಏಜೆಂಟ್ ಉತ್ತರಿಸಿ ಮತ್ತೆ ಕೇಳುತ್ತದೆ.",
   "Start conversation": "ಸಂಭಾಷಣೆ ಪ್ರಾರಂಭಿಸಿ",
   "Conversation: ON": "ಸಂಭಾಷಣೆ: ಚಾಲು",
+  "Auto (detect)": "ಸ್ವಯಂ (ಪತ್ತೆ)",
+  "(auto)": "(ಸ್ವಯಂ)",
   "Voice (Text-to-Speech)": "ಧ್ವನಿ (ಪಠ್ಯ-ಭಾಷಣ)",
   "Which engine speaks replies aloud.": "ಯಾವ ಎಂಜಿನ್ ಉತ್ತರಗಳನ್ನು ಮಾತನಾಡುತ್ತದೆ.",
   "Best Kannada (default)": "ಅತ್ಯುತ್ತಮ ಕನ್ನಡ (ಡಿಫಾಲ್ಟ್)",

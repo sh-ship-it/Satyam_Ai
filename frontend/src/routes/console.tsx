@@ -10,6 +10,8 @@ import { useT, useI18n } from "@/lib/i18n";
 import { streamChat, type ChatEvent, api, type StationRow } from "@/lib/api/client";
 import { CrimeMap, type Hotspot } from "@/components/CrimeMap";
 import { speakViaSarvam } from "@/lib/voice/tts";
+import { detectLang, resolveLang } from "@/lib/voice/lang";
+import { loadEngineSettings } from "@/components/SettingsDialog";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -249,11 +251,13 @@ function Console() {
       window.dispatchEvent(new CustomEvent("satyam:ai-state", { detail: { state } }));
     // Only voice turns participate in the conversation loop.
     if (!opts?.speak) return;
-    // Normalize to the two supported values ("en" | "kn") — opts.lang may be
-    // a BCP-47 locale like "kn-IN" from the voice-command handler.
-    const lang: "en" | "kn" =
-      (opts?.lang || "").toLowerCase().startsWith("kn") ? "kn" : "en";
-    void speakViaSarvam(text, lang, opts?.rate ?? 1, {
+    // TASK 2A: Auto-detect language from the reply text itself.
+    // opts.lang may be a BCP-47 locale like "kn-IN" OR the sentinel "auto".
+    // resolveLang() handles all cases: "auto"/falsy → detectLang(text),
+    // "kn-IN" → "kn", anything else → "en".
+    const resolvedLang: "en" | "kn" = resolveLang(opts?.lang, text);
+    console.debug("[console] speak lang=", resolvedLang, "provider=", loadEngineSettings().voiceBackend);
+    void speakViaSarvam(text, resolvedLang, opts?.rate ?? 1, {
       onStart: () => emit("speaking"),
       onEnd: () => emit("done"),
     });
@@ -291,12 +295,19 @@ function Console() {
     setInput("");
     setStreamingIdx(baseMessages.length);
 
+    // TASK 2A: auto-detect chat request language from the user's text,
+    // falling back to the UI language toggle if detection gives nothing.
     const reqLang: "en" | "kn" =
       (opts?.lang || "").toLowerCase().startsWith("kn")
         ? "kn"
-        : lang === "KN"
+        : detectLang(trimmed) === "kn"
           ? "kn"
-          : "en";
+          : lang === "KN"
+            ? "kn"
+            : "en";
+
+    // TASK 3: forward per-session engine settings from the Settings panel.
+    const engines = loadEngineSettings();
 
     // Neutral fallback — no fabricated data
     const cannedFallback = () => {
@@ -318,7 +329,15 @@ function Console() {
 
     try {
       await streamChat(
-        { message: trimmed, conversation_id: backendConvId.current ?? undefined, lang: reqLang },
+        {
+          message: trimmed,
+          conversation_id: backendConvId.current ?? undefined,
+          lang: reqLang,
+          // TASK 3: forward per-session engine overrides from Settings panel.
+          brain_engine: engines.brainEngine,
+          sql_engine: engines.sqlEngine,
+          voice_backend: engines.voiceBackend === "webspeech" ? undefined : engines.voiceBackend,
+        },
         (ev: ChatEvent) => {
           if (ev.type === "token") acc += ev.text;
           else if (ev.type === "citation") citations.push(ev.label || ev.ref);

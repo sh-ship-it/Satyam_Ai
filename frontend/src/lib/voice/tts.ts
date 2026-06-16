@@ -194,6 +194,7 @@ export async function speak(
   if (!text?.trim()) { hooks?.onEnd?.(); return; }
 
   const provider = loadEngineSettings().voiceBackend; // "sarvam" | "google" | "webspeech"
+  console.debug("[tts] speak provider=", provider, "lang=", lang);
 
   if (provider === "webspeech") {
     browserSpeak(text, lang, rate, hooks);

@@ -153,7 +153,7 @@ export const api = {
 };
 
 export type TtsResult = { audio_base64: string; mime: string; provider: string };
-export type SttResult = { transcript: string; provider: string };
+export type SttResult = { transcript: string; detected_lang: string | null; provider: string };
 
 /** Synthesize speech via the backend voice provider (Sarvam by default). */
 export async function ttsSynthesize(
@@ -161,16 +161,19 @@ export async function ttsSynthesize(
   lang: "en" | "kn",
   backend?: "sarvam" | "google" | "bhashini",
 ): Promise<TtsResult> {
+  // TASK 1 verification: log the provider actually being used for TTS.
+  console.debug("[tts] ttsSynthesize provider=", backend ?? loadEngineSettingsForDebug(), "lang=", lang);
   return request<TtsResult>("/voice/tts", {
     method: "POST",
     body: JSON.stringify({ text, lang, backend }),
   });
 }
 
-/** Transcribe a recorded audio blob via the backend voice provider. */
+/** Transcribe a recorded audio blob via the backend voice provider.
+ *  Sends lang="auto" so Saaras v3 auto-detects the spoken language. */
 export async function sttTranscribe(
   audio: Blob,
-  lang: "en" | "kn",
+  lang: "en" | "kn" | "auto" = "auto",
 ): Promise<SttResult> {
   const fd = new FormData();
   fd.append("file", audio, "audio.webm");
@@ -184,6 +187,15 @@ export async function sttTranscribe(
   });
   if (!res.ok) throw new ApiError(res.status, `STT failed: ${res.status}`);
   return (await res.json()) as SttResult;
+}
+
+/** Internal: read voiceBackend from localStorage for debug logging only. */
+function loadEngineSettingsForDebug(): string {
+  try {
+    const raw = localStorage.getItem("satyam.engine-settings");
+    if (raw) return JSON.parse(raw).voiceBackend ?? "sarvam";
+  } catch {}
+  return "sarvam";
 }
 // The backend streams grounded answers token-by-token over SSE.
 export type ChatEvent =
