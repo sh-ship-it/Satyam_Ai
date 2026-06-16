@@ -4,384 +4,84 @@
   "graph": {},
   "nodes": [
     {
-      "label": "models.py",
+      "label": "index.tsx",
       "file_type": "code",
-      "source_file": "backend/app/db/models.py",
+      "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "db_models",
-      "community": 5,
-      "norm_label": "models.py"
+      "id": "routes_index",
+      "community": 9,
+      "norm_label": "index.tsx"
     },
     {
-      "label": "Base",
+      "label": "Route",
       "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "db_models_base",
-      "community": 5,
-      "norm_label": "base"
-    },
-    {
-      "label": "DeclarativeBase",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "declarativebase",
-      "community": 5,
-      "norm_label": "declarativebase"
-    },
-    {
-      "label": "_now()",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L28",
-      "_origin": "ast",
-      "id": "db_models_now",
-      "community": 145,
-      "norm_label": "_now()"
-    },
-    {
-      "label": "datetime",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L28",
-      "_origin": "ast",
-      "id": "datetime",
-      "community": 145,
-      "norm_label": "datetime"
-    },
-    {
-      "label": "Station",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L36",
-      "_origin": "ast",
-      "id": "db_models_station",
-      "community": 5,
-      "norm_label": "station"
-    },
-    {
-      "label": "Officer",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L46",
-      "_origin": "ast",
-      "id": "db_models_officer",
-      "community": 5,
-      "norm_label": "officer"
-    },
-    {
-      "label": "Case",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L58",
-      "_origin": "ast",
-      "id": "db_models_case",
-      "community": 5,
-      "norm_label": "case"
-    },
-    {
-      "label": "Person",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L95",
-      "_origin": "ast",
-      "id": "db_models_person",
-      "community": 5,
-      "norm_label": "person"
-    },
-    {
-      "label": "CasePerson",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L104",
-      "_origin": "ast",
-      "id": "db_models_caseperson",
-      "community": 5,
-      "norm_label": "caseperson"
-    },
-    {
-      "label": "Narrative",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L116",
-      "_origin": "ast",
-      "id": "db_models_narrative",
-      "community": 5,
-      "norm_label": "narrative"
-    },
-    {
-      "label": "RankAccess",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L132",
-      "_origin": "ast",
-      "id": "db_models_rankaccess",
-      "community": 5,
-      "norm_label": "rankaccess"
-    },
-    {
-      "label": "User",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L141",
-      "_origin": "ast",
-      "id": "db_models_user",
-      "community": 5,
-      "norm_label": "user"
-    },
-    {
-      "label": "AuditLog",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L156",
-      "_origin": "ast",
-      "id": "db_models_auditlog",
-      "community": 158,
-      "norm_label": "auditlog"
-    },
-    {
-      "label": "DistrictSocioEconomicIndicator",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L175",
-      "_origin": "ast",
-      "id": "db_models_districtsocioeconomicindicator",
-      "community": 5,
-      "norm_label": "districtsocioeconomicindicator"
-    },
-    {
-      "label": "FinancialAccount",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L190",
-      "_origin": "ast",
-      "id": "db_models_financialaccount",
-      "community": 5,
-      "norm_label": "financialaccount"
-    },
-    {
-      "label": "FinancialTransaction",
-      "file_type": "code",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L208",
-      "_origin": "ast",
-      "id": "db_models_financialtransaction",
-      "community": 5,
-      "norm_label": "financialtransaction"
-    },
-    {
-      "label": "ORM models \u2014 matches 002_schema_v2.sql (satyam_synthetic_dataset).  Tables: stat",
-      "file_type": "rationale",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "db_models_rationale_1",
-      "community": 5,
-      "norm_label": "orm models \u2014 matches 002_schema_v2.sql (satyam_synthetic_dataset).  tables: stat"
-    },
-    {
-      "label": "# IMPORTANT: never use for individual offender risk scoring",
-      "file_type": "rationale",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L172",
-      "_origin": "ast",
-      "id": "db_models_rationale_172",
-      "community": 5,
-      "norm_label": "# important: never use for individual offender risk scoring"
-    },
-    {
-      "label": "load_neon_60pct.py",
-      "file_type": "code",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "seed_load_neon_60pct",
-      "community": 163,
-      "norm_label": "load_neon_60pct.py"
-    },
-    {
-      "label": "load_env()",
-      "file_type": "code",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L44",
-      "_origin": "ast",
-      "id": "seed_load_neon_60pct_load_env",
-      "community": 163,
-      "norm_label": "load_env()"
-    },
-    {
-      "label": "parse_url()",
-      "file_type": "code",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L55",
-      "_origin": "ast",
-      "id": "seed_load_neon_60pct_parse_url",
-      "community": 163,
-      "norm_label": "parse_url()"
-    },
-    {
-      "label": "take_60pct()",
-      "file_type": "code",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L61",
-      "_origin": "ast",
-      "id": "seed_load_neon_60pct_take_60pct",
-      "community": 163,
-      "norm_label": "take_60pct()"
-    },
-    {
-      "label": "progress()",
-      "file_type": "code",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L65",
-      "_origin": "ast",
-      "id": "seed_load_neon_60pct_progress",
-      "community": 163,
-      "norm_label": "progress()"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L69",
-      "_origin": "ast",
-      "id": "seed_load_neon_60pct_main",
-      "community": 163,
-      "norm_label": "main()"
-    },
-    {
-      "label": "Reload Neon cloud with 60% of each dataset table.  Strategy:   - Truncate all",
-      "file_type": "rationale",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "seed_load_neon_60pct_rationale_1",
-      "community": 163,
-      "norm_label": "reload neon cloud with 60% of each dataset table.  strategy:   - truncate all"
-    },
-    {
-      "label": "Take deterministically ~60% of rows (every row where index % 10 < 6).",
-      "file_type": "rationale",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L62",
-      "_origin": "ast",
-      "id": "seed_load_neon_60pct_rationale_62",
-      "community": 163,
-      "norm_label": "take deterministically ~60% of rows (every row where index % 10 < 6)."
-    },
-    {
-      "label": "load_new_tables.py",
-      "file_type": "code",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "seed_load_new_tables",
-      "community": 147,
-      "norm_label": "load_new_tables.py"
-    },
-    {
-      "label": "load_env()",
-      "file_type": "code",
-      "source_file": "backend/seed/load_new_tables.py",
+      "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "seed_load_new_tables_load_env",
-      "community": 147,
-      "norm_label": "load_env()"
+      "id": "routes_index_route",
+      "community": 9,
+      "norm_label": "route"
     },
     {
-      "label": "_parse_url()",
+      "label": "Landing()",
       "file_type": "code",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L44",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L48",
       "_origin": "ast",
-      "id": "seed_load_new_tables_parse_url",
-      "community": 147,
-      "norm_label": "_parse_url()"
+      "id": "routes_index_landing",
+      "community": 9,
+      "norm_label": "landing()"
     },
     {
-      "label": "_get_conn()",
+      "label": "Hero()",
       "file_type": "code",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L49",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L62",
       "_origin": "ast",
-      "id": "seed_load_new_tables_get_conn",
-      "community": 147,
-      "norm_label": "_get_conn()"
+      "id": "routes_index_hero",
+      "community": 9,
+      "norm_label": "hero()"
     },
     {
-      "label": "load_socio()",
+      "label": "MiniStat()",
       "file_type": "code",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L58",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L223",
       "_origin": "ast",
-      "id": "seed_load_new_tables_load_socio",
-      "community": 147,
-      "norm_label": "load_socio()"
+      "id": "routes_index_ministat",
+      "community": 9,
+      "norm_label": "ministat()"
     },
     {
-      "label": "load_accounts()",
+      "label": "Stats()",
       "file_type": "code",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L86",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L242",
       "_origin": "ast",
-      "id": "seed_load_new_tables_load_accounts",
-      "community": 147,
-      "norm_label": "load_accounts()"
+      "id": "routes_index_stats",
+      "community": 9,
+      "norm_label": "stats()"
     },
     {
-      "label": "load_transactions()",
+      "label": "Features()",
       "file_type": "code",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L124",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L267",
       "_origin": "ast",
-      "id": "seed_load_new_tables_load_transactions",
-      "community": 147,
-      "norm_label": "load_transactions()"
+      "id": "routes_index_features",
+      "community": 9,
+      "norm_label": "features()"
     },
     {
-      "label": "run_for_db()",
+      "label": "Testimonials()",
       "file_type": "code",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L168",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L339",
       "_origin": "ast",
-      "id": "seed_load_new_tables_run_for_db",
-      "community": 147,
-      "norm_label": "run_for_db()"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L227",
-      "_origin": "ast",
-      "id": "seed_load_new_tables_main",
-      "community": 147,
-      "norm_label": "main()"
-    },
-    {
-      "label": "Load the 3 new PS4/PS7 CSV files into Postgres (Neon or local).  Usage:   pyt",
-      "file_type": "rationale",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "seed_load_new_tables_rationale_1",
-      "community": 147,
-      "norm_label": "load the 3 new ps4/ps7 csv files into postgres (neon or local).  usage:   pyt"
-    },
-    {
-      "label": "Convert SQLAlchemy+asyncpg URL to plain asyncpg URL.",
-      "file_type": "rationale",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "seed_load_new_tables_rationale_45",
-      "community": 147,
-      "norm_label": "convert sqlalchemy+asyncpg url to plain asyncpg url."
+      "id": "routes_index_testimonials",
+      "community": 9,
+      "norm_label": "testimonials()"
     },
     {
       "label": "made_till_now.md",
@@ -530,7 +230,7 @@
       "source_location": "L157",
       "_origin": "ast",
       "id": "made_till_now_2026_06_15_security_update_robust_env_ignore_rules",
-      "community": 27,
+      "community": 115,
       "norm_label": "[2026-06-15] \u2014 security update: robust .env ignore rules"
     },
     {
@@ -540,7 +240,7 @@
       "source_location": "L159",
       "_origin": "ast",
       "id": "made_till_now_summary_159",
-      "community": 27,
+      "community": 115,
       "norm_label": "summary"
     },
     {
@@ -550,7 +250,7 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "made_till_now_changes_162",
-      "community": 27,
+      "community": 115,
       "norm_label": "changes"
     },
     {
@@ -710,7 +410,7 @@
       "source_location": "L339",
       "_origin": "ast",
       "id": "made_till_now_2026_06_15_gitignore_update_ignore_synthetic_dataset_csvs",
-      "community": 27,
+      "community": 114,
       "norm_label": "[2026-06-15] \u2014 gitignore update: ignore synthetic dataset csvs"
     },
     {
@@ -720,7 +420,7 @@
       "source_location": "L341",
       "_origin": "ast",
       "id": "made_till_now_summary_341",
-      "community": 27,
+      "community": 114,
       "norm_label": "summary"
     },
     {
@@ -730,7 +430,7 @@
       "source_location": "L344",
       "_origin": "ast",
       "id": "made_till_now_changes_344",
-      "community": 27,
+      "community": 114,
       "norm_label": "changes"
     },
     {
@@ -1450,7 +1150,7 @@
       "source_location": "L918",
       "_origin": "ast",
       "id": "made_till_now_2026_06_16_secure_auth_live_audit_map_trails_victim_network_hardcoded_values_cleanup_satyam_auth_audit_map_network_fix_issues_1_5",
-      "community": 114,
+      "community": 27,
       "norm_label": "[2026-06-16] \u2014 secure auth, live audit, map trails, victim network & hardcoded values cleanup (satyam_auth_audit_map_network_fix issues 1\u20135)"
     },
     {
@@ -1460,7 +1160,7 @@
       "source_location": "L920",
       "_origin": "ast",
       "id": "made_till_now_summary_920",
-      "community": 114,
+      "community": 27,
       "norm_label": "summary"
     },
     {
@@ -1470,7 +1170,7 @@
       "source_location": "L923",
       "_origin": "ast",
       "id": "made_till_now_frontend_changes_923",
-      "community": 114,
+      "community": 27,
       "norm_label": "frontend changes"
     },
     {
@@ -1480,7 +1180,7 @@
       "source_location": "L945",
       "_origin": "ast",
       "id": "made_till_now_verification_945",
-      "community": 114,
+      "community": 27,
       "norm_label": "verification"
     },
     {
@@ -1960,7 +1660,7 @@
       "source_location": "L1405",
       "_origin": "ast",
       "id": "made_till_now_2026_06_16_voice_input_replace_web_audio_with_browser_speechrecognition_only",
-      "community": 175,
+      "community": 27,
       "norm_label": "[2026-06-16] \u2014 voice input: replace web audio with browser speechrecognition only"
     },
     {
@@ -1970,7 +1670,7 @@
       "source_location": "L1407",
       "_origin": "ast",
       "id": "made_till_now_summary_1407",
-      "community": 175,
+      "community": 27,
       "norm_label": "summary"
     },
     {
@@ -1980,7 +1680,7 @@
       "source_location": "L1410",
       "_origin": "ast",
       "id": "made_till_now_files_changed_1410",
-      "community": 175,
+      "community": 27,
       "norm_label": "files changed"
     },
     {
@@ -1990,7 +1690,7 @@
       "source_location": "L1416",
       "_origin": "ast",
       "id": "made_till_now_2026_06_16_settings_show_downloaded_local_models_bge_m3_bge_reranker_v2_m3",
-      "community": 104,
+      "community": 27,
       "norm_label": "[2026-06-16] \u2014 settings: show downloaded local models (bge-m3 + bge-reranker-v2-m3)"
     },
     {
@@ -2000,7 +1700,7 @@
       "source_location": "L1418",
       "_origin": "ast",
       "id": "made_till_now_summary_1418",
-      "community": 104,
+      "community": 27,
       "norm_label": "summary"
     },
     {
@@ -2010,7 +1710,7 @@
       "source_location": "L1421",
       "_origin": "ast",
       "id": "made_till_now_files_changed_1421",
-      "community": 104,
+      "community": 27,
       "norm_label": "files changed"
     },
     {
@@ -2050,7 +1750,7 @@
       "source_location": "L1449",
       "_origin": "ast",
       "id": "made_till_now_2026_06_16_voice_input_self_healing_no_frames_watchdog_auto_submit_fallback",
-      "community": 27,
+      "community": 116,
       "norm_label": "[2026-06-16] \u2014 voice input self-healing: no-frames watchdog + auto-submit + fallback"
     },
     {
@@ -2060,7 +1760,7 @@
       "source_location": "L1451",
       "_origin": "ast",
       "id": "made_till_now_summary_1451",
-      "community": 27,
+      "community": 116,
       "norm_label": "summary"
     },
     {
@@ -2070,7 +1770,7 @@
       "source_location": "L1454",
       "_origin": "ast",
       "id": "made_till_now_files_changed_1454",
-      "community": 27,
+      "community": 116,
       "norm_label": "files changed"
     },
     {
@@ -2634,12 +2334,482 @@
       "norm_label": "local postgresql 17"
     },
     {
+      "label": "[2026-06-17] \u2014 Landing Page: Full-Screen Background Video + Hero UI Improvements",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L1872",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_17_landing_page_full_screen_background_video_hero_ui_improvements",
+      "community": 27,
+      "norm_label": "[2026-06-17] \u2014 landing page: full-screen background video + hero ui improvements"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L1874",
+      "_origin": "ast",
+      "id": "made_till_now_summary_1874",
+      "community": 27,
+      "norm_label": "summary"
+    },
+    {
+      "label": "File Changed: `frontend/src/routes/index.tsx`",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L1879",
+      "_origin": "ast",
+      "id": "made_till_now_file_changed_frontend_src_routes_index_tsx",
+      "community": 27,
+      "norm_label": "file changed: `frontend/src/routes/index.tsx`"
+    },
+    {
+      "label": "[2026-06-17] \u2014 Transcripts Screen: Dynamic Data + Demo Seeds + UX Improvements",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L1907",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_17_transcripts_screen_dynamic_data_demo_seeds_ux_improvements",
+      "community": 27,
+      "norm_label": "[2026-06-17] \u2014 transcripts screen: dynamic data + demo seeds + ux improvements"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L1909",
+      "_origin": "ast",
+      "id": "made_till_now_summary_1909",
+      "community": 27,
+      "norm_label": "summary"
+    },
+    {
+      "label": "File Changed: `frontend/src/routes/transcripts.tsx` \u2014 full rewrite",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L1912",
+      "_origin": "ast",
+      "id": "made_till_now_file_changed_frontend_src_routes_transcripts_tsx_full_rewrite",
+      "community": 27,
+      "norm_label": "file changed: `frontend/src/routes/transcripts.tsx` \u2014 full rewrite"
+    },
+    {
+      "label": "[2026-06-17] \u2014 Router Fix: Forecast + Trends Added to Shell Nav Rail",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L1928",
+      "_origin": "ast",
+      "id": "made_till_now_2026_06_17_router_fix_forecast_trends_added_to_shell_nav_rail",
+      "community": 148,
+      "norm_label": "[2026-06-17] \u2014 router fix: forecast + trends added to shell nav rail"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L1930",
+      "_origin": "ast",
+      "id": "made_till_now_summary_1930",
+      "community": 148,
+      "norm_label": "summary"
+    },
+    {
+      "label": "File Changed: `frontend/src/components/Shell.tsx`",
+      "file_type": "document",
+      "source_file": "made_till_now.md",
+      "source_location": "L1933",
+      "_origin": "ast",
+      "id": "made_till_now_file_changed_frontend_src_components_shell_tsx",
+      "community": 148,
+      "norm_label": "file changed: `frontend/src/components/shell.tsx`"
+    },
+    {
+      "label": "models.py",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "models.py",
+      "id": "db_models"
+    },
+    {
+      "label": "Base",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L24",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "base",
+      "id": "db_models_base"
+    },
+    {
+      "label": "DeclarativeBase",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "declarativebase",
+      "id": "declarativebase"
+    },
+    {
+      "label": "_now()",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L28",
+      "_origin": "ast",
+      "community": 145,
+      "norm_label": "_now()",
+      "id": "db_models_now"
+    },
+    {
+      "label": "datetime",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L28",
+      "_origin": "ast",
+      "community": 145,
+      "norm_label": "datetime",
+      "id": "datetime"
+    },
+    {
+      "label": "Station",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L36",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "station",
+      "id": "db_models_station"
+    },
+    {
+      "label": "Officer",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L46",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "officer",
+      "id": "db_models_officer"
+    },
+    {
+      "label": "Case",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L58",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "case",
+      "id": "db_models_case"
+    },
+    {
+      "label": "Person",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L95",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "person",
+      "id": "db_models_person"
+    },
+    {
+      "label": "CasePerson",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L104",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "caseperson",
+      "id": "db_models_caseperson"
+    },
+    {
+      "label": "Narrative",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L116",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "narrative",
+      "id": "db_models_narrative"
+    },
+    {
+      "label": "RankAccess",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L132",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "rankaccess",
+      "id": "db_models_rankaccess"
+    },
+    {
+      "label": "User",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L141",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "user",
+      "id": "db_models_user"
+    },
+    {
+      "label": "AuditLog",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L156",
+      "_origin": "ast",
+      "community": 158,
+      "norm_label": "auditlog",
+      "id": "db_models_auditlog"
+    },
+    {
+      "label": "DistrictSocioEconomicIndicator",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L175",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "districtsocioeconomicindicator",
+      "id": "db_models_districtsocioeconomicindicator"
+    },
+    {
+      "label": "FinancialAccount",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L190",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "financialaccount",
+      "id": "db_models_financialaccount"
+    },
+    {
+      "label": "FinancialTransaction",
+      "file_type": "code",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L208",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "financialtransaction",
+      "id": "db_models_financialtransaction"
+    },
+    {
+      "label": "ORM models \u2014 matches 002_schema_v2.sql (satyam_synthetic_dataset).  Tables: stat",
+      "file_type": "rationale",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "orm models \u2014 matches 002_schema_v2.sql (satyam_synthetic_dataset).  tables: stat",
+      "id": "db_models_rationale_1"
+    },
+    {
+      "label": "# IMPORTANT: never use for individual offender risk scoring",
+      "file_type": "rationale",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L172",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "# important: never use for individual offender risk scoring",
+      "id": "db_models_rationale_172"
+    },
+    {
+      "label": "load_neon_60pct.py",
+      "file_type": "code",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 163,
+      "norm_label": "load_neon_60pct.py",
+      "id": "seed_load_neon_60pct"
+    },
+    {
+      "label": "load_env()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L44",
+      "_origin": "ast",
+      "community": 163,
+      "norm_label": "load_env()",
+      "id": "seed_load_neon_60pct_load_env"
+    },
+    {
+      "label": "parse_url()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L55",
+      "_origin": "ast",
+      "community": 163,
+      "norm_label": "parse_url()",
+      "id": "seed_load_neon_60pct_parse_url"
+    },
+    {
+      "label": "take_60pct()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L61",
+      "_origin": "ast",
+      "community": 163,
+      "norm_label": "take_60pct()",
+      "id": "seed_load_neon_60pct_take_60pct"
+    },
+    {
+      "label": "progress()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "community": 163,
+      "norm_label": "progress()",
+      "id": "seed_load_neon_60pct_progress"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L69",
+      "_origin": "ast",
+      "community": 163,
+      "norm_label": "main()",
+      "id": "seed_load_neon_60pct_main"
+    },
+    {
+      "label": "Reload Neon cloud with 60% of each dataset table.  Strategy:   - Truncate all",
+      "file_type": "rationale",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 163,
+      "norm_label": "reload neon cloud with 60% of each dataset table.  strategy:   - truncate all",
+      "id": "seed_load_neon_60pct_rationale_1"
+    },
+    {
+      "label": "Take deterministically ~60% of rows (every row where index % 10 < 6).",
+      "file_type": "rationale",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L62",
+      "_origin": "ast",
+      "community": 163,
+      "norm_label": "take deterministically ~60% of rows (every row where index % 10 < 6).",
+      "id": "seed_load_neon_60pct_rationale_62"
+    },
+    {
+      "label": "load_new_tables.py",
+      "file_type": "code",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 147,
+      "norm_label": "load_new_tables.py",
+      "id": "seed_load_new_tables"
+    },
+    {
+      "label": "load_env()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L26",
+      "_origin": "ast",
+      "community": 147,
+      "norm_label": "load_env()",
+      "id": "seed_load_new_tables_load_env"
+    },
+    {
+      "label": "_parse_url()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L44",
+      "_origin": "ast",
+      "community": 147,
+      "norm_label": "_parse_url()",
+      "id": "seed_load_new_tables_parse_url"
+    },
+    {
+      "label": "_get_conn()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L49",
+      "_origin": "ast",
+      "community": 147,
+      "norm_label": "_get_conn()",
+      "id": "seed_load_new_tables_get_conn"
+    },
+    {
+      "label": "load_socio()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L58",
+      "_origin": "ast",
+      "community": 147,
+      "norm_label": "load_socio()",
+      "id": "seed_load_new_tables_load_socio"
+    },
+    {
+      "label": "load_accounts()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L86",
+      "_origin": "ast",
+      "community": 147,
+      "norm_label": "load_accounts()",
+      "id": "seed_load_new_tables_load_accounts"
+    },
+    {
+      "label": "load_transactions()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L124",
+      "_origin": "ast",
+      "community": 147,
+      "norm_label": "load_transactions()",
+      "id": "seed_load_new_tables_load_transactions"
+    },
+    {
+      "label": "run_for_db()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L168",
+      "_origin": "ast",
+      "community": 147,
+      "norm_label": "run_for_db()",
+      "id": "seed_load_new_tables_run_for_db"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L227",
+      "_origin": "ast",
+      "community": 147,
+      "norm_label": "main()",
+      "id": "seed_load_new_tables_main"
+    },
+    {
+      "label": "Load the 3 new PS4/PS7 CSV files into Postgres (Neon or local).  Usage:   pyt",
+      "file_type": "rationale",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 147,
+      "norm_label": "load the 3 new ps4/ps7 csv files into postgres (neon or local).  usage:   pyt",
+      "id": "seed_load_new_tables_rationale_1"
+    },
+    {
+      "label": "Convert SQLAlchemy+asyncpg URL to plain asyncpg URL.",
+      "file_type": "rationale",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L45",
+      "_origin": "ast",
+      "community": 147,
+      "norm_label": "convert sqlalchemy+asyncpg url to plain asyncpg url.",
+      "id": "seed_load_new_tables_rationale_45"
+    },
+    {
       "label": "transcripts.tsx",
       "file_type": "code",
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 165,
+      "community": 8,
       "norm_label": "transcripts.tsx",
       "id": "routes_transcripts"
     },
@@ -2649,7 +2819,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 165,
+      "community": 8,
       "norm_label": "route",
       "id": "routes_transcripts_route"
     },
@@ -2659,7 +2829,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 165,
+      "community": 8,
       "norm_label": "transcript",
       "id": "routes_transcripts_transcript"
     },
@@ -2669,7 +2839,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 165,
+      "community": 8,
       "norm_label": "loadtranscripts()",
       "id": "routes_transcripts_loadtranscripts"
     },
@@ -2679,7 +2849,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 165,
+      "community": 8,
       "norm_label": "savetranscripts()",
       "id": "routes_transcripts_savetranscripts"
     },
@@ -2689,7 +2859,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L43",
       "_origin": "ast",
-      "community": 165,
+      "community": 8,
       "norm_label": "demo_transcripts",
       "id": "routes_transcripts_demo_transcripts"
     },
@@ -2699,7 +2869,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 165,
+      "community": 8,
       "norm_label": "transcripts()",
       "id": "routes_transcripts_transcripts"
     },
@@ -4059,7 +4229,7 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L99",
       "_origin": "ast",
-      "community": 116,
+      "community": 51,
       "norm_label": "shell()",
       "id": "components_shell_shell"
     },
@@ -4179,7 +4349,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 116,
+      "community": 16,
       "norm_label": "persontimelineevent",
       "id": "api_intelligence_persontimelineevent"
     },
@@ -4249,7 +4419,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 116,
+      "community": 16,
       "norm_label": "offenderprofileresponse",
       "id": "api_intelligence_offenderprofileresponse"
     },
@@ -4399,7 +4569,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L60",
       "_origin": "ast",
-      "community": 164,
+      "community": 16,
       "norm_label": "sociodemographicsresponse",
       "id": "api_intelligence_sociodemographicsresponse"
     },
@@ -4419,7 +4589,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 164,
+      "community": 16,
       "norm_label": "sociocorrelationresponse",
       "id": "api_intelligence_sociocorrelationresponse"
     },
@@ -4439,7 +4609,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L64",
       "_origin": "ast",
-      "community": 164,
+      "community": 16,
       "norm_label": "socialriskindexresponse",
       "id": "api_intelligence_socialriskindexresponse"
     },
@@ -4769,7 +4939,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 116,
+      "community": 16,
       "norm_label": "profile.$personid.tsx",
       "id": "routes_profile_personid"
     },
@@ -4779,7 +4949,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 116,
+      "community": 16,
       "norm_label": "route",
       "id": "routes_profile_personid_route"
     },
@@ -4789,7 +4959,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 116,
+      "community": 16,
       "norm_label": "risk_colors",
       "id": "routes_profile_personid_risk_colors"
     },
@@ -4799,7 +4969,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 116,
+      "community": 16,
       "norm_label": "profilescreen()",
       "id": "routes_profile_personid_profilescreen"
     },
@@ -4809,7 +4979,7 @@
       "source_file": "frontend/src/routes/socio.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 164,
+      "community": 16,
       "norm_label": "socio.tsx",
       "id": "routes_socio"
     },
@@ -4819,7 +4989,7 @@
       "source_file": "frontend/src/routes/socio.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 164,
+      "community": 16,
       "norm_label": "route",
       "id": "routes_socio_route"
     },
@@ -4829,7 +4999,7 @@
       "source_file": "frontend/src/routes/socio.tsx",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 164,
+      "community": 16,
       "norm_label": "sociodashboard()",
       "id": "routes_socio_sociodashboard"
     },
@@ -4839,7 +5009,7 @@
       "source_file": "frontend/src/routes/socio.tsx",
       "source_location": "L155",
       "_origin": "ast",
-      "community": 164,
+      "community": 16,
       "norm_label": "chartcard()",
       "id": "routes_socio_chartcard"
     },
@@ -5699,7 +5869,7 @@
       "source_file": "backend/app/pipeline/router.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 172,
+      "community": 42,
       "norm_label": "router.py",
       "id": "pipeline_router"
     },
@@ -5709,7 +5879,7 @@
       "source_file": "backend/app/pipeline/router.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 172,
+      "community": 42,
       "norm_label": "_keyword_intent()",
       "id": "pipeline_router_keyword_intent"
     },
@@ -5719,7 +5889,7 @@
       "source_file": "backend/app/pipeline/router.py",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 172,
+      "community": 42,
       "norm_label": "route()",
       "id": "pipeline_router_route"
     },
@@ -5729,7 +5899,7 @@
       "source_file": "backend/app/pipeline/router.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 172,
+      "community": 42,
       "norm_label": "intent router. uses the llm with a json schema, with a cheap keyword fallback so",
       "id": "pipeline_router_rationale_1"
     },
@@ -5739,7 +5909,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "text_to_sql.py",
       "id": "tools_text_to_sql"
     },
@@ -5749,7 +5919,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L32",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "_mask_rows()",
       "id": "tools_text_to_sql_mask_rows"
     },
@@ -5759,7 +5929,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "generate_sql()",
       "id": "tools_text_to_sql_generate_sql"
     },
@@ -5769,7 +5939,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L70",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "run_sql()",
       "id": "tools_text_to_sql_run_sql"
     },
@@ -5779,7 +5949,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L70",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "asyncsession",
       "id": "asyncsession"
     },
@@ -5789,7 +5959,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L76",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "answer_with_sql()",
       "id": "tools_text_to_sql_answer_with_sql"
     },
@@ -5799,7 +5969,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "nl -> guarded sql -> rows, with pii masking for low-clearance callers.  the sql",
       "id": "tools_text_to_sql_rationale_1"
     },
@@ -5809,7 +5979,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "bullet-mask pii columns for callers below clearance l3.",
       "id": "tools_text_to_sql_rationale_33"
     },
@@ -5819,7 +5989,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L84",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "return (safe_sql, masked_rows). raises unsafesql if the model produced bad sql.",
       "id": "tools_text_to_sql_rationale_84"
     },
@@ -6239,7 +6409,7 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 148,
+      "community": 113,
       "norm_label": "recorder.ts",
       "id": "voice_recorder"
     },
@@ -6249,7 +6419,7 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 148,
+      "community": 113,
       "norm_label": "sttcallbacks",
       "id": "voice_recorder_sttcallbacks"
     },
@@ -6259,7 +6429,7 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 148,
+      "community": 113,
       "norm_label": "sttsession",
       "id": "voice_recorder_sttsession"
     },
@@ -6269,7 +6439,7 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 148,
+      "community": 113,
       "norm_label": "sttsessionoptions",
       "id": "voice_recorder_sttsessionoptions"
     },
@@ -6279,7 +6449,7 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L58",
       "_origin": "ast",
-      "community": 148,
+      "community": 113,
       "norm_label": "isbackendsttsupported()",
       "id": "voice_recorder_isbackendsttsupported"
     },
@@ -6289,7 +6459,7 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 148,
+      "community": 113,
       "norm_label": "pickmimetype()",
       "id": "voice_recorder_pickmimetype"
     },
@@ -6299,7 +6469,7 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L87",
       "_origin": "ast",
-      "community": 148,
+      "community": 113,
       "norm_label": "startsttsession()",
       "id": "voice_recorder_startsttsession"
     },
@@ -6309,7 +6479,7 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L308",
       "_origin": "ast",
-      "community": 148,
+      "community": 113,
       "norm_label": "blobtowav()",
       "id": "voice_recorder_blobtowav"
     },
@@ -6319,7 +6489,7 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L333",
       "_origin": "ast",
-      "community": 148,
+      "community": 113,
       "norm_label": "decodeaudio()",
       "id": "voice_recorder_decodeaudio"
     },
@@ -6329,7 +6499,7 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L361",
       "_origin": "ast",
-      "community": 148,
+      "community": 113,
       "norm_label": "downsample()",
       "id": "voice_recorder_downsample"
     },
@@ -6339,7 +6509,7 @@
       "source_file": "frontend/src/lib/voice/recorder.ts",
       "source_location": "L384",
       "_origin": "ast",
-      "community": 148,
+      "community": 113,
       "norm_label": "encodewav()",
       "id": "voice_recorder_encodewav"
     },
@@ -6569,7 +6739,7 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L815",
       "_origin": "ast",
-      "community": 51,
+      "community": 48,
       "norm_label": "aimsg()",
       "id": "routes_console_aimsg"
     },
@@ -6799,7 +6969,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "settingsdialog.tsx",
       "id": "components_settingsdialog"
     },
@@ -6809,7 +6979,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "tab",
       "id": "components_settingsdialog_tab"
     },
@@ -6819,7 +6989,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "enginesettings",
       "id": "components_settingsdialog_enginesettings"
     },
@@ -6829,7 +6999,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "defaultenginesettings",
       "id": "components_settingsdialog_defaultenginesettings"
     },
@@ -6849,7 +7019,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "saveenginesettings()",
       "id": "components_settingsdialog_saveenginesettings"
     },
@@ -6869,7 +7039,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L370",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "section()",
       "id": "components_settingsdialog_section"
     },
@@ -6879,7 +7049,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L382",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "field()",
       "id": "components_settingsdialog_field"
     },
@@ -6889,7 +7059,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L398",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "row()",
       "id": "components_settingsdialog_row"
     },
@@ -6899,7 +7069,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L407",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "select()",
       "id": "components_settingsdialog_select"
     },
@@ -6909,7 +7079,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L415",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "pill()",
       "id": "components_settingsdialog_pill"
     },
@@ -6919,7 +7089,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L428",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "toggle()",
       "id": "components_settingsdialog_toggle"
     },
@@ -6929,7 +7099,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L449",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "status",
       "id": "components_settingsdialog_status"
     },
@@ -6939,7 +7109,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L451",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "dbsourcerow()",
       "id": "components_settingsdialog_dbsourcerow"
     },
@@ -6949,7 +7119,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L511",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "modeltoggle()",
       "id": "components_settingsdialog_modeltoggle"
     },
@@ -6959,7 +7129,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L541",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "formatremaining()",
       "id": "components_settingsdialog_formatremaining"
     },
@@ -6969,7 +7139,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L551",
       "_origin": "ast",
-      "community": 40,
+      "community": 103,
       "norm_label": "dataactions()",
       "id": "components_settingsdialog_dataactions"
     },
@@ -6999,7 +7169,7 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 51,
+      "community": 42,
       "norm_label": "dict",
       "id": "lib_i18n_dict"
     },
@@ -7189,7 +7359,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "network.tsx",
       "id": "routes_network"
     },
@@ -7199,7 +7369,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "simparams",
       "id": "routes_network_simparams"
     },
@@ -7209,7 +7379,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "sim_defaults",
       "id": "routes_network_sim_defaults"
     },
@@ -7219,7 +7389,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "sim_presets",
       "id": "routes_network_sim_presets"
     },
@@ -7229,7 +7399,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "slider_meta",
       "id": "routes_network_slider_meta"
     },
@@ -7249,7 +7419,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "group_color",
       "id": "routes_network_group_color"
     },
@@ -7259,7 +7429,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "group_shape",
       "id": "routes_network_group_shape"
     },
@@ -7269,7 +7439,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L39",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "posmap",
       "id": "routes_network_posmap"
     },
@@ -7279,7 +7449,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "networkscreen()",
       "id": "routes_network_networkscreen"
     },
@@ -7289,7 +7459,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1019",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "control()",
       "id": "routes_network_control"
     },
@@ -7299,7 +7469,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1027",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "select()",
       "id": "routes_network_select"
     },
@@ -7309,7 +7479,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1037",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "stat()",
       "id": "routes_network_stat"
     },
@@ -7319,7 +7489,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1045",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "legend()",
       "id": "routes_network_legend"
     },
@@ -7329,7 +7499,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1065",
       "_origin": "ast",
-      "community": 115,
+      "community": 51,
       "norm_label": "slider()",
       "id": "routes_network_slider"
     },
@@ -7739,7 +7909,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L239",
       "_origin": "ast",
-      "community": 113,
+      "community": 48,
       "norm_label": "speakviasarvam",
       "id": "voice_tts_speakviasarvam"
     },
@@ -7839,7 +8009,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
+      "community": 104,
       "norm_label": "registry.py",
       "id": "models_registry"
     },
@@ -7849,7 +8019,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 39,
+      "community": 122,
       "norm_label": "get_llm()",
       "id": "models_registry_get_llm"
     },
@@ -7879,7 +8049,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 39,
+      "community": 37,
       "norm_label": "get_sql_llm()",
       "id": "models_registry_get_sql_llm"
     },
@@ -7889,7 +8059,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 39,
+      "community": 104,
       "norm_label": "get_embedder()",
       "id": "models_registry_get_embedder"
     },
@@ -7909,7 +8079,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 39,
+      "community": 104,
       "norm_label": "get_reranker()",
       "id": "models_registry_get_reranker"
     },
@@ -7989,7 +8159,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
+      "community": 104,
       "norm_label": "factory that resolves the configured backend to concrete model instances.  cache",
       "id": "models_registry_rationale_1"
     },
@@ -7999,7 +8169,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 39,
+      "community": 122,
       "norm_label": "return the brain llm.      resolution order:       1. explicit `engine` arg (per",
       "id": "models_registry_rationale_30"
     },
@@ -8019,7 +8189,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 39,
+      "community": 37,
       "norm_label": "return the text-to-sql llm.      resolution order:       1. explicit `engine` ar",
       "id": "models_registry_rationale_62"
     },
@@ -8059,7 +8229,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 23,
+      "community": 33,
       "norm_label": "audit.py",
       "id": "backend_app_api_routes_audit_py_routes_audit"
     },
@@ -8099,7 +8269,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 23,
+      "community": 33,
       "norm_label": "audit-log endpoint with hash-chain verification (admin/l3+ only).",
       "id": "routes_audit_rationale_1"
     },
@@ -9289,7 +9459,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 117,
+      "community": 39,
       "norm_label": "embed_narratives.py",
       "id": "seed_embed_narratives"
     },
@@ -9299,7 +9469,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L44",
       "_origin": "ast",
-      "community": 117,
+      "community": 39,
       "norm_label": "get_url()",
       "id": "seed_embed_narratives_get_url"
     },
@@ -9309,7 +9479,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L58",
       "_origin": "ast",
-      "community": 117,
+      "community": 39,
       "norm_label": "load_embedder()",
       "id": "seed_embed_narratives_load_embedder"
     },
@@ -9319,7 +9489,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 117,
+      "community": 39,
       "norm_label": "vec_literal()",
       "id": "seed_embed_narratives_vec_literal"
     },
@@ -9329,7 +9499,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L83",
       "_origin": "ast",
-      "community": 117,
+      "community": 39,
       "norm_label": "main()",
       "id": "seed_embed_narratives_main"
     },
@@ -9339,7 +9509,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 117,
+      "community": 39,
       "norm_label": "satyam \u2014 bge-m3 narrative embedding job.  fills narratives.embedding (vector(1",
       "id": "seed_embed_narratives_rationale_1"
     },
@@ -9349,7 +9519,7 @@
       "source_file": "backend/seed/embed_narratives.py",
       "source_location": "L59",
       "_origin": "ast",
-      "community": 117,
+      "community": 39,
       "norm_label": "single source of truth: reuse the same embedder used at query time.      this",
       "id": "seed_embed_narratives_rationale_59"
     },
@@ -9799,7 +9969,7 @@
       "source_file": "backend/app/pipeline/tools/rag.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
+      "community": 104,
       "norm_label": "rag.py",
       "id": "tools_rag"
     },
@@ -9809,7 +9979,7 @@
       "source_file": "backend/app/pipeline/tools/rag.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 39,
+      "community": 104,
       "norm_label": "_to_pgvector()",
       "id": "tools_rag_to_pgvector"
     },
@@ -9819,7 +9989,7 @@
       "source_file": "backend/app/pipeline/tools/rag.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 39,
+      "community": 104,
       "norm_label": "search_narratives()",
       "id": "tools_rag_search_narratives"
     },
@@ -9829,7 +9999,7 @@
       "source_file": "backend/app/pipeline/tools/rag.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 39,
+      "community": 104,
       "norm_label": "asyncsession",
       "id": "backend_app_pipeline_tools_rag_py_asyncsession"
     },
@@ -9839,7 +10009,7 @@
       "source_file": "backend/app/pipeline/tools/rag.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
+      "community": 104,
       "norm_label": "narrative retrieval (rag) over pgvector, with reranking.  embeds the query with",
       "id": "tools_rag_rationale_1"
     },
@@ -9849,7 +10019,7 @@
       "source_file": "backend/app/pipeline/tools/sql_guard.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "sql_guard.py",
       "id": "tools_sql_guard"
     },
@@ -9859,7 +10029,7 @@
       "source_file": "backend/app/pipeline/tools/sql_guard.py",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "unsafesql",
       "id": "tools_sql_guard_unsafesql"
     },
@@ -9869,7 +10039,7 @@
       "source_file": "backend/app/pipeline/tools/sql_guard.py",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "sanitize()",
       "id": "tools_sql_guard_sanitize"
     },
@@ -9879,7 +10049,7 @@
       "source_file": "backend/app/pipeline/tools/sql_guard.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "text-to-sql guardrail.  the llm is never trusted to produce safe sql. every cand",
       "id": "tools_sql_guard_rationale_1"
     },
@@ -9889,7 +10059,7 @@
       "source_file": "backend/app/pipeline/tools/sql_guard.py",
       "source_location": "L32",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "validate and normalize a candidate select. raises unsafesql on violation.",
       "id": "tools_sql_guard_rationale_32"
     },
@@ -10589,7 +10759,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "deps.py",
       "id": "api_deps"
     },
@@ -10599,7 +10769,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "get_principal()",
       "id": "api_deps_get_principal"
     },
@@ -10609,7 +10779,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "principal",
       "id": "backend_app_api_deps_py_principal"
     },
@@ -10619,7 +10789,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "get_scoped_session()",
       "id": "api_deps_get_scoped_session"
     },
@@ -10629,7 +10799,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "asyncsession",
       "id": "backend_app_api_deps_py_asyncsession"
     },
@@ -10639,7 +10809,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "fastapi dependencies: authenticated principal + rls-scoped db session.  the jwt",
       "id": "api_deps_rationale_1"
     },
@@ -10649,7 +10819,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "decode the bearer jwt into a principal. raises 401 on any problem.",
       "id": "api_deps_rationale_21"
     },
@@ -10659,7 +10829,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "yield a transaction-scoped session stamped with the caller's rls context.",
       "id": "api_deps_rationale_50"
     },
@@ -10669,7 +10839,7 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 32,
+      "community": 23,
       "norm_label": "cases.py",
       "id": "routes_cases"
     },
@@ -10679,7 +10849,7 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 32,
+      "community": 23,
       "norm_label": "list_cases()",
       "id": "routes_cases_list_cases"
     },
@@ -10689,7 +10859,7 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 32,
+      "community": 23,
       "norm_label": "asyncsession",
       "id": "backend_app_api_routes_cases_py_asyncsession"
     },
@@ -10699,7 +10869,7 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 32,
+      "community": 23,
       "norm_label": "principal",
       "id": "backend_app_api_routes_cases_py_principal"
     },
@@ -10709,7 +10879,7 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 32,
+      "community": 23,
       "norm_label": "get_case()",
       "id": "routes_cases_get_case"
     },
@@ -10719,7 +10889,7 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 32,
+      "community": 23,
       "norm_label": "case read endpoints (rls-scoped + server-side masked).",
       "id": "routes_cases_rationale_1"
     },
@@ -10799,7 +10969,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 32,
+      "community": 40,
       "norm_label": "rbac.py",
       "id": "core_rbac"
     },
@@ -10819,7 +10989,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "resolve_scope()",
       "id": "core_rbac_resolve_scope"
     },
@@ -10829,7 +10999,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "resolve_clearance()",
       "id": "core_rbac_resolve_clearance"
     },
@@ -10859,7 +11029,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 32,
+      "community": 40,
       "norm_label": "enum",
       "id": "enum"
     },
@@ -10899,7 +11069,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L131",
       "_origin": "ast",
-      "community": 32,
+      "community": 23,
       "norm_label": ".has()",
       "id": "core_rbac_principal_has"
     },
@@ -10959,7 +11129,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L157",
       "_origin": "ast",
-      "community": 32,
+      "community": 23,
       "norm_label": "require()",
       "id": "core_rbac_require"
     },
@@ -10969,7 +11139,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 32,
+      "community": 40,
       "norm_label": "karnataka state police rbac + abac.  rank \u2192 scope + clearance mapping mirrors ra",
       "id": "core_rbac_rationale_1"
     },
@@ -10999,7 +11169,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 39,
       "norm_label": "security.py",
       "id": "core_security"
     },
@@ -11009,7 +11179,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 3,
+      "community": 39,
       "norm_label": "create_access_token()",
       "id": "core_security_create_access_token"
     },
@@ -11019,7 +11189,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 3,
+      "community": 39,
       "norm_label": "decode_token()",
       "id": "core_security_decode_token"
     },
@@ -11029,7 +11199,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 39,
       "norm_label": "jwt issuing / verification.",
       "id": "core_security_rationale_1"
     },
@@ -11039,7 +11209,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "rls.py",
       "id": "db_rls"
     },
@@ -11049,7 +11219,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "apply_rls_context()",
       "id": "db_rls_apply_rls_context"
     },
@@ -11059,7 +11229,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "asyncsession",
       "id": "backend_app_db_rls_py_asyncsession"
     },
@@ -11069,7 +11239,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "row-level security helpers \u2014 v2 schema.  the new schema uses `app.*` gucs (app.s",
       "id": "db_rls_rationale_1"
     },
@@ -11079,7 +11249,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 3,
+      "community": 40,
       "norm_label": "stamp the current transaction with the caller's jurisdiction context.",
       "id": "db_rls_rationale_29"
     },
@@ -11149,7 +11319,7 @@
       "source_file": "backend/app/services/case_service.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 168,
+      "community": 5,
       "norm_label": "asyncsession",
       "id": "backend_app_services_case_service_py_asyncsession"
     },
@@ -11159,7 +11329,7 @@
       "source_file": "backend/app/services/case_service.py",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 168,
+      "community": 5,
       "norm_label": "get_case()",
       "id": "services_case_service_get_case"
     },
@@ -12479,7 +12649,7 @@
       "source_file": "backend/app/api/routes/chat.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 23,
+      "community": 33,
       "norm_label": "chat.py",
       "id": "routes_chat"
     },
@@ -12539,7 +12709,7 @@
       "source_file": "backend/app/api/routes/chat.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 23,
+      "community": 33,
       "norm_label": "conversational endpoint: grounded answers streamed over sse.  the response is a",
       "id": "routes_chat_rationale_1"
     },
@@ -12679,7 +12849,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 23,
+      "community": 32,
       "norm_label": "network.py",
       "id": "backend_app_api_routes_network_py_routes_network"
     },
@@ -12689,7 +12859,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 23,
+      "community": 32,
       "norm_label": "ego()",
       "id": "routes_network_ego"
     },
@@ -12699,7 +12869,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 23,
+      "community": 32,
       "norm_label": "egorequest",
       "id": "backend_app_api_routes_network_py_egorequest"
     },
@@ -12709,7 +12879,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 23,
+      "community": 32,
       "norm_label": "asyncsession",
       "id": "backend_app_api_routes_network_py_asyncsession"
     },
@@ -12719,7 +12889,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 23,
+      "community": 32,
       "norm_label": "principal",
       "id": "backend_app_api_routes_network_py_principal"
     },
@@ -12729,7 +12899,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 23,
+      "community": 32,
       "norm_label": "egoresponse",
       "id": "backend_app_api_routes_network_py_egoresponse"
     },
@@ -12739,7 +12909,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 23,
+      "community": 32,
       "norm_label": "link-analysis (ego network) endpoint.",
       "id": "routes_network_rationale_1"
     },
@@ -12749,7 +12919,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 108,
+      "community": 33,
       "norm_label": "reports.py",
       "id": "backend_app_api_routes_reports_py_routes_reports"
     },
@@ -12759,7 +12929,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 108,
+      "community": 23,
       "norm_label": "build()",
       "id": "routes_reports_build"
     },
@@ -12769,7 +12939,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 108,
+      "community": 23,
       "norm_label": "reportrequest",
       "id": "backend_app_api_routes_reports_py_reportrequest"
     },
@@ -12779,7 +12949,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 108,
+      "community": 23,
       "norm_label": "asyncsession",
       "id": "backend_app_api_routes_reports_py_asyncsession"
     },
@@ -12789,7 +12959,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 108,
+      "community": 23,
       "norm_label": "principal",
       "id": "backend_app_api_routes_reports_py_principal"
     },
@@ -12799,7 +12969,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 108,
+      "community": 23,
       "norm_label": "reportresponse",
       "id": "backend_app_api_routes_reports_py_reportresponse"
     },
@@ -12809,7 +12979,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 108,
+      "community": 33,
       "norm_label": "report builder endpoint.",
       "id": "routes_reports_rationale_1"
     },
@@ -12919,7 +13089,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 26,
+      "community": 110,
       "norm_label": "bhashini.py",
       "id": "api_bhashini"
     },
@@ -12929,7 +13099,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 26,
+      "community": 110,
       "norm_label": "_bhashinibase",
       "id": "api_bhashini_bhashinibase"
     },
@@ -12939,7 +13109,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 39,
+      "community": 110,
       "norm_label": ".__init__()",
       "id": "api_bhashini_bhashinibase_init"
     },
@@ -12949,7 +13119,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 26,
+      "community": 110,
       "norm_label": "bhashinistt",
       "id": "api_bhashini_bhashinistt"
     },
@@ -12959,7 +13129,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 26,
+      "community": 110,
       "norm_label": ".transcribe()",
       "id": "api_bhashini_bhashinistt_transcribe"
     },
@@ -12989,7 +13159,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 26,
+      "community": 110,
       "norm_label": "bhashinitranslator",
       "id": "api_bhashini_bhashinitranslator"
     },
@@ -12999,7 +13169,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 26,
+      "community": 110,
       "norm_label": ".translate()",
       "id": "api_bhashini_bhashinitranslator_translate"
     },
@@ -13009,7 +13179,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 26,
+      "community": 110,
       "norm_label": "bhashini (govt. of india) clients \u2014 primary indic layer (kannada stt/tts/mt).  t",
       "id": "api_bhashini_rationale_1"
     },
@@ -13499,7 +13669,7 @@
       "source_file": "backend/app/pipeline/slots.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 51,
+      "community": 42,
       "norm_label": "_memorystore",
       "id": "pipeline_slots_memorystore"
     },
@@ -13619,7 +13789,7 @@
       "source_file": "backend/app/schemas/report.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 108,
+      "community": 23,
       "norm_label": "report.py",
       "id": "schemas_report"
     },
@@ -13629,7 +13799,7 @@
       "source_file": "backend/app/schemas/report.py",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 108,
+      "community": 23,
       "norm_label": "reportrequest",
       "id": "schemas_report_reportrequest"
     },
@@ -13639,7 +13809,7 @@
       "source_file": "backend/app/schemas/report.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 108,
+      "community": 23,
       "norm_label": "reportresponse",
       "id": "schemas_report_reportresponse"
     },
@@ -13789,7 +13959,7 @@
       "source_file": "backend/tests/test_sql_guard.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "test_sql_guard.py",
       "id": "tests_test_sql_guard"
     },
@@ -13799,7 +13969,7 @@
       "source_file": "backend/tests/test_sql_guard.py",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "test_allows_simple_select_and_adds_limit()",
       "id": "tests_test_sql_guard_test_allows_simple_select_and_adds_limit"
     },
@@ -13809,7 +13979,7 @@
       "source_file": "backend/tests/test_sql_guard.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "test_blocks_delete()",
       "id": "tests_test_sql_guard_test_blocks_delete"
     },
@@ -13819,7 +13989,7 @@
       "source_file": "backend/tests/test_sql_guard.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "test_blocks_multiple_statements()",
       "id": "tests_test_sql_guard_test_blocks_multiple_statements"
     },
@@ -13829,7 +13999,7 @@
       "source_file": "backend/tests/test_sql_guard.py",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "test_blocks_unknown_table()",
       "id": "tests_test_sql_guard_test_blocks_unknown_table"
     },
@@ -13839,7 +14009,7 @@
       "source_file": "backend/tests/test_sql_guard.py",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 111,
+      "community": 12,
       "norm_label": "test_clamps_large_limit()",
       "id": "tests_test_sql_guard_test_clamps_large_limit"
     },
@@ -14189,7 +14359,7 @@
       "source_file": "frontend/src/components/ThemePicker.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 169,
+      "community": 113,
       "norm_label": "themepicker.tsx",
       "id": "components_themepicker"
     },
@@ -14199,7 +14369,7 @@
       "source_file": "frontend/src/components/ThemePicker.tsx",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 169,
+      "community": 113,
       "norm_label": "theme",
       "id": "components_themepicker_theme"
     },
@@ -14209,7 +14379,7 @@
       "source_file": "frontend/src/components/ThemePicker.tsx",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 169,
+      "community": 113,
       "norm_label": "themes",
       "id": "components_themepicker_themes"
     },
@@ -14219,7 +14389,7 @@
       "source_file": "frontend/src/components/ThemePicker.tsx",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 169,
+      "community": 113,
       "norm_label": "applytheme()",
       "id": "components_themepicker_applytheme"
     },
@@ -14229,7 +14399,7 @@
       "source_file": "frontend/src/components/ThemePicker.tsx",
       "source_location": "L32",
       "_origin": "ast",
-      "community": 169,
+      "community": 113,
       "norm_label": "themepicker()",
       "id": "components_themepicker_themepicker"
     },
@@ -17209,7 +17379,7 @@
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 8,
+      "community": 9,
       "norm_label": "route",
       "id": "routes_about_route"
     },
@@ -17232,46 +17402,6 @@
       "community": 9,
       "norm_label": "aboutpage()",
       "id": "routes_about_aboutpage"
-    },
-    {
-      "label": "index.tsx",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 51,
-      "norm_label": "index.tsx",
-      "id": "routes_index"
-    },
-    {
-      "label": "Route",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L19",
-      "_origin": "ast",
-      "community": 51,
-      "norm_label": "route",
-      "id": "routes_index_route"
-    },
-    {
-      "label": "Login()",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L29",
-      "_origin": "ast",
-      "community": 51,
-      "norm_label": "login()",
-      "id": "routes_index_login"
-    },
-    {
-      "label": "TrustBadge()",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L219",
-      "_origin": "ast",
-      "community": 51,
-      "norm_label": "trustbadge()",
-      "id": "routes_index_trustbadge"
     },
     {
       "label": "landing.tsx",
@@ -17359,7 +17489,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 116,
+      "community": 51,
       "norm_label": "reports.tsx",
       "id": "frontend_src_routes_reports_tsx_routes_reports"
     },
@@ -17369,7 +17499,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 116,
+      "community": 51,
       "norm_label": "route",
       "id": "routes_reports_route"
     },
@@ -17379,7 +17509,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 116,
+      "community": 51,
       "norm_label": "item",
       "id": "routes_reports_item"
     },
@@ -17389,7 +17519,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 116,
+      "community": 51,
       "norm_label": "reports()",
       "id": "routes_reports_reports"
     },
@@ -17399,7 +17529,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L195",
       "_origin": "ast",
-      "community": 116,
+      "community": 51,
       "norm_label": "itemicon()",
       "id": "routes_reports_itemicon"
     },
@@ -17409,7 +17539,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L203",
       "_origin": "ast",
-      "community": 116,
+      "community": 51,
       "norm_label": "section()",
       "id": "routes_reports_section"
     },
@@ -18616,804 +18746,195 @@
   ],
   "links": [
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "api_client"
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L8",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L17",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "db_models",
-      "target": "datetime"
+      "source": "routes_index",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell_footer",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell_gridbg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell_header",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell_nb",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "lib_i18n_uset"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L116",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L267",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models",
-      "target": "db_models_auditlog"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L31",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models",
-      "target": "db_models_base"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L68",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models",
-      "target": "db_models_case"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L96",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models",
-      "target": "db_models_caseperson"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L175",
-      "weight": 1.0,
-      "source": "db_models",
-      "target": "db_models_districtsocioeconomicindicator",
+      "source": "routes_index",
+      "target": "routes_index_features",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L190",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L62",
       "weight": 1.0,
-      "source": "db_models",
-      "target": "db_models_financialaccount",
+      "source": "routes_index",
+      "target": "routes_index_hero",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L208",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L48",
       "weight": 1.0,
-      "source": "db_models",
-      "target": "db_models_financialtransaction",
+      "source": "routes_index",
+      "target": "routes_index_landing",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L107",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L223",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models",
-      "target": "db_models_narrative"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L35",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models",
-      "target": "db_models_now"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L60",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models",
-      "target": "db_models_officer"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L87",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models",
-      "target": "db_models_person"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L132",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models",
-      "target": "db_models_rankaccess"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L50",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models",
-      "target": "db_models_station"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L39",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models",
-      "target": "db_models_user"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models_rationale_1",
-      "target": "db_models"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L172",
-      "weight": 1.0,
-      "source": "db_models_rationale_172",
-      "target": "db_models",
+      "source": "routes_index",
+      "target": "routes_index_ministat",
       "confidence_score": 1.0
     },
     {
-      "relation": "inherits",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L116",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L19",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "db_models_auditlog",
-      "target": "db_models_base"
+      "source": "routes_index",
+      "target": "routes_index_route"
     },
     {
-      "relation": "inherits",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L31",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L242",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models_base",
-      "target": "declarativebase"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L68",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models_case",
-      "target": "db_models_base"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L96",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models_caseperson",
-      "target": "db_models_base"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L175",
-      "weight": 1.0,
-      "source": "db_models_districtsocioeconomicindicator",
-      "target": "db_models_base",
+      "source": "routes_index",
+      "target": "routes_index_stats",
       "confidence_score": 1.0
     },
     {
-      "relation": "inherits",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L190",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L339",
       "weight": 1.0,
-      "source": "db_models_financialaccount",
-      "target": "db_models_base",
+      "source": "routes_index",
+      "target": "routes_index_testimonials",
       "confidence_score": 1.0
     },
     {
-      "relation": "inherits",
+      "relation": "imports_from",
+      "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L208",
-      "weight": 1.0,
-      "source": "db_models_financialtransaction",
-      "target": "db_models_base",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L107",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L20",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "db_models_narrative",
-      "target": "db_models_base"
+      "source": "src_routetree_gen",
+      "target": "routes_index"
     },
     {
-      "relation": "inherits",
+      "relation": "imports",
+      "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L60",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L20",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "db_models_officer",
-      "target": "db_models_base"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L87",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models_person",
-      "target": "db_models_base"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L132",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models_rankaccess",
-      "target": "db_models_base"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L50",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models_station",
-      "target": "db_models_base"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L39",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "db_models_user",
-      "target": "db_models_base"
+      "source": "src_routetree_gen",
+      "target": "routes_index_route"
     },
     {
       "relation": "references",
-      "context": "return_type",
+      "context": "field",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/db/models.py",
-      "source_location": "L35",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L208",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "db_models_now",
-      "target": "datetime"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/core/security.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_security",
-      "target": "datetime"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/satyam_synthetic_dataset/generate_dataset.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "satyam_synthetic_dataset_generate_dataset",
-      "target": "datetime"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/satyam_synthetic_dataset/integrity_check.py",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "satyam_synthetic_dataset_integrity_check",
-      "target": "datetime"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L31",
-      "weight": 1.0,
-      "source": "seed_load_neon_60pct",
-      "target": "datetime",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/synthetic.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "seed_synthetic",
-      "target": "datetime"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/intelligence_service.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "services_intelligence_service",
-      "target": "datetime"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/report_service.py",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "services_report_service",
-      "target": "datetime"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/case_service.py",
-      "source_location": "L9",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_case_service_py_asyncsession",
-      "target": "db_models_case"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/case_service.py",
-      "source_location": "L9",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_case_service_py_principal",
-      "target": "db_models_case"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/case_service.py",
-      "source_location": "L9",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_case_service_py_asyncsession",
-      "target": "db_models_person"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/case_service.py",
-      "source_location": "L9",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_case_service_py_principal",
-      "target": "db_models_person"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/case_service.py",
-      "source_location": "L9",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_case_service_py_asyncsession",
-      "target": "db_models_caseperson"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/case_service.py",
-      "source_location": "L9",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_case_service_py_principal",
-      "target": "db_models_caseperson"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/case_service.py",
-      "source_location": "L9",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_case_service_py_asyncsession",
-      "target": "db_models_narrative"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/case_service.py",
-      "source_location": "L9",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_case_service_py_principal",
-      "target": "db_models_narrative"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L14",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "auditlog",
-      "target": "db_models_auditlog"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/api/routes/audit.py",
-      "source_location": "L11",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_api_routes_audit_py_asyncsession",
-      "target": "db_models_auditlog"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/api/routes/audit.py",
-      "source_location": "L11",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_api_routes_audit_py_principal",
-      "target": "db_models_auditlog"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L14",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_core_audit_py_asyncsession",
-      "target": "db_models_auditlog"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L44",
-      "weight": 1.0,
-      "source": "seed_load_neon_60pct",
-      "target": "seed_load_neon_60pct_load_env",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L69",
-      "weight": 1.0,
-      "source": "seed_load_neon_60pct",
-      "target": "seed_load_neon_60pct_main",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L55",
-      "weight": 1.0,
-      "source": "seed_load_neon_60pct",
-      "target": "seed_load_neon_60pct_parse_url",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L65",
-      "weight": 1.0,
-      "source": "seed_load_neon_60pct",
-      "target": "seed_load_neon_60pct_progress",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L61",
-      "weight": 1.0,
-      "source": "seed_load_neon_60pct",
-      "target": "seed_load_neon_60pct_take_60pct",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "seed_load_neon_60pct_rationale_1",
-      "target": "seed_load_neon_60pct",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L70",
-      "weight": 1.0,
-      "source": "seed_load_neon_60pct_main",
-      "target": "seed_load_neon_60pct_load_env",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L71",
-      "weight": 1.0,
-      "source": "seed_load_neon_60pct_main",
-      "target": "seed_load_neon_60pct_parse_url",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L90",
-      "weight": 1.0,
-      "source": "seed_load_neon_60pct_main",
-      "target": "seed_load_neon_60pct_take_60pct",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L62",
-      "weight": 1.0,
-      "source": "seed_load_neon_60pct_rationale_62",
-      "target": "seed_load_neon_60pct_take_60pct",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_neon_60pct.py",
-      "source_location": "L97",
-      "weight": 1.0,
-      "source": "seed_load_neon_60pct_main",
-      "target": "seed_load_neon_60pct_progress",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L49",
-      "weight": 1.0,
-      "source": "seed_load_new_tables",
-      "target": "seed_load_new_tables_get_conn",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L86",
-      "weight": 1.0,
-      "source": "seed_load_new_tables",
-      "target": "seed_load_new_tables_load_accounts",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L26",
-      "weight": 1.0,
-      "source": "seed_load_new_tables",
-      "target": "seed_load_new_tables_load_env",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L58",
-      "weight": 1.0,
-      "source": "seed_load_new_tables",
-      "target": "seed_load_new_tables_load_socio",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L124",
-      "weight": 1.0,
-      "source": "seed_load_new_tables",
-      "target": "seed_load_new_tables_load_transactions",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L227",
-      "weight": 1.0,
-      "source": "seed_load_new_tables",
-      "target": "seed_load_new_tables_main",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L44",
-      "weight": 1.0,
-      "source": "seed_load_new_tables",
-      "target": "seed_load_new_tables_parse_url",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L168",
-      "weight": 1.0,
-      "source": "seed_load_new_tables",
-      "target": "seed_load_new_tables_run_for_db",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "seed_load_new_tables_rationale_1",
-      "target": "seed_load_new_tables",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L228",
-      "weight": 1.0,
-      "source": "seed_load_new_tables_main",
-      "target": "seed_load_new_tables_load_env",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L50",
-      "weight": 1.0,
-      "source": "seed_load_new_tables_get_conn",
-      "target": "seed_load_new_tables_parse_url",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L45",
-      "weight": 1.0,
-      "source": "seed_load_new_tables_rationale_45",
-      "target": "seed_load_new_tables_parse_url",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L175",
-      "weight": 1.0,
-      "source": "seed_load_new_tables_run_for_db",
-      "target": "seed_load_new_tables_get_conn",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L189",
-      "weight": 1.0,
-      "source": "seed_load_new_tables_run_for_db",
-      "target": "seed_load_new_tables_load_socio",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L194",
-      "weight": 1.0,
-      "source": "seed_load_new_tables_run_for_db",
-      "target": "seed_load_new_tables_load_accounts",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L199",
-      "weight": 1.0,
-      "source": "seed_load_new_tables_run_for_db",
-      "target": "seed_load_new_tables_load_transactions",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_new_tables.py",
-      "source_location": "L233",
-      "weight": 1.0,
-      "source": "seed_load_new_tables_main",
-      "target": "seed_load_new_tables_run_for_db",
-      "confidence_score": 1.0
+      "source": "src_routetree_gen_fileroutesbypath",
+      "target": "routes_index_route"
     },
     {
       "relation": "contains",
@@ -19831,8 +19352,18 @@
       "source_file": "made_till_now.md",
       "source_location": "L1721",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_17_dataset_schema_extension_ps4_socio_economic_ps7_financial_tables",
+      "target": "made_till_now_2026_06_17_dataset_schema_extension_ps4_socio_economic_ps7_financial_tables"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L1872",
+      "weight": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_17_landing_page_full_screen_background_video_hero_ui_improvements",
       "confidence_score": 1.0
     },
     {
@@ -19841,9 +19372,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1833",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_17_neon_cloud_reseed_with_60_dataset_to_free_storage_space",
-      "confidence_score": 1.0
+      "target": "made_till_now_2026_06_17_neon_cloud_reseed_with_60_dataset_to_free_storage_space"
     },
     {
       "relation": "contains",
@@ -19851,8 +19382,28 @@
       "source_file": "made_till_now.md",
       "source_location": "L1794",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_log_of_changes",
-      "target": "made_till_now_2026_06_17_ps4_ps7_tables_local_neon_migration_data_load",
+      "target": "made_till_now_2026_06_17_ps4_ps7_tables_local_neon_migration_data_load"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L1928",
+      "weight": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_17_router_fix_forecast_trends_added_to_shell_nav_rail",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L1907",
+      "weight": 1.0,
+      "source": "made_till_now_log_of_changes",
+      "target": "made_till_now_2026_06_17_transcripts_screen_dynamic_data_demo_seeds_ux_improvements",
       "confidence_score": 1.0
     },
     {
@@ -21491,9 +21042,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1780",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_dataset_schema_extension_ps4_socio_economic_ps7_financial_tables",
-      "target": "made_till_now_after_loading_expected_row_counts",
-      "confidence_score": 1.0
+      "target": "made_till_now_after_loading_expected_row_counts"
     },
     {
       "relation": "contains",
@@ -21501,9 +21052,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1787",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_dataset_schema_extension_ps4_socio_economic_ps7_financial_tables",
-      "target": "made_till_now_ethics_notes_preserved_in_code",
-      "confidence_score": 1.0
+      "target": "made_till_now_ethics_notes_preserved_in_code"
     },
     {
       "relation": "contains",
@@ -21511,9 +21062,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1733",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_dataset_schema_extension_ps4_socio_economic_ps7_financial_tables",
-      "target": "made_till_now_files_changed_1733",
-      "confidence_score": 1.0
+      "target": "made_till_now_files_changed_1733"
     },
     {
       "relation": "contains",
@@ -21521,9 +21072,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1723",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_dataset_schema_extension_ps4_socio_economic_ps7_financial_tables",
-      "target": "made_till_now_summary_1723",
-      "confidence_score": 1.0
+      "target": "made_till_now_summary_1723"
     },
     {
       "relation": "contains",
@@ -21531,9 +21082,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1768",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_dataset_schema_extension_ps4_socio_economic_ps7_financial_tables",
-      "target": "made_till_now_verification_results_1768",
-      "confidence_score": 1.0
+      "target": "made_till_now_verification_results_1768"
     },
     {
       "relation": "contains",
@@ -21541,9 +21092,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1813",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_ps4_ps7_tables_local_neon_migration_data_load",
-      "target": "made_till_now_migration_results",
-      "confidence_score": 1.0
+      "target": "made_till_now_migration_results"
     },
     {
       "relation": "contains",
@@ -21551,9 +21102,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1824",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_ps4_ps7_tables_local_neon_migration_data_load",
-      "target": "made_till_now_neon_storage_note",
-      "confidence_score": 1.0
+      "target": "made_till_now_neon_storage_note"
     },
     {
       "relation": "contains",
@@ -21561,9 +21112,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1801",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_ps4_ps7_tables_local_neon_migration_data_load",
-      "target": "made_till_now_new_file_backend_migrations_003_add_ps4_ps7_tables_sql",
-      "confidence_score": 1.0
+      "target": "made_till_now_new_file_backend_migrations_003_add_ps4_ps7_tables_sql"
     },
     {
       "relation": "contains",
@@ -21571,9 +21122,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1804",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_ps4_ps7_tables_local_neon_migration_data_load",
-      "target": "made_till_now_new_file_backend_seed_load_new_tables_py",
-      "confidence_score": 1.0
+      "target": "made_till_now_new_file_backend_seed_load_new_tables_py"
     },
     {
       "relation": "contains",
@@ -21581,9 +21132,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1796",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_ps4_ps7_tables_local_neon_migration_data_load",
-      "target": "made_till_now_summary_1796",
-      "confidence_score": 1.0
+      "target": "made_till_now_summary_1796"
     },
     {
       "relation": "contains",
@@ -21591,9 +21142,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1841",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_neon_cloud_reseed_with_60_dataset_to_free_storage_space",
-      "target": "made_till_now_final_neon_row_counts_after_reseed",
-      "confidence_score": 1.0
+      "target": "made_till_now_final_neon_row_counts_after_reseed"
     },
     {
       "relation": "contains",
@@ -21601,9 +21152,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1859",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_neon_cloud_reseed_with_60_dataset_to_free_storage_space",
-      "target": "made_till_now_fk_verification",
-      "confidence_score": 1.0
+      "target": "made_till_now_fk_verification"
     },
     {
       "relation": "contains",
@@ -21611,9 +21162,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1867",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_neon_cloud_reseed_with_60_dataset_to_free_storage_space",
-      "target": "made_till_now_local_postgresql_17",
-      "confidence_score": 1.0
+      "target": "made_till_now_local_postgresql_17"
     },
     {
       "relation": "contains",
@@ -21621,9 +21172,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1864",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_neon_cloud_reseed_with_60_dataset_to_free_storage_space",
-      "target": "made_till_now_new_file",
-      "confidence_score": 1.0
+      "target": "made_till_now_new_file"
     },
     {
       "relation": "contains",
@@ -21631,9 +21182,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1835",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_neon_cloud_reseed_with_60_dataset_to_free_storage_space",
-      "target": "made_till_now_problem",
-      "confidence_score": 1.0
+      "target": "made_till_now_problem"
     },
     {
       "relation": "contains",
@@ -21641,9 +21192,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1838",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_neon_cloud_reseed_with_60_dataset_to_free_storage_space",
-      "target": "made_till_now_solution",
-      "confidence_score": 1.0
+      "target": "made_till_now_solution"
     },
     {
       "relation": "contains",
@@ -21651,9 +21202,869 @@
       "source_file": "made_till_now.md",
       "source_location": "L1855",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "made_till_now_2026_06_17_neon_cloud_reseed_with_60_dataset_to_free_storage_space",
-      "target": "made_till_now_storage",
+      "target": "made_till_now_storage"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L1879",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_17_landing_page_full_screen_background_video_hero_ui_improvements",
+      "target": "made_till_now_file_changed_frontend_src_routes_index_tsx",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L1874",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_17_landing_page_full_screen_background_video_hero_ui_improvements",
+      "target": "made_till_now_summary_1874",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L1912",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_17_transcripts_screen_dynamic_data_demo_seeds_ux_improvements",
+      "target": "made_till_now_file_changed_frontend_src_routes_transcripts_tsx_full_rewrite",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L1909",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_17_transcripts_screen_dynamic_data_demo_seeds_ux_improvements",
+      "target": "made_till_now_summary_1909",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L1933",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_17_router_fix_forecast_trends_added_to_shell_nav_rail",
+      "target": "made_till_now_file_changed_frontend_src_components_shell_tsx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "made_till_now.md",
+      "source_location": "L1930",
+      "weight": 1.0,
+      "source": "made_till_now_2026_06_17_router_fix_forecast_trends_added_to_shell_nav_rail",
+      "target": "made_till_now_summary_1930",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "datetime"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_auditlog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_base"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_case"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L96",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_caseperson"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L175",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_districtsocioeconomicindicator"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L190",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_financialaccount"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L208",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_financialtransaction"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_narrative"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_now"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_officer"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_person"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L132",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_rankaccess"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_station"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models",
+      "target": "db_models_user"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_rationale_1",
+      "target": "db_models"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L172",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_rationale_172",
+      "target": "db_models"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_auditlog",
+      "target": "db_models_base"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_base",
+      "target": "declarativebase"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_case",
+      "target": "db_models_base"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L96",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_caseperson",
+      "target": "db_models_base"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L175",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_districtsocioeconomicindicator",
+      "target": "db_models_base"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L190",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_financialaccount",
+      "target": "db_models_base"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L208",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_financialtransaction",
+      "target": "db_models_base"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_narrative",
+      "target": "db_models_base"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_officer",
+      "target": "db_models_base"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_person",
+      "target": "db_models_base"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L132",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_rankaccess",
+      "target": "db_models_base"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_station",
+      "target": "db_models_base"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_user",
+      "target": "db_models_base"
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/db/models.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "db_models_now",
+      "target": "datetime"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/core/security.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_security",
+      "target": "datetime"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/satyam_synthetic_dataset/generate_dataset.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_synthetic_dataset_generate_dataset",
+      "target": "datetime"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/satyam_synthetic_dataset/integrity_check.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_synthetic_dataset_integrity_check",
+      "target": "datetime"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_neon_60pct",
+      "target": "datetime"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/synthetic.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_synthetic",
+      "target": "datetime"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/intelligence_service.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_intelligence_service",
+      "target": "datetime"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/report_service.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_report_service",
+      "target": "datetime"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/case_service.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_case_service_py_asyncsession",
+      "target": "db_models_case"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/case_service.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_case_service_py_principal",
+      "target": "db_models_case"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/case_service.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_case_service_py_asyncsession",
+      "target": "db_models_person"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/case_service.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_case_service_py_principal",
+      "target": "db_models_person"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/case_service.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_case_service_py_asyncsession",
+      "target": "db_models_caseperson"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/case_service.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_case_service_py_principal",
+      "target": "db_models_caseperson"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/case_service.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_case_service_py_asyncsession",
+      "target": "db_models_narrative"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/case_service.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_case_service_py_principal",
+      "target": "db_models_narrative"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L14",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "auditlog",
+      "target": "db_models_auditlog"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/api/routes/audit.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_api_routes_audit_py_asyncsession",
+      "target": "db_models_auditlog"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/api/routes/audit.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_api_routes_audit_py_principal",
+      "target": "db_models_auditlog"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L14",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_core_audit_py_asyncsession",
+      "target": "db_models_auditlog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_neon_60pct",
+      "target": "seed_load_neon_60pct_load_env"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L69",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_neon_60pct",
+      "target": "seed_load_neon_60pct_main"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_neon_60pct",
+      "target": "seed_load_neon_60pct_parse_url"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_neon_60pct",
+      "target": "seed_load_neon_60pct_progress"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_neon_60pct",
+      "target": "seed_load_neon_60pct_take_60pct"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_neon_60pct_rationale_1",
+      "target": "seed_load_neon_60pct"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_neon_60pct_main",
+      "target": "seed_load_neon_60pct_load_env"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_neon_60pct_main",
+      "target": "seed_load_neon_60pct_parse_url"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L90",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_neon_60pct_main",
+      "target": "seed_load_neon_60pct_take_60pct"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_neon_60pct_rationale_62",
+      "target": "seed_load_neon_60pct_take_60pct"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_neon_60pct.py",
+      "source_location": "L97",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_neon_60pct_main",
+      "target": "seed_load_neon_60pct_progress"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables",
+      "target": "seed_load_new_tables_get_conn"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables",
+      "target": "seed_load_new_tables_load_accounts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables",
+      "target": "seed_load_new_tables_load_env"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables",
+      "target": "seed_load_new_tables_load_socio"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L124",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables",
+      "target": "seed_load_new_tables_load_transactions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L227",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables",
+      "target": "seed_load_new_tables_main"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables",
+      "target": "seed_load_new_tables_parse_url"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L168",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables",
+      "target": "seed_load_new_tables_run_for_db"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables_rationale_1",
+      "target": "seed_load_new_tables"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L228",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables_main",
+      "target": "seed_load_new_tables_load_env"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables_get_conn",
+      "target": "seed_load_new_tables_parse_url"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables_rationale_45",
+      "target": "seed_load_new_tables_parse_url"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L175",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables_run_for_db",
+      "target": "seed_load_new_tables_get_conn"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L189",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables_run_for_db",
+      "target": "seed_load_new_tables_load_socio"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L194",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables_run_for_db",
+      "target": "seed_load_new_tables_load_accounts"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L199",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables_run_for_db",
+      "target": "seed_load_new_tables_load_transactions"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_new_tables.py",
+      "source_location": "L233",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_new_tables_main",
+      "target": "seed_load_new_tables_run_for_db"
     },
     {
       "relation": "imports_from",
@@ -30706,28 +31117,6 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_routetree_gen",
-      "target": "routes_index"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_routetree_gen",
-      "target": "routes_index_route"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routeTree.gen.ts",
       "source_location": "L16",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -31164,17 +31553,6 @@
       "confidence_score": 1.0,
       "source": "src_routetree_gen_fileroutesbypath",
       "target": "routes_forecast_route"
-    },
-    {
-      "relation": "references",
-      "context": "field",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L208",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_routetree_gen_fileroutesbypath",
-      "target": "routes_index_route"
     },
     {
       "relation": "references",
@@ -33379,17 +33757,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L16",
       "weight": 1.0,
@@ -33614,17 +33981,6 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "routes_console",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
       "target": "api_client_api"
     },
     {
@@ -35012,17 +35368,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L15",
       "weight": 1.0,
@@ -35170,28 +35515,6 @@
       "source_location": "L32",
       "weight": 1.0,
       "source": "routes_audit_audit",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L30",
-      "weight": 1.0,
-      "source": "routes_index_login",
       "target": "lib_i18n_uset"
     },
     {
@@ -51147,36 +51470,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "routes_index_login"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "routes_index_route"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L219",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "routes_index_trustbadge"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/landing.tsx",
       "source_location": "L244",
       "weight": 1.0,
@@ -52328,5 +52621,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e66af43f8d51607f8ebef2837c05ec264dc1386b"
+  "built_at_commit": "c75d85f26d2a8034c317a18741254eaf10853698"
 }
