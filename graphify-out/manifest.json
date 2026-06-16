@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1781590996.6571674,
-    "ast_hash": "39c27c3115a0cab580f5dc6d4ccfda07",
+    "mtime": 1781592868.4913197,
+    "ast_hash": "bb54904f665ab03043ef0cabf61a12b6",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -875,13 +875,13 @@
     "semantic_hash": ""
   },
   "backend/app/models/api/sarvam.py": {
-    "mtime": 1781591022.9152622,
-    "ast_hash": "2fe40f0d7c98e90c18160511e0fee289",
+    "mtime": 1781592791.1354518,
+    "ast_hash": "1abd011e5fc04270d81c57abfef1d67a",
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1781590297.5973284,
-    "ast_hash": "a822e333f369365a8220f5e9bfc0bc1b",
+    "mtime": 1781593085.6286244,
+    "ast_hash": "52252a001948b11493194e3c3cbb295e",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -985,8 +985,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/voice.py": {
-    "mtime": 1781589887.7114725,
-    "ast_hash": "92b1a99bad4c608a0b56900df6c32147",
+    "mtime": 1781592888.0557427,
+    "ast_hash": "bf8ab2480bc5bc6439c4590e8f4dbd78",
     "semantic_hash": ""
   },
   "backend/app/models/api/google_voice.py": {
@@ -1000,13 +1000,18 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/voice/tts.ts": {
-    "mtime": 1781589952.4186623,
-    "ast_hash": "a30870e947fb8d2b38e559dc6cc1ed07",
+    "mtime": 1781592832.1031609,
+    "ast_hash": "16c64a308f567be4ed21cda62ba4e307",
     "semantic_hash": ""
   },
   "SATYAM_VOICE_PIPELINE_SARVAM_FIX.md": {
     "mtime": 1781589691.4679685,
     "ast_hash": "ac1aaea4b48e8619a841c6efa4dbb805",
+    "semantic_hash": ""
+  },
+  "SATYAM_VOICE_OUTPUT_INPUT_FIX.md": {
+    "mtime": 1781592711.134146,
+    "ast_hash": "aed8833adc40052182c5921c74965e53",
     "semantic_hash": ""
   }
 }
