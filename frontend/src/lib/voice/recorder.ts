@@ -41,7 +41,8 @@ export type SttSessionOptions = {
 };
 
 const TARGET_RATE = 16000;
-const VOICE_RMS_THRESHOLD = 0.002; // empirically separates speech from room noise (more sensitive)
+const VOICE_RMS_THRESHOLD = 0.002; // was too high; quiet mics never tripped it
+const MIN_PEAK_TO_SEND = 0.001;    // any signal above this is worth transcribing
 
 export function isBackendSttSupported(): boolean {
   return (
@@ -81,6 +82,7 @@ export async function startSttSession(
   if (ctx.state === "suspended") {
     try { await ctx.resume(); } catch { /* noop */ }
   }
+  console.debug("[stt] session start", { ctxState: ctx.state, sampleRate: ctx.sampleRate });
   const source = ctx.createMediaStreamSource(stream);
   const processor = ctx.createScriptProcessor(4096, 1, 1);
   // Route through a muted gain node so the mic isn't played back (no feedback),
@@ -94,15 +96,25 @@ export async function startSttSession(
   const chunks: Float32Array[] = [];
   const inputRate = ctx.sampleRate;
   let speechStarted = false;
+  let maxPeakRef = 0;           // running max absolute sample value (track even quiet audio)
   let maxRms = 0;               // track maximum RMS seen during the session
+  let framesSeen = false;       // set true on the first onaudioprocess call
   let audioFrames = 0;          // how many onaudioprocess callbacks fired
   let lastVoiceTs = Date.now();
   const startTs = Date.now();
   let finished = false;
 
-  // No-audio watchdog: if the ScriptProcessor never fires (context stayed
-  // suspended, or the engine refuses to pump a deprecated node), report an
-  // error after ~1.6 s so the caller can fall back to browser recognition.
+  // No-frames watchdog: if onaudioprocess never fires within 1200 ms the
+  // AudioContext is not pumping (still suspended on this browser/OS). Report
+  // "no-audio-frames" so the caller falls back to browser recognition.
+  const frameWatchdog = setTimeout(() => {
+    if (framesSeen || finished) return;
+    console.debug("[stt] no audio frames in 1200ms — AudioContext not pumping");
+    callbacks.onError?.("no-audio-frames");
+    void finalize(false); // tear down; caller's onError will start browser rec
+  }, 1200);
+
+  // Legacy broader watchdog kept as a second safety net.
   const noAudioWatchdog = setTimeout(() => {
     if (finished || audioFrames > 0) return;
     finished = true;
@@ -111,6 +123,7 @@ export async function startSttSession(
   }, 1600);
 
   const cleanup = () => {
+    try { clearTimeout(frameWatchdog); } catch { /* noop */ }
     try { clearTimeout(noAudioWatchdog); } catch { /* noop */ }
     try { processor.onaudioprocess = null as any; } catch { /* noop */ }
     try { processor.disconnect(); } catch { /* noop */ }
@@ -125,15 +138,12 @@ export async function startSttSession(
     finished = true;
     cleanup();
     if (!transcribe) return;
-    // Require some real speech to avoid empty/near-empty uploads.
-    // If speechStarted is false, but we have chunks and maxRms >= 0.001,
-    // let's still transcribe to capture quiet speakers!
-    if (!speechStarted && maxRms < 0.001) {
-      callbacks.onResult?.("", null);
-      return;
-    }
-    const wav = encodeWav(flatten(chunks), inputRate, TARGET_RATE);
-    if (wav.size < 2000) {
+    // Send if there is ANY real signal — don't require the RMS gate to have
+    // been crossed (quiet mics never trip it).
+    const hasSignal = speechStarted || maxPeakRef > MIN_PEAK_TO_SEND;
+    const wav = hasSignal ? encodeWav(flatten(chunks), inputRate, TARGET_RATE) : null;
+    console.debug("[stt] finalize", { speechStarted, maxPeak: maxPeakRef, wavBytes: wav?.size });
+    if (!hasSignal || !wav || wav.size < 2000) {
       callbacks.onResult?.("", null);
       return;
     }
@@ -147,13 +157,23 @@ export async function startSttSession(
 
   processor.onaudioprocess = (e: AudioProcessingEvent) => {
     if (finished) return;
+    if (!framesSeen) {
+      framesSeen = true;
+      clearTimeout(frameWatchdog); // first frame arrived — cancel the no-frames watchdog
+    }
     audioFrames++;
     const input = e.inputBuffer.getChannelData(0);
     chunks.push(new Float32Array(input));
     let sum = 0;
-    for (let i = 0; i < input.length; i++) sum += input[i] * input[i];
+    let peak = 0;
+    for (let i = 0; i < input.length; i++) {
+      const a = Math.abs(input[i]);
+      sum += input[i] * input[i];
+      if (a > peak) peak = a;
+    }
+    if (peak > maxPeakRef) maxPeakRef = peak;
     const rms = Math.sqrt(sum / input.length);
-    if (rms > maxRms) maxRms = rms; // track maximum RMS
+    if (rms > maxRms) maxRms = rms;
     const now = Date.now();
     if (rms > VOICE_RMS_THRESHOLD) {
       if (!speechStarted) {
