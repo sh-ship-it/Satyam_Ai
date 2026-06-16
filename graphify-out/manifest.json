@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "backend/app/db/models.py": {
-    "mtime": 1781527707.4538784,
-    "ast_hash": "587b3d18d3c25e603e65145014dbab32",
+    "mtime": 1781642538.7247863,
+    "ast_hash": "5352be007a0d8fc6675238e392276269",
     "semantic_hash": ""
   },
   "backend/app/db/rls.py": {
@@ -880,8 +880,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1781641359.7145252,
-    "ast_hash": "da87dd690533758539e03ab116201fe0",
+    "mtime": 1781643932.7250793,
+    "ast_hash": "ae685daf6e3b4873800ccee49f063ecb",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -915,8 +915,8 @@
     "semantic_hash": ""
   },
   "backend/migrations/002_schema_v2.sql": {
-    "mtime": 1781527779.4090946,
-    "ast_hash": "dcd5d2e42e23119ebeef84177269ad8a",
+    "mtime": 1781642444.522998,
+    "ast_hash": "4f7d29b2b2face7f1fbad52a22d9550a",
     "semantic_hash": ""
   },
   "backend/migrations/teardown.sql": {
@@ -935,8 +935,8 @@
     "semantic_hash": ""
   },
   "backend/seed/load_seed.sql": {
-    "mtime": 1781519633.4527962,
-    "ast_hash": "3d63a56322e0690ff16cadf2d0630ba2",
+    "mtime": 1781642490.1790702,
+    "ast_hash": "757009b85e2d4f4a9cb7b2f161ae3c5a",
     "semantic_hash": ""
   },
   "backend/app/api/routes/settings.py": {
@@ -1067,6 +1067,21 @@
   "frontend/src/routes/trends.tsx": {
     "mtime": 1781636241.6076274,
     "ast_hash": "7ff2375f8e12de3762440202253dee7a",
+    "semantic_hash": ""
+  },
+  "backend/migrations/003_add_ps4_ps7_tables.sql": {
+    "mtime": 1781642893.3859127,
+    "ast_hash": "f0a8f6a2d5eab1b95dab892376e77b2e",
+    "semantic_hash": ""
+  },
+  "backend/seed/load_neon_60pct.py": {
+    "mtime": 1781643658.6771948,
+    "ast_hash": "7bb4e111415e40cffe62b8bea90e34c5",
+    "semantic_hash": ""
+  },
+  "backend/seed/load_new_tables.py": {
+    "mtime": 1781643211.8936357,
+    "ast_hash": "88c97102b00108323c1aea7ed1b51f57",
     "semantic_hash": ""
   }
 }
