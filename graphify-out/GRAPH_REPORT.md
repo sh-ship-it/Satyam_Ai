@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-16)
 
 ## Corpus Check
-- 199 files · ~109,330 words
+- 199 files · ~109,571 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `72d06cc7`
+- Built from commit: `68fd4e88`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -148,10 +148,10 @@
   backend/app/core/masking.py → backend/app/core/rbac.py
 - `AsyncSession` --uses--> `Principal`  [INFERRED]
   backend/app/api/deps.py → backend/app/core/rbac.py
-- `Embedder` --uses--> `GoogleSTT`  [INFERRED]
-  backend/app/models/registry.py → backend/app/models/api/google_voice.py
-- `LLM` --uses--> `GoogleSTT`  [INFERRED]
-  backend/app/models/registry.py → backend/app/models/api/google_voice.py
+- `request()` --calls--> `fetch()`  [INFERRED]
+  frontend/src/lib/api/client.ts → frontend/src/server.ts
+- `streamChat()` --calls--> `fetch()`  [INFERRED]
+  frontend/src/lib/api/client.ts → frontend/src/server.ts
 
 ## Import Cycles
 - 1-file cycle: `backend/app/main.py -> backend/app/main.py`
@@ -519,7 +519,7 @@ Cohesion: 0.40
 Nodes (5): [2026-06-16] — E2E Formatting & Global Language Toggle (Issues 10 & 11), Backend Changes, Frontend Changes, Summary, Verification
 
 ## Knowledge Gaps
-- **667 isolated node(s):** `VoiceScreen`, `SCREEN_ROUTES`, `ParsedVoice`, `SttCallbacks`, `SttSessionOptions` (+662 more)
+- **667 isolated node(s):** `Tab`, `EngineSettings`, `defaultEngineSettings`, `Status`, `Role` (+662 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -527,14 +527,14 @@ Nodes (5): [2026-06-16] — E2E Formatting & Global Language Toggle (Issues 10 &
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 42` to `Community 51`?**
-  _High betweenness centrality (0.078) - this node is a cross-community bridge._
+  _High betweenness centrality (0.088) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 42` to `Community 16`, `Community 33`, `Community 5`?**
-  _High betweenness centrality (0.028) - this node is a cross-community bridge._
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
 - **Are the 37 inferred relationships involving `Principal` (e.g. with `Any` and `AsyncSession`) actually correct?**
   _`Principal` has 37 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 2 inferred relationships involving `get_settings()` (e.g. with `get_url()` and `main()`) actually correct?**
   _`get_settings()` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `VoiceScreen`, `SCREEN_ROUTES`, `ParsedVoice` to the rest of the system?**
+- **What connects `Tab`, `EngineSettings`, `defaultEngineSettings` to the rest of the system?**
   _778 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._

@@ -260,8 +260,8 @@
     "semantic_hash": ""
   },
   "backend/app/schemas/chat.py": {
-    "mtime": 1781598864.9763012,
-    "ast_hash": "5692142bc50dde0ffc265a4ad8aa7b17",
+    "mtime": 1781608551.479728,
+    "ast_hash": "959661ee8057ca87b4dddef30fa24b2d",
     "semantic_hash": ""
   },
   "backend/app/schemas/map.py": {
@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/SettingsDialog.tsx": {
-    "mtime": 1781590058.744204,
-    "ast_hash": "42f7053383a6200e40db8ad7eda153e8",
+    "mtime": 1781608754.8928418,
+    "ast_hash": "c6bbd430e12fe263028cd91f5a335911",
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/client.ts": {
-    "mtime": 1781597766.0282795,
-    "ast_hash": "8fc94f6f210c6a335affe258e08b7e27",
+    "mtime": 1781608524.3816223,
+    "ast_hash": "0ad05d0a98786bafc2547958af5e14f4",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/example.functions.ts": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781605356.216379,
-    "ast_hash": "8653e14136e1c868a5d104d6ee419d1b",
+    "mtime": 1781608576.8005946,
+    "ast_hash": "9255854f85a91c7773b07897eb453a22",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
