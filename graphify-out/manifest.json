@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1781608867.2575831,
-    "ast_hash": "ea16dac33e9b60f97c685024b2dc5186",
+    "mtime": 1781636067.336779,
+    "ast_hash": "29782ff5ff5fd5281c5e04f8bbf70969",
     "semantic_hash": ""
   },
   "backend/app/models/__init__.py": {
@@ -375,8 +375,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CaseDrawer.tsx": {
-    "mtime": 1781551686.491504,
-    "ast_hash": "24fe38d1fcb4ac3023bc128e2d0a0118",
+    "mtime": 1781636600.0256252,
+    "ast_hash": "98fe8a1a8430b4585da7a0fd31363ca8",
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1781632886.561032,
-    "ast_hash": "2c97cc1f919c96062262ed78227af055",
+    "mtime": 1781636473.6698916,
+    "ast_hash": "524c1aad2fbe59453951f8286b37b745",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
-    "mtime": 1781581011.3231933,
-    "ast_hash": "e8a760c497726914ef652257b47a174e",
+    "mtime": 1781636357.9260316,
+    "ast_hash": "df063c279509e6d57e32f190708c105d",
     "semantic_hash": ""
   },
   "frontend/src/router.tsx": {
@@ -880,8 +880,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1781635312.800473,
-    "ast_hash": "ab8b8efb29a6a40d064e84615b5bb8f0",
+    "mtime": 1781641359.7145252,
+    "ast_hash": "da87dd690533758539e03ab116201fe0",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -1027,6 +1027,46 @@
   "SATYAM_FEATURE_ARCHITECTURE_AND_BUILD_PLAN.md": {
     "mtime": 1781635198.8349085,
     "ast_hash": "183784fc11b1877dd41019128f5b466d",
+    "semantic_hash": ""
+  },
+  "backend/app/api/routes/intelligence.py": {
+    "mtime": 1781636046.7476692,
+    "ast_hash": "97a13921b37c7e280d1f98650fcc1838",
+    "semantic_hash": ""
+  },
+  "backend/app/schemas/intelligence.py": {
+    "mtime": 1781640733.2218413,
+    "ast_hash": "4fa1c04c1d98cab3cabb5d29a85a3924",
+    "semantic_hash": ""
+  },
+  "backend/app/services/intelligence_service.py": {
+    "mtime": 1781640759.8720639,
+    "ast_hash": "e189d10bb2c05458d30f3a867ba60c44",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/api/intelligence.ts": {
+    "mtime": 1781640769.55227,
+    "ast_hash": "4d635c45e70110e9fb2b0b4600fd2dce",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/forecast.tsx": {
+    "mtime": 1781640820.8940825,
+    "ast_hash": "49420568aa52fe94dcbb2fc64885134f",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/profile.$personId.tsx": {
+    "mtime": 1781636357.9362266,
+    "ast_hash": "d832f7ad298400b63cd9ede7a851e380",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/socio.tsx": {
+    "mtime": 1781636287.5641377,
+    "ast_hash": "b66b19e060cfea6810262e8d94e397c8",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/trends.tsx": {
+    "mtime": 1781636241.6076274,
+    "ast_hash": "7ff2375f8e12de3762440202253dee7a",
     "semantic_hash": ""
   }
 }
