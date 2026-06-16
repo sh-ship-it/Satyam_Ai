@@ -880,8 +880,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1781599362.0383327,
-    "ast_hash": "6b8e7052cfcfa4c935c3dc9c1bdb3c43",
+    "mtime": 1781604398.4094408,
+    "ast_hash": "18ccea7e633a575dce0758a9049aa26b",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -1020,13 +1020,18 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/voice/recorder.ts": {
-    "mtime": 1781598737.234064,
-    "ast_hash": "18617ac4f5ce3281f7eaf3d0c9423c44",
+    "mtime": 1781604370.3989184,
+    "ast_hash": "242f2356963be5bc9b29bf43f67cdb54",
     "semantic_hash": ""
   },
   "SATYAM_MEDIARECORDER_STT_AUTODETECT_FIX.md": {
     "mtime": 1781597610.0179236,
     "ast_hash": "b2a42a2110d15848c2e4c5bb5c7a5bd1",
+    "semantic_hash": ""
+  },
+  "backend/test_stt_api.py": {
+    "mtime": 1781604133.576067,
+    "ast_hash": "533119ca207c2c5ea1611d3fa550bdf9",
     "semantic_hash": ""
   }
 }
