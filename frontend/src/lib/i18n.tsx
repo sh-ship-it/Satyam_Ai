@@ -312,7 +312,7 @@ const DICT: Record<string, string> = {
 };
 
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (s: string) => string };
-const I18nCtx = createContext<Ctx>({ lang: "EN", setLang: () => {}, t: (s) => s });
+const I18nCtx = createContext<Ctx>({ lang: "EN", setLang: () => { }, t: (s) => s });
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("EN");
@@ -321,12 +321,12 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     try {
       const saved = localStorage.getItem("fq-lang") as Lang | null;
       if (saved === "EN" || saved === "KN") setLangState(saved);
-    } catch {}
+    } catch { }
   }, []);
 
   const setLang = (l: Lang) => {
     setLangState(l);
-    try { localStorage.setItem("fq-lang", l); } catch {}
+    try { localStorage.setItem("fq-lang", l); } catch { }
     if (typeof document !== "undefined") {
       document.documentElement.lang = l === "KN" ? "kn" : "en";
     }
