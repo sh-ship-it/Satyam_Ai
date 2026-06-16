@@ -15,7 +15,7 @@ class ChatRequest(BaseModel):
     # session only. None means "use the server default".
     brain_engine: Optional[Literal["gemini", "groq"]] = None
     sql_engine: Optional[Literal["gemini", "qwen3-coder-next"]] = None
-    voice_backend: Optional[Literal["sarvam", "bhashini"]] = None
+    voice_backend: Optional[Literal["sarvam", "google", "bhashini"]] = None
 
 
 class Citation(BaseModel):

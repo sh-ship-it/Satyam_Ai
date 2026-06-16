@@ -634,7 +634,7 @@ function NetworkScreen() {
                       className="z-[10000] w-56 max-h-[60vh] overflow-y-auto rounded-[5px] border-2 border-foreground bg-secondary-background p-1 nb-shadow"
                     >
                       <div className="px-2 py-1 text-[10px] uppercase tracking-wide text-muted-foreground whitespace-nowrap">{t("Built-in")}</div>
-                      {Object.keys(BUILTIN_PRESETS).map((name) => (
+                      {Object.keys(SIM_PRESETS).map((name) => (
                         <button
                           key={name}
                           onClick={() => applyPreset(name)}

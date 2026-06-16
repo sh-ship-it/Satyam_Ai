@@ -176,7 +176,7 @@ export async function sttTranscribe(
   lang: "en" | "kn" | "auto" = "auto",
 ): Promise<SttResult> {
   const fd = new FormData();
-  fd.append("file", audio, "audio.webm");
+  fd.append("file", audio, "audio.wav");
   fd.append("lang", lang);
   const token = getAuthToken();
   // No content-type header — browser sets the multipart boundary.

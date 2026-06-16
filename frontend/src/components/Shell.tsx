@@ -19,7 +19,8 @@ import {
 import { type ReactNode, useState, useEffect, useRef, useCallback } from "react";
 import { ThemePicker } from "./ThemePicker";
 import { DarkModeToggle } from "./DarkModeToggle";
-import { SettingsDialog } from "./SettingsDialog";
+import { SettingsDialog, loadEngineSettings } from "./SettingsDialog";
+import { startSttSession, isBackendSttSupported, type SttSession } from "@/lib/voice/recorder";
 import { ProfileMenu } from "./ProfileMenu";
 import { useI18n } from "@/lib/i18n";
 import {
@@ -275,7 +276,10 @@ export function Shell({ children }: { children: ReactNode }) {
         return;
       }
       // 3) Data query -> Console (grounded answer, spoken in chosen language).
-      const out = { text: cmd.query, lang: speechLang, rate, speak: detail.speak !== false };
+      // Preserve the "auto" sentinel so Console can auto-detect the reply
+      // language from the actual answer text (resolveLang). Pre-resolving to a
+      // concrete locale here would defeat reply-language auto-detection.
+      const out = { text: cmd.query, lang: voiceLang === "auto" ? "auto" : speechLang, rate, speak: detail.speak !== false };
       if (pathname === "/console") {
         window.dispatchEvent(new CustomEvent("satyam:voice-send", { detail: out }));
       } else {
@@ -312,95 +316,165 @@ export function Shell({ children }: { children: ReactNode }) {
     turnSubmittedRef.current = false;
     phaseRef.current = "listening";
 
-    const SR: any =
-      (typeof window !== "undefined" &&
-        ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) ||
-      null;
-    if (!SR) {
-      setSpeechError("Speech recognition is not supported in this browser.");
-      return;
-    }
+    let disposed = false;
+    let sttSession: SttSession | null = null;
+    let browserRec: any = null;
 
-    const rec = new SR();
-    rec.continuous = true;
-    rec.interimResults = true;
-    // TASK 2A/H1: Recognition follows the Speech-output (voiceLang) selector.
-    // "auto" → use the UI language as the starting point; the transcript's
-    // detected language (via detectLang) will correct the TTS reply anyway.
-    // Explicit kn-IN / en-IN → use it directly.
-    rec.lang =
-      voiceLang === "auto"
-        ? (lang === "KN" ? "kn-IN" : "en-IN")
-        : coerceVoiceLang(voiceLang) || "en-IN";
-
-    // Auto-submit one turn ~1.6s after the user stops speaking (conversation mode only).
-    const submitTurn = () => {
+    // Dispatch one completed spoken turn. `detected` is the provider-detected
+    // BCP-47 language (backend STT only); when present it wins over the manual
+    // selector so the reply matches what was actually spoken.
+    const dispatchTurn = (rawText: string, detected?: string | null) => {
       if (turnSubmittedRef.current) return;
-      const text = `${liveFinalRef.current} ${liveInterimRef.current}`.trim();
+      const text = rawText.trim();
       if (!text) return;
       turnSubmittedRef.current = true;
       clearSilenceTimer();
       phaseRef.current = "processing";
       setMicActive(false); // mute the mic while the agent works/talks
+      const turnLang =
+        detected && detected.toLowerCase().startsWith("kn") ? "kn-IN"
+        : detected && detected.toLowerCase().startsWith("en") ? "en-IN"
+        : voiceLangRef.current;
       window.dispatchEvent(
         new CustomEvent("satyam:voice-command", {
-          detail: { text, lang: voiceLangRef.current, rate: speechRateRef.current, speak: true },
+          detail: { text, lang: turnLang, rate: speechRateRef.current, speak: true },
         }),
       );
     };
-    const armSilence = () => {
-      if (!conversationModeRef.current || turnSubmittedRef.current) return;
-      clearSilenceTimer();
-      silenceTimerRef.current = setTimeout(submitTurn, 1600);
-    };
 
-    rec.onresult = (e: any) => {
-      let interim = "";
-      let finals = "";
-      for (let i = e.resultIndex; i < e.results.length; i++) {
-        const res = e.results[i];
-        if (res.isFinal) finals += res[0].transcript;
-        else interim += res[0].transcript;
+    // ───────── Browser SpeechRecognition (Web Speech provider / fallback) ────
+    const startBrowserRecognition = () => {
+      const SR: any =
+        (typeof window !== "undefined" &&
+          ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) ||
+        null;
+      if (!SR) {
+        setSpeechError("Speech recognition is not supported in this browser.");
+        return;
       }
-      if (finals) {
-        const add = finals.trim();
-        setFinalTranscript((prev) => (prev ? prev + " " : "") + add);
-        setEditableTranscript((prev) => {
-          const next = (prev ? prev + " " : "") + add;
-          liveFinalRef.current = next;
-          return next;
-        });
-      }
-      liveInterimRef.current = interim;
-      setInterimTranscript(interim);
-      armSilence(); // any speech (interim or final) resets the pause clock
-    };
-    rec.onerror = (e: any) => {
-      if (e.error === "not-allowed" || e.error === "service-not-allowed") {
-        setSpeechError("Microphone permission denied.");
-      } else if (e.error === "no-speech") {
-        // ignore
-      } else {
-        setSpeechError(`Mic error: ${e.error}`);
-      }
-    };
-    rec.onend = () => {
-      // Only restart if THIS recognizer is still active and we are still meant to
-      // be listening. A short delay avoids Chrome's "already started" throttle.
-      if (recognitionRef.current !== rec) return;
-      setTimeout(() => {
+      const rec = new SR();
+      rec.continuous = true;
+      rec.interimResults = true;
+      // Browser recognition needs a language up front; "auto" falls back to the
+      // UI language. Genuine input auto-detect uses the backend STT path below.
+      rec.lang =
+        voiceLang === "auto"
+          ? (lang === "KN" ? "kn-IN" : "en-IN")
+          : coerceVoiceLang(voiceLang) || "en-IN";
+
+      const armSilence = () => {
+        if (!conversationModeRef.current || turnSubmittedRef.current) return;
+        clearSilenceTimer();
+        silenceTimerRef.current = setTimeout(() => {
+          dispatchTurn(`${liveFinalRef.current} ${liveInterimRef.current}`.trim());
+        }, 1600);
+      };
+
+      rec.onresult = (e: any) => {
+        let interim = "";
+        let finals = "";
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          const res = e.results[i];
+          if (res.isFinal) finals += res[0].transcript;
+          else interim += res[0].transcript;
+        }
+        if (finals) {
+          const add = finals.trim();
+          setFinalTranscript((prev) => (prev ? prev + " " : "") + add);
+          setEditableTranscript((prev) => {
+            const next = (prev ? prev + " " : "") + add;
+            liveFinalRef.current = next;
+            return next;
+          });
+        }
+        liveInterimRef.current = interim;
+        setInterimTranscript(interim);
+        armSilence(); // any speech (interim or final) resets the pause clock
+      };
+      rec.onerror = (e: any) => {
+        if (e.error === "not-allowed" || e.error === "service-not-allowed") {
+          setSpeechError("Microphone permission denied.");
+        } else if (e.error === "no-speech") {
+          // ignore
+        } else {
+          setSpeechError(`Mic error: ${e.error}`);
+        }
+      };
+      rec.onend = () => {
         if (recognitionRef.current !== rec) return;
-        try { rec.start(); } catch { /* will be re-created by the effect if needed */ }
-      }, 250);
+        setTimeout(() => {
+          if (recognitionRef.current !== rec) return;
+          try { rec.start(); } catch { /* re-created by the effect if needed */ }
+        }, 250);
+      };
+      recognitionRef.current = rec;
+      browserRec = rec;
+      try { rec.start(); } catch {}
     };
 
-    recognitionRef.current = rec;
-    try { rec.start(); } catch {}
+    // ───────── Backend STT (genuine server-side auto-detect via /voice/stt) ──
+    // Captures a WAV utterance, uploads it to the backend, and uses the
+    // provider-detected language. This is the path that makes "Auto (detect)"
+    // actually detect the spoken language instead of following the UI toggle.
+    const armBackendStt = () => {
+      if (disposed) return;
+      const voiceHint: "auto" | "en" | "kn" =
+        voiceLang === "auto" ? "auto"
+        : voiceLang.toLowerCase().startsWith("kn") ? "kn"
+        : "en";
+      void startSttSession({
+        lang: voiceHint,
+        silenceMs: 1500,
+        maxMs: 15000,
+        callbacks: {
+          onError: (msg) => {
+            if (disposed) return;
+            // Permission / network / provider failure → fall back to the browser.
+            console.warn("[stt] backend STT unavailable, using browser recognition:", msg);
+            startBrowserRecognition();
+          },
+          onResult: (text, detected) => {
+            if (disposed) return;
+            setInterimTranscript("");
+            const clean = (text || "").trim();
+            let submitted = false;
+            if (clean) {
+              setFinalTranscript((prev) => (prev ? prev + " " : "") + clean);
+              setEditableTranscript((prev) => {
+                const next = (prev ? prev + " " : "") + clean;
+                liveFinalRef.current = next;
+                return next;
+              });
+              if (conversationModeRef.current) {
+                dispatchTurn(clean, detected);
+                submitted = true; // setMicActive(false) tears down this effect
+              }
+            }
+            // Manual mode (or an empty conversation turn): keep listening.
+            if (!submitted && !disposed && listeningRef.current) armBackendStt();
+          },
+        },
+      }).then((s) => {
+        if (disposed) s.cancel();
+        else sttSession = s;
+      });
+    };
+
+    const provider = loadEngineSettings().voiceBackend; // sarvam | google | webspeech
+    if (provider !== "webspeech" && isBackendSttSupported()) {
+      armBackendStt();
+    } else {
+      startBrowserRecognition();
+    }
 
     return () => {
-      recognitionRef.current = null;
+      disposed = true;
       clearSilenceTimer();
-      try { rec.onend = null; rec.stop(); } catch {}
+      try { sttSession?.cancel(); } catch { /* noop */ }
+      if (browserRec) {
+        recognitionRef.current = null;
+        try { browserRec.onend = null; browserRec.stop(); } catch { /* noop */ }
+      }
     };
   }, [listening, micActive, lang, voiceLang, clearSilenceTimer]);
 
@@ -486,7 +560,7 @@ export function Shell({ children }: { children: ReactNode }) {
               ಕನ್ನಡ
             </span>
           </button>
-          <button onClick={() => setListening(true)} className="rounded-[5px] border-2 border-header-foreground bg-secondary-background p-2 text-foreground hover:translate-x-[2px] hover:translate-y-[2px] transition" aria-label={t("Voice")}>
+          <button onClick={() => { unlockAudioPlayback(); setListening(true); setMicActive(true); setIsSpeaking(false); setIsPaused(false); }} className="rounded-[5px] border-2 border-header-foreground bg-secondary-background p-2 text-foreground hover:translate-x-[2px] hover:translate-y-[2px] transition" aria-label={t("Voice")}>
             <Mic className="h-4 w-4" />
           </button>
           <button

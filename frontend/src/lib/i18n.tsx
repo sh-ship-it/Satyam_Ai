@@ -241,7 +241,6 @@ const DICT: Record<string, string> = {
   "ASI — Asst. Sub-Inspector (station)": "ASI — ಸಹಾಯಕ ಸಬ್-ಇನ್ಸ್‌ಪೆಕ್ಟರ್ (ಠಾಣೆ)",
   "HC — Head Constable (station)": "HC — ಹೆಡ್ ಕಾನ್ಸ್‌ಟೇಬಲ್ (ಠಾಣೆ)",
   "PC — Police Constable (station)": "PC — ಪೊಲೀಸ್ ಕಾನ್ಸ್‌ಟೇಬಲ್ (ಠಾಣೆ)",
-  "Role": "ಪಾತ್ರ",
   "Loading audit log…": "ಆಡಿಟ್ ಲಾಗ್ ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
   "Couldn't load the audit log.": "ಆಡಿಟ್ ಲಾಗ್ ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
   "No entries match your search.": "ನಿಮ್ಮ ಹುಡುಕಾಟಕ್ಕೆ ಯಾವುದೇ ನಮೂದುಗಳು ಹೊಂದಿಕೆಯಾಗುತ್ತಿಲ್ಲ.",

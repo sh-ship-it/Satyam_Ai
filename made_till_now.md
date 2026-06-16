@@ -1282,3 +1282,95 @@ Added `console.debug("[tts] speak provider=", provider, "lang=", lang)` in `tts.
 - `POST /settings/db-source` response includes `url_host` — changes between cloud/local endpoints.
 - Speaking Kannada → `detectLang` returns `"kn"` → `reqLang: "kn"` in chat → backend answers in Kannada → TTS speaks Kannada (Sarvam Bulbul v2, `kn-IN`).
 - `POST /voice/stt` with `lang=auto` → Saaras v3 detects language → response includes `detected_lang`.
+
+---
+
+### [2026-06-16] — MediaRecorder → /voice/stt Wiring + Genuine Input Language Auto-Detect (SATYAM_MEDIARECORDER_STT_AUTODETECT_FIX.md)
+
+#### Summary
+Replaced the browser `webkitSpeechRecognition` mic path (which required a fixed language up front) with a Web Audio API recorder that captures 16 kHz mono PCM WAV and uploads it to `/voice/stt`, enabling genuine server-side language auto-detection via Saaras v3. Browser SpeechRecognition is retained as an automatic fallback when the provider is Web Speech or on any error.
+
+---
+
+#### Files Changed
+
+| File | Change |
+|------|--------|
+| `frontend/src/lib/voice/recorder.ts` | **NEW** — `startSttSession()`: Web Audio API mic capture → ScriptProcessor PCM → 16 kHz mono WAV via `encodeWav()` → uploads to `/voice/stt`. Silence VAD (1.5 s), 15 s hard cap, `isBackendSttSupported()` check. |
+| `frontend/src/components/Shell.tsx` | (1) Import `loadEngineSettings` from SettingsDialog + `startSttSession`, `isBackendSttSupported`, `SttSession` from recorder. (2) Preserve `"auto"` sentinel in `out.lang` so Console `resolveLang` can auto-detect reply language from the actual text. (3) Fixed header mic button: now calls `unlockAudioPlayback()` + sets `micActive(true)` (was only `setListening(true)`, which made the recognition effect bail immediately). (4) Recognition effect rewritten: picks backend STT (Sarvam/Google) for genuine auto-detect; falls back to browser SpeechRecognition for Web Speech provider or on any error. |
+| `frontend/src/lib/api/client.ts` | `sttTranscribe`: upload filename changed `"audio.webm"` → `"audio.wav"` to match the PCM WAV the recorder sends. |
+| `backend/app/models/api/google_voice.py` | `GoogleSTT.transcribe`: config changed `encoding: WEBM_OPUS` / `sampleRateHertz: 48000` → `LINEAR16` / `16000` to match the WAV format. |
+
+---
+
+#### Architecture: End-to-End Flow
+
+```
+Mic (Web Audio API, 16 kHz mono PCM WAV)
+  → startSttSession() [recorder.ts] — ScriptProcessor RMS VAD, 1.5 s silence or 15 s cap
+  → sttTranscribe(wav, "auto") [client.ts]
+  → POST /voice/stt multipart, lang=auto [voice.py]
+  → SarvamSTT.transcribe_with_lang(audio, lang="auto") → language_code="unknown"
+  → Saaras v3 auto-detects → { transcript, detected_lang: "kn-IN" | "en-IN" }
+  → onResult(transcript, detected) → dispatchTurn picks kn-IN/en-IN from detected
+  → satyam:voice-command with correct turnLang
+  → Console speak(reply, {lang: turnLang}) → resolveLang → Sarvam Bulbul v2 in right language
+```
+
+**Browser fallback path** (Web Speech provider OR any error in backend STT):
+- `startBrowserRecognition()` runs `webkitSpeechRecognition` as before, using `voiceLang` (or UI lang for "auto").
+- Silence auto-submit (1.6 s) still works in browser path.
+
+---
+
+#### Key Design Decisions
+- **WAV not webm/Opus:** Sarvam Saaras rejects Opus; a raw PCM WAV (44-byte header + 16-bit samples) is universally accepted by both Sarvam and Google STT and needs no backend transcoding.
+- **ScriptProcessor not MediaRecorder:** `MediaRecorder` doesn't give real-time RMS for VAD; `ScriptProcessor` gives per-4096-frame PCM buffers for both VAD and encoding.
+- **Muted gain node:** Mic audio routed through `gain=0` node prevents feedback loop while keeping the `ScriptProcessor` pumping.
+- **Header mic button bug fixed:** Previous `onClick={() => setListening(true)}` never set `micActive(true)`, so `if (!listening || !micActive) return` at the top of the recognition effect immediately bailed — the mic panel opened but never started listening.
+- **`"auto"` sentinel preserved:** `out.lang` in the voice-command handler now passes `"auto"` when the selector is "Auto (detect)". Previously it pre-resolved to `speechLang` (a concrete `en-IN`/`kn-IN`), defeating `resolveLang` in Console.
+
+---
+
+#### Verification
+- `npx tsc --noEmit --skipLibCheck` — 0 new errors.
+- With `SARVAM_API_KEY` set and voice selector on "Auto (detect)": speak English → `detected_lang: "en-IN"` → reply in English; speak Kannada → `detected_lang: "kn-IN"` → reply in Kannada. No manual language change required.
+- Web Speech fallback: set voice provider to "Web Speech API" → browser `webkitSpeechRecognition` runs unchanged.
+- Header mic button: now opens panel AND starts listening immediately.
+
+---
+
+### [2026-06-16] — Root-Cause Fix: Voice Input Dead + Chat 422 on Google Voice
+
+#### Diagnosis (evidence-based)
+Started the backend and tested every endpoint with curl — **the entire backend pipeline works**:
+- `POST /voice/tts` (sarvam) → `provider: SarvamTTS`, `mime: audio/wav`, 107 KB audio ✅
+- `POST /chat/stream` → full SQL → token stream → done ✅
+- `POST /voice/stt` (multipart WAV, lang=auto) → `provider: SarvamSTT`, `detected_lang: en-IN`, HTTP 200 ✅
+- Frontend port 3000 matches `CORS_ORIGINS` ✅
+
+So the fault was entirely in the **frontend voice-capture path** plus one schema mismatch.
+
+#### Root Cause 1 (voice input dead) — `frontend/src/lib/voice/recorder.ts`
+The `AudioContext` was created **after** `await navigator.mediaDevices.getUserMedia(...)`. That await breaks the user-gesture chain, so the context starts in the **"suspended"** state. While suspended, `ScriptProcessor.onaudioprocess` never fires → **zero audio captured** → `speechStarted` stays false → `finalize()` returns an empty transcript silently. No transcript → no `satyam:voice-command` dispatched → no chat answer → no spoken reply. This single bug caused all three reported symptoms when using voice.
+
+**Fix:**
+- `if (ctx.state === "suspended") await ctx.resume();` immediately after creating the context.
+- Added a **no-audio watchdog**: if `onaudioprocess` hasn't fired within 1.6 s (`audioFrames === 0`), call `onError(...)` → Shell's `armBackendStt` `onError` handler falls back to browser `webkitSpeechRecognition`. Voice input now works even if the Web Audio path fails for any reason.
+- `cleanup()` clears the watchdog; `onaudioprocess` increments `audioFrames`.
+
+#### Root Cause 2 (chat 422 when Google voice selected) — `backend/app/schemas/chat.py`
+`console.tsx sendMessage()` now forwards `voice_backend` from Settings into `/chat/stream`. The `ChatRequest.voice_backend` Literal only allowed `["sarvam", "bhashini"]`, but the frontend can now send `"google"` (config.py was already widened). A user with Google selected would get **422 on every chat request** — killing text and voice feedback.
+
+**Fix:** widened to `Literal["sarvam", "google", "bhashini"]`. Verified: `/chat/stream` with `voice_backend=sarvam` AND `voice_backend=google` both return HTTP 200.
+
+#### Files Changed
+| File | Change |
+|------|--------|
+| `frontend/src/lib/voice/recorder.ts` | `await ctx.resume()` on suspended context; no-audio watchdog → triggers browser fallback; `audioFrames` counter; watchdog cleared in `cleanup()` |
+| `backend/app/schemas/chat.py` | `ChatRequest.voice_backend` Literal widened to include `"google"` |
+
+#### Verification
+- `npx tsc --noEmit --skipLibCheck` — 0 new errors.
+- Backend curl: TTS, STT, chat (both voice_backend values) all HTTP 200.
+- Note: `network.tsx:637 BUILTIN_PRESETS` remains a pre-existing, unrelated compile error on the /network route (not touched — out of scope for the voice fix).

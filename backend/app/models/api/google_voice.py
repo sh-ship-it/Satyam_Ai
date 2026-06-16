@@ -53,7 +53,8 @@ class GoogleTTS:
 
 
 class GoogleSTT:
-    """Google Cloud Speech-to-Text. Expects WEBM/Opus audio (MediaRecorder default)."""
+    """Google Cloud Speech-to-Text. Expects 16 kHz mono 16-bit PCM WAV (LINEAR16),
+    which is what the frontend recorder uploads."""
 
     def __init__(self) -> None:
         self._key = get_settings().google_tts_api_key
@@ -63,8 +64,8 @@ class GoogleSTT:
             return ""
         payload = {
             "config": {
-                "encoding": "WEBM_OPUS",
-                "sampleRateHertz": 48000,
+                "encoding": "LINEAR16",
+                "sampleRateHertz": 16000,
                 "languageCode": _lang_code(lang),
             },
             "audio": {"content": base64.b64encode(audio).decode("ascii")},
