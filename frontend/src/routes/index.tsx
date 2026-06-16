@@ -73,14 +73,29 @@ function Hero() {
   }, []);
 
   return (
-    <section className="relative overflow-hidden border-b-2 border-foreground bg-background">
-      {/* Parallax glow */}
+    <section className="relative overflow-hidden border-b-2 border-foreground bg-background min-h-screen">
+      {/* ── Background video ─────────────────────────────────────────── */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260319_015952_e1deeb12-8fb7-4071-a42a-60779fc64ab6.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+      />
+      {/* ── Overlay to keep text readable over the video ─────────────── */}
+      <div className="absolute inset-0 z-0 bg-background/20 pointer-events-none" />
+
+      {/* ── Parallax glow (sits above overlay, below content) ────────── */}
       <div
         ref={blobRef}
-        className="pointer-events-none absolute -top-24 -right-24 h-[28rem] w-[28rem] rounded-full bg-primary/10 blur-[120px] will-change-transform"
+        className="pointer-events-none absolute -top-24 -right-24 h-[28rem] w-[28rem] rounded-full bg-primary/10 blur-[120px] will-change-transform z-[1]"
         aria-hidden="true"
       />
-      <div className="mx-auto max-w-7xl px-6 pt-16 pb-12">
+
+      {/* ── All hero content — above the video and overlay ───────────── */}
+      <div className="relative z-10 mx-auto max-w-7xl px-6 pt-20 pb-24 min-h-screen flex flex-col justify-center">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           {/* Left */}
           <div className="animate-fade-in">
@@ -190,6 +205,14 @@ function Hero() {
             <span className="absolute -bottom-3 left-6 inline-flex items-center gap-1.5 rounded-[5px] border-2 border-foreground bg-secondary-background px-2.5 py-1 text-[11px] font-bold nb-shadow-sm">
               <ShieldCheck className="h-3.5 w-3.5 text-success" /> Chain-of-Custody Intact
             </span>
+          </div>
+        </div>
+
+        {/* ── Scroll-down hint ─────────────────────────────────────────── */}
+        <div className="mt-12 flex justify-center animate-bounce">
+          <div className="flex flex-col items-center gap-1 opacity-60">
+            <span className="text-[10px] font-bold uppercase tracking-widest">Scroll</span>
+            <ChevronDown className="h-5 w-5" />
           </div>
         </div>
       </div>

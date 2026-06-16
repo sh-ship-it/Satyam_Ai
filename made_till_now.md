@@ -1866,3 +1866,69 @@ Created `backend/seed/load_neon_60pct.py` — truncates Neon and reloads 60% of 
 
 #### Local PostgreSQL 17
 Unchanged — still has full 100% dataset (178,517 accounts, 179,185 transactions, all 100k cases).
+
+---
+
+### [2026-06-17] — Landing Page: Full-Screen Background Video + Hero UI Improvements
+
+#### Summary
+Added a full-screen background video to the landing page hero section, improved video visibility, made the hero fill the full viewport, and pushed the stats section (98.2%, 4.5M+) below the fold so it appears on scroll.
+
+---
+
+#### File Changed: `frontend/src/routes/index.tsx`
+
+**Changes (Hero function only — no other content touched):**
+
+| What | Before | After |
+|------|--------|-------|
+| Hero height | Auto-height (content only, ~400px) | `min-h-screen` — fills full viewport |
+| Background video | None | Added as first child of `<section>`: `absolute inset-0 w-full h-full object-cover z-0 pointer-events-none`, `autoPlay muted loop playsInline preload="auto"` |
+| Overlay opacity | None (was 60% after initial add) | `bg-background/20` — video clearly visible through text |
+| Parallax glow | No z-index | `z-[1]` — above overlay, below content |
+| Content wrapper | `pt-16 pb-12` | `min-h-screen flex flex-col justify-center pt-20 pb-24` — vertically centers content in full-screen hero |
+| Scroll hint | None | Bouncing "SCROLL ↓" with `ChevronDown` + `animate-bounce` at bottom of hero |
+| Stats section (98.2% etc.) | Immediately visible below hero | Now below the fold — appears when user scrolls down past the full-screen hero |
+
+**z-index stack (bottom to top):**
+1. `z-0` — background video
+2. `z-0` — overlay (`bg-background/20`)
+3. `z-[1]` — parallax glow blob
+4. `z-10` — all hero content (badge, headline, CTAs, dashboard mock, scroll hint)
+
+**Result:**
+- Video visible across the full viewport height with minimal tint (20% overlay)
+- Text and cards fully readable (neobrutalist solid-background cards)
+- Stats section (98.2%, 4.5M+, 220+, <3min) now discovered on scroll as intended
+- No new TypeScript errors (0 errors after change)
+
+---
+
+### [2026-06-17] — Transcripts Screen: Dynamic Data + Demo Seeds + UX Improvements
+
+#### Summary
+The transcripts screen was not hardcoded — it correctly reads from `localStorage["satyam-transcripts"]`. The issue was the screen appeared empty because no transcripts had been saved yet. Fixed by adding a demo seed loader, "Send to console" action, search, export, and better empty state.
+
+#### File Changed: `frontend/src/routes/transcripts.tsx` — full rewrite
+
+| Feature | Before | After |
+|---------|--------|-------|
+| Empty state | Generic clipboard icon + one-liner | Step-by-step how-to guide (4 numbered steps) + "Load demo transcripts" button |
+| Demo seed | None | 5 realistic KSP investigation queries pre-seeded (EN + KN), persisted in localStorage |
+| "Send to console" | None | Each transcript card has a "Send to console" button — sets `sessionStorage["satyam:pending-voice"]` and navigates to `/console` for AI processing |
+| Search | None | Text search filter bar |
+| Export | None | Downloads all transcripts as `.txt` file |
+| Clear all | None | "Clear all" button with confirm dialog |
+| Language badge | Text only | Coloured badge: `EN` (grey) or `ಕನ್ನಡ` (primary/blue) |
+| Card style | Plain white border | Neobrutalist `border-2 border-foreground nb-shadow-sm` cards |
+| Header | Plain text | `bg-header` bar with count, demo/export/clear-all action buttons |
+
+---
+
+### [2026-06-17] — Router Fix: Forecast + Trends Added to Shell Nav Rail
+
+#### Summary
+Added Forecast (`/forecast`) and Trends (`/trends`) to the sidebar navigation rail in `Shell.tsx` so users can navigate to the new intelligence screens.
+
+#### File Changed: `frontend/src/components/Shell.tsx`
+- NAV array extended with `{ to: "/forecast", icon: ShieldCheck, label: t("Forecast") }` and `{ to: "/trends", icon: FileText, label: t("Trends") }`
