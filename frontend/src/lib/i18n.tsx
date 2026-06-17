@@ -395,7 +395,31 @@ const DICT: Record<string, string> = {
   "Typical Time": "ಸಾಮಾನ್ಯ ಸಮಯ",
   "MO Fingerprint": "ಎಂಒ ಫಿಂಗರ್‌ಪ್ರಿಂಟ್",
   "Risk Breakdown": "ಅಪಾಯ ವಿಭಜನೆ",
-  "Seasonal lift % indicates how much higher the crime rate is compared to the year-round baseline for that period. Higher values indicate stronger seasonal patterns.":
+
+  // Reports screen
+  "Report Builder": "ವರದಿ ನಿರ್ಮಾಣ",
+  "Clear all": "ಎಲ್ಲ ತೆರವು",
+  "Quick add — Top Stations": "ತ್ವರಿತ ಸೇರ್ಪಡೆ — ಪ್ರಮುಖ ಠಾಣೆಗಳು",
+  "Search and add person, FIR, crime type…": "ವ್ಯಕ್ತಿ, ಎಫ್‌ಐಆರ್, ಅಪರಾಧ ಪ್ರಕಾರ ಹುಡುಕಿ ಸೇರಿಸಿ…",
+  "Search above to add persons, FIRs, or use quick add": "ವ್ಯಕ್ತಿಗಳು ಅಥವಾ ಎಫ್‌ಐಆರ್‌ಗಳನ್ನು ಸೇರಿಸಲು ಮೇಲೆ ಹುಡುಕಿ",
+  "Report Title": "ವರದಿ ಶೀರ್ಷಿಕೆ",
+  "Prepared by": "ತಯಾರಿಸಿದವರು",
+  "Officer name / rank": "ಅಧಿಕಾರಿ ಹೆಸರು / ಶ್ರೇಣಿ",
+  "Template": "ಟೆಂಪ್ಲೇಟ್",
+  "Print PDF": "PDF ಮುದ್ರಿಸಿ",
+  "Executive Summary": "ಕಾರ್ಯಕಾರಿ ಸಾರಾಂಶ",
+  "Distribution by Station": "ಠಾಣೆಯ ಪ್ರಕಾರ ವಿತರಣೆ",
+  "Selected Items": "ಆಯ್ಕೆ ಮಾಡಿದ ಐಟಂಗಳು",
+  "Compliance Notice": "ಅನುಸರಣೆ ಸೂಚನೆ",
+  "Clearance Rate": "ಕ್ಲಿಯರೆನ್ಸ್ ದರ",
+  "Top Crime": "ಪ್ರಮುಖ ಅಪರಾಧ",
+  "Total": "ಒಟ್ಟು",
+  "Add persons or cases from the search bar on the left.": "ಎಡ ಭಾಗದ ಹುಡುಕಾಟ ಪಟ್ಟಿಯಿಂದ ವ್ಯಕ್ತಿಗಳನ್ನು ಅಥವಾ ಪ್ರಕರಣಗಳನ್ನು ಸೇರಿಸಿ.",
+  "Items will appear here and be included in the exported PDF.": "ಐಟಂಗಳು ಇಲ್ಲಿ ಕಾಣಿಸಿಕೊಂಡು ರಫ್ತು ಮಾಡಿದ PDF ನಲ್ಲಿ ಸೇರಿಸಲಾಗುತ್ತದೆ.",
+  "View profile": "ಪ್ರೊಫೈಲ್ ನೋಡಿ",
+  "This report is generated for law enforcement use only. All data shown is synthetic and does not represent real individuals, cases, or incidents. Risk scores are decision-support tools — not predictive policing instruments. Human review is required before any operational action.":
+    "ಈ ವರದಿಯನ್ನು ಕಾನೂನು ಜಾರಿ ಉಪಯೋಗಕ್ಕೆ ಮಾತ್ರ ರಚಿಸಲಾಗಿದೆ. ಎಲ್ಲ ಡೇಟಾ ಕೃತಕ ಮಾತ್ರ.",
+  "Loading station data…": "ಠಾಣೆ ಡೇಟಾ ಲೋಡ್ ಆಗುತ್ತಿದೆ…",  "Seasonal lift % indicates how much higher the crime rate is compared to the year-round baseline for that period. Higher values indicate stronger seasonal patterns.":
     "ಋತುಮಾನ ಏರಿಕೆ % ಎಂದರೆ ಆ ಅವಧಿಗೆ ವಾರ್ಷಿಕ ಆಧಾರರೇಖೆಗಿಂತ ಅಪರಾಧ ದರ ಎಷ್ಟು ಹೆಚ್ಚಿದೆ ಎಂದು ಸೂಚಿಸುತ್ತದೆ.",
 
   // Forecast screen
