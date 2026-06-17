@@ -2052,3 +2052,77 @@ All screens now import both `useI18n` (to get `lang`) and `tData` from `@/lib/tD
 - Network node labels — person names / proper nouns, correctly left verbatim.
 - Chat answers — already handled server-side: `lang` is passed in the chat request; the LLM responds in Kannada when `lang="kn"`.
 - Voice — existing Sarvam STT/TTS pipeline already handles Kannada; language toggle also drives voice language via `resolveLang()`.
+
+
+---
+
+### [2026-06-17] — Full Kannada Translation: Forecast & Trends Screens
+
+#### Summary
+Completed the remaining partial-translation gaps in the **Early Warning & Forecast** and **Trends & Patterns** screens. Every visible string now goes through `t()` when rendering in Kannada mode. TypeScript: 0 errors.
+
+#### `frontend/src/routes/forecast.tsx`
+
+All previously-hardcoded English strings wrapped in `t()`:
+
+| Location | String(s) translated |
+|----------|---------------------|
+| Page header | `"PS8 · Predictive Intelligence"`, `"Early Warning & Forecast"` |
+| PAI counter | `"hit rate"`, `"active alert"` / `"active alerts"` (pluralised) |
+| Filter bar | `"Crime type…"` placeholder, `"District…"` placeholder, `"Horizon"` label, `"d"` day suffix, `"Refresh"` button |
+| Alert card | `"Patrol"` label, `"Recommended Action"` section, `"Toggle details"` aria-label |
+| Cell row (expanded) | `"Why this cell is flagged"` |
+| Section headings | `"Early Warning Alerts"`, `"Data as of"`, baseline comparison text, `"No active alerts"`, `"No forecast thresholds exceeded…"` |
+| Risk grid | `"Forecast Risk Grid"`, `"horizon"`, `"Group by crime type"`, `"Loading grid cells…"`, `"No risk grid data…"`, all 4 table headers (`"Risk Level"`, `"Crime Type"`, `"Risk Score"`, `"Location (lat, lng)"`), footer pagination text |
+| Backtest | `"Model Validation (Backtest)"`, `"Score"`, `"Backtest Window"`, `"What This Means"`, full ethics disclaimer |
+| Error | `"Could not load forecast data…"` |
+
+`AlertCard` and `CellRow` sub-components now receive `t` as a prop (avoids calling `useT()` outside a component scope cleanly).
+
+#### `frontend/src/routes/trends.tsx`
+
+All previously-hardcoded English strings wrapped in `t()`:
+
+| Location | String(s) translated |
+|----------|---------------------|
+| Page header | `"PS3 · MO Clustering"`, `"Trends & Patterns"` |
+| Filter placeholders | `"Crime type filter…"`, `"District filter…"` |
+| Loading / error | `"Loading…"` (already in DICT), `"Could not load trends data."` |
+| Delta cards | `"QoQ Change"`, `"YoY Change"` |
+| Section headings | `"Top Crime Types"`, `"Seasonal Peaks"`, `"MO Clusters"` |
+| Seasonal peak card | `"above baseline"` suffix |
+| Table headers | `"Cluster"`, `"Cases"`, `"Sections"`, `"Action"` |
+
+#### `frontend/src/lib/i18n.tsx` — new DICT entries added
+
+40 new Kannada translations covering all newly-wrapped strings in both screens:
+`"PS8 · Predictive Intelligence"`, `"Early Warning & Forecast"`, `"hit rate"`, `"active alert/alerts"`, `"Crime type…"`, `"District…"`, `"Horizon"`, `"d"`, `"Refresh"`, `"Patrol"`, `"Recommended Action"`, `"Why this cell is flagged"`, `"Early Warning Alerts"`, `"Data as of"`, baseline comparison sentence, `"No active alerts"`, `"No forecast thresholds exceeded…"`, `"Forecast Risk Grid"`, `"horizon"`, `"Group by crime type"`, `"Loading grid cells…"`, `"No risk grid data…"`, 4 table headers, pagination footer parts, backtest labels, ethics disclaimer, forecast error, `"PS3 · MO Clustering"`, `"Trends & Patterns"`, filter placeholders, error string, `"QoQ Change"`, `"YoY Change"`, `"Top Crime Types"`, `"Seasonal Peaks"`, `"above baseline"`, `"MO Clusters"`, `"Cluster"`, `"Cases"`.
+
+Resolved duplicate `"Action"` key: unified to `"ಕ್ರಮ"` (covers both audit action column and MO cluster action hint).
+
+---
+
+### [2026-06-17] — Documentation Update
+
+#### `docs/ARCHITECTURE.md` — full rewrite
+
+Completely replaced the outdated v1 architecture document with a current
+description of the project as actually built. Key additions vs the old doc:
+
+| Section | What changed |
+|---------|-------------|
+| §1 High-level diagram | Updated Mermaid to show Saaras v3, Mayura v1 MT, all model lanes |
+| §2 Request lifecycle | Added `fn_scope_ok()` RLS detail; Markdown-fence stripping; intelligence lanes (PS2–PS8); language-aware narrative fetch |
+| §3 Defense in depth | Added row for Markdown fences fix |
+| §4 Model strategy | Updated Saaras v2 → v3; added Mayura v1; Phase-2 model list |
+| §5 Data model | **New section** — full v2 schema table by table including PS4/PS7 extension tables, views/functions, row counts per track (Neon 60 % vs local 100 %) |
+| §6 Backend layout | **New section** — full annotated directory tree of every module |
+| §7 Frontend layout | **New section** — full annotated directory tree of every route, component, lib |
+| §8 Bilingual support | **New section** — documents custom i18n system, `tData()`, language-aware narrative API, voice language auto-detect |
+| §9 RBAC/ABAC | **New section** — 14 KSP ranks table, scope levels, 4-tier masking, PROTECTED_CRIMES |
+| §10 Intelligence features | **New section** — PS1–PS8 screen-to-endpoint mapping table |
+| §11 Colour themes | **New section** — 6 professional themes + legacy themes |
+| §12 Configuration flags | Expanded to cover all current env vars (DATABASE_URL, REDIS_URL, JWT_SECRET, all model keys) |
+| §13 Two-phase rollout | Updated Phase-2 model list; sovereignty note |
+
+Old sections that referenced `001_init.sql`, `app_users`, `persons_v` masked view, `satyam.*` GUCs, and `fir_no TEXT` PK have all been corrected to the v2 schema.
