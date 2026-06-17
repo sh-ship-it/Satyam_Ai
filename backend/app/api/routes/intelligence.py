@@ -14,7 +14,7 @@ from app.core.rbac import AccessDenied, Permission, Principal, require
 from app.schemas.intelligence import (
     BacktestResponse, CaseTimelineResponse, ForecastAlertsResponse,
     ForecastHotspotsResponse, GraphResponse, MOClustersResponse,
-    OffenderProfileResponse, PersonTimelineResponse, RingsResponse,
+    OffenderProfileResponse, OffenderListResponse, PersonTimelineResponse, RingsResponse,
     SeasonalResponse, SimilarCasesResponse, SimilarSearchRequest,
     SocialRiskIndexResponse, SocioDemographicsResponse,
     SocioCorrelationResponse, TrendsResponse,
@@ -143,6 +143,24 @@ async def offender_profile(
     await write_audit(session, action="intelligence.offender_profile", user_id=principal.officer_id,
                       query_text=f"person={person_id}")
     return await svc.get_offender_profile(session, principal, person_id)
+
+
+# C3 — Browse all offenders (dropdown/list)
+@router.get("/offenders", response_model=OffenderListResponse, tags=["intelligence"])
+async def list_offenders(
+    q: str | None = None,
+    district: str | None = None,
+    crime_type: str | None = None,
+    min_offenses: int = Query(1, ge=1),
+    limit: int = Query(100, le=500),
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> OffenderListResponse:
+    _guard(principal, min_clearance=2)
+    return await svc.list_offenders(
+        session, q=q, district=district, crime_type=crime_type,
+        min_offenses=min_offenses, limit=limit,
+    )
 
 
 # ── PS8 — Forecasting ─────────────────────────────────────────────────────────

@@ -18,6 +18,7 @@ from app.schemas.intelligence import (
     Correlations, DistrictCount, ForecastAlert, ForecastAlertsResponse,
     ForecastCell, ForecastHotspotsResponse, GenderCount, GraphResponse,
     KnownAssociate, MOCluster, MOClustersResponse, OffenderProfileResponse,
+    OffenderListItem, OffenderListResponse,
     PersonTimelineEvent, PersonTimelineResponse, RingEdge, RingMembership,
     RingNode, RingSummary, RingsResponse, RiskArea, RiskBreakdownFactor,
     RiskProfile, SeasonalPeak, SeasonalResponse, SimilarCaseMatch,
@@ -259,6 +260,56 @@ async def get_person_timeline(session: AsyncSession, person_id: int) -> PersonTi
         role=r["role"] or "Unknown", crime_type=r["crime_type"], status=r["status"],
     ) for r in rows]
     return PersonTimelineResponse(person_id=person_id, events=events)
+
+
+# ── C2 — Offender list (browse/dropdown) ─────────────────────────────────────
+
+async def list_offenders(
+    session: AsyncSession,
+    *,
+    q: str | None = None,
+    district: str | None = None,
+    crime_type: str | None = None,
+    min_offenses: int = 1,
+    limit: int = 100,
+) -> OffenderListResponse:
+    where = ["cp.role ILIKE '%accused%'"]
+    params: dict = {"min_off": min_offenses, "lim": limit}
+    if q:
+        where.append("p.name ILIKE :q")
+        params["q"] = f"%{q}%"
+    if district:
+        where.append("c.district ILIKE :district")
+        params["district"] = f"%{district}%"
+    if crime_type:
+        where.append("c.crime_type ILIKE :crime")
+        params["crime"] = f"%{crime_type}%"
+
+    sql = text(f"""
+        SELECT p.person_id, p.name, p.district,
+               COUNT(DISTINCT cp.case_id) AS offense_count,
+               MODE() WITHIN GROUP (ORDER BY c.crime_type) AS top_crime_type
+        FROM persons p
+        JOIN case_persons cp ON cp.person_id = p.person_id
+        JOIN cases c         ON c.case_id   = cp.case_id
+        WHERE {" AND ".join(where)}
+        GROUP BY p.person_id, p.name, p.district
+        HAVING COUNT(DISTINCT cp.case_id) >= :min_off
+        ORDER BY offense_count DESC
+        LIMIT :lim
+    """)
+    rows = (await session.execute(sql, params)).mappings().all()
+    return OffenderListResponse(offenders=[
+        OffenderListItem(
+            person_id=int(r["person_id"]),
+            display_name=r["name"] or f"Person #{r['person_id']}",
+            district=r["district"],
+            offense_count=int(r["offense_count"]),
+            top_crime_type=r["top_crime_type"],
+            risk_label=_risk_label(min(99, int(r["offense_count"]) * 15)),
+        )
+        for r in rows
+    ])
 
 
 # ── PS5 — Offender profile ────────────────────────────────────────────────────

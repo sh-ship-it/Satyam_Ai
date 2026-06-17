@@ -333,6 +333,8 @@ const DICT: Record<string, string> = {
   "Resume": "ಪುನರಾರಂಭಿಸಿ",
   "Pause": "ವಿರಾಮ",
   "Stop speech": "ಮಾತು ನಿಲ್ಲಿಸಿ",
+  "People & Cases": "ಜನರು ಮತ್ತು ಪ್ರಕರಣಗಳು",
+  "Financial links": "ಹಣಕಾಸು ಲಿಂಕ್‌ಗಳು",
   "Close": "ಮುಚ್ಚಿ",
 
   // Forecast / Trends extra keys

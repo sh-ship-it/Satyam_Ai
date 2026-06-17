@@ -34,6 +34,9 @@ export type SearchResult = {
   crime_type?: string;
 };
 
+export type OffenderListItem = { person_id: number; display_name: string; district: string | null; offense_count: number; top_crime_type: string | null; risk_label: string };
+export type OffenderListResponse = { offenders: OffenderListItem[] };
+
 export type RingNode = { id: string; person_id: number; label: string; type: string; risk_label: string; offense_count: number; is_kingpin: boolean; community_id: string };
 export type RingEdge = { source: string; target: string; type: string; shared_case_count: number; weight: number };
 export type GraphResponse = { nodes: RingNode[]; edges: RingEdge[] };
@@ -111,6 +114,10 @@ export const intelligence = {
   // Search — unified person + case autocomplete
   searchPersonsAndCases: (q: string, limit = 12) =>
     apiFetch<SearchResult[]>(`/api/cases/search?q=${encodeURIComponent(q)}&limit=${limit}`),
+
+  // C4 — Browse all offenders (for the profile dropdown)
+  listOffenders: (params?: URLSearchParams) =>
+    apiFetch<OffenderListResponse>(`/api/offenders${params ? "?" + params : ""}`),
 
   // PS8 — Forecasting
   getForecastHotspots: (params?: URLSearchParams) =>

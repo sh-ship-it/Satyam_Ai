@@ -2250,3 +2250,88 @@ Applied every fix from the deep bug scan document. Covers 3 critical (🔴), 3 m
 **Root cause:** On no match, code fell back to `cid = 1` (hardcoded), returning cases "similar to" an arbitrary case with no indication of failure. Also used `ORDER BY RANDOM()` making results non-deterministic.
 
 **Fix:** Return `SimilarCasesResponse(case_id=0, matches=[])` when no case matches the search query. Switched `ORDER BY RANDOM()` to `ORDER BY (crime_type ILIKE :q) DESC, case_id DESC` for deterministic results.
+
+
+---
+
+### [2026-06-17] — Missing Features Build: Financial Crime Analysis + Offender Browse (satyam_missing_features_build_spec.md)
+
+#### Summary
+Implemented all three features from the build spec. Feature B (Behavioral/MO) was already complete. Features A and C are now fully wired end-to-end.
+
+---
+
+#### Feature A — Financial Crime Analysis (PS7 Money Trails)
+
+**A1 — `backend/app/schemas/financial.py`** (new)
+- `MoneyTrailRequest` — validates seed (person_id / entity_name / case_id), min_amount, suspicious_only, depth
+- `MoneyNode` — account node with bank_name, account_type, district, kyc_risk_level, total_in/out, is_seed
+- `MoneyEdge` — transaction flow with amount, txn_count, channel, pattern_flag, is_suspicious
+- `MoneyTrailResponse` — full graph + flagged_count + total_amount + notice
+
+**A2 — `backend/app/services/financial_service.py`** (new)
+- `money_trail()` — BFS expands transactions from seed accounts up to 3 hops
+- Resolves seed by person_id int or name ILIKE, or by case_id (finds all accounts touching that case)
+- Uses SQLAlchemy `expanding=True` bindparams for `IN :ids` (asyncpg compatible)
+- Enriches nodes with account metadata + owner name join
+- Returns totals_in/out per account, degree, flagged count, grand total
+
+**A3 — `backend/app/api/routes/financial.py`** (new)
+- `POST /financial/money-trail` — clearance L2+, audit-logged, calls financial_service
+
+**A4 — `backend/app/main.py`**
+- Added `from app.api.routes import financial` import
+- Mounted at `prefix="/financial"` next to network router
+
+**A6 — `frontend/src/lib/api/financial.ts`** (new)
+- Typed client: `MoneyNode`, `MoneyEdge`, `MoneyTrailResponse`, `MoneyTrailRequest`
+- `financial.moneyTrail(req)` → `POST /financial/money-trail`
+
+**A7 — `frontend/src/components/FinancialLinksPanel.tsx`** (new)
+- Self-contained component: circular SVG node-link diagram + flagged flows table
+- Seed node at center, connected accounts in circle, edge width = suspicious flag
+- Pattern flags shown as colour-coded badges (high_value=red, near_incident_date=orange, rapid_repeated=amber, circular_flow=purple)
+- Clickable nodes open an inspector panel showing bank, account type, district, KYC risk, owner, in/out totals
+- Filters: suspicious_only toggle + min_amount selector (Any / ₹10K+ / ₹1L+ / ₹10L+)
+- Summary bar: accounts, flows, flagged count, total INR amount
+- Handles loading, error, empty state gracefully
+
+**A8 — `frontend/src/routes/network.tsx`**
+- Added `import { FinancialLinksPanel }` 
+- Added `linkMode` state (`"people" | "financial"`)
+- Added People & Cases / Financial Links toggle button bar in the toolbar
+- When "Financial" is active, renders `<FinancialLinksPanel seed={seedInput} />` instead of the SVG graph — reuses the same seed input the user already typed
+
+---
+
+#### Feature B — Behavioral Pattern (MO)
+Already implemented in Trends screen (MO Clusters tab) and Profile screen (MO Fingerprint tab). No new build needed.
+
+---
+
+#### Feature C — Offender Browse (All Offenders List + Dropdown)
+
+**C1 — `backend/app/schemas/intelligence.py`**
+- Added `OffenderListItem` — person_id, display_name, district, offense_count, top_crime_type, risk_label
+- Added `OffenderListResponse` — `offenders: list[OffenderListItem]`
+
+**C2 — `backend/app/services/intelligence_service.py`**
+- Added `list_offenders()` — joins persons → case_persons → cases where role ILIKE '%accused%'
+- Supports filters: q (name ILIKE), district, crime_type, min_offenses
+- Uses `MODE() WITHIN GROUP` aggregate for top crime type per person
+- Computes risk_label from offense_count × 15 (capped at 99)
+- Updated schema imports to include `OffenderListItem, OffenderListResponse`
+
+**C3 — `backend/app/api/routes/intelligence.py`**
+- Added `OffenderListResponse` to imports
+- Added `GET /api/offenders` endpoint — clearance L2+, optional filters: q, district, crime_type, min_offenses, limit
+
+**C4 — `frontend/src/lib/api/intelligence.ts`**
+- Added `OffenderListItem`, `OffenderListResponse` types
+- Added `intelligence.listOffenders(params?)` → `GET /api/offenders`
+
+**C5 — `frontend/src/routes/profile.$personId.tsx`**
+- Added `OffenderPicker` component — loads top 200 offenders on mount, renders as `<select>` with name + offense count + district
+- Added to the profile header toolbar alongside the search bar
+- Selecting any offender from the dropdown navigates to their full profile dossier
+- `OffenderListItem` imported from intelligence.ts

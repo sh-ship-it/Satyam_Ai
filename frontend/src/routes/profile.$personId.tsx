@@ -13,6 +13,7 @@ import {
   type OffenderProfileResponse,
   type PersonTimelineEvent,
   type SearchResult,
+  type OffenderListItem,
 } from "@/lib/api/intelligence";
 import { CaseDrawer } from "@/components/CaseDrawer";
 
@@ -34,6 +35,29 @@ const RISK_RING: Record<string, string> = {
   Medium: "ring-2 ring-yellow-400/40",
   Low: "ring-2 ring-emerald-400/30",
 };
+
+// ── Offender browse dropdown ──────────────────────────────────────────────────
+function OffenderPicker({ value, onPick }: { value: number; onPick: (id: number) => void }) {
+  const [list, setList] = useState<OffenderListItem[]>([]);
+  useEffect(() => {
+    const p = new URLSearchParams({ limit: "200", min_offenses: "1" });
+    intelligence.listOffenders(p).then((r) => setList(r.offenders)).catch(() => setList([]));
+  }, []);
+  return (
+    <select
+      value={value > 0 ? String(value) : ""}
+      onChange={(e) => e.target.value && onPick(Number(e.target.value))}
+      className="h-9 rounded-lg border border-input bg-card px-2 text-xs max-w-[200px] focus:outline-none focus:ring-1 focus:ring-primary"
+    >
+      <option value="">Browse offenders…</option>
+      {list.map((o) => (
+        <option key={o.person_id} value={o.person_id}>
+          {o.display_name} · {o.offense_count} cases{o.district ? ` · ${o.district}` : ""}
+        </option>
+      ))}
+    </select>
+  );
+}
 
 // ── Unified Search Bar ────────────────────────────────────────────────────────
 function PersonSearch({ onSelect }: { onSelect: (r: SearchResult) => void }) {
@@ -256,6 +280,10 @@ function ProfileScreen() {
               </div>
             </div>
             <PersonSearch onSelect={handleSearchSelect} />
+            <OffenderPicker
+              value={pid}
+              onPick={(id) => navigate({ to: "/profile/$personId", params: { personId: String(id) } })}
+            />
             {pid > 0 && profile && (
               <div className="flex items-center gap-2">
                 <button onClick={() => navigate({ to: "/network", search: { person: pid } as any })}

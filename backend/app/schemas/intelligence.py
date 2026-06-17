@@ -122,6 +122,19 @@ class OffenderProfileResponse(BaseModel):
     known_associates: list[KnownAssociate] = []
 
 
+# C1 — Offender list (browse/dropdown)
+class OffenderListItem(BaseModel):
+    person_id: int
+    display_name: str
+    district: str | None = None
+    offense_count: int
+    top_crime_type: str | None = None
+    risk_label: str
+
+class OffenderListResponse(BaseModel):
+    offenders: list[OffenderListItem] = []
+
+
 # ── Forecasting ───────────────────────────────────────────────────────────────
 
 class ForecastCell(BaseModel):
