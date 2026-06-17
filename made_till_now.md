@@ -2126,3 +2126,32 @@ description of the project as actually built. Key additions vs the old doc:
 | §13 Two-phase rollout | Updated Phase-2 model list; sovereignty note |
 
 Old sections that referenced `001_init.sql`, `app_users`, `persons_v` masked view, `satyam.*` GUCs, and `fir_no TEXT` PK have all been corrected to the v2 schema.
+
+
+---
+
+### [2026-06-17] — Comprehensive Architecture Document (docs/ARCHITECTURE.md)
+
+#### Summary
+Replaced the previous architecture document with a complete, shareable technical reference covering the entire project in detail — 15 sections, all pipelines, all models, all security layers.
+
+#### Sections Written
+
+| # | Section | What it covers |
+|---|---------|---------------|
+| 1 | Project Overview | What Satyam does end-to-end in plain English |
+| 2 | Tech Stack | Full tables: backend (Python/FastAPI/SQLAlchemy/pgvector/Redis/sqlglot), AI models (Gemini 2.5 Flash/Groq Llama-3.3-70B/qwen3-coder-next/BGE-M3/Reranker/Sarvam/Bhashini), frontend (React 19/TanStack/Vite/Tailwind/Leaflet), infrastructure |
+| 3 | System Architecture Diagrams | ASCII art top-level system diagram + detailed SSE chat request flow showing every hop from browser to DB and back |
+| 4 | Database Schema | Full DDL summary for all tables (cases, persons, case_persons, stations, officers, users, rank_access, narratives, audit_log, financial tables); RLS function `fn_scope_ok()`; row counts per track |
+| 5 | Backend Pipeline Workflows | Step-by-step flow for all 7 pipeline stages: guardrails → router → Text-to-SQL (sqlglot validate/rewrite) → RAG (BGE-M3 embed → pgvector → reranker) → analytics (hotspot/ego_network/station_breakdown) → compose (ANSWER_SYSTEM rules) → fallback |
+| 6 | Model Layer | Per-model reference cards: Gemini 2.5 Flash, Groq Llama-3.3-70B, Ollama Cloud qwen3, BGE-M3, bge-reranker-v2-m3, Sarvam Bulbul v3/Saaras v3/Mayura v1, Bhashini |
+| 7 | Voice Pipeline | End-to-end voice flow diagram (MediaRecorder → STT → voice router → pipeline → TTS → auto-replay); conversation mode loop; language auto-detection algorithm |
+| 8 | Security (RBAC/RLS/Masking/Audit) | JWT payload format; full 14-rank hierarchy table with scope + clearance; permission→clearance matrix; RLS GUC setup; 4-tier masking table; PROTECTED crimes list; SHA-256 hash-chain audit explained |
+| 9 | Intelligence Features PS1–PS8 | Per-PS section with data flow, API endpoints, UI elements, and KN translation hooks |
+| 10 | Frontend Architecture | Route map; Shell voice-command router; CaseDrawer tab flows; SettingsDialog engine overrides; theme system CSS |
+| 11 | Bilingual Support EN+KN | 4-layer architecture (static DICT / categorical tData / narrative DB column / LLM prompt directive); tData field coverage table; code examples for each layer |
+| 12 | API Reference Summary | All endpoints grouped by domain with method, path, params, notes |
+| 13 | Configuration & Environment | Full table of all 30+ env vars with defaults and purpose; demo mode; database URL formats |
+| 14 | Deployment | Docker Compose setup; local dev commands; database track switching |
+| 15 | Two-Phase Roadmap | Phase 1 (current hackathon) vs Phase 2 (sovereign on-prem) technology mapping |
+| App | File Tree | Abridged annotated directory tree for backend + frontend |
