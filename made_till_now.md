@@ -1981,3 +1981,74 @@ This affected 100% of SQL-routed queries — "Top crime types in Mysuru City", "
 
 #### Note on "Theft cases this year"
 The query routes correctly and SQL executes without error. The Neon cloud DB has data only up to late 2025 (synthetic dataset). "This year" (2026) genuinely has no records. This is correct behavior, not a bug.
+
+
+---
+
+### [2026-06-17] — Full Kannada Translation: i18n Layer + Dataset Layer
+
+#### Summary
+Completed end-to-end Kannada translation covering both the static UI strings (custom i18n DICT) and dynamic database values (categorical field dictionary + language-aware narrative fetching). TypeScript: 0 errors.
+
+---
+
+#### Layer 1 — Static UI strings (already complete; additions this session)
+
+**`frontend/src/lib/i18n.tsx`**
+- Added ~20 missing DICT keys that were used in the codebase but not yet translated:
+  - `"Showing"`, `"of"`, `"Read-only · No edit controls exposed"`, `"rows"`, `"loading…"`, `"stations"`, `"selected"`, `"Clear"`, `"Search"`, `"Search user, query, result…"`, `"Loading…"`, `"No person records."`, `"Could not load case data."`, `"Some fields masked for your clearance level."`, `"Sections"`, `"Coordinates unavailable"`, `"Delete preset"`, `"Physics presets"`, `"Built-in"`, `"Enter name or ID…"`, `"I couldn't reach the backend just now…"`, and more.
+- Fixed duplicate `"Saved"` key (was defined in both the new additions block and the Transcripts block).
+
+---
+
+#### Layer 2 — Categorical DB values → `tData()` lookup
+
+**`frontend/src/locales/kn-data.json`** *(created in prior session)*
+- Contains Kannada translations for all fixed-vocabulary DB fields:
+  - `crime_type` (40+ values, both UPPER and Title case variants), `status`, `fir_type`, `crime_category`, `motive`, `complaint_mode`, `role`, `gender`, `district` (all 41 Karnataka districts + special units), `legal_code`, `risk_label`, `kyc_risk_level`.
+
+**`frontend/src/lib/tData.ts`** *(created in prior session)*
+- `tData(field, value, lang)` — looks up `kn-data.json[field][value]`, falls back to English if not mapped or if `lang !== "KN"`.
+- `tAuto(value, lang)` — scans all fields for a match; useful when field name is unknown.
+
+**Applied `tData()` across all screens that render categorical DB values:**
+
+| File | Fields wrapped |
+|------|---------------|
+| `frontend/src/components/CaseDrawer.tsx` | `crime_type`, `status`, `district`, `role` (persons tab) |
+| `frontend/src/routes/console.tsx` | `top_legal_code` in station breakdown table |
+| `frontend/src/routes/forecast.tsx` | `crime_type` and `risk_level` in alert cards and forecast grid rows |
+| `frontend/src/routes/trends.tsx` | `crime_type` in top crime types bar chart |
+| `frontend/src/routes/profile.$personId.tsx` | `risk_label`, `crime_type` and `motive` in MO fingerprint, `role`/`crime_type`/`status` in timeline |
+| `frontend/src/routes/socio.tsx` | `gender` in gender distribution, `district` in correlation table and risk index cards |
+
+All screens now import both `useI18n` (to get `lang`) and `tData` from `@/lib/tData`.
+
+---
+
+#### Layer 3 — Language-aware narratives
+
+**`backend/app/api/routes/cases.py`**
+- `GET /cases/{case_id}` now accepts `?lang=kn` (or `?lang=en`, default).
+- `lang` param passed through to `case_service.get_case()`.
+
+**`backend/app/services/case_service.py`**
+- `get_case()` signature: added `lang: str = "en"` kwarg.
+- When `lang="kn"` (or starts with "kn"): first tries to load a `language="kn"` narrative row, falls back to `language="en"` if no Kannada row exists for that case.
+- Ensures case drawer always shows a narrative (never blank) even if Kannada narrative is missing.
+
+**`frontend/src/lib/api/client.ts`**
+- `caseById(caseId, lang?)` — now appends `?lang=<lang>` to the request URL (default `"en"`).
+
+**`frontend/src/components/CaseDrawer.tsx`**
+- Now uses `useI18n()` instead of `useT()` to access `lang`.
+- Passes `lang === "KN" ? "kn" : "en"` to `api.caseById()` so the narrative language matches the UI toggle.
+
+---
+
+#### Unchanged (by design)
+- Proper nouns (person names, FIR numbers, station names in free text, coordinates, IDs, dates) — never translated.
+- `audit.tsx` — `role` column already handled via `t(r.role)` mapping in the i18n DICT.
+- Network node labels — person names / proper nouns, correctly left verbatim.
+- Chat answers — already handled server-side: `lang` is passed in the chat request; the LLM responds in Kannada when `lang="kn"`.
+- Voice — existing Sarvam STT/TTS pipeline already handles Kannada; language toggle also drives voice language via `resolveLang()`.

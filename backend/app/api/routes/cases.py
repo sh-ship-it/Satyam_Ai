@@ -32,6 +32,7 @@ async def list_cases(
 @router.get("/{case_id}")
 async def get_case(
     case_id: int,
+    lang: str = "en",
     session: AsyncSession = Depends(get_scoped_session),
     principal: Principal = Depends(get_principal),
 ) -> dict:
@@ -39,7 +40,7 @@ async def get_case(
         require(principal, Permission.READ_CASE)
     except AccessDenied as e:
         raise HTTPException(status_code=403, detail=str(e))
-    case = await case_service.get_case(session, principal, case_id)
+    case = await case_service.get_case(session, principal, case_id, lang=lang)
     if case is None:
         raise HTTPException(status_code=404, detail="case not found")
     return case

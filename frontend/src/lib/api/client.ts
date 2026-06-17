@@ -118,8 +118,8 @@ export const api = {
     const q = new URLSearchParams(params as Record<string, string>).toString();
     return request(`/cases${q ? `?${q}` : ""}`);
   },
-  caseById(caseId: string) {
-    return request(`/cases/${encodeURIComponent(caseId)}`);
+  caseById(caseId: string, lang = "en") {
+    return request(`/cases/${encodeURIComponent(caseId)}?lang=${encodeURIComponent(lang)}`);
   },
   mapHotspots(body: Record<string, unknown>): Promise<HotspotResponse> {
     return request<HotspotResponse>("/map/hotspots", { method: "POST", body: JSON.stringify(body) });

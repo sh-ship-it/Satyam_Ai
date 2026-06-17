@@ -1,14 +1,15 @@
 import { X, Lock, FileDown, Plus, Clock, Sparkles, Network } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { useT } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n";
+import { tData } from "@/lib/tData";
 import { api } from "@/lib/api/client";
 import { intelligence, type SimilarCaseMatch, type TimelineEvent } from "@/lib/api/intelligence";
 
 export function CaseDrawer({
   open, onClose, caseId,
 }: { open: boolean; onClose: () => void; caseId?: number | string }) {
-  const t = useT();
+  const { t, lang } = useI18n();
   const navigate = useNavigate();
   const [tab, setTab] = useState<"summary" | "persons" | "similar" | "timeline" | "map">("summary");
   const [data, setData] = useState<any | null>(null);
@@ -23,7 +24,7 @@ export function CaseDrawer({
     let active = true;
     setLoading(true);
     setData(null);
-    api.caseById(String(caseId))
+    api.caseById(String(caseId), lang === "KN" ? "kn" : "en")
       .then((d: any) => active && setData(d))
       .catch(() => active && setData(null))
       .finally(() => active && setLoading(false));
@@ -91,11 +92,11 @@ export function CaseDrawer({
           {!loading && data && tab === "summary" && (
             <>
               <div className="grid grid-cols-2 gap-3">
-                <Field label={t("Crime type")} value={data.crime_type} />
+                <Field label={t("Crime type")} value={tData("crime_type", data.crime_type, lang)} />
                 <Field label={t("Date")} value={data.report_date} />
-                <Field label={t("Status")} value={data.status} status="warning" />
+                <Field label={t("Status")} value={tData("status", data.status, lang)} status="warning" />
                 <Field label={t("Station")} value={data.station_name ?? "—"} />
-                <Field label={t("District")} value={data.district} />
+                <Field label={t("District")} value={tData("district", data.district, lang)} />
                 <Field label={t("Legal code")} value={data.legal_code} />
               </div>
               <div>
@@ -124,7 +125,7 @@ export function CaseDrawer({
                 <div key={i} className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2.5">
                   <div>
                     <div className={`text-sm font-medium ${p.masked ? "font-mono text-foreground/60" : "text-foreground"}`}>{p.name}</div>
-                    <div className="text-[11px] text-muted-foreground">{t(p.role ?? "")}{p.age ? ` · ${p.age}` : ""}</div>
+                    <div className="text-[11px] text-muted-foreground">{tData("role", p.role ?? "", lang)}{p.age ? ` · ${p.age}` : ""}</div>
                   </div>
                   <div className="flex items-center gap-2">
                     {p.masked && <Lock className="h-4 w-4 text-warning" />}

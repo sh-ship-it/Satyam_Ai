@@ -43,7 +43,7 @@ async def list_cases(
 
 
 async def get_case(
-    session: AsyncSession, principal: Principal, case_id: int
+    session: AsyncSession, principal: Principal, case_id: int, lang: str = "en"
 ) -> dict | None:
     c = (
         await session.execute(select(Case).where(Case.case_id == case_id))
@@ -60,14 +60,25 @@ async def get_case(
         )
     ).all()
 
-    # Load first English narrative (if any)
-    narrative = (
-        await session.execute(
-            select(Narrative)
-            .where(Narrative.case_id == case_id, Narrative.language == "en")
-            .limit(1)
-        )
-    ).scalar_one_or_none()
+    # Load narrative: prefer the requested language, fall back to English
+    preferred_lang = "kn" if lang.lower().startswith("kn") else "en"
+    narrative = None
+    if preferred_lang == "kn":
+        narrative = (
+            await session.execute(
+                select(Narrative)
+                .where(Narrative.case_id == case_id, Narrative.language == "kn")
+                .limit(1)
+            )
+        ).scalar_one_or_none()
+    if narrative is None:
+        narrative = (
+            await session.execute(
+                select(Narrative)
+                .where(Narrative.case_id == case_id, Narrative.language == "en")
+                .limit(1)
+            )
+        ).scalar_one_or_none()
 
     detail = {
         "case_id":        c.case_id,

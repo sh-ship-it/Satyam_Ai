@@ -2,7 +2,8 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
 import { useEffect, useState } from "react";
 import { Network, Clock, AlertTriangle, ChevronRight } from "lucide-react";
-import { useT } from "@/lib/i18n";
+import { useT, useI18n } from "@/lib/i18n";
+import { tData } from "@/lib/tData";
 import { intelligence, type OffenderProfileResponse, type PersonTimelineEvent } from "@/lib/api/intelligence";
 
 export const Route = createFileRoute("/profile/$personId")({
@@ -21,6 +22,7 @@ function ProfileScreen() {
   const { personId } = Route.useParams();
   const navigate = useNavigate();
   const t = useT();
+  const { lang } = useI18n();
   const [profile, setProfile] = useState<OffenderProfileResponse | null>(null);
   const [timeline, setTimeline] = useState<PersonTimelineEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +69,7 @@ function ProfileScreen() {
                   <div>
                     <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Risk Score</div>
                     <div className="text-4xl font-extrabold tabular-nums">{profile.risk.score}</div>
-                    <span className={`inline-block mt-2 rounded-[5px] px-3 py-1 text-sm font-bold ${RISK_COLORS[profile.risk.label] || "bg-muted"}`}>{profile.risk.label}</span>
+                    <span className={`inline-block mt-2 rounded-[5px] px-3 py-1 text-sm font-bold ${RISK_COLORS[profile.risk.label] || "bg-muted"}`}>{tData("risk_label", profile.risk.label, lang)}</span>
                   </div>
                   <div className="flex-1 space-y-2">
                     {profile.risk.breakdown.map(f => (
@@ -91,9 +93,9 @@ function ProfileScreen() {
                 <div className="text-xs font-bold uppercase tracking-wide mb-3">MO Fingerprint</div>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { label: "Crime Types", items: profile.mo_fingerprint.top_crime_types },
+                    { label: "Crime Types", items: profile.mo_fingerprint.top_crime_types.map(v => tData("crime_type", v, lang)) },
                     { label: "Sections", items: profile.mo_fingerprint.top_sections },
-                    { label: "Motives", items: profile.mo_fingerprint.top_motives },
+                    { label: "Motives", items: profile.mo_fingerprint.top_motives.map(v => tData("motive", v, lang)) },
                     { label: "Time of Day", items: profile.mo_fingerprint.time_of_day ? [profile.mo_fingerprint.time_of_day] : [] },
                   ].map(g => (
                     <div key={g.label}>
@@ -149,10 +151,10 @@ function ProfileScreen() {
                         <div className="w-20 text-[10px] text-muted-foreground shrink-0 mt-0.5">{e.date?.slice(0, 10) || "—"}</div>
                         <div className="flex-1 border-l-2 border-border pl-3">
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] rounded-[3px] bg-muted px-1.5 py-0.5 font-medium">{e.role}</span>
-                            <span className="text-xs font-medium">{e.crime_type || "Unknown"}</span>
+                            <span className="text-[10px] rounded-[3px] bg-muted px-1.5 py-0.5 font-medium">{tData("role", e.role, lang)}</span>
+                            <span className="text-xs font-medium">{tData("crime_type", e.crime_type || "Unknown", lang)}</span>
                           </div>
-                          {e.status && <div className="text-[10px] text-muted-foreground mt-0.5">{e.status}</div>}
+                          {e.status && <div className="text-[10px] text-muted-foreground mt-0.5">{tData("status", e.status, lang)}</div>}
                         </div>
                       </div>
                     ))}

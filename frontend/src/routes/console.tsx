@@ -7,6 +7,7 @@ import {
   Map as MapIcon, Layers, Filter,
 } from "lucide-react";
 import { useT, useI18n } from "@/lib/i18n";
+import { tData } from "@/lib/tData";
 import { streamChat, type ChatEvent, api, type StationRow, getAuthToken } from "@/lib/api/client";
 import { CrimeMap, type Hotspot } from "@/components/CrimeMap";
 import { speakViaSarvam } from "@/lib/voice/tts";
@@ -696,7 +697,7 @@ function Console() {
                           <td className="px-4 py-2.5"><Spark data={r.trend} /></td>
                           <td className="px-4 py-2.5">
                             {r.top_legal_code
-                              ? <span className="rounded bg-accent px-1.5 py-0.5 text-[11px] font-medium text-accent-foreground">{r.top_legal_code}</span>
+                              ? <span className="rounded bg-accent px-1.5 py-0.5 text-[11px] font-medium text-accent-foreground">{tData("crime_type", r.top_legal_code, lang)}</span>
                               : <span className="text-muted-foreground">—</span>}
                           </td>
                         </tr>

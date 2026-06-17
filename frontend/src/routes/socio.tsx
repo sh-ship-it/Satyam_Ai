@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
 import { useEffect, useState } from "react";
 import { Users, AlertTriangle } from "lucide-react";
-import { useT } from "@/lib/i18n";
+import { useT, useI18n } from "@/lib/i18n";
+import { tData } from "@/lib/tData";
 import { intelligence, type SocioDemographicsResponse, type SocioCorrelationResponse, type SocialRiskIndexResponse } from "@/lib/api/intelligence";
 
 export const Route = createFileRoute("/socio")({
@@ -12,6 +13,7 @@ export const Route = createFileRoute("/socio")({
 
 function SocioDashboard() {
   const t = useT();
+  const { lang } = useI18n();
   const [demo, setDemo] = useState<SocioDemographicsResponse | null>(null);
   const [corr, setCorr] = useState<SocioCorrelationResponse | null>(null);
   const [risk, setRisk] = useState<SocialRiskIndexResponse | null>(null);
@@ -82,7 +84,7 @@ function SocioDashboard() {
                     const total = demo.gender.reduce((s, x) => s + x.count, 0);
                     return (
                       <div key={g.gender} className="flex items-center gap-2 mb-1">
-                        <span className="w-16 text-xs text-muted-foreground">{g.gender}</span>
+                        <span className="w-16 text-xs text-muted-foreground">{tData("gender", g.gender, lang)}</span>
                         <div className="flex-1 h-3 rounded-full bg-muted overflow-hidden border border-border">
                           <div className="h-full bg-primary rounded-full" style={{ width: `${(g.count / total) * 100}%` }} />
                         </div>
@@ -112,7 +114,7 @@ function SocioDashboard() {
                   <tbody className="divide-y divide-border">
                     {corr.scatter.slice(0, 10).map(r => (
                       <tr key={r.district} className="hover:bg-muted/20">
-                        <td className="px-3 py-2 font-medium">{r.district}</td>
+                        <td className="px-3 py-2 font-medium">{tData("district", r.district, lang)}</td>
                         <td className="px-3 py-2 tabular-nums">{r.crime_rate.toFixed(1)}</td>
                         <td className="px-3 py-2 tabular-nums">{r.literacy_rate?.toFixed(1) ?? "—"}</td>
                         <td className="px-3 py-2 tabular-nums">{r.urbanization_percent?.toFixed(1) ?? "—"}</td>
@@ -133,7 +135,7 @@ function SocioDashboard() {
                 {risk.areas.map(a => (
                   <div key={a.district} className="rounded-[5px] border-2 border-foreground bg-card p-3 nb-shadow-sm">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-bold">{a.district}</span>
+                      <span className="text-sm font-bold">{tData("district", a.district, lang)}</span>
                       <span className={`text-sm font-extrabold tabular-nums ${a.social_risk_score >= 70 ? "text-destructive" : a.social_risk_score >= 40 ? "text-orange-500" : "text-success"}`}>{a.social_risk_score}</span>
                     </div>
                     <div className="flex flex-wrap gap-1">
