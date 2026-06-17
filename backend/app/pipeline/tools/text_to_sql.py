@@ -44,6 +44,32 @@ def _mask_rows(rows: list[dict], principal: "Principal") -> list[dict]:
     return out
 
 
+def _strip_markdown_fences(text: str) -> str:
+    """Remove markdown code fences that LLMs sometimes wrap JSON responses in.
+
+    Gemini 2.5 Flash frequently returns:
+        ```json
+        { "sql": "SELECT ..." }
+        ```
+    instead of raw JSON, even when instructed not to.
+    This strips the fences so json.loads() can parse the content.
+    """
+    t = text.strip()
+    # Remove ```json ... ``` or ``` ... ``` fences
+    if t.startswith("```"):
+        lines = t.splitlines()
+        # Drop the first line (``` or ```json) and the last ``` line
+        inner_lines = []
+        for i, line in enumerate(lines):
+            if i == 0 and line.strip().startswith("```"):
+                continue
+            if i == len(lines) - 1 and line.strip() == "```":
+                continue
+            inner_lines.append(line)
+        t = "\n".join(inner_lines).strip()
+    return t
+
+
 async def generate_sql(
     question: str,
     slots: dict | None = None,
@@ -60,10 +86,15 @@ async def generate_sql(
         raw = await get_fallback_llm().complete(
             prompt, system=SQL_SYSTEM, temperature=0.0, json_schema=SQL_SCHEMA
         )
+
+    # Strip any markdown code fences Gemini 2.5 Flash wraps around JSON responses
+    cleaned = _strip_markdown_fences(raw)
+
     try:
-        candidate = json.loads(raw).get("sql", "")
+        candidate = json.loads(cleaned).get("sql", "")
     except Exception:
-        candidate = raw
+        # Last resort: if the whole response is just a SQL string, use it directly
+        candidate = cleaned
     return sanitize(candidate)
 
 

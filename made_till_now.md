@@ -1932,3 +1932,52 @@ Added Forecast (`/forecast`) and Trends (`/trends`) to the sidebar navigation ra
 
 #### File Changed: `frontend/src/components/Shell.tsx`
 - NAV array extended with `{ to: "/forecast", icon: ShieldCheck, label: t("Forecast") }` and `{ to: "/trends", icon: FileText, label: t("Trends") }`
+
+---
+
+### [2026-06-17] — Critical Bug Fix: Gemini 2.5 Flash Markdown Fences Breaking SQL Pipeline
+
+#### Root Cause
+**Gemini 2.5 Flash was wrapping all JSON responses in markdown code fences** (` ```json ... ``` `) even when instructed not to. This caused `json.loads(raw)` to fail with `JSONDecodeError`, the sqlguard to receive the raw markdown string and reject it as "unparseable", and every SQL query to return "Found no matching records."
+
+The exact error logged:
+```
+rejected: unparseable: Invalid expression / Unexpected token. Line 1, Col: 3.
+  ```json
+{
+  "sql": "SELECT crime_type, COUNT(*) as count FROM cases WHERE district = 'Mysuru City' ...
+```
+
+This affected 100% of SQL-routed queries — "Top crime types in Mysuru City", "Theft cases in Bengaluru City this year", "Summarize crime around Cyber Crime Police Station" all returned "Found no matching records" despite correct routing and valid SQL being generated.
+
+---
+
+#### Files Changed
+
+**`backend/app/pipeline/tools/text_to_sql.py`**
+- Added `_strip_markdown_fences(text)` helper function that removes ` ```json ... ``` ` and ` ``` ... ``` ` wrapper blocks from LLM responses before `json.loads()`
+- `generate_sql()` now calls `_strip_markdown_fences(raw)` before attempting to parse the JSON
+
+**`backend/app/pipeline/router.py`**
+- `route()` now strips markdown fences inline before `json.loads(cleaned)`
+- `_keyword_intent()` extended with a much wider set of SQL signals:
+  - `" cases"`, `" case in"`, `" fir"`, `" incident"`, `"reported in"` — catches "Theft cases in X"
+  - `"tell me about"`, `"summarize"`, `"summary of"`, `"overview"` — catches "Summarize crime around X"
+  - `"what are"`, `"this year"`, `"last year"`, `"last month"`, `"recent"`, `"latest"`, `"trend"` — time-based queries
+
+**`backend/app/pipeline/prompts.py`**
+- `SQL_SYSTEM` updated: added explicit instruction "Do NOT wrap the JSON in markdown code fences (no \`\`\`json). Do NOT add any explanation text. Return raw JSON only."
+- `ROUTER_SYSTEM` updated with the same no-fences instruction, plus explicit examples showing "theft cases in Bengaluru City this year" = sql_query, not smalltalk; redefined smalltalk as ONLY greetings/off-topic
+
+---
+
+#### Verified Results
+| Query | Before | After |
+|-------|--------|-------|
+| "Top crime types in Mysuru City" | "Found no matching records" | "Found 25 crime types. MOTOR VEHICLE ACCIDENTS NON-FATAL: 114, THEFT: 43..." |
+| "Summarize crime around Cyber Crime Police Station" | "Found no matching records" | "Found 92 crime types, 341 total crimes..." |
+| "tell me about the Crime Scene" | "Found no matching records" | "Found 25 crime scenes across Karnataka..." |
+| "Theft cases in Bengaluru City this year" | smalltalk → "Found no matching records" | sql_query (data correctly shows 0 rows for 2026 — dataset ends 2025) |
+
+#### Note on "Theft cases this year"
+The query routes correctly and SQL executes without error. The Neon cloud DB has data only up to late 2025 (synthetic dataset). "This year" (2026) genuinely has no records. This is correct behavior, not a bug.

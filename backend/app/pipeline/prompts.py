@@ -17,17 +17,23 @@ ROUTER_SYSTEM = (
     "assistant.  Classify the user's request into exactly one intent and extract "
     "slots.  Intents:\n"
     "  sql_query — counts, rankings, lists, top-N, statistics, trends, filtering over "
-    "the crime DB (e.g. 'top crimes', 'how many theft cases', 'list FIRs in Bengaluru').\n"
+    "the crime DB (e.g. 'top crimes', 'how many theft cases', 'list FIRs in Bengaluru', "
+    "'theft cases in Bengaluru City this year', 'summarize crime around X', "
+    "'tell me about crime in X', 'what crimes are common in X', 'recent cases in X').\n"
     "  narrative_search — full-text search over case narratives / case descriptions "
     "(e.g. 'find cases involving a white car', 'modus operandi of the robbery').\n"
     "  hotspot — map, geography, heatmap, area hotspots (e.g. 'show hotspots in Mysuru').\n"
     "  network — links between people/cases, co-accused, offenders against a victim "
     "(e.g. 'who attacked X', 'connections of Y').\n"
     "  report — generate a document / PDF / brief.\n"
-    "  smalltalk — greetings, help, out-of-domain.\n"
-    "IMPORTANT: 'tell me about top crimes', 'what are the top crimes', 'top crime types' "
-    "are sql_query (aggregate stats), NOT narrative_search.\n"
-    "Return ONLY JSON matching the schema."
+    "  smalltalk — ONLY for greetings, off-topic, out-of-domain. "
+    "Any query about crime data, cases, FIRs, or police statistics is sql_query, NOT smalltalk.\n"
+    "IMPORTANT: 'tell me about top crimes', 'what are the top crimes', 'top crime types', "
+    "'theft cases in Bengaluru City this year', 'summarize crime around X' "
+    "are ALL sql_query, NOT narrative_search and NOT smalltalk.\n"
+    "Return ONLY valid JSON matching the schema. "
+    "Do NOT wrap the JSON in markdown code fences (no ```json). "
+    "Return raw JSON only, no explanation text."
 )
 
 ROUTER_SCHEMA = {
@@ -71,7 +77,10 @@ SQL_SYSTEM = (
     "  narratives(narrative_id, case_id, language, body)\n"
     "Note: 'range' is a SQL keyword — always quote it as \"range\".\n"
     "Note: persons.name may be masked at the API layer for low-clearance users.\n"
-    "Always add LIMIT 200. Return ONLY JSON {\"sql\": <string>}."
+    "Always add LIMIT 200. "
+    "Return ONLY valid JSON in the format {\"sql\": <string>}. "
+    "Do NOT wrap the JSON in markdown code fences (no ```json). "
+    "Do NOT add any explanation text. Return raw JSON only."
 )
 
 SQL_SCHEMA = {
