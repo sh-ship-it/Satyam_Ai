@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1781636067.336779,
-    "ast_hash": "29782ff5ff5fd5281c5e04f8bbf70969",
+    "mtime": 1781722605.5563095,
+    "ast_hash": "e68d3f69926070f264d0869a1dc4852d",
     "semantic_hash": ""
   },
   "backend/app/models/__init__.py": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781720018.9782555,
-    "ast_hash": "e024335fd5b4430150940c2878ece769",
+    "mtime": 1781722964.0581427,
+    "ast_hash": "7b8d7aa4f28b49d2c38c68ee6e4f59da",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -725,8 +725,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
-    "mtime": 1781599620.3544416,
-    "ast_hash": "e67e42d9ca3e9c5ee66c3c49f123f7cf",
+    "mtime": 1781722882.106157,
+    "ast_hash": "59e8bbec5f9d1c0095e421399ea17839",
     "semantic_hash": ""
   },
   "frontend/src/routes/reports.tsx": {
@@ -880,8 +880,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1781720100.454206,
-    "ast_hash": "cfdd5215e8eb84ca78848fc0995f3458",
+    "mtime": 1781723025.790918,
+    "ast_hash": "7c10c6b04bda272d9f8527a8745b7ecf",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -1030,23 +1030,23 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/intelligence.py": {
-    "mtime": 1781720006.2309053,
-    "ast_hash": "92778dc87fce2ee5ba70a372e3f6dbcd",
+    "mtime": 1781722671.2804444,
+    "ast_hash": "a23471bbec0497029e561702d25a2b61",
     "semantic_hash": ""
   },
   "backend/app/schemas/intelligence.py": {
-    "mtime": 1781640733.2218413,
-    "ast_hash": "4fa1c04c1d98cab3cabb5d29a85a3924",
+    "mtime": 1781722616.367565,
+    "ast_hash": "d2bcfca17428260da257826ced60a387",
     "semantic_hash": ""
   },
   "backend/app/services/intelligence_service.py": {
-    "mtime": 1781719847.4007466,
-    "ast_hash": "b6b50ff2d445148574c5f124bbfe334d",
+    "mtime": 1781722646.1002028,
+    "ast_hash": "7625cc8c964e3ba0735bf38b97827958",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/intelligence.ts": {
-    "mtime": 1781698449.7295961,
-    "ast_hash": "cc179b5173f95409e48ae40e56d0e890",
+    "mtime": 1781722773.6639626,
+    "ast_hash": "c152b2c1bcfca6d92f3c244ec92d4ebc",
     "semantic_hash": ""
   },
   "frontend/src/routes/forecast.tsx": {
@@ -1055,8 +1055,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/profile.$personId.tsx": {
-    "mtime": 1781698625.3086624,
-    "ast_hash": "84ba4bf2d85be78a464d7af4bc0b4f7e",
+    "mtime": 1781722936.8451264,
+    "ast_hash": "99bdf86913a163f1f3754d19ea296f56",
     "semantic_hash": ""
   },
   "frontend/src/routes/socio.tsx": {
@@ -1102,6 +1102,36 @@
   "SATYAM_DEEP_BUG_SCAN.md": {
     "mtime": 1781719642.9976614,
     "ast_hash": "08cf71b3bd452d2307fd2cdc9dd7c4ea",
+    "semantic_hash": ""
+  },
+  "backend/app/api/routes/financial.py": {
+    "mtime": 1781722583.174495,
+    "ast_hash": "764608c4473a73ec376764503cda343d",
+    "semantic_hash": ""
+  },
+  "backend/app/schemas/financial.py": {
+    "mtime": 1781722533.8657975,
+    "ast_hash": "6f44520c5b1cffff627f355fe83c0b76",
+    "semantic_hash": ""
+  },
+  "backend/app/services/financial_service.py": {
+    "mtime": 1781722566.9342642,
+    "ast_hash": "630420a92d88226c7b40d29aa8bca497",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/FinancialLinksPanel.tsx": {
+    "mtime": 1781722751.6990986,
+    "ast_hash": "0f76d1c252a48a8d28e69dc089bb770a",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/api/financial.ts": {
+    "mtime": 1781722689.5347228,
+    "ast_hash": "efbd783ab395854678f1d9473c0f28fb",
+    "semantic_hash": ""
+  },
+  "SATYAM_MISSING_FEATURES_BUILD_SPEC.md": {
+    "mtime": 1781722400.236207,
+    "ast_hash": "523525b401e28cdf0d3b9f12dd2c2614",
     "semantic_hash": ""
   }
 }
