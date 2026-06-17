@@ -20,6 +20,20 @@ async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
+export type SearchResult = {
+  type: "person" | "case";
+  id: number;
+  label: string;
+  sub: string;
+  gender?: string | null;
+  age?: number | null;
+  district?: string | null;
+  case_count?: number;
+  crime_types?: string;
+  status?: string;
+  crime_type?: string;
+};
+
 export type RingNode = { id: string; person_id: number; label: string; type: string; risk_label: string; offense_count: number; is_kingpin: boolean; community_id: string };
 export type RingEdge = { source: string; target: string; type: string; shared_case_count: number; weight: number };
 export type GraphResponse = { nodes: RingNode[]; edges: RingEdge[] };
@@ -93,6 +107,10 @@ export const intelligence = {
   // PS5 — Offender profile
   getPersonProfile: (personId: number) =>
     apiFetch<OffenderProfileResponse>(`/api/persons/${personId}/profile`),
+
+  // Search — unified person + case autocomplete
+  searchPersonsAndCases: (q: string, limit = 12) =>
+    apiFetch<SearchResult[]>(`/api/cases/search?q=${encodeURIComponent(q)}&limit=${limit}`),
 
   // PS8 — Forecasting
   getForecastHotspots: (params?: URLSearchParams) =>
