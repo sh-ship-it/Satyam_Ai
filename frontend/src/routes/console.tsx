@@ -377,8 +377,25 @@ function Console() {
       return;
     }
 
-    if (streamError || !acc.trim()) {
+    if (streamError) {
       cannedFallback();
+      return;
+    }
+    if (blocked) {
+      // 'acc' already holds the restricted-access notice set in the blocked handler.
+      const finalMessages: ChatMessage[] = [...baseMessages, { role: "ai", text: acc }];
+      setMessages(finalMessages);
+      persistMessages(finalMessages);
+      setStreamingIdx(null);
+      return;
+    }
+    if (!acc.trim()) {
+      const empty = t("No results matched your query. Try a broader question or different filters.");
+      const finalMessages: ChatMessage[] = [...baseMessages, { role: "ai", text: empty }];
+      setMessages(finalMessages);
+      persistMessages(finalMessages);
+      setStreamingIdx(null);
+      speak(empty, opts);
       return;
     }
 

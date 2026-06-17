@@ -17,6 +17,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.registry import get_sql_llm
 from app.pipeline.prompts import SQL_SCHEMA, SQL_SYSTEM
 from app.pipeline.tools.sql_guard import UnsafeSQL, sanitize
+from app.config import get_settings
+from app.pipeline.tools.rule_sql import build_sql as build_rule_sql
 
 if TYPE_CHECKING:
     from app.core.rbac import Principal
@@ -76,6 +78,13 @@ async def generate_sql(
     *,
     sql_engine: Literal["gemini", "qwen3-coder-next"] | None = None,
 ) -> str:
+    # D5.2 FIX: in demo/keyless mode the model stubs only echo — skip them
+    # entirely and use the deterministic rule-based generator (still guarded).
+    if get_settings().demo_mode:
+        rule = build_rule_sql(question, slots)
+        if rule:
+            return rule
+
     llm = get_sql_llm(sql_engine)
     prompt = question if not slots else f"{question}\n\nKnown filters: {json.dumps(slots)}"
     try:
@@ -95,7 +104,15 @@ async def generate_sql(
     except Exception:
         # Last resort: if the whole response is just a SQL string, use it directly
         candidate = cleaned
-    return sanitize(candidate)
+
+    try:
+        return sanitize(candidate)
+    except UnsafeSQL:
+        # LLM produced junk or an echo — recover deterministically
+        rule = build_rule_sql(question, slots)
+        if rule:
+            return rule
+        raise
 
 
 async def run_sql(session: AsyncSession, sql: str) -> list[dict]:
@@ -112,9 +129,18 @@ async def answer_with_sql(
     principal: "Principal",
     sql_engine: Literal["gemini", "qwen3-coder-next"] | None = None,
 ) -> tuple[str, list[dict]]:
-    """Return (safe_sql, masked_rows). Raises UnsafeSQL if the model produced bad SQL."""
+    """Return (safe_sql, masked_rows). Raises UnsafeSQL if no usable SQL exists."""
     sql = await generate_sql(question, slots, sql_engine=sql_engine)
     rows = await run_sql(session, sql)
+
+    # D5.2 FIX: 0-row recovery — try the deterministic generator (fuzzy ILIKE) once.
+    if not rows:
+        rule = build_rule_sql(question, slots)
+        if rule and rule.strip() != sql.strip():
+            rule_rows = await run_sql(session, rule)
+            if rule_rows:
+                sql, rows = rule, rule_rows
+
     return sql, _mask_rows(rows, principal)
 
 

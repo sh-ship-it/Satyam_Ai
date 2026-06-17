@@ -456,7 +456,14 @@ async def get_forecast_alerts(session: AsyncSession) -> ForecastAlertsResponse:
                         (SELECT as_of FROM ref) - INTERVAL '90 days'
                         AND (SELECT as_of FROM ref) - INTERVAL '30 days'
                 ) AS baseline_count,
-                AVG(EXTRACT(HOUR FROM c.report_date::timestamptz)) AS avg_hour
+                -- D8 FIX: use incident_time (TEXT) instead of report_date (DATE whose hour is always 0)
+                AVG(
+                    CASE
+                        WHEN c.incident_time ~ '^[0-2]?[0-9]:'
+                        THEN split_part(c.incident_time, ':', 1)::int
+                        ELSE NULL
+                    END
+                ) AS avg_hour
             FROM cases c
             WHERE c.crime_type IS NOT NULL AND c.district IS NOT NULL
             GROUP BY c.crime_type, c.district
@@ -483,7 +490,13 @@ async def get_forecast_alerts(session: AsyncSession) -> ForecastAlertsResponse:
         fallback_sql = text("""
             SELECT crime_type, district, COUNT(*) AS total,
                    0 AS recent, 0 AS baseline_count, 0 AS lift_pct,
-                   AVG(EXTRACT(HOUR FROM report_date::timestamptz)) AS avg_hour
+                   AVG(
+                       CASE
+                           WHEN incident_time ~ '^[0-2]?[0-9]:'
+                           THEN split_part(incident_time, ':', 1)::int
+                           ELSE NULL
+                       END
+                   ) AS avg_hour
             FROM cases
             WHERE crime_type IS NOT NULL AND district IS NOT NULL
             GROUP BY crime_type, district
@@ -634,12 +647,23 @@ async def get_trends(
     series = [TrendPoint(period=r["period"], crime_type=r["crime_type"] or "Unknown",
                           district=r["district"] or "Unknown", count=int(r["cnt"])) for r in rows]
 
-    # Compute simple QoQ delta from most recent two quarters
+    # D3 FIX: real period-over-period deltas — collapse to one count per period first,
+    # then compare last period vs previous, and last period vs 12 periods ago.
+    from collections import OrderedDict
+    per_period: OrderedDict[str, int] = OrderedDict()
+    for s in series:
+        per_period[s.period] = per_period.get(s.period, 0) + s.count
+    ordered = sorted(per_period.items())  # ascending by 'YYYY-MM'
+
     deltas = TrendDeltas()
-    if len(series) >= 2:
-        curr = sum(s.count for s in series[:len(series)//2])
-        prev = sum(s.count for s in series[len(series)//2:]) or 1
+    if len(ordered) >= 2:
+        curr = ordered[-1][1]
+        prev = ordered[-2][1] or 1
         deltas.qoq_percent = round((curr - prev) / prev * 100, 1)
+    if len(ordered) >= 13:
+        curr = ordered[-1][1]
+        year_ago = ordered[-13][1] or 1
+        deltas.yoy_percent = round((curr - year_ago) / year_ago * 100, 1)
     return TrendsResponse(series=series, deltas=deltas)
 
 
@@ -648,28 +672,49 @@ async def get_seasonal(
     crime_type: str | None = None,
     district: str | None = None,
 ) -> SeasonalResponse:
+    # D4 FIX: compute true monthly lift vs per-combo average; do NOT silently
+    # default the filter to "Theft in Bengaluru City" — only default display labels.
     where = ["report_date IS NOT NULL"]
     params: dict = {}
-    ct = crime_type or "Theft"
-    d = district or "Bengaluru City"
-    where += ["crime_type ILIKE :ct", "district ILIKE :d"]
-    params = {"ct": f"%{ct}%", "d": f"%{d}%"}
+    if crime_type:
+        where.append("crime_type ILIKE :ct")
+        params["ct"] = f"%{crime_type}%"
+    if district:
+        where.append("district ILIKE :d")
+        params["d"] = f"%{district}%"
+    w = " AND ".join(where)
 
     sql = text(f"""
-        SELECT to_char(report_date, 'Month') AS mon,
-               EXTRACT(MONTH FROM report_date)::int AS mon_n,
-               COUNT(*) AS cnt
-        FROM cases WHERE {" AND ".join(where)}
-        GROUP BY 1, 2 ORDER BY cnt DESC LIMIT 3
+        WITH monthly AS (
+            SELECT EXTRACT(MONTH FROM report_date)::int AS mon_n,
+                   to_char(report_date, 'Month')        AS mon,
+                   COUNT(*)                              AS cnt
+            FROM cases WHERE {w}
+            GROUP BY 1, 2
+        ),
+        avg_cte AS (SELECT AVG(cnt) AS avg_cnt FROM monthly)
+        SELECT m.mon, m.mon_n, m.cnt,
+               CASE WHEN a.avg_cnt > 0
+                    THEN round((m.cnt / a.avg_cnt - 1.0) * 100)
+                    ELSE 0 END AS lift_pct
+        FROM monthly m, avg_cte a
+        WHERE m.cnt > a.avg_cnt
+        ORDER BY m.cnt DESC LIMIT 3
     """)
     rows = (await session.execute(sql, params)).mappings().all()
-    peaks = []
-    for r in rows:
-        peaks.append(SeasonalPeak(
-            period=r["mon"].strip(), lift_percent=round(float(r["cnt"]) / 10, 1),
+    peaks = [
+        SeasonalPeak(
+            period=r["mon"].strip(),
+            lift_percent=float(r["lift_pct"] or 0),
             recommended_action=f"Increase patrols during {r['mon'].strip()}",
-        ))
-    return SeasonalResponse(crime_type=ct, district=d, seasonal_peaks=peaks)
+        )
+        for r in rows
+    ]
+    return SeasonalResponse(
+        crime_type=crime_type or "All crime types",
+        district=district or "All districts",
+        seasonal_peaks=peaks,
+    )
 
 
 async def get_mo_clusters(session: AsyncSession) -> MOClustersResponse:
@@ -714,31 +759,37 @@ async def get_socio_demographics(
         params["d"] = f"%{district}%"
     w = " AND ".join(where)
 
-    # Fast queries directly on persons (no case join needed for basic demographics)
-    age_sql = text("""
+    # D1 FIX: filters now actually apply via join through case_persons -> cases
+    base = f"""
+        FROM persons p
+        JOIN case_persons cp ON cp.person_id = p.person_id
+        JOIN cases c        ON c.case_id   = cp.case_id
+        WHERE {w}
+    """
+    age_sql = text(f"""
         SELECT CASE
-            WHEN age < 18 THEN 'Under 18'
-            WHEN age BETWEEN 18 AND 25 THEN '18-25'
-            WHEN age BETWEEN 26 AND 35 THEN '26-35'
-            WHEN age BETWEEN 36 AND 50 THEN '36-50'
+            WHEN p.age < 18 THEN 'Under 18'
+            WHEN p.age BETWEEN 18 AND 25 THEN '18-25'
+            WHEN p.age BETWEEN 26 AND 35 THEN '26-35'
+            WHEN p.age BETWEEN 36 AND 50 THEN '36-50'
             ELSE '50+' END AS bucket,
             COUNT(*) AS n
-        FROM persons WHERE age IS NOT NULL
-        GROUP BY 1 ORDER BY MIN(age)
+        {base} AND p.age IS NOT NULL
+        GROUP BY 1 ORDER BY MIN(p.age)
     """)
-    gender_sql = text("""
-        SELECT gender, COUNT(*) AS n
-        FROM persons WHERE gender IS NOT NULL
-        GROUP BY gender ORDER BY n DESC
+    gender_sql = text(f"""
+        SELECT p.gender, COUNT(*) AS n
+        {base} AND p.gender IS NOT NULL
+        GROUP BY p.gender ORDER BY n DESC
     """)
-    district_sql = text("""
-        SELECT district, COUNT(*) AS n
-        FROM persons WHERE district IS NOT NULL
-        GROUP BY district ORDER BY n DESC LIMIT 10
+    district_sql = text(f"""
+        SELECT c.district AS district, COUNT(*) AS n
+        {base} AND c.district IS NOT NULL
+        GROUP BY c.district ORDER BY n DESC LIMIT 10
     """)
-    age_rows = (await session.execute(age_sql)).mappings().all()
-    gen_rows = (await session.execute(gender_sql)).mappings().all()
-    dist_rows = (await session.execute(district_sql)).mappings().all()
+    age_rows  = (await session.execute(age_sql, params)).mappings().all()
+    gen_rows  = (await session.execute(gender_sql, params)).mappings().all()
+    dist_rows = (await session.execute(district_sql, params)).mappings().all()
     return SocioDemographicsResponse(
         age_buckets=[AgeBucket(bucket=r["bucket"], count=int(r["n"])) for r in age_rows],
         gender=[GenderCount(gender=r["gender"], count=int(r["n"])) for r in gen_rows],
@@ -747,27 +798,60 @@ async def get_socio_demographics(
 
 
 async def get_socio_correlation(session: AsyncSession) -> SocioCorrelationResponse:
+    # D2 FIX: join the real seeded district_socio_economic_indicators table
+    # and compute Pearson correlations from actual data instead of fabricating values.
     sql = text("""
-        SELECT district, COUNT(*) AS crime_count
-        FROM cases WHERE district IS NOT NULL
-        GROUP BY district ORDER BY crime_count DESC LIMIT 20
+        WITH crime AS (
+            SELECT district, COUNT(*)::float AS crime_count
+            FROM cases WHERE district IS NOT NULL
+            GROUP BY district
+        )
+        SELECT cr.district,
+               cr.crime_count,
+               s.literacy_rate,
+               s.urbanization_percent,
+               s.income_index
+        FROM crime cr
+        JOIN district_socio_economic_indicators s ON s.district = cr.district
+        ORDER BY cr.crime_count DESC
     """)
     rows = (await session.execute(sql)).mappings().all()
-    scatter = []
-    for i, r in enumerate(rows):
-        rate = float(r["crime_count"]) / 10.0
-        scatter.append(CorrelationPoint(
-            district=r["district"], crime_rate=round(rate, 1),
-            literacy_rate=round(85 - i * 1.2, 1),
-            urbanization_percent=round(92 - i * 2.1, 1),
-            income_index=round(0.74 - i * 0.02, 2),
-        ))
+
+    scatter = [
+        CorrelationPoint(
+            district=r["district"],
+            crime_rate=round(float(r["crime_count"]) / 10.0, 1),
+            literacy_rate=r["literacy_rate"],
+            urbanization_percent=r["urbanization_percent"],
+            income_index=r["income_index"],
+        )
+        for r in rows
+    ]
+
+    def _pearson(xs: list[float], ys: list[float]) -> float | None:
+        pairs = [(x, y) for x, y in zip(xs, ys) if x is not None and y is not None]
+        n = len(pairs)
+        if n < 3:
+            return None
+        sx = sum(p[0] for p in pairs); sy = sum(p[1] for p in pairs)
+        sxx = sum(p[0] ** 2 for p in pairs); syy = sum(p[1] ** 2 for p in pairs)
+        sxy = sum(p[0] * p[1] for p in pairs)
+        denom = ((n * sxx - sx * sx) * (n * syy - sy * sy)) ** 0.5
+        if denom == 0:
+            return None
+        return round((n * sxy - sx * sy) / denom, 2)
+
+    crime_vals = [p.crime_rate for p in scatter]
+    lit_vals   = [p.literacy_rate for p in scatter]
+    urb_vals   = [p.urbanization_percent for p in scatter]
+    inc_vals   = [p.income_index for p in scatter]
+
     return SocioCorrelationResponse(
         scatter=scatter,
         correlations=Correlations(
-            crime_rate_vs_literacy=-0.21,
-            crime_rate_vs_urbanization=0.43,
-            crime_rate_vs_income=0.12,
+            crime_rate_vs_literacy=_pearson(crime_vals, lit_vals),
+            crime_rate_vs_urbanization=_pearson(crime_vals, urb_vals),
+            crime_rate_vs_income=_pearson(crime_vals, inc_vals),
         ),
     )
 

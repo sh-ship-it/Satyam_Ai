@@ -419,7 +419,9 @@ const DICT: Record<string, string> = {
   "View profile": "ಪ್ರೊಫೈಲ್ ನೋಡಿ",
   "This report is generated for law enforcement use only. All data shown is synthetic and does not represent real individuals, cases, or incidents. Risk scores are decision-support tools — not predictive policing instruments. Human review is required before any operational action.":
     "ಈ ವರದಿಯನ್ನು ಕಾನೂನು ಜಾರಿ ಉಪಯೋಗಕ್ಕೆ ಮಾತ್ರ ರಚಿಸಲಾಗಿದೆ. ಎಲ್ಲ ಡೇಟಾ ಕೃತಕ ಮಾತ್ರ.",
-  "Loading station data…": "ಠಾಣೆ ಡೇಟಾ ಲೋಡ್ ಆಗುತ್ತಿದೆ…",  "Seasonal lift % indicates how much higher the crime rate is compared to the year-round baseline for that period. Higher values indicate stronger seasonal patterns.":
+  "Loading station data…": "ಠಾಣೆ ಡೇಟಾ ಲೋಡ್ ಆಗುತ್ತಿದೆ…",
+  "No results matched your query. Try a broader question or different filters.":
+    "ನಿಮ್ಮ ಪ್ರಶ್ನೆಗೆ ಯಾವುದೇ ಫಲಿತಾಂಶ ಸಿಗಲಿಲ್ಲ. ವಿಭಿನ್ನ ಫಿಲ್ಟರ್ ಬಳಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",  "Seasonal lift % indicates how much higher the crime rate is compared to the year-round baseline for that period. Higher values indicate stronger seasonal patterns.":
     "ಋತುಮಾನ ಏರಿಕೆ % ಎಂದರೆ ಆ ಅವಧಿಗೆ ವಾರ್ಷಿಕ ಆಧಾರರೇಖೆಗಿಂತ ಅಪರಾಧ ದರ ಎಷ್ಟು ಹೆಚ್ಚಿದೆ ಎಂದು ಸೂಚಿಸುತ್ತದೆ.",
 
   // Forecast screen

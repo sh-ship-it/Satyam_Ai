@@ -45,6 +45,8 @@ async def network_rings(
 ) -> RingsResponse:
     _guard(principal, min_clearance=2)
     await write_audit(session, action="intelligence.network_rings", user_id=principal.officer_id,
+                      # NOTE: principal.officer_id currently carries users.user_id (see auth.login).
+                      # audit_log.user_id is FK -> users.user_id, so this is correct.
                       query_text=f"rings limit={limit}")
     return await svc.get_rings(session, principal, limit=limit, crime_type=crime_type, district=district)
 
@@ -99,11 +101,14 @@ async def similar_cases_search(
     sql = text("""
         SELECT case_id FROM cases
         WHERE crime_type ILIKE :q OR place_of_offence ILIKE :q
-        ORDER BY RANDOM() LIMIT 1
+        ORDER BY (crime_type ILIKE :q) DESC, case_id DESC
+        LIMIT 1
     """)
     r = (await session.execute(sql, {"q": f"%{req.query}%"})).mappings().first()
-    cid = int(r["case_id"]) if r else 1
-    return await svc.get_similar_cases(session, cid, limit=req.limit)
+    # D9 FIX: return empty result instead of silently anchoring to case_id=1
+    if not r:
+        return SimilarCasesResponse(case_id=0, matches=[])
+    return await svc.get_similar_cases(session, int(r["case_id"]), limit=req.limit)
 
 
 @router.get("/cases/{case_id}/timeline", response_model=CaseTimelineResponse, tags=["intelligence"])

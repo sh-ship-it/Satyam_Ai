@@ -17,6 +17,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.rbac import Permission, Principal
 from app.models.registry import get_fallback_llm, get_llm
+from app.config import get_settings
 from app.pipeline import guardrails
 from app.pipeline.prompts import ANSWER_SYSTEM
 from app.pipeline.router import route
@@ -38,6 +39,53 @@ def _rows_context(rows: list[dict], limit: int = 25) -> str:
     return json.dumps(rows[:limit], default=str)
 
 
+def _render_grounded(question: str, context: str) -> str:
+    """D5.3 FIX: deterministic, no-LLM answer used in demo/keyless mode."""
+    try:
+        data = json.loads(context)
+    except Exception:
+        data = None
+
+    # Help / report / note payloads.
+    if isinstance(data, dict):
+        if "help" in data:
+            return (
+                "I can answer questions over the crime database. Try: "
+                '"top crime types in Bengaluru City", "how many theft cases this year", '
+                'or "list recent cases in Mysuru".'
+            )
+        if "note" in data:
+            return str(data["note"])
+        if "nodes" in data:
+            return (
+                f"Network built: {len(data.get('nodes', []))} nodes, "
+                f"{len(data.get('edges', []))} links. Open the Network panel to explore."
+            )
+        return "Found no matching records."
+
+    rows = data if isinstance(data, list) else []
+    if not rows:
+        return "Found no matching records. Try a different district, crime type, or year."
+
+    # Single aggregate value (e.g. COUNT or top-N).
+    if len(rows) == 1 and len(rows[0]) == 1:
+        (k, v), = rows[0].items()
+        return f"**{v}** {k.replace('_', ' ')}."
+
+    # Build a Markdown table from the columns that are actually present.
+    cols = list(rows[0].keys())
+    header = "| " + " | ".join(c.replace("_", " ").title() for c in cols) + " |"
+    sep = "| " + " | ".join("---" for _ in cols) + " |"
+    body = []
+    for r in rows[:10]:
+        body.append("| " + " | ".join("" if r.get(c) is None else str(r.get(c)) for c in cols) + " |")
+    more = (
+        "" if len(rows) <= 10
+        else f"\n\nShowing 10 of {len(rows)} — ask to narrow by date, status, or crime type."
+    )
+    return f"Found {len(rows)} matching record(s).\n\n{header}\n{sep}\n" + "\n".join(body) + more
+
+
 async def _compose(
     question: str,
     context: str,
@@ -45,6 +93,10 @@ async def _compose(
     brain_engine: Literal["gemini", "groq"] | None = None,
 ) -> str:
     """Grounded answer composition with Groq fallback on primary failure."""
+    # D5.3 FIX: in demo/keyless mode skip the echo stub entirely.
+    if get_settings().demo_mode:
+        return _render_grounded(question, context)
+
     lang_directive = (
         "\n\nRespond in Kannada (ಕನ್ನಡ). Keep IPC section numbers, FIR identifiers, "
         "station names, and dates in their original form."

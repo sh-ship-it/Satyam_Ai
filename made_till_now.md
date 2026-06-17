@@ -2155,3 +2155,98 @@ Replaced the previous architecture document with a complete, shareable technical
 | 14 | Deployment | Docker Compose setup; local dev commands; database track switching |
 | 15 | Two-Phase Roadmap | Phase 1 (current hackathon) vs Phase 2 (sovereign on-prem) technology mapping |
 | App | File Tree | Abridged annotated directory tree for backend + frontend |
+
+
+---
+
+### [2026-06-17] — Bug Sprint: All 9 Issues from SATYAM_DEEP_BUG_SCAN.MD Fixed
+
+#### Summary
+Applied every fix from the deep bug scan document. Covers 3 critical (🔴), 3 medium (🟠), and 3 low/latent (🟡) issues.
+
+---
+
+#### 🔴 D1 — PS4 Socio-Demographics: filters were silently ignored
+**File:** `backend/app/services/intelligence_service.py` → `get_socio_demographics()`
+
+**Root cause:** The `role`, `crime_type`, and `district` filter parameters built a `WHERE` clause that was never passed to the three actual SQL queries (`age_sql`, `gender_sql`, `district_sql`). Every call returned demographics for *all* persons regardless of filters.
+
+**Fix:** Rewrote the three queries to `JOIN persons → case_persons → cases`, threading the `WHERE` clause and `params` dict into all three. The `district` column now shows *case district* (correct for a crime-demographics view).
+
+---
+
+#### 🔴 D2 — PS4 Socio-Correlation: fabricated indicators instead of real seeded table
+**File:** `backend/app/services/intelligence_service.py` → `get_socio_correlation()`
+
+**Root cause:** The `district_socio_economic_indicators` table (seeded with 41 real rows) was completely ignored. Values were invented positionally (`85 - i * 1.2`) and correlation constants were hardcoded (`-0.21`, `0.43`, `0.12`).
+
+**Fix:** Replaced with a real `JOIN crime ... JOIN district_socio_economic_indicators` query. Pearson correlations are now computed in Python from the actual joined data using a `_pearson()` helper.
+
+---
+
+#### 🔴 D5 — Demo-mode echo corrupts EVERY chat lane (keyless operation)
+**Files:** `backend/app/pipeline/tools/rule_sql.py` (new), `text_to_sql.py`, `orchestrator.py`
+
+**Root cause:** When no API keys are set (`demo_mode = True`), model stubs return a literal echo string like `[demo:gemini] Question: ...`. This caused `json.loads` to fail → `sanitize()` raised `UnsafeSQL` → "found no matching records" for the SQL lane. All other lanes output the raw echo string to users.
+
+**Fix (3 parts):**
+- **D5.1** — New `rule_sql.py`: deterministic NL→SQL generator using regex + ILIKE fuzzy matching. Handles count queries, top-N crime type rankings, and default case listing with place/crime/year slot extraction. Still passes through `sanitize()`.
+- **D5.2** — `text_to_sql.py` `generate_sql()`: skips LLM in demo mode and uses `build_rule_sql()` directly. Also adds 0-row recovery: if LLM SQL returns 0 rows, retries with rule-based SQL.
+- **D5.3** — `orchestrator.py` `_compose()`: in demo mode, calls `_render_grounded()` instead of the LLM stub. `_render_grounded()` produces clean Markdown tables from row data (COUNT aggregates, top-N lists, full case tables) — no API key required.
+
+---
+
+#### 🟠 D3 — PS3 Trends: "QoQ %" was meaningless (split by list index not time)
+**File:** `backend/app/services/intelligence_service.py` → `get_trends()`
+
+**Root cause:** `curr = sum(s.count for s in series[:len(series)//2])` split the mixed crime_type/district series by list position, not by time period. `yoy_percent` was never computed.
+
+**Fix:** Collapsed `series` to `{period: total_count}` dict first, sorted chronologically, then compared `ordered[-1]` vs `ordered[-2]` for QoQ and `ordered[-1]` vs `ordered[-13]` for YoY (when ≥13 periods available).
+
+---
+
+#### 🟠 D4 — PS3 Seasonal: fake lift % and hidden filter defaulting to Theft/Bengaluru
+**File:** `backend/app/services/intelligence_service.py` → `get_seasonal()`
+
+**Root cause:** `lift_percent = count / 10` was not a lift at all. The function silently defaulted `crime_type = "Theft"` and `district = "Bengaluru City"` for unfiltered calls, hiding this from the caller.
+
+**Fix:** Rewrote with a CTE that computes `AVG(cnt)` across months, then calculates `(cnt / avg_cnt - 1) * 100` as true percentage lift above baseline. Only months above average are returned. Default display labels (`"All crime types"`, `"All districts"`) no longer filter the data.
+
+---
+
+#### 🟠 D6 — Console shows "backend unreachable" for blocked/empty responses
+**File:** `frontend/src/routes/console.tsx` → `sendMessage()`
+
+**Root cause:** `if (streamError || !acc.trim()) { cannedFallback() }` treated RBAC blocks and empty-data responses the same as transport errors. Users saw "I couldn't reach the backend" when the backend was running fine.
+
+**Fix:** Split into three distinct branches:
+1. `streamError` → `cannedFallback()` (genuine transport failure)
+2. `blocked` → show the existing `acc` (already contains the RBAC notice)
+3. `!acc.trim()` → show "No results matched your query" instead of a network error
+
+---
+
+#### 🟡 D7 — Audit `user_id` naming trap (latent, no crash today)
+**Files:** `backend/app/api/routes/intelligence.py` (comment added)
+
+**Root cause:** `principal.officer_id` actually carries `users.user_id` (not `officers.officer_id`), which works because `auth.login()` sets them equal. Any future code joining `officers` via `principal.officer_id` would silently use the wrong FK.
+
+**Fix:** Added clarifying `# NOTE:` comments at `write_audit` call sites. No code change needed yet — the behaviour is correct today, the trap is documented.
+
+---
+
+#### 🟡 D8 — Forecast patrol windows always 18:00–20:00 (DATE has no hour)
+**File:** `backend/app/services/intelligence_service.py` → `get_forecast_alerts()`
+
+**Root cause:** `AVG(EXTRACT(HOUR FROM c.report_date::timestamptz))` extracts from a `DATE` column, which always has hour = 0. `AVG` → 0.0, which is falsy, so the fallback `18.0` always fired.
+
+**Fix:** Replaced with `AVG(CASE WHEN incident_time ~ '^[0-2]?[0-9]:' THEN split_part(incident_time, ':', 1)::int ELSE NULL END)` — uses the real `incident_time TEXT` column. Falls back to 18:00 only when no parseable times exist. Applied to both the primary CTE and the fallback query.
+
+---
+
+#### 🟡 D9 — Similar cases search silently returns "similar to case #1" on no match
+**File:** `backend/app/api/routes/intelligence.py` → `similar_cases_search()`
+
+**Root cause:** On no match, code fell back to `cid = 1` (hardcoded), returning cases "similar to" an arbitrary case with no indication of failure. Also used `ORDER BY RANDOM()` making results non-deterministic.
+
+**Fix:** Return `SimilarCasesResponse(case_id=0, matches=[])` when no case matches the search query. Switched `ORDER BY RANDOM()` to `ORDER BY (crime_type ILIKE :q) DESC, case_id DESC` for deterministic results.
