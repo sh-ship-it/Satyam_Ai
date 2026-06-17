@@ -144,6 +144,118 @@
   }
 }
 
+/* ── Corporate / Professional themes (data-theme + HSL tokens) ─────────────── */
+
+/* 1. Slate — clean corporate blue-gray */
+[data-theme="slate"] {
+  --main: hsl(215 20% 45%);
+  --background: hsl(215 20% 96%);
+  --primary: 215 25% 27%;
+  --primary-foreground: 210 40% 98%;
+  --accent: 215 20% 45%;
+  --accent-foreground: 210 40% 98%;
+  --ring: 215 20% 45%;
+  --sidebar-accent: 215 25% 27%;
+}
+[data-theme="slate"].dark {
+  --main: hsl(215 28% 70%);
+  --background: oklch(18% 0.02 220);
+  --primary: 215 28% 70%;
+  --primary-foreground: 215 30% 12%;
+  --accent: 215 22% 58%;
+  --accent-foreground: 215 30% 12%;
+  --ring: 215 22% 58%;
+  --sidebar-accent: 215 28% 70%;
+}
+
+/* 2. Indigo — modern premium violet-blue */
+[data-theme="indigo"] {
+  --main: hsl(239 84% 67%);
+  --background: hsl(240 20% 97%);
+  --primary: 239 60% 50%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 239 84% 67%;
+  --accent-foreground: 0 0% 100%;
+  --ring: 239 84% 67%;
+  --sidebar-accent: 239 60% 50%;
+}
+[data-theme="indigo"].dark {
+  --main: hsl(239 84% 72%);
+  --background: oklch(16% 0.03 260);
+  --primary: 239 84% 72%;
+  --primary-foreground: 240 30% 12%;
+  --accent: 239 80% 67%;
+  --accent-foreground: 240 30% 12%;
+  --ring: 239 80% 67%;
+  --sidebar-accent: 239 84% 72%;
+}
+
+/* 3. Forest — calm, trustworthy deep green */
+[data-theme="forest"] {
+  --main: hsl(158 45% 38%);
+  --background: hsl(150 20% 96%);
+  --primary: 158 40% 30%;
+  --primary-foreground: 150 30% 98%;
+  --accent: 158 45% 38%;
+  --accent-foreground: 150 30% 98%;
+  --ring: 158 45% 38%;
+  --sidebar-accent: 158 40% 30%;
+}
+[data-theme="forest"].dark {
+  --main: hsl(158 42% 55%);
+  --background: oklch(16% 0.02 162);
+  --primary: 158 42% 55%;
+  --primary-foreground: 158 35% 10%;
+  --accent: 158 40% 48%;
+  --accent-foreground: 158 35% 10%;
+  --ring: 158 40% 48%;
+  --sidebar-accent: 158 42% 55%;
+}
+
+/* 4. Graphite — deeper desaturated Slate (near-monochrome) */
+[data-theme="graphite"] {
+  --main: hsl(220 9% 36%);
+  --background: hsl(220 10% 95%);
+  --primary: 220 9% 25%;
+  --primary-foreground: 220 14% 96%;
+  --accent: 220 9% 36%;
+  --accent-foreground: 220 14% 96%;
+  --ring: 220 9% 36%;
+  --sidebar-accent: 220 9% 25%;
+}
+[data-theme="graphite"].dark {
+  --main: hsl(220 12% 72%);
+  --background: oklch(15% 0.01 220);
+  --primary: 220 12% 72%;
+  --primary-foreground: 220 12% 12%;
+  --accent: 220 10% 60%;
+  --accent-foreground: 220 12% 12%;
+  --ring: 220 10% 60%;
+  --sidebar-accent: 220 12% 72%;
+}
+
+/* 5. Midnight — deeper desaturated Indigo (navy-leaning, executive) */
+[data-theme="midnight"] {
+  --main: hsl(222 40% 42%);
+  --background: hsl(222 20% 96%);
+  --primary: 222 47% 28%;
+  --primary-foreground: 210 40% 98%;
+  --accent: 222 40% 42%;
+  --accent-foreground: 210 40% 98%;
+  --ring: 222 40% 42%;
+  --sidebar-accent: 222 47% 28%;
+}
+[data-theme="midnight"].dark {
+  --main: hsl(222 50% 68%);
+  --background: oklch(14% 0.03 240);
+  --primary: 222 50% 68%;
+  --primary-foreground: 222 47% 10%;
+  --accent: 222 42% 55%;
+  --accent-foreground: 222 47% 10%;
+  --ring: 222 42% 55%;
+  --sidebar-accent: 222 50% 68%;
+}
+
 /* Globally upgrade existing shadcn primitives to neobrutalism */
 @layer base {
   .rounded-xl, .rounded-lg, .rounded-md { border-radius: 5px !important; }
