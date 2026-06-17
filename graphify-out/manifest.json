@@ -35,8 +35,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/cases.py": {
-    "mtime": 1781521066.2046177,
-    "ast_hash": "2d09b30cb4d86049eb00a95714b43450",
+    "mtime": 1781673170.1848512,
+    "ast_hash": "d1aacba16f71a857b7b08d04bd957d72",
     "semantic_hash": ""
   },
   "backend/app/api/routes/chat.py": {
@@ -285,8 +285,8 @@
     "semantic_hash": ""
   },
   "backend/app/services/case_service.py": {
-    "mtime": 1781552163.5746915,
-    "ast_hash": "d751b8ad36af79abdc72a3fcb4014745",
+    "mtime": 1781673183.7887485,
+    "ast_hash": "2629ddc0625bc29b178250593132672c",
     "semantic_hash": ""
   },
   "backend/app/services/chat_service.py": {
@@ -375,8 +375,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CaseDrawer.tsx": {
-    "mtime": 1781636600.0256252,
-    "ast_hash": "98fe8a1a8430b4585da7a0fd31363ca8",
+    "mtime": 1781672998.476601,
+    "ast_hash": "a37c202376c408dcf57b2bf71a8ec05b",
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/client.ts": {
-    "mtime": 1781612919.3429244,
-    "ast_hash": "b2fbb43083ef5dc527cbe461b6fede17",
+    "mtime": 1781673197.127015,
+    "ast_hash": "7db9b61c48406d5a8a71dcd192a2da1e",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/example.functions.ts": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781608576.8005946,
-    "ast_hash": "9255854f85a91c7773b07897eb453a22",
+    "mtime": 1781673705.16218,
+    "ast_hash": "a50ae128324b677decb8b7bd6679b714",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
-    "mtime": 1781612341.6232307,
-    "ast_hash": "9684a5fcaffa76333b7148a026046abd",
+    "mtime": 1781673014.3582575,
+    "ast_hash": "64b52693dbb959dd457587d811e6490d",
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
@@ -880,8 +880,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1781671295.5359159,
-    "ast_hash": "aa989c0874f6f2ea506a3c5e83db0d7b",
+    "mtime": 1781673357.3637302,
+    "ast_hash": "f6b416913f77ea067dce9eddc3936772",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -1050,23 +1050,23 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/forecast.tsx": {
-    "mtime": 1781640820.8940825,
-    "ast_hash": "49420568aa52fe94dcbb2fc64885134f",
+    "mtime": 1781673588.4114394,
+    "ast_hash": "ff8c5319ba912adb11aee8d5e85a9b22",
     "semantic_hash": ""
   },
   "frontend/src/routes/profile.$personId.tsx": {
-    "mtime": 1781636357.9362266,
-    "ast_hash": "d832f7ad298400b63cd9ede7a851e380",
+    "mtime": 1781673127.651921,
+    "ast_hash": "dc9af08aefac19c6862292263a9d800d",
     "semantic_hash": ""
   },
   "frontend/src/routes/socio.tsx": {
-    "mtime": 1781636287.5641377,
-    "ast_hash": "b66b19e060cfea6810262e8d94e397c8",
+    "mtime": 1781673159.3763113,
+    "ast_hash": "52bb51d7b3bfd5d7e967163153a9c65a",
     "semantic_hash": ""
   },
   "frontend/src/routes/trends.tsx": {
-    "mtime": 1781636241.6076274,
-    "ast_hash": "7ff2375f8e12de3762440202253dee7a",
+    "mtime": 1781673623.4889882,
+    "ast_hash": "8d53756946db16bb38899eaf812bb7eb",
     "semantic_hash": ""
   },
   "backend/migrations/003_add_ps4_ps7_tables.sql": {
@@ -1082,6 +1082,16 @@
   "backend/seed/load_new_tables.py": {
     "mtime": 1781643211.8936357,
     "ast_hash": "88c97102b00108323c1aea7ed1b51f57",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/tData.ts": {
+    "mtime": 1781672814.2034037,
+    "ast_hash": "b4ff0937d148d46817ea1bd2c6a7b07f",
+    "semantic_hash": ""
+  },
+  "frontend/src/locales/kn-data.json": {
+    "mtime": 1781672776.4495676,
+    "ast_hash": "046f8abce4725d3b544b3fabeb6d2851",
     "semantic_hash": ""
   }
 }
