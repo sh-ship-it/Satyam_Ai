@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
 import { CaseDrawer } from "@/components/CaseDrawer";
 import { FinancialLinksPanel } from "@/components/FinancialLinksPanel";
+import { RingsPanel } from "@/components/RingsPanel";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { ChevronDown, Maximize2, Download, FileJson, ImageDown, Save, Trash2, Sliders } from "lucide-react";
 import { useT } from "@/lib/i18n";
@@ -53,7 +54,7 @@ function NetworkScreen() {
   const [graphLoading, setGraphLoading] = useState(false);
   const [graphEmpty, setGraphEmpty] = useState(true);
   const [depth, setDepth] = useState(2);
-  const [linkMode, setLinkMode] = useState<"people" | "financial">("people");
+  const [linkMode, setLinkMode] = useState<"people" | "financial" | "rings">("people");
 
   const fetchGraph = useCallback(async (seedName: string, queryDepth: number = depth) => {
     setGraphLoading(true);
@@ -577,7 +578,7 @@ function NetworkScreen() {
           {/* People / Financial link-mode toggle */}
           <div className="flex items-center gap-2 px-5 py-2 border-b border-border bg-card">
             <div className="inline-flex rounded-lg border border-input bg-background p-0.5 text-xs font-semibold">
-              {(["people", "financial"] as const).map((m) => (
+              {(["people", "financial", "rings"] as const).map((m) => (
                 <button
                   key={m}
                   onClick={() => setLinkMode(m)}
@@ -585,7 +586,7 @@ function NetworkScreen() {
                     linkMode === m ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {m === "people" ? t("People & Cases") : t("Financial links")}
+                  {m === "people" ? t("People & Cases") : m === "financial" ? t("Financial links") : t("Rings")}
                 </button>
               ))}
             </div>
@@ -803,6 +804,10 @@ function NetworkScreen() {
           {linkMode === "financial" ? (
             <div className="flex-1 overflow-hidden">
               <FinancialLinksPanel seed={seedInput} />
+            </div>
+          ) : linkMode === "rings" ? (
+            <div className="flex-1 overflow-hidden">
+              <RingsPanel />
             </div>
           ) : (
           <div

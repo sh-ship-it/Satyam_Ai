@@ -1,8 +1,11 @@
 """Liveness / readiness probe + model-routing diagnostics."""
 from __future__ import annotations
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.deps import get_scoped_session
 from app.config import get_settings
 from app.logging_config import get_logger
 
@@ -11,8 +14,7 @@ log = get_logger()
 
 
 @router.get("/health")
-async def health() -> dict:
-    s = get_settings()
+async def health() -> dict:    s = get_settings()
     return {
         "status": "ok",
         "app": s.app_name,
@@ -57,4 +59,30 @@ def models() -> dict:
             "tts":         type(get_tts()).__name__,          # expect "SarvamTTS"
             "stt":         type(get_stt()).__name__,          # expect "SarvamSTT"
         },
+    }
+
+
+@router.get("/health/data")
+async def health_data(session: AsyncSession = Depends(get_scoped_session)) -> dict:
+    """Row-count probe — confirms the DB is seeded before a demo.
+    Returns table row counts and a boolean `seeded` flag (true when cases > 0).
+    No auth required; use for quick pre-demo validation.
+    """
+    out: dict[str, int] = {}
+    for tbl in (
+        "cases", "persons", "case_persons", "narratives",
+        "financial_accounts", "financial_transactions",
+        "district_socio_economic_indicators",
+    ):
+        try:
+            out[tbl] = int(
+                (await session.execute(text(f'SELECT COUNT(*) FROM "{tbl}"'))).scalar() or 0
+            )
+        except Exception:
+            out[tbl] = -1  # table missing or not migrated
+    return {
+        "row_counts": out,
+        "seeded": out.get("cases", 0) > 0,
+        "financial_seeded": out.get("financial_transactions", 0) > 0,
+        "socio_seeded": out.get("district_socio_economic_indicators", 0) > 0,
     }

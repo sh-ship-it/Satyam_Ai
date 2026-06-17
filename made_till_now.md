@@ -2335,3 +2335,101 @@ Already implemented in Trends screen (MO Clusters tab) and Profile screen (MO Fi
 - Added to the profile header toolbar alongside the search bar
 - Selecting any offender from the dropdown navigates to their full profile dossier
 - `OffenderListItem` imported from intelligence.ts
+
+
+---
+
+### [2026-06-18] — Fix Verification & Gap Closure (SATYAM_FIX_VERIFICATION_AND_GAPS.md)
+
+#### Summary
+A fresh file-by-file audit confirmed all prior fixes (D1–D9, Features A & C) are correctly applied. The remaining gaps identified were the Rings UI, similar-by-description search UI, conversation PDF export, and the `/health/data` probe. All are now implemented.
+
+---
+
+#### §5.1 — Criminal Ring Detection UI (was backend-coded, had no screen)
+
+**`frontend/src/components/RingsPanel.tsx`** (new, 7 KB)
+- Fetches `GET /api/network/rings` (clearance L2+)
+- Severity-coloured cards: Critical (red) / High (orange) / Medium (yellow) / Low (green)
+- Shows: ring label, severity score badge, member count, shared case count, recency score, crime type tags, district tags
+- Expandable "Why flagged" bullet list per ring
+- "View kingpin profile →" button → navigates to `/profile/:personId`
+- Empty state and error state handled
+
+**`frontend/src/routes/network.tsx`** — 4 edits:
+1. Import `RingsPanel` 
+2. Widened `linkMode` from `"people" | "financial"` → `"people" | "financial" | "rings"`
+3. Added third tab button "Rings" in the toggle bar
+4. Added `linkMode === "rings"` branch rendering `<RingsPanel />`
+
+---
+
+#### §5.2 — Similar Cases by Description (PS6 `POST /cases/similar/search` had no UI)
+
+**`frontend/src/components/SimilarCaseSearch.tsx`** (new, 4 KB)
+- Text input + Enter key / Search button → calls `intelligence.searchSimilarCases(q, 8)`
+- Shows results: FIR number (mono), similarity % badge (colour-coded: ≥80% primary / ≥60% orange), crime type, district, why-similar tags
+- Clickable rows → `onOpenCase(caseId)` prop → opens CaseDrawer
+- Error and empty-state handled
+
+**`frontend/src/routes/console.tsx`** — added `<SimilarCaseSearch onOpenCase={...} />` below the station breakdown table + hint in the data canvas.
+
+---
+
+#### §5.3 — PS7 Doc/Implementation Contradiction Fixed
+
+**`docs/ARCHITECTURE.md`** §PS7 — replaced:
+> "query surface available via Text-to-SQL lane"
+
+with:
+> "Financial tables are intentionally NOT in the Text-to-SQL allow-list; they are queried exclusively via `POST /financial/money-trail` (clearance L2+, audit-logged)"
+
+---
+
+#### §5.4 — Conversation History PDF Export (Feature D — was entirely missing)
+
+**`frontend/src/lib/conversationStore.ts`** (new)
+- `StoredConversation` / `StoredChatMessage` types matching Console's `localStorage["satyam-chat-history"]` format
+- `loadConversations()` — reads, parses, and sorts all stored conversations by `updatedAt` (most recent first)
+- `fmtTime(ts)` — formats any timestamp as `en-IN` locale string
+
+**`frontend/src/lib/pdf/conversationPdf.ts`** (new)
+- `exportConversationPdf(c)` — opens branded print window with: KSP letterhead, officer name, timestamp, colour-coded user/AI message bubbles, citations
+- `exportConversationsPdf(list)` — exports all conversations with `page-break-after:always` between them
+- Dependency-free (no jsPDF/pdfmake) — uses `window.open()` + `window.print()`
+
+**`frontend/src/routes/transcripts.tsx`** (rewritten from scratch)
+- **Two-tab layout:** Conversations tab + Voice Transcripts tab
+- **Conversations tab:**
+  - Loads `loadConversations()` every 5 seconds (auto-refreshes as Console saves)
+  - Search across title + message content
+  - Expandable thread view (user/AI colour-coded bubbles)
+  - Per-card "PDF" button → `exportConversationPdf()`
+  - "Export all (N)" bulk button → `exportConversationsPdf()`
+- **Voice transcripts tab:** Existing voice transcript functionality preserved (demo seed, copy, send to console, export .txt, clear)
+
+---
+
+#### §5.6 — `/health/data` Seeding Probe (kills #1 demo false alarm)
+
+**`backend/app/api/routes/health.py`** — added `GET /health/data`:
+- No auth required (use before login for demo readiness check)
+- Queries row counts for: cases, persons, case_persons, narratives, financial_accounts, financial_transactions, district_socio_economic_indicators
+- Returns `{ row_counts, seeded, financial_seeded, socio_seeded }`
+- Returns `-1` for missing tables (migration not applied)
+- Usage: `curl localhost:8000/health/data | python -m json.tool` instantly shows if DB is populated
+
+---
+
+#### Documentation Updates
+
+**`docs/ARCHITECTURE.md`** — complete rewrite (v1.2):
+- Added §2 entry for `rule_sql.py` in tech stack
+- §3 system diagram updated with demo_mode flow
+- §4 database schema table now includes `incident_time` column note
+- §5 pipeline section documents demo-mode/keyless operation in detail
+- §9 PS2 updated to show 3-tab Network screen; PS7 updated with correct "NOT via Text-to-SQL" statement; all PS entries marked with current status
+- §10 component table updated with 3 new components; lib table shows 3 new files
+- §12 API reference updated with `/api/offenders`, `/financial/money-trail`, `/health/data`, all intelligence endpoints with clearance levels
+- §16 (new) — bug fixes table listing all D1–D9 fixes with descriptions
+- Appendix file tree updated with all new files

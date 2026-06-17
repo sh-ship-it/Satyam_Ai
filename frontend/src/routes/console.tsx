@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useT, useI18n } from "@/lib/i18n";
 import { tData } from "@/lib/tData";
+import { SimilarCaseSearch } from "@/components/SimilarCaseSearch";
 import { streamChat, type ChatEvent, api, type StationRow, getAuthToken } from "@/lib/api/client";
 import { CrimeMap, type Hotspot } from "@/components/CrimeMap";
 import { speakViaSarvam } from "@/lib/voice/tts";
@@ -725,6 +726,9 @@ function Console() {
                 <div className="mt-4 flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-3 py-2 text-xs text-foreground/80">
                   <Sparkles className="h-3.5 w-3.5 text-primary" />
                   {t("Live from Postgres (RLS-scoped). Click a station to drill into its FIRs.")}
+                </div>
+                <div className="mt-4">
+                  <SimilarCaseSearch onOpenCase={(id) => setDrawerCaseId(id)} />
                 </div>
               </div>
             </div>

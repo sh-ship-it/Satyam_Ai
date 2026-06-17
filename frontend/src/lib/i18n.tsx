@@ -335,6 +335,12 @@ const DICT: Record<string, string> = {
   "Stop speech": "ಮಾತು ನಿಲ್ಲಿಸಿ",
   "People & Cases": "ಜನರು ಮತ್ತು ಪ್ರಕರಣಗಳು",
   "Financial links": "ಹಣಕಾಸು ಲಿಂಕ್‌ಗಳು",
+  "Rings": "ರಿಂಗ್‌ಗಳು",
+  "Transcripts & History": "ಟ್ರಾನ್ಸ್‌ಕ್ರಿಪ್ಟ್‌ಗಳು ಮತ್ತು ಇತಿಹಾಸ",
+  "Conversations": "ಸಂಭಾಷಣೆಗಳು",
+  "Find similar cases by description": "ವಿವರಣೆಯ ಮೂಲಕ ಹೋಲುವ ಪ್ರಕರಣಗಳನ್ನು ಹುಡುಕಿ",
+  "e.g. chain snatching near bus stand at night": "ಉದಾ: ರಾತ್ರಿ ಬಸ್ ನಿಲ್ದಾಣದ ಬಳಿ ಚೈನ್ ಕಿತ್ತುಕೊಳ್ಳುವಿಕೆ",
+  "Searching…": "ಹುಡುಕಲಾಗುತ್ತಿದೆ…",
   "Close": "ಮುಚ್ಚಿ",
 
   // Forecast / Trends extra keys
