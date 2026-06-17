@@ -4,486 +4,6 @@
   "graph": {},
   "nodes": [
     {
-      "label": "cases.py",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/cases.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "routes_cases",
-      "community": 11,
-      "norm_label": "cases.py"
-    },
-    {
-      "label": "list_cases()",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/cases.py",
-      "source_location": "L16",
-      "_origin": "ast",
-      "id": "routes_cases_list_cases",
-      "community": 11,
-      "norm_label": "list_cases()"
-    },
-    {
-      "label": "AsyncSession",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/cases.py",
-      "source_location": "L16",
-      "_origin": "ast",
-      "id": "asyncsession",
-      "community": 11,
-      "norm_label": "asyncsession"
-    },
-    {
-      "label": "Principal",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/cases.py",
-      "source_location": "L16",
-      "_origin": "ast",
-      "id": "principal",
-      "community": 11,
-      "norm_label": "principal"
-    },
-    {
-      "label": "search_persons_and_cases()",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/cases.py",
-      "source_location": "L34",
-      "_origin": "ast",
-      "id": "routes_cases_search_persons_and_cases",
-      "community": 11,
-      "norm_label": "search_persons_and_cases()"
-    },
-    {
-      "label": "get_case()",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/cases.py",
-      "source_location": "L105",
-      "_origin": "ast",
-      "id": "routes_cases_get_case",
-      "community": 11,
-      "norm_label": "get_case()"
-    },
-    {
-      "label": "Case read endpoints (RLS-scoped + server-side masked).",
-      "file_type": "rationale",
-      "source_file": "backend/app/api/routes/cases.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "routes_cases_rationale_1",
-      "community": 11,
-      "norm_label": "case read endpoints (rls-scoped + server-side masked)."
-    },
-    {
-      "label": "Unified search: returns persons (by name) + cases (by FIR number / crime type).",
-      "file_type": "rationale",
-      "source_file": "backend/app/api/routes/cases.py",
-      "source_location": "L40",
-      "_origin": "ast",
-      "id": "routes_cases_rationale_40",
-      "community": 11,
-      "norm_label": "unified search: returns persons (by name) + cases (by fir number / crime type)."
-    },
-    {
-      "label": "intelligence.ts",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "api_intelligence",
-      "community": 16,
-      "norm_label": "intelligence.ts"
-    },
-    {
-      "label": "apiFetch()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "api_intelligence_apifetch",
-      "community": 1,
-      "norm_label": "apifetch()"
-    },
-    {
-      "label": "SearchResult",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "api_intelligence_searchresult",
-      "community": 16,
-      "norm_label": "searchresult"
-    },
-    {
-      "label": "RingNode",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L37",
-      "_origin": "ast",
-      "id": "api_intelligence_ringnode",
-      "community": 16,
-      "norm_label": "ringnode"
-    },
-    {
-      "label": "RingEdge",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L38",
-      "_origin": "ast",
-      "id": "api_intelligence_ringedge",
-      "community": 16,
-      "norm_label": "ringedge"
-    },
-    {
-      "label": "GraphResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L39",
-      "_origin": "ast",
-      "id": "api_intelligence_graphresponse",
-      "community": 16,
-      "norm_label": "graphresponse"
-    },
-    {
-      "label": "RingSummary",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L40",
-      "_origin": "ast",
-      "id": "api_intelligence_ringsummary",
-      "community": 16,
-      "norm_label": "ringsummary"
-    },
-    {
-      "label": "RingsResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L41",
-      "_origin": "ast",
-      "id": "api_intelligence_ringsresponse",
-      "community": 16,
-      "norm_label": "ringsresponse"
-    },
-    {
-      "label": "SimilarCaseMatch",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L43",
-      "_origin": "ast",
-      "id": "api_intelligence_similarcasematch",
-      "community": 16,
-      "norm_label": "similarcasematch"
-    },
-    {
-      "label": "SimilarCasesResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L44",
-      "_origin": "ast",
-      "id": "api_intelligence_similarcasesresponse",
-      "community": 16,
-      "norm_label": "similarcasesresponse"
-    },
-    {
-      "label": "TimelineEvent",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L46",
-      "_origin": "ast",
-      "id": "api_intelligence_timelineevent",
-      "community": 16,
-      "norm_label": "timelineevent"
-    },
-    {
-      "label": "CaseTimelineResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L47",
-      "_origin": "ast",
-      "id": "api_intelligence_casetimelineresponse",
-      "community": 16,
-      "norm_label": "casetimelineresponse"
-    },
-    {
-      "label": "PersonTimelineEvent",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L48",
-      "_origin": "ast",
-      "id": "api_intelligence_persontimelineevent",
-      "community": 16,
-      "norm_label": "persontimelineevent"
-    },
-    {
-      "label": "PersonTimelineResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L49",
-      "_origin": "ast",
-      "id": "api_intelligence_persontimelineresponse",
-      "community": 16,
-      "norm_label": "persontimelineresponse"
-    },
-    {
-      "label": "RiskFactor",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L51",
-      "_origin": "ast",
-      "id": "api_intelligence_riskfactor",
-      "community": 16,
-      "norm_label": "riskfactor"
-    },
-    {
-      "label": "RiskProfile",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L52",
-      "_origin": "ast",
-      "id": "api_intelligence_riskprofile",
-      "community": 16,
-      "norm_label": "riskprofile"
-    },
-    {
-      "label": "MOFingerprint",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L53",
-      "_origin": "ast",
-      "id": "api_intelligence_mofingerprint",
-      "community": 16,
-      "norm_label": "mofingerprint"
-    },
-    {
-      "label": "RingMembership",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L54",
-      "_origin": "ast",
-      "id": "api_intelligence_ringmembership",
-      "community": 16,
-      "norm_label": "ringmembership"
-    },
-    {
-      "label": "KnownAssociate",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L55",
-      "_origin": "ast",
-      "id": "api_intelligence_knownassociate",
-      "community": 16,
-      "norm_label": "knownassociate"
-    },
-    {
-      "label": "OffenderProfileResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L56",
-      "_origin": "ast",
-      "id": "api_intelligence_offenderprofileresponse",
-      "community": 16,
-      "norm_label": "offenderprofileresponse"
-    },
-    {
-      "label": "ForecastCell",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L58",
-      "_origin": "ast",
-      "id": "api_intelligence_forecastcell",
-      "community": 16,
-      "norm_label": "forecastcell"
-    },
-    {
-      "label": "ForecastHotspotsResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L59",
-      "_origin": "ast",
-      "id": "api_intelligence_forecasthotspotsresponse",
-      "community": 16,
-      "norm_label": "forecasthotspotsresponse"
-    },
-    {
-      "label": "ForecastAlert",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L60",
-      "_origin": "ast",
-      "id": "api_intelligence_forecastalert",
-      "community": 16,
-      "norm_label": "forecastalert"
-    },
-    {
-      "label": "ForecastAlertsResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L61",
-      "_origin": "ast",
-      "id": "api_intelligence_forecastalertsresponse",
-      "community": 16,
-      "norm_label": "forecastalertsresponse"
-    },
-    {
-      "label": "BacktestResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L62",
-      "_origin": "ast",
-      "id": "api_intelligence_backtestresponse",
-      "community": 16,
-      "norm_label": "backtestresponse"
-    },
-    {
-      "label": "TrendPoint",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L64",
-      "_origin": "ast",
-      "id": "api_intelligence_trendpoint",
-      "community": 16,
-      "norm_label": "trendpoint"
-    },
-    {
-      "label": "TrendsResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L65",
-      "_origin": "ast",
-      "id": "api_intelligence_trendsresponse",
-      "community": 16,
-      "norm_label": "trendsresponse"
-    },
-    {
-      "label": "SeasonalPeak",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L66",
-      "_origin": "ast",
-      "id": "api_intelligence_seasonalpeak",
-      "community": 16,
-      "norm_label": "seasonalpeak"
-    },
-    {
-      "label": "SeasonalResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L67",
-      "_origin": "ast",
-      "id": "api_intelligence_seasonalresponse",
-      "community": 16,
-      "norm_label": "seasonalresponse"
-    },
-    {
-      "label": "MOCluster",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L68",
-      "_origin": "ast",
-      "id": "api_intelligence_mocluster",
-      "community": 16,
-      "norm_label": "mocluster"
-    },
-    {
-      "label": "MOClustersResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L69",
-      "_origin": "ast",
-      "id": "api_intelligence_moclustersresponse",
-      "community": 16,
-      "norm_label": "moclustersresponse"
-    },
-    {
-      "label": "AgeBucket",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L71",
-      "_origin": "ast",
-      "id": "api_intelligence_agebucket",
-      "community": 16,
-      "norm_label": "agebucket"
-    },
-    {
-      "label": "GenderCount",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L72",
-      "_origin": "ast",
-      "id": "api_intelligence_gendercount",
-      "community": 16,
-      "norm_label": "gendercount"
-    },
-    {
-      "label": "DistrictCount",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L73",
-      "_origin": "ast",
-      "id": "api_intelligence_districtcount",
-      "community": 16,
-      "norm_label": "districtcount"
-    },
-    {
-      "label": "SocioDemographicsResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L74",
-      "_origin": "ast",
-      "id": "api_intelligence_sociodemographicsresponse",
-      "community": 16,
-      "norm_label": "sociodemographicsresponse"
-    },
-    {
-      "label": "CorrelationPoint",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L75",
-      "_origin": "ast",
-      "id": "api_intelligence_correlationpoint",
-      "community": 16,
-      "norm_label": "correlationpoint"
-    },
-    {
-      "label": "SocioCorrelationResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L76",
-      "_origin": "ast",
-      "id": "api_intelligence_sociocorrelationresponse",
-      "community": 16,
-      "norm_label": "sociocorrelationresponse"
-    },
-    {
-      "label": "RiskArea",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L77",
-      "_origin": "ast",
-      "id": "api_intelligence_riskarea",
-      "community": 16,
-      "norm_label": "riskarea"
-    },
-    {
-      "label": "SocialRiskIndexResponse",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L78",
-      "_origin": "ast",
-      "id": "api_intelligence_socialriskindexresponse",
-      "community": 16,
-      "norm_label": "socialriskindexresponse"
-    },
-    {
-      "label": "intelligence",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/intelligence.ts",
-      "source_location": "L82",
-      "_origin": "ast",
-      "id": "api_intelligence_intelligence",
-      "community": 16,
-      "norm_label": "intelligence"
-    },
-    {
       "label": "i18n.tsx",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
@@ -517,7 +37,7 @@
       "label": "Ctx",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L457",
+      "source_location": "L481",
       "_origin": "ast",
       "id": "lib_i18n_ctx",
       "community": 51,
@@ -527,7 +47,7 @@
       "label": "I18nCtx",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L458",
+      "source_location": "L482",
       "_origin": "ast",
       "id": "lib_i18n_i18nctx",
       "community": 51,
@@ -537,7 +57,7 @@
       "label": "I18nProvider()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L460",
+      "source_location": "L484",
       "_origin": "ast",
       "id": "lib_i18n_i18nprovider",
       "community": 127,
@@ -547,7 +67,7 @@
       "label": "useI18n()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L483",
+      "source_location": "L507",
       "_origin": "ast",
       "id": "lib_i18n_usei18n",
       "community": 103,
@@ -557,11 +77,601 @@
       "label": "useT()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L484",
+      "source_location": "L508",
       "_origin": "ast",
       "id": "lib_i18n_uset",
       "community": 51,
       "norm_label": "uset()"
+    },
+    {
+      "label": "reports.tsx",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "routes_reports",
+      "community": 51,
+      "norm_label": "reports.tsx"
+    },
+    {
+      "label": "Route",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "routes_reports_route",
+      "community": 8,
+      "norm_label": "route"
+    },
+    {
+      "label": "ItemType",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "routes_reports_itemtype",
+      "community": 51,
+      "norm_label": "itemtype"
+    },
+    {
+      "label": "ReportItem",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "routes_reports_reportitem",
+      "community": 51,
+      "norm_label": "reportitem"
+    },
+    {
+      "label": "Template",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "routes_reports_template",
+      "community": 51,
+      "norm_label": "template"
+    },
+    {
+      "label": "TEMPLATES",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "routes_reports_templates",
+      "community": 51,
+      "norm_label": "templates"
+    },
+    {
+      "label": "injectPrintStyles()",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L44",
+      "_origin": "ast",
+      "id": "routes_reports_injectprintstyles",
+      "community": 51,
+      "norm_label": "injectprintstyles()"
+    },
+    {
+      "label": "AddItemBar()",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L62",
+      "_origin": "ast",
+      "id": "routes_reports_additembar",
+      "community": 51,
+      "norm_label": "additembar()"
+    },
+    {
+      "label": "Reports()",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L131",
+      "_origin": "ast",
+      "id": "routes_reports_reports",
+      "community": 51,
+      "norm_label": "reports()"
+    },
+    {
+      "label": "ItemIcon()",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L535",
+      "_origin": "ast",
+      "id": "routes_reports_itemicon",
+      "community": 51,
+      "norm_label": "itemicon()"
+    },
+    {
+      "label": "DocSection()",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L551",
+      "_origin": "ast",
+      "id": "routes_reports_docsection",
+      "community": 51,
+      "norm_label": "docsection()"
+    },
+    {
+      "label": "cases.py",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/cases.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 12,
+      "norm_label": "cases.py",
+      "id": "routes_cases"
+    },
+    {
+      "label": "list_cases()",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/cases.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "community": 12,
+      "norm_label": "list_cases()",
+      "id": "routes_cases_list_cases"
+    },
+    {
+      "label": "AsyncSession",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/cases.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "community": 12,
+      "norm_label": "asyncsession",
+      "id": "asyncsession"
+    },
+    {
+      "label": "Principal",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/cases.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "community": 12,
+      "norm_label": "principal",
+      "id": "principal"
+    },
+    {
+      "label": "search_persons_and_cases()",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/cases.py",
+      "source_location": "L34",
+      "_origin": "ast",
+      "community": 12,
+      "norm_label": "search_persons_and_cases()",
+      "id": "routes_cases_search_persons_and_cases"
+    },
+    {
+      "label": "get_case()",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/cases.py",
+      "source_location": "L105",
+      "_origin": "ast",
+      "community": 12,
+      "norm_label": "get_case()",
+      "id": "routes_cases_get_case"
+    },
+    {
+      "label": "Case read endpoints (RLS-scoped + server-side masked).",
+      "file_type": "rationale",
+      "source_file": "backend/app/api/routes/cases.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 12,
+      "norm_label": "case read endpoints (rls-scoped + server-side masked).",
+      "id": "routes_cases_rationale_1"
+    },
+    {
+      "label": "Unified search: returns persons (by name) + cases (by FIR number / crime type).",
+      "file_type": "rationale",
+      "source_file": "backend/app/api/routes/cases.py",
+      "source_location": "L40",
+      "_origin": "ast",
+      "community": 12,
+      "norm_label": "unified search: returns persons (by name) + cases (by fir number / crime type).",
+      "id": "routes_cases_rationale_40"
+    },
+    {
+      "label": "intelligence.ts",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "intelligence.ts",
+      "id": "api_intelligence"
+    },
+    {
+      "label": "apiFetch()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L7",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "apifetch()",
+      "id": "api_intelligence_apifetch"
+    },
+    {
+      "label": "SearchResult",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "searchresult",
+      "id": "api_intelligence_searchresult"
+    },
+    {
+      "label": "RingNode",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L37",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "ringnode",
+      "id": "api_intelligence_ringnode"
+    },
+    {
+      "label": "RingEdge",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L38",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "ringedge",
+      "id": "api_intelligence_ringedge"
+    },
+    {
+      "label": "GraphResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L39",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "graphresponse",
+      "id": "api_intelligence_graphresponse"
+    },
+    {
+      "label": "RingSummary",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L40",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "ringsummary",
+      "id": "api_intelligence_ringsummary"
+    },
+    {
+      "label": "RingsResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L41",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "ringsresponse",
+      "id": "api_intelligence_ringsresponse"
+    },
+    {
+      "label": "SimilarCaseMatch",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L43",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "similarcasematch",
+      "id": "api_intelligence_similarcasematch"
+    },
+    {
+      "label": "SimilarCasesResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L44",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "similarcasesresponse",
+      "id": "api_intelligence_similarcasesresponse"
+    },
+    {
+      "label": "TimelineEvent",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L46",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "timelineevent",
+      "id": "api_intelligence_timelineevent"
+    },
+    {
+      "label": "CaseTimelineResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L47",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "casetimelineresponse",
+      "id": "api_intelligence_casetimelineresponse"
+    },
+    {
+      "label": "PersonTimelineEvent",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L48",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "persontimelineevent",
+      "id": "api_intelligence_persontimelineevent"
+    },
+    {
+      "label": "PersonTimelineResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L49",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "persontimelineresponse",
+      "id": "api_intelligence_persontimelineresponse"
+    },
+    {
+      "label": "RiskFactor",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L51",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "riskfactor",
+      "id": "api_intelligence_riskfactor"
+    },
+    {
+      "label": "RiskProfile",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L52",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "riskprofile",
+      "id": "api_intelligence_riskprofile"
+    },
+    {
+      "label": "MOFingerprint",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L53",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "mofingerprint",
+      "id": "api_intelligence_mofingerprint"
+    },
+    {
+      "label": "RingMembership",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L54",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "ringmembership",
+      "id": "api_intelligence_ringmembership"
+    },
+    {
+      "label": "KnownAssociate",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L55",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "knownassociate",
+      "id": "api_intelligence_knownassociate"
+    },
+    {
+      "label": "OffenderProfileResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L56",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "offenderprofileresponse",
+      "id": "api_intelligence_offenderprofileresponse"
+    },
+    {
+      "label": "ForecastCell",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L58",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "forecastcell",
+      "id": "api_intelligence_forecastcell"
+    },
+    {
+      "label": "ForecastHotspotsResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L59",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "forecasthotspotsresponse",
+      "id": "api_intelligence_forecasthotspotsresponse"
+    },
+    {
+      "label": "ForecastAlert",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L60",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "forecastalert",
+      "id": "api_intelligence_forecastalert"
+    },
+    {
+      "label": "ForecastAlertsResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L61",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "forecastalertsresponse",
+      "id": "api_intelligence_forecastalertsresponse"
+    },
+    {
+      "label": "BacktestResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L62",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "backtestresponse",
+      "id": "api_intelligence_backtestresponse"
+    },
+    {
+      "label": "TrendPoint",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L64",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "trendpoint",
+      "id": "api_intelligence_trendpoint"
+    },
+    {
+      "label": "TrendsResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L65",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "trendsresponse",
+      "id": "api_intelligence_trendsresponse"
+    },
+    {
+      "label": "SeasonalPeak",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L66",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "seasonalpeak",
+      "id": "api_intelligence_seasonalpeak"
+    },
+    {
+      "label": "SeasonalResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L67",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "seasonalresponse",
+      "id": "api_intelligence_seasonalresponse"
+    },
+    {
+      "label": "MOCluster",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L68",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "mocluster",
+      "id": "api_intelligence_mocluster"
+    },
+    {
+      "label": "MOClustersResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L69",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "moclustersresponse",
+      "id": "api_intelligence_moclustersresponse"
+    },
+    {
+      "label": "AgeBucket",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L71",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "agebucket",
+      "id": "api_intelligence_agebucket"
+    },
+    {
+      "label": "GenderCount",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L72",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "gendercount",
+      "id": "api_intelligence_gendercount"
+    },
+    {
+      "label": "DistrictCount",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L73",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "districtcount",
+      "id": "api_intelligence_districtcount"
+    },
+    {
+      "label": "SocioDemographicsResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L74",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "sociodemographicsresponse",
+      "id": "api_intelligence_sociodemographicsresponse"
+    },
+    {
+      "label": "CorrelationPoint",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L75",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "correlationpoint",
+      "id": "api_intelligence_correlationpoint"
+    },
+    {
+      "label": "SocioCorrelationResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L76",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "sociocorrelationresponse",
+      "id": "api_intelligence_sociocorrelationresponse"
+    },
+    {
+      "label": "RiskArea",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L77",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "riskarea",
+      "id": "api_intelligence_riskarea"
+    },
+    {
+      "label": "SocialRiskIndexResponse",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L78",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "socialriskindexresponse",
+      "id": "api_intelligence_socialriskindexresponse"
+    },
+    {
+      "label": "intelligence",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/intelligence.ts",
+      "source_location": "L82",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "intelligence",
+      "id": "api_intelligence_intelligence"
     },
     {
       "label": "forecast.tsx",
@@ -569,9 +679,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_forecast",
       "community": 16,
-      "norm_label": "forecast.tsx"
+      "norm_label": "forecast.tsx",
+      "id": "routes_forecast"
     },
     {
       "label": "Route",
@@ -579,9 +689,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "routes_forecast_route",
       "community": 8,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_forecast_route"
     },
     {
       "label": "RISK_ORDER",
@@ -589,9 +699,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "routes_forecast_risk_order",
       "community": 16,
-      "norm_label": "risk_order"
+      "norm_label": "risk_order",
+      "id": "routes_forecast_risk_order"
     },
     {
       "label": "RISK_BG",
@@ -599,9 +709,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "routes_forecast_risk_bg",
       "community": 16,
-      "norm_label": "risk_bg"
+      "norm_label": "risk_bg",
+      "id": "routes_forecast_risk_bg"
     },
     {
       "label": "RISK_BORDER",
@@ -609,9 +719,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L32",
       "_origin": "ast",
-      "id": "routes_forecast_risk_border",
       "community": 16,
-      "norm_label": "risk_border"
+      "norm_label": "risk_border",
+      "id": "routes_forecast_risk_border"
     },
     {
       "label": "RISK_GLOW",
@@ -619,9 +729,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "routes_forecast_risk_glow",
       "community": 16,
-      "norm_label": "risk_glow"
+      "norm_label": "risk_glow",
+      "id": "routes_forecast_risk_glow"
     },
     {
       "label": "RISK_ACCENT",
@@ -629,9 +739,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L44",
       "_origin": "ast",
-      "id": "routes_forecast_risk_accent",
       "community": 16,
-      "norm_label": "risk_accent"
+      "norm_label": "risk_accent",
+      "id": "routes_forecast_risk_accent"
     },
     {
       "label": "RISK_DOT",
@@ -639,9 +749,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L50",
       "_origin": "ast",
-      "id": "routes_forecast_risk_dot",
       "community": 16,
-      "norm_label": "risk_dot"
+      "norm_label": "risk_dot",
+      "id": "routes_forecast_risk_dot"
     },
     {
       "label": "RiskBadge()",
@@ -649,9 +759,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L57",
       "_origin": "ast",
-      "id": "routes_forecast_riskbadge",
       "community": 16,
-      "norm_label": "riskbadge()"
+      "norm_label": "riskbadge()",
+      "id": "routes_forecast_riskbadge"
     },
     {
       "label": "RiskBar()",
@@ -659,9 +769,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L67",
       "_origin": "ast",
-      "id": "routes_forecast_riskbar",
       "community": 16,
-      "norm_label": "riskbar()"
+      "norm_label": "riskbar()",
+      "id": "routes_forecast_riskbar"
     },
     {
       "label": "AlertCard()",
@@ -669,9 +779,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L81",
       "_origin": "ast",
-      "id": "routes_forecast_alertcard",
       "community": 16,
-      "norm_label": "alertcard()"
+      "norm_label": "alertcard()",
+      "id": "routes_forecast_alertcard"
     },
     {
       "label": "RiskSummaryBar()",
@@ -679,9 +789,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L160",
       "_origin": "ast",
-      "id": "routes_forecast_risksummarybar",
       "community": 16,
-      "norm_label": "risksummarybar()"
+      "norm_label": "risksummarybar()",
+      "id": "routes_forecast_risksummarybar"
     },
     {
       "label": "CellCard()",
@@ -689,9 +799,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L183",
       "_origin": "ast",
-      "id": "routes_forecast_cellcard",
       "community": 16,
-      "norm_label": "cellcard()"
+      "norm_label": "cellcard()",
+      "id": "routes_forecast_cellcard"
     },
     {
       "label": "ForecastScreen()",
@@ -699,9 +809,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L217",
       "_origin": "ast",
-      "id": "routes_forecast_forecastscreen",
       "community": 103,
-      "norm_label": "forecastscreen()"
+      "norm_label": "forecastscreen()",
+      "id": "routes_forecast_forecastscreen"
     },
     {
       "label": "profile.$personId.tsx",
@@ -709,9 +819,9 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_profile_personid",
       "community": 16,
-      "norm_label": "profile.$personid.tsx"
+      "norm_label": "profile.$personid.tsx",
+      "id": "routes_profile_personid"
     },
     {
       "label": "Route",
@@ -719,9 +829,9 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "routes_profile_personid_route",
       "community": 8,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_profile_personid_route"
     },
     {
       "label": "RISK_BG",
@@ -729,9 +839,9 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "routes_profile_personid_risk_bg",
       "community": 16,
-      "norm_label": "risk_bg"
+      "norm_label": "risk_bg",
+      "id": "routes_profile_personid_risk_bg"
     },
     {
       "label": "RISK_RING",
@@ -739,9 +849,9 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L31",
       "_origin": "ast",
-      "id": "routes_profile_personid_risk_ring",
       "community": 16,
-      "norm_label": "risk_ring"
+      "norm_label": "risk_ring",
+      "id": "routes_profile_personid_risk_ring"
     },
     {
       "label": "PersonSearch()",
@@ -749,9 +859,9 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L39",
       "_origin": "ast",
-      "id": "routes_profile_personid_personsearch",
       "community": 16,
-      "norm_label": "personsearch()"
+      "norm_label": "personsearch()",
+      "id": "routes_profile_personid_personsearch"
     },
     {
       "label": "injectPrintStyles()",
@@ -759,9 +869,9 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L147",
       "_origin": "ast",
-      "id": "routes_profile_personid_injectprintstyles",
       "community": 16,
-      "norm_label": "injectprintstyles()"
+      "norm_label": "injectprintstyles()",
+      "id": "routes_profile_personid_injectprintstyles"
     },
     {
       "label": "ProfileScreen()",
@@ -769,9 +879,9 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L172",
       "_origin": "ast",
-      "id": "routes_profile_personid_profilescreen",
       "community": 16,
-      "norm_label": "profilescreen()"
+      "norm_label": "profilescreen()",
+      "id": "routes_profile_personid_profilescreen"
     },
     {
       "label": "trends.tsx",
@@ -779,9 +889,9 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_trends",
       "community": 16,
-      "norm_label": "trends.tsx"
+      "norm_label": "trends.tsx",
+      "id": "routes_trends"
     },
     {
       "label": "Route",
@@ -789,9 +899,9 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "routes_trends_route",
       "community": 8,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_trends_route"
     },
     {
       "label": "Sparkline()",
@@ -799,9 +909,9 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L16",
       "_origin": "ast",
-      "id": "routes_trends_sparkline",
       "community": 16,
-      "norm_label": "sparkline()"
+      "norm_label": "sparkline()",
+      "id": "routes_trends_sparkline"
     },
     {
       "label": "TrendChart()",
@@ -809,9 +919,9 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L31",
       "_origin": "ast",
-      "id": "routes_trends_trendchart",
       "community": 16,
-      "norm_label": "trendchart()"
+      "norm_label": "trendchart()",
+      "id": "routes_trends_trendchart"
     },
     {
       "label": "DeltaCard()",
@@ -819,9 +929,9 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L59",
       "_origin": "ast",
-      "id": "routes_trends_deltacard",
       "community": 16,
-      "norm_label": "deltacard()"
+      "norm_label": "deltacard()",
+      "id": "routes_trends_deltacard"
     },
     {
       "label": "ClusterRow()",
@@ -829,9 +939,9 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L80",
       "_origin": "ast",
-      "id": "routes_trends_clusterrow",
       "community": 16,
-      "norm_label": "clusterrow()"
+      "norm_label": "clusterrow()",
+      "id": "routes_trends_clusterrow"
     },
     {
       "label": "TrendsScreen()",
@@ -839,9 +949,9 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L141",
       "_origin": "ast",
-      "id": "routes_trends_trendsscreen",
       "community": 103,
-      "norm_label": "trendsscreen()"
+      "norm_label": "trendsscreen()",
+      "id": "routes_trends_trendsscreen"
     },
     {
       "label": "ARCHITECTURE.md",
@@ -2769,7 +2879,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L918",
       "_origin": "ast",
-      "community": 27,
+      "community": 5,
       "norm_label": "[2026-06-16] \u2014 secure auth, live audit, map trails, victim network & hardcoded values cleanup (satyam_auth_audit_map_network_fix issues 1\u20135)",
       "id": "made_till_now_2026_06_16_secure_auth_live_audit_map_trails_victim_network_hardcoded_values_cleanup_satyam_auth_audit_map_network_fix_issues_1_5"
     },
@@ -2779,7 +2889,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L920",
       "_origin": "ast",
-      "community": 27,
+      "community": 5,
       "norm_label": "summary",
       "id": "made_till_now_summary_920"
     },
@@ -2789,7 +2899,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L923",
       "_origin": "ast",
-      "community": 27,
+      "community": 5,
       "norm_label": "frontend changes",
       "id": "made_till_now_frontend_changes_923"
     },
@@ -2799,7 +2909,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L945",
       "_origin": "ast",
-      "community": 27,
+      "community": 5,
       "norm_label": "verification",
       "id": "made_till_now_verification_945"
     },
@@ -3279,7 +3389,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1405",
       "_origin": "ast",
-      "community": 108,
+      "community": 27,
       "norm_label": "[2026-06-16] \u2014 voice input: replace web audio with browser speechrecognition only",
       "id": "made_till_now_2026_06_16_voice_input_replace_web_audio_with_browser_speechrecognition_only"
     },
@@ -3289,7 +3399,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1407",
       "_origin": "ast",
-      "community": 108,
+      "community": 27,
       "norm_label": "summary",
       "id": "made_till_now_summary_1407"
     },
@@ -3299,7 +3409,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1410",
       "_origin": "ast",
-      "community": 108,
+      "community": 27,
       "norm_label": "files changed",
       "id": "made_till_now_files_changed_1410"
     },
@@ -3339,7 +3449,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1435",
       "_origin": "ast",
-      "community": 27,
+      "community": 23,
       "norm_label": "[2026-06-16] \u2014 settings dialog layout fix (overflow)",
       "id": "made_till_now_2026_06_16_settings_dialog_layout_fix_overflow"
     },
@@ -3349,7 +3459,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1437",
       "_origin": "ast",
-      "community": 27,
+      "community": 23,
       "norm_label": "summary",
       "id": "made_till_now_summary_1437"
     },
@@ -3359,7 +3469,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1440",
       "_origin": "ast",
-      "community": 27,
+      "community": 23,
       "norm_label": "files changed",
       "id": "made_till_now_files_changed_1440"
     },
@@ -3369,7 +3479,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1449",
       "_origin": "ast",
-      "community": 164,
+      "community": 27,
       "norm_label": "[2026-06-16] \u2014 voice input self-healing: no-frames watchdog + auto-submit + fallback",
       "id": "made_till_now_2026_06_16_voice_input_self_healing_no_frames_watchdog_auto_submit_fallback"
     },
@@ -3379,7 +3489,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1451",
       "_origin": "ast",
-      "community": 164,
+      "community": 27,
       "norm_label": "summary",
       "id": "made_till_now_summary_1451"
     },
@@ -3389,7 +3499,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1454",
       "_origin": "ast",
-      "community": 164,
+      "community": 27,
       "norm_label": "files changed",
       "id": "made_till_now_files_changed_1454"
     },
@@ -4579,7 +4689,7 @@
       "source_file": "frontend/src/routes/socio.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 16,
+      "community": 8,
       "norm_label": "route",
       "id": "routes_socio_route"
     },
@@ -4749,7 +4859,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 11,
+      "community": 12,
       "norm_label": "text_to_sql.py",
       "id": "tools_text_to_sql"
     },
@@ -4759,7 +4869,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L32",
       "_origin": "ast",
-      "community": 11,
+      "community": 12,
       "norm_label": "_mask_rows()",
       "id": "tools_text_to_sql_mask_rows"
     },
@@ -4769,7 +4879,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 11,
+      "community": 12,
       "norm_label": "_strip_markdown_fences()",
       "id": "tools_text_to_sql_strip_markdown_fences"
     },
@@ -4779,7 +4889,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 11,
+      "community": 122,
       "norm_label": "generate_sql()",
       "id": "tools_text_to_sql_generate_sql"
     },
@@ -4789,7 +4899,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L101",
       "_origin": "ast",
-      "community": 11,
+      "community": 12,
       "norm_label": "run_sql()",
       "id": "tools_text_to_sql_run_sql"
     },
@@ -4799,7 +4909,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 11,
+      "community": 12,
       "norm_label": "answer_with_sql()",
       "id": "tools_text_to_sql_answer_with_sql"
     },
@@ -4809,7 +4919,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 11,
+      "community": 12,
       "norm_label": "nl -> guarded sql -> rows, with pii masking for low-clearance callers.  the sql",
       "id": "tools_text_to_sql_rationale_1"
     },
@@ -4819,7 +4929,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 11,
+      "community": 12,
       "norm_label": "bullet-mask pii columns for callers below clearance l3.",
       "id": "tools_text_to_sql_rationale_33"
     },
@@ -4829,7 +4939,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 11,
+      "community": 12,
       "norm_label": "remove markdown code fences that llms sometimes wrap json responses in.      gem",
       "id": "tools_text_to_sql_rationale_48"
     },
@@ -4839,7 +4949,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L115",
       "_origin": "ast",
-      "community": 11,
+      "community": 12,
       "norm_label": "return (safe_sql, masked_rows). raises unsafesql if the model produced bad sql.",
       "id": "tools_text_to_sql_rationale_115"
     },
@@ -4879,7 +4989,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 102,
+      "community": 3,
       "norm_label": "deps.py",
       "id": "api_deps"
     },
@@ -4889,7 +4999,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 102,
+      "community": 3,
       "norm_label": "get_principal()",
       "id": "api_deps_get_principal"
     },
@@ -4899,7 +5009,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 102,
+      "community": 3,
       "norm_label": "principal",
       "id": "backend_app_api_deps_py_principal"
     },
@@ -4909,7 +5019,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 102,
+      "community": 3,
       "norm_label": "get_scoped_session()",
       "id": "api_deps_get_scoped_session"
     },
@@ -4919,7 +5029,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 102,
+      "community": 3,
       "norm_label": "asyncsession",
       "id": "backend_app_api_deps_py_asyncsession"
     },
@@ -4929,7 +5039,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 102,
+      "community": 3,
       "norm_label": "fastapi dependencies: authenticated principal + rls-scoped db session.  the jwt",
       "id": "api_deps_rationale_1"
     },
@@ -4939,7 +5049,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 102,
+      "community": 3,
       "norm_label": "decode the bearer jwt into a principal. raises 401 on any problem.",
       "id": "api_deps_rationale_21"
     },
@@ -4949,7 +5059,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 102,
+      "community": 3,
       "norm_label": "yield a transaction-scoped session stamped with the caller's rls context.",
       "id": "api_deps_rationale_50"
     },
@@ -4969,7 +5079,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "audit.py",
       "id": "backend_app_api_routes_audit_py_routes_audit"
     },
@@ -4979,7 +5089,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 121,
+      "community": 3,
       "norm_label": "list_audit()",
       "id": "routes_audit_list_audit"
     },
@@ -4989,7 +5099,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 121,
+      "community": 3,
       "norm_label": "asyncsession",
       "id": "backend_app_api_routes_audit_py_asyncsession"
     },
@@ -4999,7 +5109,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 121,
+      "community": 3,
       "norm_label": "principal",
       "id": "backend_app_api_routes_audit_py_principal"
     },
@@ -5009,7 +5119,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 3,
       "norm_label": "audit-log endpoint with hash-chain verification (admin/l3+ only).",
       "id": "routes_audit_rationale_1"
     },
@@ -5019,7 +5129,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "auth.py",
       "id": "routes_auth"
     },
@@ -5029,7 +5139,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "get_db_rank()",
       "id": "routes_auth_get_db_rank"
     },
@@ -5039,7 +5149,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "get_or_create_user()",
       "id": "routes_auth_get_or_create_user"
     },
@@ -5049,7 +5159,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "asyncsession",
       "id": "backend_app_api_routes_auth_py_asyncsession"
     },
@@ -5059,7 +5169,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "user",
       "id": "user"
     },
@@ -5069,7 +5179,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L99",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "login()",
       "id": "routes_auth_login"
     },
@@ -5079,7 +5189,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L99",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "loginrequest",
       "id": "loginrequest"
     },
@@ -5089,7 +5199,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L99",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "loginresponse",
       "id": "loginresponse"
     },
@@ -5099,7 +5209,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L143",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "register()",
       "id": "routes_auth_register"
     },
@@ -5109,7 +5219,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L143",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "registerrequest",
       "id": "registerrequest"
     },
@@ -5119,7 +5229,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L187",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "me()",
       "id": "routes_auth_me"
     },
@@ -5129,7 +5239,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L187",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "principal",
       "id": "backend_app_api_routes_auth_py_principal"
     },
@@ -5139,7 +5249,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L187",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "sessionuser",
       "id": "sessionuser"
     },
@@ -5149,7 +5259,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "authentication routes.  demo login: mints a jwt for any username/rank combo so j",
       "id": "routes_auth_rationale_1"
     },
@@ -5159,7 +5269,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "# important: district and range must match real values in the synthetic dataset.",
       "id": "routes_auth_rationale_27"
     },
@@ -5869,7 +5979,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 163,
       "norm_label": "reports.py",
       "id": "backend_app_api_routes_reports_py_routes_reports"
     },
@@ -5879,7 +5989,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 163,
       "norm_label": "build()",
       "id": "routes_reports_build"
     },
@@ -5889,7 +5999,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 163,
       "norm_label": "reportrequest",
       "id": "backend_app_api_routes_reports_py_reportrequest"
     },
@@ -5899,7 +6009,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 163,
       "norm_label": "asyncsession",
       "id": "backend_app_api_routes_reports_py_asyncsession"
     },
@@ -5909,7 +6019,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 163,
       "norm_label": "principal",
       "id": "backend_app_api_routes_reports_py_principal"
     },
@@ -5919,7 +6029,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 163,
       "norm_label": "reportresponse",
       "id": "backend_app_api_routes_reports_py_reportresponse"
     },
@@ -5929,7 +6039,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 163,
       "norm_label": "report builder endpoint.",
       "id": "routes_reports_rationale_1"
     },
@@ -6299,7 +6409,7 @@
       "source_file": "backend/app/core/audit.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 121,
+      "community": 3,
       "norm_label": "audit.py",
       "id": "core_audit"
     },
@@ -6309,7 +6419,7 @@
       "source_file": "backend/app/core/audit.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 121,
+      "community": 3,
       "norm_label": "_digest()",
       "id": "core_audit_digest"
     },
@@ -6329,7 +6439,7 @@
       "source_file": "backend/app/core/audit.py",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 121,
+      "community": 3,
       "norm_label": "asyncsession",
       "id": "backend_app_core_audit_py_asyncsession"
     },
@@ -6349,7 +6459,7 @@
       "source_file": "backend/app/core/audit.py",
       "source_location": "L72",
       "_origin": "ast",
-      "community": 121,
+      "community": 3,
       "norm_label": "verify_chain()",
       "id": "core_audit_verify_chain"
     },
@@ -6359,7 +6469,7 @@
       "source_file": "backend/app/core/audit.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 121,
+      "community": 3,
       "norm_label": "tamper-evident, hash-chained audit log.  each entry stores sha256(prev_hash + ca",
       "id": "core_audit_rationale_1"
     },
@@ -6479,7 +6589,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "resolve_scope()",
       "id": "core_rbac_resolve_scope"
     },
@@ -6489,7 +6599,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "resolve_clearance()",
       "id": "core_rbac_resolve_clearance"
     },
@@ -6629,7 +6739,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L157",
       "_origin": "ast",
-      "community": 121,
+      "community": 12,
       "norm_label": "require()",
       "id": "core_rbac_require"
     },
@@ -6669,7 +6779,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 129,
+      "community": 39,
       "norm_label": "security.py",
       "id": "core_security"
     },
@@ -6679,7 +6789,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 5,
+      "community": 39,
       "norm_label": "create_access_token()",
       "id": "core_security_create_access_token"
     },
@@ -6689,7 +6799,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 129,
+      "community": 39,
       "norm_label": "decode_token()",
       "id": "core_security_decode_token"
     },
@@ -6699,7 +6809,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 129,
+      "community": 39,
       "norm_label": "jwt issuing / verification.",
       "id": "core_security_rationale_1"
     },
@@ -6759,7 +6869,7 @@
       "source_file": "backend/app/db/models.py",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 129,
+      "community": 163,
       "norm_label": "_now()",
       "id": "db_models_now"
     },
@@ -6769,7 +6879,7 @@
       "source_file": "backend/app/db/models.py",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 129,
+      "community": 163,
       "norm_label": "datetime",
       "id": "datetime"
     },
@@ -6789,7 +6899,7 @@
       "source_file": "backend/app/db/models.py",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "officer",
       "id": "db_models_officer"
     },
@@ -6849,7 +6959,7 @@
       "source_file": "backend/app/db/models.py",
       "source_location": "L141",
       "_origin": "ast",
-      "community": 5,
+      "community": 3,
       "norm_label": "user",
       "id": "db_models_user"
     },
@@ -6919,7 +7029,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 102,
+      "community": 3,
       "norm_label": "rls.py",
       "id": "db_rls"
     },
@@ -6929,7 +7039,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 102,
+      "community": 3,
       "norm_label": "apply_rls_context()",
       "id": "db_rls_apply_rls_context"
     },
@@ -6939,7 +7049,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 102,
+      "community": 3,
       "norm_label": "asyncsession",
       "id": "backend_app_db_rls_py_asyncsession"
     },
@@ -6949,7 +7059,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 102,
+      "community": 3,
       "norm_label": "row-level security helpers \u2014 v2 schema.  the new schema uses `app.*` gucs (app.s",
       "id": "db_rls_rationale_1"
     },
@@ -6959,7 +7069,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 102,
+      "community": 3,
       "norm_label": "stamp the current transaction with the caller's jurisdiction context.",
       "id": "db_rls_rationale_29"
     },
@@ -6969,7 +7079,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 23,
+      "community": 104,
       "norm_label": "session.py",
       "id": "db_session"
     },
@@ -6979,7 +7089,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 23,
+      "community": 104,
       "norm_label": "set_db_source()",
       "id": "db_session_set_db_source"
     },
@@ -6989,7 +7099,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 23,
+      "community": 104,
       "norm_label": "get_db_source()",
       "id": "db_session_get_db_source"
     },
@@ -7009,7 +7119,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 23,
+      "community": 104,
       "norm_label": "_get_engine()",
       "id": "db_session_get_engine"
     },
@@ -7019,7 +7129,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 23,
+      "community": 104,
       "norm_label": "asyncengine",
       "id": "asyncengine"
     },
@@ -7029,7 +7139,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 23,
+      "community": 3,
       "norm_label": "get_sessionmaker()",
       "id": "db_session_get_sessionmaker"
     },
@@ -7039,7 +7149,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 23,
+      "community": 3,
       "norm_label": "async_sessionmaker",
       "id": "async_sessionmaker"
     },
@@ -7049,7 +7159,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 23,
+      "community": 3,
       "norm_label": "asyncsession",
       "id": "backend_app_db_session_py_asyncsession"
     },
@@ -7059,7 +7169,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L77",
       "_origin": "ast",
-      "community": 23,
+      "community": 3,
       "norm_label": "get_session()",
       "id": "db_session_get_session"
     },
@@ -7069,7 +7179,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 23,
+      "community": 104,
       "norm_label": "async sqlalchemy engine + session, with runtime database-source switching.  the",
       "id": "db_session_rationale_1"
     },
@@ -7089,7 +7199,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 23,
+      "community": 104,
       "norm_label": "return the engine for the currently active source.",
       "id": "db_session_rationale_63"
     },
@@ -7099,7 +7209,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L78",
       "_origin": "ast",
-      "community": 23,
+      "community": 3,
       "norm_label": "fastapi dependency yielding a transactional session.",
       "id": "db_session_rationale_78"
     },
@@ -7239,7 +7349,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 176,
+      "community": 26,
       "norm_label": "bhashini.py",
       "id": "api_bhashini"
     },
@@ -7249,7 +7359,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 176,
+      "community": 26,
       "norm_label": "_bhashinibase",
       "id": "api_bhashini_bhashinibase"
     },
@@ -7259,7 +7369,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 176,
+      "community": 39,
       "norm_label": ".__init__()",
       "id": "api_bhashini_bhashinibase_init"
     },
@@ -7269,7 +7379,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 176,
+      "community": 26,
       "norm_label": "bhashinistt",
       "id": "api_bhashini_bhashinistt"
     },
@@ -7279,7 +7389,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 176,
+      "community": 26,
       "norm_label": ".transcribe()",
       "id": "api_bhashini_bhashinistt_transcribe"
     },
@@ -7309,7 +7419,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 176,
+      "community": 26,
       "norm_label": "bhashinitranslator",
       "id": "api_bhashini_bhashinitranslator"
     },
@@ -7319,7 +7429,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 176,
+      "community": 26,
       "norm_label": ".translate()",
       "id": "api_bhashini_bhashinitranslator_translate"
     },
@@ -7329,7 +7439,7 @@
       "source_file": "backend/app/models/api/bhashini.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 176,
+      "community": 26,
       "norm_label": "bhashini (govt. of india) clients \u2014 primary indic layer (kannada stt/tts/mt).  t",
       "id": "api_bhashini_rationale_1"
     },
@@ -7449,7 +7559,7 @@
       "source_file": "backend/app/models/api/google_voice.py",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 149,
+      "community": 26,
       "norm_label": "googletts",
       "id": "api_google_voice_googletts"
     },
@@ -7459,7 +7569,7 @@
       "source_file": "backend/app/models/api/google_voice.py",
       "source_location": "L32",
       "_origin": "ast",
-      "community": 149,
+      "community": 39,
       "norm_label": ".__init__()",
       "id": "api_google_voice_googletts_init"
     },
@@ -7519,7 +7629,7 @@
       "source_file": "backend/app/models/api/google_voice.py",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 149,
+      "community": 26,
       "norm_label": "google cloud text-to-speech. returns mp3 audio bytes.",
       "id": "api_google_voice_rationale_28"
     },
@@ -7539,7 +7649,7 @@
       "source_file": "backend/app/models/api/groq.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 93,
+      "community": 122,
       "norm_label": "groq.py",
       "id": "api_groq"
     },
@@ -7549,7 +7659,7 @@
       "source_file": "backend/app/models/api/groq.py",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 93,
+      "community": 122,
       "norm_label": "groqllm",
       "id": "api_groq_groqllm"
     },
@@ -7559,7 +7669,7 @@
       "source_file": "backend/app/models/api/groq.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 93,
+      "community": 122,
       "norm_label": ".__init__()",
       "id": "api_groq_groqllm_init"
     },
@@ -7569,7 +7679,7 @@
       "source_file": "backend/app/models/api/groq.py",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 93,
+      "community": 122,
       "norm_label": ".complete()",
       "id": "api_groq_groqllm_complete"
     },
@@ -7579,7 +7689,7 @@
       "source_file": "backend/app/models/api/groq.py",
       "source_location": "L43",
       "_origin": "ast",
-      "community": 93,
+      "community": 122,
       "norm_label": ".stream()",
       "id": "api_groq_groqllm_stream"
     },
@@ -7589,7 +7699,7 @@
       "source_file": "backend/app/models/api/groq.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 93,
+      "community": 122,
       "norm_label": "groq client \u2014 low-latency fallback lane (short prompts, tpm-limited).  used when",
       "id": "api_groq_rationale_1"
     },
@@ -7729,7 +7839,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 176,
+      "community": 110,
       "norm_label": "sarvamstt",
       "id": "api_sarvam_sarvamstt"
     },
@@ -7779,7 +7889,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L144",
       "_origin": "ast",
-      "community": 176,
+      "community": 110,
       "norm_label": "sarvamtranslator",
       "id": "api_sarvam_sarvamtranslator"
     },
@@ -7819,7 +7929,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 176,
+      "community": 110,
       "norm_label": "saaras v3 speech-to-text. /speech-to-text is multipart/form-data.      sends l",
       "id": "api_sarvam_rationale_62"
     },
@@ -7859,7 +7969,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L145",
       "_origin": "ast",
-      "community": 176,
+      "community": 110,
       "norm_label": "mayura v1 \u2014 neural mt between kannada and english.",
       "id": "api_sarvam_rationale_145"
     },
@@ -8309,7 +8419,7 @@
       "source_file": "backend/app/models/local/stt_whisper.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 176,
+      "community": 26,
       "norm_label": "whisperstt",
       "id": "local_stt_whisper_whisperstt"
     },
@@ -8319,7 +8429,7 @@
       "source_file": "backend/app/models/local/stt_whisper.py",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 176,
+      "community": 26,
       "norm_label": ".transcribe()",
       "id": "local_stt_whisper_whisperstt_transcribe"
     },
@@ -8339,7 +8449,7 @@
       "source_file": "backend/app/models/local/tts_parler.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 26,
+      "community": 93,
       "norm_label": "tts_parler.py",
       "id": "local_tts_parler"
     },
@@ -8369,7 +8479,7 @@
       "source_file": "backend/app/models/local/tts_parler.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 26,
+      "community": 93,
       "norm_label": "indic-parler-tts. demo stub.",
       "id": "local_tts_parler_rationale_1"
     },
@@ -8409,7 +8519,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L52",
       "_origin": "ast",
-      "community": 26,
+      "community": 122,
       "norm_label": "get_fallback_llm()",
       "id": "models_registry_get_fallback_llm"
     },
@@ -8459,7 +8569,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 15,
+      "community": 26,
       "norm_label": "reranker",
       "id": "reranker"
     },
@@ -8469,7 +8579,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L104",
       "_origin": "ast",
-      "community": 176,
+      "community": 110,
       "norm_label": "get_stt()",
       "id": "models_registry_get_stt"
     },
@@ -8479,7 +8589,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L104",
       "_origin": "ast",
-      "community": 176,
+      "community": 26,
       "norm_label": "speechtotext",
       "id": "speechtotext"
     },
@@ -8509,7 +8619,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L152",
       "_origin": "ast",
-      "community": 176,
+      "community": 110,
       "norm_label": "get_translator()",
       "id": "models_registry_get_translator"
     },
@@ -8519,7 +8629,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L152",
       "_origin": "ast",
-      "community": 176,
+      "community": 26,
       "norm_label": "translator",
       "id": "translator"
     },
@@ -8549,7 +8659,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 26,
+      "community": 122,
       "norm_label": "low-latency fallback lane (always groq) used on timeout / 429 from primary.",
       "id": "models_registry_rationale_53"
     },
@@ -8569,7 +8679,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L105",
       "_origin": "ast",
-      "community": 176,
+      "community": 110,
       "norm_label": "sarvam (primary) \u2192 google \u2192 bhashini (fallback) \u2192 local whisper.      resolution",
       "id": "models_registry_rationale_105"
     },
@@ -8589,7 +8699,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L153",
       "_origin": "ast",
-      "community": 176,
+      "community": 110,
       "norm_label": "sarvam translate (primary) \u2192 bhashini nmt (fallback).     falls back to bhashini",
       "id": "models_registry_rationale_153"
     },
@@ -8709,7 +8819,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 42,
+      "community": 122,
       "norm_label": "_compose()",
       "id": "pipeline_orchestrator_compose"
     },
@@ -8769,7 +8879,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 42,
+      "community": 122,
       "norm_label": "grounded answer composition with groq fallback on primary failure.",
       "id": "pipeline_orchestrator_rationale_47"
     },
@@ -9839,7 +9949,7 @@
       "source_file": "backend/app/schemas/report.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 121,
+      "community": 163,
       "norm_label": "report.py",
       "id": "schemas_report"
     },
@@ -9849,7 +9959,7 @@
       "source_file": "backend/app/schemas/report.py",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 121,
+      "community": 163,
       "norm_label": "reportrequest",
       "id": "schemas_report_reportrequest"
     },
@@ -9859,7 +9969,7 @@
       "source_file": "backend/app/schemas/report.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 163,
       "norm_label": "reportresponse",
       "id": "schemas_report_reportresponse"
     },
@@ -10609,7 +10719,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 129,
+      "community": 163,
       "norm_label": "report_service.py",
       "id": "services_report_service"
     },
@@ -10619,7 +10729,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 163,
       "norm_label": "build()",
       "id": "services_report_service_build"
     },
@@ -10629,7 +10739,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 163,
       "norm_label": "asyncsession",
       "id": "backend_app_services_report_service_py_asyncsession"
     },
@@ -10639,7 +10749,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 163,
       "norm_label": "principal",
       "id": "backend_app_services_report_service_py_principal"
     },
@@ -10649,7 +10759,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 163,
       "norm_label": "reportrequest",
       "id": "backend_app_services_report_service_py_reportrequest"
     },
@@ -10659,7 +10769,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 163,
       "norm_label": "reportresponse",
       "id": "backend_app_services_report_service_py_reportresponse"
     },
@@ -10669,7 +10779,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 129,
+      "community": 163,
       "norm_label": "report builder. produces a structured (json) report payload; the pdf export can",
       "id": "services_report_service_rationale_1"
     },
@@ -10679,7 +10789,7 @@
       "source_file": "backend/check_audit.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 23,
+      "community": 3,
       "norm_label": "check_audit.py",
       "id": "backend_check_audit"
     },
@@ -10689,7 +10799,7 @@
       "source_file": "backend/check_audit.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 23,
+      "community": 3,
       "norm_label": "main()",
       "id": "backend_check_audit_main"
     },
@@ -10699,7 +10809,7 @@
       "source_file": "backend/check_insert.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 23,
+      "community": 3,
       "norm_label": "check_insert.py",
       "id": "backend_check_insert"
     },
@@ -10709,7 +10819,7 @@
       "source_file": "backend/check_insert.py",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 23,
+      "community": 3,
       "norm_label": "main()",
       "id": "backend_check_insert_main"
     },
@@ -11069,7 +11179,7 @@
       "source_file": "backend/seed/synthetic.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 129,
+      "community": 163,
       "norm_label": "synthetic.py",
       "id": "seed_synthetic"
     },
@@ -11079,7 +11189,7 @@
       "source_file": "backend/seed/synthetic.py",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 129,
+      "community": 163,
       "norm_label": "generate()",
       "id": "seed_synthetic_generate"
     },
@@ -11089,7 +11199,7 @@
       "source_file": "backend/seed/synthetic.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 129,
+      "community": 163,
       "norm_label": "synthetic ksp-style crime data generator.  important (spec risk r4): this is syn",
       "id": "seed_synthetic_rationale_1"
     },
@@ -12859,7 +12969,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "settingsdialog.tsx",
       "id": "components_settingsdialog"
     },
@@ -12869,7 +12979,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "tab",
       "id": "components_settingsdialog_tab"
     },
@@ -12879,7 +12989,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "enginesettings",
       "id": "components_settingsdialog_enginesettings"
     },
@@ -12889,7 +12999,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "defaultenginesettings",
       "id": "components_settingsdialog_defaultenginesettings"
     },
@@ -12909,7 +13019,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "saveenginesettings()",
       "id": "components_settingsdialog_saveenginesettings"
     },
@@ -12929,7 +13039,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L370",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "section()",
       "id": "components_settingsdialog_section"
     },
@@ -12939,7 +13049,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L382",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "field()",
       "id": "components_settingsdialog_field"
     },
@@ -12949,7 +13059,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L398",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "row()",
       "id": "components_settingsdialog_row"
     },
@@ -12959,7 +13069,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L407",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "select()",
       "id": "components_settingsdialog_select"
     },
@@ -12969,7 +13079,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L415",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "pill()",
       "id": "components_settingsdialog_pill"
     },
@@ -12979,7 +13089,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L428",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "toggle()",
       "id": "components_settingsdialog_toggle"
     },
@@ -12999,7 +13109,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L451",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "dbsourcerow()",
       "id": "components_settingsdialog_dbsourcerow"
     },
@@ -13009,7 +13119,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L511",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "modeltoggle()",
       "id": "components_settingsdialog_modeltoggle"
     },
@@ -13019,7 +13129,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L541",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "formatremaining()",
       "id": "components_settingsdialog_formatremaining"
     },
@@ -13029,7 +13139,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L551",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "dataactions()",
       "id": "components_settingsdialog_dataactions"
     },
@@ -16599,7 +16709,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 51,
+      "community": 8,
       "norm_label": "route",
       "id": "routes_audit_route"
     },
@@ -16924,66 +17034,6 @@
       "id": "routes_network_slider"
     },
     {
-      "label": "reports.tsx",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 51,
-      "norm_label": "reports.tsx",
-      "id": "frontend_src_routes_reports_tsx_routes_reports"
-    },
-    {
-      "label": "Route",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L8",
-      "_origin": "ast",
-      "community": 51,
-      "norm_label": "route",
-      "id": "routes_reports_route"
-    },
-    {
-      "label": "Item",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L18",
-      "_origin": "ast",
-      "community": 51,
-      "norm_label": "item",
-      "id": "routes_reports_item"
-    },
-    {
-      "label": "Reports()",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L20",
-      "_origin": "ast",
-      "community": 51,
-      "norm_label": "reports()",
-      "id": "routes_reports_reports"
-    },
-    {
-      "label": "ItemIcon()",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L214",
-      "_origin": "ast",
-      "community": 51,
-      "norm_label": "itemicon()",
-      "id": "routes_reports_itemicon"
-    },
-    {
-      "label": "Section()",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L222",
-      "_origin": "ast",
-      "community": 51,
-      "norm_label": "section()",
-      "id": "routes_reports_section"
-    },
-    {
       "label": "transcripts.tsx",
       "file_type": "code",
       "source_file": "frontend/src/routes/transcripts.tsx",
@@ -16999,7 +17049,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 51,
+      "community": 8,
       "norm_label": "route",
       "id": "routes_transcripts_route"
     },
@@ -19529,12 +19579,1050 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L239",
       "_origin": "ast",
-      "community": 113,
+      "community": 48,
       "norm_label": "speakviasarvam",
       "id": "voice_tts_speakviasarvam"
     }
   ],
   "links": [
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/AccountManager.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_accountmanager",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_createaccountdialog",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ProfileMenu.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_profilemenu",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_shell",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/audit.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "frontend_src_routes_audit_tsx_routes_audit",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "frontend_src_routes_network_tsx_routes_network",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L232",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_ctx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_dict"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L233",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_i18nctx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L235",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_i18nprovider"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_lang"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L258",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L259",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/forecast.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_forecast",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/login.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_login",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_profile_personid",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "lib_i18n",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/__root.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_root",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/socio.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_socio",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/transcripts.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_transcripts",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/trends.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_trends",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/pipeline/slots.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "pipeline_slots_memorystore",
+      "target": "lib_i18n_dict"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/__root.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_root",
+      "target": "lib_i18n_i18nprovider"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/AccountManager.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_accountmanager",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/AccountManager.tsx",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "components_accountmanager_accountmanager",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "components_casedrawer_casedrawer",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ProfileMenu.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_profilemenu",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/ProfileMenu.tsx",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "components_profilemenu_profilemenu",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "components_settingsdialog_settingsdialog",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_shell",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "components_shell_shell",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "routes_console_console",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/forecast.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_forecast",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/forecast.tsx",
+      "source_location": "L158",
+      "weight": 1.0,
+      "source": "routes_forecast_forecastscreen",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_profile_personid",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "routes_profile_personid_profilescreen",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "lib_i18n_usei18n",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L133",
+      "weight": 1.0,
+      "source": "routes_reports_reports",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/socio.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_socio",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/socio.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "routes_socio_sociodashboard",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/trends.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_trends",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/trends.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "routes_trends_trendsscreen",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "components_casedrawer_casedrawer",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_createaccountdialog",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "components_createaccountdialog_createaccountdialog",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/audit.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "frontend_src_routes_audit_tsx_routes_audit",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "frontend_src_routes_network_tsx_routes_network",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/audit.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "routes_audit_audit",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L585",
+      "weight": 1.0,
+      "source": "routes_console_aimsg",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "routes_console_console",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/forecast.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_forecast",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/forecast.tsx",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "routes_forecast_forecastscreen",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/login.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_login",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/login.tsx",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "routes_login_login",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L849",
+      "weight": 1.0,
+      "source": "routes_network_legend",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "routes_network_networkscreen",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_profile_personid",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "routes_profile_personid_personsearch",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "routes_profile_personid_profilescreen",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "lib_i18n_uset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "routes_reports_additembar",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "routes_reports_reports",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/socio.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_socio",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/socio.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "routes_socio_sociodashboard",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/transcripts.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_transcripts",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/transcripts.tsx",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "routes_transcripts_transcripts",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/trends.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_trends",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/trends.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "routes_trends_trendsscreen",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "api_client_api",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "api_client_stationrow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "api_intelligence_intelligence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "api_intelligence_searchresult",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "components_shell_shell",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "lib_tdata_tdata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "routes_reports_additembar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L551",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "routes_reports_docsection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "routes_reports_injectprintstyles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L535",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "routes_reports_itemicon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "routes_reports_itemtype",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "routes_reports_reportitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L131",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "routes_reports_reports",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "routes_reports_route",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "routes_reports_template",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "routes_reports",
+      "target": "routes_reports_templates",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_routetree_gen",
+      "target": "routes_reports_route"
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L159",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_routetree_gen_fileroutesbypath",
+      "target": "routes_reports_route"
+    },
     {
       "relation": "imports_from",
       "context": "import",
@@ -19572,9 +20660,9 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_cases",
-      "target": "routes_cases_search_persons_and_cases",
-      "confidence_score": 1.0
+      "target": "routes_cases_search_persons_and_cases"
     },
     {
       "relation": "rationale_for",
@@ -19593,9 +20681,9 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_cases_list_cases",
-      "target": "asyncsession",
-      "confidence_score": 1.0
+      "target": "asyncsession"
     },
     {
       "relation": "calls",
@@ -19615,9 +20703,9 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_cases_list_cases",
-      "target": "principal",
-      "confidence_score": 1.0
+      "target": "principal"
     },
     {
       "relation": "references",
@@ -19626,9 +20714,9 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L105",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_cases_get_case",
-      "target": "asyncsession",
-      "confidence_score": 1.0
+      "target": "asyncsession"
     },
     {
       "relation": "references",
@@ -19637,9 +20725,9 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_cases_search_persons_and_cases",
-      "target": "asyncsession",
-      "confidence_score": 1.0
+      "target": "asyncsession"
     },
     {
       "relation": "references",
@@ -19670,9 +20758,9 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L105",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_cases_get_case",
-      "target": "principal",
-      "confidence_score": 1.0
+      "target": "principal"
     },
     {
       "relation": "references",
@@ -19681,9 +20769,9 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_cases_search_persons_and_cases",
-      "target": "principal",
-      "confidence_score": 1.0
+      "target": "principal"
     },
     {
       "relation": "rationale_for",
@@ -19691,9 +20779,9 @@
       "source_file": "backend/app/api/routes/cases.py",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_cases_rationale_40",
-      "target": "routes_cases_search_persons_and_cases",
-      "confidence_score": 1.0
+      "target": "routes_cases_search_persons_and_cases"
     },
     {
       "relation": "calls",
@@ -20025,9 +21113,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_intelligence",
-      "target": "api_intelligence_searchresult",
-      "confidence_score": 1.0
+      "target": "api_intelligence_searchresult"
     },
     {
       "relation": "contains",
@@ -20213,9 +21301,9 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_profile_personid",
-      "target": "api_intelligence_searchresult",
-      "confidence_score": 1.0
+      "target": "api_intelligence_searchresult"
     },
     {
       "relation": "imports",
@@ -20312,9 +21400,9 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_trends",
-      "target": "api_intelligence_trendsresponse",
-      "confidence_score": 1.0
+      "target": "api_intelligence_trendsresponse"
     },
     {
       "relation": "imports",
@@ -20427,832 +21515,15 @@
       "target": "api_intelligence_intelligence"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/AccountManager.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_accountmanager",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_createaccountdialog",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ProfileMenu.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_profilemenu",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_shell",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/audit.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_audit_tsx_routes_audit",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_network_tsx_routes_network",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L232",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_ctx"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_dict"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L233",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_i18nctx"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L235",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_i18nprovider"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_lang"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L258",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L259",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/forecast.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_forecast",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/login.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_login",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_profile_personid",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/__root.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_root",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/socio.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_socio",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/transcripts.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_transcripts",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/trends.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_trends",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/pipeline/slots.py",
-      "source_location": "L30",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "pipeline_slots_memorystore",
-      "target": "lib_i18n_dict"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/__root.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_root",
-      "target": "lib_i18n_i18nprovider"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/AccountManager.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_accountmanager",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/AccountManager.tsx",
-      "source_location": "L68",
-      "weight": 1.0,
-      "source": "components_accountmanager_accountmanager",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L12",
-      "weight": 1.0,
-      "source": "components_casedrawer_casedrawer",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ProfileMenu.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_profilemenu",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/ProfileMenu.tsx",
-      "source_location": "L101",
-      "weight": 1.0,
-      "source": "components_profilemenu_profilemenu",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "components_settingsdialog_settingsdialog",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_shell",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L95",
-      "weight": 1.0,
-      "source": "components_shell_shell",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L70",
-      "weight": 1.0,
-      "source": "routes_console_console",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/forecast.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_forecast",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/forecast.tsx",
-      "source_location": "L158",
-      "weight": 1.0,
-      "source": "routes_forecast_forecastscreen",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_profile_personid",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "source": "routes_profile_personid_profilescreen",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/socio.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_socio",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/socio.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "source": "routes_socio_sociodashboard",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/trends.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_trends",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/trends.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "source": "routes_trends_trendsscreen",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "source": "components_casedrawer_casedrawer",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_createaccountdialog",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
-      "source_location": "L28",
-      "weight": 1.0,
-      "source": "components_createaccountdialog_createaccountdialog",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/audit.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_audit_tsx_routes_audit",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_network_tsx_routes_network",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/audit.tsx",
-      "source_location": "L32",
-      "weight": 1.0,
-      "source": "routes_audit_audit",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L585",
-      "weight": 1.0,
-      "source": "routes_console_aimsg",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L88",
-      "weight": 1.0,
-      "source": "routes_console_console",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/forecast.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_forecast",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/forecast.tsx",
-      "source_location": "L148",
-      "weight": 1.0,
-      "source": "routes_forecast_forecastscreen",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/login.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_login",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/login.tsx",
-      "source_location": "L31",
-      "weight": 1.0,
-      "source": "routes_login_login",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L849",
-      "weight": 1.0,
-      "source": "routes_network_legend",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L41",
-      "weight": 1.0,
-      "source": "routes_network_networkscreen",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_profile_personid",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L40",
-      "weight": 1.0,
-      "source": "routes_profile_personid_personsearch",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "source": "routes_profile_personid_profilescreen",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "source": "routes_reports_reports",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/socio.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_socio",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/socio.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "source": "routes_socio_sociodashboard",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/transcripts.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_transcripts",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/transcripts.tsx",
-      "source_location": "L38",
-      "weight": 1.0,
-      "source": "routes_transcripts_transcripts",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/trends.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_trends",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/trends.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "source": "routes_trends_trendsscreen",
-      "target": "lib_i18n_uset"
-    },
-    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_forecast",
-      "target": "components_casedrawer_casedrawer",
-      "confidence_score": 1.0
+      "target": "components_casedrawer_casedrawer"
     },
     {
       "relation": "imports_from",
@@ -21314,9 +21585,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L183",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_forecast",
-      "target": "routes_forecast_cellcard",
-      "confidence_score": 1.0
+      "target": "routes_forecast_cellcard"
     },
     {
       "relation": "contains",
@@ -21334,9 +21605,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_forecast",
-      "target": "routes_forecast_risk_accent",
-      "confidence_score": 1.0
+      "target": "routes_forecast_risk_accent"
     },
     {
       "relation": "contains",
@@ -21374,9 +21645,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_forecast",
-      "target": "routes_forecast_risk_glow",
-      "confidence_score": 1.0
+      "target": "routes_forecast_risk_glow"
     },
     {
       "relation": "contains",
@@ -21384,9 +21655,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_forecast",
-      "target": "routes_forecast_risk_order",
-      "confidence_score": 1.0
+      "target": "routes_forecast_risk_order"
     },
     {
       "relation": "contains",
@@ -21414,9 +21685,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L160",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_forecast",
-      "target": "routes_forecast_risksummarybar",
-      "confidence_score": 1.0
+      "target": "routes_forecast_risksummarybar"
     },
     {
       "relation": "contains",
@@ -21490,9 +21761,9 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_profile_personid",
-      "target": "components_casedrawer_casedrawer",
-      "confidence_score": 1.0
+      "target": "components_casedrawer_casedrawer"
     },
     {
       "relation": "imports_from",
@@ -21544,9 +21815,9 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_profile_personid",
-      "target": "routes_profile_personid_injectprintstyles",
-      "confidence_score": 1.0
+      "target": "routes_profile_personid_injectprintstyles"
     },
     {
       "relation": "contains",
@@ -21554,9 +21825,9 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_profile_personid",
-      "target": "routes_profile_personid_personsearch",
-      "confidence_score": 1.0
+      "target": "routes_profile_personid_personsearch"
     },
     {
       "relation": "contains",
@@ -21574,9 +21845,9 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_profile_personid",
-      "target": "routes_profile_personid_risk_bg",
-      "confidence_score": 1.0
+      "target": "routes_profile_personid_risk_bg"
     },
     {
       "relation": "contains",
@@ -21584,9 +21855,9 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_profile_personid",
-      "target": "routes_profile_personid_risk_ring",
-      "confidence_score": 1.0
+      "target": "routes_profile_personid_risk_ring"
     },
     {
       "relation": "contains",
@@ -21649,9 +21920,9 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_trends",
-      "target": "components_casedrawer_casedrawer",
-      "confidence_score": 1.0
+      "target": "components_casedrawer_casedrawer"
     },
     {
       "relation": "imports_from",
@@ -21703,9 +21974,9 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_trends",
-      "target": "routes_trends_clusterrow",
-      "confidence_score": 1.0
+      "target": "routes_trends_clusterrow"
     },
     {
       "relation": "contains",
@@ -21713,9 +21984,9 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_trends",
-      "target": "routes_trends_deltacard",
-      "confidence_score": 1.0
+      "target": "routes_trends_deltacard"
     },
     {
       "relation": "contains",
@@ -21733,9 +22004,9 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_trends",
-      "target": "routes_trends_sparkline",
-      "confidence_score": 1.0
+      "target": "routes_trends_sparkline"
     },
     {
       "relation": "contains",
@@ -21743,9 +22014,9 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_trends",
-      "target": "routes_trends_trendchart",
-      "confidence_score": 1.0
+      "target": "routes_trends_trendchart"
     },
     {
       "relation": "contains",
@@ -25532,17 +25803,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L9",
       "weight": 1.0,
@@ -25707,17 +25967,6 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
-      "target": "api_client_stationrow"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L10",
       "weight": 1.0,
@@ -25778,17 +26027,6 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "frontend_src_routes_network_tsx_routes_network",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
       "target": "api_client_api"
     },
     {
@@ -49000,17 +49238,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
-      "target": "components_shell"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L2",
       "weight": 1.0,
@@ -49038,17 +49265,6 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "frontend_src_routes_network_tsx_routes_network",
-      "target": "components_shell_shell"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
       "target": "components_shell_shell"
     },
     {
@@ -53621,17 +53837,6 @@
       "target": "routes_network_route"
     },
     {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_routetree_gen",
-      "target": "routes_reports_route"
-    },
-    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -53973,17 +54178,6 @@
       "confidence_score": 1.0,
       "source": "src_routetree_gen_fileroutesbypath",
       "target": "routes_network_route"
-    },
-    {
-      "relation": "references",
-      "context": "field",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L159",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_routetree_gen_fileroutesbypath",
-      "target": "routes_reports_route"
     },
     {
       "relation": "references",
@@ -54429,56 +54623,6 @@
       "confidence_score": 1.0,
       "source": "frontend_src_routes_network_tsx_routes_network",
       "target": "routes_network_stat"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L18",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
-      "target": "routes_reports_item"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L195",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
-      "target": "routes_reports_itemicon"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
-      "target": "routes_reports_reports"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
-      "target": "routes_reports_route"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L203",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_reports_tsx_routes_reports",
-      "target": "routes_reports_section"
     },
     {
       "relation": "contains",
@@ -56804,5 +56948,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "3e5f9033a8d9790d501724cf40acf19cc885d9ec"
+  "built_at_commit": "efff59235c9a1a914786cf1545f12598bacf601a"
 }

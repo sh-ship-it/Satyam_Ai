@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781698714.2362998,
-    "ast_hash": "bc6c612e3946a8b392356ec4c6151b3a",
+    "mtime": 1781699120.1258168,
+    "ast_hash": "5519021aad0ea5f7f853b614aa3a856a",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -730,8 +730,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/reports.tsx": {
-    "mtime": 1781552809.0027905,
-    "ast_hash": "48c924b6e1aaa437e63033475ab4a455",
+    "mtime": 1781699140.782414,
+    "ast_hash": "c7548bb83f7afc0142a899058ba28100",
     "semantic_hash": ""
   },
   "frontend/src/routes/transcripts.tsx": {
