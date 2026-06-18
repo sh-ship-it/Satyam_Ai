@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 class LoginRequest(BaseModel):
     username: str = ""
+    password: str = ""              # verified against bcrypt hash in DB
     role: Optional[str] = None      # legacy alias for rank
     rank: Optional[str] = None      # preferred: KSP rank string
 
@@ -32,4 +33,3 @@ class RegisterRequest(BaseModel):
     rank: Optional[str] = None
     password: str = ""
     photo_b64: Optional[str] = None
-

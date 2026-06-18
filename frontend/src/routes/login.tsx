@@ -34,6 +34,8 @@ function Login() {
   const [remember, setRemember] = useState(false);
   const [role, setRole] = useState("CI");
   const [showCreate, setShowCreate] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-background text-foreground">
@@ -102,18 +104,29 @@ function Login() {
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
+                setError(null);
+                setLoading(true);
                 const data = new FormData(e.currentTarget);
                 const email = String(data.get("email") || "").trim();
-                // The demo backend mints a JWT from a username; fall back to a
-                // default investigator if blank. Navigation proceeds even if the
-                // API is unreachable (offline pitch mode).
+                const password = String(data.get("password") || "").trim();
                 const username = email ? email.split("@")[0] : "officer";
                 try {
-                  await api.login(username, role);
-                } catch {
-                  /* backend down — continue to console as demo */
+                  await api.login(username, role, password);
+                  navigate({ to: "/console" });
+                } catch (err: any) {
+                  // Show backend error or a generic message
+                  const msg = err?.body?.detail || err?.message || "";
+                  if (msg.includes("Invalid password") || msg.includes("Invalid credentials")) {
+                    setError(t("Invalid email or password. Please try again."));
+                  } else if (msg) {
+                    setError(msg);
+                  } else {
+                    // Backend down — proceed as demo
+                    navigate({ to: "/console" });
+                  }
+                } finally {
+                  setLoading(false);
                 }
-                navigate({ to: "/console" });
               }}
               className="space-y-4"
             >
@@ -141,7 +154,7 @@ function Login() {
                   <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/50" />
                   <input
                     type={showPw ? "text" : "password"}
-                    defaultValue="demopass"
+                    name="password"
                     placeholder={t("Enter your password")}
                     className="h-11 w-full rounded-[5px] border-2 border-foreground bg-background pl-9 pr-10 text-sm font-medium placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring nb-shadow-sm"
                   />
@@ -200,12 +213,27 @@ function Login() {
                 </a>
               </div>
 
+              {error && (
+                <div className="rounded-[5px] border-2 border-destructive bg-destructive/10 px-3 py-2 text-xs font-bold text-destructive flex items-center gap-2">
+                  <Shield className="h-3.5 w-3.5 shrink-0" />
+                  {error}
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-[5px] border-2 border-foreground bg-primary text-sm font-extrabold uppercase tracking-wide text-primary-foreground nb-shadow transition hover:translate-x-[2px] hover:translate-y-[2px] hover:nb-shadow-sm active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+                disabled={loading}
+                className="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-[5px] border-2 border-foreground bg-primary text-sm font-extrabold uppercase tracking-wide text-primary-foreground nb-shadow transition hover:translate-x-[2px] hover:translate-y-[2px] hover:nb-shadow-sm active:translate-x-[4px] active:translate-y-[4px] active:shadow-none disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                <Shield className="h-4 w-4" />
-                {t("Sign in")}
+                {loading ? (
+                  <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                  </svg>
+                ) : (
+                  <Shield className="h-4 w-4" />
+                )}
+                {loading ? t("Signing in…") : t("Sign in")}
               </button>
 
               <button

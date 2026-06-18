@@ -143,6 +143,9 @@ class User(Base):
     user_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     username: Mapped[str] = mapped_column(Text, unique=True)
     password_hash: Mapped[str] = mapped_column(Text)
+    full_name: Mapped[Optional[str]] = mapped_column(Text)          # display name
+    email: Mapped[Optional[str]] = mapped_column(Text)              # optional e-mail
+    photo_b64: Mapped[Optional[str]] = mapped_column(Text)          # base-64 profile photo
     officer_id: Mapped[Optional[int]] = mapped_column(ForeignKey("officers.officer_id"))
     assigned_rank: Mapped[Optional[str]] = mapped_column(ForeignKey("rank_access.rank"))
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)

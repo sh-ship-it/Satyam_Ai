@@ -1,33 +1,28 @@
 """Authentication routes.
 
-Demo login: mints a JWT for any username/rank combo so judges can hop between
-clearance levels without a real LDAP/OIDC setup.  In production this endpoint
-is disabled; identity/claims come from the KSP OIDC provider.
-
-The JWT shape is identical between demo and production so nothing downstream
-changes at the flip of APP_ENV.
+Login:    looks up the user by username (derived from email), verifies bcrypt password.
+          Falls back to demo mode (any password accepted) when APP_ENV != production
+          and the user doesn't exist yet — so judges can sign in without pre-seeding.
+Register: creates a new User row with bcrypt-hashed password + Officer row if needed.
+          Works on both the Neon cloud DB and local PG17 (whichever DATABASE_URL points to).
 """
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select, func
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_principal
 from app.config import get_settings
 from app.core.rbac import Principal, resolve_clearance, resolve_scope
-from app.core.security import create_access_token
+from app.core.security import create_access_token, hash_password, verify_password
 from app.schemas.auth import LoginRequest, LoginResponse, SessionUser, RegisterRequest
 from app.db.session import get_sessionmaker
 from app.db.models import User, Officer
 
-
 router = APIRouter()
 
-# ── Demo station/district/range defaults ──────────────────────────────────
-# IMPORTANT: district and range must match real values in the synthetic dataset.
-# "Bengaluru City" and "Commissionerates" exist in the seeded data; the old
-# "Bengaluru Urban" / "Bengaluru Range" did NOT — causing RLS to filter out
-# all rows for district/station-scoped demo users (Issue 0).
+# ── Demo station/district/range defaults ──────────────────────────────────────
 _BLR = {"district": "Bengaluru City", "range": "Commissionerates"}
 
 _DEMO_STATIONS: dict[str, dict] = {
@@ -43,146 +38,177 @@ _DEMO_STATIONS: dict[str, dict] = {
     "DIG":   {"station_id": None, "district": "", "range": "Commissionerates"},
     "IGP":   {"station_id": None, "district": "", "range": ""},
     "DGP":   {"station_id": None, "district": "", "range": ""},
-    # Legacy app-role aliases
     "admin":        {"station_id": None, "district": "", "range": ""},
     "investigator": {"station_id": 1,    **_BLR},
-    "analyst":      {"station_id": None, "district": "", "range": ""},  # state scope → sees all
+    "analyst":      {"station_id": None, "district": "", "range": ""},
     "viewer":       {"station_id": 1,    **_BLR},
 }
-from sqlalchemy.ext.asyncio import AsyncSession
-
-def get_db_rank(rank: str) -> str:
-    if rank == "CI":
-        return "PI"
-    if rank == "DySP":
-        return "Dy.SP"
-    return rank
 
 
-async def get_or_create_user(session: AsyncSession, username: str, rank: str, name: str) -> User:
-    stmt = select(User).where(User.username == username)
-    user = (await session.execute(stmt)).scalar_one_or_none()
-    if user:
-        return user
+def _db_rank(rank: str) -> str:
+    """Normalise UI rank values to the DB rank_access.rank strings."""
+    return {"CI": "PI", "DySP": "Dy.SP"}.get(rank, rank)
 
-    db_rank = get_db_rank(rank)
-    officer_stmt = select(Officer).where(Officer.rank == db_rank).limit(1)
-    officer = (await session.execute(officer_stmt)).scalar_one_or_none()
 
-    if not officer:
-        max_id_res = await session.execute(select(func.max(Officer.officer_id)))
-        new_officer_id = (max_id_res.scalar() or 0) + 1
-        geo = _DEMO_STATIONS.get(rank, _DEMO_STATIONS["investigator"])
-        station_id = geo.get("station_id", 1) or 1
-        officer = Officer(
-            officer_id=new_officer_id,
-            name=name,
-            rank=db_rank,
-            station_id=station_id,
-        )
-        session.add(officer)
-        await session.flush()
-
-    new_user = User(
-        username=username,
-        password_hash="demo_pwd",
-        officer_id=officer.officer_id,
-        assigned_rank=db_rank,
-        is_active=True,
+async def _get_or_create_officer(
+    session: AsyncSession, name: str, rank: str, station_id: int
+) -> Officer:
+    db_rank = _db_rank(rank)
+    stmt = select(Officer).where(Officer.rank == db_rank).limit(1)
+    officer = (await session.execute(stmt)).scalar_one_or_none()
+    if officer:
+        return officer
+    max_id = (await session.execute(select(func.max(Officer.officer_id)))).scalar() or 0
+    officer = Officer(
+        officer_id=max_id + 1,
+        name=name,
+        rank=db_rank,
+        station_id=station_id,
     )
-    session.add(new_user)
+    session.add(officer)
     await session.flush()
-    return new_user
+    return officer
 
 
-@router.post("/login", response_model=LoginResponse)
-async def login(req: LoginRequest) -> LoginResponse:
-    settings = get_settings()
-    if settings.app_env == "production":
-        raise HTTPException(status_code=403, detail="demo login is disabled in production")
-
-    rank = req.role or req.rank or "investigator"
+def _build_token_and_user(
+    uid: str, name: str, rank: str, officer_id: int | None
+) -> tuple[str, SessionUser]:
     clearance = resolve_clearance(rank)
     scope = resolve_scope(rank)
     geo = _DEMO_STATIONS.get(rank, _DEMO_STATIONS["investigator"])
+    user = SessionUser(
+        id=uid, name=name, rank=rank, scope=scope, clearance=clearance,
+        station_id=geo["station_id"], district=geo["district"], range_name=geo["range"],
+    )
+    token = create_access_token(
+        subject=uid, name=name, rank=rank, scope=scope, clearance=clearance,
+        station_id=geo["station_id"], district=geo["district"], range_name=geo["range"],
+        officer_id=officer_id,
+    )
+    return token, user
 
-    uid = req.username.strip() or f"demo-{rank}"
 
-    # Get or create database user
+# ── Login ─────────────────────────────────────────────────────────────────────
+@router.post("/login", response_model=LoginResponse)
+async def login(req: LoginRequest) -> LoginResponse:
+    settings = get_settings()
+    rank = req.role or req.rank or "CI"
+    username = (req.username or "").strip()
+    if not username:
+        username = f"demo-{rank}"
+
     sessionmaker = get_sessionmaker()
     async with sessionmaker() as session:
         async with session.begin():
-            db_user = await get_or_create_user(session, uid, rank, uid.title())
-            user_id = db_user.user_id
+            stmt = select(User).where(User.username == username)
+            db_user = (await session.execute(stmt)).scalar_one_or_none()
 
-    user = SessionUser(
-        id=uid,
-        name=req.username.strip() or rank.title(),
-        rank=rank,
-        scope=scope,
-        clearance=clearance,
-        station_id=geo["station_id"],
-        district=geo["district"],
-        range_name=geo["range"],
-    )
-    token = create_access_token(
-        subject=user.id,
-        name=user.name,
-        rank=rank,
-        scope=scope,
-        clearance=clearance,
-        station_id=geo["station_id"],
-        district=geo["district"],
-        range_name=geo["range"],
-        officer_id=user_id,
-    )
-    return LoginResponse(token=token, user=user)
+            if db_user:
+                # Existing user: verify password (skip in demo mode for convenience)
+                if settings.app_env == "production":
+                    if not verify_password(req.password or "", db_user.password_hash):
+                        raise HTTPException(status_code=401, detail="Invalid credentials")
+                else:
+                    # In dev/demo: accept any password OR verified password
+                    pw_ok = (not req.password) or verify_password(req.password, db_user.password_hash)
+                    if not pw_ok:
+                        raise HTTPException(status_code=401, detail="Invalid password")
+
+                name = db_user.full_name or username.replace(".", " ").title()
+                assigned_rank = db_user.assigned_rank or rank
+                officer_id = db_user.user_id
+                token, user = _build_token_and_user(username, name, assigned_rank, officer_id)
+                return LoginResponse(token=token, user=user)
+
+            else:
+                # No user found: in demo mode auto-create; in production reject
+                if settings.app_env == "production":
+                    raise HTTPException(status_code=401, detail="Invalid credentials")
+
+                geo = _DEMO_STATIONS.get(rank, _DEMO_STATIONS["investigator"])
+                officer = await _get_or_create_officer(
+                    session, username.replace(".", " ").title(),
+                    rank, geo["station_id"] or 1,
+                )
+                hashed = hash_password(req.password or "demo")
+                new_user = User(
+                    username=username,
+                    password_hash=hashed,
+                    full_name=username.replace(".", " ").title(),
+                    officer_id=officer.officer_id,
+                    assigned_rank=_db_rank(rank),
+                    is_active=True,
+                )
+                session.add(new_user)
+                await session.flush()
+                name = new_user.full_name or username
+                token, user = _build_token_and_user(username, name, rank, new_user.user_id)
+                return LoginResponse(token=token, user=user)
 
 
+# ── Register ──────────────────────────────────────────────────────────────────
 @router.post("/register", response_model=LoginResponse)
 async def register(req: RegisterRequest) -> LoginResponse:
     settings = get_settings()
     if settings.app_env == "production":
-        raise HTTPException(status_code=403, detail="self-registration disabled in production")
+        raise HTTPException(status_code=403, detail="Self-registration disabled in production.")
 
-    rank = req.role or req.rank or "investigator"
-    clearance = resolve_clearance(rank)
-    scope = resolve_scope(rank)
-    geo = _DEMO_STATIONS.get(rank, _DEMO_STATIONS["investigator"])
+    rank = req.role or req.rank or "CI"
+    name = (req.name or "").strip()
+    email = (req.email or "").strip()
+    password = (req.password or "").strip()
 
-    uid = (req.email.split("@")[0] if req.email else "").strip() or f"demo-{rank}"
+    # Derive username from email (before @) or name
+    if email:
+        username = email.split("@")[0].lower().replace(" ", ".")
+    elif name:
+        username = name.lower().replace(" ", ".")
+    else:
+        username = f"officer-{rank.lower()}"
 
-    # Get or create database user
+    if not name:
+        name = username.replace(".", " ").title()
+
+    if not password:
+        raise HTTPException(status_code=422, detail="Password is required.")
+
     sessionmaker = get_sessionmaker()
     async with sessionmaker() as session:
         async with session.begin():
-            db_user = await get_or_create_user(session, uid, rank, req.name.strip() or uid.title())
-            user_id = db_user.user_id
+            # Check username uniqueness
+            stmt = select(User).where(User.username == username)
+            existing = (await session.execute(stmt)).scalar_one_or_none()
+            if existing:
+                raise HTTPException(
+                    status_code=409,
+                    detail=f"Username '{username}' is already taken. Use a different name or email."
+                )
 
-    user = SessionUser(
-        id=uid,
-        name=req.name.strip() or uid.title(),
-        rank=rank,
-        scope=scope,
-        clearance=clearance,
-        station_id=geo["station_id"],
-        district=geo["district"],
-        range_name=geo["range"],
-    )
-    token = create_access_token(
-        subject=user.id,
-        name=user.name,
-        rank=rank,
-        scope=scope,
-        clearance=clearance,
-        station_id=geo["station_id"],
-        district=geo["district"],
-        range_name=geo["range"],
-        officer_id=user_id,
-    )
+            geo = _DEMO_STATIONS.get(rank, _DEMO_STATIONS["investigator"])
+            officer = await _get_or_create_officer(
+                session, name, rank, geo["station_id"] or 1,
+            )
+
+            hashed = hash_password(password)
+            new_user = User(
+                username=username,
+                password_hash=hashed,
+                full_name=name,
+                email=email or None,
+                photo_b64=req.photo_b64 or None,
+                officer_id=officer.officer_id,
+                assigned_rank=_db_rank(rank),
+                is_active=True,
+            )
+            session.add(new_user)
+            await session.flush()
+            user_id = new_user.user_id
+
+    token, user = _build_token_and_user(username, name, rank, user_id)
     return LoginResponse(token=token, user=user)
 
 
+# ── Me ────────────────────────────────────────────────────────────────────────
 @router.get("/me", response_model=SessionUser)
 async def me(principal: Principal = Depends(get_principal)) -> SessionUser:
     return SessionUser(
@@ -195,4 +221,3 @@ async def me(principal: Principal = Depends(get_principal)) -> SessionUser:
         district=principal.district,
         range_name=principal.range_name,
     )
-

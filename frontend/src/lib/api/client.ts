@@ -9,6 +9,7 @@ export const API_BASE =
   "http://localhost:8000";
 
 const TOKEN_KEY = "satyam.token";
+const USER_KEY  = "satyam.user";
 
 export function getAuthToken(): string | null {
   if (typeof window === "undefined") return null;
@@ -19,6 +20,20 @@ export function setAuthToken(token: string | null) {
   if (typeof window === "undefined") return;
   if (token) window.localStorage.setItem(TOKEN_KEY, token);
   else window.localStorage.removeItem(TOKEN_KEY);
+}
+
+export function getCachedUser(): SessionUser | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(USER_KEY);
+    return raw ? (JSON.parse(raw) as SessionUser) : null;
+  } catch { return null; }
+}
+
+export function setCachedUser(user: SessionUser | null) {
+  if (typeof window === "undefined") return;
+  if (user) window.localStorage.setItem(USER_KEY, JSON.stringify(user));
+  else window.localStorage.removeItem(USER_KEY);
 }
 
 function authHeaders(extra: Record<string, string> = {}): Record<string, string> {
@@ -83,12 +98,13 @@ export type StationBreakdownResponse = { rows: StationRow[]; total: number };
 
 export const api = {
   // --- auth ---
-  async login(username: string, rank?: string): Promise<{ token: string; user: SessionUser }> {
+  async login(username: string, rank?: string, password = ""): Promise<{ token: string; user: SessionUser }> {
     const out = await request<{ token: string; user: SessionUser }>("/auth/login", {
       method: "POST",
-      body: JSON.stringify({ username, rank }),
+      body: JSON.stringify({ username, rank, password }),
     });
     setAuthToken(out.token);
+    setCachedUser(out.user);
     return out;
   },
   async register(body: {
@@ -103,6 +119,7 @@ export const api = {
       body: JSON.stringify(body),
     });
     setAuthToken(out.token);
+    setCachedUser(out.user);
     return out;
   },
   me(): Promise<SessionUser> {
@@ -110,6 +127,7 @@ export const api = {
   },
   logout() {
     setAuthToken(null);
+    setCachedUser(null);
   },
 
 

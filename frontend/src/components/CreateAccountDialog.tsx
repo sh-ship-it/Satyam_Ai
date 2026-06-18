@@ -105,6 +105,10 @@ export function CreateAccountDialog({
   };
 
   const submit = async () => {
+    if (!name || !email || !password) {
+      setErr(t("Please fill in all required fields."));
+      return;
+    }
     setBusy(true);
     setErr(null);
     try {
@@ -116,8 +120,17 @@ export function CreateAccountDialog({
         photo_b64: photo ?? undefined,
       });
       onCreated();
-    } catch {
-      setErr(t("Could not create the account. Try again."));
+    } catch (e: any) {
+      const detail = e?.body?.detail || e?.message || "";
+      if (detail.includes("already taken")) {
+        setErr(t("This username is already taken. Try a different name or email."));
+      } else if (detail.includes("Password")) {
+        setErr(t("Password is required."));
+      } else if (detail) {
+        setErr(detail);
+      } else {
+        setErr(t("Could not create the account. Try again."));
+      }
     } finally {
       setBusy(false);
     }
@@ -209,8 +222,7 @@ export function CreateAccountDialog({
           onClick={submit}
           disabled={busy || !name || !email || !password}
           className="mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-[5px] border-2 border-foreground bg-primary text-sm font-extrabold uppercase text-primary-foreground nb-shadow disabled:opacity-60 disabled:cursor-not-allowed select-none"
-        >
-          {busy ? <RefreshCw className="h-4 w-4 animate-spin" /> : null}
+        >          {busy ? <RefreshCw className="h-4 w-4 animate-spin" /> : null}
           {t("Create account")}
         </button>
       </div>
