@@ -400,13 +400,13 @@
     "semantic_hash": ""
   },
   "frontend/src/components/SettingsDialog.tsx": {
-    "mtime": 1781812247.226935,
-    "ast_hash": "c6bbd430e12fe263028cd91f5a335911",
+    "mtime": 1781812706.2632496,
+    "ast_hash": "df782064326ec96eb0f7e04535119880",
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1781812239.8060079,
-    "ast_hash": "524c1aad2fbe59453951f8286b37b745",
+    "mtime": 1781812883.5807078,
+    "ast_hash": "d84fbdb90c0ef2d61437997529ccff4f",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781812239.555591,
-    "ast_hash": "6928fe911728be5609435a4a6535582b",
+    "mtime": 1781812851.2888846,
+    "ast_hash": "e1dc70477a74c473c3663650e405c9d4",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
-    "mtime": 1781764702.2774847,
-    "ast_hash": "9713bb1dd93ee08a769da417611dbf46",
+    "mtime": 1781812834.127314,
+    "ast_hash": "76a26949e098659acbfcad12fc49462b",
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
@@ -1187,6 +1187,11 @@
   "SATYAM_INCIDENT_TREND_REDESIGN.md": {
     "mtime": 1781801360.7751262,
     "ast_hash": "cb52de75877788a98eaf1df1fc6899de",
+    "semantic_hash": ""
+  },
+  "SATYAM_COPILOT_STT_TOGGLE.md": {
+    "mtime": 1781812534.0291045,
+    "ast_hash": "78e29fda96c486af5cfc1642185dcc2e",
     "semantic_hash": ""
   }
 }
