@@ -77,64 +77,180 @@ function KpiCard({
   );
 }
 
-// ── Time series bar chart (animated, peak annotation) ────────────────────────
-function TrendChart({ series }: { series: TrendPoint[] }) {
+// ── Time series bar chart (pixel-height bars, peak annotation) ───────────────
+function TrendChart({ series, t }: { series: TrendPoint[]; t: (s: string) => string }) {
   const byPeriod = useMemo(() => {
     const m: Record<string, number> = {};
     series.forEach((s) => { m[s.period] = (m[s.period] || 0) + s.count; });
     return Object.entries(m).sort(([a], [b]) => a.localeCompare(b));
   }, [series]);
-  const max = Math.max(1, ...byPeriod.map(([, v]) => v));
-  const peakIdx = byPeriod.findIndex(([, v]) => v === max);
+
+  const [hover, setHover] = useState<number | null>(null);
 
   if (byPeriod.length === 0)
-    return <div className="text-xs text-muted-foreground text-center py-10">No trend data</div>;
+    return <div className="text-xs text-muted-foreground text-center py-10">{t("No trend data")}</div>;
+
+  const max = Math.max(1, ...byPeriod.map(([, v]) => v));
+  const peakIdx = byPeriod.reduce((b, [, v], i, a) => (v > a[b][1] ? i : b), 0);
+  const fmt = (p: string) => (p.length > 7 ? p.slice(2) : p);
+
+  // ── Single period → spotlight (no degenerate full-width block) ──
+  if (byPeriod.length === 1) {
+    const [period, v] = byPeriod[0];
+    return (
+      <div className="relative flex h-56 flex-col items-center justify-center gap-3">
+        <style>{TREND_STYLE}</style>
+        <span className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">{fmt(period)}</span>
+        <div className="flex items-end gap-2 tc-fade">
+          <span className="text-6xl font-extrabold leading-none tabular-nums text-primary">{v}</span>
+          <span className="mb-1.5 text-xs text-muted-foreground">{t("incidents")}</span>
+        </div>
+        <span className="flex items-center gap-1 rounded-full bg-destructive/10 px-2.5 py-0.5 text-[10px] font-bold text-destructive">
+          <TrendingUp className="h-3 w-3" /> {t("Peak period")}
+        </span>
+        <div className="mt-1 w-full max-w-md px-2">
+          <div className="h-2.5 overflow-hidden rounded-full bg-muted">
+            <div className="tc-grow h-full rounded-full bg-gradient-to-r from-primary/60 to-primary" />
+          </div>
+          <div className="mt-1 flex justify-between text-[9px] text-muted-foreground">
+            <span>0</span>
+            <span>{t("max")} {max}</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Multi period → smooth area + line chart ──
+  const n = byPeriod.length;
+  const TOP = 16, BOT = 84, PADX = 4;
+  const pts = byPeriod.map(([, v], i) => ({
+    x: PADX + (i / (n - 1)) * (100 - 2 * PADX),
+    y: BOT - (v / max) * (BOT - TOP),
+  }));
+  const line = pts.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(" ");
+  const area = `${pts[0].x.toFixed(2)},${BOT} ${line} ${pts[n - 1].x.toFixed(2)},${BOT}`;
+  const showLabel = (i: number) => n <= 10 || i === 0 || i === n - 1 || i === peakIdx;
 
   return (
-    <div>
-      <div className="flex items-end gap-1 h-52 pt-6 relative">
-        {byPeriod.map(([period, v], i) => {
-          const isPeak = i === peakIdx;
-          const pct = (v / max) * 100;
-          return (
-            <div key={period} className="flex-1 flex flex-col items-center gap-1 group min-w-0 relative">
-              {isPeak && (
-                <div className="absolute -top-5 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                  <span className="text-[9px] font-bold text-destructive bg-destructive/10 px-1.5 py-0.5 rounded-full border border-destructive/30">
-                    ▲ Peak
-                  </span>
-                </div>
-              )}
-              <div className="text-[9px] font-bold text-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-                {v.toLocaleString()}
-              </div>
-              <div
-                className={`w-full rounded-t-md transition-all duration-700 ${
-                  isPeak
-                    ? "bg-gradient-to-t from-destructive/70 to-destructive"
-                    : "bg-gradient-to-t from-primary/50 to-primary hover:from-primary hover:to-primary"
-                }`}
-                style={{ height: `${pct}%`, transitionDelay: `${i * 15}ms` }}
-              />
-              <div className="text-[8px] text-muted-foreground truncate w-full text-center" title={period}>
-                {period.length > 7 ? period.slice(2) : period}
-              </div>
-            </div>
-          );
-        })}
+    <div className="relative h-56 w-full">
+      <style>{TREND_STYLE}</style>
+
+      {/* gridlines + y scale */}
+      {[0, 0.5, 1].map((g) => (
+        <div
+          key={g}
+          className="absolute left-0 right-0 border-t border-dashed border-border/60"
+          style={{ top: `${TOP + (1 - g) * (BOT - TOP)}%` }}
+        >
+          <span className="absolute -top-1.5 left-0 bg-card pr-1 text-[8px] tabular-nums text-muted-foreground">
+            {Math.round(max * g)}
+          </span>
+        </div>
+      ))}
+
+      {/* area + line */}
+      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="tc-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--main)" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="var(--main)" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <polygon className="tc-area" points={area} fill="url(#tc-fill)" />
+        <polyline
+          className="tc-line"
+          points={line}
+          fill="none"
+          stroke="var(--main)"
+          strokeWidth="2.5"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+          pathLength={1}
+        />
+      </svg>
+
+      {/* dots + peak marker */}
+      {pts.map((p, i) => {
+        const isPeak = i === peakIdx;
+        const [period, v] = byPeriod[i];
+        return (
+          <div
+            key={period}
+            className="absolute -translate-x-1/2 -translate-y-1/2"
+            style={{ left: `${p.x}%`, top: `${p.y}%` }}
+          >
+            {isPeak && (
+              <span className="absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-destructive px-1.5 py-0.5 text-[8px] font-bold text-white">
+                ▲ {v}
+              </span>
+            )}
+            <div
+              className={`tc-dot rounded-full ${isPeak ? "tc-peak h-3 w-3 bg-destructive ring-2 ring-destructive/30" : "h-2 w-2 bg-primary"}`}
+            />
+          </div>
+        );
+      })}
+
+      {/* x-axis labels */}
+      {pts.map((p, i) =>
+        showLabel(i) ? (
+          <div
+            key={`l${i}`}
+            className="absolute -translate-x-1/2 whitespace-nowrap text-[8px] text-muted-foreground"
+            style={{ left: `${p.x}%`, top: "90%" }}
+            title={byPeriod[i][0]}
+          >
+            {fmt(byPeriod[i][0])}
+          </div>
+        ) : null,
+      )}
+
+      {/* hover capture + tooltip */}
+      <div className="absolute top-0 flex" style={{ left: `${PADX}%`, right: `${PADX}%`, height: `${BOT}%` }}>
+        {byPeriod.map(([period], i) => (
+          <div
+            key={period}
+            className="flex-1"
+            onMouseEnter={() => setHover(i)}
+            onMouseLeave={() => setHover((h) => (h === i ? null : h))}
+          />
+        ))}
       </div>
-      <div className="mt-2 flex items-center justify-between text-[10px] text-muted-foreground">
-        <span className="flex items-center gap-1">
-          <span className="inline-block h-2 w-3 rounded-sm bg-primary/60" /> Normal
-        </span>
-        <span className="flex items-center gap-1">
-          <span className="inline-block h-2 w-3 rounded-sm bg-destructive/60" /> Peak period
-        </span>
-        <span>{byPeriod.length} periods · max {max.toLocaleString()} incidents</span>
-      </div>
+      {hover !== null && (
+        <div
+          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full rounded-md border border-border bg-card px-2 py-1 text-[10px] shadow-md"
+          style={{ left: `${pts[hover].x}%`, top: `${pts[hover].y}%` }}
+        >
+          <div className="font-bold text-foreground">
+            {byPeriod[hover][1]} {t("incidents")}
+          </div>
+          <div className="text-muted-foreground">{byPeriod[hover][0]}</div>
+        </div>
+      )}
     </div>
   );
 }
+
+const TREND_STYLE = `
+.tc-fade{ animation: tc-fade .7s ease-out both; }
+@keyframes tc-fade{ from{ opacity:0; transform: translateY(6px); } to{ opacity:1; transform:none; } }
+.tc-grow{ transform-origin:left; animation: tc-grow 1s ease-out both; }
+@keyframes tc-grow{ from{ transform: scaleX(0); } to{ transform: scaleX(1); } }
+.tc-area{ animation: tc-fade .9s ease-out both; }
+.tc-line{ stroke-dasharray:1; animation: tc-draw 1.1s ease-out forwards; }
+@keyframes tc-draw{ from{ stroke-dashoffset:1; } to{ stroke-dashoffset:0; } }
+.tc-dot{ animation: tc-pop .45s ease-out both; }
+@keyframes tc-pop{ from{ transform: scale(0); } to{ transform: scale(1); } }
+.tc-peak{ animation: tc-peak 2s ease-in-out infinite; }
+@keyframes tc-peak{ 0%,100%{ box-shadow: 0 0 0 0 rgba(255,77,80,.5); } 50%{ box-shadow: 0 0 0 7px rgba(255,77,80,0); } }
+@media (prefers-reduced-motion: reduce){
+  .tc-fade,.tc-grow,.tc-area,.tc-line,.tc-dot,.tc-peak{ animation: none !important; }
+  .tc-grow{ transform: scaleX(1); }
+  .tc-line{ stroke-dashoffset: 0; }
+}
+`;
 
 // ── Crime × period heatmap ─────────────────────────────────────────────────────
 function CrimeHeatmap({ series, lang, t }: { series: TrendPoint[]; lang: string; t: (s: string) => string }) {
@@ -346,6 +462,71 @@ const BAR_COLORS = [
   "from-primary/40 to-primary/60",
   "from-primary/30 to-primary/50",
 ];
+
+// ── Animated top crime type bars ───────────────────────────────────────────────
+function AnimatedBars({ topByType, lang, t }: {
+  topByType: [string, number][]; lang: string; t: (s: string) => string;
+}) {
+  const [mounted, setMounted] = useState(false);
+
+  // Use a timeout (not rAF) so the 0% width paint is guaranteed flushed first
+  useEffect(() => {
+    setMounted(false);
+    const id = setTimeout(() => setMounted(true), 50);
+    return () => clearTimeout(id);
+  }, [topByType]);
+
+  const total = topByType.reduce((s, [, v]) => s + v, 0);
+  const maxVal = topByType[0]?.[1] ?? 1;
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-5">
+      <h2 className="text-sm font-extrabold uppercase tracking-wide flex items-center gap-2 mb-5">
+        <TrendingUp className="h-4 w-4 text-primary" /> {t("Top Crime Types")}
+        <span className="ml-auto text-[10px] font-normal text-muted-foreground normal-case">
+          {t("by incident count")}
+        </span>
+      </h2>
+      <div className="space-y-4">
+        {topByType.map(([ct, cnt], idx) => {
+          const pct = (cnt / maxVal) * 100;
+          const sharePct = total > 0 ? ((cnt / total) * 100).toFixed(0) : "0";
+          const color = BAR_COLORS[Math.min(idx, BAR_COLORS.length - 1)];
+          return (
+            <div key={ct}>
+              <div className="flex items-center gap-3 mb-1.5">
+                <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-extrabold shrink-0
+                  ${idx === 0 ? "bg-destructive text-destructive-foreground"
+                  : idx === 1 ? "bg-orange-500 text-white"
+                  : idx === 2 ? "bg-amber-500 text-white"
+                  : "bg-muted text-muted-foreground"}`}>
+                  {idx + 1}
+                </span>
+                <span className="flex-1 text-xs font-semibold text-foreground truncate">
+                  {tData("crime_type", ct, lang)}
+                </span>
+                <span className="text-[10px] text-muted-foreground tabular-nums">{sharePct}%</span>
+                <span className="w-14 text-right text-xs tabular-nums font-bold text-foreground">
+                  {cnt.toLocaleString()}
+                </span>
+              </div>
+              {/* Track is a plain block div — width % resolves correctly */}
+              <div className="h-4 rounded-full bg-muted overflow-hidden">
+                <div
+                  className={`h-full rounded-full bg-gradient-to-r ${color}`}
+                  style={{
+                    width: `${mounted ? pct : 0}%`,
+                    transition: mounted ? `width 700ms ease-out ${idx * 60}ms` : "none",
+                  }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 // ── Main screen ────────────────────────────────────────────────────────────────
 function TrendsScreen() {
@@ -625,49 +806,7 @@ function TrendsScreen() {
 
               {/* Top crime types — rich animated bars */}
               {topByType.length > 0 && (
-                <div className="rounded-xl border border-border bg-card p-5">
-                  <h2 className="text-sm font-extrabold uppercase tracking-wide flex items-center gap-2 mb-5">
-                    <TrendingUp className="h-4 w-4 text-primary" /> {t("Top Crime Types")}
-                    <span className="ml-auto text-[10px] font-normal text-muted-foreground normal-case">
-                      {t("by incident count")}
-                    </span>
-                  </h2>
-                  <div className="space-y-4">
-                    {topByType.map(([ct, cnt], idx) => {
-                      const maxVal = topByType[0][1];
-                      const pct = (cnt / maxVal) * 100;
-                      const total = topByType.reduce((s, [, v]) => s + v, 0);
-                      const sharePct = total > 0 ? ((cnt / total) * 100).toFixed(0) : "0";
-                      const color = BAR_COLORS[Math.min(idx, BAR_COLORS.length - 1)];
-                      return (
-                        <div key={ct} className="group">
-                          <div className="flex items-center gap-3 mb-1.5">
-                            <span className={`h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-extrabold shrink-0
-                              ${idx === 0 ? "bg-destructive text-destructive-foreground"
-                              : idx === 1 ? "bg-orange-500 text-white"
-                              : idx === 2 ? "bg-amber-500 text-white"
-                              : "bg-muted text-muted-foreground"}`}>
-                              {idx + 1}
-                            </span>
-                            <span className="flex-1 text-xs font-semibold text-foreground truncate">
-                              {tData("crime_type", ct, lang)}
-                            </span>
-                            <span className="text-[10px] text-muted-foreground tabular-nums">{sharePct}%</span>
-                            <span className="w-14 text-right text-xs tabular-nums font-bold text-foreground">
-                              {cnt.toLocaleString()}
-                            </span>
-                          </div>
-                          <div className="flex-1 h-4 rounded-full bg-muted overflow-hidden">
-                            <div
-                              className={`h-full rounded-full bg-gradient-to-r ${color} transition-all duration-700`}
-                              style={{ width: `${pct}%`, transitionDelay: `${idx * 60}ms` }}
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+                <AnimatedBars topByType={topByType} lang={lang} t={t} />
               )}
 
               {/* Top Districts */}
@@ -716,7 +855,7 @@ function TrendsScreen() {
               </p>
               {series.length > 0 ? (
                 <>
-                  <TrendChart series={series} />
+                  <TrendChart series={series} t={t} />
                   <div className="mt-6 overflow-auto max-h-64 rounded-lg border border-border">
                     <table className="w-full text-xs">
                       <thead className="bg-muted/50 text-[10px] uppercase tracking-wider text-muted-foreground sticky top-0">
