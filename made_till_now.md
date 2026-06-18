@@ -2910,3 +2910,83 @@ Tailwind's `transition-all` class + `transitionDelay` in the `style` prop is unr
 - `npx tsc --noEmit` — 0 errors after every change.
 - All data from API (`intelligence.getTrends`, `intelligence.getMOClusters`, `intelligence.getSeasonal`).
 - Nothing hardcoded — all KPI numbers, bar widths, district names, cluster counts, seasonal peaks computed from live `series` / `clusters` / `peaks` state.
+
+
+---
+
+### [2026-06-19] — Voice Copilot: STT Engine Toggle + Chat-Mic Separation (SATYAM_COPILOT_STT_TOGGLE.md)
+
+#### Summary
+Implemented the full voice copilot spec. Two independent mic instances are now architecturally separated. The top-right copilot mic can be switched between Browser Web Speech API and Sarvam Saaras v3 in Settings. The chat-box mic button now has its own local dictation loop and can never open the copilot. TypeScript: 0 errors.
+
+---
+
+#### §3 — Copilot Mic Engine Toggle
+
+**`frontend/src/components/SettingsDialog.tsx`**
+- `EngineSettings` type: added `copilotStt: "browser" | "sarvam"` (independent of `voiceBackend`).
+- `defaultEngineSettings`: `copilotStt: "browser"` — lowest-latency live captions is the default.
+- `loadEngineSettings()` already spreads defaults over stored JSON → existing users auto-inherit `"browser"`.
+- Models tab UI: new **"Voice copilot mic (Speech-to-Text)"** two-button picker above the Database source block. Calls `updateEngine("copilotStt", opt.id)`. Options: Browser (lowest latency · live captions) / Sarvam API (best Kannada accuracy).
+
+**`frontend/src/components/Shell.tsx`**
+- Added imports: `loadEngineSettings` from `SettingsDialog`, `startSttSession` + `isBackendSttSupported` from `lib/voice/recorder`.
+- Copilot STT `useEffect` fully replaced with a **branching version**:
+  - Reads `const sttEngine = loadEngineSettings().copilotStt` at the top of the effect.
+  - **Branch A — `"browser"`**: Web Speech API with `interimResults=true`, auto-restart on `onend`, 1.5s silence-timer auto-submit, per-word live captions. Falls back with error message if browser has no `SpeechRecognition`.
+  - **Branch B — `"sarvam"`**: `startSttSession()` from `recorder.ts` → MediaRecorder → `POST /voice/stt` → Sarvam Saaras v3. Shows "Hearing you…" status, submits final transcript via `dispatchTurn()`.
+  - Both branches: same `dispatchTurn()` helper → `satyam:voice-command` event → Gemini brain.
+  - Deps array unchanged: `[listening, micActive, lang, voiceLang, clearSilenceTimer]`.
+- `backend: "sarvam"` prop removed from `startSttSession()` call (not a valid field on `SttSessionOptions` — the backend always routes to Sarvam via `/voice/stt`).
+
+---
+
+#### §5 — Chat-Box Mic Separation (Bugfix)
+
+**Root cause:** The chat-box mic button in `console.tsx` dispatched `window.dispatchEvent(new Event("satyam:open-voice"))` — the same event that opens the top-right copilot. Every chat mic tap opened the copilot instead of doing in-place dictation.
+
+**`frontend/src/routes/console.tsx`**
+- Added state: `const [chatDictating, setChatDictating] = useState(false)`.
+- Added ref: `const chatRecRef = useRef<any>(null)`.
+- Added `toggleChatDictation()` function — a fully self-contained Web Speech recognizer:
+  - Creates its own `SpeechRecognition` instance (`continuous=true`, `interimResults=true`).
+  - `onresult` writes directly to the chat `input` state: `(prefix + finalText + interim)`.
+  - `onend` clears `chatRecRef` + `chatDictating` state and commits final text to `input`.
+  - Calling `toggleChatDictation()` when `chatRecRef.current` is set stops the recognizer.
+  - Never dispatches any events. Never reads or writes `listening`, `micActive`, or any copilot state.
+- Chat-box mic button: `onClick` changed from `window.dispatchEvent(new Event("satyam:open-voice"))` → `toggleChatDictation()`. Button turns **red + pulses** (`bg-destructive text-destructive-foreground animate-pulse`) while dictating; normal muted style otherwise.
+
+---
+
+#### Guardrail Verification (all pass)
+
+| Check | Result |
+|-------|--------|
+| `satyam:open-voice` dispatchers | **0** — only the Shell.tsx listener remains; no dispatcher in `console.tsx` |
+| `copilotStt` references | Only `SettingsDialog.tsx` (type + default + UI) and `Shell.tsx` (read in effect) |
+| `npx tsc --noEmit` | **0 errors** |
+
+---
+
+#### Architecture: Two Independent Mics
+
+| Mic | File | Purpose | Engine |
+|-----|------|---------|--------|
+| **Copilot mic** | `Shell.tsx` | Screen nav + data Q&A → Gemini brain | Browser or Sarvam (Settings toggle) |
+| **Chat-box mic** | `console.tsx` | Dictation into chat textarea only | Always Browser Web Speech API |
+
+`satyam:open-voice` has exactly **one dispatcher** (copilot orb button in Shell) and **one listener** (also Shell). The chat-box mic dispatches nothing — complete isolation is permanent.
+
+---
+
+#### i18n Keys Added (`frontend/src/lib/i18n.tsx`)
+
+| English | Kannada |
+|---------|---------|
+| `"Voice copilot mic (Speech-to-Text)"` | `"ವಾಯ್ಸ್ ಕೋಪೈಲಟ್ ಮೈಕ್ (ವಾಕ್-ಟು-ಟೆಕ್ಸ್ಟ್)"` |
+| `"Engine for the top-right voice copilot only…"` | Kannada |
+| `"Browser"` | `"ಬ್ರೌಸರ್"` |
+| `"Lowest latency · live captions"` | `"ಕಡಿಮೆ ವಿಳಂಬ · ಲೈವ್ ಕ್ಯಾಪ್ಷನ್"` |
+| `"Best Kannada accuracy"` | `"ಅತ್ಯುತ್ತಮ ಕನ್ನಡ ನಿಖರತೆ"` |
+| `"Stop dictation"` | `"ಡಿಕ್ಟೇಶನ್ ನಿಲ್ಲಿಸಿ"` |
+| `"Dictate into chat"` | `"ಚಾಟ್‌ಗೆ ಡಿಕ್ಟೇಟ್ ಮಾಡಿ"` |

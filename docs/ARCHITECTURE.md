@@ -3,7 +3,7 @@
 > **Project:** Satyam — Bilingual Voice-Enabled Crime Intelligence AI
 > **Event:** Datathon 2026 · KSP × hack2skill
 > **Stack:** Python 3.11 · FastAPI · PostgreSQL 16 + pgvector · React 19 · TanStack Start
-> **Last updated:** 2026-06-18
+> **Last updated:** 2026-06-19
 
 ---
 
@@ -274,6 +274,8 @@ User query
 
 ## 7. Voice Pipeline
 
+### 7.1 Overview
+
 ```
 Officer speaks → MediaRecorder (recorder.ts) → POST /voice/stt
   → detectLang() → Sarvam Saaras v3 (or Bhashini fallback)
@@ -288,6 +290,40 @@ Officer speaks → MediaRecorder (recorder.ts) → POST /voice/stt
 ```
 
 Language auto-detection: counts Kannada Unicode chars (U+0C80–U+0CFF); >20% → "kn".
+
+### 7.2 Two Independent Microphones
+
+Satyam has **two completely independent mic instances** that must never trigger each other:
+
+| Mic | Location | Purpose | Engine |
+|-----|----------|---------|--------|
+| **Copilot mic** | Top-right orb in `Shell.tsx` | Screen navigation + data Q&A; sends to Gemini brain | User-selectable: Browser or Sarvam (see §7.3) |
+| **Chat-box mic** | Red mic button inside chat textarea in `console.tsx` | Dictation into chat input only; never opens copilot | Always Browser Web Speech API |
+
+**Separation guarantee:** `satyam:open-voice` event has exactly one dispatcher (the copilot orb button in `Shell.tsx`) and exactly one listener (also in `Shell.tsx`). The chat-box mic button calls `toggleChatDictation()` directly — it does not dispatch any events and does not touch copilot state (`listening`, `micActive`, `conversationMode`).
+
+### 7.3 Copilot Mic Engine Toggle
+
+Users can switch the **copilot mic** (top-right) between two STT engines in **Settings → Models → "Voice copilot mic (Speech-to-Text)"**:
+
+| Mode | Engine | Characteristics |
+|------|--------|-----------------|
+| **Browser** *(default)* | Web Speech API | Lowest latency · live word-by-word captions · good English · OK Kannada |
+| **Sarvam** | Sarvam Saaras v3 via `recorder.ts` + `/voice/stt` | Best Kannada accuracy · utterance-based (no live captions) · ~1.5s transcription wait |
+
+The setting is stored in `EngineSettings.copilotStt` (`"browser" | "sarvam"`) in `localStorage`, **independent of** `voiceBackend` (the TTS / chat voice engine). The brain (Gemini) and spoken reply (Sarvam Bulbul v3) are the same in both modes.
+
+**Implementation:** `Shell.tsx` reads `loadEngineSettings().copilotStt` at the start of the copilot STT `useEffect` and branches:
+- `"browser"` → `new SpeechRecognition()` with `interimResults=true`, auto-restart on `onend`, silence-timer auto-submit at 1.5s
+- `"sarvam"` → `startSttSession()` from `lib/voice/recorder.ts` (MediaRecorder → backend `/voice/stt`)
+
+### 7.4 Chat-Box Dictation (`toggleChatDictation`)
+
+`console.tsx` owns a `chatRecRef` and `chatDictating` state. When the mic button is tapped:
+- A fresh `SpeechRecognition` instance is created with `interimResults=true`
+- Results are written **only** to the `input` state (the chat textarea value)
+- The copilot orb, `listening` state, and all copilot events are untouched
+- The button turns red + pulses while active; tapping again stops the recognizer
 
 ---
 
@@ -329,7 +365,7 @@ Every query: `row_hash = SHA-256(prev_hash + timestamp + user_id + action + quer
 |----|--------|-----------|--------|
 | PS1 | Console (Chat + Canvas) | `/chat` SSE, `/map/hotspots`, `/map/station-breakdown` | ✅ Full |
 | PS2 | Network (People / Financial / **Rings**) | `/network/ego`, `/api/network/rings`, `/api/network/case/{id}`, `/api/network/person/{id}`, `/financial/money-trail` | ✅ Full + Rings UI |
-| PS3 | Trends & Patterns (4 tabs) | `/api/trends`, `/api/trends/seasonal`, `/api/mo/clusters` | ✅ Full |
+| PS3 | Trends & Patterns (4 tabs) | `/api/trends`, `/api/trends/seasonal`, `/api/mo/clusters` | ✅ Full — SVG area+line chart, KPI cards, AnimatedBars, DominantCallout, seasonal spike alerts |
 | PS4 | Socio Dashboard | `/api/socio/demographics`, `/api/socio/correlation`, `/api/socio/risk-index` | ✅ Full (real Pearson) |
 | PS5 | Offender Profile + Browse | `/api/persons/{id}/profile`, `/api/persons/{id}/timeline`, `/api/offenders` | ✅ Full + Picker |
 | PS6 | Similar Cases + Timeline | `/api/cases/{id}/similar`, `/api/cases/similar/search`, `/api/cases/{id}/timeline` | ✅ Full + Description search UI |
@@ -373,14 +409,14 @@ Every query: `row_hash = SHA-256(prev_hash + timestamp + user_id + action + quer
 
 | Component | Purpose |
 |-----------|---------|
-| `Shell.tsx` | Nav + voice command router + language toggle + theme picker |
+| `Shell.tsx` | Nav + voice command router + language toggle + theme picker + copilot mic (Browser/Sarvam) |
 | `CaseDrawer.tsx` | Sliding case detail (Summary / Persons / Timeline / Similar / Map tabs) |
 | `CrimeMap.tsx` | Leaflet heat/pin/grid map |
 | `FinancialLinksPanel.tsx` | SVG money-trail graph + flows table (PS7) |
 | `RingsPanel.tsx` | Criminal ring detection cards (PS2) |
 | `SimilarCaseSearch.tsx` | Description-based similar case search widget (PS6) |
 | `ThemePicker.tsx` | 6 professional + 8 legacy colour themes |
-| `SettingsDialog.tsx` | Live engine overrides (brain/SQL/voice) |
+| `SettingsDialog.tsx` | Live engine overrides (brain/SQL/voice/copilotStt) + DB source picker |
 | `ProfileMenu.tsx` | User profile + logout |
 
 ### 10.3 Key Libraries
