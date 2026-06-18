@@ -19,7 +19,7 @@ from app.core.rbac import Permission, Principal
 from app.models.registry import get_fallback_llm, get_llm
 from app.config import get_settings
 from app.pipeline import guardrails
-from app.pipeline.prompts import ANSWER_SYSTEM
+from app.pipeline.prompts import build_answer_system
 from app.pipeline.router import route
 from app.pipeline.slots import ConversationState
 from app.pipeline.tools import analytics, rag
@@ -91,8 +91,11 @@ async def _compose(
     context: str,
     lang: str = "en",
     brain_engine: Literal["gemini", "groq"] | None = None,
+    principal: "Principal | None" = None,
 ) -> str:
     """Grounded answer composition with Groq fallback on primary failure."""
+    system = build_answer_system(principal)
+
     # D5.3 FIX: in demo/keyless mode skip the echo stub entirely.
     if get_settings().demo_mode:
         return _render_grounded(question, context)
@@ -106,12 +109,12 @@ async def _compose(
     prompt = f"Question: {question}\n\nGrounded data:\n{context}{lang_directive}"
     try:
         return await get_llm(brain_engine).complete(
-            prompt, system=ANSWER_SYSTEM, temperature=0.2
+            prompt, system=system, temperature=0.2
         )
     except Exception:
         try:
             return await get_fallback_llm().complete(
-                prompt, system=ANSWER_SYSTEM, temperature=0.2
+                prompt, system=system, temperature=0.2
             )
         except Exception:
             return "I found the records below, but couldn't generate a summary just now."
@@ -200,11 +203,41 @@ async def run(
         elif intent == "report":
             context = json.dumps({"note": "Use the Reports panel to build a document."})
 
-        else:  # smalltalk / help
-            context = json.dumps({"help": "Ask about cases, hotspots, links, or reports."})
+        else:  # smalltalk — let the LLM answer conversationally with full context
+            # Don't pass a data stub; compose directly so Gemini can use its world
+            # knowledge + the officer's identity from the system prompt.
+            system = build_answer_system(principal)
+            if get_settings().demo_mode:
+                answer = (
+                    f"Hello! I'm Satyam, the KSP crime-intelligence assistant. "
+                    f"Ask me about crime statistics, FIRs, hotspots, or suspect networks."
+                )
+            else:
+                lang_directive = (
+                    " Respond in Kannada (ಕನ್ನಡ)." if lang == "kn" else ""
+                )
+                try:
+                    answer = await get_llm(brain_engine).complete(
+                        message + lang_directive, system=system, temperature=0.3
+                    )
+                except Exception:
+                    try:
+                        answer = await get_fallback_llm().complete(
+                            message + lang_directive, system=system, temperature=0.3
+                        )
+                    except Exception:
+                        answer = (
+                            "I'm Satyam, the KSP crime-intelligence assistant. "
+                            "Ask me about crime statistics, FIRs, hotspots, or networks."
+                        )
+            for chunk in answer.split(" "):
+                yield PipelineEvent("token", {"text": chunk + " "})
+            state.add_turn("assistant", answer)
+            yield PipelineEvent("done", {"conversation_id": state.conversation_id})
+            return
 
         # 3) compose grounded answer (token stream)
-        answer = await _compose(message, context, lang, brain_engine=brain_engine)
+        answer = await _compose(message, context, lang, brain_engine=brain_engine, principal=principal)
         for chunk in answer.split(" "):
             yield PipelineEvent("token", {"text": chunk + " "})
         for c in citations:
