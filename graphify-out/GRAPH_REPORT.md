@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `563ead1e`
+- Built from commit: `5a500131`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -811,7 +811,7 @@ _Questions this graph is uniquely positioned to answer:_
   _`Principal` has 92 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 55 inferred relationships involving `Permission` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Permission` has 55 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `ROLE_BY_VALUE`, `Lang`, `Ctx` to the rest of the system?**
+- **What connects `Liveness / readiness probe + model-routing diagnostics.`, `Model-routing diagnostics — no auth, dev only.      Returns the resolved impleme`, `Row-count probe — confirms the DB is seeded before a demo.     Returns table row` to the rest of the system?**
   _988 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._

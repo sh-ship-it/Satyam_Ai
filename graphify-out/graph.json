@@ -4,14 +4,94 @@
   "graph": {},
   "nodes": [
     {
+      "label": "health.py",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "routes_health",
+      "community": 175,
+      "norm_label": "health.py"
+    },
+    {
+      "label": "health()",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "routes_health_health",
+      "community": 175,
+      "norm_label": "health()"
+    },
+    {
+      "label": "models()",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "routes_health_models",
+      "community": 180,
+      "norm_label": "models()"
+    },
+    {
+      "label": "health_data()",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L67",
+      "_origin": "ast",
+      "id": "routes_health_health_data",
+      "community": 61,
+      "norm_label": "health_data()"
+    },
+    {
+      "label": "AsyncSession",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L67",
+      "_origin": "ast",
+      "id": "asyncsession",
+      "community": 61,
+      "norm_label": "asyncsession"
+    },
+    {
+      "label": "Liveness / readiness probe + model-routing diagnostics.",
+      "file_type": "rationale",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "routes_health_rationale_1",
+      "community": 175,
+      "norm_label": "liveness / readiness probe + model-routing diagnostics."
+    },
+    {
+      "label": "Model-routing diagnostics \u2014 no auth, dev only.      Returns the resolved impleme",
+      "file_type": "rationale",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "routes_health_rationale_30",
+      "community": 180,
+      "norm_label": "model-routing diagnostics \u2014 no auth, dev only.      returns the resolved impleme"
+    },
+    {
+      "label": "Row-count probe \u2014 confirms the DB is seeded before a demo.     Returns table row",
+      "file_type": "rationale",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L68",
+      "_origin": "ast",
+      "id": "routes_health_rationale_68",
+      "community": 61,
+      "norm_label": "row-count probe \u2014 confirms the db is seeded before a demo.     returns table row"
+    },
+    {
       "label": "CreateAccountDialog.tsx",
       "file_type": "code",
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "components_createaccountdialog",
       "community": 1,
-      "norm_label": "createaccountdialog.tsx"
+      "norm_label": "createaccountdialog.tsx",
+      "id": "components_createaccountdialog"
     },
     {
       "label": "ROLE_OPTIONS",
@@ -19,9 +99,9 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "components_createaccountdialog_role_options",
       "community": 1,
-      "norm_label": "role_options"
+      "norm_label": "role_options",
+      "id": "components_createaccountdialog_role_options"
     },
     {
       "label": "ROLE_BY_VALUE",
@@ -29,9 +109,9 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "components_createaccountdialog_role_by_value",
       "community": 1,
-      "norm_label": "role_by_value"
+      "norm_label": "role_by_value",
+      "id": "components_createaccountdialog_role_by_value"
     },
     {
       "label": "ROLE_GROUPS",
@@ -39,9 +119,9 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L21",
       "_origin": "ast",
-      "id": "components_createaccountdialog_role_groups",
       "community": 1,
-      "norm_label": "role_groups"
+      "norm_label": "role_groups",
+      "id": "components_createaccountdialog_role_groups"
     },
     {
       "label": "CreateAccountDialog()",
@@ -49,9 +129,9 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L27",
       "_origin": "ast",
-      "id": "components_createaccountdialog_createaccountdialog",
       "community": 1,
-      "norm_label": "createaccountdialog()"
+      "norm_label": "createaccountdialog()",
+      "id": "components_createaccountdialog_createaccountdialog"
     },
     {
       "label": "i18n.tsx",
@@ -59,9 +139,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_i18n",
       "community": 103,
-      "norm_label": "i18n.tsx"
+      "norm_label": "i18n.tsx",
+      "id": "lib_i18n"
     },
     {
       "label": "Lang",
@@ -69,9 +149,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "lib_i18n_lang",
       "community": 103,
-      "norm_label": "lang"
+      "norm_label": "lang",
+      "id": "lib_i18n_lang"
     },
     {
       "label": "DICT",
@@ -79,9 +159,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "lib_i18n_dict",
       "community": 42,
-      "norm_label": "dict"
+      "norm_label": "dict",
+      "id": "lib_i18n_dict"
     },
     {
       "label": "Ctx",
@@ -89,9 +169,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L494",
       "_origin": "ast",
-      "id": "lib_i18n_ctx",
       "community": 103,
-      "norm_label": "ctx"
+      "norm_label": "ctx",
+      "id": "lib_i18n_ctx"
     },
     {
       "label": "I18nCtx",
@@ -99,9 +179,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L495",
       "_origin": "ast",
-      "id": "lib_i18n_i18nctx",
       "community": 103,
-      "norm_label": "i18nctx"
+      "norm_label": "i18nctx",
+      "id": "lib_i18n_i18nctx"
     },
     {
       "label": "I18nProvider()",
@@ -109,9 +189,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L497",
       "_origin": "ast",
-      "id": "lib_i18n_i18nprovider",
       "community": 127,
-      "norm_label": "i18nprovider()"
+      "norm_label": "i18nprovider()",
+      "id": "lib_i18n_i18nprovider"
     },
     {
       "label": "useI18n()",
@@ -119,9 +199,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L520",
       "_origin": "ast",
-      "id": "lib_i18n_usei18n",
       "community": 103,
-      "norm_label": "usei18n()"
+      "norm_label": "usei18n()",
+      "id": "lib_i18n_usei18n"
     },
     {
       "label": "useT()",
@@ -129,9 +209,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L521",
       "_origin": "ast",
-      "id": "lib_i18n_uset",
       "community": 172,
-      "norm_label": "uset()"
+      "norm_label": "uset()",
+      "id": "lib_i18n_uset"
     },
     {
       "label": "login.tsx",
@@ -139,9 +219,9 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_login",
       "community": 1,
-      "norm_label": "login.tsx"
+      "norm_label": "login.tsx",
+      "id": "routes_login"
     },
     {
       "label": "Route",
@@ -149,9 +229,9 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "routes_login_route",
       "community": 1,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_login_route"
     },
     {
       "label": "Login()",
@@ -159,9 +239,9 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L30",
       "_origin": "ast",
-      "id": "routes_login_login",
       "community": 1,
-      "norm_label": "login()"
+      "norm_label": "login()",
+      "id": "routes_login_login"
     },
     {
       "label": "TrustBadge()",
@@ -169,9 +249,9 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L255",
       "_origin": "ast",
-      "id": "routes_login_trustbadge",
       "community": 1,
-      "norm_label": "trustbadge()"
+      "norm_label": "trustbadge()",
+      "id": "routes_login_trustbadge"
     },
     {
       "label": "SATYAM_FIX_VERIFICATION_AND_GAPS.md",
@@ -412,86 +492,6 @@
       "community": 5,
       "norm_label": "7. smoke test after applying",
       "id": "satyam_fix_verification_and_gaps_7_smoke_test_after_applying"
-    },
-    {
-      "label": "health.py",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 175,
-      "norm_label": "health.py",
-      "id": "routes_health"
-    },
-    {
-      "label": "health()",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L17",
-      "_origin": "ast",
-      "community": 175,
-      "norm_label": "health()",
-      "id": "routes_health_health"
-    },
-    {
-      "label": "models()",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L28",
-      "_origin": "ast",
-      "community": 180,
-      "norm_label": "models()",
-      "id": "routes_health_models"
-    },
-    {
-      "label": "health_data()",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L66",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "health_data()",
-      "id": "routes_health_health_data"
-    },
-    {
-      "label": "AsyncSession",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L66",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "asyncsession",
-      "id": "asyncsession"
-    },
-    {
-      "label": "Liveness / readiness probe + model-routing diagnostics.",
-      "file_type": "rationale",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 175,
-      "norm_label": "liveness / readiness probe + model-routing diagnostics.",
-      "id": "routes_health_rationale_1"
-    },
-    {
-      "label": "Model-routing diagnostics \u2014 no auth, dev only.      Returns the resolved impleme",
-      "file_type": "rationale",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L29",
-      "_origin": "ast",
-      "community": 180,
-      "norm_label": "model-routing diagnostics \u2014 no auth, dev only.      returns the resolved impleme",
-      "id": "routes_health_rationale_29"
-    },
-    {
-      "label": "Row-count probe \u2014 confirms the DB is seeded before a demo.     Returns table row",
-      "file_type": "rationale",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L67",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "row-count probe \u2014 confirms the db is seeded before a demo.     returns table row",
-      "id": "routes_health_rationale_67"
     },
     {
       "label": "ARCHITECTURE.md",
@@ -20789,6 +20789,242 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_health",
+      "target": "app_config"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_health",
+      "target": "app_logging_config"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_health",
+      "target": "fastapi"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_health",
+      "target": "routes_health_health"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L66",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_health",
+      "target": "routes_health_health_data"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_health",
+      "target": "routes_health_models"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_health_rationale_1",
+      "target": "routes_health"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "routes_health_health",
+      "target": "app_config_get_settings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "routes_health_models",
+      "target": "app_config_get_settings"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "routes_health_models",
+      "target": "models_registry_get_llm"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "routes_health_models",
+      "target": "models_registry_get_sql_llm"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "routes_health_models",
+      "target": "models_registry_get_stt"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "routes_health_models",
+      "target": "models_registry_get_translator"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "routes_health_models",
+      "target": "models_registry_get_tts"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "routes_health_rationale_30",
+      "target": "routes_health_models",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L66",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_health_health_data",
+      "target": "asyncsession"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/health.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "routes_health_rationale_68",
+      "target": "routes_health_health_data",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/cases.py",
+      "source_location": "L105",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_cases_get_case",
+      "target": "asyncsession"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/cases.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_cases_list_cases",
+      "target": "asyncsession"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/cases.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_cases_search_persons_and_cases",
+      "target": "asyncsession"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_text_to_sql_answer_with_sql",
+      "target": "asyncsession"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
+      "source_location": "L101",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tools_text_to_sql_run_sql",
+      "target": "asyncsession"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L4",
       "weight": 1.0,
@@ -20823,9 +21059,9 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_createaccountdialog",
-      "target": "components_createaccountdialog_role_by_value",
-      "confidence_score": 1.0
+      "target": "components_createaccountdialog_role_by_value"
     },
     {
       "relation": "contains",
@@ -20833,9 +21069,9 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_createaccountdialog",
-      "target": "components_createaccountdialog_role_groups",
-      "confidence_score": 1.0
+      "target": "components_createaccountdialog_role_groups"
     },
     {
       "relation": "contains",
@@ -20898,9 +21134,9 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_login",
-      "target": "components_createaccountdialog_role_groups",
-      "confidence_score": 1.0
+      "target": "components_createaccountdialog_role_groups"
     },
     {
       "relation": "calls",
@@ -22110,242 +22346,6 @@
       "confidence_score": 1.0,
       "source": "satyam_fix_verification_and_gaps_5_drop_in_code_copy_paste_ready",
       "target": "satyam_fix_verification_and_gaps_5_6_optional_add_a_health_data_seeding_probe_kills_the_1_no_data_false_alarm"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health",
-      "target": "app_config"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health",
-      "target": "app_logging_config"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health",
-      "target": "fastapi"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L12",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health",
-      "target": "routes_health_health"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L66",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health",
-      "target": "routes_health_health_data"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health",
-      "target": "routes_health_models"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health_rationale_1",
-      "target": "routes_health"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L13",
-      "weight": 1.0,
-      "source": "routes_health_health",
-      "target": "app_config_get_settings"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L41",
-      "weight": 1.0,
-      "source": "routes_health_models",
-      "target": "app_config_get_settings"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L54",
-      "weight": 1.0,
-      "source": "routes_health_models",
-      "target": "models_registry_get_llm"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L55",
-      "weight": 1.0,
-      "source": "routes_health_models",
-      "target": "models_registry_get_sql_llm"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L58",
-      "weight": 1.0,
-      "source": "routes_health_models",
-      "target": "models_registry_get_stt"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L56",
-      "weight": 1.0,
-      "source": "routes_health_models",
-      "target": "models_registry_get_translator"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L57",
-      "weight": 1.0,
-      "source": "routes_health_models",
-      "target": "models_registry_get_tts"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health_rationale_29",
-      "target": "routes_health_models"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L66",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health_health_data",
-      "target": "asyncsession"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/health.py",
-      "source_location": "L67",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_health_rationale_67",
-      "target": "routes_health_health_data"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/cases.py",
-      "source_location": "L105",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_cases_get_case",
-      "target": "asyncsession"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/cases.py",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_cases_list_cases",
-      "target": "asyncsession"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/api/routes/cases.py",
-      "source_location": "L34",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_cases_search_persons_and_cases",
-      "target": "asyncsession"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
-      "source_location": "L107",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tools_text_to_sql_answer_with_sql",
-      "target": "asyncsession"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/pipeline/tools/text_to_sql.py",
-      "source_location": "L101",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tools_text_to_sql_run_sql",
-      "target": "asyncsession"
     },
     {
       "relation": "contains",
@@ -60598,5 +60598,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "563ead1e18f6ff78527b52272c78565cac47a8d5"
+  "built_at_commit": "5a500131bea29e0872288f98842272df054b1913"
 }

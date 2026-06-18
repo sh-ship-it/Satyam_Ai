@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/health.py": {
-    "mtime": 1781726261.9801452,
-    "ast_hash": "124792f06ea77a37afbd098a220ba8f5",
+    "mtime": 1781754656.384405,
+    "ast_hash": "42b6e0a6c3630d2677cd5694a0cf19d6",
     "semantic_hash": ""
   },
   "backend/app/api/routes/map.py": {
