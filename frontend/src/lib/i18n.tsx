@@ -442,6 +442,13 @@ const DICT: Record<string, string> = {
   "Reviewed / Authorized": "ಪರಿಶೀಲಿಸಿ / ಅಧಿಕೃತಗೊಳಿಸಿ",
   "Confidential · Karnataka State Police · Synthetic data only": "ಗೌಪ್ಯ · ಕರ್ನಾಟಕ ರಾಜ್ಯ ಪೊಲೀಸ್ · ಕೃತಕ ಡೇಟಾ ಮಾತ್ರ",
   "Model live inference": "ಮಾಡೆಲ್ ಲೈವ್ ಅನುಮಾನ",
+  "Lower risk": "ಕಡಿಮೆ ಅಪಾಯ",
+  "Higher risk": "ಹೆಚ್ಚು ಅಪಾಯ",
+  "No grid cells for the current filters.": "ಪ್ರಸ್ತುತ ಫಿಲ್ಟರ್‌ಗಳಿಗೆ ಯಾವುದೇ ಗ್ರಿಡ್ ಕೋಶಗಳಿಲ್ಲ.",
+  "Darker cells indicate more reported incidents for that crime type in that period.":
+    "ಗಾಢ ಕೋಶಗಳು ಆ ಅವಧಿಯಲ್ಲಿ ಹೆಚ್ಚಿನ ವರದಿಯಾದ ಘಟನೆಗಳನ್ನು ಸೂಚಿಸುತ್ತವೆ.",
+  "Fewer": "ಕಡಿಮೆ",
+  "More incidents": "ಹೆಚ್ಚು ಘಟನೆಗಳು",
   "Ingesting FIR signals": "ಎಫ್‌ಐಆರ್ ಸಂಕೇತಗಳನ್ನು ಸ್ವೀಕರಿಸಲಾಗುತ್ತಿದೆ",
   "Engineering features": "ವೈಶಿಷ್ಟ್ಯಗಳನ್ನು ರೂಪಿಸಲಾಗುತ್ತಿದೆ",
   "KDE · recency · seasonality": "KDE · ಇತ್ತೀಚಿನ · ಋತುಮಾನ",

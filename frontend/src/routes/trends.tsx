@@ -56,7 +56,7 @@ function TrendChart({ series }: { series: TrendPoint[] }) {
 }
 
 // ── Crime × period heatmap ─────────────────────────────────────────────────────
-function CrimeHeatmap({ series }: { series: TrendPoint[] }) {
+function CrimeHeatmap({ series, lang, t }: { series: TrendPoint[]; lang: string; t: (s: string) => string }) {
   const { periods, crimes, grid, max } = useMemo(() => {
     const pSet = new Set<string>(), cSet = new Set<string>();
     const g: Record<string, number> = {};
@@ -69,43 +69,67 @@ function CrimeHeatmap({ series }: { series: TrendPoint[] }) {
     });
     return {
       periods: [...pSet].sort(),
-      crimes: [...cSet].sort().slice(0, 8),
+      crimes: [...cSet].sort((a, b) => a.localeCompare(b)).slice(0, 8),
       grid: g, max: mx,
     };
   }, [series]);
-  if (periods.length === 0) return null;
+
+  if (periods.length === 0)
+    return <div className="text-xs text-muted-foreground text-center py-10">{t("No data for this scope.")}</div>;
+
+  // Fixed track sizing: label column + one track per period, minmax(30px,1fr).
+  // Fixed h-7 cells so a single-period window doesn't stretch into a giant block.
+  const cols = `minmax(120px,160px) repeat(${periods.length}, minmax(30px, 1fr))`;
+  const fmtPeriod = (p: string) => (p.length > 7 ? p.slice(2) : p);
+
   return (
-    <div className="overflow-x-auto">
-      <div className="inline-block min-w-full">
-        <div className="flex">
-          <div className="w-36 shrink-0" />
+    <div className="overflow-x-auto pb-1">
+      <div style={{ minWidth: periods.length > 14 ? periods.length * 34 + 160 : undefined }}>
+        {/* Period axis */}
+        <div className="grid items-end gap-1 mb-1" style={{ gridTemplateColumns: cols }}>
+          <div />
           {periods.map((p) => (
-            <div key={p} className="flex-1 min-w-[28px] text-[8px] text-muted-foreground text-center -rotate-45 origin-left h-6">
-              {p.slice(2)}
+            <div key={p} className="text-[9px] font-medium text-muted-foreground text-center truncate" title={p}>
+              {fmtPeriod(p)}
             </div>
           ))}
         </div>
-        {crimes.map((c) => (
-          <div key={c} className="flex items-center">
-            <div className="w-36 shrink-0 text-[10px] font-medium text-foreground truncate pr-2" title={c}>{c}</div>
-            {periods.map((p) => {
-              const v = grid[`${c}|${p}`] || 0;
-              const intensity = v / max;
-              return (
-                <div
-                  key={p}
-                  title={`${c} · ${p}: ${v}`}
-                  className="flex-1 min-w-[28px] aspect-square m-[1px] rounded-[3px]"
-                  style={{
-                    backgroundColor: v
-                      ? `rgba(99,102,241,${Math.max(0.1, intensity)})`
-                      : "rgba(120,120,120,0.06)",
-                  }}
-                />
-              );
-            })}
+        {/* Rows */}
+        <div className="space-y-1">
+          {crimes.map((c) => (
+            <div key={c} className="grid items-center gap-1" style={{ gridTemplateColumns: cols }}>
+              <div className="text-[11px] font-medium text-foreground truncate pr-2" title={tData("crime_type", c, lang)}>
+                {tData("crime_type", c, lang)}
+              </div>
+              {periods.map((p) => {
+                const v = grid[`${c}|${p}`] || 0;
+                const intensity = max > 0 ? v / max : 0;
+                return (
+                  <div
+                    key={p}
+                    title={`${tData("crime_type", c, lang)} · ${p}: ${v}`}
+                    className="h-7 rounded-[4px] border border-border/40 flex items-center justify-center"
+                    style={{ backgroundColor: "var(--main)", opacity: v ? Math.max(0.14, intensity) : 0.05 }}
+                  >
+                    {v > 0 && intensity >= 0.55 && (
+                      <span className="text-[9px] font-bold tabular-nums text-foreground/80 leading-none">{v}</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+        {/* Legend */}
+        <div className="mt-3 flex items-center gap-2 text-[10px] text-muted-foreground">
+          <span>{t("Fewer")}</span>
+          <div className="flex items-center gap-0.5">
+            {[0.12, 0.3, 0.5, 0.7, 1].map((o) => (
+              <span key={o} className="h-2.5 w-5 rounded-[2px]" style={{ backgroundColor: "var(--main)", opacity: o }} />
+            ))}
           </div>
-        ))}
+          <span>{t("More incidents")}</span>
+        </div>
       </div>
     </div>
   );
@@ -326,11 +350,14 @@ function TrendsScreen() {
             <>
               {/* Crime × Period heatmap */}
               {series.length > 0 && (
-                <div className="rounded-2xl border border-border bg-card p-4">
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3">
-                    {t("Crime × Period intensity")}
-                  </div>
-                  <CrimeHeatmap series={series} />
+                <div className="rounded-xl border border-border bg-card p-5">
+                  <h2 className="text-sm font-extrabold uppercase tracking-wide flex items-center gap-2 mb-1">
+                    <Layers className="h-4 w-4 text-primary" /> {t("Crime × Period intensity")}
+                  </h2>
+                  <p className="text-[11px] text-muted-foreground mb-4">
+                    {t("Darker cells indicate more reported incidents for that crime type in that period.")}
+                  </p>
+                  <CrimeHeatmap series={series} lang={lang} t={t} />
                 </div>
               )}
 

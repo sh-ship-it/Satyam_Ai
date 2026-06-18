@@ -27,17 +27,17 @@ const RISK_ORDER: Record<string, number> = { Critical: 0, High: 1, Medium: 2, Lo
 const RISK_BG: Record<string, string> = {
   Critical: "bg-destructive text-destructive-foreground",
   High: "bg-orange-500 text-white",
-  Medium: "bg-yellow-400 text-foreground",
-  Low: "bg-emerald-500/20 text-emerald-700 dark:text-emerald-400",
+  Medium: "bg-warning text-foreground",
+  Low: "bg-success/20 text-success",
 };
 const RISK_BORDER: Record<string, string> = {
   Critical: "border-destructive/60",
   High: "border-orange-400/60",
-  Medium: "border-yellow-400/60",
-  Low: "border-emerald-500/40",
+  Medium: "border-warning/60",
+  Low: "border-success/40",
 };
 const RISK_GLOW: Record<string, string> = {
-  Critical: "shadow-[0_0_0_1px_hsl(var(--destructive)/0.3)]",
+  Critical: "shadow-[0_0_0_1px_rgba(255,77,80,0.35)]",
   High: "shadow-[0_0_0_1px_rgba(249,115,22,0.25)]",
   Medium: "shadow-[0_0_0_1px_rgba(234,179,8,0.2)]",
   Low: "",
@@ -45,14 +45,14 @@ const RISK_GLOW: Record<string, string> = {
 const RISK_ACCENT: Record<string, string> = {
   Critical: "bg-destructive/10",
   High: "bg-orange-500/10",
-  Medium: "bg-yellow-400/10",
-  Low: "bg-emerald-500/10",
+  Medium: "bg-warning/10",
+  Low: "bg-success/10",
 };
 const RISK_DOT: Record<string, string> = {
   Critical: "bg-destructive animate-ping",
   High: "bg-orange-500",
-  Medium: "bg-yellow-400",
-  Low: "bg-emerald-500",
+  Medium: "bg-warning",
+  Low: "bg-success",
 };
 
 function RiskBadge({ level, lang, size = "sm" }: { level: string; lang: string; size?: "sm" | "lg" }) {
@@ -67,7 +67,7 @@ function RiskBadge({ level, lang, size = "sm" }: { level: string; lang: string; 
 
 function RiskBar({ score }: { score: number }) {
   const pct = Math.min(100, score);
-  const color = pct >= 75 ? "bg-destructive" : pct >= 55 ? "bg-orange-500" : pct >= 30 ? "bg-yellow-400" : "bg-emerald-500";
+  const color = pct >= 75 ? "bg-destructive" : pct >= 55 ? "bg-orange-500" : pct >= 30 ? "bg-warning" : "bg-success";
   return (
     <div className="flex items-center gap-2 w-full">
       <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
@@ -87,7 +87,7 @@ function AlertCard({ a, expanded, onToggle, lang, t, onSendToChat, onOpenNetwork
   return (
     <div className={`rounded-xl border bg-card transition-all duration-200 hover:shadow-md ${RISK_BORDER[a.risk_level] || "border-border"} ${RISK_GLOW[a.risk_level] || ""}`}>
       {/* Coloured top strip */}
-      <div className={`h-1 rounded-t-xl ${a.risk_level === "Critical" ? "bg-destructive" : a.risk_level === "High" ? "bg-orange-500" : a.risk_level === "Medium" ? "bg-yellow-400" : "bg-emerald-500"}`} />
+      <div className={`h-1 rounded-t-xl ${a.risk_level === "Critical" ? "bg-destructive" : a.risk_level === "High" ? "bg-orange-500" : a.risk_level === "Medium" ? "bg-warning" : "bg-success"}`} />
 
       <div className="p-4">
         {/* Header */}
@@ -174,7 +174,7 @@ function RiskSummaryBar({ alerts, lang, t }: { alerts: ForecastAlert[]; lang: st
       ) : null)}
       {alerts.length === 0 && (
         <span className="text-xs text-muted-foreground flex items-center gap-1">
-          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> {t("All clear")}
+          <CheckCircle2 className="h-3.5 w-3.5 text-success" /> {t("All clear")}
         </span>
       )}
     </div>
@@ -191,7 +191,7 @@ function CellCard({ c, expanded, onToggle, lang, t }: {
       className={`rounded-xl border bg-card cursor-pointer transition-all hover:shadow-md ${RISK_BORDER[c.risk_level] || "border-border"}`}
       onClick={onToggle}
     >
-      <div className={`h-1 rounded-t-xl ${c.risk_level === "Critical" ? "bg-destructive" : c.risk_level === "High" ? "bg-orange-500" : c.risk_level === "Medium" ? "bg-yellow-400" : "bg-emerald-500"}`} />
+      <div className={`h-1 rounded-t-xl ${c.risk_level === "Critical" ? "bg-destructive" : c.risk_level === "High" ? "bg-orange-500" : c.risk_level === "Medium" ? "bg-warning" : "bg-success"}`} />
       <div className="p-3">
         <div className="flex items-center justify-between gap-2 mb-2">
           <RiskBadge level={c.risk_level} lang={lang} />
@@ -326,11 +326,11 @@ function ForecastScreen() {
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               {backtest && (
-                <div className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2">
-                  <Activity className="h-4 w-4 text-emerald-500" />
+                <div className="flex items-center gap-2 rounded-xl border border-success/30 bg-success/10 px-3 py-2">
+                  <Activity className="h-4 w-4 text-success" />
                   <div>
                     <div className="text-[10px] text-muted-foreground">{t("Model accuracy")}</div>
-                    <div className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400">
+                    <div className="text-sm font-extrabold text-success">
                       PAI {Math.round(backtest.hit_rate_top_10_percent_cells * 100)}% {t("hit rate")}
                     </div>
                   </div>
@@ -599,13 +599,13 @@ function ForecastScreen() {
                     <div className="p-5">
                       <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">{backtest.metric} {t("Score")}</div>
                       <div className="flex items-end gap-2">
-                        <span className="text-4xl font-extrabold text-emerald-500 tabular-nums">
+                        <span className="text-4xl font-extrabold text-success tabular-nums">
                           {Math.round(backtest.hit_rate_top_10_percent_cells * 100)}%
                         </span>
                         <span className="text-xs text-muted-foreground mb-1.5">{t("hit rate")}</span>
                       </div>
                       <div className="mt-2 h-2 rounded-full bg-muted overflow-hidden">
-                        <div className="h-full bg-emerald-500 rounded-full transition-all"
+                        <div className="h-full bg-success rounded-full transition-all"
                           style={{ width: `${Math.round(backtest.hit_rate_top_10_percent_cells * 100)}%` }} />
                       </div>
                     </div>
