@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781781197.0953186,
-    "ast_hash": "389384f9be8a1e81b324aa411bee1ad0",
+    "mtime": 1781788285.2815704,
+    "ast_hash": "c092db6b832eeee8972432fc0970a128",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -725,13 +725,13 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
-    "mtime": 1781781179.5337567,
-    "ast_hash": "c4893e2e4c1bc3b7a93b0a6fdc97dbe2",
+    "mtime": 1781787627.9556558,
+    "ast_hash": "2f7b64f580fc7750208af40e3aeee762",
     "semantic_hash": ""
   },
   "frontend/src/routes/reports.tsx": {
-    "mtime": 1781699140.782414,
-    "ast_hash": "c7548bb83f7afc0142a899058ba28100",
+    "mtime": 1781788221.90063,
+    "ast_hash": "cc2df486f4b6781faacd6af8d8ff58c0",
     "semantic_hash": ""
   },
   "frontend/src/routes/transcripts.tsx": {
@@ -1045,13 +1045,13 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/intelligence.ts": {
-    "mtime": 1781722773.6639626,
-    "ast_hash": "c152b2c1bcfca6d92f3c244ec92d4ebc",
+    "mtime": 1781787522.7872531,
+    "ast_hash": "4e7be69d7a67213c2cf98c058d1a7d55",
     "semantic_hash": ""
   },
   "frontend/src/routes/forecast.tsx": {
-    "mtime": 1781697619.8801315,
-    "ast_hash": "20013aa6626731bd6376624294b757e7",
+    "mtime": 1781787815.5396767,
+    "ast_hash": "ce63fb8e47dd8eea92b06df86ced2394",
     "semantic_hash": ""
   },
   "frontend/src/routes/profile.$personId.tsx": {
@@ -1065,8 +1065,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/trends.tsx": {
-    "mtime": 1781697728.9046793,
-    "ast_hash": "2a22ec03eefbf6a8610b891c83b83710",
+    "mtime": 1781787929.1175015,
+    "ast_hash": "a103399e659a312e9e3a1fd0f1113b1a",
     "semantic_hash": ""
   },
   "backend/migrations/003_add_ps4_ps7_tables.sql": {
@@ -1162,6 +1162,16 @@
   "backend/migrations/003_users_extend.sql": {
     "mtime": 1781756573.8782127,
     "ast_hash": "5f325e855369187bd9dd54c6b1a9689a",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ModelInferenceTheater.tsx": {
+    "mtime": 1781787783.4176214,
+    "ast_hash": "b613c95182a30f7abf0c0ddb896a52ec",
+    "semantic_hash": ""
+  },
+  "SATYAM_SCREENS_OVERHAUL_AND_FIXES.md": {
+    "mtime": 1781787425.8036082,
+    "ast_hash": "a92808648af31f1f506e3a5346f7e5a6",
     "semantic_hash": ""
   }
 }
