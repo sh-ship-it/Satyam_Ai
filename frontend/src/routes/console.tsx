@@ -4,14 +4,14 @@ import { CaseDrawer } from "@/components/CaseDrawer";
 import { useState, useEffect, useRef } from "react";
 import {
   Mic, Send, Sparkles, ShieldAlert, History, X,
-  Map as MapIcon, Layers, Filter,
+  Map as MapIcon, Layers, Filter, Volume2,
 } from "lucide-react";
 import { useT, useI18n } from "@/lib/i18n";
 import { tData } from "@/lib/tData";
 import { SimilarCaseSearch } from "@/components/SimilarCaseSearch";
 import { streamChat, type ChatEvent, api, type StationRow, getAuthToken } from "@/lib/api/client";
 import { CrimeMap, type Hotspot } from "@/components/CrimeMap";
-import { speakViaSarvam } from "@/lib/voice/tts";
+import { speakViaSarvam, isServerVoiceEnabled } from "@/lib/voice/tts";
 import { detectLang, resolveLang } from "@/lib/voice/lang";
 import { loadEngineSettings } from "@/components/SettingsDialog";
 import ReactMarkdown from "react-markdown";
@@ -82,6 +82,18 @@ function Console() {
   const [streamingIdx, setStreamingIdx] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const backendConvId = useRef<string | null>(null);
+  const [isTtsSpeaking, setIsTtsSpeaking] = useState(false);
+
+  // Track when Sarvam/Google TTS is speaking so we can show a visual indicator.
+  useEffect(() => {
+    const onState = (e: Event) => {
+      const state = (e as CustomEvent).detail?.state;
+      if (state === "speaking") setIsTtsSpeaking(true);
+      else if (state === "done") setIsTtsSpeaking(false);
+    };
+    window.addEventListener("satyam:ai-state", onState);
+    return () => window.removeEventListener("satyam:ai-state", onState);
+  }, []);
 
   // ── Results Canvas state ──────────────────────────────────────────────────
   const [canvasTab, setCanvasTab] = useState<"data" | "map">("data");
@@ -270,8 +282,10 @@ function Console() {
   function speak(text: string, opts?: { speak?: boolean; lang?: string; rate?: number }) {
     const emit = (state: "speaking" | "done") =>
       window.dispatchEvent(new CustomEvent("satyam:ai-state", { detail: { state } }));
-    // Only voice turns participate in the conversation loop.
-    if (!opts?.speak) return;
+    // Voice turns always speak. Typed turns speak only when a server TTS provider
+    // (Sarvam or Google) is active in Settings — browser Web Speech is opt-in only.
+    const shouldSpeak = opts?.speak || isServerVoiceEnabled();
+    if (!shouldSpeak) return;
     // TASK 2A: Auto-detect language from the reply text itself.
     // opts.lang may be a BCP-47 locale like "kn-IN" OR the sentinel "auto".
     // resolveLang() handles all cases: "auto"/falsy → detectLang(text),
@@ -485,6 +499,12 @@ function Console() {
               </h2>
             </div>
             <div className="flex items-center gap-3">
+              {isTtsSpeaking && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-success/40 bg-success/10 px-2 py-0.5 text-[10px] font-bold text-success animate-pulse">
+                  <Volume2 className="h-2.5 w-2.5" />
+                  {t("Speaking…")}
+                </span>
+              )}
               <button
                 onClick={() => setHistoryOpen((v) => !v)}
                 className="inline-flex items-center gap-1 text-xs text-primary hover:underline"

@@ -10,6 +10,8 @@
  *  - V3: unlock audio playback on a user gesture so fetched clips can play.
  *  - V4: pauseSpeech()/resumeSpeech() control BOTH the <audio> clip and the
  *        browser voice.
+ *  - V5: strip Markdown before sending to TTS (Sarvam reads ** | [] verbatim).
+ *        Auto-speak typed answers when Sarvam/Google is the selected provider.
  * Always fires exactly one terminal onEnd so the conversation loop never stalls.
  */
 import { ttsSynthesize } from "../api/client";
@@ -18,7 +20,44 @@ import { loadEngineSettings } from "@/components/SettingsDialog";
 export type SpeakHooks = { onStart?: () => void; onEnd?: () => void };
 
 let currentAudio: HTMLAudioElement | null = null;
-const cache = new Map<string, string>(); // `${provider}::${lang}::${text}` → objectURL
+
+// ── Markdown stripper for clean TTS ──────────────────────────────────────────
+/**
+ * Strip Markdown syntax so Sarvam/Google reads clean prose, not
+ * "asterisk asterisk bold asterisk asterisk pipe column pipe".
+ */
+export function stripMarkdown(text: string): string {
+  return (text || "")
+    // fenced code blocks
+    .replace(/```[\s\S]*?```/g, "")
+    // inline code
+    .replace(/`[^`]*`/g, "")
+    // headings
+    .replace(/^#{1,6}\s+/gm, "")
+    // bold/italic
+    .replace(/\*{1,3}([^*]+)\*{1,3}/g, "$1")
+    .replace(/_{1,3}([^_]+)_{1,3}/g, "$1")
+    // GFM table rows → comma-separated
+    .replace(/\|([^\n]+)\|/g, (_m, inner: string) =>
+      inner.split("|").map((c: string) => c.trim()).filter(Boolean).join(", ")
+    )
+    // table separator rows
+    .replace(/^[\s|:-]+$/gm, "")
+    // markdown links [text](url)
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    // inline citations like [ref]
+    .replace(/\[[^\]]+\]/g, "")
+    // blockquotes
+    .replace(/^>\s*/gm, "")
+    // horizontal rules
+    .replace(/^[-*_]{3,}$/gm, "")
+    // bullet/numbered list markers
+    .replace(/^[\s]*[-*+]\s+/gm, "")
+    .replace(/^\s*\d+\.\s+/gm, "")
+    // excess blank lines
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
 
 // ── browser voice pre-loading (V2) ───────────────────────────────────────────
 let voicesCache: SpeechSynthesisVoice[] = [];
@@ -183,6 +222,9 @@ function b64ToBlob(b64: string, mime: string): Blob {
  *
  * Fires exactly one terminal `onEnd` regardless of path, so the conversation
  * loop (satyam:ai-state "done") never stalls.
+ *
+ * Markdown is stripped before synthesis so providers don't read
+ * "asterisk asterisk bold asterisk asterisk" etc.
  */
 export async function speak(
   text: string,
@@ -191,49 +233,60 @@ export async function speak(
   hooks?: SpeakHooks,
 ): Promise<void> {
   cancelSpeech();
-  if (!text?.trim()) { hooks?.onEnd?.(); return; }
+  const cleaned = stripMarkdown(text);
+  if (!cleaned) { hooks?.onEnd?.(); return; }
 
   const provider = loadEngineSettings().voiceBackend; // "sarvam" | "google" | "webspeech"
   console.debug("[tts] speak provider=", provider, "lang=", lang);
 
   if (provider === "webspeech") {
-    browserSpeak(text, lang, rate, hooks);
+    browserSpeak(cleaned, lang, rate, hooks);
     return;
   }
 
   // sarvam or google — fetch via the backend TTS endpoint.
+  // V5: No module-level cache — objectURLs can get revoked; just always fetch
+  // (the backend Sarvam call is fast, ~300ms, and not called for typed queries
+  // unless the user explicitly enables voice output in settings).
   try {
-    const key = `${provider}::${lang}::${text}`;
-    let url = cache.get(key);
-    if (!url) {
-      const { audio_base64, mime } = await ttsSynthesize(
-        text,
-        lang,
-        provider as "sarvam" | "google" | "bhashini",
-      );
-      if (!audio_base64) throw new Error("empty audio response");
-      url = URL.createObjectURL(b64ToBlob(audio_base64, mime || "audio/wav"));
-      cache.set(key, url);
-    }
+    const { audio_base64, mime } = await ttsSynthesize(
+      cleaned,
+      lang,
+      provider as "sarvam" | "google" | "bhashini",
+    );
+    if (!audio_base64) throw new Error("empty audio response");
+    const url = URL.createObjectURL(b64ToBlob(audio_base64, mime || "audio/wav"));
     const audio = new Audio(url);
     audio.playbackRate = Math.max(0.1, rate || 1);
     currentAudio = audio;
     audio.onplay = () => hooks?.onStart?.();
     audio.onended = () => {
       if (currentAudio === audio) currentAudio = null;
+      URL.revokeObjectURL(url);
       hooks?.onEnd?.();
     };
     audio.onerror = () => {
       if (currentAudio === audio) currentAudio = null;
+      URL.revokeObjectURL(url);
       // Provider audio failed — degrade to browser voice, never strand the loop.
-      browserSpeak(text, lang, rate, hooks);
+      browserSpeak(cleaned, lang, rate, hooks);
     };
     await audio.play(); // may reject if autoplay not unlocked → caught below
   } catch {
     // Network / CORS / autoplay block — always fall back, never stall.
-    browserSpeak(text, lang, rate, hooks);
+    browserSpeak(cleaned, lang, rate, hooks);
   }
 }
 
 // Back-compat alias — console.tsx and Shell.tsx import `speakViaSarvam`.
 export const speakViaSarvam = speak;
+
+/**
+ * Returns true when the currently selected voice backend is a server-side
+ * provider (Sarvam or Google) rather than the browser's built-in Web Speech.
+ * Use this to decide whether to auto-speak typed (non-voice) answers.
+ */
+export function isServerVoiceEnabled(): boolean {
+  const p = loadEngineSettings().voiceBackend;
+  return p === "sarvam" || p === "google";
+}
