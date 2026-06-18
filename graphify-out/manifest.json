@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781792033.049027,
-    "ast_hash": "7d5e46a9fa5606e8993bcfbf76c7d5a2",
+    "mtime": 1781792704.013626,
+    "ast_hash": "c1cb209be496c4aef97081e8d5a8c7db",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -1065,8 +1065,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/trends.tsx": {
-    "mtime": 1781790340.1322224,
-    "ast_hash": "e576bfc0d64dd4b8b8e52e7e20814cf2",
+    "mtime": 1781792680.9919736,
+    "ast_hash": "6dab344ea3687036509ac56476511912",
     "semantic_hash": ""
   },
   "backend/migrations/003_add_ps4_ps7_tables.sql": {
