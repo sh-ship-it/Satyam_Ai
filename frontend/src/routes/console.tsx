@@ -79,6 +79,8 @@ function Console() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
+  const [chatDictating, setChatDictating] = useState(false);
+  const chatRecRef = useRef<any>(null);
   const [streamingIdx, setStreamingIdx] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const backendConvId = useRef<string | null>(null);
@@ -426,6 +428,49 @@ function Console() {
     speak(finalAi.text, opts);
   }
 
+  // Chat-box dictation — fills ONLY the chat input. It must never open the
+  // top-right voice copilot (no "satyam:open-voice") or touch copilot state.
+  function toggleChatDictation() {
+    if (chatRecRef.current) {
+      try { chatRecRef.current.stop(); } catch { /* noop */ }
+      return; // onend clears the ref + flag
+    }
+    const SR: any =
+      (typeof window !== "undefined" &&
+        ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) || null;
+    if (!SR) {
+      alert("This browser has no speech recognition. Use Chrome or Edge.");
+      return;
+    }
+    const rec = new SR();
+    rec.continuous = true;
+    rec.interimResults = true;
+    rec.lang = lang === "KN" ? "kn-IN" : "en-IN";
+
+    const prefix = input.trim() ? input.trim() + " " : "";
+    let finalText = "";
+
+    rec.onresult = (e: any) => {
+      let interim = "";
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const r = e.results[i];
+        if (r.isFinal) finalText += r[0].transcript + " ";
+        else interim += r[0].transcript;
+      }
+      setInput((prefix + finalText + interim).replace(/\s+/g, " ").trimStart());
+    };
+    rec.onerror = () => { /* swallow; onend cleans up */ };
+    rec.onend = () => {
+      chatRecRef.current = null;
+      setChatDictating(false);
+      setInput((prefix + finalText).replace(/\s+/g, " ").trim());
+    };
+
+    chatRecRef.current = rec;
+    setChatDictating(true);
+    try { rec.start(); } catch { chatRecRef.current = null; setChatDictating(false); }
+  }
+
   function handleSend() { sendMessage(input); }
 
   function handleNewChat() {
@@ -617,9 +662,10 @@ function Console() {
               />
               <button
                 type="button"
-                onClick={() => window.dispatchEvent(new Event("satyam:open-voice"))}
-                className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
-                aria-label={t("Voice")}
+                onClick={toggleChatDictation}
+                className={"grid h-8 w-8 place-items-center rounded-md " + (chatDictating ? "bg-destructive text-destructive-foreground animate-pulse" : "text-muted-foreground hover:bg-muted hover:text-foreground")}
+                aria-label={chatDictating ? t("Stop dictation") : t("Dictate into chat")}
+                title={chatDictating ? t("Stop dictation") : t("Dictate into chat")}
               >
                 <Mic className="h-4 w-4" />
               </button>
