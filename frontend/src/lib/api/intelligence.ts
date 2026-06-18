@@ -113,7 +113,7 @@ export const intelligence = {
 
   // Search — unified person + case autocomplete
   searchPersonsAndCases: (q: string, limit = 12) =>
-    apiFetch<SearchResult[]>(`/api/cases/search?q=${encodeURIComponent(q)}&limit=${limit}`),
+    apiFetch<SearchResult[]>(`/cases/search?q=${encodeURIComponent(q)}&limit=${limit}`),
 
   // C4 — Browse all offenders (for the profile dropdown)
   listOffenders: (params?: URLSearchParams) =>

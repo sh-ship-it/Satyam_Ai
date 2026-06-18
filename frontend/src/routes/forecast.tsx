@@ -15,6 +15,7 @@ import {
   type BacktestResponse,
 } from "@/lib/api/intelligence";
 import { CaseDrawer } from "@/components/CaseDrawer";
+import { ModelInferenceTheater } from "@/components/ModelInferenceTheater";
 
 export const Route = createFileRoute("/forecast")({
   head: () => ({ meta: [{ title: "Early Warning & Forecast · Satyam" }] }),
@@ -78,9 +79,10 @@ function RiskBar({ score }: { score: number }) {
 }
 
 // ── Alert card ────────────────────────────────────────────────────────────────
-function AlertCard({ a, expanded, onToggle, lang, t, onSendToChat }: {
+function AlertCard({ a, expanded, onToggle, lang, t, onSendToChat, onOpenNetwork }: {
   a: ForecastAlert; expanded: boolean; onToggle: () => void;
   lang: string; t: (s: string) => string; onSendToChat: (text: string) => void;
+  onOpenNetwork: (district: string, crimeType: string) => void;
 }) {
   return (
     <div className={`rounded-xl border bg-card transition-all duration-200 hover:shadow-md ${RISK_BORDER[a.risk_level] || "border-border"} ${RISK_GLOW[a.risk_level] || ""}`}>
@@ -128,7 +130,7 @@ function AlertCard({ a, expanded, onToggle, lang, t, onSendToChat }: {
             {t("Ask AI")}
           </button>
           <button
-            onClick={() => onSendToChat(`${t("Show network")} ${a.district} ${tData("crime_type", a.crime_type, "EN")}`)}
+            onClick={() => onOpenNetwork(a.district, a.crime_type)}
             className="inline-flex items-center gap-1 rounded-md bg-muted/60 hover:bg-muted px-2 py-1 text-[10px] font-medium text-muted-foreground hover:text-foreground transition"
           >
             <ArrowUpRight className="h-3 w-3" />
@@ -295,6 +297,16 @@ function ForecastScreen() {
     } catch {}
   };
 
+  const handleOpenNetwork = (district: string, crimeType: string) => {
+    try {
+      sessionStorage.setItem(
+        "satyam:network-context",
+        JSON.stringify({ district, crime_type: crimeType, ts: Date.now() }),
+      );
+    } catch {}
+    navigate({ to: "/network" });
+  };
+
   return (
     <Shell>
       <div className="flex flex-col h-full overflow-auto bg-background">
@@ -392,6 +404,11 @@ function ForecastScreen() {
             </div>
           )}
 
+          {/* ── Model inference theater ───────────────────────────────── */}
+          <div className="px-0 pt-0">
+            <ModelInferenceTheater cells={cells} backtest={backtest} loading={loading} asOf={alertsAsOf} t={t} />
+          </div>
+
           {/* ── Early Warning Alerts ─────────────────────────────────────── */}
           <section>
             <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
@@ -459,7 +476,7 @@ function ForecastScreen() {
                   <AlertCard key={a.alert_id} a={a}
                     expanded={expandedAlert === a.alert_id}
                     onToggle={() => setExpandedAlert(p => p === a.alert_id ? null : a.alert_id)}
-                    lang={lang} t={t} onSendToChat={handleSendToChat}
+                    lang={lang} t={t} onSendToChat={handleSendToChat} onOpenNetwork={handleOpenNetwork}
                   />
                 ))}
               </div>

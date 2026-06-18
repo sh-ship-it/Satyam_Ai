@@ -27,30 +27,86 @@ function Sparkline({ data, color = "text-primary" }: { data: number[]; color?: s
   );
 }
 
-// ── Time series bar chart ─────────────────────────────────────────────────────
+// ── Time series bar chart (animated, axis-labeled) ────────────────────────────
 function TrendChart({ series }: { series: TrendPoint[] }) {
   const byPeriod = useMemo(() => {
     const m: Record<string, number> = {};
-    series.forEach(s => { m[s.period] = (m[s.period] || 0) + s.count; });
-    return Object.entries(m).sort((a, b) => a[0].localeCompare(b[0])).slice(-12);
+    series.forEach((s) => { m[s.period] = (m[s.period] || 0) + s.count; });
+    return Object.entries(m).sort(([a], [b]) => a.localeCompare(b));
   }, [series]);
-
-  if (byPeriod.length < 2) return null;
-  const max = Math.max(...byPeriod.map(([, v]) => v), 1);
+  const max = Math.max(1, ...byPeriod.map(([, v]) => v));
+  if (byPeriod.length === 0)
+    return <div className="text-xs text-muted-foreground text-center py-10">No trend data</div>;
   return (
-    <div className="flex items-end gap-1.5 h-20 w-full">
-      {byPeriod.map(([period, count]) => {
-        const pct = (count / max) * 100;
-        return (
-          <div key={period} className="flex-1 flex flex-col items-center gap-1 group relative">
-            <div className="w-full bg-primary/20 hover:bg-primary/40 rounded-t transition-all duration-200 cursor-default"
-              style={{ height: `${Math.max(pct, 4)}%` }} title={`${period}: ${count}`} />
-            <span className="text-[8px] text-muted-foreground rotate-45 origin-left hidden group-hover:block absolute -bottom-4 left-0 whitespace-nowrap z-10 bg-card px-1 rounded shadow">
-              {period.slice(-4)}
-            </span>
+    <div className="flex items-end gap-1.5 h-56 pt-4">
+      {byPeriod.map(([period, v], i) => (
+        <div key={period} className="flex-1 flex flex-col items-center gap-1 group min-w-0">
+          <div className="text-[9px] font-bold text-foreground opacity-0 group-hover:opacity-100 transition">{v}</div>
+          <div
+            className="w-full rounded-t-md bg-gradient-to-t from-primary/60 to-primary transition-all duration-700 group-hover:from-primary group-hover:to-primary"
+            style={{ height: `${(v / max) * 100}%`, transitionDelay: `${i * 18}ms` }}
+          />
+          <div className="text-[8px] text-muted-foreground truncate w-full text-center" title={period}>
+            {period.length > 7 ? period.slice(2) : period}
           </div>
-        );
-      })}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Crime × period heatmap ─────────────────────────────────────────────────────
+function CrimeHeatmap({ series }: { series: TrendPoint[] }) {
+  const { periods, crimes, grid, max } = useMemo(() => {
+    const pSet = new Set<string>(), cSet = new Set<string>();
+    const g: Record<string, number> = {};
+    let mx = 1;
+    series.forEach((s) => {
+      pSet.add(s.period); cSet.add(s.crime_type);
+      const k = `${s.crime_type}|${s.period}`;
+      g[k] = (g[k] || 0) + s.count;
+      mx = Math.max(mx, g[k]);
+    });
+    return {
+      periods: [...pSet].sort(),
+      crimes: [...cSet].sort().slice(0, 8),
+      grid: g, max: mx,
+    };
+  }, [series]);
+  if (periods.length === 0) return null;
+  return (
+    <div className="overflow-x-auto">
+      <div className="inline-block min-w-full">
+        <div className="flex">
+          <div className="w-36 shrink-0" />
+          {periods.map((p) => (
+            <div key={p} className="flex-1 min-w-[28px] text-[8px] text-muted-foreground text-center -rotate-45 origin-left h-6">
+              {p.slice(2)}
+            </div>
+          ))}
+        </div>
+        {crimes.map((c) => (
+          <div key={c} className="flex items-center">
+            <div className="w-36 shrink-0 text-[10px] font-medium text-foreground truncate pr-2" title={c}>{c}</div>
+            {periods.map((p) => {
+              const v = grid[`${c}|${p}`] || 0;
+              const intensity = v / max;
+              return (
+                <div
+                  key={p}
+                  title={`${c} · ${p}: ${v}`}
+                  className="flex-1 min-w-[28px] aspect-square m-[1px] rounded-[3px]"
+                  style={{
+                    backgroundColor: v
+                      ? `rgba(99,102,241,${Math.max(0.1, intensity)})`
+                      : "rgba(120,120,120,0.06)",
+                  }}
+                />
+              );
+            })}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -266,7 +322,18 @@ function TrendsScreen() {
 
           {/* ── OVERVIEW TAB ─────────────────────────────────────────────── */}
           {activeTab === "overview" && !loading && (
+
             <>
+              {/* Crime × Period heatmap */}
+              {series.length > 0 && (
+                <div className="rounded-2xl border border-border bg-card p-4">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3">
+                    {t("Crime × Period intensity")}
+                  </div>
+                  <CrimeHeatmap series={series} />
+                </div>
+              )}
+
               {/* Delta cards */}
               {deltas.qoq_percent != null && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

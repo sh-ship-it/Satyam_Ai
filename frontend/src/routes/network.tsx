@@ -264,6 +264,7 @@ function NetworkScreen() {
   const [graphEmpty, setGraphEmpty] = useState(true);
   const [depth, setDepth] = useState(2);
   const [linkMode, setLinkMode] = useState<"people" | "financial" | "rings">("people");
+  const [ringCtx, setRingCtx] = useState<{ district?: string; crime_type?: string } | null>(null);
 
   const fetchGraph = useCallback(async (seedName: string, queryDepth: number = depth) => {
     setGraphLoading(true);
@@ -369,6 +370,18 @@ function NetworkScreen() {
       fetchGraph(seed);
     }
   }, [fetchGraph]);
+
+  useEffect(() => {
+    let raw: string | null = null;
+    try { raw = sessionStorage.getItem("satyam:network-context"); } catch {}
+    if (!raw) return;
+    try { sessionStorage.removeItem("satyam:network-context"); } catch {}
+    let ctx: { district?: string; crime_type?: string } = {};
+    try { ctx = JSON.parse(raw); } catch { return; }
+    if (!ctx.district && !ctx.crime_type) return;
+    setRingCtx({ district: ctx.district || undefined, crime_type: ctx.crime_type || undefined });
+    setLinkMode("rings");
+  }, []);
 
   const [exportOpen, setExportOpen] = useState(false);
   const [exporting, setExporting] = useState<null | "png" | "json">(null);
@@ -1057,7 +1070,7 @@ function NetworkScreen() {
             </div>
           ) : linkMode === "rings" ? (
             <div className="flex-1 overflow-hidden">
-              <RingsPanel />
+              <RingsPanel crimeType={ringCtx?.crime_type} district={ringCtx?.district} />
             </div>
           ) : (
           <div

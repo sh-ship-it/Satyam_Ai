@@ -4,12 +4,12 @@ import { useState, useEffect, useRef } from "react";
 import {
   X, FileDown, MapPin, Table2, FileText, Sparkles, Search,
   Loader2, User, Hash, Printer, ChevronDown, Plus, ShieldAlert,
-  TrendingUp, BarChart3, AlertTriangle,
+  TrendingUp, BarChart3, AlertTriangle, Upload, Database,
 } from "lucide-react";
 import { useT, useI18n } from "@/lib/i18n";
 import { tData } from "@/lib/tData";
 import { api, type StationRow } from "@/lib/api/client";
-import { intelligence, type SearchResult } from "@/lib/api/intelligence";
+import { intelligence, type SearchResult, type OffenderListItem } from "@/lib/api/intelligence";
 
 export const Route = createFileRoute("/reports")({
   head: () => ({
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/reports")({
 });
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-type ItemType = "table" | "map" | "case" | "person" | "alert";
+type ItemType = "table" | "map" | "case" | "person" | "alert" | "attachment";
 type ReportItem = {
   id: string;
   type: ItemType;
@@ -127,6 +127,85 @@ function AddItemBar({ onAdd }: { onAdd: (item: ReportItem) => void }) {
   );
 }
 
+// ── Upload Panel ──────────────────────────────────────────────────────────────
+function UploadPanel({ onAdd }: { onAdd: (item: ReportItem) => void }) {
+  const t = useT();
+  const [picking, setPicking] = useState(false);
+  const [q, setQ] = useState("");
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!picking || q.trim().length < 2) { setResults([]); return; }
+    const id = setTimeout(() => {
+      intelligence.searchPersonsAndCases(q.trim(), 12)
+        .then((r) => setResults(r.filter((x) => x.type === "case")))
+        .catch(() => setResults([]));
+    }, 250);
+    return () => clearTimeout(id);
+  }, [q, picking]);
+
+  const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      onAdd({
+        id: `attachment-${Date.now()}`,
+        type: "attachment",
+        title: f.name,
+        meta: `${(f.size / 1024).toFixed(0)} KB · ${f.type || "file"}`,
+        data: { name: f.name, size: f.size, mime: f.type } as any,
+      });
+    };
+    reader.readAsDataURL(f);
+    e.target.value = "";
+  };
+
+  return (
+    <div className="space-y-2">
+      <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{t("Attach evidence")}</div>
+      {/* Device upload */}
+      <button onClick={() => fileRef.current?.click()}
+        className="w-full rounded-xl border-2 border-dashed border-border bg-muted/20 hover:border-primary hover:bg-primary/5 transition p-4 text-center">
+        <Upload className="h-5 w-5 mx-auto mb-1 text-muted-foreground" />
+        <div className="text-xs font-medium text-foreground">{t("Upload from device")}</div>
+        <div className="text-[10px] text-muted-foreground">{t("PDF, image, CSV — max ~5 MB")}</div>
+      </button>
+      <input ref={fileRef} type="file" accept=".pdf,.png,.jpg,.jpeg,.csv,.txt,.docx" className="hidden" onChange={onFile} />
+      {/* Dataset import */}
+      <button onClick={() => setPicking((v) => !v)}
+        className="w-full rounded-xl border border-border bg-background hover:bg-muted/50 transition p-2.5 text-left flex items-center gap-2">
+        <Database className="h-4 w-4 text-primary shrink-0" />
+        <span className="text-xs font-medium text-foreground">{t("Import from case dataset")}</span>
+        <ChevronDown className={`h-3.5 w-3.5 ml-auto text-muted-foreground transition ${picking ? "rotate-180" : ""}`} />
+      </button>
+      {picking && (
+        <div className="rounded-xl border border-border bg-card p-2 space-y-2">
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("Search FIR / crime type…")}
+            className="w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring" />
+          <div className="max-h-48 overflow-y-auto divide-y divide-border/40">
+            {results.length === 0 && q.length >= 2 && (
+              <div className="px-2 py-3 text-xs text-muted-foreground text-center">{t("No results")}</div>
+            )}
+            {results.map((r) => (
+              <button key={`${r.type}-${r.id}`}
+                onClick={() => onAdd({ id: `case-${r.id}-${Date.now()}`, type: "case", title: r.label, meta: r.sub, data: { id: r.id } as any })}
+                className="w-full flex items-center gap-2 px-2 py-1.5 hover:bg-muted/50 text-left">
+                <Hash className="h-3.5 w-3.5 text-orange-500 shrink-0" />
+                <div className="min-w-0">
+                  <div className="text-xs font-medium truncate">{r.label}</div>
+                  <div className="text-[10px] text-muted-foreground truncate">{r.sub}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Main component ────────────────────────────────────────────────────────────
 function Reports() {
   const t = useT();
@@ -145,6 +224,8 @@ function Reports() {
   // Live data
   const [stations, setStations] = useState<StationRow[]>([]);
   const [stationsLoading, setStationsLoading] = useState(true);
+  const [topOffenders, setTopOffenders] = useState<OffenderListItem[]>([]);
+  const [trendDeltas, setTrendDeltas] = useState<{ qoq_percent: number | null; yoy_percent: number | null }>({ qoq_percent: null, yoy_percent: null });
 
   useEffect(() => {
     injectPrintStyles();
@@ -153,6 +234,10 @@ function Reports() {
       .then((r) => setStations(r.rows || []))
       .catch(() => {})
       .finally(() => setStationsLoading(false));
+    intelligence.listOffenders(new URLSearchParams({ limit: "8", min_offenses: "2" }))
+      .then((r) => setTopOffenders(r.offenders)).catch(() => setTopOffenders([]));
+    intelligence.getTrends(new URLSearchParams({ granularity: "quarter" }))
+      .then((r) => setTrendDeltas(r.deltas)).catch(() => {});
   }, []);
 
   // Voice command hook
@@ -243,6 +328,10 @@ function Reports() {
           {/* Search add */}
           <div className="px-3 pt-3 pb-2 border-b border-border">
             <AddItemBar onAdd={addItem} />
+          </div>
+          {/* Upload panel */}
+          <div className="px-3 pt-2 pb-2 border-b border-border">
+            <UploadPanel onAdd={addItem} />
           </div>
 
           {/* Quick add from live data */}
@@ -465,8 +554,59 @@ function Reports() {
                 </div>
               </DocSection>
 
-              {/* ── 3. Items in Report ───────────────────────────────── */}
-              <DocSection num="3" title={t("Selected Items")} icon={<FileText className="h-4 w-4" />}>
+              {/* ── 3. Crime Trend Signal ────────────────────────────── */}
+              <DocSection num="3" title={t("Crime Trend Signal")} icon={<TrendingUp className="h-4 w-4" />}>
+                <div className="grid grid-cols-2 gap-3">
+                  {([["Quarter-on-quarter", trendDeltas.qoq_percent], ["Year-on-year", trendDeltas.yoy_percent]] as [string, number | null][]).map(([lbl, val]) => (
+                    <div key={lbl} className="rounded-xl border border-border p-3">
+                      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{t(lbl)}</div>
+                      <div className={`text-xl font-extrabold ${val == null ? "text-muted-foreground" : val > 0 ? "text-destructive" : "text-emerald-600"}`}>
+                        {val == null ? "—" : `${val > 0 ? "+" : ""}${val.toFixed(1)}%`}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </DocSection>
+
+              {/* ── 4. Notable Repeat Offenders ──────────────────────── */}
+              <DocSection num="4" title={t("Notable Repeat Offenders")} icon={<User className="h-4 w-4" />}>
+                <div className="overflow-hidden rounded-xl border border-border">
+                  <table className="w-full text-[12px]">
+                    <thead className="bg-muted/60 text-[10px] uppercase tracking-wider text-muted-foreground">
+                      <tr>
+                        <th className="px-3 py-2 text-left">{t("Name")}</th>
+                        <th className="px-3 py-2 text-right">{t("Cases")}</th>
+                        <th className="px-3 py-2 text-left">{t("Top Crime")}</th>
+                        <th className="px-3 py-2 text-left">{t("District")}</th>
+                        <th className="px-3 py-2 text-left">{t("Risk")}</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      {topOffenders.length === 0 ? (
+                        <tr><td colSpan={5} className="px-3 py-4 text-center text-muted-foreground text-xs">{t("No data")}</td></tr>
+                      ) : topOffenders.map((o) => (
+                        <tr key={o.person_id} className="hover:bg-muted/20">
+                          <td className="px-3 py-2 font-medium">{o.display_name}</td>
+                          <td className="px-3 py-2 text-right tabular-nums font-bold">{o.offense_count}</td>
+                          <td className="px-3 py-2">{o.top_crime_type || "—"}</td>
+                          <td className="px-3 py-2">{o.district || "—"}</td>
+                          <td className="px-3 py-2">
+                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                              o.risk_label === "Critical" ? "bg-destructive/15 text-destructive" :
+                              o.risk_label === "High" ? "bg-orange-500/15 text-orange-600" :
+                              "bg-muted text-muted-foreground"}`}>
+                              {o.risk_label}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </DocSection>
+
+              {/* ── 5. Items in Report ───────────────────────────────── */}
+              <DocSection num="5" title={t("Selected Items")} icon={<FileText className="h-4 w-4" />}>
                 {items.length === 0 ? (
                   <div className="flex flex-col items-center gap-3 rounded-xl border-2 border-dashed border-border bg-muted/20 p-8 text-center">
                     <Sparkles className="h-6 w-6 text-muted-foreground/50" />
@@ -497,8 +637,8 @@ function Reports() {
                 )}
               </DocSection>
 
-              {/* ── 4. Ethics notice ─────────────────────────────────── */}
-              <DocSection num="4" title={t("Compliance Notice")} icon={<ShieldAlert className="h-4 w-4" />}>
+              {/* ── 6. Ethics notice ─────────────────────────────────── */}
+              <DocSection num="6" title={t("Compliance Notice")} icon={<ShieldAlert className="h-4 w-4" />}>
                 <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 px-4 py-3 flex items-start gap-3">
                   <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
                   <p className="text-xs text-muted-foreground leading-relaxed">
@@ -506,6 +646,21 @@ function Reports() {
                   </p>
                 </div>
               </DocSection>
+
+              {/* ── Signature block ──────────────────────────────────── */}
+              <div className="mt-10 pt-6 border-t border-border grid grid-cols-2 gap-8 text-[11px]">
+                <div>
+                  <div className="h-10 border-b border-foreground/40" />
+                  <div className="mt-1 text-muted-foreground">{t("Prepared by")}: {officerName || "—"}</div>
+                </div>
+                <div>
+                  <div className="h-10 border-b border-foreground/40" />
+                  <div className="mt-1 text-muted-foreground">{t("Reviewed / Authorized")}</div>
+                </div>
+              </div>
+              <div className="mt-4 text-center text-[9px] uppercase tracking-[0.25em] text-muted-foreground">
+                {t("Confidential · Karnataka State Police · Synthetic data only")}
+              </div>
 
               {/* ── Citations ─────────────────────────────────────────── */}
               <div className="pt-6 border-t border-border">
@@ -539,6 +694,7 @@ function ItemIcon({ type }: { type: ItemType }) {
     case:   { icon: Hash,     bg: "bg-orange-500/10 text-orange-600" },
     person: { icon: User,     bg: "bg-primary/10 text-primary" },
     alert:  { icon: AlertTriangle, bg: "bg-destructive/10 text-destructive" },
+    attachment: { icon: Upload, bg: "bg-violet-500/10 text-violet-600" },
   };
   const { icon: Icon, bg } = configs[type] || configs.case;
   return (
