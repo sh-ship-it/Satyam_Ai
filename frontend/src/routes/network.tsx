@@ -4,9 +4,10 @@ import { CaseDrawer } from "@/components/CaseDrawer";
 import { FinancialLinksPanel } from "@/components/FinancialLinksPanel";
 import { RingsPanel } from "@/components/RingsPanel";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
-import { ChevronDown, Maximize2, Download, FileJson, ImageDown, Save, Trash2, Sliders } from "lucide-react";
+import { ChevronDown, Maximize2, Download, FileJson, ImageDown, Save, Trash2, Sliders, Search, User, Hash, Loader2, TrendingUp } from "lucide-react";
 import { useT } from "@/lib/i18n";
 import { api } from "@/lib/api/client";
+import { intelligence, type SearchResult, type OffenderListItem } from "@/lib/api/intelligence";
 import { createPortal } from "react-dom";
 
 type SimParams = { repulsion: number; spring: number; gravity: number; damping: number };
@@ -35,10 +36,218 @@ export const Route = createFileRoute("/network")({
 
 // Demo nodes and edges removed. Graph starts empty.
 
-const GROUP_COLOR = ["oklch(0.546 0.215 262)", "oklch(0.65 0.17 150)", "oklch(0.7 0.18 50)", "oklch(0.58 0.22 27)"];
-const GROUP_SHAPE = ["circle", "square", "diamond", "triangle"];
+// Group colours: 0=seed(blue), 1=accused(orange), 2=victim(green), 3=case(purple)
+const GROUP_COLOR = [
+  "oklch(0.546 0.215 262)",  // 0 seed — blue
+  "oklch(0.65 0.18 50)",     // 1 accused — orange
+  "oklch(0.60 0.17 150)",    // 2 victim/complainant — green
+  "oklch(0.55 0.15 300)",    // 3 case node — purple
+];
+const GROUP_SHAPE = ["circle", "circle", "circle", "diamond"];
 
 type PosMap = Record<string, { x: number; y: number; vx: number; vy: number; fx?: number | null; fy?: number | null }>;
+
+// ── Seed entity autocomplete ──────────────────────────────────────────────────
+function SeedSearch({
+  value,
+  onChange,
+  onSelect,
+  loading,
+  t,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  onSelect: (name: string) => void;
+  loading: boolean;
+  t: (s: string) => string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [searching, setSearching] = useState(false);
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [popular, setPopular] = useState<OffenderListItem[]>([]);
+  const [activeIdx, setActiveIdx] = useState(-1);
+  const debounce = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Pre-load top offenders shown before user types
+  useEffect(() => {
+    const p = new URLSearchParams({ limit: "8", min_offenses: "2" });
+    intelligence.listOffenders(p)
+      .then(r => setPopular(r.offenders.slice(0, 8)))
+      .catch(() => {});
+  }, []);
+
+  // Live search while typing
+  useEffect(() => {
+    if (value.trim().length < 2) {
+      setResults([]);
+      return;
+    }
+    if (debounce.current) clearTimeout(debounce.current);
+    debounce.current = setTimeout(() => {
+      setSearching(true);
+      intelligence.searchPersonsAndCases(value.trim(), 10)
+        .then(r => { setResults(r); setActiveIdx(-1); })
+        .catch(() => setResults([]))
+        .finally(() => setSearching(false));
+    }, 280);
+    return () => { if (debounce.current) clearTimeout(debounce.current); };
+  }, [value]);
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const showDropdown = open && (value.trim().length < 2 ? popular.length > 0 : results.length > 0 || searching);
+
+  function pick(name: string) {
+    onChange(name);
+    setOpen(false);
+    setResults([]);
+    onSelect(name);
+  }
+
+  function handleKey(e: React.KeyboardEvent) {
+    const items = value.trim().length < 2 ? popular.map(p => p.display_name) : results.map(r => r.label);
+    if (!showDropdown) return;
+    if (e.key === "ArrowDown") { e.preventDefault(); setActiveIdx(i => Math.min(i + 1, items.length - 1)); }
+    if (e.key === "ArrowUp")   { e.preventDefault(); setActiveIdx(i => Math.max(i - 1, 0)); }
+    if (e.key === "Enter") {
+      if (activeIdx >= 0 && items[activeIdx]) { pick(items[activeIdx]); }
+      else if (value.trim()) { setOpen(false); onSelect(value.trim()); }
+    }
+    if (e.key === "Escape") setOpen(false);
+  }
+
+  return (
+    <div ref={containerRef} className="relative">
+      <div className={`flex items-center gap-1 rounded-md border bg-card transition-all ${open ? "border-primary ring-1 ring-primary/20" : "border-input"}`}>
+        {searching
+          ? <Loader2 className="ml-2 h-3.5 w-3.5 text-muted-foreground animate-spin shrink-0" />
+          : <Search className="ml-2 h-3.5 w-3.5 text-muted-foreground shrink-0" />}
+        <input
+          ref={inputRef}
+          value={value}
+          onChange={e => { onChange(e.target.value); setOpen(true); }}
+          onFocus={() => setOpen(true)}
+          onKeyDown={handleKey}
+          placeholder={t("Enter name or ID…")}
+          className="w-44 bg-transparent px-1 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+        />
+        {value && (
+          <button onClick={() => { onChange(""); setResults([]); inputRef.current?.focus(); }}
+            className="mr-1 text-muted-foreground hover:text-foreground transition">
+            <span className="text-xs">✕</span>
+          </button>
+        )}
+      </div>
+
+      {showDropdown && (
+        <div className="absolute left-0 top-full z-[500] mt-1.5 w-72 max-h-72 overflow-y-auto rounded-xl border border-border bg-card shadow-2xl divide-y divide-border/50">
+          {/* Pre-type: show popular offenders */}
+          {value.trim().length < 2 && (
+            <>
+              <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted/30 flex items-center gap-1.5">
+                <TrendingUp className="h-3 w-3" /> {t("Top offenders")}
+              </div>
+              {popular.map(p => (
+                <button key={p.person_id} onClick={() => pick(p.display_name)}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 text-left transition">
+                  <div className="h-7 w-7 rounded-full bg-destructive/10 flex items-center justify-center shrink-0">
+                    <User className="h-3.5 w-3.5 text-destructive" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-semibold text-foreground truncate">{p.display_name}</div>
+                    <div className="text-[10px] text-muted-foreground truncate">
+                      {p.offense_count} cases · {p.top_crime_type || "—"}{p.district ? ` · ${p.district}` : ""}
+                    </div>
+                  </div>
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ${
+                    p.risk_label === "Critical" ? "bg-destructive/15 text-destructive" :
+                    p.risk_label === "High" ? "bg-orange-500/15 text-orange-600" :
+                    "bg-muted text-muted-foreground"}`}>
+                    {p.risk_label}
+                  </span>
+                </button>
+              ))}
+            </>
+          )}
+
+          {/* While typing: live search results */}
+          {value.trim().length >= 2 && searching && (
+            <div className="flex items-center justify-center gap-2 px-3 py-4 text-xs text-muted-foreground">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" /> Searching…
+            </div>
+          )}
+          {value.trim().length >= 2 && !searching && results.length === 0 && (
+            <div className="px-3 py-4 text-xs text-muted-foreground text-center">
+              No results for "<strong>{value}</strong>"
+            </div>
+          )}
+          {value.trim().length >= 2 && !searching && results.length > 0 && (() => {
+            const persons = results.filter(r => r.type === "person");
+            const cases   = results.filter(r => r.type === "case");
+            return (
+              <>
+                {persons.length > 0 && (
+                  <>
+                    <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted/30 flex items-center gap-1.5">
+                      <User className="h-3 w-3" /> {t("Persons")}
+                    </div>
+                    {persons.map((r, i) => (
+                      <button key={r.id} onClick={() => pick(r.label)}
+                        className={`w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 text-left transition ${activeIdx === i ? "bg-muted/50" : ""}`}>
+                        <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                          <User className="h-3.5 w-3.5 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-semibold text-foreground truncate">{r.label}</div>
+                          <div className="text-[10px] text-muted-foreground truncate">{r.sub}</div>
+                        </div>
+                        {(r.case_count ?? 0) > 0 && (
+                          <span className="text-[10px] font-bold bg-destructive/10 text-destructive px-1.5 py-0.5 rounded-full shrink-0">
+                            {r.case_count} cases
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </>
+                )}
+                {cases.length > 0 && (
+                  <>
+                    <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted/30 flex items-center gap-1.5">
+                      <Hash className="h-3 w-3" /> {t("Cases / FIRs")}
+                    </div>
+                    {cases.map((r, i) => (
+                      <button key={r.id} onClick={() => pick(r.label)}
+                        className={`w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 text-left transition ${activeIdx === persons.length + i ? "bg-muted/50" : ""}`}>
+                        <div className="h-7 w-7 rounded-full bg-orange-500/10 flex items-center justify-center shrink-0">
+                          <Hash className="h-3.5 w-3.5 text-orange-500" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-semibold font-mono text-foreground truncate">{r.label}</div>
+                          <div className="text-[10px] text-muted-foreground truncate">{r.sub}</div>
+                        </div>
+                      </button>
+                    ))}
+                  </>
+                )}
+              </>
+            );
+          })()}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function NetworkScreen() {
   const t = useT();
@@ -59,33 +268,74 @@ function NetworkScreen() {
   const fetchGraph = useCallback(async (seedName: string, queryDepth: number = depth) => {
     setGraphLoading(true);
     setGraphEmpty(false);
+    setPos({}); // clear old positions so new nodes animate in
     try {
       const res: any = await api.network({ entity_name: seedName, depth: queryDepth });
+
       if (!res?.nodes?.length) {
         setNODES([]);
         setEDGES([]);
         setGraphEmpty(true);
         return;
       }
-      // Map API nodes to our internal format
-      const mappedNodes = res.nodes.map((n: any, idx: number) => ({
-        id: String(n.id ?? idx),
-        x: 20 + (idx % 8) * 9 + Math.random() * 6,
-        y: 20 + Math.floor(idx / 8) * 14 + Math.random() * 6,
-        r: n.id === res.seed_id ? 22 : 8 + Math.min(n.degree ?? 1, 8),
-        group: n.entity_type === "person" ? (idx === 0 ? 0 : 1) : n.entity_type === "location" ? 2 : 3,
-        label: n.label ?? n.name ?? String(n.id),
-        role: n.id === res.seed_id ? "seed" : undefined,
-        caseIds: n.case_ids ?? [],
-      }));
-      const mappedEdges: [string,string][] = (res.edges ?? []).map((e: any) => [String(e.source), String(e.target)] as [string,string]);
+
+      const seedId = String(res.seed_id ?? res.root ?? "");
+
+      // Map API nodes — backend returns `kind` not `entity_type`
+      const mappedNodes = res.nodes.map((n: any, idx: number) => {
+        const nid = String(n.id ?? idx);
+        const isSeed = nid === seedId;
+        const kind = (n.kind || n.entity_type || "person").toLowerCase();
+        const isCase = kind === "case";
+        const role = n.role || (isSeed ? "seed" : undefined);
+
+        // Colour group:
+        //   0 = seed person (blue)
+        //   1 = co-accused person (orange)
+        //   2 = victim/complainant (green)
+        //   3 = case node (purple)
+        let group = 3;
+        if (isCase) {
+          group = 3;
+        } else if (isSeed) {
+          group = 0;
+        } else {
+          const r = (role || "").toLowerCase();
+          if (r.includes("accused")) group = 1;
+          else if (r.includes("victim") || r.includes("complainant")) group = 2;
+          else group = 1; // default co-involved = orange
+        }
+
+        // Spread nodes in a circle around center
+        const angle = (idx / Math.max(res.nodes.length - 1, 1)) * 2 * Math.PI;
+        const radius = isSeed ? 0 : isCase ? 18 : 28;
+        const cx = 50, cy = 50;
+
+        return {
+          id: nid,
+          x: isSeed ? cx : cx + radius * Math.cos(angle) + (Math.random() - 0.5) * 4,
+          y: isSeed ? cy : cy + radius * Math.sin(angle) + (Math.random() - 0.5) * 4,
+          r: isSeed ? 24 : isCase ? 7 : 10 + Math.min(n.degree ?? 1, 6),
+          group,
+          label: n.label ?? n.name ?? nid,
+          role: isSeed ? "seed" : role,
+          kind,
+          crime_type: n.crime_type,
+          caseIds: n.case_ids ?? [],
+        };
+      });
+
+      const mappedEdges: [string, string][] = (res.edges ?? []).map(
+        (e: any) => [String(e.source), String(e.target)] as [string, string]
+      );
+
       setNODES(mappedNodes);
       setEDGES(mappedEdges);
-      const newSeedId = String(res.seed_id ?? mappedNodes[0]?.id ?? "");
-      setSelected(newSeedId);
-      setSelectedSet(new Set(newSeedId ? [newSeedId] : []));
+      setSelected(seedId);
+      setSelectedSet(new Set(seedId ? [seedId] : []));
       setGraphEmpty(mappedNodes.length === 0);
-    } catch {
+    } catch (err) {
+      console.error("[network] fetchGraph error:", err);
       setNODES([]);
       setEDGES([]);
       setGraphEmpty(true);
@@ -595,12 +845,12 @@ function NetworkScreen() {
           <div className="flex flex-wrap items-center gap-2 border-b border-border bg-card px-5 py-3 text-foreground">
             <Control label={t("Seed entity")}>
               <div className="flex items-center gap-1">
-                <input
+                <SeedSearch
                   value={seedInput}
-                  onChange={(e) => setSeedInput(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter" && seedInput.trim()) fetchGraph(seedInput.trim()); }}
-                  placeholder={t("Enter name or ID…")}
-                  className="w-40 rounded-md border border-input bg-card px-2 py-1.5 text-sm text-foreground"
+                  onChange={setSeedInput}
+                  onSelect={(name) => fetchGraph(name)}
+                  loading={graphLoading}
+                  t={t}
                 />
                 <button
                   onClick={() => seedInput.trim() && fetchGraph(seedInput.trim())}
@@ -1008,34 +1258,90 @@ function NetworkScreen() {
             <h3 className="text-sm font-semibold text-foreground">{node.label}</h3>
           </div>
           <div className="p-4 space-y-4">
-            <div className="grid grid-cols-2 gap-2">
-              <Stat label={t("Degree")} value={String(EDGES.filter(([a,b]) => a === selected || b === selected).length)} />
-              <Stat label={t("Group")} value={`G-${(NODES.find(n => n.id === selected)?.group ?? 0) + 1}`} />
-              <Stat label={t("Type")} value={(NODES.find(n => n.id === selected) as any)?.role === "seed" ? t("Seed") : `${t("Depth")} 1`} />
-              <Stat label={t("Role")} value={(NODES.find(n => n.id === selected) as any)?.role === "seed" ? t("Hub") : t("Associate")} tone="red" />
-            </div>
+            {(() => {
+              const selNode = NODES.find(n => n.id === selected) as any;
+              const edgeCount = EDGES.filter(([a, b]) => a === selected || b === selected).length;
+              const isSeed = selNode?.role === "seed";
+              const kind = selNode?.kind || "person";
+              const isCase = kind === "case";
+              const roleLabel = selNode?.role
+                ? selNode.role.charAt(0).toUpperCase() + selNode.role.slice(1)
+                : isCase ? "FIR / Case" : "—";
+              const crimeType = selNode?.crime_type;
+              const groupLabel = ["Seed Person", "Accused", "Victim / Complainant", "Case / FIR"][selNode?.group ?? 0] || "—";
 
-            {((NODES.find(n => n.id === selected) as any)?.caseIds?.length ?? 0) > 0 && (
-              <div>
-                <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("Linked cases")}</div>
-                <div className="space-y-1.5">
-                  {((NODES.find(n => n.id === selected) as any)?.caseIds ?? []).slice(0, 5).map((cid: number) => (
-                    <button
-                      key={cid}
-                      onClick={() => setDrawerCaseId(cid)}
-                      className="flex w-full items-center justify-between rounded-md border border-border bg-muted/30 px-2.5 py-1.5 text-left text-sm hover:bg-muted"
-                    >
-                      <span className="font-mono text-foreground">#{cid}</span>
-                      <span className="text-[10px] text-primary hover:underline">{t("Open")} →</span>
+              return (
+                <>
+                  {/* Role badge */}
+                  <div className="flex items-center gap-2">
+                    <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${
+                      isSeed ? "bg-primary text-primary-foreground" :
+                      selNode?.group === 1 ? "bg-orange-500/15 text-orange-700 dark:text-orange-400" :
+                      selNode?.group === 2 ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400" :
+                      "bg-purple-500/15 text-purple-700 dark:text-purple-400"
+                    }`}>{groupLabel}</span>
+                    {isSeed && <span className="rounded-full bg-primary/10 text-primary px-2 py-0.5 text-[10px] font-bold">SEED</span>}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <Stat label={t("Connections")} value={String(edgeCount)} />
+                    <Stat label={t("Node type")} value={isCase ? "FIR/Case" : "Person"} />
+                    <Stat label={t("Role")} value={roleLabel} tone={selNode?.group === 1 ? "red" : undefined} />
+                    {crimeType && <Stat label={t("Crime type")} value={crimeType} />}
+                  </div>
+
+                  {/* Linked cases */}
+                  {(selNode?.caseIds?.length ?? 0) > 0 && (
+                    <div>
+                      <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("Linked cases")}</div>
+                      <div className="space-y-1.5">
+                        {(selNode?.caseIds ?? []).slice(0, 5).map((cid: number) => (
+                          <button key={cid} onClick={() => setDrawerCaseId(cid)}
+                            className="flex w-full items-center justify-between rounded-md border border-border bg-muted/30 px-2.5 py-1.5 text-left text-sm hover:bg-muted">
+                            <span className="font-mono text-foreground">#{cid}</span>
+                            <span className="text-[10px] text-primary hover:underline">{t("Open")} →</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Case node: open directly */}
+                  {isCase && selected.startsWith("case:") && (
+                    <button onClick={() => setDrawerCaseId(parseInt(selected.replace("case:", ""), 10))}
+                      className="w-full flex items-center justify-center gap-1.5 rounded-md bg-primary text-primary-foreground px-3 py-2 text-xs font-bold hover:bg-primary/90 transition">
+                      {t("Open case")} →
                     </button>
-                  ))}
-                </div>
-              </div>
-            )}
+                  )}
 
-            {((NODES.find(n => n.id === selected) as any)?.caseIds?.length ?? 0) === 0 && (
-              <p className="text-xs text-muted-foreground">{t("No linked cases found for this node.")}</p>
-            )}
+                  {(selNode?.caseIds?.length ?? 0) === 0 && !isCase && (
+                    <p className="text-xs text-muted-foreground">{t("No linked cases found for this node.")}</p>
+                  )}
+
+                  {/* Network summary */}
+                  {isSeed && NODES.length > 1 && (
+                    <div className="rounded-lg border border-border bg-muted/20 p-3 text-xs space-y-1">
+                      <div className="font-bold text-foreground mb-2">{t("Network summary")}</div>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>{t("Total nodes")}</span><span className="font-bold text-foreground">{NODES.length}</span>
+                      </div>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>{t("Accused")}</span>
+                        <span className="font-bold text-orange-600">{NODES.filter((n: any) => n.group === 1).length}</span>
+                      </div>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>{t("Victims")}</span>
+                        <span className="font-bold text-emerald-600">{NODES.filter((n: any) => n.group === 2).length}</span>
+                      </div>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>{t("Cases / FIRs")}</span>
+                        <span className="font-bold text-purple-600">{NODES.filter((n: any) => n.group === 3).length}</span>
+                      </div>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         </aside>
       </div>
@@ -1074,10 +1380,10 @@ function Stat({ label, value, tone }: { label: string; value: string; tone?: "re
 function Legend() {
   const t = useT();
   const items = [
-    { l: t("Person (C-01)"), c: GROUP_COLOR[0], s: "●" },
-    { l: t("Co-accused"), c: GROUP_COLOR[1], s: "■" },
-    { l: t("Location"), c: GROUP_COLOR[2], s: "◆" },
-    { l: t("Asset"), c: GROUP_COLOR[3], s: "▲" },
+    { l: t("Seed person"), c: GROUP_COLOR[0], s: "●" },
+    { l: t("Accused / co-accused"), c: GROUP_COLOR[1], s: "●" },
+    { l: t("Victim / complainant"), c: GROUP_COLOR[2], s: "●" },
+    { l: t("Case / FIR"), c: GROUP_COLOR[3], s: "◆" },
   ];
   return (
     <div className="hidden lg:flex items-center gap-3 text-[10px]">
