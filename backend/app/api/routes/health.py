@@ -14,7 +14,8 @@ log = get_logger()
 
 
 @router.get("/health")
-async def health() -> dict:    s = get_settings()
+async def health() -> dict:
+    s = get_settings()
     return {
         "status": "ok",
         "app": s.app_name,
