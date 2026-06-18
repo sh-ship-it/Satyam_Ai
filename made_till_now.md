@@ -2775,3 +2775,138 @@ Fixed by Fix 4 above (same root cause).
 
 #### Issue 7 — Conversations not visible across accounts
 Deferred — requires a new `conversations` DB table + backend endpoints. Out of scope for this session (frontend already has the `conversationStore.ts` + PDF export from a prior session).
+
+
+---
+
+### [2026-06-18] — Trends & Patterns Screen: Full UI Overhaul (Dynamic, Rich, Animated)
+
+#### Summary
+Completely rebuilt `frontend/src/routes/trends.tsx` — the Trends & Patterns screen (PS3 · MO Clustering). Everything was made visually rich and fully dynamic (all data from API, nothing hardcoded). TypeScript: 0 errors throughout.
+
+---
+
+#### Changes — `frontend/src/routes/trends.tsx`
+
+**New helper hooks & utilities:**
+- `useCountUp(target, duration)` — count-up animation hook that eases a number from 0 → target using a cubic ease-out curve. Used in KPI cards.
+- `useDebounce<T>(value, delay)` — debounces filter inputs (400ms) so API calls only fire when the user stops typing — not on every keystroke.
+
+**New `KpiCard` component:**
+- 4 KPI summary cards shown at the top of the Overview tab (computed live from `series` data):
+  - **Total Incidents** — animated count-up, primary colour
+  - **Crime Types** — distinct count + top crime type as subtitle, destructive colour
+  - **Top District** — district name (Kannada-translated) + incident count, warning colour
+  - **QoQ Trend** — `+X%` / `-X%` with directional colour (destructive / success / muted) + Rising/Falling/Stable label
+- Each card has an icon, coloured icon background, and animated number.
+
+**New `DominantCallout` component:**
+- Appears automatically when any single crime type accounts for ≥30% of all incidents in the current view.
+- Warning-coloured banner with `AlertTriangle` icon: "Dominant Pattern Detected — `<CrimeType>` accounts for X% of all incidents in this view."
+- Fully computed from live `series` data — no hardcoding.
+
+**New `AnimatedBars` component (Top Crime Types):**
+- Replaces the old plain horizontal bars.
+- Rank badge (numbered circle): #1 = destructive red, #2 = orange, #3 = amber, #4+ = muted.
+- Bar colours rank-graded via `BAR_COLORS` array (red → orange → amber → blue gradient series).
+- Share % label (percentage of total) shown next to raw count.
+- Bars animate from 0% → real width using `setTimeout(50ms)` + inline `transition` style — guarantees a full repaint at 0 before growing so the animation always fires.
+- Staggered delays: `idx * 60ms` per bar.
+- `useEffect` resets and re-animates whenever `topByType` data changes.
+
+**Top Districts improvements:**
+- #1 district gets a 🥇 trophy badge + `bg-warning/8` background highlight + bold warning text.
+- All others use `bg-primary/60` bars.
+- Bars also animate (via the same `style.width` + `transitionDelay` pattern).
+
+**`DeltaCard` fix:**
+- `trend === "down"` colour: `text-emerald-500` → `text-success` (on-brand token).
+- Background: `bg-success/10 border-success/20` when down, `bg-destructive/10 border-destructive/20` when up.
+
+**Tab bar badges:**
+- Time Series, MO Clusters, and Seasonal tabs each show a count badge (period count / cluster count / peak count) derived from live API data.
+- Badge uses `bg-primary text-primary-foreground` when active tab, `bg-muted text-muted-foreground` otherwise.
+
+**Filter bar improvements:**
+- Crime type and district inputs are now debounced (400ms) — separate `crimeTypeInput` / `districtInput` display state + `useDebounce` resolved values for API calls.
+- Clear (✕) button appears inside each filter input when it has a value.
+- Granularity selector buttons made slightly larger (`px-2.5 py-1`) with shadow on active.
+
+**`ClusterRow` improvement:**
+- Open row now has `bg-primary/5` highlight instead of no background.
+- Expand arrow smoothly rotates 90° when open via `transition-transform` + conditional `rotate-90`.
+
+**Seasonal tab improvements:**
+- Peaks sorted highest-lift-first.
+- "Highest Seasonal Spike" alert callout (destructive colour) shown at top when any peak has lift ≥ 15%.
+- Lift % badge gets a colored background: `bg-destructive/10` / `bg-warning/10` / `bg-primary/10` per severity.
+
+**Loading skeleton:**
+- 4-column skeleton grid (matches KPI layout) while loading, not just 2 columns.
+
+---
+
+#### Changes — `frontend/src/routes/trends.tsx` (TrendChart — full replacement)
+
+**Replaced the old bar chart with a proper SVG area + line chart per `SATYAM_INCIDENT_TREND_REDESIGN.md`:**
+
+| Old behaviour | New behaviour |
+|---|---|
+| `flex-1` bars with `height: %` — degenerate single-period block | **Spotlight mode** for 1 period: centred count-up number + "Peak period" pill + animated progress bar |
+| Flat bars, no trend readability | Smooth SVG `<polygon>` area fill + `<polyline>` line with `stroke-dashoffset` draw animation |
+| No peak emphasis | Peak dot: red, pulsing ring (`@keyframes tc-peak`), inline "▲ N" label above |
+| No y-axis | 3 dashed gridlines (0 / 50% / 100%) with value labels |
+| No tooltip | Hover capture layer across full chart → floating tooltip (period + incident count) |
+| Off-brand colours | Uses `var(--main)` for area/line, `var(--destructive)` for peak |
+
+**CSS animations injected via `<style>{TREND_STYLE}`:**
+- `.tc-fade` — fade + slide-up (KPI number, area)
+- `.tc-grow` — scale-X from left (spotlight proportion bar)
+- `.tc-line` — `stroke-dasharray:1; stroke-dashoffset` draw-on animation (1.1s)
+- `.tc-dot` — scale-in pop for each data point dot
+- `.tc-peak` — infinite pulsing box-shadow ring on peak dot
+- All animations respect `@media (prefers-reduced-motion: reduce)`
+
+**Component signature changed:** `TrendChart({ series })` → `TrendChart({ series, t })` — takes `t` for i18n.
+**Call site updated:** `<TrendChart series={series} />` → `<TrendChart series={series} t={t} />`
+
+---
+
+#### Changes — `frontend/src/lib/i18n.tsx`
+
+New Kannada translation keys added:
+- `"No trend data"` → `"ಯಾವುದೇ ಪ್ರವೃತ್ತಿ ಡೇಟಾ ಇಲ್ಲ"`
+- `"Peak period"` → `"ಶಿಖರ ಅವಧಿ"`
+- `"max"` → `"ಗರಿಷ್ಠ"`
+- `"Total Incidents"` → `"ಒಟ್ಟು ಘಟನೆಗಳು"`
+- `"periods"` → `"ಅವಧಿಗಳು"`
+- `"incidents"` → `"ಘಟನೆಗಳು"`
+- `"by incident count"` → `"ಘಟನೆ ಎಣಿಕೆಯ ಪ್ರಕಾರ"`
+- `"Rising"` → `"ಏರಿಕೆ"`
+- `"Falling"` → `"ಇಳಿಕೆ"`
+- `"Stable"` → `"ಸ್ಥಿರ"`
+- `"Dominant Pattern Detected"` → `"ಪ್ರಧಾನ ಮಾದರಿ ಪತ್ತೆಯಾಗಿದೆ"`
+- `"accounts for"` → `"ಕಾರಣವಾಗಿದೆ"`
+- `"of all incidents in this view."` → `"ಈ ದೃಶ್ಯದ ಎಲ್ಲ ಘಟನೆಗಳ."`
+- `"Highest Seasonal Spike"` → `"ಅತ್ಯಧಿಕ ಋತುಮಾನ ಏರಿಕೆ"`
+- `"Total reported incidents per period. Peak bar is highlighted."` → Kannada
+- `"Clear all"` → `"ಎಲ್ಲ ತೆರವು"` (already present, confirmed)
+
+---
+
+#### Bar Animation Bug Fix (two rounds)
+
+**Root cause of invisible bars:**
+Tailwind's `transition-all` class + `transitionDelay` in the `style` prop is unreliable for entry animations. When React mounts an element with `height: 50%` (or `width: 50%`) inline already set, the browser paints at the final value immediately — the CSS transition engine never sees a `0 → 50` change, so no animation fires.
+
+**Fix applied (both `TrendChart` and `AnimatedBars`):**
+1. `setTimeout(..., 50ms)` instead of `requestAnimationFrame` — guarantees the browser fully paints the "zero" frame before `setMounted(true)` triggers the grow.
+2. Inline `transition` string (`transition: 'height 700ms ease-out Xms'`) instead of Tailwind classes — the browser's style engine applies it directly so delay + duration are guaranteed active when the value changes.
+3. For the area/line SVG chart: replaced the bar approach entirely with `stroke-dashoffset` draw animation (CSS keyframe), which is immune to this problem.
+
+---
+
+#### Verification
+- `npx tsc --noEmit` — 0 errors after every change.
+- All data from API (`intelligence.getTrends`, `intelligence.getMOClusters`, `intelligence.getSeasonal`).
+- Nothing hardcoded — all KPI numbers, bar widths, district names, cluster counts, seasonal peaks computed from live `series` / `clusters` / `peaks` state.
