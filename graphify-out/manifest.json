@@ -30,8 +30,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/auth.py": {
-    "mtime": 1781580450.4268944,
-    "ast_hash": "9e0755678de523b5e56bcb181c7731a2",
+    "mtime": 1781756549.8204086,
+    "ast_hash": "7b6a774e862040362a72445e9586b5eb",
     "semantic_hash": ""
   },
   "backend/app/api/routes/cases.py": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "backend/app/core/security.py": {
-    "mtime": 1781520885.3703668,
-    "ast_hash": "efccb691b0ca97acee1e370b953f646c",
+    "mtime": 1781756495.900036,
+    "ast_hash": "26c354969931776305284c8172839cb4",
     "semantic_hash": ""
   },
   "backend/app/db/__init__.py": {
@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "backend/app/db/models.py": {
-    "mtime": 1781642538.7247863,
-    "ast_hash": "5352be007a0d8fc6675238e392276269",
+    "mtime": 1781756509.2538364,
+    "ast_hash": "f7b629eb822ffb62a4b8813b3eae5757",
     "semantic_hash": ""
   },
   "backend/app/db/rls.py": {
@@ -250,8 +250,8 @@
     "semantic_hash": ""
   },
   "backend/app/schemas/auth.py": {
-    "mtime": 1781580432.2925584,
-    "ast_hash": "8dab4a8e155d30c962b8ae428c511ab3",
+    "mtime": 1781756561.5805862,
+    "ast_hash": "df8a1ec90e4f2faa0a722fe6a8a0dce7",
     "semantic_hash": ""
   },
   "backend/app/schemas/case.py": {
@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ProfileMenu.tsx": {
-    "mtime": 1781580943.2572505,
-    "ast_hash": "b9df6f6a53f7a1bd035a86cdf4235a59",
+    "mtime": 1781756061.0102415,
+    "ast_hash": "464f16d96c9dab4cb0ad7d8fd26828ca",
     "semantic_hash": ""
   },
   "frontend/src/components/SettingsDialog.tsx": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/client.ts": {
-    "mtime": 1781673197.127015,
-    "ast_hash": "7db9b61c48406d5a8a71dcd192a2da1e",
+    "mtime": 1781756586.9384644,
+    "ast_hash": "861aa741bd2430ba7de208dfd09a4a66",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/example.functions.ts": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781754271.630079,
-    "ast_hash": "dc710c8ab49a038fe0e28ea35ab5a52c",
+    "mtime": 1781756694.7360053,
+    "ast_hash": "227794b93d4b87186379f5718ed45a94",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -865,8 +865,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/login.tsx": {
-    "mtime": 1781754259.012566,
-    "ast_hash": "36ebad1f7e65b3ad3f654dfa855b58d2",
+    "mtime": 1781756651.461064,
+    "ast_hash": "db0b4645ad64c5e204cd74d292fd40a4",
     "semantic_hash": ""
   },
   "backend/app/models/api/ollama_cloud.py": {
@@ -975,8 +975,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CreateAccountDialog.tsx": {
-    "mtime": 1781754241.4951913,
-    "ast_hash": "856b509085fdd7e88aa5188940a020ec",
+    "mtime": 1781756676.9928403,
+    "ast_hash": "c0aef667f40ece416c86361c1e77e0f8",
     "semantic_hash": ""
   },
   "backend/app/api/routes/voice.py": {
@@ -1157,6 +1157,11 @@
   "SATYAM_FIX_VERIFICATION_AND_GAPS.md": {
     "mtime": 1781725801.9151275,
     "ast_hash": "1934c78df75b3aca9544a06447898d30",
+    "semantic_hash": ""
+  },
+  "backend/migrations/003_users_extend.sql": {
+    "mtime": 1781756573.8782127,
+    "ast_hash": "5f325e855369187bd9dd54c6b1a9689a",
     "semantic_hash": ""
   }
 }
