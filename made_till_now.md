@@ -2433,3 +2433,148 @@ with:
 - §12 API reference updated with `/api/offenders`, `/financial/money-trail`, `/health/data`, all intelligence endpoints with clearance levels
 - §16 (new) — bug fixes table listing all D1–D9 fixes with descriptions
 - Appendix file tree updated with all new files
+
+
+---
+
+### [2026-06-18] — Login Rank Dropdown Grouped by Access Tier
+
+#### Summary
+Grouped the police-rank dropdown on the login page into 3 optgroup sections using native `<optgroup>` so judges can instantly see which ranks grant which access level.
+
+#### Changes
+
+**`frontend/src/components/CreateAccountDialog.tsx`**
+- Added `ROLE_BY_VALUE` lookup map (not exported) immediately after `ROLE_OPTIONS` closing `];`
+- Exported new `ROLE_GROUPS` array grouping ranks into 3 tiers:
+  - `"Highest access"` — DGP, IGP, DIG, SP (clearance L4)
+  - `"Medium access"` — DySP, CI/PI (clearance L3)
+  - `"Low access"` — PSI/SI, ASI, HC, PC (clearance L1–L2)
+- `ROLE_OPTIONS` flat array left completely untouched (Create Account dialog still works as before)
+
+**`frontend/src/routes/login.tsx`**
+- Import changed: `ROLE_OPTIONS` → `ROLE_GROUPS`
+- Flat `{ROLE_OPTIONS.map(r => <option>)}` replaced with two-level map: `ROLE_GROUPS.map(group → <optgroup label={t(group.label)}> group.roles.map(rank → <option>)`
+- Section headers are non-selectable; only rank options are selectable
+- Submitted value is unchanged (e.g. `"DGP"`) — no auth impact
+
+**`frontend/src/lib/i18n.tsx`**
+- Added 3 Kannada translations: `"Highest access"`, `"Medium access"`, `"Low access"` → `"ಅತ್ಯುನ್ನತ ಪ್ರವೇಶ"`, `"ಮಧ್ಯಮ ಪ್ರವೇಶ"`, `"ಕಡಿಮೆ ಪ್ರವೇಶ"`
+
+---
+
+### [2026-06-18] — Dynamic Profile Menu (ProfileMenu.tsx + client.ts)
+
+#### Summary
+Replaced all hardcoded demo accounts (R. Kumar, P. Shankar, Meera N.) in the ProfileMenu with live data from the JWT/session. Sign out now actually clears the session and redirects to `/login`. "Add another account" now opens the CreateAccountDialog.
+
+#### Changes
+
+**`frontend/src/lib/api/client.ts`**
+- Added `USER_KEY = "satyam.user"` storage constant
+- Added `getCachedUser(): SessionUser | null` — reads from `localStorage["satyam.user"]`
+- Added `setCachedUser(user)` — writes/clears the same key
+- `api.login()` now calls `setCachedUser(out.user)` after successful token response
+- `api.register()` now calls `setCachedUser(out.user)` after successful registration
+- `api.logout()` now calls both `setAuthToken(null)` and `setCachedUser(null)` — full session clear
+
+**`frontend/src/components/ProfileMenu.tsx`** — complete rewrite:
+- Removed `SEED_ACCOUNTS` (hardcoded R. Kumar / P. Shankar / Meera N.)
+- Initial accounts built from `getCachedUser()` on first render; `api.me()` re-fetches on mount and keeps the active account in sync with the live JWT claims
+- `initialsFrom(name)` — derives 2-letter initials from any name
+- `userToAccount(SessionUser, idx)` — converts a live `SessionUser` to the internal `Account` shape
+- Account list persisted to `localStorage["satyam.profile.accounts"]`; active id to `["satyam.profile.activeId"]`
+- Display name, rank, and workspace shown in the trigger button and header card always come from `me` (live) for the active account
+- Badge generated from `me.id` — `KSP-{id.slice(-6).padStart(6,'0')}` instead of hardcoded "KSP-08842"
+- **"Add another account"** → opens `CreateAccountDialog`; on success re-fetches `api.me()` and pushes the new account into the list
+- **"Sign out"** → calls `api.logout()` (clears token + cached user + localStorage), then `navigate({ to: "/login" })` — was previously a no-op
+- **"Profile & settings"** → still opens SettingsDialog (unchanged)
+- **"Manage accounts"** → still opens AccountManager (unchanged)
+- Photo update persisted to the account object in localStorage
+
+---
+
+### [2026-06-18] — Dynamic Login System with Real DB Persistence
+
+#### Summary
+The login/register flow now fully round-trips to the database. New accounts are saved to whichever DB `DATABASE_URL` points to (Neon cloud or local PG17). Login verifies bcrypt passwords. Users who don't have an account cannot sign in — they must create one first. Role is captured only at registration, not at login.
+
+#### Backend changes
+
+**`backend/app/core/security.py`**
+- Added `hash_password(plain)` — bcrypt with 12 rounds; falls back to a `__plain__…` sentinel if the `bcrypt` package is not installed
+- Added `verify_password(plain, hashed)` — `bcrypt.checkpw()` or plain-sentinel comparison
+
+**`backend/app/db/models.py`**
+- Added 3 new columns to the `User` model:
+  - `full_name TEXT` — officer display name
+  - `email TEXT` — optional e-mail (indexed)
+  - `photo_b64 TEXT` — base-64 profile photo
+
+**`backend/migrations/003_users_extend.sql`** (new)
+- `ALTER TABLE users ADD COLUMN IF NOT EXISTS full_name / email / photo_b64` — idempotent, applied to both Neon and local DB
+
+**`backend/app/schemas/auth.py`**
+- Added `password: str = ""` to `LoginRequest` so the frontend can send a password on sign-in
+
+**`backend/app/api/routes/auth.py`** — complete rewrite:
+- `POST /login`:
+  - Looks up user by username (derived from email before `@`)
+  - If found: verifies bcrypt password (`verify_password()`); wrong password → 401; in dev/demo mode, empty password is accepted for convenience
+  - If not found: **HTTP 404** `"Account not found. Please create an account first."` — **no auto-create on login**
+  - Rank always comes from `db_user.assigned_rank` (set at registration), never from the request body
+- `POST /register`:
+  - Derives `username` from email prefix or name
+  - Returns **HTTP 409** if username already taken with clear message
+  - Hashes password with bcrypt → stores in DB
+  - Creates `Officer` row if one doesn't exist for that rank
+  - Stores `full_name`, `email`, `photo_b64` in the `User` row
+  - Works on both Neon cloud and local PG17 via SQLAlchemy
+- `GET /me`: unchanged
+
+#### Frontend changes
+
+**`frontend/src/lib/api/client.ts`**
+- `api.login(username, password)` — removed `rank` parameter (rank is read from DB now)
+- Body sent: `{ username, password }` only
+
+**`frontend/src/routes/login.tsx`** — redesigned sign-in form:
+- Removed `defaultValue="r.kumar@ksp.gov.in"` — email field is now blank with placeholder `your.name@ksp.gov.in`
+- Removed the **Role** field entirely — role is baked into the account at registration, not re-entered at login
+- Removed `ROLE_GROUPS` import (no longer needed on the sign-in page)
+- Loading spinner on the Sign In button while request is in flight
+- **Error messages by HTTP status:**
+  - 404 → "No account found for this email. Please create an account first." with an inline **Create account** link
+  - 401 → "Invalid email or password. Please try again."
+  - Backend unreachable → falls through to console (offline demo mode)
+- Empty email → client-side "Please enter your email address." (no round-trip)
+
+**`frontend/src/components/CreateAccountDialog.tsx`**
+- `role` initial state changed from `"CI"` → `""` (no pre-selection)
+- Role `<select>` first option: `<option value="" disabled>Select your rank / role</option>`
+- Options now rendered as grouped `<optgroup>` sections matching the 3 access tiers
+- `submit()` validation requires `role` to be non-empty before calling API
+- `disabled` condition on Create Account button includes `!role`
+- Catches specific backend errors: "already taken" → clear message; "Password required" → clear message
+
+**`frontend/src/lib/i18n.tsx`**
+- Added: `"Please enter your email address."`, `"No account found for this email. Please create an account first."`, `"your.name@ksp.gov.in"`, `"Select your rank / role"`, `"Invalid email or password. Please try again."`, `"Signing in…"`, `"This username is already taken."`, `"Password is required."`, `"Please fill in all required fields."`
+
+#### End-to-end flow
+
+```
+New user:
+  1. Opens /login → clicks "Create account"
+  2. Fills name / email / password / rank (grouped select, no default)
+  3. POST /register → bcrypt hash + User row + Officer row saved to DB
+  4. JWT issued → cached in localStorage → redirected to /console
+
+Returning user:
+  1. Opens /login → types email + password (no role field)
+  2. POST /login → username looked up in DB → bcrypt verify → JWT issued
+  3. If user not in DB → 404 error + "Create account" link shown inline
+  4. Redirected to /console
+
+Sign out:
+  api.logout() → clears localStorage token + user → navigate to /login
+```
