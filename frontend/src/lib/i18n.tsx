@@ -253,6 +253,7 @@ const DICT: Record<string, string> = {
   "Full name": "ಪೂರ್ಣ ಹೆಸರು",
   "Email address": "ಇಮೇಲ್ ವಿಳಾಸ",
   "Select police station (optional)": "ಪೊಲೀಸ್ ಠಾಣೆ ಆಯ್ಕೆಮಾಡಿ (ಐಚ್ಛಿಕ)",
+  "Search police station…": "ಪೊಲೀಸ್ ಠಾಣೆ ಹುಡುಕಿ…",
   "Could not create the account. Try again.": "ಖಾತೆ ರಚಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ.",
   "DGP — Director General (state)": "DGP — ಪೊಲೀಸ್ ಮಹಾನಿರ್ದೇಶಕರು (ರಾಜ್ಯ)",
   "IGP — Inspector General (state)": "IGP — ಪೊಲೀಸ್ ಮಹಾನಿರೀಕ್ಷಕರು (ರಾಜ್ಯ)",

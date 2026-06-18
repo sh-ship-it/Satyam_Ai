@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Camera, Upload, X, RefreshCw } from "lucide-react";
+import { Camera, Upload, X, RefreshCw, ChevronDown } from "lucide-react";
 import { useT } from "@/lib/i18n";
 import { api } from "@/lib/api/client";
 
@@ -39,6 +39,7 @@ export function CreateAccountDialog({
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const [stationId, setStationId] = useState<string>("");      // "" = none
+  const [stationSearch, setStationSearch] = useState<string>("");
   const [stations, setStations] = useState<{ station_id: number; station_name: string; district: string }[]>([]);
   const [photo, setPhoto] = useState<string | null>(null);
   const [camOn, setCamOn] = useState(false);
@@ -84,12 +85,48 @@ export function CreateAccountDialog({
     }
   }, [open]);
 
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   useEffect(() => {
     if (!open) return;
     api.stations().then(setStations).catch(() => setStations([]));
   }, [open]);
 
-  const stationsByDistrict = stations.reduce<Record<string, typeof stations>>((acc, s) => {
+  // Revert search text to match selected station when dropdown closes
+  useEffect(() => {
+    if (!isOpen) {
+      const selected = stations.find((s) => String(s.station_id) === stationId);
+      if (selected) {
+        setStationSearch(selected.station_name);
+      } else {
+        setStationSearch("");
+      }
+    }
+  }, [isOpen, stationId, stations]);
+
+  const filteredStations = stations.filter((s) => {
+    if (!stationSearch) return true;
+    const selected = stations.find((st) => String(st.station_id) === stationId);
+    if (selected && stationSearch === selected.station_name) return true;
+    return (
+      s.station_name.toLowerCase().includes(stationSearch.toLowerCase()) ||
+      s.district.toLowerCase().includes(stationSearch.toLowerCase())
+    );
+  });
+
+  const stationsByDistrict = filteredStations.reduce<Record<string, typeof stations>>((acc, s) => {
     (acc[s.district] ??= []).push(s); return acc;
   }, {});
 
@@ -229,22 +266,96 @@ export function CreateAccountDialog({
               </optgroup>
             ))}
           </select>
-          <select
-            value={stationId}
-            onChange={(e) => setStationId(e.target.value)}
-            className="h-10 w-full rounded-[5px] border-2 border-foreground bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring nb-shadow-sm"
-          >
-            <option value="">{t("Select police station (optional)")}</option>
-            {Object.keys(stationsByDistrict).sort().map((district) => (
-              <optgroup key={district} label={district}>
-                {stationsByDistrict[district].map((s) => (
-                  <option key={s.station_id} value={String(s.station_id)}>
-                    {s.station_name}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
+          <div ref={containerRef} className="relative">
+            <div className="relative flex items-center">
+              <input
+                type="text"
+                value={stationSearch}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setStationSearch(val);
+                  setIsOpen(true);
+                  if (!val) {
+                    setStationId("");
+                  }
+                }}
+                onFocus={(e) => {
+                  setIsOpen(true);
+                  e.target.select();
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    setIsOpen(false);
+                  } else if (e.key === "ArrowDown" && !isOpen) {
+                    setIsOpen(true);
+                  }
+                }}
+                placeholder={t("Search police station…")}
+                className="h-10 w-full rounded-[5px] border-2 border-foreground bg-background pl-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-ring nb-shadow-sm"
+              />
+              <div className="absolute right-3 flex items-center gap-1.5">
+                {stationId ? (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setStationId("");
+                      setStationSearch("");
+                    }}
+                    className="rounded-full p-0.5 hover:bg-muted text-foreground/50 hover:text-foreground"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                ) : null}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsOpen(!isOpen);
+                  }}
+                  className="rounded-full p-0.5 hover:bg-muted text-foreground/50 hover:text-foreground"
+                >
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            {isOpen && (
+              <div className="absolute left-0 right-0 top-full z-50 mt-1 max-h-60 overflow-y-auto rounded-[5px] border-2 border-foreground bg-background py-1 nb-shadow-sm">
+                {Object.keys(stationsByDistrict).length === 0 ? (
+                  <div className="px-3 py-2 text-sm text-muted-foreground">
+                    {t("No entries match your search.")}
+                  </div>
+                ) : (
+                  Object.keys(stationsByDistrict).sort().map((district) => (
+                    <div key={district}>
+                      <div className="px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-muted-foreground bg-secondary-background border-y border-foreground/10 first:border-t-0 select-none">
+                        {district}
+                      </div>
+                      {stationsByDistrict[district].map((s) => {
+                        const isSelected = String(s.station_id) === stationId;
+                        return (
+                          <div
+                            key={s.station_id}
+                            onClick={() => {
+                              setStationId(String(s.station_id));
+                              setStationSearch(s.station_name);
+                              setIsOpen(false);
+                            }}
+                            className={`cursor-pointer px-3 py-2 text-sm transition-colors font-medium hover:bg-primary hover:text-primary-foreground ${
+                              isSelected ? "bg-primary/20 font-bold" : "text-foreground"
+                            }`}
+                          >
+                            {s.station_name}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {err && <p className="mt-3 text-xs font-medium text-destructive">{err}</p>}
