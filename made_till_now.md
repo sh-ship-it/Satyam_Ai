@@ -2647,3 +2647,131 @@ Enhanced the Text-to-Speech (TTS) audio pipeline to strip formatting characters 
 - Subscribed to the `satyam:ai-state` custom event to track the active playback status (`speaking` vs `done`).
 - Added a pulsing green `🔊 Speaking…` badge in the chat console header during TTS audio playback.
 
+
+
+---
+
+### [2026-06-18] — Screens Overhaul & Cross-Cutting Fixes (SATYAM_SCREENS_OVERHAUL_AND_FIXES.md)
+
+#### Summary
+Applied all issues from the screens overhaul spec. 6 issues fixed, 1 already done. TypeScript: 0 errors.
+
+---
+
+#### Fix 4 — Search 404 (unblocked Issues 1 & 4)
+
+**File:** `frontend/src/lib/api/intelligence.ts`
+
+- `searchPersonsAndCases` path: `/api/cases/search` → `/cases/search`
+- Root cause: the `cases` router is mounted at `/cases` (not `/api/cases`) in `main.py`. Every autocomplete keystroke on the Network seed search and Reports search was returning 404.
+- This single-character fix unblocked both the Network seed autocomplete and the Reports case search.
+
+---
+
+#### Issue 1 — Forecast "Network" button routes to real criminal rings (not chat)
+
+**Files:** `frontend/src/routes/forecast.tsx`, `frontend/src/routes/network.tsx`
+
+**Problem:** The "Network" button on alert cards was calling `onSendToChat("Show network …")`, which sent the district+crime string to the chat lane. The LLM replied "I cannot generate a network graph for a text query" — a dead end.
+
+**Fix — `forecast.tsx`:**
+- Added `onOpenNetwork: (district: string, crimeType: string) => void` prop to `AlertCard`
+- "Network" button `onClick` changed from `onSendToChat(...)` to `onOpenNetwork(a.district, a.crime_type)`
+- Added `handleOpenNetwork(district, crimeType)` handler in `ForecastScreen`:
+  - Writes `{ district, crime_type, ts }` to `sessionStorage["satyam:network-context"]`
+  - Navigates to `/network`
+- "Ask AI" button preserved and still uses `handleSendToChat`
+
+**Fix — `network.tsx`:**
+- Added `ringCtx` state: `useState<{ district?: string; crime_type?: string } | null>(null)`
+- Added mount-time `useEffect` that reads and removes `satyam:network-context` from sessionStorage, sets `ringCtx`, and switches `linkMode` to `"rings"` (existing Rings tab)
+- `<RingsPanel />` call updated to pass `crimeType={ringCtx?.crime_type} district={ringCtx?.district}`
+- The existing `RingsPanel` already calls `intelligence.getNetworkRings(12, crimeType, district)` — no new component built
+
+**Result:** Clicking "Network" on any forecast alert navigates to the Network screen with the Rings tab active, showing criminal rings detected for that alert's district/crime type (or the clean "No rings detected" state). Previously-dormant `/api/network/rings` endpoint is now wired to a user action.
+
+---
+
+#### Issue 2 — Live model-inference visualization on Forecast screen
+
+**Files:** `frontend/src/components/ModelInferenceTheater.tsx` (new), `frontend/src/routes/forecast.tsx`
+
+**Problem:** The Forecast screen showed only final result cards — no visible evidence that a model was running. Judges see a static list.
+
+**New component `ModelInferenceTheater.tsx`:**
+- Animated 4-stage pipeline stepper: **Ingest FIR signals → Engineering features → Running risk model → Projecting risk surface**
+- Each stage shows a CheckCircle when done, pulsing icon when active, dimmed when pending
+- Transitions on 420ms intervals while `loading = true`, then settles all as done
+- PAI hit rate badge shown in the header (from `backtest.hit_rate_top_10_percent_cells`)
+- Live indicator: pulsing green dot + `as of <date>`
+- Risk surface heat grid: 48 cells sorted by `risk_score`, each cell coloured `rgba(239,68,68, intensity)`, pop-in animation with staggered `transitionDelay: ${i * 12}ms`
+- Gradient legend: Low → High
+
+**Mounted in `forecast.tsx`:** above the alerts section inside the scroll container, uses the existing `cells`, `backtest`, `loading`, `alertsAsOf` state — no new API calls.
+
+---
+
+#### Issue 3 — Trends & Patterns overhaul
+
+**File:** `frontend/src/routes/trends.tsx`
+
+**`TrendChart` — replaced:**
+- Old: basic flat bars, h=20, no labels
+- New: gradient `from-primary/60 to-primary` animated bars (h=56), `transitionDelay: ${i * 18}ms` for staggered entry, hover-reveal count label above each bar, period axis labels below
+
+**New `CrimeHeatmap` component:**
+- Crime type × period intensity grid using indigo colour scale `rgba(99,102,241, intensity)`
+- Up to 8 crime types (rows) × all periods (columns) with `-rotate-45` column headers
+- Mounted at the top of the **Overview** tab: "Crime × Period intensity" section header + `<CrimeHeatmap series={series} />`
+
+---
+
+#### Issue 4 — Reports search not loading names
+Fixed by Fix 4 above (same root cause).
+
+---
+
+#### Issue 5 — Karnataka Crime Intelligence Brief: richer doc
+
+**File:** `frontend/src/routes/reports.tsx`
+
+**New data loaded on mount (alongside stations):**
+- `intelligence.listOffenders({ limit: 8, min_offenses: 2 })` → `topOffenders`
+- `intelligence.getTrends({ granularity: "quarter" })` → `trendDeltas`
+
+**Two new DocSections inserted between Station Distribution and Selected Items:**
+
+| Old # | New # | Title |
+|-------|-------|-------|
+| 3 | → 5 | Selected Items |
+| 4 | → 6 | Compliance Notice |
+| (new) | 3 | Crime Trend Signal |
+| (new) | 4 | Notable Repeat Offenders |
+
+- **§3 Crime Trend Signal:** Two pill cards showing QoQ and YoY % change. Green when negative (crime falling), red when positive (crime rising). `—` when no data.
+- **§4 Notable Repeat Offenders:** Live table — display_name, offense_count, top_crime_type, district, risk_label badge (Critical/High/muted). Loaded from real `GET /api/offenders` endpoint.
+
+**Signature block** added before citations:
+- Two signature lines: "Prepared by: {officerName}" and "Reviewed / Authorized"
+- Confidential footer: "CONFIDENTIAL · KARNATAKA STATE POLICE · SYNTHETIC DATA ONLY"
+
+---
+
+#### Issue 6 — Reports: working upload panel
+
+**File:** `frontend/src/routes/reports.tsx`
+
+**Type extension:**
+- `ItemType` union extended: added `"attachment"`
+- `ItemIcon` configs: added `attachment: { icon: Upload, bg: "bg-violet-500/10 text-violet-600" }`
+
+**New `UploadPanel` component** (added before `Reports` function):
+- **Source 1 — Device upload:** File picker button (`border-dashed` upload box). Accepts `.pdf,.png,.jpg,.jpeg,.csv,.txt,.docx`. Reads file as DataURL via `FileReader`, creates an `attachment` cart item with filename + size/mime as meta.
+- **Source 2 — Dataset import:** Collapsible panel with a search input. Debounced 250ms → calls `intelligence.searchPersonsAndCases(q, 12)`, filters to `type === "case"` results, renders each as a clickable row that adds a `case` item to the cart.
+
+**Mounted** in the left panel sidebar below the existing `AddItemBar` search, separated by a border.
+
+---
+
+#### Issue 7 — Conversations not visible across accounts
+Deferred — requires a new `conversations` DB table + backend endpoints. Out of scope for this session (frontend already has the `conversationStore.ts` + PDF export from a prior session).
