@@ -4,86 +4,6 @@
   "graph": {},
   "nodes": [
     {
-      "label": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "file_type": "document",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "satyam_copilot_stt_toggle",
-      "community": 179,
-      "norm_label": "satyam_copilot_stt_toggle.md"
-    },
-    {
-      "label": "Satyam \u2014 Voice Copilot Mic: **Browser \u2194 Sarvam** toggle \ud83c\udf99\ufe0f",
-      "file_type": "document",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "satyam_copilot_stt_toggle_satyam_voice_copilot_mic_browser_sarvam_toggle",
-      "community": 179,
-      "norm_label": "satyam \u2014 voice copilot mic: **browser \u2194 sarvam** toggle \ud83c\udf99\ufe0f"
-    },
-    {
-      "label": "Does the browser do Kannada?",
-      "file_type": "document",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "satyam_copilot_stt_toggle_does_the_browser_do_kannada",
-      "community": 179,
-      "norm_label": "does the browser do kannada?"
-    },
-    {
-      "label": "1) `frontend/src/components/SettingsDialog.tsx`",
-      "file_type": "document",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L22",
-      "_origin": "ast",
-      "id": "satyam_copilot_stt_toggle_1_frontend_src_components_settingsdialog_tsx",
-      "community": 179,
-      "norm_label": "1) `frontend/src/components/settingsdialog.tsx`"
-    },
-    {
-      "label": "2) `frontend/src/components/Shell.tsx`",
-      "file_type": "document",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L97",
-      "_origin": "ast",
-      "id": "satyam_copilot_stt_toggle_2_frontend_src_components_shell_tsx",
-      "community": 179,
-      "norm_label": "2) `frontend/src/components/shell.tsx`"
-    },
-    {
-      "label": "Why the chat box is safe \ud83d\udd12",
-      "file_type": "document",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L341",
-      "_origin": "ast",
-      "id": "satyam_copilot_stt_toggle_why_the_chat_box_is_safe",
-      "community": 179,
-      "norm_label": "why the chat box is safe \ud83d\udd12"
-    },
-    {
-      "label": "Behaviour notes",
-      "file_type": "document",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L347",
-      "_origin": "ast",
-      "id": "satyam_copilot_stt_toggle_behaviour_notes",
-      "community": 179,
-      "norm_label": "behaviour notes"
-    },
-    {
-      "label": "Verification (static analysis)",
-      "file_type": "document",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L352",
-      "_origin": "ast",
-      "id": "satyam_copilot_stt_toggle_verification_static_analysis",
-      "community": 179,
-      "norm_label": "verification (static analysis)"
-    },
-    {
       "label": "SettingsDialog.tsx",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
@@ -117,7 +37,7 @@
       "label": "defaultEngineSettings",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L22",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "components_settingsdialog_defaultenginesettings",
       "community": 163,
@@ -127,7 +47,7 @@
       "label": "loadEngineSettings()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L32",
+      "source_location": "L29",
       "_origin": "ast",
       "id": "components_settingsdialog_loadenginesettings",
       "community": 113,
@@ -137,7 +57,7 @@
       "label": "saveEngineSettings()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L41",
+      "source_location": "L38",
       "_origin": "ast",
       "id": "components_settingsdialog_saveenginesettings",
       "community": 163,
@@ -147,17 +67,17 @@
       "label": "SettingsDialog()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L45",
+      "source_location": "L42",
       "_origin": "ast",
       "id": "components_settingsdialog_settingsdialog",
-      "community": 163,
+      "community": 33,
       "norm_label": "settingsdialog()"
     },
     {
       "label": "Section()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L403",
+      "source_location": "L370",
       "_origin": "ast",
       "id": "components_settingsdialog_section",
       "community": 163,
@@ -167,7 +87,7 @@
       "label": "Field()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L415",
+      "source_location": "L382",
       "_origin": "ast",
       "id": "components_settingsdialog_field",
       "community": 163,
@@ -177,7 +97,7 @@
       "label": "Row()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L431",
+      "source_location": "L398",
       "_origin": "ast",
       "id": "components_settingsdialog_row",
       "community": 163,
@@ -187,7 +107,7 @@
       "label": "Select()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L440",
+      "source_location": "L407",
       "_origin": "ast",
       "id": "components_settingsdialog_select",
       "community": 163,
@@ -197,7 +117,7 @@
       "label": "Pill()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L448",
+      "source_location": "L415",
       "_origin": "ast",
       "id": "components_settingsdialog_pill",
       "community": 163,
@@ -207,7 +127,7 @@
       "label": "Toggle()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L461",
+      "source_location": "L428",
       "_origin": "ast",
       "id": "components_settingsdialog_toggle",
       "community": 163,
@@ -217,7 +137,7 @@
       "label": "Status",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L482",
+      "source_location": "L449",
       "_origin": "ast",
       "id": "components_settingsdialog_status",
       "community": 113,
@@ -227,7 +147,7 @@
       "label": "DbSourceRow()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L484",
+      "source_location": "L451",
       "_origin": "ast",
       "id": "components_settingsdialog_dbsourcerow",
       "community": 163,
@@ -237,7 +157,7 @@
       "label": "ModelToggle()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L544",
+      "source_location": "L511",
       "_origin": "ast",
       "id": "components_settingsdialog_modeltoggle",
       "community": 163,
@@ -247,7 +167,7 @@
       "label": "formatRemaining()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L574",
+      "source_location": "L541",
       "_origin": "ast",
       "id": "components_settingsdialog_formatremaining",
       "community": 163,
@@ -257,7 +177,7 @@
       "label": "DataActions()",
       "file_type": "code",
       "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L584",
+      "source_location": "L551",
       "_origin": "ast",
       "id": "components_settingsdialog_dataactions",
       "community": 163,
@@ -277,7 +197,7 @@
       "label": "VoiceScreen",
       "file_type": "code",
       "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L36",
+      "source_location": "L35",
       "_origin": "ast",
       "id": "components_shell_voicescreen",
       "community": 113,
@@ -287,7 +207,7 @@
       "label": "SCREEN_ROUTES",
       "file_type": "code",
       "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L37",
+      "source_location": "L36",
       "_origin": "ast",
       "id": "components_shell_screen_routes",
       "community": 113,
@@ -297,7 +217,7 @@
       "label": "ParsedVoice",
       "file_type": "code",
       "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L49",
+      "source_location": "L48",
       "_origin": "ast",
       "id": "components_shell_parsedvoice",
       "community": 113,
@@ -307,7 +227,7 @@
       "label": "parseVoiceCommand()",
       "file_type": "code",
       "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L59",
+      "source_location": "L58",
       "_origin": "ast",
       "id": "components_shell_parsevoicecommand",
       "community": 113,
@@ -317,10 +237,10 @@
       "label": "Shell()",
       "file_type": "code",
       "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L100",
+      "source_location": "L99",
       "_origin": "ast",
       "id": "components_shell_shell",
-      "community": 33,
+      "community": 172,
       "norm_label": "shell()"
     },
     {
@@ -357,7 +277,7 @@
       "label": "Ctx",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L580",
+      "source_location": "L576",
       "_origin": "ast",
       "id": "lib_i18n_ctx",
       "community": 33,
@@ -367,7 +287,7 @@
       "label": "I18nCtx",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L581",
+      "source_location": "L577",
       "_origin": "ast",
       "id": "lib_i18n_i18nctx",
       "community": 33,
@@ -377,7 +297,7 @@
       "label": "I18nProvider()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L583",
+      "source_location": "L579",
       "_origin": "ast",
       "id": "lib_i18n_i18nprovider",
       "community": 127,
@@ -387,20 +307,20 @@
       "label": "useI18n()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L606",
+      "source_location": "L602",
       "_origin": "ast",
       "id": "lib_i18n_usei18n",
-      "community": 103,
+      "community": 33,
       "norm_label": "usei18n()"
     },
     {
       "label": "useT()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L607",
+      "source_location": "L603",
       "_origin": "ast",
       "id": "lib_i18n_uset",
-      "community": 33,
+      "community": 172,
       "norm_label": "uset()"
     },
     {
@@ -499,7 +419,7 @@
       "source_file": "frontend/src/routes/trends.tsx",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 8,
+      "community": 179,
       "norm_label": "route",
       "id": "routes_trends_route"
     },
@@ -809,7 +729,7 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 8,
+      "community": 179,
       "norm_label": "route",
       "id": "routes_forecast_route"
     },
@@ -879,7 +799,7 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L58",
       "_origin": "ast",
-      "community": 32,
+      "community": 16,
       "norm_label": "riskbadge()",
       "id": "routes_forecast_riskbadge"
     },
@@ -899,7 +819,7 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L82",
       "_origin": "ast",
-      "community": 32,
+      "community": 16,
       "norm_label": "alertcard()",
       "id": "routes_forecast_alertcard"
     },
@@ -929,7 +849,7 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L219",
       "_origin": "ast",
-      "community": 32,
+      "community": 33,
       "norm_label": "forecastscreen()",
       "id": "routes_forecast_forecastscreen"
     },
@@ -3789,7 +3709,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 32,
+      "community": 16,
       "norm_label": "similarcasematch",
       "id": "api_intelligence_similarcasematch"
     },
@@ -3809,7 +3729,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 32,
+      "community": 16,
       "norm_label": "timelineevent",
       "id": "api_intelligence_timelineevent"
     },
@@ -4159,7 +4079,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 8,
+      "community": 179,
       "norm_label": "route",
       "id": "routes_network_route"
     },
@@ -4279,7 +4199,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 8,
+      "community": 179,
       "norm_label": "route",
       "id": "routes_reports_route"
     },
@@ -4619,7 +4539,7 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 8,
+      "community": 179,
       "norm_label": "route",
       "id": "routes_console_route"
     },
@@ -4629,7 +4549,7 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 103,
+      "community": 33,
       "norm_label": "console()",
       "id": "routes_console_console"
     },
@@ -4889,7 +4809,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 103,
       "norm_label": "createaccountdialog.tsx",
       "id": "components_createaccountdialog"
     },
@@ -4899,7 +4819,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 33,
+      "community": 103,
       "norm_label": "role_options",
       "id": "components_createaccountdialog_role_options"
     },
@@ -4909,7 +4829,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 33,
+      "community": 103,
       "norm_label": "role_by_value",
       "id": "components_createaccountdialog_role_by_value"
     },
@@ -4919,7 +4839,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 33,
+      "community": 103,
       "norm_label": "role_groups",
       "id": "components_createaccountdialog_role_groups"
     },
@@ -4929,7 +4849,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 33,
+      "community": 103,
       "norm_label": "createaccountdialog()",
       "id": "components_createaccountdialog_createaccountdialog"
     },
@@ -5379,7 +5299,7 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L102",
       "_origin": "ast",
-      "community": 1,
+      "community": 33,
       "norm_label": "stationrow",
       "id": "api_client_stationrow"
     },
@@ -5399,7 +5319,7 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L111",
       "_origin": "ast",
-      "community": 33,
+      "community": 103,
       "norm_label": "api",
       "id": "api_client_api"
     },
@@ -5479,7 +5399,7 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 103,
       "norm_label": "login.tsx",
       "id": "routes_login"
     },
@@ -5489,7 +5409,7 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 8,
+      "community": 103,
       "norm_label": "route",
       "id": "routes_login_route"
     },
@@ -5499,7 +5419,7 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 33,
+      "community": 103,
       "norm_label": "login()",
       "id": "routes_login_login"
     },
@@ -5509,7 +5429,7 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L233",
       "_origin": "ast",
-      "community": 33,
+      "community": 103,
       "norm_label": "trustbadge()",
       "id": "routes_login_trustbadge"
     },
@@ -5919,7 +5839,7 @@
       "source_file": "backend/app/api/routes/health.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "health.py",
       "id": "routes_health"
     },
@@ -5929,7 +5849,7 @@
       "source_file": "backend/app/api/routes/health.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "health()",
       "id": "routes_health_health"
     },
@@ -5959,7 +5879,7 @@
       "source_file": "backend/app/api/routes/health.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "liveness / readiness probe + model-routing diagnostics.",
       "id": "routes_health_rationale_1"
     },
@@ -6919,7 +6839,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 172,
+      "community": 179,
       "norm_label": "route",
       "id": "routes_transcripts_route"
     },
@@ -9009,7 +8929,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 8,
+      "community": 179,
       "norm_label": "route",
       "id": "routes_profile_personid_route"
     },
@@ -9069,7 +8989,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L196",
       "_origin": "ast",
-      "community": 32,
+      "community": 16,
       "norm_label": "profilescreen()",
       "id": "routes_profile_personid_profilescreen"
     },
@@ -9589,7 +9509,7 @@
       "source_file": "frontend/src/components/CaseDrawer.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 32,
+      "community": 16,
       "norm_label": "casedrawer.tsx",
       "id": "components_casedrawer"
     },
@@ -9599,7 +9519,7 @@
       "source_file": "frontend/src/components/CaseDrawer.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 32,
+      "community": 16,
       "norm_label": "casedrawer()",
       "id": "components_casedrawer_casedrawer"
     },
@@ -9609,7 +9529,7 @@
       "source_file": "frontend/src/components/CaseDrawer.tsx",
       "source_location": "L213",
       "_origin": "ast",
-      "community": 32,
+      "community": 16,
       "norm_label": "field()",
       "id": "components_casedrawer_field"
     },
@@ -9619,7 +9539,7 @@
       "source_file": "frontend/src/lib/tData.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 32,
+      "community": 16,
       "norm_label": "tdata.ts",
       "id": "lib_tdata"
     },
@@ -9629,7 +9549,7 @@
       "source_file": "frontend/src/lib/tData.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 32,
+      "community": 16,
       "norm_label": "kndata",
       "id": "lib_tdata_kndata"
     },
@@ -9639,7 +9559,7 @@
       "source_file": "frontend/src/lib/tData.ts",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 32,
+      "community": 16,
       "norm_label": "fieldkey",
       "id": "lib_tdata_fieldkey"
     },
@@ -9649,7 +9569,7 @@
       "source_file": "frontend/src/lib/tData.ts",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 32,
+      "community": 16,
       "norm_label": "tdata()",
       "id": "lib_tdata_tdata"
     },
@@ -9659,7 +9579,7 @@
       "source_file": "frontend/src/lib/tData.ts",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 32,
+      "community": 16,
       "norm_label": "tauto()",
       "id": "lib_tdata_tauto"
     },
@@ -9679,7 +9599,7 @@
       "source_file": "frontend/src/routes/socio.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 8,
+      "community": 16,
       "norm_label": "route",
       "id": "routes_socio_route"
     },
@@ -10579,7 +10499,7 @@
       "source_file": "backend/app/config.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "config.py",
       "id": "app_config"
     },
@@ -10639,7 +10559,7 @@
       "source_file": "backend/app/config.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "application settings, loaded from environment / .env.",
       "id": "app_config_rationale_1"
     },
@@ -10659,7 +10579,7 @@
       "source_file": "backend/app/config.py",
       "source_location": "L51",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "# note: \"webspeech\" is a browser-only provider and is intentionally not a",
       "id": "app_config_rationale_51"
     },
@@ -11839,7 +11759,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 110,
+      "community": 26,
       "norm_label": "sarvamstt",
       "id": "api_sarvam_sarvamstt"
     },
@@ -11889,7 +11809,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L144",
       "_origin": "ast",
-      "community": 110,
+      "community": 26,
       "norm_label": "sarvamtranslator",
       "id": "api_sarvam_sarvamtranslator"
     },
@@ -11929,7 +11849,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 110,
+      "community": 26,
       "norm_label": "saaras v3 speech-to-text. /speech-to-text is multipart/form-data.      sends l",
       "id": "api_sarvam_rationale_62"
     },
@@ -11969,7 +11889,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L145",
       "_origin": "ast",
-      "community": 110,
+      "community": 26,
       "norm_label": "mayura v1 \u2014 neural mt between kannada and english.",
       "id": "api_sarvam_rationale_145"
     },
@@ -12159,7 +12079,7 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "embedder_bge.py",
       "id": "local_embedder_bge"
     },
@@ -12169,7 +12089,7 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "_load_model()",
       "id": "local_embedder_bge_load_model"
     },
@@ -12199,7 +12119,7 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L51",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "._encode()",
       "id": "local_embedder_bge_bgem3embedder_encode"
     },
@@ -12219,7 +12139,7 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "bge-m3 embedder (sole embedder for the whole system).  real local inference via",
       "id": "local_embedder_bge_rationale_1"
     },
@@ -12229,7 +12149,7 @@
       "source_file": "backend/app/models/local/embedder_bge.py",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "load bge-m3 once and cache for the process lifetime (~1.3 gb fp16).",
       "id": "local_embedder_bge_rationale_26"
     },
@@ -12599,7 +12519,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L130",
       "_origin": "ast",
-      "community": 26,
+      "community": 180,
       "norm_label": "get_tts()",
       "id": "models_registry_get_tts"
     },
@@ -12689,7 +12609,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L131",
       "_origin": "ast",
-      "community": 26,
+      "community": 180,
       "norm_label": "sarvam bulbul v3 (primary) \u2192 google \u2192 bhashini (fallback) \u2192 local parler-tts.",
       "id": "models_registry_rationale_131"
     },
@@ -14219,7 +14139,7 @@
       "source_file": "backend/test_stt_api.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "test_stt_api.py",
       "id": "backend_test_stt_api"
     },
@@ -15619,7 +15539,7 @@
       "source_file": "frontend/src/components/AccountManager.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 103,
+      "community": 33,
       "norm_label": "accountmanager.tsx",
       "id": "components_accountmanager"
     },
@@ -15629,7 +15549,7 @@
       "source_file": "frontend/src/components/AccountManager.tsx",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 103,
+      "community": 33,
       "norm_label": "account",
       "id": "components_accountmanager_account"
     },
@@ -15639,7 +15559,7 @@
       "source_file": "frontend/src/components/AccountManager.tsx",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 103,
+      "community": 33,
       "norm_label": "fetchstate",
       "id": "components_accountmanager_fetchstate"
     },
@@ -15649,7 +15569,7 @@
       "source_file": "frontend/src/components/AccountManager.tsx",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 103,
+      "community": 33,
       "norm_label": "avatar()",
       "id": "components_accountmanager_avatar"
     },
@@ -15659,7 +15579,7 @@
       "source_file": "frontend/src/components/AccountManager.tsx",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 103,
+      "community": 33,
       "norm_label": "skeletonrow()",
       "id": "components_accountmanager_skeletonrow"
     },
@@ -15669,7 +15589,7 @@
       "source_file": "frontend/src/components/AccountManager.tsx",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 103,
+      "community": 33,
       "norm_label": "accountmanager()",
       "id": "components_accountmanager_accountmanager"
     },
@@ -18979,7 +18899,7 @@
       "source_file": "frontend/src/routeTree.gen.ts",
       "source_location": "L114",
       "_origin": "ast",
-      "community": 8,
+      "community": 127,
       "norm_label": "fileroutesbyid",
       "id": "src_routetree_gen_fileroutesbyid"
     },
@@ -19009,7 +18929,7 @@
       "source_file": "frontend/src/routeTree.gen.ts",
       "source_location": "L190",
       "_origin": "ast",
-      "community": 8,
+      "community": 179,
       "norm_label": "fileroutesbypath",
       "id": "src_routetree_gen_fileroutesbypath"
     },
@@ -19089,7 +19009,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L76",
       "_origin": "ast",
-      "community": 8,
+      "community": 127,
       "norm_label": "route",
       "id": "routes_root_route"
     },
@@ -19129,7 +19049,7 @@
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 9,
+      "community": 179,
       "norm_label": "route",
       "id": "routes_about_route"
     },
@@ -19159,7 +19079,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 172,
       "norm_label": "audit.tsx",
       "id": "frontend_src_routes_audit_tsx_routes_audit"
     },
@@ -19169,7 +19089,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 33,
+      "community": 172,
       "norm_label": "route",
       "id": "routes_audit_route"
     },
@@ -19179,7 +19099,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 33,
+      "community": 172,
       "norm_label": "auditrow",
       "id": "routes_audit_auditrow"
     },
@@ -19189,7 +19109,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 33,
+      "community": 172,
       "norm_label": "audit()",
       "id": "routes_audit_audit"
     },
@@ -19199,7 +19119,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L219",
       "_origin": "ast",
-      "community": 33,
+      "community": 172,
       "norm_label": "th()",
       "id": "routes_audit_th"
     },
@@ -19209,7 +19129,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L222",
       "_origin": "ast",
-      "community": 33,
+      "community": 172,
       "norm_label": "filter()",
       "id": "routes_audit_filter"
     },
@@ -19219,7 +19139,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L230",
       "_origin": "ast",
-      "community": 33,
+      "community": 172,
       "norm_label": "select()",
       "id": "routes_audit_select"
     },
@@ -21775,76 +21695,6 @@
     }
   ],
   "links": [
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "satyam_copilot_stt_toggle",
-      "target": "satyam_copilot_stt_toggle_satyam_voice_copilot_mic_browser_sarvam_toggle",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L22",
-      "weight": 1.0,
-      "source": "satyam_copilot_stt_toggle_satyam_voice_copilot_mic_browser_sarvam_toggle",
-      "target": "satyam_copilot_stt_toggle_1_frontend_src_components_settingsdialog_tsx",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L97",
-      "weight": 1.0,
-      "source": "satyam_copilot_stt_toggle_satyam_voice_copilot_mic_browser_sarvam_toggle",
-      "target": "satyam_copilot_stt_toggle_2_frontend_src_components_shell_tsx",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L347",
-      "weight": 1.0,
-      "source": "satyam_copilot_stt_toggle_satyam_voice_copilot_mic_browser_sarvam_toggle",
-      "target": "satyam_copilot_stt_toggle_behaviour_notes",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "satyam_copilot_stt_toggle_satyam_voice_copilot_mic_browser_sarvam_toggle",
-      "target": "satyam_copilot_stt_toggle_does_the_browser_do_kannada",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L352",
-      "weight": 1.0,
-      "source": "satyam_copilot_stt_toggle_satyam_voice_copilot_mic_browser_sarvam_toggle",
-      "target": "satyam_copilot_stt_toggle_verification_static_analysis",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_COPILOT_STT_TOGGLE.md",
-      "source_location": "L341",
-      "weight": 1.0,
-      "source": "satyam_copilot_stt_toggle_satyam_voice_copilot_mic_browser_sarvam_toggle",
-      "target": "satyam_copilot_stt_toggle_why_the_chat_box_is_safe",
-      "confidence_score": 1.0
-    },
     {
       "relation": "imports_from",
       "context": "import",
@@ -63050,5 +62900,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "7e4ea571b5bd9f1409a8ce85cc9de6659e59dad6"
+  "built_at_commit": "f7be86e9a26f1e61239a48875e78267f6c6c1f73"
 }
