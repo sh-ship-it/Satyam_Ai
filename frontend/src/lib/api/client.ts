@@ -98,10 +98,10 @@ export type StationBreakdownResponse = { rows: StationRow[]; total: number };
 
 export const api = {
   // --- auth ---
-  async login(username: string, rank?: string, password = ""): Promise<{ token: string; user: SessionUser }> {
+  async login(username: string, password = ""): Promise<{ token: string; user: SessionUser }> {
     const out = await request<{ token: string; user: SessionUser }>("/auth/login", {
       method: "POST",
-      body: JSON.stringify({ username, rank, password }),
+      body: JSON.stringify({ username, password }),
     });
     setAuthToken(out.token);
     setCachedUser(out.user);

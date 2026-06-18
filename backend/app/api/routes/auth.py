@@ -92,10 +92,9 @@ def _build_token_and_user(
 @router.post("/login", response_model=LoginResponse)
 async def login(req: LoginRequest) -> LoginResponse:
     settings = get_settings()
-    rank = req.role or req.rank or "CI"
     username = (req.username or "").strip()
     if not username:
-        username = f"demo-{rank}"
+        raise HTTPException(status_code=422, detail="Email / username is required.")
 
     sessionmaker = get_sessionmaker()
     async with sessionmaker() as session:
@@ -104,46 +103,29 @@ async def login(req: LoginRequest) -> LoginResponse:
             db_user = (await session.execute(stmt)).scalar_one_or_none()
 
             if db_user:
-                # Existing user: verify password (skip in demo mode for convenience)
+                # Verify password
                 if settings.app_env == "production":
                     if not verify_password(req.password or "", db_user.password_hash):
                         raise HTTPException(status_code=401, detail="Invalid credentials")
                 else:
-                    # In dev/demo: accept any password OR verified password
+                    # Dev/demo: accept correct password; empty password accepted for convenience
                     pw_ok = (not req.password) or verify_password(req.password, db_user.password_hash)
                     if not pw_ok:
                         raise HTTPException(status_code=401, detail="Invalid password")
 
                 name = db_user.full_name or username.replace(".", " ").title()
-                assigned_rank = db_user.assigned_rank or rank
+                # Rank comes from the DB record, not the request
+                assigned_rank = db_user.assigned_rank or "CI"
                 officer_id = db_user.user_id
                 token, user = _build_token_and_user(username, name, assigned_rank, officer_id)
                 return LoginResponse(token=token, user=user)
 
             else:
-                # No user found: in demo mode auto-create; in production reject
-                if settings.app_env == "production":
-                    raise HTTPException(status_code=401, detail="Invalid credentials")
-
-                geo = _DEMO_STATIONS.get(rank, _DEMO_STATIONS["investigator"])
-                officer = await _get_or_create_officer(
-                    session, username.replace(".", " ").title(),
-                    rank, geo["station_id"] or 1,
+                # No user found — user must register first; never auto-create on login
+                raise HTTPException(
+                    status_code=404,
+                    detail="Account not found. Please create an account first."
                 )
-                hashed = hash_password(req.password or "demo")
-                new_user = User(
-                    username=username,
-                    password_hash=hashed,
-                    full_name=username.replace(".", " ").title(),
-                    officer_id=officer.officer_id,
-                    assigned_rank=_db_rank(rank),
-                    is_active=True,
-                )
-                session.add(new_user)
-                await session.flush()
-                name = new_user.full_name or username
-                token, user = _build_token_and_user(username, name, rank, new_user.user_id)
-                return LoginResponse(token=token, user=user)
 
 
 # ── Register ──────────────────────────────────────────────────────────────────

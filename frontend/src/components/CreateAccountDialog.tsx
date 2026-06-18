@@ -37,7 +37,7 @@ export function CreateAccountDialog({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("CI");
+  const [role, setRole] = useState("");
   const [photo, setPhoto] = useState<string | null>(null);
   const [camOn, setCamOn] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -105,7 +105,7 @@ export function CreateAccountDialog({
   };
 
   const submit = async () => {
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !role) {
       setErr(t("Please fill in all required fields."));
       return;
     }
@@ -208,10 +208,13 @@ export function CreateAccountDialog({
             onChange={(e) => setRole(e.target.value)}
             className="h-10 w-full rounded-[5px] border-2 border-foreground bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring nb-shadow-sm"
           >
-            {ROLE_OPTIONS.map((r) => (
-              <option key={r.value} value={r.value}>
-                {t(r.label)}
-              </option>
+            <option value="" disabled>{t("Select your rank / role")}</option>
+            {ROLE_GROUPS.map((g) => (
+              <optgroup key={g.label} label={t(g.label)}>
+                {g.roles.map((r) => (
+                  <option key={r.value} value={r.value}>{t(r.label)}</option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </div>
@@ -220,7 +223,7 @@ export function CreateAccountDialog({
 
         <button
           onClick={submit}
-          disabled={busy || !name || !email || !password}
+          disabled={busy || !name || !email || !password || !role}
           className="mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-[5px] border-2 border-foreground bg-primary text-sm font-extrabold uppercase text-primary-foreground nb-shadow disabled:opacity-60 disabled:cursor-not-allowed select-none"
         >          {busy ? <RefreshCw className="h-4 w-4 animate-spin" /> : null}
           {t("Create account")}
