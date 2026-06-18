@@ -30,8 +30,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/auth.py": {
-    "mtime": 1781757588.4480598,
-    "ast_hash": "4463ca55091213b552f3df867e774ac8",
+    "mtime": 1781760593.543305,
+    "ast_hash": "0926154402fc0851413e3ea09baedd7b",
     "semantic_hash": ""
   },
   "backend/app/api/routes/cases.py": {
@@ -250,8 +250,8 @@
     "semantic_hash": ""
   },
   "backend/app/schemas/auth.py": {
-    "mtime": 1781756561.5805862,
-    "ast_hash": "df8a1ec90e4f2faa0a722fe6a8a0dce7",
+    "mtime": 1781760523.2859526,
+    "ast_hash": "576444f0f20140b4d9e4e7b5640702a0",
     "semantic_hash": ""
   },
   "backend/app/schemas/case.py": {
@@ -330,13 +330,13 @@
     "semantic_hash": ""
   },
   "backend/tests/conftest.py": {
-    "mtime": 1781282331.2548237,
-    "ast_hash": "eb7d901c34509b6b7b71777c6543d839",
+    "mtime": 1781760695.4573183,
+    "ast_hash": "beff343fff69547941c6c677724158dc",
     "semantic_hash": ""
   },
   "backend/tests/test_health.py": {
-    "mtime": 1781527983.5167873,
-    "ast_hash": "66c9665a2f90ab6fd2b7eb80f7b41fe7",
+    "mtime": 1781760709.8471296,
+    "ast_hash": "e35ec5cfcec449dd5fa8c182f0b15825",
     "semantic_hash": ""
   },
   "backend/tests/test_rbac.py": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/client.ts": {
-    "mtime": 1781757599.6202984,
-    "ast_hash": "676f9d32c35f64078370be7c610c534e",
+    "mtime": 1781760737.432873,
+    "ast_hash": "d81bc6fa91cb1e183181bfa1689563dd",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/example.functions.ts": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781757813.2868738,
-    "ast_hash": "9bd579eb123eda8ebf56d4e495a29592",
+    "mtime": 1781760755.7767847,
+    "ast_hash": "61dc535d4bdaa8a15b744ed176865c45",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -975,8 +975,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CreateAccountDialog.tsx": {
-    "mtime": 1781757769.1544006,
-    "ast_hash": "f6b419877a06cc6d633b4927bb1482ef",
+    "mtime": 1781760747.8745315,
+    "ast_hash": "83f5543e499f99e49aac228434f975e4",
     "semantic_hash": ""
   },
   "backend/app/api/routes/voice.py": {
