@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781726281.3697512,
-    "ast_hash": "0e0e4c57531b1981dc31dc0050eb7064",
+    "mtime": 1781754271.630079,
+    "ast_hash": "dc710c8ab49a038fe0e28ea35ab5a52c",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -865,8 +865,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/login.tsx": {
-    "mtime": 1781581005.4521375,
-    "ast_hash": "710236635751bb90733319c5ec754a24",
+    "mtime": 1781754259.012566,
+    "ast_hash": "36ebad1f7e65b3ad3f654dfa855b58d2",
     "semantic_hash": ""
   },
   "backend/app/models/api/ollama_cloud.py": {
@@ -975,8 +975,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CreateAccountDialog.tsx": {
-    "mtime": 1781580469.0386784,
-    "ast_hash": "09626fb2df10f801086243b8d7c3bb10",
+    "mtime": 1781754241.4951913,
+    "ast_hash": "856b509085fdd7e88aa5188940a020ec",
     "semantic_hash": ""
   },
   "backend/app/api/routes/voice.py": {
