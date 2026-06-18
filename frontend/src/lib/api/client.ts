@@ -9,7 +9,7 @@ export const API_BASE =
   "http://localhost:8000";
 
 const TOKEN_KEY = "satyam.token";
-const USER_KEY  = "satyam.user";
+const USER_KEY = "satyam-user";
 
 export function getAuthToken(): string | null {
   if (typeof window === "undefined") return null;
@@ -22,18 +22,23 @@ export function setAuthToken(token: string | null) {
   else window.localStorage.removeItem(TOKEN_KEY);
 }
 
+export function cacheUser(u: SessionUser | null) {
+  if (typeof window === "undefined") return;
+  if (u) window.localStorage.setItem(USER_KEY, JSON.stringify(u));
+  else window.localStorage.removeItem(USER_KEY);
+}
+
 export function getCachedUser(): SessionUser | null {
-  if (typeof window === "undefined") return null;
   try {
-    const raw = window.localStorage.getItem(USER_KEY);
-    return raw ? (JSON.parse(raw) as SessionUser) : null;
-  } catch { return null; }
+    const r = typeof window !== "undefined" ? window.localStorage.getItem(USER_KEY) : null;
+    return r ? (JSON.parse(r) as SessionUser) : null;
+  } catch {
+    return null;
+  }
 }
 
 export function setCachedUser(user: SessionUser | null) {
-  if (typeof window === "undefined") return;
-  if (user) window.localStorage.setItem(USER_KEY, JSON.stringify(user));
-  else window.localStorage.removeItem(USER_KEY);
+  cacheUser(user);
 }
 
 function authHeaders(extra: Record<string, string> = {}): Record<string, string> {
@@ -83,6 +88,13 @@ export type SessionUser = {
   range_name?: string;
 };
 
+export type StationOption = {
+  station_id: number;
+  station_name: string;
+  district: string;
+  range_name: string;
+};
+
 // Map types
 export type HotspotPoint = { lat: number; lng: number; weight: number; label?: string | null };
 export type HotspotResponse = { mode: string; points: HotspotPoint[]; total: number };
@@ -104,7 +116,7 @@ export const api = {
       body: JSON.stringify({ username, password }),
     });
     setAuthToken(out.token);
-    setCachedUser(out.user);
+    cacheUser(out.user);
     return out;
   },
   async register(body: {
@@ -113,21 +125,27 @@ export const api = {
     role: string;
     password: string;
     photo_b64?: string;
+    station_id?: number | null;
   }): Promise<{ token: string; user: SessionUser }> {
     const out = await request<{ token: string; user: SessionUser }>("/auth/register", {
       method: "POST",
       body: JSON.stringify(body),
     });
     setAuthToken(out.token);
-    setCachedUser(out.user);
+    cacheUser(out.user);
     return out;
   },
-  me(): Promise<SessionUser> {
-    return request<SessionUser>("/auth/me");
+  async me(): Promise<SessionUser> {
+    const u = await request<SessionUser>("/auth/me");
+    cacheUser(u);
+    return u;
   },
   logout() {
     setAuthToken(null);
-    setCachedUser(null);
+    cacheUser(null);
+  },
+  async stations(): Promise<StationOption[]> {
+    return request<StationOption[]>("/auth/stations");
   },
 
 

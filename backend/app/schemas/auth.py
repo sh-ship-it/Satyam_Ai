@@ -33,3 +33,12 @@ class RegisterRequest(BaseModel):
     rank: Optional[str] = None
     password: str = ""
     photo_b64: Optional[str] = None
+    station_id: Optional[int] = None
+
+
+class StationOption(BaseModel):
+    station_id: int
+    station_name: str
+    district: str
+    range_name: str = ""
+

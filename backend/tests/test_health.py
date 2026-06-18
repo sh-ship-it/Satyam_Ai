@@ -14,9 +14,22 @@ def test_health_ok():
 
 
 def test_login_and_me():
-    r = client.post("/auth/login", json={"username": "officer1", "rank": "investigator"})
+    from app.db.session import _engines, _sessionmakers
+    _engines.clear()
+    _sessionmakers.clear()
+    client.post("/auth/register", json={
+        "name": "Officer One",
+        "email": "officer1@ksp.gov.in",
+        "password": "demo",
+        "role": "PSI"
+    })
+    _engines.clear()
+    _sessionmakers.clear()
+    r = client.post("/auth/login", json={"username": "officer1", "password": "demo"})
     assert r.status_code == 200
+    _engines.clear()
+    _sessionmakers.clear()
     token = r.json()["token"]
     me = client.get("/auth/me", headers={"Authorization": f"Bearer {token}"})
     assert me.status_code == 200
-    assert me.json()["rank"] == "investigator"
+    assert me.json()["rank"] == "PSI"

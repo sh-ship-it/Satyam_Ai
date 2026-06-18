@@ -38,6 +38,8 @@ export function CreateAccountDialog({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const [stationId, setStationId] = useState<string>("");      // "" = none
+  const [stations, setStations] = useState<{ station_id: number; station_name: string; district: string }[]>([]);
   const [photo, setPhoto] = useState<string | null>(null);
   const [camOn, setCamOn] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -82,6 +84,15 @@ export function CreateAccountDialog({
     }
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    api.stations().then(setStations).catch(() => setStations([]));
+  }, [open]);
+
+  const stationsByDistrict = stations.reduce<Record<string, typeof stations>>((acc, s) => {
+    (acc[s.district] ??= []).push(s); return acc;
+  }, {});
+
   const capture = () => {
     const v = videoRef.current;
     if (!v) return;
@@ -118,6 +129,7 @@ export function CreateAccountDialog({
         role,
         password,
         photo_b64: photo ?? undefined,
+        station_id: stationId ? Number(stationId) : undefined,
       });
       onCreated();
     } catch (e: any) {
@@ -213,6 +225,22 @@ export function CreateAccountDialog({
               <optgroup key={g.label} label={t(g.label)}>
                 {g.roles.map((r) => (
                   <option key={r.value} value={r.value}>{t(r.label)}</option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+          <select
+            value={stationId}
+            onChange={(e) => setStationId(e.target.value)}
+            className="h-10 w-full rounded-[5px] border-2 border-foreground bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring nb-shadow-sm"
+          >
+            <option value="">{t("Select police station (optional)")}</option>
+            {Object.keys(stationsByDistrict).sort().map((district) => (
+              <optgroup key={district} label={district}>
+                {stationsByDistrict[district].map((s) => (
+                  <option key={s.station_id} value={String(s.station_id)}>
+                    {s.station_name}
+                  </option>
                 ))}
               </optgroup>
             ))}
