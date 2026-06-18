@@ -16,6 +16,14 @@ export const ROLE_OPTIONS = [
   { value: "PC",   label: "PC — Police Constable (station)" },
 ];
 
+const ROLE_BY_VALUE = Object.fromEntries(ROLE_OPTIONS.map((r) => [r.value, r]));
+
+export const ROLE_GROUPS: { label: string; roles: typeof ROLE_OPTIONS }[] = [
+  { label: "Highest access", roles: ["DGP", "IGP", "DIG", "SP"].map((v) => ROLE_BY_VALUE[v]) },
+  { label: "Medium access",  roles: ["DySP", "CI"].map((v) => ROLE_BY_VALUE[v]) },
+  { label: "Low access",     roles: ["PSI", "ASI", "HC", "PC"].map((v) => ROLE_BY_VALUE[v]) },
+];
+
 export function CreateAccountDialog({
   open,
   onClose,

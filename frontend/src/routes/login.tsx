@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useT } from "@/lib/i18n";
 import { api } from "@/lib/api/client";
-import { CreateAccountDialog, ROLE_OPTIONS } from "@/components/CreateAccountDialog";
+import { CreateAccountDialog, ROLE_GROUPS } from "@/components/CreateAccountDialog";
 
 
 export const Route = createFileRoute("/login")({
@@ -168,10 +168,14 @@ function Login() {
                     onChange={(e) => setRole(e.target.value)}
                     className="h-11 w-full appearance-none rounded-[5px] border-2 border-foreground bg-background pl-9 pr-8 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-ring nb-shadow-sm"
                   >
-                    {ROLE_OPTIONS.map((r) => (
-                      <option key={r.value} value={r.value}>
-                        {t(r.label)}
-                      </option>
+                    {ROLE_GROUPS.map((g) => (
+                      <optgroup key={g.label} label={t(g.label)}>
+                        {g.roles.map((r) => (
+                          <option key={r.value} value={r.value}>
+                            {t(r.label)}
+                          </option>
+                        ))}
+                      </optgroup>
                     ))}
                   </select>
                 </div>
