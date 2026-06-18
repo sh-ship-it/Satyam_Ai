@@ -2578,3 +2578,72 @@ Returning user:
 Sign out:
   api.logout() → clears localStorage token + user → navigate to /login
 ```
+
+---
+
+### [2026-06-18] — Police Station Selector with Real-Time Search & Combobox on Sign-Up
+
+#### Summary
+Added a custom searchable Police Station combobox selector to the first-time sign-up form (`CreateAccountDialog`). Officers can optionally choose their assigned police station from the real Karnataka State Police (KSP) dataset. The selected station's geographic details (district and range) automatically scope the officer's jurisdiction and persist to the database (Officer record), JWT token, and frontend session.
+
+#### Backend Changes
+
+**`backend/app/schemas/auth.py`**
+- Extended `RegisterRequest` with `station_id: Optional[int] = None`.
+- Added a new `StationOption` response model mapping station IDs to names, districts, and ranges.
+
+**`backend/app/api/routes/auth.py`**
+- Added `GET /auth/stations` endpoint to retrieve all police stations sorted by district and name.
+- Updated the `POST /register` handler:
+  - If a `station_id` is selected, fetches the real station record from the database.
+  - Automatically overrides the default geographic scope in `geo` with the station's real ID, district, and range.
+  - Links the new `Officer` record to the selected `station_id`.
+
+#### Frontend Changes
+
+**`frontend/src/components/CreateAccountDialog.tsx`**
+- Replaced the basic input/select placeholder with a custom-styled combobox dropdown.
+- Integrated search functionality to filter stations in real-time by name.
+- Grouped search results dynamically by district (e.g. "Bengaluru City", "Mysuru City").
+- Implemented keyboard shortcuts (Up/Down arrow key selection, Escape/Click-away to close, Enter to select).
+- Added an "X" button to clear the selection, keeping the field optional (suitable for state-level or high-ranking officers).
+- Persists selected station locally to the session user metadata.
+
+---
+
+### [2026-06-18] — Personalised AI Chat Context & Database Knowledge Safeguard
+
+#### Summary
+Replaced the static AI system prompt with a dynamic prompt engine that personalises Gemini's responses based on the logged-in officer's rank, scope, and jurisdiction. Routed conversational "smalltalk" intents to the LLM with this dynamic profile context, enabling Satyam to explain its features, answer personal profile questions, and converse naturally while strictly safeguarding API keys and system credentials.
+
+#### Backend Changes
+
+**`backend/app/pipeline/prompts.py`**
+- Replaced static `ANSWER_SYSTEM` with a dynamic `build_answer_system(principal: Principal | None) -> str` function.
+- Injects the active officer's name, rank, clearance level (L1–L4), jurisdiction scope (state, range, district, station), and district/range names.
+- Injects comprehensive system context about Satyam's features (Text-to-SQL, RAG, Analytics, RLS, audit logs) so Gemini can answer metadata and usage questions.
+- Added explicit guardrails instructing the LLM never to leak sensitive system credentials (API keys, database URLs, JWT secrets).
+
+**`backend/app/pipeline/orchestrator.py`**
+- Rewired the conversational fallback handler in `run()` to fetch `build_answer_system(principal)` and complete user queries using the brain LLM instead of returning a hardcoded static help message.
+- Updated the grounded answer composer `_compose()` to receive the `principal` and construct the personalised system prompt for all grounded database responses.
+
+---
+
+### [2026-06-18] — Sarvam TTS Pipeline Enhancements (Markdown Stripping & Auto-Speak)
+
+#### Summary
+Enhanced the Text-to-Speech (TTS) audio pipeline to strip formatting characters before synthesis, preventing the voice generator from verbalizing raw Markdown. Configured the chat interface to auto-speak typed responses when a cloud-based TTS provider (Sarvam or Google) is active, and added a visual speaking status indicator to the console.
+
+#### Frontend Changes
+
+**`frontend/src/lib/voice/tts.ts`**
+- Added `stripMarkdown(text: string) -> string` to strip code blocks, inline code, headings, bold/italic symbols, Markdown tables, links, and inline citations before sending the payload to the TTS engine.
+- Added an `isServerVoiceEnabled()` helper to check if a server-side TTS engine (`sarvam` or `google`) is active.
+- Refactored `speak()` to prevent memory leaks by calling `URL.revokeObjectURL(url)` on the synthesized audio blob immediately after completion or on playback error.
+
+**`frontend/src/routes/console.tsx`**
+- Updated the message output process to automatically speak text responses when the user types a message and server-side TTS is active (on by default).
+- Subscribed to the `satyam:ai-state` custom event to track the active playback status (`speaking` vs `done`).
+- Added a pulsing green `🔊 Speaking…` badge in the chat console header during TTS audio playback.
+
