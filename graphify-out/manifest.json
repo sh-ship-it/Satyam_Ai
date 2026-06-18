@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781792704.013626,
-    "ast_hash": "c1cb209be496c4aef97081e8d5a8c7db",
+    "mtime": 1781801496.059794,
+    "ast_hash": "6928fe911728be5609435a4a6535582b",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -1065,8 +1065,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/trends.tsx": {
-    "mtime": 1781792680.9919736,
-    "ast_hash": "6dab344ea3687036509ac56476511912",
+    "mtime": 1781801482.9937387,
+    "ast_hash": "7c368127ca2ef0b3fd45ede3a670a540",
     "semantic_hash": ""
   },
   "backend/migrations/003_add_ps4_ps7_tables.sql": {
@@ -1182,6 +1182,11 @@
   "SATYAM_MODEL_LIVE_INFERENCE_REDESIGN.md": {
     "mtime": 1781791836.2792063,
     "ast_hash": "09d0c5573f3e380a453f0b7beabd9083",
+    "semantic_hash": ""
+  },
+  "SATYAM_INCIDENT_TREND_REDESIGN.md": {
+    "mtime": 1781801360.7751262,
+    "ast_hash": "cb52de75877788a98eaf1df1fc6899de",
     "semantic_hash": ""
   }
 }
