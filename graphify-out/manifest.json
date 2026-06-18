@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781788285.2815704,
-    "ast_hash": "c092db6b832eeee8972432fc0970a128",
+    "mtime": 1781790571.7994125,
+    "ast_hash": "a268de65006fe9d14c65737d7aeb43fb",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -1050,8 +1050,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/forecast.tsx": {
-    "mtime": 1781787815.5396767,
-    "ast_hash": "ce63fb8e47dd8eea92b06df86ced2394",
+    "mtime": 1781790506.3840387,
+    "ast_hash": "9a8e53c00e2fd95a409b1e4b341abeba",
     "semantic_hash": ""
   },
   "frontend/src/routes/profile.$personId.tsx": {
@@ -1065,8 +1065,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/trends.tsx": {
-    "mtime": 1781787929.1175015,
-    "ast_hash": "a103399e659a312e9e3a1fd0f1113b1a",
+    "mtime": 1781790340.1322224,
+    "ast_hash": "e576bfc0d64dd4b8b8e52e7e20814cf2",
     "semantic_hash": ""
   },
   "backend/migrations/003_add_ps4_ps7_tables.sql": {
@@ -1165,8 +1165,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ModelInferenceTheater.tsx": {
-    "mtime": 1781787783.4176214,
-    "ast_hash": "b613c95182a30f7abf0c0ddb896a52ec",
+    "mtime": 1781790286.3599968,
+    "ast_hash": "76506861acd2ad596734993663ed69fd",
     "semantic_hash": ""
   },
   "SATYAM_SCREENS_OVERHAUL_AND_FIXES.md": {
