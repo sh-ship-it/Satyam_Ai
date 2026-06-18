@@ -12,6 +12,8 @@ export type EngineSettings = {
   brainEngine: "gemini" | "groq" | "local";
   sqlEngine: "gemini" | "qwen3-coder-next" | "local";
   voiceBackend: "sarvam" | "google" | "webspeech";
+  /** Copilot (top-right) microphone STT engine — independent of the chat voice. */
+  copilotStt: "browser" | "sarvam";
   dbSource: "cloud" | "local";
 };
 
@@ -23,6 +25,7 @@ const defaultEngineSettings: EngineSettings = {
   brainEngine: "gemini",
   sqlEngine: "gemini",
   voiceBackend: "sarvam",
+  copilotStt: "browser", // lowest-latency live captions; switch to Sarvam for best Kannada
   dbSource: "cloud",
 };
 
@@ -266,6 +269,36 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                       >
                         <span className="flex items-center gap-1">
                           {engines.voiceBackend === opt.id && <Check className="h-3 w-3" />}
+                          {opt.label}
+                        </span>
+                        <span className="mt-0.5 block font-normal text-[10px] opacity-70">{opt.hint}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Copilot mic — Speech-to-Text engine (independent of the chat voice/mic) */}
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-foreground">{t("Voice copilot mic (Speech-to-Text)")}</label>
+                  <p className="text-xs text-muted-foreground">{t("Engine for the top-right voice copilot only. Does not affect the chat box mic or the chat voice.")}</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {([
+                      { id: "browser" as const, label: t("Browser"), hint: t("Lowest latency · live captions") },
+                      { id: "sarvam" as const, label: "Sarvam API", hint: t("Best Kannada accuracy") },
+                    ]).map((opt) => (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => updateEngine("copilotStt", opt.id)}
+                        className={
+                          "rounded-[5px] border-2 border-foreground px-3 py-2 text-left text-xs font-bold transition hover:translate-x-[2px] hover:translate-y-[2px] " +
+                          (engines.copilotStt === opt.id
+                            ? "bg-primary text-primary-foreground nb-shadow-sm"
+                            : "bg-secondary-background text-foreground")
+                        }
+                      >
+                        <span className="flex items-center gap-1">
+                          {engines.copilotStt === opt.id && <Check className="h-3 w-3" />}
                           {opt.label}
                         </span>
                         <span className="mt-0.5 block font-normal text-[10px] opacity-70">{opt.hint}</span>

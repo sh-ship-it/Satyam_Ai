@@ -514,6 +514,10 @@ const DICT: Record<string, string> = {
     "ನಿಮ್ಮ ಪ್ರಶ್ನೆಗೆ ಯಾವುದೇ ಫಲಿತಾಂಶ ಸಿಗಲಿಲ್ಲ. ವಿಭಿನ್ನ ಫಿಲ್ಟರ್ ಬಳಸಿ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",  "Seasonal lift % indicates how much higher the crime rate is compared to the year-round baseline for that period. Higher values indicate stronger seasonal patterns.":
     "ಋತುಮಾನ ಏರಿಕೆ % ಎಂದರೆ ಆ ಅವಧಿಗೆ ವಾರ್ಷಿಕ ಆಧಾರರೇಖೆಗಿಂತ ಅಪರಾಧ ದರ ಎಷ್ಟು ಹೆಚ್ಚಿದೆ ಎಂದು ಸೂಚಿಸುತ್ತದೆ.",
 
+  "Voice copilot mic (Speech-to-Text)": "ಧ್ವನಿ ಕೊಪೈಲಟ್ ಮೈಕ್ (ಮಾತು-ಪಠ್ಯ)",
+  "Engine for the top-right voice copilot only. Does not affect the chat box mic or the chat voice.": "ಮೇಲ್ಬಲ ಧ್ವನಿ ಕೊಪೈಲಟ್‌ಗೆ ಮಾತ್ರ. ಚಾಟ್ ಬಾಕ್ಸ್ ಮೈಕ್ ಅಥವಾ ಚಾಟ್ ಧ್ವನಿಯ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುವುದಿಲ್ಲ.",
+  "Browser": "ಬ್ರೌಸರ್",
+  "Lowest latency · live captions": "ಅತ್ಯಂತ ಕಡಿಮೆ ವಿಳಂಬ · ನೇರ ಶೀರ್ಷಿಕೆಗಳು",
   // Forecast screen
   "PS8 · Predictive Intelligence": "PS8 · ಭವಿಷ್ಯಸೂಚಕ ಗುಪ್ತಚರ",
   "Early Warning & Forecast": "ಮುಂಚಿನ ಎಚ್ಚರಿಕೆ ಮತ್ತು ಮುನ್ಸೂಚನೆ",
