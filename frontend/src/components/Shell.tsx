@@ -19,7 +19,7 @@ import {
 import { type ReactNode, useState, useEffect, useRef, useCallback } from "react";
 import { ThemePicker } from "./ThemePicker";
 import { DarkModeToggle } from "./DarkModeToggle";
-import { SettingsDialog, loadEngineSettings } from "./SettingsDialog";
+import { SettingsDialog } from "./SettingsDialog";
 import { ProfileMenu } from "./ProfileMenu";
 import { useI18n } from "@/lib/i18n";
 import {
@@ -31,7 +31,6 @@ import {
   unlockAudioPlayback,
 } from "@/lib/voice/tts";
 import { resolveLang } from "@/lib/voice/lang";
-import { startSttSession, isBackendSttSupported } from "@/lib/voice/recorder";
 
 type VoiceScreen = { to: string; words: RegExp };
 const SCREEN_ROUTES: VoiceScreen[] = [
@@ -319,19 +318,33 @@ export function Shell({ children }: { children: ReactNode }) {
     turnSubmittedRef.current = false;
     phaseRef.current = "listening";
 
-    // Secure-context guard (shared): mic is blocked on plain http://<LAN-IP>.
+    // Secure-context guard: mic is blocked on plain http://<LAN-IP>.
     if (typeof window !== "undefined" && !window.isSecureContext &&
         location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
       setSpeechError("Microphone needs https or localhost. Open the app at http://localhost:3000.");
       return;
     }
 
-    // The COPILOT mic engine is chosen in Settings -> Models ("Voice copilot
-    // mic"). It is fully INDEPENDENT of the chat voice (voiceBackend) and of the
-    // chat-box mic; only this top-right copilot effect reads copilotStt.
-    const sttEngine = loadEngineSettings().copilotStt; // "browser" | "sarvam"
+    const SR: any =
+      (typeof window !== "undefined" &&
+        ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) || null;
+    if (!SR) {
+      setSpeechError("This browser has no speech recognition. Use Chrome or Edge.");
+      return;
+    }
 
-    // Shared: hand a finished utterance to the Gemini brain.
+    console.debug("[voice] SpeechRecognition start", { voiceLang, uiLang: lang });
+
+    const rec = new SR();
+    rec.continuous = true;  // keep listening until explicit stop
+    rec.interimResults = true;
+    // Give the browser a concrete language; "auto" uses the UI language as hint.
+    // Reply language is still auto-detected from the answer text via detectLang.
+    rec.lang =
+      voiceLang === "auto"
+        ? (lang === "KN" ? "kn-IN" : "en-IN")
+        : (coerceVoiceLang(voiceLang) || "en-IN");
+
     const dispatchTurn = (rawText: string) => {
       if (turnSubmittedRef.current) return;
       const text = rawText.trim();
@@ -341,178 +354,105 @@ export function Shell({ children }: { children: ReactNode }) {
       phaseRef.current = "processing";
       setMicActive(false);
       const turnLang = voiceLangRef.current; // "auto" | "kn-IN" | "en-IN"
-      console.debug("[voice] dispatchTurn", { engine: sttEngine, text, turnLang });
+      console.debug("[voice] dispatchTurn", { text, turnLang });
       window.dispatchEvent(new CustomEvent("satyam:voice-command", {
         detail: { text, lang: turnLang, rate: speechRateRef.current, speak: true },
       }));
     };
 
-    // === OPTION A - BROWSER (Web Speech API) =================================
-    // Lowest latency, live word-by-word captions. Kannada via rec.lang="kn-IN"
-    // (Chrome / Edge only; Kannada accuracy is weaker than Sarvam).
-    if (sttEngine === "browser") {
-      const SR: any =
-        (typeof window !== "undefined" &&
-          ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) || null;
-      if (!SR) {
-        setSpeechError("This browser has no speech recognition. Use Chrome/Edge, or switch the copilot mic to Sarvam in Settings.");
-        return;
+    const armSilence = () => {
+      if (turnSubmittedRef.current) return;
+      clearSilenceTimer();
+      // Auto-submit ~1.5 s after speech stops — works in both manual & conversation mode.
+      silenceTimerRef.current = setTimeout(() => {
+        const text = `${liveFinalRef.current} ${liveInterimRef.current}`.trim();
+        if (text) dispatchTurn(text);
+      }, 1500);
+    };
+
+    rec.onstart = () => {
+      setSpeechError(null);
+      setCaptureStatus(null);
+      console.debug("[voice] recognition onstart, lang=", rec.lang);
+    };
+    rec.onaudiostart = () => {
+      console.debug("[voice] onaudiostart — mic is open");
+      setCaptureStatus(null);
+    };
+    rec.onspeechstart = () => {
+      console.debug("[voice] onspeechstart — voice detected");
+      setInterimTranscript("\u2026");
+    };
+    rec.onresult = (e: any) => {
+      let interim = "", finals = "";
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const r = e.results[i];
+        if (r.isFinal) finals += r[0].transcript;
+        else interim += r[0].transcript;
       }
-      console.debug("[voice] SpeechRecognition start", { voiceLang, uiLang: lang });
-
-      const rec = new SR();
-      rec.continuous = true; // keep listening until explicit stop
-      rec.interimResults = true;
-      // Concrete language hint; "auto" falls back to the UI language.
-      rec.lang =
-        voiceLang === "auto"
-          ? (lang === "KN" ? "kn-IN" : "en-IN")
-          : (coerceVoiceLang(voiceLang) || "en-IN");
-
-      const armSilence = () => {
-        if (turnSubmittedRef.current) return;
-        clearSilenceTimer();
-        // Auto-submit ~1.5s after speech stops.
-        silenceTimerRef.current = setTimeout(() => {
-          const text = `${liveFinalRef.current} ${liveInterimRef.current}`.trim();
-          if (text) dispatchTurn(text);
-        }, 1500);
-      };
-
-      rec.onstart = () => { setSpeechError(null); setCaptureStatus(null); };
-      rec.onaudiostart = () => { setCaptureStatus(null); };
-      rec.onspeechstart = () => { setInterimTranscript("\u2026"); };
-      rec.onresult = (e: any) => {
-        let interim = "", finals = "";
-        for (let i = e.resultIndex; i < e.results.length; i++) {
-          const r = e.results[i];
-          if (r.isFinal) finals += r[0].transcript;
-          else interim += r[0].transcript;
-        }
-        if (finals) {
-          const add = finals.trim();
-          setFinalTranscript((p) => (p ? p + " " : "") + add);
-          setEditableTranscript((p) => {
-            const n = (p ? p + " " : "") + add;
-            liveFinalRef.current = n;
-            return n;
-          });
-        }
-        liveInterimRef.current = interim;
-        setInterimTranscript(interim || (liveFinalRef.current ? "" : "\u2026"));
-        armSilence(); // reset end-of-utterance timer on every speech event
-      };
-      rec.onerror = (e: any) => {
-        if (e.error === "not-allowed" || e.error === "service-not-allowed")
-          setSpeechError("Microphone permission denied. Allow mic in the browser address bar.");
-        else if (e.error === "audio-capture")
-          setSpeechError("No microphone found, or it is in use by another app (Zoom/Meet).");
-        else if (e.error === "no-speech") {
-          /* keep waiting - user hasn't spoken yet */
-        } else {
-          setSpeechError(`Mic error: ${e.error}`);
-        }
-      };
-      rec.onend = () => {
-        // Auto-restart only if still active and no turn was submitted.
-        if (recognitionRef.current !== rec) return;
-        if (turnSubmittedRef.current) return;
-        setTimeout(() => {
-          if (recognitionRef.current !== rec || turnSubmittedRef.current) return;
-          try { rec.start(); } catch { /* effect re-creates on next render */ }
-        }, 200);
-      };
-
-      recognitionRef.current = rec;
-      sttSessionRef.current = {
-        stop: () => {
-          const text = `${liveFinalRef.current} ${liveInterimRef.current}`.trim();
-          if (text && !turnSubmittedRef.current) dispatchTurn(text);
-          try { rec.stop(); } catch { /* noop */ }
-        },
-        cancel: () => {
-          recognitionRef.current = null;
-          try { rec.onend = null; rec.stop(); } catch { /* noop */ }
-        },
-      };
-
-      try {
-        unlockAudioPlayback();
-        rec.start();
-        console.debug("[voice] rec.start() OK, lang=", rec.lang);
-      } catch (err) {
-        setSpeechError("Could not start microphone. Reload the page and try again.");
+      if (finals) {
+        const add = finals.trim();
+        setFinalTranscript((p) => (p ? p + " " : "") + add);
+        setEditableTranscript((p) => {
+          const n = (p ? p + " " : "") + add;
+          liveFinalRef.current = n;
+          return n;
+        });
       }
+      liveInterimRef.current = interim;
+      setInterimTranscript(interim || (liveFinalRef.current ? "" : "\u2026"));
+      armSilence(); // reset the end-of-utterance timer on every speech event
+    };
+    rec.onerror = (e: any) => {
+      if (e.error === "not-allowed" || e.error === "service-not-allowed")
+        setSpeechError("Microphone permission denied. Allow mic in the browser address bar.");
+      else if (e.error === "audio-capture")
+        setSpeechError("No microphone found, or it is in use by another app (Zoom/Meet).");
+      else if (e.error === "no-speech") {
+        /* keep waiting — user hasn't spoken yet */
+      } else {
+        setSpeechError(`Mic error: ${e.error}`);
+      }
+    };
+    rec.onend = () => {
+      // Only auto-restart if this recognizer is still active and no turn was submitted.
+      if (recognitionRef.current !== rec) return;
+      if (turnSubmittedRef.current) return;
+      setTimeout(() => {
+        if (recognitionRef.current !== rec || turnSubmittedRef.current) return;
+        try { rec.start(); } catch { /* effect will re-create on next render */ }
+      }, 200);
+    };
 
-      return () => {
-        recognitionRef.current = null;
-        clearSilenceTimer();
-        try { rec.onend = null; rec.stop(); } catch { /* noop */ }
-        sttSessionRef.current = null;
-      };
-    }
-
-    // === OPTION B - SARVAM (Saaras v3) ======================================
-    // Best Kannada accuracy. Utterance-based: shows capture status then the
-    // final recognized text (no word-by-word live captions).
-    if (!isBackendSttSupported()) {
-      setSpeechError("This browser can't record audio for Sarvam STT. Use Chrome or Edge.");
-      return;
-    }
-
-    const sttLang: "auto" | "en" | "kn" =
-      voiceLang === "auto" ? "auto" : voiceLang.toLowerCase().startsWith("kn") ? "kn" : "en";
-
-    let session: { stop: () => void; cancel: () => void } | null = null;
-    let cancelled = false;
-
-    unlockAudioPlayback();
-    void startSttSession({
-      lang: sttLang,
-      silenceMs: 1500, // auto-end the utterance ~1.5s after speech stops
-      maxMs: 15000,
-      callbacks: {
-        onStatus: (s: string) => { if (!cancelled) setCaptureStatus(s); },
-        onSpeechStart: () => {
-          if (cancelled) return;
-          setInterimTranscript("\u2026");
-          setCaptureStatus("Hearing you\u2026");
-        },
-        onResult: (transcript: string) => {
-          if (cancelled) return;
-          const clean = (transcript || "").trim();
-          setInterimTranscript("");
-          if (clean) {
-            setCaptureStatus(null);
-            setFinalTranscript(clean);
-            setEditableTranscript(clean);
-            liveFinalRef.current = clean;
-            dispatchTurn(clean);
-          } else {
-            setCaptureStatus("Didn't catch that \u2014 tap the mic to try again.");
-          }
-        },
-        onError: (msg: string) => { if (!cancelled) setSpeechError(msg); },
+    recognitionRef.current = rec;
+    // Expose stop/cancel so the mic-orb tap and cleanup can stop it.
+    sttSessionRef.current = {
+      stop: () => {
+        const text = `${liveFinalRef.current} ${liveInterimRef.current}`.trim();
+        if (text && !turnSubmittedRef.current) dispatchTurn(text);
+        try { rec.stop(); } catch { /* noop */ }
       },
-    })
-      .then((s) => {
-        if (cancelled) { try { s.cancel(); } catch { /* noop */ } return; }
-        session = s;
-        recognitionRef.current = s; // keep the ref live for cleanup / orb-tap stop
-        sttSessionRef.current = {
-          stop: () => { try { s.stop(); } catch { /* noop */ } },
-          cancel: () => { try { s.cancel(); } catch { /* noop */ } },
-        };
-      })
-      .catch(() => {
-        if (!cancelled) setSpeechError("Could not start the microphone. Reload and try again.");
-      });
+      cancel: () => {
+        recognitionRef.current = null;
+        try { rec.onend = null; rec.stop(); } catch { /* noop */ }
+      },
+    };
+
+    try {
+      // Call unlockAudioPlayback again right before rec.start() — the gesture
+      // chain may have broken between the panel opening and the effect running.
+      unlockAudioPlayback();
+      rec.start();
+      console.debug("[voice] rec.start() OK, lang=", rec.lang);
+    } catch (err) {
+      console.debug("[voice] rec.start() failed:", err);
+      setSpeechError("Could not start microphone. Reload the page and try again.");
+    }
 
     return () => {
-      cancelled = true;
       recognitionRef.current = null;
       clearSilenceTimer();
-      try { session?.cancel(); } catch { /* noop */ }
+      try { rec.onend = null; rec.stop(); } catch { /* noop */ }
       sttSessionRef.current = null;
     };
   }, [listening, micActive, lang, voiceLang, clearSilenceTimer]);
