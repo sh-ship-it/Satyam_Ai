@@ -30,8 +30,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/auth.py": {
-    "mtime": 1781756549.8204086,
-    "ast_hash": "7b6a774e862040362a72445e9586b5eb",
+    "mtime": 1781757588.4480598,
+    "ast_hash": "4463ca55091213b552f3df867e774ac8",
     "semantic_hash": ""
   },
   "backend/app/api/routes/cases.py": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/client.ts": {
-    "mtime": 1781756586.9384644,
-    "ast_hash": "861aa741bd2430ba7de208dfd09a4a66",
+    "mtime": 1781757599.6202984,
+    "ast_hash": "676f9d32c35f64078370be7c610c534e",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/example.functions.ts": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1781756694.7360053,
-    "ast_hash": "227794b93d4b87186379f5718ed45a94",
+    "mtime": 1781757813.2868738,
+    "ast_hash": "9bd579eb123eda8ebf56d4e495a29592",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -865,8 +865,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/login.tsx": {
-    "mtime": 1781756651.461064,
-    "ast_hash": "db0b4645ad64c5e204cd74d292fd40a4",
+    "mtime": 1781757685.0954604,
+    "ast_hash": "d66b735fc07d755e7a78d6ed74437379",
     "semantic_hash": ""
   },
   "backend/app/models/api/ollama_cloud.py": {
@@ -975,8 +975,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CreateAccountDialog.tsx": {
-    "mtime": 1781756676.9928403,
-    "ast_hash": "c0aef667f40ece416c86361c1e77e0f8",
+    "mtime": 1781757769.1544006,
+    "ast_hash": "f6b419877a06cc6d633b4927bb1482ef",
     "semantic_hash": ""
   },
   "backend/app/api/routes/voice.py": {
