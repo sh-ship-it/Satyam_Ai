@@ -72,15 +72,15 @@ function SeedSearch({
 
   // Pre-load top offenders shown before user types
   useEffect(() => {
-    const p = new URLSearchParams({ limit: "8", min_offenses: "2" });
+    const p = new URLSearchParams({ limit: "8", min_offenses: "1" });
     intelligence.listOffenders(p)
       .then(r => setPopular(r.offenders.slice(0, 8)))
       .catch(() => {});
   }, []);
 
-  // Live search while typing
+  // Live search while typing (Google-style: fires from the first character)
   useEffect(() => {
-    if (value.trim().length < 2) {
+    if (value.trim().length < 1) {
       setResults([]);
       return;
     }
@@ -89,9 +89,9 @@ function SeedSearch({
       setSearching(true);
       intelligence.searchPersonsAndCases(value.trim(), 10)
         .then(r => { setResults(r); setActiveIdx(-1); })
-        .catch(() => setResults([]))
+        .catch(err => { console.error("[seed search] failed:", err); setResults([]); })
         .finally(() => setSearching(false));
-    }, 280);
+    }, 180);
     return () => { if (debounce.current) clearTimeout(debounce.current); };
   }, [value]);
 
@@ -106,7 +106,7 @@ function SeedSearch({
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const showDropdown = open && (value.trim().length < 2 ? popular.length > 0 : results.length > 0 || searching);
+  const showDropdown = open && (value.trim().length < 1 ? popular.length > 0 : results.length > 0 || searching);
 
   function pick(name: string) {
     onChange(name);
@@ -116,7 +116,7 @@ function SeedSearch({
   }
 
   function handleKey(e: React.KeyboardEvent) {
-    const items = value.trim().length < 2 ? popular.map(p => p.display_name) : results.map(r => r.label);
+    const items = value.trim().length < 1 ? popular.map(p => p.display_name) : results.map(r => r.label);
     if (!showDropdown) return;
     if (e.key === "ArrowDown") { e.preventDefault(); setActiveIdx(i => Math.min(i + 1, items.length - 1)); }
     if (e.key === "ArrowUp")   { e.preventDefault(); setActiveIdx(i => Math.max(i - 1, 0)); }
@@ -153,7 +153,7 @@ function SeedSearch({
       {showDropdown && (
         <div className="absolute left-0 top-full z-[500] mt-1.5 w-72 max-h-72 overflow-y-auto rounded-xl border border-border bg-card shadow-2xl divide-y divide-border/50">
           {/* Pre-type: show popular offenders */}
-          {value.trim().length < 2 && (
+          {value.trim().length < 1 && (
             <>
               <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted/30 flex items-center gap-1.5">
                 <TrendingUp className="h-3 w-3" /> {t("Top offenders")}
@@ -182,17 +182,17 @@ function SeedSearch({
           )}
 
           {/* While typing: live search results */}
-          {value.trim().length >= 2 && searching && (
+          {value.trim().length >= 1 && searching && (
             <div className="flex items-center justify-center gap-2 px-3 py-4 text-xs text-muted-foreground">
               <Loader2 className="h-3.5 w-3.5 animate-spin" /> Searching…
             </div>
           )}
-          {value.trim().length >= 2 && !searching && results.length === 0 && (
+          {value.trim().length >= 1 && !searching && results.length === 0 && (
             <div className="px-3 py-4 text-xs text-muted-foreground text-center">
               No results for "<strong>{value}</strong>"
             </div>
           )}
-          {value.trim().length >= 2 && !searching && results.length > 0 && (() => {
+          {value.trim().length >= 1 && !searching && results.length > 0 && (() => {
             const persons = results.filter(r => r.type === "person");
             const cases   = results.filter(r => r.type === "case");
             return (
@@ -358,7 +358,7 @@ function NetworkScreen() {
       const d = (e as CustomEvent).detail;
       if (!d || d.route !== "/network") return;
       setTaskMsg(d.task || d.query || null);
-      if (d.task) fetchGraph(d.task);
+      if (d.task) { setSeedInput(d.task); fetchGraph(d.task); } // show the name in the Seed box AND search it
     };
     window.addEventListener("satyam:run-task", onTask);
     return () => window.removeEventListener("satyam:run-task", onTask);

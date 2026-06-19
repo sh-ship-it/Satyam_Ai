@@ -11,6 +11,7 @@ import { tData } from "@/lib/tData";
 import { SimilarCaseSearch } from "@/components/SimilarCaseSearch";
 import { streamChat, type ChatEvent, api, type StationRow, getAuthToken } from "@/lib/api/client";
 import { CrimeMap, type Hotspot } from "@/components/CrimeMap";
+import { intelligence } from "@/lib/api/intelligence";
 import { speakViaSarvam, isServerVoiceEnabled } from "@/lib/voice/tts";
 import { detectLang, resolveLang } from "@/lib/voice/lang";
 import { loadEngineSettings } from "@/components/SettingsDialog";
@@ -109,6 +110,7 @@ function Console() {
   const [canvasErr, setCanvasErr] = useState<string | null>(null);
   const [trail, setTrail] = useState<Hotspot[] | undefined>(undefined);
   const [trailKey, setTrailKey] = useState(0);
+  const [mapFocus, setMapFocus] = useState<Hotspot[] | null>(null);
 
   const connectDots = async (seed: string) => {
     try {
@@ -257,6 +259,26 @@ function Console() {
       window.removeEventListener("satyam:insert-transcript", handler);
       window.removeEventListener("satyam:voice-send", voiceSendHandler);
     };
+  }, []);
+
+  // AI: focus the map on a person's crime locations.
+  useEffect(() => {
+    const onMapFocus = async (e: Event) => {
+      const d = (e as CustomEvent).detail || {};
+      const who = d.person || d.place || "";
+      if (!who) return;
+      setCanvasTab("map");   // make sure the map panel is showing
+      setMapMode("pins");
+      try {
+        const locs = await intelligence.personLocations(who);
+        setMapFocus(locs.length ? locs : null);
+      } catch (err) {
+        console.error("[map-focus] failed:", err);
+        setMapFocus(null);
+      }
+    };
+    window.addEventListener("satyam:map-focus", onMapFocus);
+    return () => window.removeEventListener("satyam:map-focus", onMapFocus);
   }, []);
 
   const activeConv = conversations.find((c) => c.id === activeId);
@@ -840,7 +862,7 @@ function Console() {
                 </button>
               </div>
 
-              <CrimeMap points={hotspots} mode={mapMode} trail={trail} animateKey={trailKey} />
+              <CrimeMap points={hotspots} mode={mapMode} trail={trail} animateKey={trailKey} focus={mapFocus} />
 
               {/* Legend */}
               <div className="absolute bottom-4 left-4 z-[400] rounded-lg border border-border bg-card/95 backdrop-blur px-3 py-2 text-xs shadow-lg">

@@ -46,7 +46,7 @@ async def search_persons_and_cases(
     except AccessDenied as e:
         raise HTTPException(status_code=403, detail=str(e))
 
-    pat = f"%{q}%"
+    pat = f"%{q.strip()}%"
 
     # Person search
     person_sql = text("""
@@ -56,7 +56,7 @@ async def search_persons_and_cases(
         FROM persons p
         LEFT JOIN case_persons cp ON cp.person_id = p.person_id
         LEFT JOIN cases c ON c.case_id = cp.case_id
-        WHERE p.name ILIKE :pat
+        WHERE p.name ILIKE :pat OR CAST(p.person_id AS TEXT) ILIKE :pat
         GROUP BY p.person_id, p.name, p.gender, p.age, p.district
         ORDER BY case_count DESC
         LIMIT :lim
@@ -99,6 +99,43 @@ async def search_persons_and_cases(
             "district": c["district"],
         })
     return results
+
+
+@router.get("/persons/locations")
+async def person_locations(
+    q: str,
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> list[dict]:
+    """Geocoded crime locations for the best name match — used by the voice 'show on map' action."""
+    try:
+        require(principal, Permission.READ_CASE)
+    except AccessDenied as e:
+        raise HTTPException(status_code=403, detail=str(e))
+
+    pat = f"%{q.strip()}%"
+    sql = text(
+        """
+        SELECT c.fir_number, c.crime_type, c.place_of_offence, c.latitude, c.longitude
+        FROM cases c
+        JOIN case_persons cp ON cp.case_id = c.case_id
+        JOIN persons p ON p.person_id = cp.person_id
+        WHERE p.name ILIKE :pat
+          AND c.latitude IS NOT NULL AND c.longitude IS NOT NULL
+        ORDER BY c.case_id DESC
+        LIMIT 50
+        """
+    )
+    rows = (await session.execute(sql, {"pat": pat})).mappings().all()
+    return [
+        {
+            "lat": r["latitude"],
+            "lng": r["longitude"],
+            "weight": 1,
+            "label": f"{r['crime_type'] or 'Crime'} · {r['place_of_offence'] or ''} ({r['fir_number'] or ''})",
+        }
+        for r in rows
+    ]
 
 
 @router.get("/{case_id}")

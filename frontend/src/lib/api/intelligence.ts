@@ -80,6 +80,8 @@ export type SocioCorrelationResponse = { scatter: CorrelationPoint[]; correlatio
 export type RiskArea = { district: string; social_risk_score: number; drivers: string[] };
 export type SocialRiskIndexResponse = { areas: RiskArea[] };
 
+export type PersonLocation = { lat: number; lng: number; weight: number; label: string };
+
 // ── API functions ──────────────────────────────────────────────────────────
 
 export const intelligence = {
@@ -113,7 +115,11 @@ export const intelligence = {
 
   // Search — unified person + case autocomplete
   searchPersonsAndCases: (q: string, limit = 12) =>
-    apiFetch<SearchResult[]>(`/cases/search?q=${encodeURIComponent(q)}&limit=${limit}`),
+    apiFetch<SearchResult[]>(`/api/cases/search?q=${encodeURIComponent(q)}&limit=${limit}`),
+
+  // Voice "show on map" — geocoded crime locations for a person name
+  personLocations: (q: string) =>
+    apiFetch<PersonLocation[]>(`/api/cases/persons/locations?q=${encodeURIComponent(q)}`),
 
   // C4 — Browse all offenders (for the profile dropdown)
   listOffenders: (params?: URLSearchParams) =>

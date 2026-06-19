@@ -43,6 +43,12 @@ const SCREEN_ROUTES: VoiceScreen[] = [
   { to: "/transcripts", words: /(transcripts?|recordings?)|ಪ್ರತಿಲೇಖನ/i },
 ];
 const NAV_VERB = /(open|show|go to|goto|navigate|take me to|switch to|jump to)|ತೆರೆ|ಹೋಗು|ತೋರಿಸಿ/i;
+// Person-crime question: "what crime did X commit" / "crime rate of X" / Kannada equivalents.
+const PERSON_CRIME_INTENT = /(crime rate|what crime|which crime|crimes?|offences?|offenses?|record of|history of)|ಅಪರಾಧ|ಕ್ರಿಮಿನಲ್|ಅಪರಾಧಗಳು/i;
+// Follow-up affirmatives + the two suggested actions.
+const AFFIRM = /\b(yes|yeah|yep|sure|ok|okay|please do|go ahead|details)\b|ಹೌದು|ಸರಿ|ವಿವರ|ಮಾಡಿ/i;
+const MAP_ACTION = /(map|location|place|where|pin|on the map)|ನಕ್ಷೆ|ಸ್ಥಳ|ಎಲ್ಲಿ/i;
+const NETWORK_ACTION = /(network|graph|connections?|links?)|ನೆಟ್‌ವರ್ಕ್|ಸಂಪರ್ಕ/i;
 const KANNADA_INTENT = /(in kannada|kannadadalli|kannada)|ಕನ್ನಡ/i;
 const ENGLISH_INTENT = /(in english|english)|ಇಂಗ್ಲಿಷ್/i;
 
@@ -141,6 +147,7 @@ export function Shell({ children }: { children: ReactNode }) {
   // —— turn-taking machine ——
   const phaseRef = useRef<"listening" | "processing" | "speaking">("listening");
   const conversationModeRef = useRef(false);
+  const lastPersonRef = useRef<string>("");
   const listeningRef = useRef(false);
   const voiceLangRef = useRef(voiceLang);
   const speechRateRef = useRef(speechRate);
@@ -277,6 +284,56 @@ export function Shell({ children }: { children: ReactNode }) {
         if (conversationModeRef.current) setTimeout(() => resumeListening(), 700);
         return;
       }
+      // 2.5) Follow-up actions after a person-crime answer ("yes / on the map / in the network").
+      if (lastPersonRef.current && (AFFIRM.test(cmd.query) || MAP_ACTION.test(cmd.query) || NETWORK_ACTION.test(cmd.query))) {
+        const who = lastPersonRef.current;
+        if (MAP_ACTION.test(cmd.query)) {
+          navigate({ to: "/console" });
+          window.dispatchEvent(new CustomEvent("satyam:map-focus", { detail: { person: who } }));
+          if (detail.speak) speakText(resolved === "kn" ? `${who} ಅವರ ಅಪರಾಧ ಸ್ಥಳವನ್ನು ನಕ್ಷೆಯಲ್ಲಿ ತೋರಿಸಲಾಗುತ್ತಿದೆ` : `Showing ${who}'s crime location on the map`, speechLang, rate);
+        } else {
+          // default / "network" / bare "yes" -> open the Network graph for this person
+          navigate({ to: "/network" });
+          window.dispatchEvent(new CustomEvent("satyam:run-task", { detail: { route: "/network", query: who, task: who, lang: resolved, rate, speak: !!detail.speak } }));
+          if (detail.speak) speakText(resolved === "kn" ? `${who} ಅವರ ನೆಟ್‌ವರ್ಕ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ` : `Opening ${who}'s network`, speechLang, rate);
+        }
+        lastPersonRef.current = "";
+        if (conversationModeRef.current) setTimeout(() => resumeListening(), 700);
+        closePanel();
+        return;
+      }
+
+      // 2.6) Person-crime question -> answer in Console, then offer follow-up actions by voice.
+      if (PERSON_CRIME_INTENT.test(cmd.query)) {
+        // Best-effort name extraction: strip the intent words and common fillers.
+        const who = cmd.query
+          .replace(PERSON_CRIME_INTENT, " ")
+          .replace(/\b(did|does|do|commit|committed|of|the|by|for|show|me|what|which|is|are|his|her|their|tell)\b/gi, " ")
+          .replace(/\s+/g, " ").trim();
+        if (who) lastPersonRef.current = who;
+        const ask = { text: cmd.query, lang: voiceLang === "auto" ? "auto" : speechLang, rate, speak: detail.speak !== false };
+        if (pathname === "/console") {
+          window.dispatchEvent(new CustomEvent("satyam:voice-send", { detail: ask }));
+        } else {
+          try { sessionStorage.setItem("satyam:pending-voice", JSON.stringify(ask)); } catch {}
+          navigate({ to: "/console" });
+        }
+        // After the grounded answer is spoken, offer the next step and keep listening.
+        if (detail.speak) {
+          setTimeout(() => {
+            speakText(
+              resolved === "kn"
+                ? `${lastPersonRef.current} ಅವರ ಇತರ ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಲಾ? ನಕ್ಷೆಯಲ್ಲಿ ತೋರಿಸಲೇ ಅಥವಾ ನೆಟ್‌ವರ್ಕ್‌ನಲ್ಲಿ ಹುಡುಕಲಾ?`
+                : `Do you want me to check ${lastPersonRef.current}'s other details? I can show the crime location on the map, or search them in the network.`,
+              speechLang, rate,
+            );
+            if (conversationModeRef.current) resumeListening();
+          }, 3500); // give the grounded answer time to speak first
+        }
+        closePanel();
+        return;
+      }
+
       // 3) Data query -> Console (grounded answer, spoken in chosen language).
       // Preserve the "auto" sentinel so Console can auto-detect the reply
       // language from the actual answer text (resolveLang). Pre-resolving to a

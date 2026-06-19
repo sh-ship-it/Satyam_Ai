@@ -19,11 +19,13 @@ export function CrimeMap({
   mode = "heat",
   trail,
   animateKey,
+  focus,
 }: {
   points: Hotspot[];
   mode?: Mode;
   trail?: Hotspot[];
   animateKey?: number;
+  focus?: Hotspot[] | null;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
@@ -133,6 +135,30 @@ export function CrimeMap({
 
     return () => { if (trailLayerRef.current) { map.removeLayer(trailLayerRef.current); trailLayerRef.current = null; } };
   }, [trail, animateKey, ready]);
+
+  // AI focus: highlight a specific person's crime locations and zoom in.
+  const focusLayerRef = useRef<any>(null);
+  useEffect(() => {
+    const map = mapRef.current, L = LRef.current;
+    if (!map || !L || !ready) return;
+    if (focusLayerRef.current) { map.removeLayer(focusLayerRef.current); focusLayerRef.current = null; }
+    if (!focus || focus.length === 0) return;
+
+    const group = L.layerGroup().addTo(map);
+    focusLayerRef.current = group;
+    focus.forEach((p, i) => {
+      const m = L.circleMarker([p.lat, p.lng], {
+        radius: 11, color: "#2563eb", weight: 3, fillColor: "#3b82f6", fillOpacity: 0.9,
+      }).bindPopup(`<strong>${p.label ?? "Crime location"}</strong>`).addTo(group);
+      if (i === 0) m.openPopup();
+    });
+    try {
+      const b = L.latLngBounds(focus.map((p) => [p.lat, p.lng] as [number, number]));
+      map.fitBounds(b, { padding: [60, 60], maxZoom: 14 });
+    } catch { /* single-point edge case */ }
+
+    return () => { if (focusLayerRef.current) { map.removeLayer(focusLayerRef.current); focusLayerRef.current = null; } };
+  }, [focus, ready]);
 
   return <div ref={containerRef} className="absolute inset-0 z-0 bg-muted" />;
 }
