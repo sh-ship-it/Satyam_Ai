@@ -29,9 +29,11 @@ import {
   pauseSpeech,
   resumeSpeech,
   unlockAudioPlayback,
+  stripMarkdown,
 } from "@/lib/voice/tts";
 import { resolveLang } from "@/lib/voice/lang";
 import { startSttSession, isBackendSttSupported } from "@/lib/voice/recorder";
+import { streamChat, type ChatEvent } from "@/lib/api/client";
 
 type VoiceScreen = { to: string; words: RegExp };
 const SCREEN_ROUTES: VoiceScreen[] = [
@@ -148,6 +150,9 @@ export function Shell({ children }: { children: ReactNode }) {
   const phaseRef = useRef<"listening" | "processing" | "speaking">("listening");
   const conversationModeRef = useRef(false);
   const lastPersonRef = useRef<string>("");
+  // Conversation id for the TOP-RIGHT COPILOT's own grounded answers. Kept
+  // separate from the Console chat thread so the copilot never posts into chat.
+  const copilotConvId = useRef<string | null>(null);
   const listeningRef = useRef(false);
   const voiceLangRef = useRef(voiceLang);
   const speechRateRef = useRef(speechRate);
@@ -248,6 +253,56 @@ export function Shell({ children }: { children: ReactNode }) {
         setMicActive(false);
       };
 
+      // The TOP-RIGHT COPILOT answers data questions ITSELF and speaks the reply
+      // back, like two people talking. It calls the same grounded /chat/stream
+      // API the Console uses, but NEVER forwards the turn to the Console chat
+      // thread (that is exclusively the chat-box mic's job). The spoken reply
+      // drives the existing satyam:ai-state state machine (thinking -> speaking
+      // -> done) so the orb animates and conversation mode keeps listening.
+      const answerInCopilot = (question: string, followUp?: string) => {
+        const aiState = (state: "thinking" | "speaking" | "done") =>
+          window.dispatchEvent(new CustomEvent("satyam:ai-state", { detail: { state } }));
+        aiState("thinking"); // orb shows "Thinking…" + arms the recovery watchdog
+        const engines = loadEngineSettings();
+        let acc = "";
+        let streamError = false;
+        const finish = () => {
+          let answer = acc.trim();
+          if (streamError)
+            answer = t("I couldn't reach the backend just now. Please retry once the API is running.");
+          else if (!answer)
+            answer = t("No results matched your query. Try a broader question or different filters.");
+          // For a person-crime turn we append the spoken follow-up offer so it is
+          // one continuous utterance (no mid-answer mic re-arm race).
+          const toSpeak = followUp && !streamError ? `${answer}. ${followUp}` : answer;
+          if (detail.speak === false) { aiState("done"); return; }
+          const spokenLang: "en" | "kn" = resolveLang(speechLang, toSpeak);
+          void speakViaSarvam(stripMarkdown(toSpeak), spokenLang, rate, {
+            onStart: () => aiState("speaking"),
+            onEnd: () => aiState("done"),
+          });
+        };
+        void streamChat(
+          {
+            message: question,
+            conversation_id: copilotConvId.current ?? undefined,
+            lang: resolved, // "en" | "kn"
+            brain_engine: engines.brainEngine,
+            sql_engine: engines.sqlEngine,
+            voice_backend: engines.voiceBackend === "webspeech" ? undefined : engines.voiceBackend,
+          },
+          (ev: ChatEvent) => {
+            if (ev.type === "token") acc += ev.text;
+            else if (ev.type === "blocked")
+              acc = t("Your role can't view named accused records. Showing aggregate counts instead.");
+            else if (ev.type === "done") copilotConvId.current = ev.conversation_id;
+            else if (ev.type === "error") streamError = true;
+          },
+        )
+          .then(finish)
+          .catch(() => { streamError = true; finish(); });
+      };
+
       // 0) Pure language switch ("speak in Kannada").
       if (cmd.langOnly) {
         closePanel();
@@ -303,7 +358,8 @@ export function Shell({ children }: { children: ReactNode }) {
         return;
       }
 
-      // 2.6) Person-crime question -> answer in Console, then offer follow-up actions by voice.
+      // 2.6) Person-crime question -> the COPILOT answers out loud ITSELF, then
+      // offers the next step in the SAME spoken reply. Nothing is posted to chat.
       if (PERSON_CRIME_INTENT.test(cmd.query)) {
         // Best-effort name extraction: strip the intent words and common fillers.
         const who = cmd.query
@@ -311,43 +367,19 @@ export function Shell({ children }: { children: ReactNode }) {
           .replace(/\b(did|does|do|commit|committed|of|the|by|for|show|me|what|which|is|are|his|her|their|tell)\b/gi, " ")
           .replace(/\s+/g, " ").trim();
         if (who) lastPersonRef.current = who;
-        const ask = { text: cmd.query, lang: voiceLang === "auto" ? "auto" : speechLang, rate, speak: detail.speak !== false };
-        if (pathname === "/console") {
-          window.dispatchEvent(new CustomEvent("satyam:voice-send", { detail: ask }));
-        } else {
-          try { sessionStorage.setItem("satyam:pending-voice", JSON.stringify(ask)); } catch {}
-          navigate({ to: "/console" });
-        }
-        // After the grounded answer is spoken, offer the next step and keep listening.
-        if (detail.speak) {
-          setTimeout(() => {
-            speakText(
-              resolved === "kn"
-                ? `${lastPersonRef.current} ಅವರ ಇತರ ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಲಾ? ನಕ್ಷೆಯಲ್ಲಿ ತೋರಿಸಲೇ ಅಥವಾ ನೆಟ್‌ವರ್ಕ್‌ನಲ್ಲಿ ಹುಡುಕಲಾ?`
-                : `Do you want me to check ${lastPersonRef.current}'s other details? I can show the crime location on the map, or search them in the network.`,
-              speechLang, rate,
-            );
-            if (conversationModeRef.current) resumeListening();
-          }, 3500); // give the grounded answer time to speak first
-        }
-        closePanel();
+        const followUp =
+          resolved === "kn"
+            ? `${lastPersonRef.current} ಅವರ ಇತರ ವಿವರಗಳನ್ನು ಪರಿಶೀಲಿಸಲಾ? ನಕ್ಷೆಯಲ್ಲಿ ತೋರಿಸಲೇ ಅಥವಾ ನೆಟ್‌ವರ್ಕ್‌ನಲ್ಲಿ ಹುಡುಕಲಾ?`
+            : `Do you want me to check ${lastPersonRef.current}'s other details? I can show the crime location on the map, or search them in the network.`;
+        answerInCopilot(cmd.query, followUp);
         return;
       }
 
-      // 3) Data query -> Console (grounded answer, spoken in chosen language).
-      // Preserve the "auto" sentinel so Console can auto-detect the reply
-      // language from the actual answer text (resolveLang). Pre-resolving to a
-      // concrete locale here would defeat reply-language auto-detection.
-      const out = { text: cmd.query, lang: voiceLang === "auto" ? "auto" : speechLang, rate, speak: detail.speak !== false };
-      if (pathname === "/console") {
-        window.dispatchEvent(new CustomEvent("satyam:voice-send", { detail: out }));
-      } else {
-        try {
-          sessionStorage.setItem("satyam:pending-voice", JSON.stringify(out));
-        } catch {}
-        navigate({ to: "/console" });
-      }
-      closePanel();
+      // 3) Data query -> the COPILOT answers out loud ITSELF (two-way
+      // conversation). It must NEVER hand the turn to the Console chat thread;
+      // the chat-box mic is the only path that posts a message into chat.
+      answerInCopilot(cmd.query);
+      return;
     };
 
     const onCmd = (e: Event) => handle((e as CustomEvent).detail || {});
