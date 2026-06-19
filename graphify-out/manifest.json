@@ -35,8 +35,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/cases.py": {
-    "mtime": 1781698429.6644733,
-    "ast_hash": "d540a670105108dd68c27f53958f6886",
+    "mtime": 1781848182.1678119,
+    "ast_hash": "7fb6c1ed9089557a1a97201a6ba5dd3f",
     "semantic_hash": ""
   },
   "backend/app/api/routes/chat.py": {
@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1781722605.5563095,
-    "ast_hash": "e68d3f69926070f264d0869a1dc4852d",
+    "mtime": 1781848160.3876657,
+    "ast_hash": "421cb3026b2a4eb3276cc92ba2941faa",
     "semantic_hash": ""
   },
   "backend/app/models/__init__.py": {
@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
-    "mtime": 1781580600.1992686,
-    "ast_hash": "6a3675d54ad030b3010acc49c681546e",
+    "mtime": 1781848316.3309488,
+    "ast_hash": "c58c6fccf1836d600ba8dd6ca23574f4",
     "semantic_hash": ""
   },
   "frontend/src/components/DarkModeToggle.tsx": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1781812883.5807078,
-    "ast_hash": "d84fbdb90c0ef2d61437997529ccff4f",
+    "mtime": 1781848446.7438192,
+    "ast_hash": "c093b9542fb72283ed1e371a6c23240e",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
-    "mtime": 1781812834.127314,
-    "ast_hash": "76a26949e098659acbfcad12fc49462b",
+    "mtime": 1781848372.6568348,
+    "ast_hash": "7084b2f45b3e83989e82e8751b1d1153",
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
@@ -725,8 +725,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
-    "mtime": 1781787627.9556558,
-    "ast_hash": "2f7b64f580fc7750208af40e3aeee762",
+    "mtime": 1781848289.2214463,
+    "ast_hash": "39d529266e4bdfd45bd3063d6063c135",
     "semantic_hash": ""
   },
   "frontend/src/routes/reports.tsx": {
@@ -1045,8 +1045,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/intelligence.ts": {
-    "mtime": 1781787522.7872531,
-    "ast_hash": "4e7be69d7a67213c2cf98c058d1a7d55",
+    "mtime": 1781848203.233945,
+    "ast_hash": "f18724b78b776087d9055838e651408a",
     "semantic_hash": ""
   },
   "frontend/src/routes/forecast.tsx": {
@@ -1192,6 +1192,16 @@
   "SATYAM_COPILOT_STT_TOGGLE.md": {
     "mtime": 1781812534.0291045,
     "ast_hash": "78e29fda96c486af5cfc1642185dcc2e",
+    "semantic_hash": ""
+  },
+  "backend/seed/geocode_cases.py": {
+    "mtime": 1781848064.1210964,
+    "ast_hash": "ed976337211f2e9556d4f96c761c5c7b",
+    "semantic_hash": ""
+  },
+  "SATYAM_NETWORK_SEARCH_AND_VOICE_ACTIONS.md": {
+    "mtime": 1781848086.4741325,
+    "ast_hash": "96836d9005704ba422e8ff92a088fdec",
     "semantic_hash": ""
   }
 }
