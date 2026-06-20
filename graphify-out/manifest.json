@@ -1210,8 +1210,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/ops.py": {
-    "mtime": 1781942377.736841,
-    "ast_hash": "310cccfdddecd5a168ec42e00953d7bf",
+    "mtime": 1781942948.4300053,
+    "ast_hash": "a5106debf83377ad8842156518fe38f9",
     "semantic_hash": ""
   },
   "backend/app/db/ops_models.py": {
@@ -1225,13 +1225,13 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/responseOps.ts": {
-    "mtime": 1781942410.3632395,
-    "ast_hash": "1aaa9964b8ef5e4f719f9fd2c8eb49f5",
+    "mtime": 1781943016.5652664,
+    "ast_hash": "be0b390372b40f9edf6939d7d6f04690",
     "semantic_hash": ""
   },
   "frontend/src/routes/operations.tsx": {
-    "mtime": 1781941838.156846,
-    "ast_hash": "7c7262d011eb2c18ab48e3519daee341",
+    "mtime": 1781943065.4250648,
+    "ast_hash": "e3d8604178cc5eb72bf3fb598432381d",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE0_SCAFFOLD.md": {
@@ -1240,8 +1240,8 @@
     "semantic_hash": ""
   },
   "backend/app/schemas/ops.py": {
-    "mtime": 1781941744.1698644,
-    "ast_hash": "d347ccdce7ffc2adbb7696f92e478734",
+    "mtime": 1781942907.8143134,
+    "ast_hash": "77ff6eca1c78772a491fbf3fc60039da",
     "semantic_hash": ""
   },
   "backend/app/services/ops/__init__.py": {
@@ -1297,6 +1297,31 @@
   "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md": {
     "mtime": 1781899387.000479,
     "ast_hash": "bca7f3906f7b3b6085c6464f9e6ee301",
+    "semantic_hash": ""
+  },
+  "ai_camera/detect_video.py": {
+    "mtime": 1781942992.8769844,
+    "ast_hash": "ebd3f89dee7132e5ba82dfd7b5112c48",
+    "semantic_hash": ""
+  },
+  "ai_camera/notify.py": {
+    "mtime": 1781942965.2482321,
+    "ast_hash": "d575c7c38db24946daafc3066e541c40",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ops/ReviewPanel.tsx": {
+    "mtime": 1781943041.6076565,
+    "ast_hash": "a07fce7d78b2d659c42c27ac8cda5aff",
+    "semantic_hash": ""
+  },
+  "SATYAM_OPS_PHASE4_CAMERA_REVIEW.md": {
+    "mtime": 1781899390.9718466,
+    "ast_hash": "609e96a7b4a1854a051dfbedadae483b",
+    "semantic_hash": ""
+  },
+  "ai_camera/requirements.txt": {
+    "mtime": 1781942955.3913388,
+    "ast_hash": "159a2c68ffd071145340f8ad7cb1e3c8",
     "semantic_hash": ""
   }
 }
