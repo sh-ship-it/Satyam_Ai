@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
-    "mtime": 1781974316.1270864,
-    "ast_hash": "c6a0d2312f2c92cf313c486746eb354a",
+    "mtime": 1781975259.6138887,
+    "ast_hash": "24a2c54cfe8e14a8c275fba502d3bb6b",
     "semantic_hash": ""
   },
   "frontend/src/components/DarkModeToggle.tsx": {
@@ -1280,8 +1280,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ops/DispatchPanel.tsx": {
-    "mtime": 1781968418.8774939,
-    "ast_hash": "87ed05ac353df2a4eafa920624a2f4d1",
+    "mtime": 1781975476.730855,
+    "ast_hash": "0332f8fff8088cff73d008d4ebde6ed9",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE2_DISPATCH_SIM.md": {
