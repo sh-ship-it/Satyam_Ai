@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ProfileMenu.tsx": {
-    "mtime": 1781756061.0102415,
-    "ast_hash": "464f16d96c9dab4cb0ad7d8fd26828ca",
+    "mtime": 1781986692.4463668,
+    "ast_hash": "9b71c6b8b17d331875b2d3b0829ef3c6",
     "semantic_hash": ""
   },
   "frontend/src/components/SettingsDialog.tsx": {
@@ -1210,8 +1210,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/ops.py": {
-    "mtime": 1781956961.5569103,
-    "ast_hash": "7e93c8b5328220df2a4640ec95d6e6a2",
+    "mtime": 1781986709.666173,
+    "ast_hash": "d40e11dcf5851d1ca421a1287cd0a065",
     "semantic_hash": ""
   },
   "backend/app/db/ops_models.py": {
@@ -1225,8 +1225,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/responseOps.ts": {
-    "mtime": 1781956034.585341,
-    "ast_hash": "27e01cc3d672f703f753163f8780ac18",
+    "mtime": 1781986428.0879965,
+    "ast_hash": "6080715a04a1ed5cf948e453a73460d5",
     "semantic_hash": ""
   },
   "frontend/src/routes/operations.tsx": {
@@ -1310,8 +1310,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ops/ReviewPanel.tsx": {
-    "mtime": 1781945633.973078,
-    "ast_hash": "37508eace4893c70da44f998b801497f",
+    "mtime": 1781986509.370032,
+    "ast_hash": "04b7c385fe1908c8285edd6a7b5e62ce",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE4_CAMERA_REVIEW.md": {
@@ -1372,6 +1372,11 @@
   "SATYAM_OPS_DATASET_FIX.md": {
     "mtime": 1781977868.9660127,
     "ast_hash": "a8c2f019ce65b708aa65cc0138fb9b3a",
+    "semantic_hash": ""
+  },
+  "frontend/public/total fight.mp4": {
+    "mtime": 1781986116.8861563,
+    "ast_hash": "c6e06b6563210935fd7e7a33f41ab788",
     "semantic_hash": ""
   }
 }
