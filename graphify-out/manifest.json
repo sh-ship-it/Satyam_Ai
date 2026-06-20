@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
-    "mtime": 1781945580.9646685,
-    "ast_hash": "6d291e16b47be91b6985a25368ffa055",
+    "mtime": 1781952097.9365947,
+    "ast_hash": "9370d1210d1ea494dcb105739d4e947a",
     "semantic_hash": ""
   },
   "frontend/src/components/DarkModeToggle.tsx": {
@@ -1210,8 +1210,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/ops.py": {
-    "mtime": 1781945503.5055947,
-    "ast_hash": "65a5b591f5a9aecc174ed7abbf30ee0b",
+    "mtime": 1781952063.1051662,
+    "ast_hash": "243d844ac68389db4a992eb9e726e8fb",
     "semantic_hash": ""
   },
   "backend/app/db/ops_models.py": {
@@ -1225,13 +1225,13 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/responseOps.ts": {
-    "mtime": 1781943016.5652664,
-    "ast_hash": "be0b390372b40f9edf6939d7d6f04690",
+    "mtime": 1781952107.569347,
+    "ast_hash": "95cde36d7d91664d338ef6af702b332c",
     "semantic_hash": ""
   },
   "frontend/src/routes/operations.tsx": {
-    "mtime": 1781945663.0271778,
-    "ast_hash": "7a7b06f7fc797382bde64998a47eda64",
+    "mtime": 1781952183.188945,
+    "ast_hash": "17f52161173d27667c9bc77ea1cb839c",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE0_SCAFFOLD.md": {
@@ -1270,8 +1270,8 @@
     "semantic_hash": ""
   },
   "backend/app/services/ops/sim_service.py": {
-    "mtime": 1781945521.6079803,
-    "ast_hash": "949884305cce90187756f761097c2e1e",
+    "mtime": 1781952051.3166175,
+    "ast_hash": "1b7edc9329215dc636b8ed0d0d2932f1",
     "semantic_hash": ""
   },
   "backend/app/services/ops/ws_manager.py": {
@@ -1290,8 +1290,8 @@
     "semantic_hash": ""
   },
   "backend/app/services/ops/corridor_service.py": {
-    "mtime": 1781942330.114337,
-    "ast_hash": "a17679c823a9c06a39f49bccc3d91831",
+    "mtime": 1781952025.7959907,
+    "ast_hash": "b163749757b71667c62e9c310a770f7d",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md": {
@@ -1327,6 +1327,31 @@
   "SATYAM_OPS_BUGFIX_PACK.md": {
     "mtime": 1781945389.3724456,
     "ast_hash": "91221027760ea8439b623db0586b6bb2",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ops/DemoSimPanel.tsx": {
+    "mtime": 1781952148.9754467,
+    "ast_hash": "c93dcb2928161a54083c6586f3cb55cf",
+    "semantic_hash": ""
+  },
+  "model/inference/live_cctv.py": {
+    "mtime": 1781952223.6265528,
+    "ast_hash": "3818b96437fdc789f18f97ff82ebce5c",
+    "semantic_hash": ""
+  },
+  "model/inference/notify.py": {
+    "mtime": 1781952199.3797154,
+    "ast_hash": "1daf7fcf80ff502557d76fe0c161cc32",
+    "semantic_hash": ""
+  },
+  "SATYAM_OPS_PARITY_PACK.md": {
+    "mtime": 1781951954.7239022,
+    "ast_hash": "9874930dcbba4bed845b33000def19bc",
+    "semantic_hash": ""
+  },
+  "model/requirements.txt": {
+    "mtime": 1781952189.9255142,
+    "ast_hash": "159a2c68ffd071145340f8ad7cb1e3c8",
     "semantic_hash": ""
   }
 }
