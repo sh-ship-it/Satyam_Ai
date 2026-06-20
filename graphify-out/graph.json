@@ -4,133 +4,103 @@
   "graph": {},
   "nodes": [
     {
-      "label": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "label": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
       "file_type": "document",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "satyam_ops_phase2_dispatch_sim",
-      "community": 164,
-      "norm_label": "satyam_ops_phase2_dispatch_sim.md"
+      "id": "satyam_ops_phase3_green_corridor",
+      "community": 195,
+      "norm_label": "satyam_ops_phase3_green_corridor.md"
     },
     {
-      "label": "Phase 2 \u2014 Dispatch nearest patrol + live GPS simulation",
+      "label": "Phase 3 \u2014 Green Corridor (signals turn green on the patrol's route)",
       "file_type": "document",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
-      "community": 164,
-      "norm_label": "phase 2 \u2014 dispatch nearest patrol + live gps simulation"
+      "id": "satyam_ops_phase3_green_corridor_phase_3_green_corridor_signals_turn_green_on_the_patrol_s_route",
+      "community": 195,
+      "norm_label": "phase 3 \u2014 green corridor (signals turn green on the patrol's route)"
     },
     {
-      "label": "1. NEW \u2014 `backend/app/services/ops/routing_service.py`",
+      "label": "1. NEW \u2014 `backend/app/services/ops/corridor_service.py`",
       "file_type": "document",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "satyam_ops_phase2_dispatch_sim_1_new_backend_app_services_ops_routing_service_py",
-      "community": 164,
-      "norm_label": "1. new \u2014 `backend/app/services/ops/routing_service.py`"
+      "id": "satyam_ops_phase3_green_corridor_1_new_backend_app_services_ops_corridor_service_py",
+      "community": 195,
+      "norm_label": "1. new \u2014 `backend/app/services/ops/corridor_service.py`"
     },
     {
-      "label": "2. NEW \u2014 `backend/app/services/ops/ws_manager.py`",
+      "label": "2. EDIT \u2014 `backend/app/services/ops/sim_service.py` (hook the corridor into movement)",
       "file_type": "document",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L68",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L57",
       "_origin": "ast",
-      "id": "satyam_ops_phase2_dispatch_sim_2_new_backend_app_services_ops_ws_manager_py",
-      "community": 164,
-      "norm_label": "2. new \u2014 `backend/app/services/ops/ws_manager.py`"
+      "id": "satyam_ops_phase3_green_corridor_2_edit_backend_app_services_ops_sim_service_py_hook_the_corridor_into_movement",
+      "community": 195,
+      "norm_label": "2. edit \u2014 `backend/app/services/ops/sim_service.py` (hook the corridor into movement)"
     },
     {
-      "label": "3. NEW \u2014 `backend/app/services/ops/sim_service.py`",
+      "label": "3. EDIT \u2014 `backend/app/api/routes/ops.py` (pass the corridor hook + expose signals)",
       "file_type": "document",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L114",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L79",
       "_origin": "ast",
-      "id": "satyam_ops_phase2_dispatch_sim_3_new_backend_app_services_ops_sim_service_py",
-      "community": 164,
-      "norm_label": "3. new \u2014 `backend/app/services/ops/sim_service.py`"
+      "id": "satyam_ops_phase3_green_corridor_3_edit_backend_app_api_routes_ops_py_pass_the_corridor_hook_expose_signals",
+      "community": 195,
+      "norm_label": "3. edit \u2014 `backend/app/api/routes/ops.py` (pass the corridor hook + expose signals)"
     },
     {
-      "label": "4. EDIT \u2014 `backend/app/schemas/ops.py` (append)",
+      "label": "4. EDIT \u2014 `frontend/src/lib/api/responseOps.ts` (append)",
       "file_type": "document",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L213",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L112",
       "_origin": "ast",
-      "id": "satyam_ops_phase2_dispatch_sim_4_edit_backend_app_schemas_ops_py_append",
-      "community": 164,
-      "norm_label": "4. edit \u2014 `backend/app/schemas/ops.py` (append)"
+      "id": "satyam_ops_phase3_green_corridor_4_edit_frontend_src_lib_api_responseops_ts_append",
+      "community": 195,
+      "norm_label": "4. edit \u2014 `frontend/src/lib/api/responseops.ts` (append)"
     },
     {
-      "label": "5. EDIT \u2014 `backend/app/api/routes/ops.py` (append Phase 2)",
+      "label": "5. EDIT \u2014 `frontend/src/components/ops/DispatchPanel.tsx` (render signals + react to WS)",
       "file_type": "document",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L248",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L124",
       "_origin": "ast",
-      "id": "satyam_ops_phase2_dispatch_sim_5_edit_backend_app_api_routes_ops_py_append_phase_2",
-      "community": 164,
-      "norm_label": "5. edit \u2014 `backend/app/api/routes/ops.py` (append phase 2)"
+      "id": "satyam_ops_phase3_green_corridor_5_edit_frontend_src_components_ops_dispatchpanel_tsx_render_signals_react_to_ws",
+      "community": 195,
+      "norm_label": "5. edit \u2014 `frontend/src/components/ops/dispatchpanel.tsx` (render signals + react to ws)"
     },
     {
-      "label": "6. EDIT \u2014 `frontend/src/lib/api/responseOps.ts` (append)",
+      "label": "6. EDIT \u2014 `frontend/src/components/CrimeMap.tsx` (additive optional `signals` prop)",
       "file_type": "document",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L361",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L154",
       "_origin": "ast",
-      "id": "satyam_ops_phase2_dispatch_sim_6_edit_frontend_src_lib_api_responseops_ts_append",
-      "community": 164,
-      "norm_label": "6. edit \u2014 `frontend/src/lib/api/responseops.ts` (append)"
+      "id": "satyam_ops_phase3_green_corridor_6_edit_frontend_src_components_crimemap_tsx_additive_optional_signals_prop",
+      "community": 195,
+      "norm_label": "6. edit \u2014 `frontend/src/components/crimemap.tsx` (additive optional `signals` prop)"
     },
     {
-      "label": "7. NEW \u2014 `frontend/src/components/ops/DispatchPanel.tsx`",
+      "label": "7. Verify",
       "file_type": "document",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L391",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L196",
       "_origin": "ast",
-      "id": "satyam_ops_phase2_dispatch_sim_7_new_frontend_src_components_ops_dispatchpanel_tsx",
-      "community": 164,
-      "norm_label": "7. new \u2014 `frontend/src/components/ops/dispatchpanel.tsx`"
-    },
-    {
-      "label": "8. EDIT \u2014 `frontend/src/components/CrimeMap.tsx` (additive: render `trail` as a polyline + `focus` as a live marker)",
-      "file_type": "document",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L475",
-      "_origin": "ast",
-      "id": "satyam_ops_phase2_dispatch_sim_8_edit_frontend_src_components_crimemap_tsx_additive_render_trail_as_a_polyline_focus_as_a_live_marker",
-      "community": 164,
-      "norm_label": "8. edit \u2014 `frontend/src/components/crimemap.tsx` (additive: render `trail` as a polyline + `focus` as a live marker)"
-    },
-    {
-      "label": "9. EDIT \u2014 `frontend/src/routes/operations.tsx` (mount dispatch tab)",
-      "file_type": "document",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L495",
-      "_origin": "ast",
-      "id": "satyam_ops_phase2_dispatch_sim_9_edit_frontend_src_routes_operations_tsx_mount_dispatch_tab",
-      "community": 164,
-      "norm_label": "9. edit \u2014 `frontend/src/routes/operations.tsx` (mount dispatch tab)"
-    },
-    {
-      "label": "10. Verify",
-      "file_type": "document",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L506",
-      "_origin": "ast",
-      "id": "satyam_ops_phase2_dispatch_sim_10_verify",
-      "community": 164,
-      "norm_label": "10. verify"
+      "id": "satyam_ops_phase3_green_corridor_7_verify",
+      "community": 195,
+      "norm_label": "7. verify"
     },
     {
       "label": "Self-rating",
       "file_type": "document",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L517",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L207",
       "_origin": "ast",
-      "id": "satyam_ops_phase2_dispatch_sim_self_rating",
-      "community": 164,
+      "id": "satyam_ops_phase3_green_corridor_self_rating",
+      "community": 195,
       "norm_label": "self-rating"
     },
     {
@@ -297,7 +267,7 @@
       "label": "dispatch_state()",
       "file_type": "code",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L169",
+      "source_location": "L172",
       "_origin": "ast",
       "id": "routes_ops_dispatch_state",
       "community": 154,
@@ -307,7 +277,7 @@
       "label": "ops_ws()",
       "file_type": "code",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L179",
+      "source_location": "L182",
       "_origin": "ast",
       "id": "routes_ops_ops_ws",
       "community": 154,
@@ -317,11 +287,21 @@
       "label": "WebSocket",
       "file_type": "code",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L179",
+      "source_location": "L182",
       "_origin": "ast",
-      "id": "backend_app_api_routes_ops_py_websocket",
+      "id": "websocket",
       "community": 154,
       "norm_label": "websocket"
+    },
+    {
+      "label": "signals()",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/ops.py",
+      "source_location": "L201",
+      "_origin": "ast",
+      "id": "routes_ops_signals",
+      "community": 154,
+      "norm_label": "signals()"
     },
     {
       "label": "Response-Ops router. Mounted at /api/ops only when ENABLE_RESPONSE_OPS=true.",
@@ -347,9 +327,9 @@
       "label": "Polling fallback for clients that can't hold a WebSocket.",
       "file_type": "rationale",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L173",
+      "source_location": "L176",
       "_origin": "ast",
-      "id": "routes_ops_rationale_173",
+      "id": "routes_ops_rationale_176",
       "community": 154,
       "norm_label": "polling fallback for clients that can't hold a websocket."
     },
@@ -357,161 +337,61 @@
       "label": "Live event stream. Auth via ?token=<jwt> query param (WS can't send headers).",
       "file_type": "rationale",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L180",
+      "source_location": "L183",
       "_origin": "ast",
-      "id": "routes_ops_rationale_180",
+      "id": "routes_ops_rationale_183",
       "community": 154,
       "norm_label": "live event stream. auth via ?token=<jwt> query param (ws can't send headers)."
     },
     {
-      "label": "ops.py",
+      "label": "corridor_service.py",
       "file_type": "code",
-      "source_file": "backend/app/schemas/ops.py",
+      "source_file": "backend/app/services/ops/corridor_service.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "schemas_ops",
-      "community": 193,
-      "norm_label": "ops.py"
+      "id": "ops_corridor_service",
+      "community": 202,
+      "norm_label": "corridor_service.py"
     },
     {
-      "label": "RiskZoneOut",
+      "label": "activate_near()",
       "file_type": "code",
-      "source_file": "backend/app/schemas/ops.py",
-      "source_location": "L7",
+      "source_file": "backend/app/services/ops/corridor_service.py",
+      "source_location": "L18",
       "_origin": "ast",
-      "id": "schemas_ops_riskzoneout",
-      "community": 193,
-      "norm_label": "riskzoneout"
+      "id": "ops_corridor_service_activate_near",
+      "community": 202,
+      "norm_label": "activate_near()"
     },
     {
-      "label": "BaseModel",
+      "label": "reset_all()",
       "file_type": "code",
-      "source_file": "",
-      "source_location": "",
+      "source_file": "backend/app/services/ops/corridor_service.py",
+      "source_location": "L34",
       "_origin": "ast",
-      "id": "basemodel",
-      "community": 18,
-      "norm_label": "basemodel"
+      "id": "ops_corridor_service_reset_all",
+      "community": 202,
+      "norm_label": "reset_all()"
     },
     {
-      "label": "RiskZonesResponse",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/ops.py",
+      "label": "Green corridor \u2014 Python port of EMERGE greenCorridor.js.  Flips ops_traffic_si",
+      "file_type": "rationale",
+      "source_file": "backend/app/services/ops/corridor_service.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "ops_corridor_service_rationale_1",
+      "community": 202,
+      "norm_label": "green corridor \u2014 python port of emerge greencorridor.js.  flips ops_traffic_si"
+    },
+    {
+      "label": "Turn signals within the radius GREEN; emit only on real state changes.",
+      "file_type": "rationale",
+      "source_file": "backend/app/services/ops/corridor_service.py",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "schemas_ops_riskzonesresponse",
-      "community": 193,
-      "norm_label": "riskzonesresponse"
-    },
-    {
-      "label": "SuggestionOut",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/ops.py",
-      "source_location": "L25",
-      "_origin": "ast",
-      "id": "schemas_ops_suggestionout",
-      "community": 193,
-      "norm_label": "suggestionout"
-    },
-    {
-      "label": "SuggestionsResponse",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/ops.py",
-      "source_location": "L40",
-      "_origin": "ast",
-      "id": "schemas_ops_suggestionsresponse",
-      "community": 193,
-      "norm_label": "suggestionsresponse"
-    },
-    {
-      "label": "PatrolOut",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/ops.py",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "schemas_ops_patrolout",
-      "community": 193,
-      "norm_label": "patrolout"
-    },
-    {
-      "label": "DispatchRequest",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/ops.py",
-      "source_location": "L54",
-      "_origin": "ast",
-      "id": "schemas_ops_dispatchrequest",
-      "community": 193,
-      "norm_label": "dispatchrequest"
-    },
-    {
-      "label": "DispatchOut",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/ops.py",
-      "source_location": "L61",
-      "_origin": "ast",
-      "id": "schemas_ops_dispatchout",
-      "community": 193,
-      "norm_label": "dispatchout"
-    },
-    {
-      "label": "routing_service.py",
-      "file_type": "code",
-      "source_file": "backend/app/services/ops/routing_service.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "ops_routing_service",
-      "community": 181,
-      "norm_label": "routing_service.py"
-    },
-    {
-      "label": "haversine_km()",
-      "file_type": "code",
-      "source_file": "backend/app/services/ops/routing_service.py",
-      "source_location": "L12",
-      "_origin": "ast",
-      "id": "ops_routing_service_haversine_km",
-      "community": 181,
-      "norm_label": "haversine_km()"
-    },
-    {
-      "label": "_straight_line()",
-      "file_type": "code",
-      "source_file": "backend/app/services/ops/routing_service.py",
-      "source_location": "L20",
-      "_origin": "ast",
-      "id": "ops_routing_service_straight_line",
-      "community": 181,
-      "norm_label": "_straight_line()"
-    },
-    {
-      "label": "get_route()",
-      "file_type": "code",
-      "source_file": "backend/app/services/ops/routing_service.py",
-      "source_location": "L28",
-      "_origin": "ast",
-      "id": "ops_routing_service_get_route",
-      "community": 181,
-      "norm_label": "get_route()"
-    },
-    {
-      "label": "Routing \u2014 Python port of EMERGE routingService.js (OSRM + straight-line fallback",
-      "file_type": "rationale",
-      "source_file": "backend/app/services/ops/routing_service.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "ops_routing_service_rationale_1",
-      "community": 181,
-      "norm_label": "routing \u2014 python port of emerge routingservice.js (osrm + straight-line fallback"
-    },
-    {
-      "label": "Return {provider, distance_km, duration_sec, coords:[[lng,lat],...]}. Never rais",
-      "file_type": "rationale",
-      "source_file": "backend/app/services/ops/routing_service.py",
-      "source_location": "L29",
-      "_origin": "ast",
-      "id": "ops_routing_service_rationale_29",
-      "community": 181,
-      "norm_label": "return {provider, distance_km, duration_sec, coords:[[lng,lat],...]}. never rais"
+      "id": "ops_corridor_service_rationale_19",
+      "community": 202,
+      "norm_label": "turn signals within the radius green; emit only on real state changes."
     },
     {
       "label": "sim_service.py",
@@ -527,7 +407,7 @@
       "label": "latest_state()",
       "file_type": "code",
       "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L21",
+      "source_location": "L22",
       "_origin": "ast",
       "id": "ops_sim_service_latest_state",
       "community": 172,
@@ -537,7 +417,7 @@
       "label": "_subsample()",
       "file_type": "code",
       "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L25",
+      "source_location": "L26",
       "_origin": "ast",
       "id": "ops_sim_service_subsample",
       "community": 172,
@@ -547,7 +427,7 @@
       "label": "_persist_status()",
       "file_type": "code",
       "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L35",
+      "source_location": "L36",
       "_origin": "ast",
       "id": "ops_sim_service_persist_status",
       "community": 172,
@@ -557,7 +437,7 @@
       "label": "_run()",
       "file_type": "code",
       "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L47",
+      "source_location": "L48",
       "_origin": "ast",
       "id": "ops_sim_service_run",
       "community": 172,
@@ -567,7 +447,7 @@
       "label": "start()",
       "file_type": "code",
       "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L78",
+      "source_location": "L80",
       "_origin": "ast",
       "id": "ops_sim_service_start",
       "community": 172,
@@ -577,7 +457,7 @@
       "label": "stop()",
       "file_type": "code",
       "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L87",
+      "source_location": "L89",
       "_origin": "ast",
       "id": "ops_sim_service_stop",
       "community": 172,
@@ -597,101 +477,11 @@
       "label": "on_move(lat,lng) optional async hook (Phase 3 green corridor).",
       "file_type": "rationale",
       "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L49",
+      "source_location": "L50",
       "_origin": "ast",
-      "id": "ops_sim_service_rationale_49",
+      "id": "ops_sim_service_rationale_50",
       "community": 172,
       "norm_label": "on_move(lat,lng) optional async hook (phase 3 green corridor)."
-    },
-    {
-      "label": "ws_manager.py",
-      "file_type": "code",
-      "source_file": "backend/app/services/ops/ws_manager.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "ops_ws_manager",
-      "community": 122,
-      "norm_label": "ws_manager.py"
-    },
-    {
-      "label": "WsManager",
-      "file_type": "code",
-      "source_file": "backend/app/services/ops/ws_manager.py",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "ops_ws_manager_wsmanager",
-      "community": 122,
-      "norm_label": "wsmanager"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "backend/app/services/ops/ws_manager.py",
-      "source_location": "L11",
-      "_origin": "ast",
-      "id": "ops_ws_manager_wsmanager_init",
-      "community": 122,
-      "norm_label": ".__init__()"
-    },
-    {
-      "label": ".connect()",
-      "file_type": "code",
-      "source_file": "backend/app/services/ops/ws_manager.py",
-      "source_location": "L15",
-      "_origin": "ast",
-      "id": "ops_ws_manager_wsmanager_connect",
-      "community": 122,
-      "norm_label": ".connect()"
-    },
-    {
-      "label": "WebSocket",
-      "file_type": "code",
-      "source_file": "backend/app/services/ops/ws_manager.py",
-      "source_location": "L15",
-      "_origin": "ast",
-      "id": "backend_app_services_ops_ws_manager_py_websocket",
-      "community": 122,
-      "norm_label": "websocket"
-    },
-    {
-      "label": ".disconnect()",
-      "file_type": "code",
-      "source_file": "backend/app/services/ops/ws_manager.py",
-      "source_location": "L20",
-      "_origin": "ast",
-      "id": "ops_ws_manager_wsmanager_disconnect",
-      "community": 122,
-      "norm_label": ".disconnect()"
-    },
-    {
-      "label": ".broadcast()",
-      "file_type": "code",
-      "source_file": "backend/app/services/ops/ws_manager.py",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "ops_ws_manager_wsmanager_broadcast",
-      "community": 122,
-      "norm_label": ".broadcast()"
-    },
-    {
-      "label": "Any",
-      "file_type": "code",
-      "source_file": "backend/app/services/ops/ws_manager.py",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "any",
-      "community": 121,
-      "norm_label": "any"
-    },
-    {
-      "label": "In-memory WebSocket broadcast hub for Response-Ops live events.",
-      "file_type": "rationale",
-      "source_file": "backend/app/services/ops/ws_manager.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "ops_ws_manager_rationale_1",
-      "community": 122,
-      "norm_label": "in-memory websocket broadcast hub for response-ops live events."
     },
     {
       "label": "CrimeMap.tsx",
@@ -824,10 +614,20 @@
       "norm_label": "dispatchresult"
     },
     {
+      "label": "Signal",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/responseOps.ts",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "api_responseops_signal",
+      "community": 48,
+      "norm_label": "signal"
+    },
+    {
       "label": "responseOps",
       "file_type": "code",
       "source_file": "frontend/src/lib/api/responseOps.ts",
-      "source_location": "L37",
+      "source_location": "L38",
       "_origin": "ast",
       "id": "api_responseops_responseops",
       "community": 48,
@@ -837,11 +637,381 @@
       "label": "openOpsSocket()",
       "file_type": "code",
       "source_file": "frontend/src/lib/api/responseOps.ts",
-      "source_location": "L52",
+      "source_location": "L54",
       "_origin": "ast",
       "id": "api_responseops_openopssocket",
       "community": 48,
       "norm_label": "openopssocket()"
+    },
+    {
+      "label": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 164,
+      "norm_label": "satyam_ops_phase2_dispatch_sim.md",
+      "id": "satyam_ops_phase2_dispatch_sim"
+    },
+    {
+      "label": "Phase 2 \u2014 Dispatch nearest patrol + live GPS simulation",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 164,
+      "norm_label": "phase 2 \u2014 dispatch nearest patrol + live gps simulation",
+      "id": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation"
+    },
+    {
+      "label": "1. NEW \u2014 `backend/app/services/ops/routing_service.py`",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "community": 164,
+      "norm_label": "1. new \u2014 `backend/app/services/ops/routing_service.py`",
+      "id": "satyam_ops_phase2_dispatch_sim_1_new_backend_app_services_ops_routing_service_py"
+    },
+    {
+      "label": "2. NEW \u2014 `backend/app/services/ops/ws_manager.py`",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L68",
+      "_origin": "ast",
+      "community": 164,
+      "norm_label": "2. new \u2014 `backend/app/services/ops/ws_manager.py`",
+      "id": "satyam_ops_phase2_dispatch_sim_2_new_backend_app_services_ops_ws_manager_py"
+    },
+    {
+      "label": "3. NEW \u2014 `backend/app/services/ops/sim_service.py`",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L114",
+      "_origin": "ast",
+      "community": 164,
+      "norm_label": "3. new \u2014 `backend/app/services/ops/sim_service.py`",
+      "id": "satyam_ops_phase2_dispatch_sim_3_new_backend_app_services_ops_sim_service_py"
+    },
+    {
+      "label": "4. EDIT \u2014 `backend/app/schemas/ops.py` (append)",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L213",
+      "_origin": "ast",
+      "community": 164,
+      "norm_label": "4. edit \u2014 `backend/app/schemas/ops.py` (append)",
+      "id": "satyam_ops_phase2_dispatch_sim_4_edit_backend_app_schemas_ops_py_append"
+    },
+    {
+      "label": "5. EDIT \u2014 `backend/app/api/routes/ops.py` (append Phase 2)",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L248",
+      "_origin": "ast",
+      "community": 164,
+      "norm_label": "5. edit \u2014 `backend/app/api/routes/ops.py` (append phase 2)",
+      "id": "satyam_ops_phase2_dispatch_sim_5_edit_backend_app_api_routes_ops_py_append_phase_2"
+    },
+    {
+      "label": "6. EDIT \u2014 `frontend/src/lib/api/responseOps.ts` (append)",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L361",
+      "_origin": "ast",
+      "community": 164,
+      "norm_label": "6. edit \u2014 `frontend/src/lib/api/responseops.ts` (append)",
+      "id": "satyam_ops_phase2_dispatch_sim_6_edit_frontend_src_lib_api_responseops_ts_append"
+    },
+    {
+      "label": "7. NEW \u2014 `frontend/src/components/ops/DispatchPanel.tsx`",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L391",
+      "_origin": "ast",
+      "community": 164,
+      "norm_label": "7. new \u2014 `frontend/src/components/ops/dispatchpanel.tsx`",
+      "id": "satyam_ops_phase2_dispatch_sim_7_new_frontend_src_components_ops_dispatchpanel_tsx"
+    },
+    {
+      "label": "8. EDIT \u2014 `frontend/src/components/CrimeMap.tsx` (additive: render `trail` as a polyline + `focus` as a live marker)",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L475",
+      "_origin": "ast",
+      "community": 164,
+      "norm_label": "8. edit \u2014 `frontend/src/components/crimemap.tsx` (additive: render `trail` as a polyline + `focus` as a live marker)",
+      "id": "satyam_ops_phase2_dispatch_sim_8_edit_frontend_src_components_crimemap_tsx_additive_render_trail_as_a_polyline_focus_as_a_live_marker"
+    },
+    {
+      "label": "9. EDIT \u2014 `frontend/src/routes/operations.tsx` (mount dispatch tab)",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L495",
+      "_origin": "ast",
+      "community": 164,
+      "norm_label": "9. edit \u2014 `frontend/src/routes/operations.tsx` (mount dispatch tab)",
+      "id": "satyam_ops_phase2_dispatch_sim_9_edit_frontend_src_routes_operations_tsx_mount_dispatch_tab"
+    },
+    {
+      "label": "10. Verify",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L506",
+      "_origin": "ast",
+      "community": 164,
+      "norm_label": "10. verify",
+      "id": "satyam_ops_phase2_dispatch_sim_10_verify"
+    },
+    {
+      "label": "Self-rating",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L517",
+      "_origin": "ast",
+      "community": 164,
+      "norm_label": "self-rating",
+      "id": "satyam_ops_phase2_dispatch_sim_self_rating"
+    },
+    {
+      "label": "ops.py",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/ops.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 193,
+      "norm_label": "ops.py",
+      "id": "schemas_ops"
+    },
+    {
+      "label": "RiskZoneOut",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/ops.py",
+      "source_location": "L7",
+      "_origin": "ast",
+      "community": 193,
+      "norm_label": "riskzoneout",
+      "id": "schemas_ops_riskzoneout"
+    },
+    {
+      "label": "BaseModel",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 18,
+      "norm_label": "basemodel",
+      "id": "basemodel"
+    },
+    {
+      "label": "RiskZonesResponse",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/ops.py",
+      "source_location": "L19",
+      "_origin": "ast",
+      "community": 193,
+      "norm_label": "riskzonesresponse",
+      "id": "schemas_ops_riskzonesresponse"
+    },
+    {
+      "label": "SuggestionOut",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/ops.py",
+      "source_location": "L25",
+      "_origin": "ast",
+      "community": 193,
+      "norm_label": "suggestionout",
+      "id": "schemas_ops_suggestionout"
+    },
+    {
+      "label": "SuggestionsResponse",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/ops.py",
+      "source_location": "L40",
+      "_origin": "ast",
+      "community": 193,
+      "norm_label": "suggestionsresponse",
+      "id": "schemas_ops_suggestionsresponse"
+    },
+    {
+      "label": "PatrolOut",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/ops.py",
+      "source_location": "L45",
+      "_origin": "ast",
+      "community": 193,
+      "norm_label": "patrolout",
+      "id": "schemas_ops_patrolout"
+    },
+    {
+      "label": "DispatchRequest",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/ops.py",
+      "source_location": "L54",
+      "_origin": "ast",
+      "community": 193,
+      "norm_label": "dispatchrequest",
+      "id": "schemas_ops_dispatchrequest"
+    },
+    {
+      "label": "DispatchOut",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/ops.py",
+      "source_location": "L61",
+      "_origin": "ast",
+      "community": 193,
+      "norm_label": "dispatchout",
+      "id": "schemas_ops_dispatchout"
+    },
+    {
+      "label": "routing_service.py",
+      "file_type": "code",
+      "source_file": "backend/app/services/ops/routing_service.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 181,
+      "norm_label": "routing_service.py",
+      "id": "ops_routing_service"
+    },
+    {
+      "label": "haversine_km()",
+      "file_type": "code",
+      "source_file": "backend/app/services/ops/routing_service.py",
+      "source_location": "L12",
+      "_origin": "ast",
+      "community": 181,
+      "norm_label": "haversine_km()",
+      "id": "ops_routing_service_haversine_km"
+    },
+    {
+      "label": "_straight_line()",
+      "file_type": "code",
+      "source_file": "backend/app/services/ops/routing_service.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "community": 181,
+      "norm_label": "_straight_line()",
+      "id": "ops_routing_service_straight_line"
+    },
+    {
+      "label": "get_route()",
+      "file_type": "code",
+      "source_file": "backend/app/services/ops/routing_service.py",
+      "source_location": "L28",
+      "_origin": "ast",
+      "community": 181,
+      "norm_label": "get_route()",
+      "id": "ops_routing_service_get_route"
+    },
+    {
+      "label": "Routing \u2014 Python port of EMERGE routingService.js (OSRM + straight-line fallback",
+      "file_type": "rationale",
+      "source_file": "backend/app/services/ops/routing_service.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 181,
+      "norm_label": "routing \u2014 python port of emerge routingservice.js (osrm + straight-line fallback",
+      "id": "ops_routing_service_rationale_1"
+    },
+    {
+      "label": "Return {provider, distance_km, duration_sec, coords:[[lng,lat],...]}. Never rais",
+      "file_type": "rationale",
+      "source_file": "backend/app/services/ops/routing_service.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "community": 181,
+      "norm_label": "return {provider, distance_km, duration_sec, coords:[[lng,lat],...]}. never rais",
+      "id": "ops_routing_service_rationale_29"
+    },
+    {
+      "label": "ws_manager.py",
+      "file_type": "code",
+      "source_file": "backend/app/services/ops/ws_manager.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 199,
+      "norm_label": "ws_manager.py",
+      "id": "ops_ws_manager"
+    },
+    {
+      "label": "WsManager",
+      "file_type": "code",
+      "source_file": "backend/app/services/ops/ws_manager.py",
+      "source_location": "L10",
+      "_origin": "ast",
+      "community": 199,
+      "norm_label": "wsmanager",
+      "id": "ops_ws_manager_wsmanager"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "backend/app/services/ops/ws_manager.py",
+      "source_location": "L11",
+      "_origin": "ast",
+      "community": 199,
+      "norm_label": ".__init__()",
+      "id": "ops_ws_manager_wsmanager_init"
+    },
+    {
+      "label": ".connect()",
+      "file_type": "code",
+      "source_file": "backend/app/services/ops/ws_manager.py",
+      "source_location": "L15",
+      "_origin": "ast",
+      "community": 199,
+      "norm_label": ".connect()",
+      "id": "ops_ws_manager_wsmanager_connect"
+    },
+    {
+      "label": "WebSocket",
+      "file_type": "code",
+      "source_file": "backend/app/services/ops/ws_manager.py",
+      "source_location": "L15",
+      "_origin": "ast",
+      "community": 199,
+      "norm_label": "websocket",
+      "id": "backend_app_services_ops_ws_manager_py_websocket"
+    },
+    {
+      "label": ".disconnect()",
+      "file_type": "code",
+      "source_file": "backend/app/services/ops/ws_manager.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "community": 199,
+      "norm_label": ".disconnect()",
+      "id": "ops_ws_manager_wsmanager_disconnect"
+    },
+    {
+      "label": ".broadcast()",
+      "file_type": "code",
+      "source_file": "backend/app/services/ops/ws_manager.py",
+      "source_location": "L24",
+      "_origin": "ast",
+      "community": 199,
+      "norm_label": ".broadcast()",
+      "id": "ops_ws_manager_wsmanager_broadcast"
+    },
+    {
+      "label": "Any",
+      "file_type": "code",
+      "source_file": "backend/app/services/ops/ws_manager.py",
+      "source_location": "L24",
+      "_origin": "ast",
+      "community": 121,
+      "norm_label": "any",
+      "id": "any"
+    },
+    {
+      "label": "In-memory WebSocket broadcast hub for Response-Ops live events.",
+      "file_type": "rationale",
+      "source_file": "backend/app/services/ops/ws_manager.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 199,
+      "norm_label": "in-memory websocket broadcast hub for response-ops live events.",
+      "id": "ops_ws_manager_rationale_1"
     },
     {
       "label": "operations.tsx",
@@ -849,9 +1019,9 @@
       "source_file": "frontend/src/routes/operations.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_operations",
       "community": 48,
-      "norm_label": "operations.tsx"
+      "norm_label": "operations.tsx",
+      "id": "routes_operations"
     },
     {
       "label": "Route",
@@ -859,9 +1029,9 @@
       "source_file": "frontend/src/routes/operations.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "routes_operations_route",
       "community": 48,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_operations_route"
     },
     {
       "label": "Tab",
@@ -869,9 +1039,9 @@
       "source_file": "frontend/src/routes/operations.tsx",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "routes_operations_tab",
       "community": 48,
-      "norm_label": "tab"
+      "norm_label": "tab",
+      "id": "routes_operations_tab"
     },
     {
       "label": "OperationsScreen()",
@@ -879,9 +1049,9 @@
       "source_file": "frontend/src/routes/operations.tsx",
       "source_location": "L16",
       "_origin": "ast",
-      "id": "routes_operations_operationsscreen",
       "community": 48,
-      "norm_label": "operationsscreen()"
+      "norm_label": "operationsscreen()",
+      "id": "routes_operations_operationsscreen"
     },
     {
       "label": "SATYAM_OPS_PHASE1_PREDICTIVE.md",
@@ -1299,7 +1469,7 @@
       "source_file": "backend/app/config.py",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 185,
+      "community": 39,
       "norm_label": "settings",
       "id": "app_config_settings"
     },
@@ -1309,7 +1479,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 185,
+      "community": 39,
       "norm_label": "basesettings",
       "id": "basesettings"
     },
@@ -1319,7 +1489,7 @@
       "source_file": "backend/app/config.py",
       "source_location": "L97",
       "_origin": "ast",
-      "community": 185,
+      "community": 39,
       "norm_label": ".cors_origin_list()",
       "id": "app_config_settings_cors_origin_list"
     },
@@ -1329,7 +1499,7 @@
       "source_file": "backend/app/config.py",
       "source_location": "L101",
       "_origin": "ast",
-      "community": 185,
+      "community": 39,
       "norm_label": ".demo_mode()",
       "id": "app_config_settings_demo_mode"
     },
@@ -1359,7 +1529,7 @@
       "source_file": "backend/app/config.py",
       "source_location": "L102",
       "_origin": "ast",
-      "community": 185,
+      "community": 39,
       "norm_label": "no external model keys => run with deterministic stubs + fixtures.",
       "id": "app_config_rationale_102"
     },
@@ -1479,7 +1649,7 @@
       "source_file": "backend/app/main.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 122,
+      "community": 37,
       "norm_label": "main.py",
       "id": "app_main"
     },
@@ -1489,7 +1659,7 @@
       "source_file": "backend/app/main.py",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 39,
+      "community": 37,
       "norm_label": "lifespan()",
       "id": "app_main_lifespan"
     },
@@ -1499,7 +1669,7 @@
       "source_file": "backend/app/main.py",
       "source_location": "L34",
       "_origin": "ast",
-      "community": 122,
+      "community": 185,
       "norm_label": "fastapi",
       "id": "fastapi"
     },
@@ -1509,7 +1679,7 @@
       "source_file": "backend/app/main.py",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 122,
+      "community": 37,
       "norm_label": "create_app()",
       "id": "app_main_create_app"
     },
@@ -1519,7 +1689,7 @@
       "source_file": "backend/app/main.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 122,
+      "community": 37,
       "norm_label": "fastapi application factory for satyam.",
       "id": "app_main_rationale_1"
     },
@@ -1609,7 +1779,7 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L110",
       "_origin": "ast",
-      "community": 165,
+      "community": 200,
       "norm_label": "shell()",
       "id": "components_shell_shell"
     },
@@ -2369,7 +2539,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 165,
+      "community": 117,
       "norm_label": "searchresult",
       "id": "api_intelligence_searchresult"
     },
@@ -2449,7 +2619,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 33,
+      "community": 117,
       "norm_label": "similarcasematch",
       "id": "api_intelligence_similarcasematch"
     },
@@ -2469,7 +2639,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 33,
+      "community": 117,
       "norm_label": "timelineevent",
       "id": "api_intelligence_timelineevent"
     },
@@ -2889,7 +3059,7 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L925",
       "_origin": "ast",
-      "community": 165,
+      "community": 127,
       "norm_label": "aimsg()",
       "id": "routes_console_aimsg"
     },
@@ -3029,7 +3199,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L252",
       "_origin": "ast",
-      "community": 165,
+      "community": 35,
       "norm_label": "networkscreen()",
       "id": "routes_network_networkscreen"
     },
@@ -3069,7 +3239,7 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1393",
       "_origin": "ast",
-      "community": 165,
+      "community": 35,
       "norm_label": "legend()",
       "id": "routes_network_legend"
     },
@@ -3769,7 +3939,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L157",
       "_origin": "ast",
-      "community": 189,
+      "community": 27,
       "norm_label": "[2026-06-15] \u2014 security update: robust .env ignore rules",
       "id": "made_till_now_2026_06_15_security_update_robust_env_ignore_rules"
     },
@@ -3779,7 +3949,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L159",
       "_origin": "ast",
-      "community": 189,
+      "community": 27,
       "norm_label": "summary",
       "id": "made_till_now_summary_159"
     },
@@ -3789,7 +3959,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L162",
       "_origin": "ast",
-      "community": 189,
+      "community": 27,
       "norm_label": "changes",
       "id": "made_till_now_changes_162"
     },
@@ -4049,7 +4219,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L464",
       "_origin": "ast",
-      "community": 188,
+      "community": 27,
       "norm_label": "[2026-06-15] \u2014 architecture doc revision: saaras v3, gpu specs, demo clarification",
       "id": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_demo_clarification"
     },
@@ -4059,7 +4229,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L466",
       "_origin": "ast",
-      "community": 188,
+      "community": 27,
       "norm_label": "summary",
       "id": "made_till_now_summary_466"
     },
@@ -4069,7 +4239,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L470",
       "_origin": "ast",
-      "community": 188,
+      "community": 27,
       "norm_label": "code changes",
       "id": "made_till_now_code_changes"
     },
@@ -4639,7 +4809,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L891",
       "_origin": "ast",
-      "community": 27,
+      "community": 201,
       "norm_label": "[2026-06-16] \u2014 e2e formatting & global language toggle (issues 10 & 11)",
       "id": "made_till_now_2026_06_16_e2e_formatting_global_language_toggle_issues_10_11"
     },
@@ -4649,7 +4819,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L893",
       "_origin": "ast",
-      "community": 27,
+      "community": 201,
       "norm_label": "summary",
       "id": "made_till_now_summary_893"
     },
@@ -4659,7 +4829,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L896",
       "_origin": "ast",
-      "community": 27,
+      "community": 201,
       "norm_label": "backend changes",
       "id": "made_till_now_backend_changes_896"
     },
@@ -4669,7 +4839,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L900",
       "_origin": "ast",
-      "community": 27,
+      "community": 201,
       "norm_label": "frontend changes",
       "id": "made_till_now_frontend_changes_900"
     },
@@ -4679,7 +4849,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L912",
       "_origin": "ast",
-      "community": 27,
+      "community": 201,
       "norm_label": "verification",
       "id": "made_till_now_verification"
     },
@@ -4729,7 +4899,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L951",
       "_origin": "ast",
-      "community": 192,
+      "community": 27,
       "norm_label": "[2026-06-16] \u2014 physics preset dropdown positioning & viewport overflow fix",
       "id": "made_till_now_2026_06_16_physics_preset_dropdown_positioning_viewport_overflow_fix"
     },
@@ -4739,7 +4909,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L953",
       "_origin": "ast",
-      "community": 192,
+      "community": 27,
       "norm_label": "summary",
       "id": "made_till_now_summary_953"
     },
@@ -4749,7 +4919,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L956",
       "_origin": "ast",
-      "community": 192,
+      "community": 27,
       "norm_label": "changes",
       "id": "made_till_now_changes_956"
     },
@@ -4759,7 +4929,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L967",
       "_origin": "ast",
-      "community": 27,
+      "community": 204,
       "norm_label": "[2026-06-16] \u2014 physics parameter configuration refactoring",
       "id": "made_till_now_2026_06_16_physics_parameter_configuration_refactoring"
     },
@@ -4769,7 +4939,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L969",
       "_origin": "ast",
-      "community": 27,
+      "community": 204,
       "norm_label": "summary",
       "id": "made_till_now_summary_969"
     },
@@ -4779,7 +4949,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L972",
       "_origin": "ast",
-      "community": 27,
+      "community": 204,
       "norm_label": "changes",
       "id": "made_till_now_changes_972"
     },
@@ -5229,7 +5399,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1416",
       "_origin": "ast",
-      "community": 195,
+      "community": 27,
       "norm_label": "[2026-06-16] \u2014 settings: show downloaded local models (bge-m3 + bge-reranker-v2-m3)",
       "id": "made_till_now_2026_06_16_settings_show_downloaded_local_models_bge_m3_bge_reranker_v2_m3"
     },
@@ -5239,7 +5409,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1418",
       "_origin": "ast",
-      "community": 195,
+      "community": 27,
       "norm_label": "summary",
       "id": "made_till_now_summary_1418"
     },
@@ -5249,7 +5419,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1421",
       "_origin": "ast",
-      "community": 195,
+      "community": 27,
       "norm_label": "files changed",
       "id": "made_till_now_files_changed_1421"
     },
@@ -5289,7 +5459,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1449",
       "_origin": "ast",
-      "community": 196,
+      "community": 27,
       "norm_label": "[2026-06-16] \u2014 voice input self-healing: no-frames watchdog + auto-submit + fallback",
       "id": "made_till_now_2026_06_16_voice_input_self_healing_no_frames_watchdog_auto_submit_fallback"
     },
@@ -5299,7 +5469,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1451",
       "_origin": "ast",
-      "community": 196,
+      "community": 27,
       "norm_label": "summary",
       "id": "made_till_now_summary_1451"
     },
@@ -5309,7 +5479,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1454",
       "_origin": "ast",
-      "community": 196,
+      "community": 27,
       "norm_label": "files changed",
       "id": "made_till_now_files_changed_1454"
     },
@@ -5389,7 +5559,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1515",
       "_origin": "ast",
-      "community": 27,
+      "community": 203,
       "norm_label": "[2026-06-16] \u2014 voice input: mediarecorder \u2192 pure speechrecognition + ui redesign",
       "id": "made_till_now_2026_06_16_voice_input_mediarecorder_pure_speechrecognition_ui_redesign"
     },
@@ -5399,7 +5569,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1517",
       "_origin": "ast",
-      "community": 27,
+      "community": 203,
       "norm_label": "summary",
       "id": "made_till_now_summary_1517"
     },
@@ -5409,7 +5579,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1520",
       "_origin": "ast",
-      "community": 27,
+      "community": 203,
       "norm_label": "root cause of \"not hearing me\"",
       "id": "made_till_now_root_cause_of_not_hearing_me"
     },
@@ -5419,7 +5589,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1523",
       "_origin": "ast",
-      "community": 27,
+      "community": 203,
       "norm_label": "files changed",
       "id": "made_till_now_files_changed_1523"
     },
@@ -5429,7 +5599,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1536",
       "_origin": "ast",
-      "community": 27,
+      "community": 205,
       "norm_label": "[2026-06-16] \u2014 voice panel ui redesign (neobrutalist)",
       "id": "made_till_now_2026_06_16_voice_panel_ui_redesign_neobrutalist"
     },
@@ -5439,7 +5609,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1538",
       "_origin": "ast",
-      "community": 27,
+      "community": 205,
       "norm_label": "summary",
       "id": "made_till_now_summary_1538"
     },
@@ -5449,7 +5619,7 @@
       "source_file": "made_till_now.md",
       "source_location": "L1541",
       "_origin": "ast",
-      "community": 27,
+      "community": 205,
       "norm_label": "new layout",
       "id": "made_till_now_new_layout"
     },
@@ -6339,7 +6509,7 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 165,
+      "community": 103,
       "norm_label": "i18n.tsx",
       "id": "lib_i18n"
     },
@@ -6349,7 +6519,7 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 165,
+      "community": 103,
       "norm_label": "lang",
       "id": "lib_i18n_lang"
     },
@@ -6369,7 +6539,7 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L582",
       "_origin": "ast",
-      "community": 165,
+      "community": 103,
       "norm_label": "ctx",
       "id": "lib_i18n_ctx"
     },
@@ -6379,7 +6549,7 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L583",
       "_origin": "ast",
-      "community": 165,
+      "community": 103,
       "norm_label": "i18nctx",
       "id": "lib_i18n_i18nctx"
     },
@@ -6409,7 +6579,7 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L609",
       "_origin": "ast",
-      "community": 165,
+      "community": 127,
       "norm_label": "uset()",
       "id": "lib_i18n_uset"
     },
@@ -6889,7 +7059,7 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L58",
       "_origin": "ast",
-      "community": 33,
+      "community": 117,
       "norm_label": "riskbadge()",
       "id": "routes_forecast_riskbadge"
     },
@@ -6909,7 +7079,7 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L82",
       "_origin": "ast",
-      "community": 33,
+      "community": 117,
       "norm_label": "alertcard()",
       "id": "routes_forecast_alertcard"
     },
@@ -7349,7 +7519,7 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 8,
+      "community": 165,
       "norm_label": "route",
       "id": "routes_reports_route"
     },
@@ -7599,7 +7769,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L289",
       "_origin": "ast",
-      "community": 113,
+      "community": 51,
       "norm_label": "isservervoiceenabled()",
       "id": "voice_tts_isservervoiceenabled"
     },
@@ -7609,7 +7779,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L282",
       "_origin": "ast",
-      "community": 113,
+      "community": 51,
       "norm_label": "speakviasarvam",
       "id": "voice_tts_speakviasarvam"
     },
@@ -7619,7 +7789,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "orchestrator.py",
       "id": "pipeline_orchestrator"
     },
@@ -7649,7 +7819,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "_rows_context()",
       "id": "pipeline_orchestrator_rows_context"
     },
@@ -7659,7 +7829,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L42",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "_render_grounded()",
       "id": "pipeline_orchestrator_render_grounded"
     },
@@ -7669,7 +7839,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L89",
       "_origin": "ast",
-      "community": 42,
+      "community": 180,
       "norm_label": "_compose()",
       "id": "pipeline_orchestrator_compose"
     },
@@ -7679,7 +7849,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L123",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "run()",
       "id": "pipeline_orchestrator_run"
     },
@@ -7689,7 +7859,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L123",
       "_origin": "ast",
-      "community": 121,
+      "community": 188,
       "norm_label": "conversationstate",
       "id": "conversationstate"
     },
@@ -7699,7 +7869,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "router-first orchestration.  given a user message + rls-scoped session + princip",
       "id": "pipeline_orchestrator_rationale_1"
     },
@@ -7709,7 +7879,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L43",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "d5.3 fix: deterministic, no-llm answer used in demo/keyless mode.",
       "id": "pipeline_orchestrator_rationale_43"
     },
@@ -7719,7 +7889,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 42,
+      "community": 180,
       "norm_label": "grounded answer composition with groq fallback on primary failure.",
       "id": "pipeline_orchestrator_rationale_96"
     },
@@ -7729,7 +7899,7 @@
       "source_file": "backend/app/pipeline/prompts.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "prompts.py",
       "id": "pipeline_prompts"
     },
@@ -7739,7 +7909,7 @@
       "source_file": "backend/app/pipeline/prompts.py",
       "source_location": "L127",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "build_answer_system()",
       "id": "pipeline_prompts_build_answer_system"
     },
@@ -7749,7 +7919,7 @@
       "source_file": "backend/app/pipeline/prompts.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "prompt templates \u2014 updated for new schema (002_schema_v2.sql).  key schema chang",
       "id": "pipeline_prompts_rationale_1"
     },
@@ -7759,7 +7929,7 @@
       "source_file": "backend/app/pipeline/prompts.py",
       "source_location": "L128",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "build a rich, personalised system prompt.      injects the logged-in officer's n",
       "id": "pipeline_prompts_rationale_128"
     },
@@ -7789,7 +7959,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 165,
+      "community": 103,
       "norm_label": "createaccountdialog.tsx",
       "id": "components_createaccountdialog"
     },
@@ -7799,7 +7969,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 165,
+      "community": 103,
       "norm_label": "role_options",
       "id": "components_createaccountdialog_role_options"
     },
@@ -7809,7 +7979,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 165,
+      "community": 103,
       "norm_label": "role_by_value",
       "id": "components_createaccountdialog_role_by_value"
     },
@@ -7819,7 +7989,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 165,
+      "community": 103,
       "norm_label": "role_groups",
       "id": "components_createaccountdialog_role_groups"
     },
@@ -7829,7 +7999,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 165,
+      "community": 103,
       "norm_label": "createaccountdialog()",
       "id": "components_createaccountdialog_createaccountdialog"
     },
@@ -7839,7 +8009,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "auth.py",
       "id": "routes_auth"
     },
@@ -7849,7 +8019,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "_db_rank()",
       "id": "routes_auth_db_rank"
     },
@@ -7859,7 +8029,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "_get_or_create_officer()",
       "id": "routes_auth_get_or_create_officer"
     },
@@ -7869,7 +8039,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "officer",
       "id": "officer"
     },
@@ -7879,7 +8049,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "_build_token_and_user()",
       "id": "routes_auth_build_token_and_user"
     },
@@ -7889,7 +8059,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "sessionuser",
       "id": "sessionuser"
     },
@@ -7899,7 +8069,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L91",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "get_or_create_user()",
       "id": "routes_auth_get_or_create_user"
     },
@@ -7909,7 +8079,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L91",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "user",
       "id": "user"
     },
@@ -7919,7 +8089,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L146",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "list_stations()",
       "id": "routes_auth_list_stations"
     },
@@ -7929,7 +8099,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L146",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "stationoption",
       "id": "stationoption"
     },
@@ -7939,7 +8109,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L165",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "login()",
       "id": "routes_auth_login"
     },
@@ -7949,7 +8119,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L165",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "loginrequest",
       "id": "loginrequest"
     },
@@ -7959,7 +8129,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L165",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "loginresponse",
       "id": "loginresponse"
     },
@@ -7969,7 +8139,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L205",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "register()",
       "id": "routes_auth_register"
     },
@@ -7979,7 +8149,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L205",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "registerrequest",
       "id": "registerrequest"
     },
@@ -7989,7 +8159,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L280",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "me()",
       "id": "routes_auth_me"
     },
@@ -7999,7 +8169,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "authentication routes.  login:    looks up the user by username (derived from em",
       "id": "routes_auth_rationale_1"
     },
@@ -8009,7 +8179,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "normalise ui rank values to the db rank_access.rank strings.",
       "id": "routes_auth_rationale_49"
     },
@@ -8089,7 +8259,7 @@
       "source_file": "backend/tests/test_health.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 122,
+      "community": 37,
       "norm_label": "test_health.py",
       "id": "tests_test_health"
     },
@@ -8099,7 +8269,7 @@
       "source_file": "backend/tests/test_health.py",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 122,
+      "community": 37,
       "norm_label": "test_health_ok()",
       "id": "tests_test_health_test_health_ok"
     },
@@ -8109,7 +8279,7 @@
       "source_file": "backend/tests/test_health.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 122,
+      "community": 37,
       "norm_label": "test_login_and_me()",
       "id": "tests_test_health_test_login_and_me"
     },
@@ -8289,7 +8459,7 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L111",
       "_origin": "ast",
-      "community": 165,
+      "community": 103,
       "norm_label": "api",
       "id": "api_client_api"
     },
@@ -8369,7 +8539,7 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 165,
+      "community": 103,
       "norm_label": "login.tsx",
       "id": "routes_login"
     },
@@ -8389,7 +8559,7 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 165,
+      "community": 103,
       "norm_label": "login()",
       "id": "routes_login_login"
     },
@@ -8399,7 +8569,7 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L233",
       "_origin": "ast",
-      "community": 165,
+      "community": 103,
       "norm_label": "trustbadge()",
       "id": "routes_login_trustbadge"
     },
@@ -8409,7 +8579,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 196,
       "norm_label": "security.py",
       "id": "core_security"
     },
@@ -8419,7 +8589,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 154,
+      "community": 196,
       "norm_label": "_bcrypt()",
       "id": "core_security_bcrypt"
     },
@@ -8429,7 +8599,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 154,
+      "community": 196,
       "norm_label": "hash_password()",
       "id": "core_security_hash_password"
     },
@@ -8439,7 +8609,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 154,
+      "community": 196,
       "norm_label": "verify_password()",
       "id": "core_security_verify_password"
     },
@@ -8449,7 +8619,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L43",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "create_access_token()",
       "id": "core_security_create_access_token"
     },
@@ -8459,7 +8629,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 154,
+      "community": 196,
       "norm_label": "decode_token()",
       "id": "core_security_decode_token"
     },
@@ -8469,7 +8639,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 196,
       "norm_label": "jwt issuing / verification + password hashing.",
       "id": "core_security_rationale_1"
     },
@@ -8479,7 +8649,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 154,
+      "community": 196,
       "norm_label": "lazy import so the module loads without bcrypt if it's not installed.",
       "id": "core_security_rationale_13"
     },
@@ -8489,7 +8659,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 154,
+      "community": 196,
       "norm_label": "return a bcrypt hash of *plain*. falls back to a placeholder if bcrypt is unavai",
       "id": "core_security_rationale_22"
     },
@@ -8499,7 +8669,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 154,
+      "community": 196,
       "norm_label": "return true if *plain* matches *hashed*. handles both bcrypt and the plain senti",
       "id": "core_security_rationale_31"
     },
@@ -8569,7 +8739,7 @@
       "source_file": "backend/app/db/models.py",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "officer",
       "id": "db_models_officer"
     },
@@ -8629,7 +8799,7 @@
       "source_file": "backend/app/db/models.py",
       "source_location": "L141",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "user",
       "id": "db_models_user"
     },
@@ -9309,7 +9479,7 @@
       "source_file": "frontend/src/routes/transcripts.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 127,
+      "community": 8,
       "norm_label": "route",
       "id": "routes_transcripts_route"
     },
@@ -11339,7 +11509,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 117,
+      "community": 8,
       "norm_label": "route",
       "id": "routes_profile_personid_route"
     },
@@ -11399,7 +11569,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L196",
       "_origin": "ast",
-      "community": 33,
+      "community": 117,
       "norm_label": "profilescreen()",
       "id": "routes_profile_personid_profilescreen"
     },
@@ -11689,7 +11859,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 46,
+      "community": 180,
       "norm_label": "text_to_sql.py",
       "id": "tools_text_to_sql"
     },
@@ -11709,7 +11879,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 46,
+      "community": 180,
       "norm_label": "_strip_markdown_fences()",
       "id": "tools_text_to_sql_strip_markdown_fences"
     },
@@ -11719,7 +11889,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 46,
+      "community": 180,
       "norm_label": "generate_sql()",
       "id": "tools_text_to_sql_generate_sql"
     },
@@ -11729,7 +11899,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L118",
       "_origin": "ast",
-      "community": 46,
+      "community": 188,
       "norm_label": "run_sql()",
       "id": "tools_text_to_sql_run_sql"
     },
@@ -11739,7 +11909,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L118",
       "_origin": "ast",
-      "community": 46,
+      "community": 188,
       "norm_label": "asyncsession",
       "id": "backend_app_pipeline_tools_text_to_sql_py_asyncsession"
     },
@@ -11749,7 +11919,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L124",
       "_origin": "ast",
-      "community": 46,
+      "community": 188,
       "norm_label": "answer_with_sql()",
       "id": "tools_text_to_sql_answer_with_sql"
     },
@@ -11759,7 +11929,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 46,
+      "community": 180,
       "norm_label": "nl -> guarded sql -> rows, with pii masking for low-clearance callers.  the sql",
       "id": "tools_text_to_sql_rationale_1"
     },
@@ -11779,7 +11949,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 46,
+      "community": 180,
       "norm_label": "remove markdown code fences that llms sometimes wrap json responses in.      gem",
       "id": "tools_text_to_sql_rationale_50"
     },
@@ -11789,7 +11959,7 @@
       "source_file": "backend/app/pipeline/tools/text_to_sql.py",
       "source_location": "L132",
       "_origin": "ast",
-      "community": 46,
+      "community": 188,
       "norm_label": "return (safe_sql, masked_rows). raises unsafesql if no usable sql exists.",
       "id": "tools_text_to_sql_rationale_132"
     },
@@ -11859,7 +12029,7 @@
       "source_file": "frontend/src/components/CaseDrawer.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 117,
       "norm_label": "casedrawer.tsx",
       "id": "components_casedrawer"
     },
@@ -11869,7 +12039,7 @@
       "source_file": "frontend/src/components/CaseDrawer.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 33,
+      "community": 117,
       "norm_label": "casedrawer()",
       "id": "components_casedrawer_casedrawer"
     },
@@ -11879,7 +12049,7 @@
       "source_file": "frontend/src/components/CaseDrawer.tsx",
       "source_location": "L213",
       "_origin": "ast",
-      "community": 33,
+      "community": 117,
       "norm_label": "field()",
       "id": "components_casedrawer_field"
     },
@@ -11889,7 +12059,7 @@
       "source_file": "frontend/src/lib/tData.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 117,
       "norm_label": "tdata.ts",
       "id": "lib_tdata"
     },
@@ -11899,7 +12069,7 @@
       "source_file": "frontend/src/lib/tData.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 33,
+      "community": 117,
       "norm_label": "kndata",
       "id": "lib_tdata_kndata"
     },
@@ -11909,7 +12079,7 @@
       "source_file": "frontend/src/lib/tData.ts",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 33,
+      "community": 117,
       "norm_label": "fieldkey",
       "id": "lib_tdata_fieldkey"
     },
@@ -11919,7 +12089,7 @@
       "source_file": "frontend/src/lib/tData.ts",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 33,
+      "community": 117,
       "norm_label": "tdata()",
       "id": "lib_tdata_tdata"
     },
@@ -11929,7 +12099,7 @@
       "source_file": "frontend/src/lib/tData.ts",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 33,
+      "community": 117,
       "norm_label": "tauto()",
       "id": "lib_tdata_tauto"
     },
@@ -12059,7 +12229,7 @@
       "source_file": "backend/app/pipeline/router.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "router.py",
       "id": "pipeline_router"
     },
@@ -12069,7 +12239,7 @@
       "source_file": "backend/app/pipeline/router.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "_keyword_intent()",
       "id": "pipeline_router_keyword_intent"
     },
@@ -12079,7 +12249,7 @@
       "source_file": "backend/app/pipeline/router.py",
       "source_location": "L43",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "route()",
       "id": "pipeline_router_route"
     },
@@ -12089,7 +12259,7 @@
       "source_file": "backend/app/pipeline/router.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "intent router. uses the llm with a json schema, with a cheap keyword fallback so",
       "id": "pipeline_router_rationale_1"
     },
@@ -12129,7 +12299,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 185,
       "norm_label": "deps.py",
       "id": "api_deps"
     },
@@ -12139,7 +12309,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 154,
+      "community": 185,
       "norm_label": "get_principal()",
       "id": "api_deps_get_principal"
     },
@@ -12149,7 +12319,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 154,
+      "community": 185,
       "norm_label": "principal",
       "id": "backend_app_api_deps_py_principal"
     },
@@ -12159,7 +12329,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 154,
+      "community": 185,
       "norm_label": "get_scoped_session()",
       "id": "api_deps_get_scoped_session"
     },
@@ -12169,7 +12339,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 154,
+      "community": 185,
       "norm_label": "asyncsession",
       "id": "backend_app_api_deps_py_asyncsession"
     },
@@ -12179,7 +12349,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 185,
       "norm_label": "fastapi dependencies: authenticated principal + rls-scoped db session.  the jwt",
       "id": "api_deps_rationale_1"
     },
@@ -12189,7 +12359,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 154,
+      "community": 185,
       "norm_label": "decode the bearer jwt into a principal. raises 401 on any problem.",
       "id": "api_deps_rationale_21"
     },
@@ -12199,7 +12369,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 154,
+      "community": 185,
       "norm_label": "yield a transaction-scoped session stamped with the caller's rls context.",
       "id": "api_deps_rationale_50"
     },
@@ -12219,7 +12389,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 122,
+      "community": 185,
       "norm_label": "audit.py",
       "id": "backend_app_api_routes_audit_py_routes_audit"
     },
@@ -12229,7 +12399,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "list_audit()",
       "id": "routes_audit_list_audit"
     },
@@ -12239,7 +12409,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "asyncsession",
       "id": "backend_app_api_routes_audit_py_asyncsession"
     },
@@ -12249,7 +12419,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "principal",
       "id": "backend_app_api_routes_audit_py_principal"
     },
@@ -12259,7 +12429,7 @@
       "source_file": "backend/app/api/routes/audit.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 122,
+      "community": 185,
       "norm_label": "audit-log endpoint with hash-chain verification (admin/l3+ only).",
       "id": "routes_audit_rationale_1"
     },
@@ -12269,7 +12439,7 @@
       "source_file": "backend/app/api/routes/chat.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 122,
+      "community": 185,
       "norm_label": "chat.py",
       "id": "routes_chat"
     },
@@ -12279,7 +12449,7 @@
       "source_file": "backend/app/api/routes/chat.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "chat_stream()",
       "id": "routes_chat_chat_stream"
     },
@@ -12289,7 +12459,7 @@
       "source_file": "backend/app/api/routes/chat.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "chatrequest",
       "id": "chatrequest"
     },
@@ -12299,7 +12469,7 @@
       "source_file": "backend/app/api/routes/chat.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "asyncsession",
       "id": "backend_app_api_routes_chat_py_asyncsession"
     },
@@ -12309,7 +12479,7 @@
       "source_file": "backend/app/api/routes/chat.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "principal",
       "id": "backend_app_api_routes_chat_py_principal"
     },
@@ -12319,7 +12489,7 @@
       "source_file": "backend/app/api/routes/chat.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "streamingresponse",
       "id": "streamingresponse"
     },
@@ -12329,7 +12499,7 @@
       "source_file": "backend/app/api/routes/chat.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 122,
+      "community": 185,
       "norm_label": "conversational endpoint: grounded answers streamed over sse.  the response is a",
       "id": "routes_chat_rationale_1"
     },
@@ -12469,7 +12639,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 122,
+      "community": 185,
       "norm_label": "network.py",
       "id": "backend_app_api_routes_network_py_routes_network"
     },
@@ -12479,7 +12649,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "ego()",
       "id": "routes_network_ego"
     },
@@ -12489,7 +12659,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "egorequest",
       "id": "backend_app_api_routes_network_py_egorequest"
     },
@@ -12499,7 +12669,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "asyncsession",
       "id": "backend_app_api_routes_network_py_asyncsession"
     },
@@ -12509,7 +12679,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "principal",
       "id": "backend_app_api_routes_network_py_principal"
     },
@@ -12519,7 +12689,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "egoresponse",
       "id": "backend_app_api_routes_network_py_egoresponse"
     },
@@ -12529,7 +12699,7 @@
       "source_file": "backend/app/api/routes/network.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 122,
+      "community": 185,
       "norm_label": "link-analysis (ego network) endpoint.",
       "id": "routes_network_rationale_1"
     },
@@ -12539,7 +12709,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 122,
+      "community": 135,
       "norm_label": "reports.py",
       "id": "backend_app_api_routes_reports_py_routes_reports"
     },
@@ -12549,7 +12719,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "build()",
       "id": "routes_reports_build"
     },
@@ -12559,7 +12729,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "reportrequest",
       "id": "backend_app_api_routes_reports_py_reportrequest"
     },
@@ -12569,7 +12739,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "asyncsession",
       "id": "backend_app_api_routes_reports_py_asyncsession"
     },
@@ -12579,7 +12749,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "principal",
       "id": "backend_app_api_routes_reports_py_principal"
     },
@@ -12589,7 +12759,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "reportresponse",
       "id": "backend_app_api_routes_reports_py_reportresponse"
     },
@@ -12599,7 +12769,7 @@
       "source_file": "backend/app/api/routes/reports.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 122,
+      "community": 135,
       "norm_label": "report builder endpoint.",
       "id": "routes_reports_rationale_1"
     },
@@ -12609,7 +12779,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "settings.py",
       "id": "routes_settings"
     },
@@ -12619,7 +12789,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "dbsourcerequest",
       "id": "routes_settings_dbsourcerequest"
     },
@@ -12629,7 +12799,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "dbsourceresponse",
       "id": "routes_settings_dbsourceresponse"
     },
@@ -12639,7 +12809,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "switch_db_source()",
       "id": "routes_settings_switch_db_source"
     },
@@ -12649,7 +12819,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "principal",
       "id": "backend_app_api_routes_settings_py_principal"
     },
@@ -12659,7 +12829,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "current_db_source()",
       "id": "routes_settings_current_db_source"
     },
@@ -12669,7 +12839,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L60",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "get_db_source_host()",
       "id": "routes_settings_get_db_source_host"
     },
@@ -12679,7 +12849,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "runtime settings endpoint.  allows the frontend settings panel to flip the act",
       "id": "routes_settings_rationale_1"
     },
@@ -12689,7 +12859,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "return host:port only \u2014 never expose credentials in the response.",
       "id": "routes_settings_rationale_61"
     },
@@ -12699,7 +12869,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "voice.py",
       "id": "routes_voice"
     },
@@ -12709,7 +12879,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "_norm_lang()",
       "id": "routes_voice_norm_lang"
     },
@@ -12719,7 +12889,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "_guard()",
       "id": "routes_voice_guard"
     },
@@ -12729,7 +12899,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "principal",
       "id": "backend_app_api_routes_voice_py_principal"
     },
@@ -12739,7 +12909,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L44",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "tts()",
       "id": "routes_voice_tts"
     },
@@ -12749,7 +12919,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L44",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "ttsrequest",
       "id": "ttsrequest"
     },
@@ -12759,7 +12929,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L44",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "ttsresponse",
       "id": "ttsresponse"
     },
@@ -12769,7 +12939,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "stt()",
       "id": "routes_voice_stt"
     },
@@ -12779,7 +12949,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "uploadfile",
       "id": "uploadfile"
     },
@@ -12789,7 +12959,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "sttresponse",
       "id": "sttresponse"
     },
@@ -12799,7 +12969,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L102",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "translate()",
       "id": "routes_voice_translate"
     },
@@ -12809,7 +12979,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L102",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "translaterequest",
       "id": "translaterequest"
     },
@@ -12819,7 +12989,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L102",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "translateresponse",
       "id": "translateresponse"
     },
@@ -12829,7 +12999,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "voice pipeline endpoints: tts / stt / mt.  provider-agnostic: delegates to the",
       "id": "routes_voice_rationale_1"
     },
@@ -12839,7 +13009,7 @@
       "source_file": "backend/app/api/routes/voice.py",
       "source_location": "L32",
       "_origin": "ast",
-      "community": 93,
+      "community": 135,
       "norm_label": "collapse any locale string to the two supported voice languages.",
       "id": "routes_voice_rationale_32"
     },
@@ -12909,7 +13079,7 @@
       "source_file": "backend/app/core/audit.py",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 121,
+      "community": 12,
       "norm_label": "auditlog",
       "id": "auditlog"
     },
@@ -13029,7 +13199,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "rbac.py",
       "id": "core_rbac"
     },
@@ -13049,7 +13219,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "resolve_scope()",
       "id": "core_rbac_resolve_scope"
     },
@@ -13059,7 +13229,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 154,
+      "community": 93,
       "norm_label": "resolve_clearance()",
       "id": "core_rbac_resolve_clearance"
     },
@@ -13069,7 +13239,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L82",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "permission",
       "id": "core_rbac_permission"
     },
@@ -13079,7 +13249,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "str",
       "id": "str"
     },
@@ -13089,7 +13259,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "enum",
       "id": "enum"
     },
@@ -13129,7 +13299,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L131",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": ".has()",
       "id": "core_rbac_principal_has"
     },
@@ -13179,7 +13349,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L153",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "accessdenied",
       "id": "core_rbac_accessdenied"
     },
@@ -13189,7 +13359,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 46,
+      "community": 192,
       "norm_label": "exception",
       "id": "exception"
     },
@@ -13199,7 +13369,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L157",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "require()",
       "id": "core_rbac_require"
     },
@@ -13209,7 +13379,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "karnataka state police rbac + abac.  rank \u2192 scope + clearance mapping mirrors ra",
       "id": "core_rbac_rationale_1"
     },
@@ -13259,7 +13429,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 185,
       "norm_label": "rls.py",
       "id": "db_rls"
     },
@@ -13269,7 +13439,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 154,
+      "community": 185,
       "norm_label": "apply_rls_context()",
       "id": "db_rls_apply_rls_context"
     },
@@ -13279,7 +13449,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 154,
+      "community": 185,
       "norm_label": "asyncsession",
       "id": "backend_app_db_rls_py_asyncsession"
     },
@@ -13289,7 +13459,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 185,
       "norm_label": "row-level security helpers \u2014 v2 schema.  the new schema uses `app.*` gucs (app.s",
       "id": "db_rls_rationale_1"
     },
@@ -13299,7 +13469,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 154,
+      "community": 185,
       "norm_label": "stamp the current transaction with the caller's jurisdiction context.",
       "id": "db_rls_rationale_29"
     },
@@ -13309,7 +13479,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "session.py",
       "id": "db_session"
     },
@@ -13319,7 +13489,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "set_db_source()",
       "id": "db_session_set_db_source"
     },
@@ -13329,7 +13499,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "get_db_source()",
       "id": "db_session_get_db_source"
     },
@@ -13339,7 +13509,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "active_url()",
       "id": "db_session_active_url"
     },
@@ -13349,7 +13519,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "_get_engine()",
       "id": "db_session_get_engine"
     },
@@ -13359,7 +13529,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "asyncengine",
       "id": "asyncengine"
     },
@@ -13369,7 +13539,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "get_sessionmaker()",
       "id": "db_session_get_sessionmaker"
     },
@@ -13379,7 +13549,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "async_sessionmaker",
       "id": "async_sessionmaker"
     },
@@ -13389,7 +13559,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "asyncsession",
       "id": "backend_app_db_session_py_asyncsession"
     },
@@ -13399,7 +13569,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L77",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "get_session()",
       "id": "db_session_get_session"
     },
@@ -13409,7 +13579,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "async sqlalchemy engine + session, with runtime database-source switching.  the",
       "id": "db_session_rationale_1"
     },
@@ -13419,7 +13589,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "return the url for the currently active source.",
       "id": "db_session_rationale_41"
     },
@@ -13429,7 +13599,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "return the engine for the currently active source.",
       "id": "db_session_rationale_63"
     },
@@ -13439,7 +13609,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L78",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "fastapi dependency yielding a transactional session.",
       "id": "db_session_rationale_78"
     },
@@ -14019,7 +14189,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 110,
+      "community": 26,
       "norm_label": "sarvamstt",
       "id": "api_sarvam_sarvamstt"
     },
@@ -14069,7 +14239,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L144",
       "_origin": "ast",
-      "community": 26,
+      "community": 110,
       "norm_label": "sarvamtranslator",
       "id": "api_sarvam_sarvamtranslator"
     },
@@ -14109,7 +14279,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 110,
+      "community": 26,
       "norm_label": "saaras v3 speech-to-text. /speech-to-text is multipart/form-data.      sends l",
       "id": "api_sarvam_rationale_62"
     },
@@ -14149,7 +14319,7 @@
       "source_file": "backend/app/models/api/sarvam.py",
       "source_location": "L145",
       "_origin": "ast",
-      "community": 26,
+      "community": 110,
       "norm_label": "mayura v1 \u2014 neural mt between kannada and english.",
       "id": "api_sarvam_rationale_145"
     },
@@ -14679,7 +14849,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 39,
+      "community": 180,
       "norm_label": "get_llm()",
       "id": "models_registry_get_llm"
     },
@@ -14759,7 +14929,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L104",
       "_origin": "ast",
-      "community": 110,
+      "community": 39,
       "norm_label": "get_stt()",
       "id": "models_registry_get_stt"
     },
@@ -14779,7 +14949,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L130",
       "_origin": "ast",
-      "community": 39,
+      "community": 26,
       "norm_label": "get_tts()",
       "id": "models_registry_get_tts"
     },
@@ -14799,7 +14969,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L152",
       "_origin": "ast",
-      "community": 39,
+      "community": 110,
       "norm_label": "get_translator()",
       "id": "models_registry_get_translator"
     },
@@ -14829,7 +14999,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 39,
+      "community": 180,
       "norm_label": "return the brain llm.      resolution order:       1. explicit `engine` arg (per",
       "id": "models_registry_rationale_30"
     },
@@ -14859,7 +15029,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L105",
       "_origin": "ast",
-      "community": 110,
+      "community": 39,
       "norm_label": "sarvam (primary) \u2192 google \u2192 bhashini (fallback) \u2192 local whisper.      resolution",
       "id": "models_registry_rationale_105"
     },
@@ -14869,7 +15039,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L131",
       "_origin": "ast",
-      "community": 39,
+      "community": 26,
       "norm_label": "sarvam bulbul v3 (primary) \u2192 google \u2192 bhashini (fallback) \u2192 local parler-tts.",
       "id": "models_registry_rationale_131"
     },
@@ -14879,7 +15049,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L153",
       "_origin": "ast",
-      "community": 39,
+      "community": 110,
       "norm_label": "sarvam translate (primary) \u2192 bhashini nmt (fallback).     falls back to bhashini",
       "id": "models_registry_rationale_153"
     },
@@ -15249,7 +15419,7 @@
       "source_file": "backend/app/pipeline/tools/sql_guard.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 46,
+      "community": 192,
       "norm_label": "sql_guard.py",
       "id": "tools_sql_guard"
     },
@@ -15259,7 +15429,7 @@
       "source_file": "backend/app/pipeline/tools/sql_guard.py",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 46,
+      "community": 192,
       "norm_label": "unsafesql",
       "id": "tools_sql_guard_unsafesql"
     },
@@ -15269,7 +15439,7 @@
       "source_file": "backend/app/pipeline/tools/sql_guard.py",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 46,
+      "community": 192,
       "norm_label": "sanitize()",
       "id": "tools_sql_guard_sanitize"
     },
@@ -15279,7 +15449,7 @@
       "source_file": "backend/app/pipeline/tools/sql_guard.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 46,
+      "community": 192,
       "norm_label": "text-to-sql guardrail.  the llm is never trusted to produce safe sql. every cand",
       "id": "tools_sql_guard_rationale_1"
     },
@@ -15289,7 +15459,7 @@
       "source_file": "backend/app/pipeline/tools/sql_guard.py",
       "source_location": "L32",
       "_origin": "ast",
-      "community": 46,
+      "community": 192,
       "norm_label": "validate and normalize a candidate select. raises unsafesql on violation.",
       "id": "tools_sql_guard_rationale_32"
     },
@@ -15559,7 +15729,7 @@
       "source_file": "backend/app/schemas/report.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "report.py",
       "id": "schemas_report"
     },
@@ -15569,7 +15739,7 @@
       "source_file": "backend/app/schemas/report.py",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "reportrequest",
       "id": "schemas_report_reportrequest"
     },
@@ -15579,7 +15749,7 @@
       "source_file": "backend/app/schemas/report.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "reportresponse",
       "id": "schemas_report_reportresponse"
     },
@@ -15879,7 +16049,7 @@
       "source_file": "backend/app/services/network_service.py",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "egorequest",
       "id": "backend_app_services_network_service_py_egorequest"
     },
@@ -15889,7 +16059,7 @@
       "source_file": "backend/app/services/network_service.py",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "egoresponse",
       "id": "backend_app_services_network_service_py_egoresponse"
     },
@@ -15909,7 +16079,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 121,
+      "community": 12,
       "norm_label": "report_service.py",
       "id": "services_report_service"
     },
@@ -15919,7 +16089,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "build()",
       "id": "services_report_service_build"
     },
@@ -15929,7 +16099,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "asyncsession",
       "id": "backend_app_services_report_service_py_asyncsession"
     },
@@ -15939,7 +16109,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "principal",
       "id": "backend_app_services_report_service_py_principal"
     },
@@ -15949,7 +16119,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "reportrequest",
       "id": "backend_app_services_report_service_py_reportrequest"
     },
@@ -15959,7 +16129,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 121,
+      "community": 135,
       "norm_label": "reportresponse",
       "id": "backend_app_services_report_service_py_reportresponse"
     },
@@ -15969,7 +16139,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 121,
+      "community": 12,
       "norm_label": "report builder. produces a structured (json) report payload; the pdf export can",
       "id": "services_report_service_rationale_1"
     },
@@ -15979,7 +16149,7 @@
       "source_file": "backend/check_audit.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "check_audit.py",
       "id": "backend_check_audit"
     },
@@ -15989,7 +16159,7 @@
       "source_file": "backend/check_audit.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "main()",
       "id": "backend_check_audit_main"
     },
@@ -15999,7 +16169,7 @@
       "source_file": "backend/check_insert.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "check_insert.py",
       "id": "backend_check_insert"
     },
@@ -16009,7 +16179,7 @@
       "source_file": "backend/check_insert.py",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 154,
+      "community": 189,
       "norm_label": "main()",
       "id": "backend_check_insert_main"
     },
@@ -16449,7 +16619,7 @@
       "source_file": "backend/tests/test_rbac.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 121,
+      "community": 46,
       "norm_label": "principal",
       "id": "backend_tests_test_rbac_py_principal"
     },
@@ -16599,7 +16769,7 @@
       "source_file": "backend/tests/test_sql_guard.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 46,
+      "community": 192,
       "norm_label": "test_sql_guard.py",
       "id": "tests_test_sql_guard"
     },
@@ -16609,7 +16779,7 @@
       "source_file": "backend/tests/test_sql_guard.py",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 46,
+      "community": 192,
       "norm_label": "test_allows_simple_select_and_adds_limit()",
       "id": "tests_test_sql_guard_test_allows_simple_select_and_adds_limit"
     },
@@ -16619,7 +16789,7 @@
       "source_file": "backend/tests/test_sql_guard.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 46,
+      "community": 192,
       "norm_label": "test_blocks_delete()",
       "id": "tests_test_sql_guard_test_blocks_delete"
     },
@@ -16629,7 +16799,7 @@
       "source_file": "backend/tests/test_sql_guard.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 46,
+      "community": 192,
       "norm_label": "test_blocks_multiple_statements()",
       "id": "tests_test_sql_guard_test_blocks_multiple_statements"
     },
@@ -16639,7 +16809,7 @@
       "source_file": "backend/tests/test_sql_guard.py",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 46,
+      "community": 192,
       "norm_label": "test_blocks_unknown_table()",
       "id": "tests_test_sql_guard_test_blocks_unknown_table"
     },
@@ -16649,7 +16819,7 @@
       "source_file": "backend/tests/test_sql_guard.py",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 46,
+      "community": 192,
       "norm_label": "test_clamps_large_limit()",
       "id": "tests_test_sql_guard_test_clamps_large_limit"
     },
@@ -21079,7 +21249,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 165,
+      "community": 200,
       "norm_label": "audit.tsx",
       "id": "frontend_src_routes_audit_tsx_routes_audit"
     },
@@ -21089,7 +21259,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 165,
+      "community": 200,
       "norm_label": "route",
       "id": "routes_audit_route"
     },
@@ -21099,7 +21269,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 165,
+      "community": 200,
       "norm_label": "auditrow",
       "id": "routes_audit_auditrow"
     },
@@ -21109,7 +21279,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 165,
+      "community": 200,
       "norm_label": "audit()",
       "id": "routes_audit_audit"
     },
@@ -21119,7 +21289,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L219",
       "_origin": "ast",
-      "community": 165,
+      "community": 200,
       "norm_label": "th()",
       "id": "routes_audit_th"
     },
@@ -21129,7 +21299,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L222",
       "_origin": "ast",
-      "community": 165,
+      "community": 200,
       "norm_label": "filter()",
       "id": "routes_audit_filter"
     },
@@ -21139,7 +21309,7 @@
       "source_file": "frontend/src/routes/audit.tsx",
       "source_location": "L230",
       "_origin": "ast",
-      "community": 165,
+      "community": 200,
       "norm_label": "select()",
       "id": "routes_audit_select"
     },
@@ -23698,121 +23868,91 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
       "source_location": "L1",
       "weight": 1.0,
-      "source": "satyam_ops_phase2_dispatch_sim",
-      "target": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
+      "source": "satyam_ops_phase3_green_corridor",
+      "target": "satyam_ops_phase3_green_corridor_phase_3_green_corridor_signals_turn_green_on_the_patrol_s_route",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L506",
-      "weight": 1.0,
-      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
-      "target": "satyam_ops_phase2_dispatch_sim_10_verify",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
       "source_location": "L7",
       "weight": 1.0,
-      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
-      "target": "satyam_ops_phase2_dispatch_sim_1_new_backend_app_services_ops_routing_service_py",
+      "source": "satyam_ops_phase3_green_corridor_phase_3_green_corridor_signals_turn_green_on_the_patrol_s_route",
+      "target": "satyam_ops_phase3_green_corridor_1_new_backend_app_services_ops_corridor_service_py",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L68",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L57",
       "weight": 1.0,
-      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
-      "target": "satyam_ops_phase2_dispatch_sim_2_new_backend_app_services_ops_ws_manager_py",
+      "source": "satyam_ops_phase3_green_corridor_phase_3_green_corridor_signals_turn_green_on_the_patrol_s_route",
+      "target": "satyam_ops_phase3_green_corridor_2_edit_backend_app_services_ops_sim_service_py_hook_the_corridor_into_movement",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L114",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L79",
       "weight": 1.0,
-      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
-      "target": "satyam_ops_phase2_dispatch_sim_3_new_backend_app_services_ops_sim_service_py",
+      "source": "satyam_ops_phase3_green_corridor_phase_3_green_corridor_signals_turn_green_on_the_patrol_s_route",
+      "target": "satyam_ops_phase3_green_corridor_3_edit_backend_app_api_routes_ops_py_pass_the_corridor_hook_expose_signals",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L213",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L112",
       "weight": 1.0,
-      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
-      "target": "satyam_ops_phase2_dispatch_sim_4_edit_backend_app_schemas_ops_py_append",
+      "source": "satyam_ops_phase3_green_corridor_phase_3_green_corridor_signals_turn_green_on_the_patrol_s_route",
+      "target": "satyam_ops_phase3_green_corridor_4_edit_frontend_src_lib_api_responseops_ts_append",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L248",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L124",
       "weight": 1.0,
-      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
-      "target": "satyam_ops_phase2_dispatch_sim_5_edit_backend_app_api_routes_ops_py_append_phase_2",
+      "source": "satyam_ops_phase3_green_corridor_phase_3_green_corridor_signals_turn_green_on_the_patrol_s_route",
+      "target": "satyam_ops_phase3_green_corridor_5_edit_frontend_src_components_ops_dispatchpanel_tsx_render_signals_react_to_ws",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L361",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L154",
       "weight": 1.0,
-      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
-      "target": "satyam_ops_phase2_dispatch_sim_6_edit_frontend_src_lib_api_responseops_ts_append",
+      "source": "satyam_ops_phase3_green_corridor_phase_3_green_corridor_signals_turn_green_on_the_patrol_s_route",
+      "target": "satyam_ops_phase3_green_corridor_6_edit_frontend_src_components_crimemap_tsx_additive_optional_signals_prop",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L391",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L196",
       "weight": 1.0,
-      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
-      "target": "satyam_ops_phase2_dispatch_sim_7_new_frontend_src_components_ops_dispatchpanel_tsx",
+      "source": "satyam_ops_phase3_green_corridor_phase_3_green_corridor_signals_turn_green_on_the_patrol_s_route",
+      "target": "satyam_ops_phase3_green_corridor_7_verify",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L475",
+      "source_file": "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md",
+      "source_location": "L207",
       "weight": 1.0,
-      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
-      "target": "satyam_ops_phase2_dispatch_sim_8_edit_frontend_src_components_crimemap_tsx_additive_render_trail_as_a_polyline_focus_as_a_live_marker",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L495",
-      "weight": 1.0,
-      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
-      "target": "satyam_ops_phase2_dispatch_sim_9_edit_frontend_src_routes_operations_tsx_mount_dispatch_tab",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
-      "source_location": "L517",
-      "weight": 1.0,
-      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
-      "target": "satyam_ops_phase2_dispatch_sim_self_rating",
+      "source": "satyam_ops_phase3_green_corridor_phase_3_green_corridor_signals_turn_green_on_the_patrol_s_route",
+      "target": "satyam_ops_phase3_green_corridor_self_rating",
       "confidence_score": 1.0
     },
     {
@@ -23842,9 +23982,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops",
-      "target": "routes_ops_dispatch",
-      "confidence_score": 1.0
+      "target": "routes_ops_dispatch"
     },
     {
       "relation": "contains",
@@ -23852,9 +23992,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L169",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops",
-      "target": "routes_ops_dispatch_state",
-      "confidence_score": 1.0
+      "target": "routes_ops_dispatch_state"
     },
     {
       "relation": "contains",
@@ -23882,9 +24022,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L179",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops",
-      "target": "routes_ops_ops_ws",
-      "confidence_score": 1.0
+      "target": "routes_ops_ops_ws"
     },
     {
       "relation": "contains",
@@ -23892,9 +24032,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops",
-      "target": "routes_ops_patrols",
-      "confidence_score": 1.0
+      "target": "routes_ops_patrols"
     },
     {
       "relation": "contains",
@@ -23910,11 +24050,21 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L154",
+      "source_location": "L201",
       "weight": 1.0,
       "source": "routes_ops",
-      "target": "routes_ops_simulate",
+      "target": "routes_ops_signals",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/ops.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_ops",
+      "target": "routes_ops_simulate"
     },
     {
       "relation": "contains",
@@ -23954,9 +24104,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L121",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_dispatch",
-      "target": "routes_ops_guard",
-      "confidence_score": 1.0
+      "target": "routes_ops_guard"
     },
     {
       "relation": "calls",
@@ -23965,9 +24115,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L174",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_dispatch_state",
-      "target": "routes_ops_guard",
-      "confidence_score": 1.0
+      "target": "routes_ops_guard"
     },
     {
       "relation": "references",
@@ -23987,9 +24137,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L110",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_patrols",
-      "target": "routes_ops_guard",
-      "confidence_score": 1.0
+      "target": "routes_ops_guard"
     },
     {
       "relation": "calls",
@@ -24007,11 +24157,22 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L159",
+      "source_location": "L205",
       "weight": 1.0,
-      "source": "routes_ops_simulate",
+      "source": "routes_ops_signals",
       "target": "routes_ops_guard",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/ops.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_ops_simulate",
+      "target": "routes_ops_guard"
     },
     {
       "relation": "calls",
@@ -24061,9 +24222,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "principal",
-      "target": "dispatchout",
-      "confidence_score": 0.5
+      "target": "dispatchout"
     },
     {
       "relation": "uses",
@@ -24071,9 +24232,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "principal",
-      "target": "dispatchrequest",
-      "confidence_score": 0.5
+      "target": "dispatchrequest"
     },
     {
       "relation": "uses",
@@ -24101,9 +24262,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "principal",
-      "target": "patrolout",
-      "confidence_score": 0.5
+      "target": "patrolout"
     },
     {
       "relation": "uses",
@@ -24228,9 +24389,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_dispatch",
-      "target": "principal",
-      "confidence_score": 1.0
+      "target": "principal"
     },
     {
       "relation": "references",
@@ -24239,9 +24400,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L169",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_dispatch_state",
-      "target": "principal",
-      "confidence_score": 1.0
+      "target": "principal"
     },
     {
       "relation": "references",
@@ -24261,9 +24422,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_patrols",
-      "target": "principal",
-      "confidence_score": 1.0
+      "target": "principal"
     },
     {
       "relation": "references",
@@ -24281,11 +24442,22 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L154",
+      "source_location": "L201",
       "weight": 1.0,
-      "source": "routes_ops_simulate",
+      "source": "routes_ops_signals",
       "target": "principal",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/ops.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_ops_simulate",
+      "target": "principal"
     },
     {
       "relation": "references",
@@ -24304,9 +24476,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_rationale_31",
-      "target": "routes_ops_ops_health",
-      "confidence_score": 1.0
+      "target": "routes_ops_ops_health"
     },
     {
       "relation": "references",
@@ -24315,9 +24487,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_risk_zones",
-      "target": "asyncsession",
-      "confidence_score": 1.0
+      "target": "asyncsession"
     },
     {
       "relation": "references",
@@ -24367,9 +24539,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "asyncsession",
-      "target": "dispatchout",
-      "confidence_score": 0.5
+      "target": "dispatchout"
     },
     {
       "relation": "uses",
@@ -24377,9 +24549,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "asyncsession",
-      "target": "dispatchrequest",
-      "confidence_score": 0.5
+      "target": "dispatchrequest"
     },
     {
       "relation": "uses",
@@ -24407,9 +24579,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "asyncsession",
-      "target": "patrolout",
-      "confidence_score": 0.5
+      "target": "patrolout"
     },
     {
       "relation": "uses",
@@ -24427,9 +24599,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "asyncsession",
-      "target": "riskzonesresponse",
-      "confidence_score": 0.5
+      "target": "riskzonesresponse"
     },
     {
       "relation": "uses",
@@ -24457,9 +24629,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "asyncsession",
-      "target": "suggestionsresponse",
-      "confidence_score": 0.5
+      "target": "suggestionsresponse"
     },
     {
       "relation": "references",
@@ -24556,9 +24728,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_act_on_suggestion",
-      "target": "asyncsession",
-      "confidence_score": 1.0
+      "target": "asyncsession"
     },
     {
       "relation": "references",
@@ -24567,9 +24739,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_dispatch",
-      "target": "asyncsession",
-      "confidence_score": 1.0
+      "target": "asyncsession"
     },
     {
       "relation": "references",
@@ -24578,7 +24750,18 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_patrols",
+      "target": "asyncsession"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/api/routes/ops.py",
+      "source_location": "L201",
+      "weight": 1.0,
+      "source": "routes_ops_signals",
       "target": "asyncsession",
       "confidence_score": 1.0
     },
@@ -24589,9 +24772,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_simulate",
-      "target": "asyncsession",
-      "confidence_score": 1.0
+      "target": "asyncsession"
     },
     {
       "relation": "references",
@@ -24600,9 +24783,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_suggestions",
-      "target": "asyncsession",
-      "confidence_score": 1.0
+      "target": "asyncsession"
     },
     {
       "relation": "references",
@@ -24632,19 +24815,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
-      "source": "backend_app_api_routes_ops_py_websocket",
-      "target": "riskzonesresponse",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L12",
-      "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "dispatchout",
-      "target": "riskzonesresponse",
-      "confidence_score": 0.5
+      "target": "riskzonesresponse"
     },
     {
       "relation": "uses",
@@ -24652,9 +24825,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "dispatchrequest",
-      "target": "riskzonesresponse",
-      "confidence_score": 0.5
+      "target": "riskzonesresponse"
     },
     {
       "relation": "uses",
@@ -24662,9 +24835,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "patrolout",
-      "target": "riskzonesresponse",
-      "confidence_score": 0.5
+      "target": "riskzonesresponse"
     },
     {
       "relation": "uses",
@@ -24685,6 +24858,16 @@
       "confidence_score": 0.5,
       "source": "riskzonesresponse",
       "target": "suggestionsresponse"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/api/routes/ops.py",
+      "source_location": "L12",
+      "weight": 0.8,
+      "source": "websocket",
+      "target": "riskzonesresponse",
+      "confidence_score": 0.5
     },
     {
       "relation": "calls",
@@ -24714,19 +24897,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
-      "source": "backend_app_api_routes_ops_py_websocket",
-      "target": "suggestionsresponse",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L12",
-      "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "dispatchout",
-      "target": "suggestionsresponse",
-      "confidence_score": 0.5
+      "target": "suggestionsresponse"
     },
     {
       "relation": "uses",
@@ -24734,9 +24907,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "dispatchrequest",
-      "target": "suggestionsresponse",
-      "confidence_score": 0.5
+      "target": "suggestionsresponse"
     },
     {
       "relation": "uses",
@@ -24744,9 +24917,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "patrolout",
-      "target": "suggestionsresponse",
-      "confidence_score": 0.5
+      "target": "suggestionsresponse"
     },
     {
       "relation": "uses",
@@ -24759,15 +24932,25 @@
       "confidence_score": 0.5
     },
     {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/api/routes/ops.py",
+      "source_location": "L12",
+      "weight": 0.8,
+      "source": "websocket",
+      "target": "suggestionsresponse",
+      "confidence_score": 0.5
+    },
+    {
       "relation": "references",
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_patrols",
-      "target": "patrolout",
-      "confidence_score": 1.0
+      "target": "patrolout"
     },
     {
       "relation": "uses",
@@ -24775,19 +24958,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
-      "source": "backend_app_api_routes_ops_py_websocket",
-      "target": "patrolout",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L12",
-      "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "dispatchout",
-      "target": "patrolout",
-      "confidence_score": 0.5
+      "target": "patrolout"
     },
     {
       "relation": "uses",
@@ -24795,9 +24968,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "dispatchrequest",
-      "target": "patrolout",
-      "confidence_score": 0.5
+      "target": "patrolout"
     },
     {
       "relation": "uses",
@@ -24810,15 +24983,25 @@
       "confidence_score": 0.5
     },
     {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/api/routes/ops.py",
+      "source_location": "L12",
+      "weight": 0.8,
+      "source": "websocket",
+      "target": "patrolout",
+      "confidence_score": 0.5
+    },
+    {
       "relation": "references",
       "context": "return_type",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_dispatch",
-      "target": "dispatchout",
-      "confidence_score": 1.0
+      "target": "dispatchout"
     },
     {
       "relation": "references",
@@ -24827,9 +25010,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_ops_dispatch",
-      "target": "dispatchrequest",
-      "confidence_score": 1.0
+      "target": "dispatchrequest"
     },
     {
       "relation": "uses",
@@ -24837,19 +25020,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
-      "source": "backend_app_api_routes_ops_py_websocket",
-      "target": "dispatchrequest",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L12",
-      "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "dispatchout",
-      "target": "dispatchrequest",
-      "confidence_score": 0.5
+      "target": "dispatchrequest"
     },
     {
       "relation": "uses",
@@ -24867,8 +25040,8 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L12",
       "weight": 0.8,
-      "source": "backend_app_api_routes_ops_py_websocket",
-      "target": "dispatchout",
+      "source": "websocket",
+      "target": "dispatchrequest",
       "confidence_score": 0.5
     },
     {
@@ -24882,12 +25055,22 @@
       "confidence_score": 0.5
     },
     {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/api/routes/ops.py",
+      "source_location": "L12",
+      "weight": 0.8,
+      "source": "websocket",
+      "target": "dispatchout",
+      "confidence_score": 0.5
+    },
+    {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L173",
+      "source_location": "L176",
       "weight": 1.0,
-      "source": "routes_ops_rationale_173",
+      "source": "routes_ops_rationale_176",
       "target": "routes_ops_dispatch_state",
       "confidence_score": 1.0
     },
@@ -24896,21 +25079,666 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L179",
+      "source_location": "L182",
       "weight": 1.0,
       "source": "routes_ops_ops_ws",
-      "target": "backend_app_api_routes_ops_py_websocket",
+      "target": "websocket",
       "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L180",
+      "source_location": "L183",
       "weight": 1.0,
-      "source": "routes_ops_rationale_180",
+      "source": "routes_ops_rationale_183",
       "target": "routes_ops_ops_ws",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/corridor_service.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "ops_corridor_service",
+      "target": "ops_corridor_service_activate_near",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/corridor_service.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "ops_corridor_service",
+      "target": "ops_corridor_service_reset_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/corridor_service.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "ops_corridor_service_rationale_1",
+      "target": "ops_corridor_service",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/corridor_service.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "ops_corridor_service_rationale_19",
+      "target": "ops_corridor_service_activate_near",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/sim_service.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_sim_service",
+      "target": "ops_sim_service_latest_state"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/sim_service.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_sim_service",
+      "target": "ops_sim_service_persist_status"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/sim_service.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_sim_service",
+      "target": "ops_sim_service_run"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/sim_service.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_sim_service",
+      "target": "ops_sim_service_start"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/sim_service.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_sim_service",
+      "target": "ops_sim_service_stop"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/sim_service.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_sim_service",
+      "target": "ops_sim_service_subsample"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/sim_service.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_sim_service_rationale_1",
+      "target": "ops_sim_service"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/sim_service.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_sim_service_run",
+      "target": "ops_sim_service_subsample"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/sim_service.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_sim_service_run",
+      "target": "ops_sim_service_persist_status"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/sim_service.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "ops_sim_service_rationale_50",
+      "target": "ops_sim_service_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/ops/sim_service.py",
+      "source_location": "L83",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_sim_service_start",
+      "target": "ops_sim_service_run"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_crimemap",
+      "target": "components_crimemap_crimemap"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_crimemap",
+      "target": "components_crimemap_hotspot"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_crimemap",
+      "target": "components_crimemap_karnataka_center"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_crimemap",
+      "target": "components_crimemap_mode"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "components_crimemap"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "components_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "components_crimemap_hotspot"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "components_crimemap_hotspot"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "components_crimemap_hotspot"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "components_crimemap_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "components_crimemap_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "components_crimemap_crimemap"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "api_responseops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "api_responseops_dispatchresult"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "api_responseops_openopssocket"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "api_responseops_patrol"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "api_responseops_responseops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "ops_dispatchpanel_dispatchpanel"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/operations.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_operations",
+      "target": "ops_dispatchpanel"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/operations.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_operations",
+      "target": "ops_dispatchpanel_dispatchpanel"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/responseOps.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_responseops",
+      "target": "api_client_apierror"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/responseOps.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_responseops",
+      "target": "api_client_getauthtoken"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/responseOps.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_responseops",
+      "target": "api_responseops_dispatchresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/responseOps.ts",
+      "source_location": "L52",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_responseops",
+      "target": "api_responseops_openopssocket"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/responseOps.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_responseops",
+      "target": "api_responseops_opsfetch"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/responseOps.ts",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_responseops",
+      "target": "api_responseops_patrol"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/responseOps.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_responseops",
+      "target": "api_responseops_responseops"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/responseOps.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_responseops",
+      "target": "api_responseops_riskzone"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/responseOps.ts",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "api_responseops",
+      "target": "api_responseops_signal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/api/responseOps.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "api_responseops",
+      "target": "api_responseops_suggestion"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops_riskzone"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops_suggestion"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops_responseops"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_phase2_dispatch_sim",
+      "target": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L506",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
+      "target": "satyam_ops_phase2_dispatch_sim_10_verify"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
+      "target": "satyam_ops_phase2_dispatch_sim_1_new_backend_app_services_ops_routing_service_py"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
+      "target": "satyam_ops_phase2_dispatch_sim_2_new_backend_app_services_ops_ws_manager_py"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L114",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
+      "target": "satyam_ops_phase2_dispatch_sim_3_new_backend_app_services_ops_sim_service_py"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L213",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
+      "target": "satyam_ops_phase2_dispatch_sim_4_edit_backend_app_schemas_ops_py_append"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L248",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
+      "target": "satyam_ops_phase2_dispatch_sim_5_edit_backend_app_api_routes_ops_py_append_phase_2"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L361",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
+      "target": "satyam_ops_phase2_dispatch_sim_6_edit_frontend_src_lib_api_responseops_ts_append"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L391",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
+      "target": "satyam_ops_phase2_dispatch_sim_7_new_frontend_src_components_ops_dispatchpanel_tsx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L475",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
+      "target": "satyam_ops_phase2_dispatch_sim_8_edit_frontend_src_components_crimemap_tsx_additive_render_trail_as_a_polyline_focus_as_a_live_marker"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L495",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
+      "target": "satyam_ops_phase2_dispatch_sim_9_edit_frontend_src_routes_operations_tsx_mount_dispatch_tab"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_PHASE2_DISPATCH_SIM.md",
+      "source_location": "L517",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_phase2_dispatch_sim_phase_2_dispatch_nearest_patrol_live_gps_simulation",
+      "target": "satyam_ops_phase2_dispatch_sim_self_rating"
     },
     {
       "relation": "contains",
@@ -24918,9 +25746,9 @@
       "source_file": "backend/app/schemas/ops.py",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_ops",
-      "target": "schemas_ops_dispatchout",
-      "confidence_score": 1.0
+      "target": "schemas_ops_dispatchout"
     },
     {
       "relation": "contains",
@@ -24928,9 +25756,9 @@
       "source_file": "backend/app/schemas/ops.py",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_ops",
-      "target": "schemas_ops_dispatchrequest",
-      "confidence_score": 1.0
+      "target": "schemas_ops_dispatchrequest"
     },
     {
       "relation": "contains",
@@ -24938,9 +25766,9 @@
       "source_file": "backend/app/schemas/ops.py",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_ops",
-      "target": "schemas_ops_patrolout",
-      "confidence_score": 1.0
+      "target": "schemas_ops_patrolout"
     },
     {
       "relation": "contains",
@@ -25698,9 +26526,9 @@
       "source_file": "backend/app/schemas/ops.py",
       "source_location": "L61",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_ops_dispatchout",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "inherits",
@@ -25708,9 +26536,9 @@
       "source_file": "backend/app/schemas/ops.py",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_ops_dispatchrequest",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "inherits",
@@ -25718,9 +26546,9 @@
       "source_file": "backend/app/schemas/ops.py",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_ops_patrolout",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "inherits",
@@ -25828,9 +26656,9 @@
       "source_file": "backend/app/services/ops/routing_service.py",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_routing_service",
-      "target": "ops_routing_service_get_route",
-      "confidence_score": 1.0
+      "target": "ops_routing_service_get_route"
     },
     {
       "relation": "contains",
@@ -25838,9 +26666,9 @@
       "source_file": "backend/app/services/ops/routing_service.py",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_routing_service",
-      "target": "ops_routing_service_haversine_km",
-      "confidence_score": 1.0
+      "target": "ops_routing_service_haversine_km"
     },
     {
       "relation": "contains",
@@ -25848,9 +26676,9 @@
       "source_file": "backend/app/services/ops/routing_service.py",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_routing_service",
-      "target": "ops_routing_service_straight_line",
-      "confidence_score": 1.0
+      "target": "ops_routing_service_straight_line"
     },
     {
       "relation": "rationale_for",
@@ -25858,9 +26686,9 @@
       "source_file": "backend/app/services/ops/routing_service.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_routing_service_rationale_1",
-      "target": "ops_routing_service",
-      "confidence_score": 1.0
+      "target": "ops_routing_service"
     },
     {
       "relation": "calls",
@@ -25869,9 +26697,9 @@
       "source_file": "backend/app/services/ops/routing_service.py",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_routing_service_get_route",
-      "target": "ops_routing_service_haversine_km",
-      "confidence_score": 1.0
+      "target": "ops_routing_service_haversine_km"
     },
     {
       "relation": "calls",
@@ -25880,9 +26708,9 @@
       "source_file": "backend/app/services/ops/routing_service.py",
       "source_location": "L50",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_routing_service_get_route",
-      "target": "ops_routing_service_straight_line",
-      "confidence_score": 1.0
+      "target": "ops_routing_service_straight_line"
     },
     {
       "relation": "rationale_for",
@@ -25890,122 +26718,9 @@
       "source_file": "backend/app/services/ops/routing_service.py",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_routing_service_rationale_29",
-      "target": "ops_routing_service_get_route",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L21",
-      "weight": 1.0,
-      "source": "ops_sim_service",
-      "target": "ops_sim_service_latest_state",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L35",
-      "weight": 1.0,
-      "source": "ops_sim_service",
-      "target": "ops_sim_service_persist_status",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L47",
-      "weight": 1.0,
-      "source": "ops_sim_service",
-      "target": "ops_sim_service_run",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L78",
-      "weight": 1.0,
-      "source": "ops_sim_service",
-      "target": "ops_sim_service_start",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L87",
-      "weight": 1.0,
-      "source": "ops_sim_service",
-      "target": "ops_sim_service_stop",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L25",
-      "weight": 1.0,
-      "source": "ops_sim_service",
-      "target": "ops_sim_service_subsample",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "ops_sim_service_rationale_1",
-      "target": "ops_sim_service",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L50",
-      "weight": 1.0,
-      "source": "ops_sim_service_run",
-      "target": "ops_sim_service_subsample",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L52",
-      "weight": 1.0,
-      "source": "ops_sim_service_run",
-      "target": "ops_sim_service_persist_status",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L49",
-      "weight": 1.0,
-      "source": "ops_sim_service_rationale_49",
-      "target": "ops_sim_service_run",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/ops/sim_service.py",
-      "source_location": "L83",
-      "weight": 1.0,
-      "source": "ops_sim_service_start",
-      "target": "ops_sim_service_run",
-      "confidence_score": 1.0
+      "target": "ops_routing_service_get_route"
     },
     {
       "relation": "imports_from",
@@ -26014,9 +26729,9 @@
       "source_file": "backend/app/services/ops/ws_manager.py",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_ws_manager",
-      "target": "fastapi",
-      "confidence_score": 1.0
+      "target": "fastapi"
     },
     {
       "relation": "contains",
@@ -26024,9 +26739,9 @@
       "source_file": "backend/app/services/ops/ws_manager.py",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_ws_manager",
-      "target": "ops_ws_manager_wsmanager",
-      "confidence_score": 1.0
+      "target": "ops_ws_manager_wsmanager"
     },
     {
       "relation": "rationale_for",
@@ -26034,9 +26749,9 @@
       "source_file": "backend/app/services/ops/ws_manager.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_ws_manager_rationale_1",
-      "target": "ops_ws_manager",
-      "confidence_score": 1.0
+      "target": "ops_ws_manager"
     },
     {
       "relation": "method",
@@ -26044,9 +26759,9 @@
       "source_file": "backend/app/services/ops/ws_manager.py",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_ws_manager_wsmanager",
-      "target": "ops_ws_manager_wsmanager_broadcast",
-      "confidence_score": 1.0
+      "target": "ops_ws_manager_wsmanager_broadcast"
     },
     {
       "relation": "method",
@@ -26054,9 +26769,9 @@
       "source_file": "backend/app/services/ops/ws_manager.py",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_ws_manager_wsmanager",
-      "target": "ops_ws_manager_wsmanager_connect",
-      "confidence_score": 1.0
+      "target": "ops_ws_manager_wsmanager_connect"
     },
     {
       "relation": "method",
@@ -26064,9 +26779,9 @@
       "source_file": "backend/app/services/ops/ws_manager.py",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_ws_manager_wsmanager",
-      "target": "ops_ws_manager_wsmanager_disconnect",
-      "confidence_score": 1.0
+      "target": "ops_ws_manager_wsmanager_disconnect"
     },
     {
       "relation": "method",
@@ -26074,9 +26789,9 @@
       "source_file": "backend/app/services/ops/ws_manager.py",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_ws_manager_wsmanager",
-      "target": "ops_ws_manager_wsmanager_init",
-      "confidence_score": 1.0
+      "target": "ops_ws_manager_wsmanager_init"
     },
     {
       "relation": "references",
@@ -26085,9 +26800,9 @@
       "source_file": "backend/app/services/ops/ws_manager.py",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_ws_manager_wsmanager_connect",
-      "target": "backend_app_services_ops_ws_manager_py_websocket",
-      "confidence_score": 1.0
+      "target": "backend_app_services_ops_ws_manager_py_websocket"
     },
     {
       "relation": "references",
@@ -26096,9 +26811,9 @@
       "source_file": "backend/app/services/ops/ws_manager.py",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_ws_manager_wsmanager_disconnect",
-      "target": "backend_app_services_ops_ws_manager_py_websocket",
-      "confidence_score": 1.0
+      "target": "backend_app_services_ops_ws_manager_py_websocket"
     },
     {
       "relation": "references",
@@ -26107,9 +26822,9 @@
       "source_file": "backend/app/services/ops/ws_manager.py",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_ws_manager_wsmanager_broadcast",
-      "target": "any",
-      "confidence_score": 1.0
+      "target": "any"
     },
     {
       "relation": "uses",
@@ -26281,368 +26996,6 @@
       "confidence_score": 1.0,
       "source": "services_intelligence_service_fmt",
       "target": "any"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_crimemap",
-      "target": "components_crimemap_crimemap"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_crimemap",
-      "target": "components_crimemap_hotspot"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_crimemap",
-      "target": "components_crimemap_karnataka_center"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_crimemap",
-      "target": "components_crimemap_mode"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "components_crimemap",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "components_crimemap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "components_crimemap_hotspot",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "components_crimemap_hotspot"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "components_crimemap_hotspot"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "components_crimemap_crimemap",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "components_crimemap_crimemap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "components_crimemap_crimemap"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "api_responseops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "api_responseops_dispatchresult",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "api_responseops_openopssocket",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "api_responseops_patrol",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "api_responseops_responseops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "lib_i18n_uset",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "ops_dispatchpanel_dispatchpanel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/operations.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "routes_operations",
-      "target": "ops_dispatchpanel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/operations.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "routes_operations",
-      "target": "ops_dispatchpanel_dispatchpanel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/responseOps.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_responseops",
-      "target": "api_client_apierror"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/responseOps.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_responseops",
-      "target": "api_client_getauthtoken"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/responseOps.ts",
-      "source_location": "L30",
-      "weight": 1.0,
-      "source": "api_responseops",
-      "target": "api_responseops_dispatchresult",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/responseOps.ts",
-      "source_location": "L52",
-      "weight": 1.0,
-      "source": "api_responseops",
-      "target": "api_responseops_openopssocket",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/responseOps.ts",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_responseops",
-      "target": "api_responseops_opsfetch"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/responseOps.ts",
-      "source_location": "L29",
-      "weight": 1.0,
-      "source": "api_responseops",
-      "target": "api_responseops_patrol",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/responseOps.ts",
-      "source_location": "L19",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_responseops",
-      "target": "api_responseops_responseops"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/responseOps.ts",
-      "source_location": "L19",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_responseops",
-      "target": "api_responseops_riskzone"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/api/responseOps.ts",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "api_responseops",
-      "target": "api_responseops_suggestion"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops_riskzone"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops_suggestion"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops_responseops"
     },
     {
       "relation": "imports_from",
@@ -68097,5 +68450,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "7c08f0622fee3638936e00ca696b72e9f51fe8e4"
+  "built_at_commit": "b271ce9b3081b1f79516944a8636e9265f0b1dfd"
 }

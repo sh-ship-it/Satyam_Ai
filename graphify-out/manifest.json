@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
-    "mtime": 1781941823.2264829,
-    "ast_hash": "2bd464123a0849bb3b0b05ecea868bd8",
+    "mtime": 1781942607.4613576,
+    "ast_hash": "d1a04a8b2224349bd2a219f334dbcad4",
     "semantic_hash": ""
   },
   "frontend/src/components/DarkModeToggle.tsx": {
@@ -1210,8 +1210,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/ops.py": {
-    "mtime": 1781941780.1595292,
-    "ast_hash": "0ff491215241c1eedf397c2672bc3699",
+    "mtime": 1781942377.736841,
+    "ast_hash": "310cccfdddecd5a168ec42e00953d7bf",
     "semantic_hash": ""
   },
   "backend/app/db/ops_models.py": {
@@ -1225,8 +1225,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/responseOps.ts": {
-    "mtime": 1781941804.129035,
-    "ast_hash": "bf98663fe8b2654a8988f5d171757e3f",
+    "mtime": 1781942410.3632395,
+    "ast_hash": "1aaa9964b8ef5e4f719f9fd2c8eb49f5",
     "semantic_hash": ""
   },
   "frontend/src/routes/operations.tsx": {
@@ -1270,8 +1270,8 @@
     "semantic_hash": ""
   },
   "backend/app/services/ops/sim_service.py": {
-    "mtime": 1781941686.431643,
-    "ast_hash": "8e53bc3b2a8457d0e6b4c16fb202e7bd",
+    "mtime": 1781942345.297723,
+    "ast_hash": "069f85386fa26918787d1cda737f5591",
     "semantic_hash": ""
   },
   "backend/app/services/ops/ws_manager.py": {
@@ -1280,13 +1280,23 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ops/DispatchPanel.tsx": {
-    "mtime": 1781941712.5691833,
-    "ast_hash": "181f7b4f9aa4698a9676823a1ee45c9f",
+    "mtime": 1781942455.5826125,
+    "ast_hash": "ea20173ea1a5ae1b9640127371b07b29",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE2_DISPATCH_SIM.md": {
     "mtime": 1781899382.0038986,
     "ast_hash": "a3b76b3fe8bdbc17f3eac9ffeaa6ff67",
+    "semantic_hash": ""
+  },
+  "backend/app/services/ops/corridor_service.py": {
+    "mtime": 1781942330.114337,
+    "ast_hash": "a17679c823a9c06a39f49bccc3d91831",
+    "semantic_hash": ""
+  },
+  "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md": {
+    "mtime": 1781899387.000479,
+    "ast_hash": "bca7f3906f7b3b6085c6464f9e6ee301",
     "semantic_hash": ""
   }
 }
