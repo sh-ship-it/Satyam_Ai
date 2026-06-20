@@ -13,6 +13,9 @@ import { Route as TrendsRouteImport } from './routes/trends'
 import { Route as TranscriptsRouteImport } from './routes/transcripts'
 import { Route as SocioRouteImport } from './routes/socio'
 import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as OpsPredictiveRouteImport } from './routes/ops-predictive'
+import { Route as OpsDispatchRouteImport } from './routes/ops-dispatch'
+import { Route as OpsCameraRouteImport } from './routes/ops-camera'
 import { Route as OperationsRouteImport } from './routes/operations'
 import { Route as NetworkRouteImport } from './routes/network'
 import { Route as LoginRouteImport } from './routes/login'
@@ -41,6 +44,21 @@ const SocioRoute = SocioRouteImport.update({
 const ReportsRoute = ReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpsPredictiveRoute = OpsPredictiveRouteImport.update({
+  id: '/ops-predictive',
+  path: '/ops-predictive',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpsDispatchRoute = OpsDispatchRouteImport.update({
+  id: '/ops-dispatch',
+  path: '/ops-dispatch',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpsCameraRoute = OpsCameraRouteImport.update({
+  id: '/ops-camera',
+  path: '/ops-camera',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OperationsRoute = OperationsRouteImport.update({
@@ -98,6 +116,9 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
   '/operations': typeof OperationsRoute
+  '/ops-camera': typeof OpsCameraRoute
+  '/ops-dispatch': typeof OpsDispatchRoute
+  '/ops-predictive': typeof OpsPredictiveRoute
   '/reports': typeof ReportsRoute
   '/socio': typeof SocioRoute
   '/transcripts': typeof TranscriptsRoute
@@ -113,6 +134,9 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
   '/operations': typeof OperationsRoute
+  '/ops-camera': typeof OpsCameraRoute
+  '/ops-dispatch': typeof OpsDispatchRoute
+  '/ops-predictive': typeof OpsPredictiveRoute
   '/reports': typeof ReportsRoute
   '/socio': typeof SocioRoute
   '/transcripts': typeof TranscriptsRoute
@@ -129,6 +153,9 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
   '/operations': typeof OperationsRoute
+  '/ops-camera': typeof OpsCameraRoute
+  '/ops-dispatch': typeof OpsDispatchRoute
+  '/ops-predictive': typeof OpsPredictiveRoute
   '/reports': typeof ReportsRoute
   '/socio': typeof SocioRoute
   '/transcripts': typeof TranscriptsRoute
@@ -146,6 +173,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/network'
     | '/operations'
+    | '/ops-camera'
+    | '/ops-dispatch'
+    | '/ops-predictive'
     | '/reports'
     | '/socio'
     | '/transcripts'
@@ -161,6 +191,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/network'
     | '/operations'
+    | '/ops-camera'
+    | '/ops-dispatch'
+    | '/ops-predictive'
     | '/reports'
     | '/socio'
     | '/transcripts'
@@ -176,6 +209,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/network'
     | '/operations'
+    | '/ops-camera'
+    | '/ops-dispatch'
+    | '/ops-predictive'
     | '/reports'
     | '/socio'
     | '/transcripts'
@@ -192,6 +228,9 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   NetworkRoute: typeof NetworkRoute
   OperationsRoute: typeof OperationsRoute
+  OpsCameraRoute: typeof OpsCameraRoute
+  OpsDispatchRoute: typeof OpsDispatchRoute
+  OpsPredictiveRoute: typeof OpsPredictiveRoute
   ReportsRoute: typeof ReportsRoute
   SocioRoute: typeof SocioRoute
   TranscriptsRoute: typeof TranscriptsRoute
@@ -227,6 +266,27 @@ declare module '@tanstack/react-router' {
       path: '/reports'
       fullPath: '/reports'
       preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ops-predictive': {
+      id: '/ops-predictive'
+      path: '/ops-predictive'
+      fullPath: '/ops-predictive'
+      preLoaderRoute: typeof OpsPredictiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ops-dispatch': {
+      id: '/ops-dispatch'
+      path: '/ops-dispatch'
+      fullPath: '/ops-dispatch'
+      preLoaderRoute: typeof OpsDispatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ops-camera': {
+      id: '/ops-camera'
+      path: '/ops-camera'
+      fullPath: '/ops-camera'
+      preLoaderRoute: typeof OpsCameraRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/operations': {
@@ -304,6 +364,9 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   NetworkRoute: NetworkRoute,
   OperationsRoute: OperationsRoute,
+  OpsCameraRoute: OpsCameraRoute,
+  OpsDispatchRoute: OpsDispatchRoute,
+  OpsPredictiveRoute: OpsPredictiveRoute,
   ReportsRoute: ReportsRoute,
   SocioRoute: SocioRoute,
   TranscriptsRoute: TranscriptsRoute,
