@@ -845,8 +845,8 @@
     "semantic_hash": ""
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1781980570.753038,
-    "ast_hash": "2af64fd3488acbb34d7166c804c8e920",
+    "mtime": 1781993180.7184198,
+    "ast_hash": "724a558edf1d4f3a52b28847c1444985",
     "semantic_hash": ""
   },
   "frontend/src/routes/README.md": {
@@ -1210,8 +1210,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/ops.py": {
-    "mtime": 1781990127.4940732,
-    "ast_hash": "627c47037c0b124bc06ae8611045f3e9",
+    "mtime": 1781991211.069988,
+    "ast_hash": "4be09955dfbce2f12537d1eda3271906",
     "semantic_hash": ""
   },
   "backend/app/db/ops_models.py": {
@@ -1225,8 +1225,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/responseOps.ts": {
-    "mtime": 1781986428.0879965,
-    "ast_hash": "6080715a04a1ed5cf948e453a73460d5",
+    "mtime": 1781991225.025798,
+    "ast_hash": "ad39e64aae97178a139dec81d493477e",
     "semantic_hash": ""
   },
   "frontend/src/routes/operations.tsx": {
@@ -1310,8 +1310,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ops/ReviewPanel.tsx": {
-    "mtime": 1781990003.9181714,
-    "ast_hash": "59e57c29763d9f892fb8fec7210cbb5e",
+    "mtime": 1781991253.0843625,
+    "ast_hash": "8e28dddf8cc23a662a2f4eb18b879e2d",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE4_CAMERA_REVIEW.md": {
@@ -1335,8 +1335,8 @@
     "semantic_hash": ""
   },
   "model/inference/live_cctv.py": {
-    "mtime": 1781990114.6136727,
-    "ast_hash": "61d66d187280d012b11c6e2cca179e5a",
+    "mtime": 1781991119.516201,
+    "ast_hash": "9e6334f3598229ddf402458b0e9981e8",
     "semantic_hash": ""
   },
   "model/inference/notify.py": {
@@ -1392,6 +1392,16 @@
   "frontend/src/routes/ops-predictive.tsx": {
     "mtime": 1781989205.143389,
     "ast_hash": "7d57e8bd5ad34714b52e57c9c03a8456",
+    "semantic_hash": ""
+  },
+  "scratch/test_api.py": {
+    "mtime": 1781992573.220322,
+    "ast_hash": "487a25a374c583a85da3f4f81468b55f",
+    "semantic_hash": ""
+  },
+  "scratch/test_resolve.py": {
+    "mtime": 1781992091.2776775,
+    "ast_hash": "d70a21100ca012850071ec8cfe1e048f",
     "semantic_hash": ""
   }
 }
