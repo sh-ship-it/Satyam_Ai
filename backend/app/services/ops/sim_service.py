@@ -24,6 +24,20 @@ def latest_state(dispatch_id: int) -> dict | None:
     return _latest.get(dispatch_id)
 
 
+def active_states() -> list[dict]:
+    """Latest position/status for every simulation still running."""
+    return [
+        {"dispatchId": did, **_latest[did]}
+        for did in list(_running.keys())
+        if did in _latest
+    ]
+
+
+def active_ids() -> list[int]:
+    """IDs of simulations still running (used by Stop All)."""
+    return list(_running.keys())
+
+
 def _subsample(coords: list[list[float]], cap: int = MAX_POINTS) -> list[list[float]]:
     if len(coords) <= cap:
         return coords
@@ -40,7 +54,7 @@ async def _persist_status(dispatch_id: int, patrol_id: int, status: str,
     async with sm() as db:
         async with db.begin():
             await db.execute(update(IncidentDispatch).where(IncidentDispatch.id == dispatch_id).values(status=status))
-            vals: dict = {"status": {"COMPLETED": "IDLE", "ON_SCENE": "ON_SCENE"}.get(status, "EN_ROUTE")}
+            vals: dict = {"status": {"COMPLETED": "IDLE", "CANCELLED": "IDLE", "ON_SCENE": "ON_SCENE"}.get(status, "EN_ROUTE")}
             if lat is not None:
                 vals["lat"], vals["lng"] = lat, lng
             await db.execute(update(PatrolUnit).where(PatrolUnit.id == patrol_id).values(**vals))
@@ -78,6 +92,7 @@ async def _run(dispatch_id: int, patrol_id: int, coords: list[list[float]],
         await manager.broadcast({"type": "DISPATCH_STATUS", "dispatchId": dispatch_id, "status": "COMPLETED"})
     except asyncio.CancelledError:
         await _persist_status(dispatch_id, patrol_id, "CANCELLED")
+        await manager.broadcast({"type": "DISPATCH_STATUS", "dispatchId": dispatch_id, "status": "CANCELLED"})
         raise
     finally:
         _running.pop(dispatch_id, None)

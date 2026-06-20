@@ -1,24 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
 import { useState } from "react";
-import { Siren, Radar, Truck, Video } from "lucide-react";
+import { Siren, Radar, Truck, Video, Radio } from "lucide-react";
 import { useT } from "@/lib/i18n";
 import { PredictivePanel } from "@/components/ops/PredictivePanel";
 import { DispatchPanel } from "@/components/ops/DispatchPanel";
 import { ReviewPanel } from "@/components/ops/ReviewPanel";
+import { DemoSimPanel } from "@/components/ops/DemoSimPanel";
 
 export const Route = createFileRoute("/operations")({
   head: () => ({ meta: [{ title: "Response Ops · Satyam" }] }),
   component: OperationsScreen,
 });
 
-type Tab = "predict" | "dispatch" | "review";
+type Tab = "demo" | "predict" | "dispatch" | "review";
 
 function OperationsScreen() {
   const t = useT();
-  const [tab, setTab] = useState<Tab>("predict");
+  const [tab, setTab] = useState<Tab>("demo");
 
   const TABS: { id: Tab; label: string; icon: any }[] = [
+    { id: "demo", label: t("Demo Simulation"), icon: Radio },
     { id: "predict", label: t("Predictive Deployment"), icon: Radar },
     { id: "dispatch", label: t("Dispatch & Green Corridor"), icon: Truck },
     { id: "review", label: t("Camera Review"), icon: Video },
@@ -52,6 +54,7 @@ function OperationsScreen() {
         </nav>
 
         <section className="rounded-[8px] border-2 border-foreground bg-background p-4">
+          {tab === "demo" && <DemoSimPanel />}
           {tab === "predict" && <PredictivePanel />}
           {tab === "dispatch" && <DispatchPanel />}
           {tab === "review" && <ReviewPanel />}

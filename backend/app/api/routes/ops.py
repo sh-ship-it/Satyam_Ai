@@ -230,6 +230,39 @@ async def signals(
     return [{"id": s.id, "junction_id": s.junction_id, "lat": s.lat, "lng": s.lng, "state": s.state} for s in rows]
 
 
+@router.get("/corridor/state")
+async def corridor_state(principal: Principal = Depends(get_principal)) -> dict:
+    """Green-corridor status for the Demo dashboard side panel."""
+    _guard(principal)
+    return await corridor_service.state()
+
+
+@router.post("/corridor/reset")
+async def corridor_reset(principal: Principal = Depends(get_principal)) -> dict:
+    """Deactivate the green corridor — restore every signal to NORMAL."""
+    _guard(principal)
+    await corridor_service.reset_all()
+    return {"ok": True}
+
+
+@router.get("/demo/active")
+async def demo_active(principal: Principal = Depends(get_principal)) -> dict:
+    """Live snapshot of every running simulation (polling fallback for the dashboard)."""
+    _guard(principal)
+    return {"active": sim_service.active_states()}
+
+
+@router.post("/demo/stop-all")
+async def demo_stop_all(principal: Principal = Depends(get_principal)) -> dict:
+    """Stop All: cancel every running simulation and clear the green corridor."""
+    _guard(principal)
+    ids = sim_service.active_ids()
+    for did in ids:
+        sim_service.stop(did)
+    await corridor_service.reset_all()
+    return {"stopped": len(ids)}
+
+
 LOW_CONF = 0.5
 HIGH_CONF = 0.8
 

@@ -60,6 +60,12 @@ export const responseOps = {
     opsFetch<{ ok: boolean; case_id: number; dispatch_id: number | null }>(`/review-queue/${id}/confirm?auto_dispatch=${autoDispatch}`, { method: "POST" }),
   rejectReview: (id: number) =>
     opsFetch<{ ok: boolean }>(`/review-queue/${id}/reject`, { method: "POST" }),
+  corridorState: () =>
+    opsFetch<{ active: boolean; count: number; signals: Signal[] }>("/corridor/state"),
+  resetCorridor: () => opsFetch<{ ok: boolean }>("/corridor/reset", { method: "POST" }),
+  demoActive: () =>
+    opsFetch<{ active: { dispatchId: number; lat: number; lng: number; status: string; eta_sec: number }[] }>("/demo/active"),
+  stopAllSims: () => opsFetch<{ stopped: number }>("/demo/stop-all", { method: "POST" }),
 };
 
 /** Open the live ops WebSocket. Returns the socket; caller attaches onmessage. */

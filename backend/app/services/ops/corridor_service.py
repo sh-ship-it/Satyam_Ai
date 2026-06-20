@@ -31,6 +31,22 @@ async def activate_near(lat: float, lng: float) -> None:
                     })
 
 
+async def state() -> dict:
+    """Current green-corridor status for the dashboard side panel."""
+    sm = get_sessionmaker()
+    async with sm() as db:
+        rows = (await db.execute(select(TrafficSignal))).scalars().all()
+    greens = [s for s in rows if s.state == "GREEN"]
+    return {
+        "active": len(greens) > 0,
+        "count": len(greens),
+        "signals": [
+            {"id": s.id, "junction_id": s.junction_id, "lat": s.lat, "lng": s.lng, "state": s.state}
+            for s in greens
+        ],
+    }
+
+
 async def reset_all() -> None:
     sm = get_sessionmaker()
     async with sm() as db:

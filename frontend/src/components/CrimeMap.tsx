@@ -23,6 +23,8 @@ export function CrimeMap({
   signals,
   routePath,
   liveMarker,
+  liveMarkers,
+  routePaths,
 }: {
   points: Hotspot[];
   mode?: Mode;
@@ -32,6 +34,8 @@ export function CrimeMap({
   signals?: { id: number; junction_id: string; lat: number; lng: number; state: string }[];
   routePath?: Hotspot[];
   liveMarker?: Hotspot | null;
+  liveMarkers?: Hotspot[];
+  routePaths?: Hotspot[][];
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
@@ -232,6 +236,41 @@ export function CrimeMap({
     }
     if (!map.getBounds().contains(ll)) map.panTo(ll, { animate: true });
   }, [liveMarker, ready]);
+
+  // --- Response-Ops: many live vehicle markers (Demo Simulation) ---
+  const liveMarkersRef = useRef<any>(null);
+  useEffect(() => {
+    const map = mapRef.current, L = LRef.current;
+    if (!map || !L || !ready) return;
+    if (liveMarkersRef.current) { map.removeLayer(liveMarkersRef.current); liveMarkersRef.current = null; }
+    if (!liveMarkers || liveMarkers.length === 0) return;
+    const group = L.layerGroup();
+    liveMarkers.forEach((m) => {
+      const cm = L.circleMarker([m.lat, m.lng], {
+        radius: 8, color: "#0B5", weight: 3, fillColor: "#00C896", fillOpacity: 1,
+      });
+      if (m.label) cm.bindTooltip(m.label);
+      cm.addTo(group);
+    });
+    group.addTo(map);
+    liveMarkersRef.current = group;
+  }, [liveMarkers, ready]);
+
+  // --- Response-Ops: many dispatch route lines (Demo Simulation) ---
+  const routePathsRef = useRef<any>(null);
+  useEffect(() => {
+    const map = mapRef.current, L = LRef.current;
+    if (!map || !L || !ready) return;
+    if (routePathsRef.current) { map.removeLayer(routePathsRef.current); routePathsRef.current = null; }
+    if (!routePaths || routePaths.length === 0) return;
+    const group = L.layerGroup();
+    routePaths.forEach((rp) => {
+      if (rp.length < 2) return;
+      L.polyline(rp.map((p) => [p.lat, p.lng]), { color: "#91C5FD", weight: 4, opacity: 0.85 }).addTo(group);
+    });
+    group.addTo(map);
+    routePathsRef.current = group;
+  }, [routePaths, ready]);
 
   return <div ref={containerRef} className="absolute inset-0 z-0 bg-muted" />;
 }
