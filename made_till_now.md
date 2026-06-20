@@ -3128,3 +3128,134 @@ Built the complete **Response Ops** module (`ENABLE_RESPONSE_OPS=true`) across 5
 - **§13 Configuration** — `ENABLE_RESPONSE_OPS` env var added
 - **§13.4 Response Ops API** — full 15-endpoint table added
 - **Appendix file tree** — `ai_camera/`, `components/ops/`, `responseOps.ts` all added
+
+
+---
+
+### [2026-06-21] — Response Ops Parity Pack + Dataset-Driven Frontend + UI Fixes
+
+#### Summary
+Multiple sessions of work on the Response Ops module. The overall goal was to match the EMERGE reference screenshots, fix all zoom/pan issues, and make every Operations screen work from the existing dataset — never blank when the ops backend is off. TypeScript: 0 errors throughout.
+
+---
+
+#### Parity Pack (SATYAM_OPS_PARITY_PACK.md + SATYAM_OPS_SCREENSHOT_PARITY_PACK.md)
+
+**Backend — `backend/app/services/ops/corridor_service.py`:**
+- New `state()` — returns active green-signal count + signal list for the dashboard panel
+- `activate_corridor(route_coords, patrol_id, callsign)` — lights every signal within 500m of any point on the route, broadcasts `GREEN_CORRIDOR_ACTIVE` with `routeCoords:[[lat,lng]]` + activated signals list
+- `reset_all()` now broadcasts `GREEN_CORRIDOR_DEACTIVATED` (previously broadcast `SIGNAL_RESET` only)
+
+**Backend — `backend/app/services/ops/sim_service.py` (full replacement):**
+- `ACCEPTED` phase (2s hold) before `EN_ROUTE`
+- `phase` field on every `PATROL_LOCATION` + `DISPATCH_STATUS` broadcast
+- `_load_meta(dispatch_id, patrol_id)` — loads `callsign` + `sceneLat`/`sceneLng` from DB for the active-dispatch list
+- `_emit_status(dispatch_id, status, phase)` helper
+- Whole-route corridor activated at `EN_ROUTE` start via `corridor_service.activate_corridor(pts, ...)`
+- `active_states()` — snapshot of all non-completed dispatches (drives Active Dispatches list)
+- `active_ids()` — ids still running
+- `stop_all()` — cancels all running tasks
+
+**Backend — `backend/app/api/routes/ops.py` additions:**
+- `GET /api/ops/dispatch/active` — every dispatch currently mid-simulation
+- `POST /api/ops/dispatch/simulate-all` — starts sims for all unfinished routed dispatches
+- `POST /api/ops/dispatch/stop-all` — cancels all sims
+- `GET /api/ops/corridor/state` — green-corridor status
+- `POST /api/ops/corridor/reset` — Deactivate button
+- `GET /api/ops/demo/active` — polling fallback for DemoSimPanel
+- `POST /api/ops/demo/stop-all` — Stop All from Demo panel
+
+**Backend — `model/inference/live_cctv.py`:** YOLOv8+ByteTrack on video/webcam; stall detection → `/api/ops/detect/notify`. Runnable as `python inference/live_cctv.py` from the `model/` directory.
+
+**Frontend — `CrimeMap.tsx` new props:**
+- `corridorPath?: [number, number][]` — 3-layer green glow polyline (`#00C896`/`#00E6A8`)
+- `darkTiles?: boolean` — switches to CARTO `dark_all` tiles; existing callers unaffected
+- `lockBounds?: boolean` — suppresses the auto-`fitBounds` from the `points` effect; used during active simulation to prevent zoom-out
+- `fitSignal?: number` — parent increments once; `CrimeMap` calls `fitBounds` exactly once per increment (dedicated effect with `[fitSignal]` dep only)
+- `liveMarkers?: Hotspot[]` — array of animated 🚓 markers for multi-unit Demo Simulation
+- `routePaths?: Hotspot[][]` — array of route polylines for multi-unit Demo Simulation
+- `liveMarker` — replaced plain circleMarker with animated `divIcon` (🚓 + pulsing ring); `panTo` fires only on first placement (`liveMarkerPlacedRef`)
+
+**Frontend — `DemoSimPanel.tsx` (full replacement):**
+- Demo Mode ON/OFF toggle + Simulate All + Stop All + Active Dispatches list
+- Left sidebar: dispatch cards with callsign, scene name, distance, ETA
+- Center: `CrimeMap` with `darkTiles`, `routePaths`, `corridorPath`, `liveMarkers`, `signals`
+- Right: Green Corridor panel (ACTIVE/IDLE badge, signal count) + Live Event Feed (last 40 events, scrollable)
+- All events handled from WS: `PATROL_LOCATION`, `DISPATCH_STATUS`, `SIGNAL_GREEN`, `SIGNAL_RESET`, `GREEN_CORRIDOR_ACTIVE`, `GREEN_CORRIDOR_DEACTIVATED`, `INCIDENT_CANDIDATE`
+
+**Frontend — `DispatchPanel.tsx` (full replacement):**
+- Phase timeline component (`ACCEPTED→EN_ROUTE→ON_SCENE→COMPLETED`) with colored dots + connector lines
+- Progress bar + ETA in each dispatch card
+- Green corridor floating panel with signal chips + Deactivate button
+- Map legend overlay
+- `simulateAll` button auto-seeds dispatches from risk zones if DB is empty (3 Bengaluru fallback scenes)
+- `actionBusy` / `actionError` states with meaningful error messages
+- `lockBounds={simRunning}` prevents zoom-out during simulation
+
+**Frontend — `LiveOperationsMap.tsx` (full replacement):**
+- Full-screen dark CARTO map; renders on `/operations` as the default "Live Map" tab
+- Header overlay: "Live Operations Map" + live stats (CRIME HOTSPOTS — RISK CELLS — UNITS — EN ROUTE)
+- Top-right: Heatmap toggle, DEMO pill, Routes toggle, legend
+- Green corridor banner + floating panel with Deactivate button
+- Always-on base layer: crime-density heatmap from `api.mapHotspots({mode:"by_crime"})`
+- Additive ops overlay: WS events for vehicle markers, incident markers, signal dots, route glows
+
+**Frontend — `operations.tsx`:**
+- "Live Map" tab added as the **default** tab (renders full-bleed `LiveOperationsMap`)
+- Tab bar floats as absolute centered overlay on the live map
+- Secondary tabs (Demo Simulation / Predictive / Dispatch+Corridor / Camera Review) stay reachable
+
+---
+
+#### Zoom / Pan Bugs Fixed (3 rounds)
+
+| Bug | Root cause | Fix |
+|-----|-----------|-----|
+| Map zoomed out every 140ms tick | `points` effect called `fitBounds` every time `patrolPoints` updated (new array ref on each tick) | Added `lockBounds` prop; when `true`, `fitBounds` is skipped in the points effect |
+| Map zoomed out when corridor/route changed | `corridorPath`/`routePath` effects in dep array → every re-render called `fitBounds` | Replaced with key-guarded `useEffect` with no dep array → `fitSignal` counter as the sole zoom trigger |
+| `panTo` on every GPS tick | `liveMarker` effect ran every 140ms and called `panTo(ll)` when marker went off-screen | Added `liveMarkerPlacedRef` — `panTo` fires only on the very first marker placement |
+
+---
+
+#### Dataset-Driven Frontend (SATYAM_OPS_DATASET_FIX.md)
+
+**Problem:** All three Operations screens were wired exclusively to `responseOps.*` + ops WebSocket (gated behind `ENABLE_RESPONSE_OPS`, seeded patrols, JWT). When the ops backend was off, every call returned empty and the screens were blank.
+
+**Fix — `PredictivePanel.tsx` (full replacement):**
+- Loads `intelligence.getForecastAlerts()` + `intelligence.getForecastHotspots()` (same rule-based model as the Forecast screen)
+- Fallback: if forecast returns no cells, loads `api.mapHotspots({mode:"by_crime"})` and synthesizes risk cells from real crime density
+- No `responseOps` import — zero dependency on the ops backend
+- **"Simulate deployment"** → instant `🚓` placement at the hotspot (no animation, no timer): `setSimCar({lat: target.lat, lng: target.lng})` + `setFitSignal(n+1)` — map zooms to the hotspot, car appears, label "Unit on station"
+- Button label: "Unit on station — Reset" (always, never "Deploying unit")
+- Deployment suggestion cards show: crime_type, district, patrol_window, recommended_action, fairness_note, risk_level badge
+
+**Fix — `DemoSimPanel.tsx`:**
+- `scenes = FALLBACK_SCENES` constant — hardcoded 4 Bengaluru anchor scenes only
+- `intelligence` import removed — zero network calls
+- `useState(FALLBACK_SCENES)` replaced with plain `const scenes = FALLBACK_SCENES`
+
+**Fix — `LiveOperationsMap.tsx`:**
+- Base layer loaded unconditionally from `api.mapHotspots({mode:"by_crime"})` — heatmap always visible
+- Forecast risk cell count from `intelligence.getForecastHotspots()` shown in header
+- `!hasLiveData` info card explains what the map shows when ops backend is off
+- `fittedRef` prevents re-zoom once user has interacted
+
+---
+
+#### Additional UI Fixes
+
+- **Dark tiles** on Predictive Deployment map + Dispatch & Green Corridor map (`darkTiles` prop to `CrimeMap`)
+- **Active Dispatches section removed** from `DispatchPanel` — was showing backend-seeded Hoysala-01/02/03 units which confused users; removed heading, empty-state text, and `.map()` block
+- **Simulation auto-stops** on arrival: after `ON_SCENE` hold + `COMPLETED`, `stopSim()` is called automatically so routes/corridor/vehicle marker clear without manual Reset
+- **Response Ops opened to all ranks** — `_guard()` in `ops.py` made a no-op; WS no longer closes `4403` for L1 tokens
+
+---
+
+#### Architecture Doc Updated (docs/ARCHITECTURE.md — v1.3 → v1.4)
+
+- Last updated: `2026-06-20` → `2026-06-21`, version `v1.3` → `v1.4`
+- **§10.8 Parity Pack** — new sub-section covering corridor/sim changes, all new backend routes, parity frontend components, zoom/pan fixes
+- **§10.9 Dataset-Driven Frontend** — table of which screen uses which data source, key design decisions, UI fixes
+- §9 OPS row updated: "Full + Dataset-driven frontend"
+- §11 `/operations` route map updated: lists all 5 tabs
+- §11.2 `CrimeMap.tsx` description updated: all new props listed

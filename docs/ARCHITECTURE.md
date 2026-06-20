@@ -3,7 +3,7 @@
 > **Project:** Satyam — Bilingual Voice-Enabled Crime Intelligence AI
 > **Event:** Datathon 2026 · KSP × hack2skill
 > **Stack:** Python 3.11 · FastAPI · PostgreSQL 16 + pgvector · React 19 · TanStack Start
-> **Last updated:** 2026-06-20
+> **Last updated:** 2026-06-21
 
 ---
 
@@ -371,7 +371,7 @@ Every query: `row_hash = SHA-256(prev_hash + timestamp + user_id + action + quer
 | PS6 | Similar Cases + Timeline | `/api/cases/{id}/similar`, `/api/cases/similar/search`, `/api/cases/{id}/timeline` | ✅ Full + Description search UI |
 | PS7 | Financial Intelligence | `/financial/money-trail` (BFS over financial_accounts/transactions) | ✅ Full — NOT via Text-to-SQL |
 | PS8 | Early Warning & Forecast | `/api/forecast/hotspots`, `/api/forecast/alerts`, `/api/forecast/backtest` | ✅ Full (real PAI backtest) |
-| **OPS** | **Response Ops** (feature-flagged) | `/api/ops/*` — risk zones, dispatch, green corridor, camera review | ✅ Full (Phases 0–4, `ENABLE_RESPONSE_OPS=true`) |
+| **OPS** | **Response Ops** (feature-flagged) | `/api/ops/*` — risk zones, dispatch, green corridor, camera review | ✅ Full + Dataset-driven frontend (Phases 0–4, `ENABLE_RESPONSE_OPS=true`) |
 
 ### PS2 — Network Screen (3 tabs)
 
@@ -467,6 +467,49 @@ Python port of EMERGE `predictiveReadinessService.js`:
 - `init_ops --reset` clears transient state between demo runs
 - WS enforces `RUN_ANALYTICS` clearance gate (L2+, closes `4403` for L1 tokens)
 
+### 10.8 Parity Pack (SATYAM_OPS_PARITY_PACK + SATYAM_OPS_SCREENSHOT_PARITY_PACK)
+
+Added to match the EMERGE reference screenshots:
+
+**Backend additions:**
+- `corridor_service.state()` — current green-signal count for the dashboard panel
+- `corridor_service.activate_corridor(route)` — route-wide signal activation on `EN_ROUTE` (500m radius), broadcasts `GREEN_CORRIDOR_ACTIVE` with `routeCoords` + activated signal list
+- `corridor_service.reset_all()` broadcasts `GREEN_CORRIDOR_DEACTIVATED` on arrival/cancel
+- `sim_service`: `ACCEPTED` phase (2s hold), `phase` field on every broadcast, `active_states()` / `active_ids()` / `stop_all()`, callsign + scene meta loaded from DB in `_load_meta()`
+- New ops routes: `GET /dispatch/active`, `POST /dispatch/simulate-all`, `POST /dispatch/stop-all`, `GET /corridor/state`, `POST /corridor/reset`, `GET /demo/active`, `POST /demo/stop-all`
+- YOLO entrypoint at `model/inference/live_cctv.py` (runs as `python inference/live_cctv.py`)
+
+**Frontend additions:**
+- `DemoSimPanel` — Demo Mode ON/OFF, Simulate All, Stop All, Active Dispatches list, Green Corridor panel, Live Event Feed
+- `DispatchPanel` — phase timeline (`ACCEPTED→EN_ROUTE→ON_SCENE→COMPLETED`), progress bar, ETA, green-corridor floating panel with signal chips and Deactivate button, map legend
+- `LiveOperationsMap` — dark CARTO tiles, full-screen with header stats overlay, Heatmap/DEMO/Routes toggles, animated 🚓 markers, green corridor glow, floating signal panel
+- `CrimeMap.tsx` — `corridorPath` (3-layer glow), `liveMarker` (animated 🚓 `divIcon`, pans once), `lockBounds` prop, `fitSignal` prop (one-shot zoom), `darkTiles` prop, `liveMarkers`/`routePaths` for multi-unit Demo Simulation
+
+**Zoom/pan fixes:**
+- `fitSignal` counter — parent increments once on sim start; `CrimeMap` zooms exactly once
+- `lockBounds` — suppresses `fitBounds` from the `points` effect during active simulation
+- `liveMarkerPlacedRef` — `panTo` fires only on initial marker creation, never on each GPS tick
+
+### 10.9 Dataset-Driven Frontend (SATYAM_OPS_DATASET_FIX)
+
+Rewrote the three Operations screens to use real forecast/dataset endpoints so they are never blank when the Response-Ops backend is off:
+
+| Screen | Data source | No backend needed? |
+|--------|-------------|-------------------|
+| **Predictive Deployment** | `intelligence.getForecastAlerts()` + `getForecastHotspots()` → fallback `api.mapHotspots()` | ✅ Yes |
+| **Demo Simulation** | Hardcoded 4 Bengaluru anchor scenes (client-side animation only) | ✅ Yes |
+| **Live Operations Map** | Always-on: `api.mapHotspots({mode:"by_crime"})` heatmap + forecast risk cell count; ops overlay additive | ✅ Heatmap always; ops overlay when WS up |
+
+**Key design decisions:**
+- `PredictivePanel` — instant patrol-car placement (no animation): clicking "Simulate deployment" drops a 🚓 marker at the hotspot immediately; map zooms via `fitSignal`; no route line or timer
+- `DemoSimPanel` — `scenes = FALLBACK_SCENES` hardcoded; `intelligence` import removed; no network calls
+- `LiveOperationsMap` — crime-density heatmap renders before any WS data; `fittedRef` prevents re-zoom once the user has moved the map; `!hasLiveData` info card explains the view
+
+**UI fixes also applied in this session:**
+- Dispatch & Green Corridor map + Predictive Deployment map → dark CARTO tiles (`darkTiles` prop)
+- Active Dispatches list removed from Dispatch & Green Corridor screen (backend-dependent, was showing Hoysala-01/02/03 from seeded ops data)
+- All `ENABLE_RESPONSE_OPS` operations still work when backend is on; screens degrade gracefully when it is off
+
 ---
 
 ## 11. Frontend Architecture
@@ -485,7 +528,7 @@ Python port of EMERGE `predictiveReadinessService.js`:
 /reports              Report builder + live preview + PDF print
 /audit                Hash-chain audit log
 /transcripts          Conversations tab (PDF export) + Voice transcripts tab
-/operations           Response Ops (feature-flagged) — Predictive / Dispatch+Corridor / Camera Review
+/operations           Response Ops (feature-flagged) — Live Map / Demo Simulation / Predictive / Dispatch+Corridor / Camera Review
 /about                Project info
 ```
 
@@ -495,7 +538,7 @@ Python port of EMERGE `predictiveReadinessService.js`:
 |-----------|---------|
 | `Shell.tsx` | Nav + voice command router + language toggle + theme picker + copilot mic (Browser/Sarvam) |
 | `CaseDrawer.tsx` | Sliding case detail (Summary / Persons / Timeline / Similar / Map tabs) |
-| `CrimeMap.tsx` | Leaflet heat/pin/grid map + `routePath` + `liveMarker` + `signals` (ops extensions) |
+| `CrimeMap.tsx` | Leaflet heat/pin/grid map + `routePath` + `liveMarker` + `signals` + `corridorPath` + `darkTiles` + `lockBounds` + `fitSignal` + `liveMarkers`/`routePaths` (ops extensions) |
 | `FinancialLinksPanel.tsx` | SVG money-trail graph + flows table (PS7) |
 | `RingsPanel.tsx` | Criminal ring detection cards (PS2) |
 | `SimilarCaseSearch.tsx` | Description-based similar case search widget (PS6) |
@@ -759,4 +802,4 @@ satyam/
 
 ---
 
-*Last updated: 2026-06-20 · Satyam v1.3 · Datathon 2026 KSP × hack2skill*
+*Last updated: 2026-06-21 · Satyam v1.4 · Datathon 2026 KSP × hack2skill*
