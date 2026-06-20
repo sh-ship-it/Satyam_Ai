@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8ffd9a86`
+- Built from commit: `3079e833`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -970,7 +970,7 @@ Cohesion: 0.67
 Nodes (3): [2026-06-16] — Voice Panel UI Redesign (neobrutalist), New Layout, Summary
 
 ## Knowledge Gaps
-- **1017 isolated node(s):** `Table of Contents`, `1. Project Overview`, `2.1 Backend`, `2.2 AI / Model Services`, `2.3 Frontend` (+1012 more)
+- **1017 isolated node(s):** `TrendsRoute`, `TranscriptsRoute`, `SocioRoute`, `ReportsRoute`, `OperationsRoute` (+1012 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **24 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -978,14 +978,14 @@ Nodes (3): [2026-06-16] — Voice Panel UI Redesign (neobrutalist), New Layout, 
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 42` to `Community 131`?**
-  _High betweenness centrality (0.125) - this node is a cross-community bridge._
+  _High betweenness centrality (0.122) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 121` to `Community 3`, `Community 135`, `Community 200`, `Community 169`, `Community 42`, `Community 204`, `Community 46`, `Community 122`, `Community 93`?**
-  _High betweenness centrality (0.074) - this node is a cross-community bridge._
+  _High betweenness centrality (0.068) - this node is a cross-community bridge._
 - **Are the 87 inferred relationships involving `Principal` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Principal` has 87 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 53 inferred relationships involving `Permission` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Permission` has 53 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Table of Contents`, `1. Project Overview`, `2.1 Backend` to the rest of the system?**
+- **What connects `TrendsRoute`, `TranscriptsRoute`, `SocioRoute` to the rest of the system?**
   _1180 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._

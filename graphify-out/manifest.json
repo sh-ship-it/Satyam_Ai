@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
-    "mtime": 1781939567.8708732,
-    "ast_hash": "43420f38b6222ca58e74edff05899f43",
+    "mtime": 1781948284.959201,
+    "ast_hash": "2dde67fdee1f52ef0c2aeaaf4ccd5cd5",
     "semantic_hash": ""
   },
   "frontend/src/router.tsx": {
