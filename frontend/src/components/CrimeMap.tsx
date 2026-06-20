@@ -26,6 +26,8 @@ export function CrimeMap({
   liveMarkers,
   routePaths,
   corridorPath,
+  fitSignal,
+  lockBounds,
 }: {
   points: Hotspot[];
   mode?: Mode;
@@ -38,6 +40,10 @@ export function CrimeMap({
   liveMarkers?: Hotspot[];
   routePaths?: Hotspot[][];
   corridorPath?: [number, number][];
+  /** Increment this number to trigger a one-shot fitBounds to the current corridorPath. */
+  fitSignal?: number;
+  /** When true, suppress the automatic fitBounds that fires when `points` changes. */
+  lockBounds?: boolean;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
@@ -111,12 +117,14 @@ export function CrimeMap({
     group.addTo(map);
     layerRef.current = group;
 
-    // Fit map bounds to the returned points
-    try {
-      const bounds = L.latLngBounds(points.map((p) => [p.lat, p.lng]));
-      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
-    } catch { /* ignore — e.g. single-point edge case */ }
-  }, [points, mode, ready]);
+    // Fit map bounds to the returned points — skip when a sim route has taken over the viewport.
+    if (!lockBounds) {
+      try {
+        const bounds = L.latLngBounds(points.map((p) => [p.lat, p.lng]));
+        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+      } catch { /* ignore — e.g. single-point edge case */ }
+    }
+  }, [points, mode, ready, lockBounds]);
 
   // Animated "connect the dots" offender trail
   const trailLayerRef = useRef<any>(null);
@@ -203,35 +211,26 @@ export function CrimeMap({
     signalLayerRef.current = group;
   }, [signals, ready]);
 
-  // --- Response-Ops: static dispatch route line (no animation, fits once) ---
+  // --- Response-Ops: static dispatch route line ---
   const routePathRef = useRef<any>(null);
-  const routePathKeyRef = useRef<string>("");
   useEffect(() => {
     const map = mapRef.current, L = LRef.current;
     if (!map || !L || !ready) return;
     if (routePathRef.current) { map.removeLayer(routePathRef.current); routePathRef.current = null; }
-    if (!routePath || routePath.length < 2) { routePathKeyRef.current = ""; return; }
-    const line = L.polyline(routePath.map((p: Hotspot) => [p.lat, p.lng]), {
+    if (!routePath || routePath.length < 2) return;
+    routePathRef.current = L.polyline(routePath.map((p: Hotspot) => [p.lat, p.lng]), {
       color: "#91C5FD", weight: 5, opacity: 0.9,
     }).addTo(map);
-    routePathRef.current = line;
-    // fitBounds only when the route is genuinely new.
-    const key = `${routePath[0]?.lat},${routePath[0]?.lng}:${routePath[routePath.length-1]?.lat},${routePath[routePath.length-1]?.lng}`;
-    if (key !== routePathKeyRef.current) {
-      routePathKeyRef.current = key;
-      try { map.fitBounds(line.getBounds().pad(0.25), { maxZoom: 15 }); } catch {}
-    }
-    return () => { if (routePathRef.current) { map.removeLayer(routePathRef.current); routePathRef.current = null; } };
+    // No fitBounds here — fitSignal handles zooming.
   }, [routePath, ready]);
 
-  // --- Response-Ops: green-corridor glow (3-layer polyline along the route) ---
+  // --- Response-Ops: green-corridor glow ---
   const corridorRef = useRef<any>(null);
-  const corridorKeyRef = useRef<string>("");
   useEffect(() => {
     const map = mapRef.current, L = LRef.current;
     if (!map || !L || !ready) return;
     if (corridorRef.current) { map.removeLayer(corridorRef.current); corridorRef.current = null; }
-    if (!corridorPath || corridorPath.length < 2) { corridorKeyRef.current = ""; return; }
+    if (!corridorPath || corridorPath.length < 2) return;
     const latlngs = corridorPath as [number, number][];
     const group = L.layerGroup();
     L.polyline(latlngs, { color: "#00C896", weight: 16, opacity: 0.18 }).addTo(group);
@@ -239,14 +238,18 @@ export function CrimeMap({
     L.polyline(latlngs, { color: "#00E6A8", weight: 3, opacity: 0.95 }).addTo(group);
     group.addTo(map);
     corridorRef.current = group;
-    // Only fitBounds when it's a brand-new corridor (not every re-render).
-    const key = `${latlngs[0]?.[0]},${latlngs[0]?.[1]}:${latlngs[latlngs.length-1]?.[0]},${latlngs[latlngs.length-1]?.[1]}`;
-    if (key !== corridorKeyRef.current) {
-      corridorKeyRef.current = key;
-      try { map.fitBounds(L.latLngBounds(latlngs).pad(0.25), { maxZoom: 15 }); } catch {}
-    }
-    return () => { if (corridorRef.current) { map.removeLayer(corridorRef.current); corridorRef.current = null; } };
+    // No fitBounds here — fitSignal handles zooming.
   }, [corridorPath, ready]);
+
+  // --- One-shot fitBounds: fires only when fitSignal increments ---
+  useEffect(() => {
+    if (!fitSignal) return;
+    const map = mapRef.current, L = LRef.current;
+    if (!map || !L || !ready) return;
+    const path = corridorPath ?? (routePath ? routePath.map((p) => [p.lat, p.lng] as [number, number]) : null);
+    if (!path || path.length < 2) return;
+    try { map.fitBounds(L.latLngBounds(path).pad(0.3), { maxZoom: 15, animate: true }); } catch {}
+  }, [fitSignal]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // --- Response-Ops: pulse keyframes injected once (for the live marker) ---
   useEffect(() => {

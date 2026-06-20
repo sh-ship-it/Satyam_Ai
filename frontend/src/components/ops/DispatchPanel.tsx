@@ -119,6 +119,7 @@ export function DispatchPanel() {
   const [simId, setSimId] = useState<string | null>(null);
   const [simRoute, setSimRoute] = useState<Hotspot[] | null>(null);
   const [simCorridor, setSimCorridor] = useState<[number, number][] | null>(null);
+  const [simFitSignal, setSimFitSignal] = useState(0);
   const [simCar, setSimCar] = useState<LL | null>(null);
   const [simSignals, setSimSignals] = useState<SimSignal[]>([]);
   const [simPhase, setSimPhase] = useState<string>("ACCEPTED");
@@ -143,6 +144,7 @@ export function DispatchPanel() {
     setSimId(d.id);
     setSimRoute(initial.map((p) => ({ lat: p.lat, lng: p.lng, weight: 1 })));
     setSimCorridor(corridorPts.map((p) => [p.lat, p.lng] as [number, number]));
+    setSimFitSignal((n) => n + 1); // trigger one-shot fitBounds in CrimeMap
     setSimSignals(sigs);
     setSimCar({ lat: corridorPts[0].lat, lng: corridorPts[0].lng });
     setSimPhase("ACCEPTED");
@@ -156,7 +158,11 @@ export function DispatchPanel() {
         clearSimTimer();
         setSimCar({ lat: corridorPts[n - 1].lat, lng: corridorPts[n - 1].lng });
         setSimPhase("ON_SCENE"); setSimEta(0);
-        window.setTimeout(() => setSimPhase("COMPLETED"), 1600);
+        window.setTimeout(() => {
+          setSimPhase("COMPLETED");
+          // Auto-stop 1.5s after showing COMPLETED so routes/corridor clear cleanly.
+          window.setTimeout(() => stopSim(), 1500);
+        }, 1600);
         return;
       }
       setSimCar({ lat: corridorPts[i].lat, lng: corridorPts[i].lng });
@@ -203,13 +209,75 @@ export function DispatchPanel() {
     return () => ws.close();
   }, []);
 
+  const [actionBusy, setActionBusy] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
+
+  // Bengaluru demo scenes — used when no risk zones are available.
+  const FALLBACK_SCENES = [
+    { lat: 12.985, lng: 77.606 },
+    { lat: 12.9719, lng: 77.6412 },
+    { lat: 12.9172, lng: 77.6228 },
+  ];
+
   async function dispatchNearest() {
     stopSim();
-    const d = await responseOps.dispatch({ scene_lat: scene.lat, scene_lng: scene.lng });
-    setLive(null); await responseOps.simulate(d.id); refreshActive();
+    setActionBusy(true);
+    setActionError(null);
+    try {
+      const d = await responseOps.dispatch({ scene_lat: scene.lat, scene_lng: scene.lng });
+      setLive(null);
+      await responseOps.simulate(d.id);
+      refreshActive();
+    } catch (err: any) {
+      setActionError(err?.message?.includes("409") ? "No patrol unit available. Run python -m seed.init_ops --reset to reset units." : "Dispatch failed — check that the backend is running.");
+    } finally {
+      setActionBusy(false);
+    }
   }
-  async function simulateAll() { stopSim(); await responseOps.simulateAll(); refreshActive(); }
-  async function stopAll() { await responseOps.stopAll(); setLive(null); setCorridor(null); refreshActive(); }
+
+  async function simulateAll() {
+    stopSim();
+    setActionBusy(true);
+    setActionError(null);
+    try {
+      // Try the backend simulate-all first.
+      const res = await responseOps.simulateAll();
+      if (res.started === 0) {
+        // Nothing to simulate — seed dispatches from risk zones or fallback scenes.
+        let scenes = FALLBACK_SCENES;
+        try {
+          const rz = await responseOps.riskZones();
+          if (rz.zones.length >= 2) scenes = rz.zones.slice(0, 3).map((z) => ({ lat: z.center_lat, lng: z.center_lng }));
+        } catch { /* use fallback */ }
+        for (const s of scenes) {
+          try {
+            const d = await responseOps.dispatch({ scene_lat: s.lat, scene_lng: s.lng });
+            await responseOps.simulate(d.id);
+          } catch { /* no free unit — skip */ }
+        }
+      }
+      refreshActive();
+    } catch (err: any) {
+      setActionError("Simulate All failed — check that the backend is running and ENABLE_RESPONSE_OPS=true.");
+    } finally {
+      setActionBusy(false);
+    }
+  }
+
+  async function stopAll() {
+    setActionBusy(true);
+    setActionError(null);
+    try {
+      await responseOps.stopAll();
+      setLive(null); setCorridor(null);
+      refreshActive();
+    } catch {
+      // Best-effort — clear UI state even if backend call fails.
+      setLive(null); setCorridor(null);
+    } finally {
+      setActionBusy(false);
+    }
+  }
 
   const patrolPoints: Hotspot[] = patrols
     .map((p) => ({ lat: p.lat ?? 0, lng: p.lng ?? 0, weight: 1, label: `${p.callsign} (${p.status})` }))
@@ -227,13 +295,20 @@ export function DispatchPanel() {
       {/* LEFT */}
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap gap-2">
-          <button onClick={simulateAll} className="inline-flex items-center gap-1 rounded-[6px] border-2 border-foreground bg-[var(--main,#91C5FD)] px-2 py-1.5 text-xs font-bold">
-            <Radio className="h-3.5 w-3.5" /> {t("Simulate All")}
+          <button onClick={simulateAll} disabled={actionBusy}
+            className="inline-flex items-center gap-1 rounded-[6px] border-2 border-foreground bg-[var(--main,#91C5FD)] px-2 py-1.5 text-xs font-bold disabled:opacity-50">
+            <Radio className="h-3.5 w-3.5" /> {actionBusy ? t("Working…") : t("Simulate All")}
           </button>
-          <button onClick={stopAll} className="inline-flex items-center gap-1 rounded-[6px] border-2 border-foreground bg-background px-2 py-1.5 text-xs font-bold hover:bg-muted">
+          <button onClick={stopAll} disabled={actionBusy}
+            className="inline-flex items-center gap-1 rounded-[6px] border-2 border-foreground bg-background px-2 py-1.5 text-xs font-bold hover:bg-muted disabled:opacity-50">
             <Square className="h-3.5 w-3.5" /> {t("Stop All")}
           </button>
         </div>
+        {actionError && (
+          <div className="rounded-[6px] border-2 border-destructive/60 bg-destructive/10 px-3 py-2 text-[11px] text-destructive">
+            {actionError}
+          </div>
+        )}
 
         <div className="rounded-[8px] border-2 border-foreground p-3 text-xs">
           <div className="mb-2 font-bold">{t("Scene")}</div>
@@ -243,8 +318,9 @@ export function DispatchPanel() {
             <input className="w-1/2 rounded-[4px] border-2 border-foreground px-2 py-1" value={scene.lng}
               onChange={(e) => setScene((s) => ({ ...s, lng: parseFloat(e.target.value) || s.lng }))} />
           </div>
-          <button onClick={dispatchNearest} className="mt-2 inline-flex w-full items-center justify-center gap-1 rounded-[6px] border-2 border-foreground bg-[var(--main,#91C5FD)] px-2 py-1.5 font-bold">
-            <Navigation className="h-4 w-4" /> {t("Dispatch nearest unit")}
+          <button onClick={dispatchNearest} disabled={actionBusy}
+            className="mt-2 inline-flex w-full items-center justify-center gap-1 rounded-[6px] border-2 border-foreground bg-[var(--main,#91C5FD)] px-2 py-1.5 font-bold disabled:opacity-50">
+            <Navigation className="h-4 w-4" /> {actionBusy ? t("Working…") : t("Dispatch nearest unit")}
           </button>
         </div>
 
@@ -323,6 +399,8 @@ export function DispatchPanel() {
           mode="pins"
           routePath={simRunning ? (simRoute ?? undefined) : undefined}
           corridorPath={simRunning ? (simCorridor ?? undefined) : (corridor?.routeCoords ?? undefined)}
+          fitSignal={simFitSignal}
+          lockBounds={simRunning}
           liveMarker={
             simRunning
               ? simCar ? { lat: simCar.lat, lng: simCar.lng, weight: 3, label: simDispatch ? `${simDispatch.callsign} ${t("en route")}` : t("Patrol en route") } : null
