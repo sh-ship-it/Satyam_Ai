@@ -19,6 +19,7 @@ from pathlib import Path
 
 import cv2
 from ultralytics import YOLO
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 # inference/ is on sys.path when launched via the backend subprocess
 SCRIPT_DIR = Path(__file__).resolve().parent   # model/inference
@@ -39,6 +40,71 @@ COOLDOWN_SEC   = 15.0 # minimum gap between two alerts of the same type
 WEAPON_NAMES = {"gun", "pistol", "rifle", "handgun", "firearm", "weapon", "knife"}
 WEAPON_CONF  = 0.35   # min confidence for a weapon box to fire an alert
 WEAPON_WEIGHTS_CANDIDATES = ("gun.pt", "weapon.pt", "weapons.pt", "gun_yolov8.pt")
+
+
+# ── MJPEG live-stream server (so the browser shows the annotated boxes) ──────
+class _FrameBuffer:
+    """Thread-safe holder for the latest annotated JPEG frame."""
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self._jpg: bytes | None = None
+        self._cond = threading.Condition(self._lock)
+
+    def set(self, jpg: bytes) -> None:
+        with self._cond:
+            self._jpg = jpg
+            self._cond.notify_all()
+
+    def get_next(self, timeout: float = 5.0) -> bytes | None:
+        with self._cond:
+            self._cond.wait(timeout=timeout)
+            return self._jpg
+
+
+_FRAMES = _FrameBuffer()
+
+
+class _MJPEGHandler(BaseHTTPRequestHandler):
+    def log_message(self, *_args) -> None:  # silence per-request logging
+        pass
+
+    def do_GET(self) -> None:
+        if self.path not in ("/stream", "/stream.mjpg", "/"):
+            self.send_response(404)
+            self.end_headers()
+            return
+        self.send_response(200)
+        self.send_header("Age", "0")
+        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Connection", "close")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header(
+            "Content-Type", "multipart/x-mixed-replace; boundary=--frameboundary"
+        )
+        self.end_headers()
+        try:
+            while True:
+                jpg = _FRAMES.get_next()
+                if jpg is None:
+                    continue
+                self.wfile.write(b"--frameboundary\r\n")
+                self.wfile.write(b"Content-Type: image/jpeg\r\n")
+                self.wfile.write(f"Content-Length: {len(jpg)}\r\n\r\n".encode())
+                self.wfile.write(jpg)
+                self.wfile.write(b"\r\n")
+                self.wfile.flush()
+        except (BrokenPipeError, ConnectionResetError, OSError):
+            pass  # client (browser tab) disconnected — normal
+
+
+def _start_mjpeg_server(port: int) -> None:
+    try:
+        srv = ThreadingHTTPServer(("0.0.0.0", port), _MJPEGHandler)
+        print(f"📺 MJPEG stream on http://localhost:{port}/stream", flush=True)
+        threading.Thread(target=srv.serve_forever, daemon=True).start()
+    except Exception as exc:
+        print(f"⚠️  Could not start MJPEG server on :{port}: {exc}", flush=True)
 
 
 def resolve_video(arg: str | None) -> str | int:
@@ -80,7 +146,12 @@ def main() -> None:
     ap.add_argument("--cooldown",     type=float, default=COOLDOWN_SEC)
     ap.add_argument("--no-display", action="store_true",
                     help="run headless (no cv2 window) — used when launched by the backend")
+    ap.add_argument("--mjpeg-port", type=int, default=8089,
+                    help="port for the annotated MJPEG live stream (0 = disabled)")
     args = ap.parse_args()
+
+    if args.mjpeg_port:
+        _start_mjpeg_server(args.mjpeg_port)
 
     source = resolve_video(args.video)
     print(f"⏳ Loading model: {args.weights}")
@@ -230,12 +301,26 @@ def main() -> None:
                 conf = min(0.92, 0.65 + fight_pairs * 0.05)
                 fire("fight", conf)
 
-        # ── Annotate and display ──────────────────────────────────────────
+        # ── Annotate (always, for the MJPEG stream) + optional window ──────
+        annotated = res.plot()
+        cv2.putText(annotated, f"Satyam CCTV  |  people:{n_people}", (14, 36),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 200), 2)
+
+        # Banner the most recent alert so judges see WHAT was detected.
+        if last_fire:
+            recent_type = max(last_fire, key=last_fire.get)
+            if now - last_fire[recent_type] < 2.5:
+                txt = f"DETECTED: {recent_type.replace('_', ' ').upper()}"
+                cv2.putText(annotated, txt, (14, 74),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.95, (40, 40, 255), 3)
+
+        if args.mjpeg_port:
+            ok_enc, buf = cv2.imencode(".jpg", annotated, [cv2.IMWRITE_JPEG_QUALITY, 80])
+            if ok_enc:
+                _FRAMES.set(buf.tobytes())
+
         if not args.no_display:
             try:
-                annotated = res.plot()
-                cv2.putText(annotated, f"Satyam CCTV | people:{n_people}", (12, 32),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 200), 2)
                 cv2.imshow("Satyam CCTV — YOLO", annotated)
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     break
@@ -243,8 +328,8 @@ def main() -> None:
                 # No GUI available — fall back to headless for the rest of the run.
                 args.no_display = True
         else:
-            # Headless: throttle roughly to the source frame rate so detections
-            # track real time instead of racing through the whole clip instantly.
+            # Headless: throttle roughly to the source frame rate so the stream
+            # plays at real-time speed instead of racing through the clip.
             time.sleep(max(0.0, 1.0 / fps))
 
     cap.release()

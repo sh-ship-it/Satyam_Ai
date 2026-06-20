@@ -450,6 +450,7 @@ import pathlib as _pathlib
 import threading as _threading
 
 _yolo_proc: "_subprocess.Popen[bytes] | None" = None
+_yolo_stream_port: int = 0
 
 
 def _drain(proc: "_subprocess.Popen[bytes]") -> None:
@@ -514,9 +515,10 @@ async def camera_start(
 ) -> dict:
     """Launch the YOLO live_cctv detector as a background process."""
     _guard(principal)
-    global _yolo_proc
+    global _yolo_proc, _yolo_stream_port
     if _yolo_proc is not None and _yolo_proc.poll() is None:
-        return {"ok": True, "status": "already_running", "pid": _yolo_proc.pid}
+        return {"ok": True, "status": "already_running", "pid": _yolo_proc.pid,
+                "stream_port": _yolo_stream_port}
 
     # Locate live_cctv.py relative to this file: backend/app/api/routes/ops.py
     # parents[4] = repo root (ops.py → routes → api → app → backend → repo)
@@ -549,9 +551,28 @@ async def camera_start(
     )
 
     py = _resolve_python()
+    # Pick a guaranteed-free port for the MJPEG stream (avoids "address in use").
+    def _free_port(preferred: int) -> int:
+        import socket as _socket
+        # Try the preferred port first, fall back to an OS-assigned free port.
+        for cand in (preferred, 0):
+            s = _socket.socket(_socket.AF_INET, _socket.SOCK_STREAM)
+            try:
+                s.bind(("0.0.0.0", cand))
+                port = s.getsockname()[1]
+                s.close()
+                return port
+            except OSError:
+                s.close()
+                continue
+        return preferred
+
+    mjpeg_port = _free_port(int(_os.getenv("YOLO_MJPEG_PORT", "8089")))
+    _yolo_stream_port = mjpeg_port
     env = {**_os.environ, "SATYAM_URL": "http://localhost:8000", "SATYAM_TOKEN": _token}
     _yolo_proc = _subprocess.Popen(
-        [py, str(script), "--video", str(video_path), "--camera", camera_id, "--no-display"],
+        [py, str(script), "--video", str(video_path), "--camera", camera_id,
+         "--no-display", "--mjpeg-port", str(mjpeg_port)],
         cwd=str(script.parent),
         env=env,
         stdout=_subprocess.PIPE,
@@ -560,7 +581,10 @@ async def camera_start(
     # Drain the pipe in a daemon thread — prevents the child from blocking when
     # stdout fills up (the main symptom: video freezes after ~3 s).
     _threading.Thread(target=_drain, args=(_yolo_proc,), daemon=True).start()
-    return {"ok": True, "status": "started", "pid": _yolo_proc.pid, "python": py}
+    return {
+        "ok": True, "status": "started", "pid": _yolo_proc.pid,
+        "python": py, "stream_port": mjpeg_port,
+    }
 
 
 @router.post("/camera/stop")
@@ -592,4 +616,5 @@ async def camera_status(
     running = _yolo_proc is not None and _yolo_proc.poll() is None
     if not running:
         _yolo_proc = None
-    return {"running": running, "pid": _yolo_proc.pid if running else None}
+    return {"running": running, "pid": _yolo_proc.pid if running else None,
+            "stream_port": _yolo_stream_port if running else 0}

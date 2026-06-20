@@ -24,6 +24,8 @@ export function ReviewPanel() {
   const t = useT();
   const [running, setRunning] = useState(false);
   const [statusBusy, setStatusBusy] = useState(false);
+  const [streamPort, setStreamPort] = useState(8089);
+  const [streamReady, setStreamReady] = useState(false);
   const [detections, setDetections] = useState<FeedItem[]>([]);
   const [queueItems, setQueueItems] = useState<ReviewItem[]>([]);
   const [queueBusy, setQueueBusy] = useState(false);
@@ -32,8 +34,19 @@ export function ReviewPanel() {
 
   // ── Check if YOLO is already running on mount ────────────────────────────
   useEffect(() => {
-    responseOps.cameraStatus().then((s) => setRunning(s.running)).catch(() => {});
+    responseOps.cameraStatus().then((s) => {
+      setRunning(s.running);
+      if (s.running && s.stream_port) setStreamPort(s.stream_port);
+    }).catch(() => {});
   }, []);
+
+  // MJPEG <img> onLoad is unreliable for multipart streams — clear the
+  // "connecting" overlay after a short grace period once the feed is running.
+  useEffect(() => {
+    if (!running) { setStreamReady(false); return; }
+    const id = setTimeout(() => setStreamReady(true), 2500);
+    return () => clearTimeout(id);
+  }, [running, streamPort]);
 
   // ── Poll camera/status while running ────────────────────────────────────
   useEffect(() => {
@@ -86,7 +99,9 @@ export function ReviewPanel() {
   async function startCamera() {
     setStatusBusy(true);
     try {
-      await responseOps.cameraStart("frontend/public/total fight.mp4", "CAM-001");
+      const res = await responseOps.cameraStart("frontend/public/total fight.mp4", "CAM-001");
+      if (res.stream_port) setStreamPort(res.stream_port);
+      setStreamReady(false);
       setRunning(true);
       setDetections([]);
     } catch (err: any) {
@@ -97,7 +112,7 @@ export function ReviewPanel() {
   async function stopCamera() {
     setStatusBusy(true);
     try { await responseOps.cameraStop(); } catch { /* ignore */ }
-    finally { setRunning(false); setStatusBusy(false); }
+    finally { setRunning(false); setStreamReady(false); setStatusBusy(false); }
   }
 
   async function confirmItem(id: number) {
@@ -144,22 +159,27 @@ export function ReviewPanel() {
           </div>
         </div>
 
-        {/* Video preview area */}
+        {/* Video preview area — live annotated MJPEG stream from YOLO */}
         <div className="relative flex h-[340px] items-center justify-center overflow-hidden rounded-[8px] border-2 border-foreground bg-black">
           {running ? (
             <>
-              <video
-                key="cctv-loop"
-                src="/total fight.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
+              <img
+                key={`mjpeg-${streamPort}`}
+                src={`http://${typeof window !== "undefined" ? window.location.hostname : "localhost"}:${streamPort}/stream`}
+                alt="Live YOLO detection stream"
+                onLoad={() => setStreamReady(true)}
+                onError={() => setStreamReady(false)}
                 className="h-full w-full object-contain"
               />
               <div className="absolute left-2 top-2 flex items-center gap-1 rounded-[4px] bg-destructive px-2 py-0.5 text-[10px] font-bold text-white">
                 <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-white" /> LIVE · YOLO
               </div>
+              {!streamReady && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-muted-foreground">
+                  <RefreshCw className="h-6 w-6 animate-spin opacity-50" />
+                  <p className="text-xs">{t("Connecting to detection stream…")}</p>
+                </div>
+              )}
             </>
           ) : (
             <div className="flex flex-col items-center gap-3 text-muted-foreground">
