@@ -1210,8 +1210,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/ops.py": {
-    "mtime": 1781939374.026926,
-    "ast_hash": "8362c3ad35b43008116029cc65897540",
+    "mtime": 1781940397.1234,
+    "ast_hash": "2071a93a781dd0c3d8dce21d836a29dd",
     "semantic_hash": ""
   },
   "backend/app/db/ops_models.py": {
@@ -1225,18 +1225,43 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/responseOps.ts": {
-    "mtime": 1781939384.2803879,
-    "ast_hash": "7b4883d42ce8ede9ddcbe6d0305e3e7d",
+    "mtime": 1781940483.1290932,
+    "ast_hash": "d0215fee8c7ae4fb1bd5a510feb4d7d7",
     "semantic_hash": ""
   },
   "frontend/src/routes/operations.tsx": {
-    "mtime": 1781939405.5089104,
-    "ast_hash": "61897380c929687e3f85b8033160a1f5",
+    "mtime": 1781940434.0003047,
+    "ast_hash": "a1f978af5fb430663593d62c8db678aa",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE0_SCAFFOLD.md": {
     "mtime": 1781899360.0346365,
     "ast_hash": "77ced6c099e05fec428557bad8d0bba7",
+    "semantic_hash": ""
+  },
+  "backend/app/schemas/ops.py": {
+    "mtime": 1781940303.7095752,
+    "ast_hash": "5acc76b207c7625205fd3458998726fe",
+    "semantic_hash": ""
+  },
+  "backend/app/services/ops/__init__.py": {
+    "mtime": 1781940309.1379523,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "backend/app/services/ops/risk_service.py": {
+    "mtime": 1781940348.375415,
+    "ast_hash": "1905246f991ebdb37fc0626e088ac011",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ops/PredictivePanel.tsx": {
+    "mtime": 1781940372.6579351,
+    "ast_hash": "937dc159d5cf2900d45e444c53c39cfe",
+    "semantic_hash": ""
+  },
+  "SATYAM_OPS_PHASE1_PREDICTIVE.md": {
+    "mtime": 1781899368.8711703,
+    "ast_hash": "a8c391ebe5a907b51ea51dc2e2723e0a",
     "semantic_hash": ""
   }
 }
