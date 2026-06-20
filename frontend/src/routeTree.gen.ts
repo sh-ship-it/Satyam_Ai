@@ -13,6 +13,7 @@ import { Route as TrendsRouteImport } from './routes/trends'
 import { Route as TranscriptsRouteImport } from './routes/transcripts'
 import { Route as SocioRouteImport } from './routes/socio'
 import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as OperationsRouteImport } from './routes/operations'
 import { Route as NetworkRouteImport } from './routes/network'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForecastRouteImport } from './routes/forecast'
@@ -21,7 +22,6 @@ import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProfilePersonIdRouteImport } from './routes/profile.$personId'
-import { Route as OperationsRouteImport } from './routes/operations'
 
 const TrendsRoute = TrendsRouteImport.update({
   id: '/trends',
@@ -41,6 +41,11 @@ const SocioRoute = SocioRouteImport.update({
 const ReportsRoute = ReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OperationsRoute = OperationsRouteImport.update({
+  id: '/operations',
+  path: '/operations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NetworkRoute = NetworkRouteImport.update({
@@ -81,11 +86,6 @@ const IndexRoute = IndexRouteImport.update({
 const ProfilePersonIdRoute = ProfilePersonIdRouteImport.update({
   id: '/profile/$personId',
   path: '/profile/$personId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OperationsRoute = OperationsRouteImport.update({
-  id: '/operations',
-  path: '/operations',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -229,6 +229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/operations': {
+      id: '/operations'
+      path: '/operations'
+      fullPath: '/operations'
+      preLoaderRoute: typeof OperationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/network': {
       id: '/network'
       path: '/network'
@@ -283,13 +290,6 @@ declare module '@tanstack/react-router' {
       path: '/profile/$personId'
       fullPath: '/profile/$personId'
       preLoaderRoute: typeof ProfilePersonIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/operations': {
-      id: '/operations'
-      path: '/operations'
-      fullPath: '/operations'
-      preLoaderRoute: typeof OperationsRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
