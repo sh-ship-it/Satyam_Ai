@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
-    "mtime": 1781956078.9966934,
-    "ast_hash": "9e70ebbac835b97fa74d2a3954a7a5af",
+    "mtime": 1781974316.1270864,
+    "ast_hash": "c6a0d2312f2c92cf313c486746eb354a",
     "semantic_hash": ""
   },
   "frontend/src/components/DarkModeToggle.tsx": {
