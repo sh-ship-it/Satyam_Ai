@@ -7,9 +7,9 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_principal, get_scoped_session
-from app.core.rbac import AccessDenied, Permission, Principal, require
+from app.core.rbac import AccessDenied, Permission, Principal, require, resolve_clearance, resolve_scope
 from app.core.security import decode_token
-from app.db.models import Case
+from app.db.models import Case, Station
 from app.db.ops_models import Camera, IncidentDispatch, IncidentReview, PatrolSuggestion, PatrolUnit, RiskZone, TrafficSignal
 from app.schemas.ops import (
     CameraOut, DetectNotify, ReviewItemOut,
@@ -66,7 +66,8 @@ async def suggestions(
         select(PatrolSuggestion, PatrolUnit.callsign)
         .join(PatrolUnit, PatrolUnit.id == PatrolSuggestion.patrol_id, isouter=True)
         .where(PatrolSuggestion.status == "PENDING")
-        .order_by(PatrolSuggestion.response_improve_sec.desc())
+        .order_by(PatrolSuggestion.response_improve_sec.is_(None),
+                  PatrolSuggestion.response_improve_sec.desc())
     )).all()
     return SuggestionsResponse(
         suggestions=[SuggestionOut(
@@ -134,6 +135,8 @@ async def dispatch(
         )
     if not patrol:
         raise HTTPException(status_code=409, detail="no available patrol unit")
+    if patrol.lat is None or patrol.lng is None:
+        raise HTTPException(status_code=409, detail="selected patrol has no location")
 
     route = await routing_service.get_route(
         from_lat=patrol.lat, from_lng=patrol.lng, to_lat=req.scene_lat, to_lng=req.scene_lng,
@@ -145,6 +148,9 @@ async def dispatch(
     )
     session.add(disp)
     await session.flush()
+    await session.execute(
+        update(PatrolUnit).where(PatrolUnit.id == patrol.id).values(status="EN_ROUTE")
+    )
     return DispatchOut(
         id=disp.id, patrol_id=patrol.id, patrol_callsign=patrol.callsign, case_id=req.case_id,
         scene_lat=req.scene_lat, scene_lng=req.scene_lng, status=disp.status,
@@ -188,9 +194,23 @@ async def ops_ws(ws: WebSocket, token: str | None = None) -> None:
         await ws.close(code=4401)
         return
     try:
-        decode_token(token)
+        claims = decode_token(token)
     except Exception:
         await ws.close(code=4401)
+        return
+    # WS connections can't use Depends(get_principal) (no headers), so rebuild the
+    # Principal from the JWT claims and enforce the same RUN_ANALYTICS gate (clearance
+    # L2+) that every HTTP ops endpoint applies via _guard().
+    rank = str(claims.get("rank") or claims.get("role") or "viewer")
+    principal = Principal(
+        id=str(claims.get("sub", "")),
+        name=str(claims.get("name", "")),
+        rank=rank,
+        scope=str(claims.get("scope") or resolve_scope(rank)),
+        clearance=int(claims.get("clearance") or resolve_clearance(rank)),
+    )
+    if not principal.has(Permission.RUN_ANALYTICS):
+        await ws.close(code=4403)
         return
     await manager.connect(ws)
     try:
@@ -306,10 +326,19 @@ async def confirm_item(
 
     # Create a minimal case row from the confirmed incident.
     today = dt.date.today()
+    # station_id is a NOT-NULL FK -> resolve a valid station (officer's, else first seeded).
+    sid = principal.station_id
+    if not sid:
+        sid = (await session.execute(select(Station.station_id).limit(1))).scalar()
+    if not sid:
+        raise HTTPException(status_code=409, detail="no station available to file case")
+    sname = (await session.execute(
+        select(Station.station_name).where(Station.station_id == sid)
+    )).scalar() or ""
     new_case = Case(
         fir_number=f"CCTV-{item.id}", fir_year=today.year,
-        station_id=principal.station_id or 0,
-        station_name="", district=principal.district or "", range_name=principal.range_name or "",
+        station_id=sid,
+        station_name=sname, district=principal.district or "", range_name=principal.range_name or "",
         crime_type="CCTV-detected incident", crime_category="SLL", legal_code="BNS",
         fir_type="Suo Motu", status="Under Investigation",
         report_date=today, incident_date=today,
@@ -339,6 +368,9 @@ async def confirm_item(
             )
             session.add(disp)
             await session.flush()
+            await session.execute(
+                update(PatrolUnit).where(PatrolUnit.id == patrol.id).values(status="EN_ROUTE")
+            )
             dispatch_id = disp.id
 
     return {"ok": True, "case_id": new_case.case_id, "dispatch_id": dispatch_id}

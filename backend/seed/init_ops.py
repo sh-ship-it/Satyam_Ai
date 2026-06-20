@@ -1,20 +1,23 @@
 """Create + seed Response-Ops tables. Safe to run repeatedly.
 
-    python -m seed.init_ops
+    python -m seed.init_ops            # create + seed-if-empty
+    python -m seed.init_ops --reset    # also clear transient state (units->IDLE, signals->NORMAL)
 
 Creates ONLY ops_* tables (explicit allow-list) and inserts demo rows if empty.
 """
 from __future__ import annotations
 
+import argparse
 import asyncio
 
-from sqlalchemy import select
+from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from app.config import get_settings
 from app.db.models import Base
 from app.db.ops_models import (
     OPS_TABLES, PatrolUnit, TrafficSignal, Camera,
+    IncidentDispatch, IncidentReview, PatrolSuggestion, RiskZone,
 )
 
 # A few demo patrols around Bengaluru/Karnataka for the simulation.
@@ -37,7 +40,7 @@ DEMO_CAMERAS = [
 ]
 
 
-async def main() -> None:
+async def main(reset: bool = False) -> None:
     s = get_settings()
     engine = create_async_engine(s.seed_database_url, future=True)
     async with engine.begin() as conn:
@@ -47,6 +50,17 @@ async def main() -> None:
 
     sm = async_sessionmaker(engine, expire_on_commit=False)
     async with sm() as db:
+        if reset:
+            # Clear transient state but KEEP patrols/signals/cameras rows.
+            await db.execute(delete(IncidentDispatch))
+            await db.execute(delete(IncidentReview))
+            await db.execute(delete(PatrolSuggestion))
+            await db.execute(delete(RiskZone))
+            await db.execute(update(PatrolUnit).values(status="IDLE"))
+            await db.execute(update(TrafficSignal).values(state="NORMAL"))
+            await db.commit()
+            print("[init_ops] reset: dispatches/reviews/suggestions/zones cleared; units IDLE; signals NORMAL")
+
         if not (await db.execute(select(PatrolUnit.id).limit(1))).first():
             db.add_all([PatrolUnit(status="IDLE", **p) for p in DEMO_PATROLS])
         if not (await db.execute(select(TrafficSignal.id).limit(1))).first():
@@ -59,4 +73,7 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--reset", action="store_true", help="clear transient ops state before seeding")
+    args = ap.parse_args()
+    asyncio.run(main(reset=args.reset))

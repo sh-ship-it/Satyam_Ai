@@ -26,7 +26,10 @@ def _straight_line(from_lat, from_lng, to_lat, to_lng, steps: int = 40) -> list[
 
 
 async def get_route(*, from_lat: float, from_lng: float, to_lat: float, to_lng: float) -> dict:
-    """Return {provider, distance_km, duration_sec, coords:[[lng,lat],...]}. Never raises."""
+    """Return {provider, distance_km, duration_sec, coords:[[lng,lat],...]}.
+    Raises ValueError on null coordinates (callers must guard); otherwise never raises."""
+    if None in (from_lat, from_lng, to_lat, to_lng):
+        raise ValueError("get_route requires non-null coordinates")
     url = (f"{OSRM_BASE_URL}/route/v1/driving/"
            f"{from_lng},{from_lat};{to_lng},{to_lat}"
            f"?overview=full&geometries=geojson&steps=false")

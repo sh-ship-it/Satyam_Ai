@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
 import { useState } from "react";
-import { Siren, Radar, Truck, TrafficCone, Video } from "lucide-react";
+import { Siren, Radar, Truck, Video } from "lucide-react";
 import { useT } from "@/lib/i18n";
 import { PredictivePanel } from "@/components/ops/PredictivePanel";
 import { DispatchPanel } from "@/components/ops/DispatchPanel";
@@ -12,7 +12,7 @@ export const Route = createFileRoute("/operations")({
   component: OperationsScreen,
 });
 
-type Tab = "predict" | "dispatch" | "corridor" | "review";
+type Tab = "predict" | "dispatch" | "review";
 
 function OperationsScreen() {
   const t = useT();
@@ -20,8 +20,7 @@ function OperationsScreen() {
 
   const TABS: { id: Tab; label: string; icon: any }[] = [
     { id: "predict", label: t("Predictive Deployment"), icon: Radar },
-    { id: "dispatch", label: t("Dispatch & Tracking"), icon: Truck },
-    { id: "corridor", label: t("Green Corridor"), icon: TrafficCone },
+    { id: "dispatch", label: t("Dispatch & Green Corridor"), icon: Truck },
     { id: "review", label: t("Camera Review"), icon: Video },
   ];
 
@@ -56,9 +55,6 @@ function OperationsScreen() {
           {tab === "predict" && <PredictivePanel />}
           {tab === "dispatch" && <DispatchPanel />}
           {tab === "review" && <ReviewPanel />}
-          {tab !== "predict" && tab !== "dispatch" && tab !== "review" && (
-            <p className="text-sm text-muted-foreground">{t("Coming in a later phase.")} ({tab})</p>
-          )}
         </section>
       </div>
     </Shell>

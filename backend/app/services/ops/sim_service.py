@@ -12,6 +12,7 @@ from app.services.ops.ws_manager import manager
 
 TICK_SEC = 0.8           # interval between coordinate steps
 MAX_POINTS = 60          # subsample long routes to <= this many steps
+ON_SCENE_HOLD_SEC = 6    # keep unit ON_SCENE this long, then free it (-> IDLE)
 
 # dispatch_id -> asyncio.Task
 _running: dict[int, asyncio.Task] = {}
@@ -70,6 +71,11 @@ async def _run(dispatch_id: int, patrol_id: int, coords: list[list[float]],
         _latest[dispatch_id] = {"lat": last_lat, "lng": last_lng, "status": "ON_SCENE", "eta_sec": 0}
         await manager.broadcast({"type": "DISPATCH_STATUS", "dispatchId": dispatch_id, "status": "ON_SCENE"})
         await corridor_service.reset_all()
+        # Hold on-scene briefly, then free the unit so it can be dispatched again.
+        await asyncio.sleep(ON_SCENE_HOLD_SEC)
+        await _persist_status(dispatch_id, patrol_id, "COMPLETED", last_lat, last_lng)
+        _latest[dispatch_id] = {"lat": last_lat, "lng": last_lng, "status": "COMPLETED", "eta_sec": 0}
+        await manager.broadcast({"type": "DISPATCH_STATUS", "dispatchId": dispatch_id, "status": "COMPLETED"})
     except asyncio.CancelledError:
         await _persist_status(dispatch_id, patrol_id, "CANCELLED")
         raise

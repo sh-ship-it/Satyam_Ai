@@ -21,6 +21,8 @@ export function CrimeMap({
   animateKey,
   focus,
   signals,
+  routePath,
+  liveMarker,
 }: {
   points: Hotspot[];
   mode?: Mode;
@@ -28,6 +30,8 @@ export function CrimeMap({
   animateKey?: number;
   focus?: Hotspot[] | null;
   signals?: { id: number; junction_id: string; lat: number; lng: number; state: string }[];
+  routePath?: Hotspot[];
+  liveMarker?: Hotspot | null;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
@@ -192,6 +196,42 @@ export function CrimeMap({
     group.addTo(map);
     signalLayerRef.current = group;
   }, [signals, ready]);
+
+  // --- Response-Ops: static dispatch route line (no animation, fits once) ---
+  const routePathRef = useRef<any>(null);
+  useEffect(() => {
+    const map = mapRef.current, L = LRef.current;
+    if (!map || !L || !ready) return;
+    if (routePathRef.current) { map.removeLayer(routePathRef.current); routePathRef.current = null; }
+    if (!routePath || routePath.length < 2) return;
+    const line = L.polyline(routePath.map((p: Hotspot) => [p.lat, p.lng]), {
+      color: "#91C5FD", weight: 5, opacity: 0.9,
+    }).addTo(map);
+    routePathRef.current = line;
+    map.fitBounds(line.getBounds().pad(0.2));
+    return () => { if (routePathRef.current) { map.removeLayer(routePathRef.current); routePathRef.current = null; } };
+  }, [routePath, ready]);
+
+  // --- Response-Ops: single live patrol marker that PANS, never hard-zooms ---
+  const liveMarkerRef = useRef<any>(null);
+  useEffect(() => {
+    const map = mapRef.current, L = LRef.current;
+    if (!map || !L || !ready) return;
+    if (!liveMarker) {
+      if (liveMarkerRef.current) { map.removeLayer(liveMarkerRef.current); liveMarkerRef.current = null; }
+      return;
+    }
+    const ll: [number, number] = [liveMarker.lat, liveMarker.lng];
+    if (!liveMarkerRef.current) {
+      liveMarkerRef.current = L.circleMarker(ll, {
+        radius: 9, color: "#0B5", weight: 3, fillColor: "#00C896", fillOpacity: 1,
+      }).addTo(map);
+      if (liveMarker.label) liveMarkerRef.current.bindTooltip(liveMarker.label);
+    } else {
+      liveMarkerRef.current.setLatLng(ll);
+    }
+    if (!map.getBounds().contains(ll)) map.panTo(ll, { animate: true });
+  }, [liveMarker, ready]);
 
   return <div ref={containerRef} className="absolute inset-0 z-0 bg-muted" />;
 }

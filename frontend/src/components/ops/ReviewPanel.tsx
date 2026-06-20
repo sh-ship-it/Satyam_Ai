@@ -27,7 +27,14 @@ export function ReviewPanel() {
     return () => ws.close();
   }, []);
 
-  async function confirm(id: number) { await responseOps.confirmReview(id, true); setItems((p) => p.filter((i) => i.id !== id)); }
+  async function confirm(id: number) {
+    const res = await responseOps.confirmReview(id, true);
+    setItems((p) => p.filter((i) => i.id !== id));
+    // Kick off the live simulation for the auto-created dispatch (best-effort).
+    if (res.dispatch_id) {
+      try { await responseOps.simulate(res.dispatch_id); } catch { /* sim is best-effort */ }
+    }
+  }
   async function reject(id: number) { await responseOps.rejectReview(id); setItems((p) => p.filter((i) => i.id !== id)); }
 
   const tier = (c: number) => (c >= 0.8 ? { label: t("High"), cls: "bg-destructive text-destructive-foreground" }
