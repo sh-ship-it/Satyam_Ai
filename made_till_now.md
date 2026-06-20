@@ -2990,3 +2990,141 @@ Implemented the full voice copilot spec. Two independent mic instances are now a
 | `"Best Kannada accuracy"` | `"ಅತ್ಯುತ್ತಮ ಕನ್ನಡ ನಿಖರತೆ"` |
 | `"Stop dictation"` | `"ಡಿಕ್ಟೇಶನ್ ನಿಲ್ಲಿಸಿ"` |
 | `"Dictate into chat"` | `"ಚಾಟ್‌ಗೆ ಡಿಕ್ಟೇಟ್ ಮಾಡಿ"` |
+
+
+---
+
+### [2026-06-20] — Response Ops Module: Phases 0–4 + Bug-Fix Pack
+
+#### Summary
+Built the complete **Response Ops** module (`ENABLE_RESPONSE_OPS=true`) across 5 phases, porting EMERGE's predictive readiness, dispatch simulation, green corridor, and camera review systems into Satyam. Followed by a 10-bug fix pack. All TypeScript: 0 errors throughout. Python `py_compile`: OK throughout.
+
+---
+
+#### Phase 0 — Scaffold (SATYAM_OPS_PHASE0_SCAFFOLD.md)
+
+**New backend files:**
+- `backend/app/db/ops_models.py` — 7 ORM tables: `ops_patrol_units`, `ops_traffic_signals`, `ops_incident_dispatches`, `ops_risk_zones`, `ops_patrol_suggestions`, `ops_cameras`, `ops_incident_review_queue`. All on shared `Base`; `OPS_TABLES` allow-list. No existing tables altered.
+- `backend/seed/init_ops.py` — idempotent seed: creates ops tables + 4 demo Hoysala patrols + 5 junctions + 2 cameras. `--reset` flag added in bugfix pack.
+- `backend/app/api/routes/ops.py` — Phase 0 stub with `/health` probe. Feature-guarded mount in `main.py` (`if settings.enable_response_ops`).
+
+**New frontend files:**
+- `frontend/src/routes/operations.tsx` — `/operations` route with 3 tabs (Predictive / Dispatch+Corridor / Camera Review). Registered in `routeTree.gen.ts`.
+- `frontend/src/lib/api/responseOps.ts` — isolated `opsFetch()` + `openOpsSocket()` + all typed methods.
+
+**3 additive edits:**
+- `config.py` — `enable_response_ops: bool = False`
+- `main.py` — feature-guarded `include_router` at `/api/ops`
+- `Shell.tsx` — `Siren` icon import + `/operations` NAV entry + `SCREEN_ROUTES` voice entry
+
+**Activated:** `ENABLE_RESPONSE_OPS=true` added to `backend/.env`; `python -m seed.init_ops` seeded 7 ops tables.
+
+---
+
+#### Phase 1 — Predictive Deployment (SATYAM_OPS_PHASE1_PREDICTIVE.md)
+
+**Port of EMERGE `predictiveReadinessService.js` to Python.**
+
+**New backend files:**
+- `backend/app/schemas/ops.py` — `RiskZoneOut`, `RiskZonesResponse`, `SuggestionOut`, `SuggestionsResponse`
+- `backend/app/services/ops/__init__.py` — package marker
+- `backend/app/services/ops/risk_service.py` — grid scoring: `GRID_SIZE=0.01` (~1.1km), `LOOKBACK_DAYS=365`, severity weights per crime type, `recompute_if_stale()` (5min debounce), `_rebuild_suggestions()` (top-5 zones → nearest IDLE patrol)
+
+**Endpoints added to `ops.py`:**
+- `GET /api/ops/risk-zones` — scored zones ordered by risk descending
+- `GET /api/ops/suggestions` — pending pre-positioning cards
+- `POST /api/ops/suggestions/{id}/{accept|dismiss}` — action handler + patrol relocation on accept
+
+**New frontend:**
+- `frontend/src/components/ops/PredictivePanel.tsx` — `CrimeMap` heat map + suggestion cards with Accept/Dismiss buttons + Recompute
+
+---
+
+#### Phase 2 — Dispatch Simulation (SATYAM_OPS_PHASE2_DISPATCH_SIM.md)
+
+**Port of EMERGE `routingService.js` + `demoSimulationService.js`.**
+
+**New backend files:**
+- `backend/app/services/ops/routing_service.py` — OSRM driving route + straight-line fallback (40 km/h)
+- `backend/app/services/ops/ws_manager.py` — in-memory WS broadcast hub (`WsManager`, process-level `manager` singleton)
+- `backend/app/services/ops/sim_service.py` — asyncio task per dispatch: walks route at `TICK_SEC=0.8s`, broadcasts `PATROL_LOCATION`, status lifecycle `ACCEPTED→EN_ROUTE→ON_SCENE→COMPLETED→IDLE`
+
+**Schemas appended:** `PatrolOut`, `DispatchRequest`, `DispatchOut`
+
+**Endpoints added to `ops.py`:**
+- `GET /api/ops/patrols`, `POST /api/ops/dispatch`, `POST /api/ops/dispatch/{id}/simulate`
+- `GET /api/ops/dispatch/{id}/state` (polling fallback)
+- `WS /api/ops/ws?token=` — live event stream, auth via JWT query param
+
+**New frontend:**
+- `frontend/src/components/ops/DispatchPanel.tsx` — patrol map + scene coords input + Dispatch button + live ETA card + WS-driven position updates
+
+---
+
+#### Phase 3 — Green Corridor (SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md)
+
+**Port of EMERGE `greenCorridor.js`.**
+
+**New backend file:**
+- `backend/app/services/ops/corridor_service.py` — `activate_near(lat, lng)` (300m radius, emit-on-change), `reset_all()` (on arrival)
+
+**3 additive edits:**
+- `sim_service.py` — imports `corridor_service`; calls `reset_all()` after ON_SCENE broadcast
+- `ops.py` — `corridor_service` + `TrafficSignal` imports; `simulate` passes `on_move=corridor_service.activate_near`; `GET /api/ops/signals` endpoint
+- `responseOps.ts` — `Signal` type + `signals()` method
+- `DispatchPanel.tsx` — `signals` state + load on mount + WS SIGNAL_GREEN/SIGNAL_RESET handlers + `signals` prop to `CrimeMap`
+- `CrimeMap.tsx` — `signals` optional prop + `signalLayerRef` draw effect (green/gray dots)
+
+---
+
+#### Phase 4 — Camera Review (SATYAM_OPS_PHASE4_CAMERA_REVIEW.md)
+
+**Port of EMERGE confidence-tier detection + human-review flow.**
+
+**New backend files:** `backend/app/schemas/ops.py` appended — `DetectNotify`, `ReviewItemOut`, `CameraOut`
+
+**Endpoints added to `ops.py`:**
+- `POST /api/ops/detect/notify` — confidence gating (LOW=0.5, HIGH=0.8); geo-fill from camera; broadcasts `INCIDENT_CANDIDATE`
+- `GET /api/ops/cameras`, `GET /api/ops/review-queue`
+- `POST /api/ops/review-queue/{id}/confirm` — `cases` INSERT (CCTV-{id}, valid station FK) + auto-dispatch nearest patrol
+- `POST /api/ops/review-queue/{id}/reject`
+
+**New ai_camera sibling (separate process, optional):**
+- `ai_camera/requirements.txt` — ultralytics, opencv-python, httpx, numpy
+- `ai_camera/notify.py` — thin HTTP client to `/api/ops/detect/notify`
+- `ai_camera/detect_video.py` — YOLOv8 on video/webcam; stalled vehicle ≥2.5s → confidence ramp
+
+**New frontend:**
+- `frontend/src/components/ops/ReviewPanel.tsx` — candidate card grid with frame preview, confidence tier badge, Confirm/Reject; live WS updates on `INCIDENT_CANDIDATE`
+- `responseOps.ts` — `ReviewItem`, `CameraInfo` types + `cameras()`, `reviewQueue()`, `confirmReview()`, `rejectReview()` methods
+
+---
+
+#### Bug-Fix Pack (SATYAM_OPS_BUGFIX_PACK.md)
+
+10 bugs fixed across `ops.py`, `sim_service.py`, `routing_service.py`, `init_ops.py`, `CrimeMap.tsx`, `DispatchPanel.tsx`, `ReviewPanel.tsx`, `operations.tsx`:
+
+| # | Severity | Fix |
+|---|----------|-----|
+| 1 | 🔴 HIGH | Patrol marked `EN_ROUTE` on dispatch; `ON_SCENE_HOLD_SEC=6` hold then `COMPLETED→IDLE` lifecycle in sim |
+| 2 | 🔴 HIGH | Null patrol coords guard in `dispatch` endpoint + `ValueError` at top of `get_route` |
+| 3 | 🔴 HIGH | Camera confirm resolves real station FK (officer's station, else first seeded; never `0`) |
+| 4 | 🔴 HIGH | `ReviewPanel.confirm` now calls `responseOps.simulate(res.dispatch_id)` to animate the auto-dispatch |
+| 5 | 🟡 MED | `CrimeMap` gets `routePath` prop (static blue polyline) + `liveMarker` prop (single panning green dot) — no double-draw, no zoom-bounce |
+| 6 | 🟡 MED | `DispatchPanel` WS subscribes once (`[]` dep); `activeRef` fixes stale-closure; `DISPATCH_STATUS=COMPLETED` refreshes patrol list |
+| 7 | 🟡 MED | "Green Corridor" dead tab removed; merged into "Dispatch & Green Corridor"; `TrafficCone` import dropped |
+| 8 | 🟡 MED | Suggestions `NULLs FIRST` fixed with `.order_by(is_(None), desc())` |
+| 9 | 🟡 MED | `init_ops --reset` clears transient state (dispatches/reviews/suggestions/zones, units→IDLE, signals→NORMAL) |
+| 10 | 🔴 HIGH | WS endpoint rebuilds `Principal` from JWT claims; enforces `RUN_ANALYTICS` clearance (L2+); L1 tokens get `4403` |
+
+---
+
+#### Architecture Doc Updated (docs/ARCHITECTURE.md — v1.3)
+
+- Last updated: `2026-06-19` → `2026-06-20`, version `v1.2` → `v1.3`
+- New **§10 Response Ops Module** — full architecture description: phases 0–4, risk scoring formula, dispatch lifecycle, OSRM/straight-line routing, green corridor constants, camera review confidence tiers, frontend panels, all bug fixes
+- **§9 intelligence table** — added OPS row
+- **§11 Frontend Architecture** — `/operations` route added to route map; ops panel components added to component table; `responseOps.ts` added to key libraries; `CrimeMap.tsx` ops props documented
+- **§13 Configuration** — `ENABLE_RESPONSE_OPS` env var added
+- **§13.4 Response Ops API** — full 15-endpoint table added
+- **Appendix file tree** — `ai_camera/`, `components/ops/`, `responseOps.ts` all added

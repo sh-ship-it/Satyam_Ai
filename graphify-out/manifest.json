@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
-    "mtime": 1781942607.4613576,
-    "ast_hash": "d1a04a8b2224349bd2a219f334dbcad4",
+    "mtime": 1781945580.9646685,
+    "ast_hash": "6d291e16b47be91b6985a25368ffa055",
     "semantic_hash": ""
   },
   "frontend/src/components/DarkModeToggle.tsx": {
@@ -1210,8 +1210,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/ops.py": {
-    "mtime": 1781942948.4300053,
-    "ast_hash": "a5106debf83377ad8842156518fe38f9",
+    "mtime": 1781945503.5055947,
+    "ast_hash": "65a5b591f5a9aecc174ed7abbf30ee0b",
     "semantic_hash": ""
   },
   "backend/app/db/ops_models.py": {
@@ -1220,8 +1220,8 @@
     "semantic_hash": ""
   },
   "backend/seed/init_ops.py": {
-    "mtime": 1781939364.407176,
-    "ast_hash": "1059825c3e21db5ce71665db8c88d70b",
+    "mtime": 1781945555.8937554,
+    "ast_hash": "56c74a3727125246b454a89cde7efb91",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/responseOps.ts": {
@@ -1230,8 +1230,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/operations.tsx": {
-    "mtime": 1781943065.4250648,
-    "ast_hash": "e3d8604178cc5eb72bf3fb598432381d",
+    "mtime": 1781945663.0271778,
+    "ast_hash": "7a7b06f7fc797382bde64998a47eda64",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE0_SCAFFOLD.md": {
@@ -1265,13 +1265,13 @@
     "semantic_hash": ""
   },
   "backend/app/services/ops/routing_service.py": {
-    "mtime": 1781941650.609901,
-    "ast_hash": "8b4536037a6978731665e847de62b8eb",
+    "mtime": 1781945531.1458561,
+    "ast_hash": "690e3792853775f1f29f00549ab32294",
     "semantic_hash": ""
   },
   "backend/app/services/ops/sim_service.py": {
-    "mtime": 1781942345.297723,
-    "ast_hash": "069f85386fa26918787d1cda737f5591",
+    "mtime": 1781945521.6079803,
+    "ast_hash": "949884305cce90187756f761097c2e1e",
     "semantic_hash": ""
   },
   "backend/app/services/ops/ws_manager.py": {
@@ -1280,8 +1280,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ops/DispatchPanel.tsx": {
-    "mtime": 1781942455.5826125,
-    "ast_hash": "ea20173ea1a5ae1b9640127371b07b29",
+    "mtime": 1781945626.1641715,
+    "ast_hash": "cff7e9e8fa8958f4d91be934613d1539",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE2_DISPATCH_SIM.md": {
@@ -1310,8 +1310,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ops/ReviewPanel.tsx": {
-    "mtime": 1781943041.6076565,
-    "ast_hash": "a07fce7d78b2d659c42c27ac8cda5aff",
+    "mtime": 1781945633.973078,
+    "ast_hash": "37508eace4893c70da44f998b801497f",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE4_CAMERA_REVIEW.md": {
@@ -1322,6 +1322,11 @@
   "ai_camera/requirements.txt": {
     "mtime": 1781942955.3913388,
     "ast_hash": "159a2c68ffd071145340f8ad7cb1e3c8",
+    "semantic_hash": ""
+  },
+  "SATYAM_OPS_BUGFIX_PACK.md": {
+    "mtime": 1781945389.3724456,
+    "ast_hash": "91221027760ea8439b623db0586b6bb2",
     "semantic_hash": ""
   }
 }

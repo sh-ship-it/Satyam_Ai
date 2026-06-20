@@ -3,7 +3,7 @@
 > **Project:** Satyam — Bilingual Voice-Enabled Crime Intelligence AI
 > **Event:** Datathon 2026 · KSP × hack2skill
 > **Stack:** Python 3.11 · FastAPI · PostgreSQL 16 + pgvector · React 19 · TanStack Start
-> **Last updated:** 2026-06-19
+> **Last updated:** 2026-06-20
 
 ---
 
@@ -371,6 +371,7 @@ Every query: `row_hash = SHA-256(prev_hash + timestamp + user_id + action + quer
 | PS6 | Similar Cases + Timeline | `/api/cases/{id}/similar`, `/api/cases/similar/search`, `/api/cases/{id}/timeline` | ✅ Full + Description search UI |
 | PS7 | Financial Intelligence | `/financial/money-trail` (BFS over financial_accounts/transactions) | ✅ Full — NOT via Text-to-SQL |
 | PS8 | Early Warning & Forecast | `/api/forecast/hotspots`, `/api/forecast/alerts`, `/api/forecast/backtest` | ✅ Full (real PAI backtest) |
+| **OPS** | **Response Ops** (feature-flagged) | `/api/ops/*` — risk zones, dispatch, green corridor, camera review | ✅ Full (Phases 0–4, `ENABLE_RESPONSE_OPS=true`) |
 
 ### PS2 — Network Screen (3 tabs)
 
@@ -386,9 +387,91 @@ Every query: `row_hash = SHA-256(prev_hash + timestamp + user_id + action + quer
 
 ---
 
-## 10. Frontend Architecture
+## 10. Response Ops Module (`ENABLE_RESPONSE_OPS=true`)
 
-### 10.1 Route Map
+A feature-flagged, fully isolated module ported from EMERGE. Off by default — when off the app behaves byte-for-byte identically. Activated via `ENABLE_RESPONSE_OPS=true` in `backend/.env`. All ops tables are `ops_*` prefixed; no existing table is altered.
+
+### 10.1 Architecture
+
+```
+ops_patrol_units      — callsign, lat/lng, status (IDLE|EN_ROUTE|ON_SCENE|OFFLINE)
+ops_traffic_signals   — junction_id, lat/lng, state (NORMAL|GREEN)
+ops_risk_zones        — grid_key, risk_score, risk_label (grid scoring output)
+ops_patrol_suggestions— risk_zone_id → patrol_id, distance_km, response_improve_sec
+ops_incident_dispatches— patrol→scene route, status lifecycle
+ops_cameras           — camera metadata
+ops_incident_review_queue — AI-detected candidates awaiting human review
+```
+
+### 10.2 Phases
+
+| Phase | Feature | Key files |
+|-------|---------|-----------|
+| **0** | Tables + empty router + nav entry | `db/ops_models.py`, `api/routes/ops.py`, `seed/init_ops.py`, `routes/operations.tsx` |
+| **1** | Predictive deployment (grid scoring) | `services/ops/risk_service.py` → `GET /api/ops/risk-zones`, `GET /api/ops/suggestions` |
+| **2** | Dispatch nearest patrol + GPS simulation | `services/ops/routing_service.py`, `services/ops/sim_service.py` → `POST /api/ops/dispatch`, WS `/api/ops/ws` |
+| **3** | Green corridor (signals flip GREEN on route) | `services/ops/corridor_service.py` → `GET /api/ops/signals` |
+| **4** | AI camera → human review → case + dispatch | `POST /api/ops/detect/notify`, `GET /api/ops/cameras`, `GET /api/ops/review-queue`, confirm/reject |
+
+### 10.3 Risk Scoring (Phase 1)
+
+Python port of EMERGE `predictiveReadinessService.js`:
+- `GRID_SIZE=0.01` (~1.1 km cells), `LOOKBACK_DAYS=365`
+- Score = `incident_score (max 40)` + `density_score (max 30)` + `time_score (max 30)`
+- Labels: Critical ≥75 / High ≥55 / Medium ≥30 / Low
+- 5-min debounce (`RECOMPUTE_DEBOUNCE_SEC=300`) prevents flooding on `?refresh=true`
+- Suggestions: top-5 zones → nearest IDLE patrol → `distance_km` + `response_improve_sec`
+
+### 10.4 Dispatch Simulation (Phase 2)
+
+- OSRM driving route (free public API); straight-line fallback with error key
+- Simulation runs as an `asyncio.Task` — walks route coords at `TICK_SEC=0.8s`
+- Broadcasts `PATROL_LOCATION` events over the single `/api/ops/ws` WebSocket
+- Status lifecycle: `IDLE → EN_ROUTE → ON_SCENE (6s hold) → COMPLETED → IDLE`
+- WS auth: `?token=<JWT>` query param; enforces `RUN_ANALYTICS` clearance (L2+)
+
+### 10.5 Green Corridor (Phase 3)
+
+- `ACTIVATION_RADIUS_KM=0.3` — mirrors EMERGE constant
+- Per-tick `corridor_service.activate_near(lat, lng)` flips nearby signals GREEN (emit-only-on-change)
+- `reset_all()` called on `ON_SCENE` arrival → `SIGNAL_RESET` broadcast → map dots go gray
+
+### 10.6 Camera Review (Phase 4)
+
+- Confidence tiers: `LOW_CONF=0.5` (ignored), `0.5–0.8` (MEDIUM, queue), `≥0.8` (HIGH, auto-flag)
+- `POST /api/ops/detect/notify` — called by the separate `ai_camera/` YOLO process (no import of Satyam)
+- **Confirm** → `cases` INSERT (CCTV-{id}, valid station FK, Suo Motu) + auto-dispatch nearest patrol + simulate
+- **Reject** → status=REJECTED, no case
+- `ai_camera/detect_video.py` — YOLOv8 on video/webcam; stalled vehicle ≥2.5s → confidence ramp → notify
+
+### 10.7 Frontend
+
+| Route | Tab | Component |
+|-------|-----|-----------|
+| `/operations` | Predictive Deployment | `PredictivePanel` — heat map + suggestion cards (Accept/Dismiss) |
+| `/operations` | Dispatch & Green Corridor | `DispatchPanel` — patrol map + route line + gliding live marker + signal dots |
+| `/operations` | Camera Review | `ReviewPanel` — candidate cards with frame preview + Confirm/Reject |
+
+`CrimeMap.tsx` extended with:
+- `routePath` prop — static blue polyline (dispatch route, no animation)
+- `liveMarker` prop — single green dot that pans the map without zoom-bouncing
+- `signals` prop — junction dots (green=active, gray=normal)
+
+**Bug fixes applied (bugfix pack):**
+- Patrol marked `EN_ROUTE` on dispatch; `COMPLETED→IDLE` lifecycle after 6s on-scene hold
+- Null coordinate guard on `dispatch` + `get_route` ValueError
+- Camera confirm: resolves valid station FK (never `station_id=0`)
+- `ReviewPanel.confirm` kicks off live simulation for the auto-dispatch
+- WS stable connection (single subscription, `activeRef` stale-closure fix)
+- `suggestions` ordering: NULLs last on `response_improve_sec DESC`
+- `init_ops --reset` clears transient state between demo runs
+- WS enforces `RUN_ANALYTICS` clearance gate (L2+, closes `4403` for L1 tokens)
+
+---
+
+## 11. Frontend Architecture
+
+### 11.1 Route Map
 
 ```
 /                     Landing page (hero background video)
@@ -402,45 +485,50 @@ Every query: `row_hash = SHA-256(prev_hash + timestamp + user_id + action + quer
 /reports              Report builder + live preview + PDF print
 /audit                Hash-chain audit log
 /transcripts          Conversations tab (PDF export) + Voice transcripts tab
+/operations           Response Ops (feature-flagged) — Predictive / Dispatch+Corridor / Camera Review
 /about                Project info
 ```
 
-### 10.2 Components
+### 11.2 Components
 
 | Component | Purpose |
 |-----------|---------|
 | `Shell.tsx` | Nav + voice command router + language toggle + theme picker + copilot mic (Browser/Sarvam) |
 | `CaseDrawer.tsx` | Sliding case detail (Summary / Persons / Timeline / Similar / Map tabs) |
-| `CrimeMap.tsx` | Leaflet heat/pin/grid map |
+| `CrimeMap.tsx` | Leaflet heat/pin/grid map + `routePath` + `liveMarker` + `signals` (ops extensions) |
 | `FinancialLinksPanel.tsx` | SVG money-trail graph + flows table (PS7) |
 | `RingsPanel.tsx` | Criminal ring detection cards (PS2) |
 | `SimilarCaseSearch.tsx` | Description-based similar case search widget (PS6) |
 | `ThemePicker.tsx` | 6 professional + 8 legacy colour themes |
 | `SettingsDialog.tsx` | Live engine overrides (brain/SQL/voice/copilotStt) + DB source picker |
 | `ProfileMenu.tsx` | User profile + logout |
+| `ops/PredictivePanel.tsx` | Risk zone heat map + patrol suggestion cards |
+| `ops/DispatchPanel.tsx` | Patrol map + dispatch controls + live GPS animation |
+| `ops/ReviewPanel.tsx` | CCTV incident review queue |
 
-### 10.3 Key Libraries
+### 11.3 Key Libraries
 
 ```
 src/lib/
   i18n.tsx              Custom i18n: I18nProvider, useI18n(), useT(), DICT (200+ EN→KN)
   tData.ts              tData(field, value, lang) — categorical DB value lookup
-  conversationStore.ts  NEW: loadConversations() from localStorage for Transcripts screen
-  pdf/conversationPdf.ts NEW: exportConversationPdf() — branded print-to-PDF
+  conversationStore.ts  loadConversations() from localStorage for Transcripts screen
+  pdf/conversationPdf.ts exportConversationPdf() — branded print-to-PDF
   api/
     client.ts           REST + SSE streamChat()
     intelligence.ts     PS2–PS8 typed wrappers + listOffenders() + searchPersonsAndCases()
-    financial.ts        NEW: financial.moneyTrail() for PS7
+    financial.ts        financial.moneyTrail() for PS7
+    responseOps.ts      Response-Ops typed client (opsFetch, openOpsSocket)
   voice/
-    tts.ts              speakViaSarvam()
-    recorder.ts         MediaRecorder STT
+    tts.ts              speakViaSarvam(), stripMarkdown()
+    recorder.ts         MediaRecorder STT + startSttSession()
     lang.ts             detectLang(), resolveLang()
 locales/
   kn-data.json          Kannada lookup: 9 fields, 150+ entries (all 41 districts)
   en.json               Reference copy (not loaded by app)
 ```
 
-### 10.4 Theme System
+### 11.4 Theme System
 
 6 professional themes via `data-theme` on `<html>`: slate, indigo, forest, graphite, midnight, pine. Plus 8 legacy themes via inline CSS variable overrides. `html[lang="kn"]` applies Noto Sans Kannada globally.
 
@@ -512,6 +600,26 @@ locales/
 | `POST /voice/stt` | L1 | Audio → transcript |
 | `POST /voice/translate` | L1 | MT EN↔KN via Sarvam Mayura v1 |
 
+### 13.4 Response Ops (`/api/ops/` — requires `ENABLE_RESPONSE_OPS=true`)
+
+| Path | Clearance | Notes |
+|------|-----------|-------|
+| `GET /api/ops/health` | L1 | Liveness probe for the ops module |
+| `GET /api/ops/risk-zones` | L2+ | Scored grid zones; `?refresh=true` forces recompute |
+| `GET /api/ops/suggestions` | L2+ | Pending patrol pre-positioning suggestions |
+| `POST /api/ops/suggestions/{id}/{action}` | L2+ | accept \| dismiss |
+| `GET /api/ops/patrols` | L2+ | All patrol units with status/location |
+| `POST /api/ops/dispatch` | L2+ | Create dispatch (nearest or explicit patrol) |
+| `POST /api/ops/dispatch/{id}/simulate` | L2+ | Start live GPS animation task |
+| `GET /api/ops/dispatch/{id}/state` | L2+ | Polling fallback for latest position |
+| `GET /api/ops/signals` | L2+ | All traffic signal states |
+| `POST /api/ops/detect/notify` | L2+ | YOLO camera service posts candidate |
+| `GET /api/ops/cameras` | L2+ | Camera list |
+| `GET /api/ops/review-queue` | L2+ | Pending CCTV review items |
+| `POST /api/ops/review-queue/{id}/confirm` | L2+ | File case + auto-dispatch |
+| `POST /api/ops/review-queue/{id}/reject` | L2+ | Reject candidate |
+| `WS /api/ops/ws?token=` | L2+ | Live event stream (PATROL_LOCATION, SIGNAL_GREEN, INCIDENT_CANDIDATE, …) |
+
 ---
 
 ## 13. Configuration & Environment
@@ -532,6 +640,7 @@ locales/
 | `OLLAMA_CLOUD_API_KEY` | `""` | qwen3-coder-next SQL option |
 | `VITE_API_BASE_URL` | `http://localhost:8000` | Frontend base URL |
 | `VECTOR_TYPE` | `vector` | `vector` (local) \| `halfvec` (Neon) |
+| `ENABLE_RESPONSE_OPS` | `false` | `true` to activate the Response Ops module |
 
 **Demo mode:** when both `GEMINI_API_KEY` and `GROQ_API_KEY` are empty, `demo_mode = True` — `rule_sql.py` handles SQL generation and `_render_grounded()` handles answer composition. No API keys required for a working demo with a seeded DB.
 
@@ -626,22 +735,28 @@ satyam/
 │
 ├── frontend/src/
 │   ├── routes/            console, network, forecast, trends, socio, profile.$personId,
-│   │                      reports, audit, transcripts(REWRITTEN), login, index, about
-│   ├── components/        Shell, CaseDrawer, CrimeMap, FinancialLinksPanel(NEW),
-│   │                      RingsPanel(NEW), SimilarCaseSearch(NEW), ThemePicker,
+│   │                      reports, audit, transcripts, login, index, about, operations(NEW)
+│   ├── components/        Shell, CaseDrawer, CrimeMap(+ops-props), FinancialLinksPanel,
+│   │                      RingsPanel, SimilarCaseSearch, ThemePicker,
 │   │                      SettingsDialog, ProfileMenu, AccountManager
+│   │   └── ops/           PredictivePanel, DispatchPanel, ReviewPanel
 │   ├── lib/
 │   │   ├── i18n.tsx        Custom i18n DICT (200+ EN→KN keys)
 │   │   ├── tData.ts        Categorical DB value translation
-│   │   ├── conversationStore.ts  NEW: loads chat history for Transcripts
-│   │   ├── pdf/conversationPdf.ts  NEW: branded print-to-PDF
-│   │   ├── api/            client.ts, intelligence.ts, financial.ts(NEW)
+│   │   ├── conversationStore.ts  loads chat history for Transcripts
+│   │   ├── pdf/conversationPdf.ts  branded print-to-PDF
+│   │   ├── api/            client.ts, intelligence.ts, financial.ts, responseOps.ts(NEW)
 │   │   └── voice/          tts.ts, recorder.ts, lang.ts
 │   └── locales/            kn-data.json (150+ entries), en.json
+│
+├── ai_camera/             YOLO sibling process (optional, Phase 4)
+│   ├── requirements.txt   ultralytics, opencv, httpx
+│   ├── notify.py          POST candidates to /api/ops/detect/notify
+│   └── detect_video.py    YOLOv8 on video/webcam
 │
 └── docs/ARCHITECTURE.md    ← this file
 ```
 
 ---
 
-*Last updated: 2026-06-18 · Satyam v1.2 · Datathon 2026 KSP × hack2skill*
+*Last updated: 2026-06-20 · Satyam v1.3 · Datathon 2026 KSP × hack2skill*
