@@ -33,6 +33,11 @@ export type DispatchResult = {
   distance_km?: number | null; duration_sec?: number | null; eta_sec?: number | null;
   route: number[][];
 };
+export type ActiveDispatch = {
+  dispatchId: number; patrolId: number; callsign?: string;
+  lat: number; lng: number; status: string; phase: string;
+  eta_sec: number; progress: number; sceneLat?: number | null; sceneLng?: number | null;
+};
 export type Signal = { id: number; junction_id: string; lat: number; lng: number; state: "NORMAL" | "GREEN" };
 export type ReviewItem = {
   id: number; camera_id: string; candidate_type: string; confidence: number;
@@ -53,6 +58,9 @@ export const responseOps = {
   dispatch: (body: { scene_lat: number; scene_lng: number; case_id?: number; patrol_id?: number }) =>
     opsFetch<DispatchResult>("/dispatch", { method: "POST", body: JSON.stringify(body) }),
   simulate: (id: number) => opsFetch<{ ok: boolean }>(`/dispatch/${id}/simulate`, { method: "POST" }),
+  activeDispatches: () => opsFetch<{ active: ActiveDispatch[] }>("/dispatch/active"),
+  simulateAll: () => opsFetch<{ ok: boolean; started: number }>("/dispatch/simulate-all", { method: "POST" }),
+  stopAll: () => opsFetch<{ ok: boolean }>("/dispatch/stop-all", { method: "POST" }),
   signals: () => opsFetch<Signal[]>("/signals"),
   cameras: () => opsFetch<CameraInfo[]>("/cameras"),
   reviewQueue: () => opsFetch<ReviewItem[]>("/review-queue"),

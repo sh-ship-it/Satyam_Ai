@@ -1,22 +1,28 @@
-"""Live patrol simulation — Python port of EMERGE demoSimulationService.js."""
+"""Live patrol simulation — Python port of EMERGE demoSimulationService.js.
+
+Adds (parity pack): an ACCEPTED phase, a `phase` field on every broadcast, an
+in-memory active-dispatch registry (active_states/active_ids), simulate-all /
+stop-all support, and up-front whole-route green-corridor activation.
+"""
 from __future__ import annotations
 
 import asyncio
 
-from sqlalchemy import update
+from sqlalchemy import select, update
 
 from app.db.ops_models import IncidentDispatch, PatrolUnit
 from app.db.session import get_sessionmaker
 from app.services.ops import corridor_service
 from app.services.ops.ws_manager import manager
 
-TICK_SEC = 0.8           # interval between coordinate steps
-MAX_POINTS = 60          # subsample long routes to <= this many steps
-ON_SCENE_HOLD_SEC = 6    # keep unit ON_SCENE this long, then free it (-> IDLE)
+TICK_SEC = 0.8            # interval between coordinate steps
+MAX_POINTS = 60           # subsample long routes to <= this many steps
+ON_SCENE_HOLD_SEC = 6     # keep unit ON_SCENE this long, then free it (-> IDLE)
+ACCEPTED_HOLD_SEC = 2     # brief ACCEPTED phase before moving (mirrors EMERGE)
 
 # dispatch_id -> asyncio.Task
 _running: dict[int, asyncio.Task] = {}
-# dispatch_id -> latest {lat,lng,status,eta_sec} for the polling fallback
+# dispatch_id -> latest {lat,lng,status,phase,eta_sec,progress,callsign,...}
 _latest: dict[int, dict] = {}
 
 
@@ -25,16 +31,15 @@ def latest_state(dispatch_id: int) -> dict | None:
 
 
 def active_states() -> list[dict]:
-    """Latest position/status for every simulation still running."""
+    """Snapshot of every dispatch that is not finished (drives the Active list)."""
     return [
-        {"dispatchId": did, **_latest[did]}
-        for did in list(_running.keys())
-        if did in _latest
+        {"dispatchId": did, **st}
+        for did, st in _latest.items()
+        if st.get("status") not in ("COMPLETED", "CANCELLED")
     ]
 
 
 def active_ids() -> list[int]:
-    """IDs of simulations still running (used by Stop All)."""
     return list(_running.keys())
 
 
@@ -54,45 +59,92 @@ async def _persist_status(dispatch_id: int, patrol_id: int, status: str,
     async with sm() as db:
         async with db.begin():
             await db.execute(update(IncidentDispatch).where(IncidentDispatch.id == dispatch_id).values(status=status))
-            vals: dict = {"status": {"COMPLETED": "IDLE", "CANCELLED": "IDLE", "ON_SCENE": "ON_SCENE"}.get(status, "EN_ROUTE")}
+            vals: dict = {"status": {"COMPLETED": "IDLE", "ON_SCENE": "ON_SCENE"}.get(status, "EN_ROUTE")}
             if lat is not None:
                 vals["lat"], vals["lng"] = lat, lng
             await db.execute(update(PatrolUnit).where(PatrolUnit.id == patrol_id).values(**vals))
 
 
+async def _load_meta(dispatch_id: int, patrol_id: int) -> dict:
+    sm = get_sessionmaker()
+    async with sm() as db:
+        callsign = (await db.execute(
+            select(PatrolUnit.callsign).where(PatrolUnit.id == patrol_id)
+        )).scalar()
+        disp = (await db.execute(
+            select(IncidentDispatch).where(IncidentDispatch.id == dispatch_id)
+        )).scalar_one_or_none()
+    return {
+        "patrolId": patrol_id,
+        "callsign": callsign or f"Unit #{patrol_id}",
+        "sceneLat": disp.scene_lat if disp else None,
+        "sceneLng": disp.scene_lng if disp else None,
+    }
+
+
+async def _emit_status(dispatch_id: int, status: str, phase: str) -> None:
+    await manager.broadcast({"type": "DISPATCH_STATUS", "dispatchId": dispatch_id, "status": status, "phase": phase})
+
+
 async def _run(dispatch_id: int, patrol_id: int, coords: list[list[float]],
                duration_sec: int, on_move=None) -> None:
-    """on_move(lat,lng) optional async hook (Phase 3 green corridor)."""
+    """on_move(lat,lng) optional async hook (per-tick near-corridor activation)."""
     pts = _subsample(coords)
     n = max(1, len(pts))
+    meta = await _load_meta(dispatch_id, patrol_id)
+
+    # --- ACCEPTED (brief) ---
+    first_lng, first_lat = pts[0]
+    _latest[dispatch_id] = {**meta, "lat": first_lat, "lng": first_lng,
+                            "status": "ACCEPTED", "phase": "ACCEPTED",
+                            "eta_sec": duration_sec, "progress": 0.0}
+    await _persist_status(dispatch_id, patrol_id, "ACCEPTED", first_lat, first_lng)
+    await _emit_status(dispatch_id, "ACCEPTED", "ACCEPTED")
+    await asyncio.sleep(ACCEPTED_HOLD_SEC)
+
+    # --- EN_ROUTE: light the whole corridor up-front, then start moving ---
     await _persist_status(dispatch_id, patrol_id, "EN_ROUTE")
-    await manager.broadcast({"type": "DISPATCH_STATUS", "dispatchId": dispatch_id, "status": "EN_ROUTE"})
+    await _emit_status(dispatch_id, "EN_ROUTE", "EN_ROUTE")
+    try:
+        await corridor_service.activate_corridor(pts, patrol_id=patrol_id, callsign=meta["callsign"])
+    except Exception:  # noqa: BLE001 - corridor is best-effort
+        pass
+
     try:
         for i, (lng, lat) in enumerate(pts):
             remaining = int(duration_sec * (1 - i / n))
-            _latest[dispatch_id] = {"lat": lat, "lng": lng, "status": "EN_ROUTE", "eta_sec": remaining}
+            progress = round((i + 1) / n, 3)
+            _latest[dispatch_id] = {**meta, "lat": lat, "lng": lng,
+                                    "status": "EN_ROUTE", "phase": "EN_ROUTE",
+                                    "eta_sec": remaining, "progress": progress}
             await manager.broadcast({
                 "type": "PATROL_LOCATION", "dispatchId": dispatch_id, "patrolId": patrol_id,
-                "lat": lat, "lng": lng, "etaSec": remaining,
-                "progress": round((i + 1) / n, 3),
+                "lat": lat, "lng": lng, "etaSec": remaining, "progress": progress, "phase": "EN_ROUTE",
             })
             if on_move:
                 await on_move(lat, lng)
             await asyncio.sleep(TICK_SEC)
-        # arrived
+
+        # --- ON_SCENE ---
         last_lng, last_lat = pts[-1]
         await _persist_status(dispatch_id, patrol_id, "ON_SCENE", last_lat, last_lng)
-        _latest[dispatch_id] = {"lat": last_lat, "lng": last_lng, "status": "ON_SCENE", "eta_sec": 0}
-        await manager.broadcast({"type": "DISPATCH_STATUS", "dispatchId": dispatch_id, "status": "ON_SCENE"})
+        _latest[dispatch_id] = {**meta, "lat": last_lat, "lng": last_lng,
+                                "status": "ON_SCENE", "phase": "ON_SCENE", "eta_sec": 0, "progress": 1.0}
+        await _emit_status(dispatch_id, "ON_SCENE", "ON_SCENE")
         await corridor_service.reset_all()
-        # Hold on-scene briefly, then free the unit so it can be dispatched again.
         await asyncio.sleep(ON_SCENE_HOLD_SEC)
+
+        # --- COMPLETED (unit freed -> IDLE) ---
         await _persist_status(dispatch_id, patrol_id, "COMPLETED", last_lat, last_lng)
-        _latest[dispatch_id] = {"lat": last_lat, "lng": last_lng, "status": "COMPLETED", "eta_sec": 0}
-        await manager.broadcast({"type": "DISPATCH_STATUS", "dispatchId": dispatch_id, "status": "COMPLETED"})
+        _latest[dispatch_id] = {**meta, "lat": last_lat, "lng": last_lng,
+                                "status": "COMPLETED", "phase": "COMPLETED", "eta_sec": 0, "progress": 1.0}
+        await _emit_status(dispatch_id, "COMPLETED", "COMPLETED")
     except asyncio.CancelledError:
         await _persist_status(dispatch_id, patrol_id, "CANCELLED")
-        await manager.broadcast({"type": "DISPATCH_STATUS", "dispatchId": dispatch_id, "status": "CANCELLED"})
+        try:
+            await corridor_service.reset_all()
+        except Exception:  # noqa: BLE001
+            pass
         raise
     finally:
         _running.pop(dispatch_id, None)
@@ -111,3 +163,8 @@ def stop(dispatch_id: int) -> None:
     task = _running.get(dispatch_id)
     if task:
         task.cancel()
+
+
+def stop_all() -> None:
+    for did in list(_running.keys()):
+        stop(did)

@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
 import { useState } from "react";
-import { Siren, Radar, Truck, Video, Radio } from "lucide-react";
+import { Siren, Radar, Truck, Video, Radio, Map as MapIcon } from "lucide-react";
 import { useT } from "@/lib/i18n";
+import { LiveOperationsMap } from "@/components/ops/LiveOperationsMap";
 import { PredictivePanel } from "@/components/ops/PredictivePanel";
 import { DispatchPanel } from "@/components/ops/DispatchPanel";
 import { ReviewPanel } from "@/components/ops/ReviewPanel";
@@ -13,18 +14,49 @@ export const Route = createFileRoute("/operations")({
   component: OperationsScreen,
 });
 
-type Tab = "demo" | "predict" | "dispatch" | "review";
+type Tab = "live" | "demo" | "predict" | "dispatch" | "review";
 
 function OperationsScreen() {
   const t = useT();
-  const [tab, setTab] = useState<Tab>("demo");
+  const [tab, setTab] = useState<Tab>("live");
 
   const TABS: { id: Tab; label: string; icon: any }[] = [
+    { id: "live", label: t("Live Map"), icon: MapIcon },
     { id: "demo", label: t("Demo Simulation"), icon: Radio },
     { id: "predict", label: t("Predictive Deployment"), icon: Radar },
     { id: "dispatch", label: t("Dispatch & Green Corridor"), icon: Truck },
     { id: "review", label: t("Camera Review"), icon: Video },
   ];
+
+  const tabBar = (
+    <nav className="flex gap-2 overflow-x-auto">
+      {TABS.map(({ id, label, icon: Icon }) => (
+        <button
+          key={id}
+          onClick={() => setTab(id)}
+          className={`inline-flex items-center gap-2 whitespace-nowrap rounded-[6px] border-2 border-foreground px-3 py-1.5 text-sm font-bold transition ${
+            tab === id ? "bg-foreground text-background" : "bg-background hover:bg-muted"
+          }`}
+        >
+          <Icon className="h-4 w-4" /> {label}
+        </button>
+      ))}
+    </nav>
+  );
+
+  // Live Map fills the viewport below the app header (no card padding).
+  if (tab === "live") {
+    return (
+      <Shell>
+        <div className="relative flex h-full min-h-0 flex-1 flex-col">
+          <div className="absolute left-1/2 top-3 z-[1100] -translate-x-1/2">{tabBar}</div>
+          <div className="relative flex-1">
+            <LiveOperationsMap />
+          </div>
+        </div>
+      </Shell>
+    );
+  }
 
   return (
     <Shell>
@@ -39,19 +71,7 @@ function OperationsScreen() {
           </div>
         </header>
 
-        <nav className="flex gap-2 overflow-x-auto">
-          {TABS.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => setTab(id)}
-              className={`inline-flex items-center gap-2 whitespace-nowrap rounded-[6px] border-2 border-foreground px-3 py-1.5 text-sm font-bold transition ${
-                tab === id ? "bg-foreground text-background" : "bg-background hover:bg-muted"
-              }`}
-            >
-              <Icon className="h-4 w-4" /> {label}
-            </button>
-          ))}
-        </nav>
+        {tabBar}
 
         <section className="rounded-[8px] border-2 border-foreground bg-background p-4">
           {tab === "demo" && <DemoSimPanel />}

@@ -25,6 +25,7 @@ export function CrimeMap({
   liveMarker,
   liveMarkers,
   routePaths,
+  corridorPath,
 }: {
   points: Hotspot[];
   mode?: Mode;
@@ -36,6 +37,7 @@ export function CrimeMap({
   liveMarker?: Hotspot | null;
   liveMarkers?: Hotspot[];
   routePaths?: Hotspot[][];
+  corridorPath?: [number, number][];
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
@@ -216,7 +218,34 @@ export function CrimeMap({
     return () => { if (routePathRef.current) { map.removeLayer(routePathRef.current); routePathRef.current = null; } };
   }, [routePath, ready]);
 
-  // --- Response-Ops: single live patrol marker that PANS, never hard-zooms ---
+  // --- Response-Ops: green-corridor glow (3-layer polyline along the route) ---
+  const corridorRef = useRef<any>(null);
+  useEffect(() => {
+    const map = mapRef.current, L = LRef.current;
+    if (!map || !L || !ready) return;
+    if (corridorRef.current) { map.removeLayer(corridorRef.current); corridorRef.current = null; }
+    if (!corridorPath || corridorPath.length < 2) return;
+    const latlngs = corridorPath as [number, number][];
+    const group = L.layerGroup();
+    L.polyline(latlngs, { color: "#00C896", weight: 16, opacity: 0.18 }).addTo(group);
+    L.polyline(latlngs, { color: "#00C896", weight: 8, opacity: 0.4 }).addTo(group);
+    L.polyline(latlngs, { color: "#00E6A8", weight: 3, opacity: 0.95 }).addTo(group);
+    group.addTo(map);
+    corridorRef.current = group;
+    try { map.fitBounds(L.latLngBounds(latlngs).pad(0.2)); } catch {}
+    return () => { if (corridorRef.current) { map.removeLayer(corridorRef.current); corridorRef.current = null; } };
+  }, [corridorPath, ready]);
+
+  // --- Response-Ops: pulse keyframes injected once (for the live marker) ---
+  useEffect(() => {
+    if (typeof document === "undefined" || document.getElementById("ops-pulse-kf")) return;
+    const st = document.createElement("style");
+    st.id = "ops-pulse-kf";
+    st.textContent = "@keyframes opspulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.8);opacity:0}}";
+    document.head.appendChild(st);
+  }, []);
+
+  // --- Response-Ops: single live patrol marker (animated vehicle) that PANS ---
   const liveMarkerRef = useRef<any>(null);
   useEffect(() => {
     const map = mapRef.current, L = LRef.current;
@@ -227,9 +256,14 @@ export function CrimeMap({
     }
     const ll: [number, number] = [liveMarker.lat, liveMarker.lng];
     if (!liveMarkerRef.current) {
-      liveMarkerRef.current = L.circleMarker(ll, {
-        radius: 9, color: "#0B5", weight: 3, fillColor: "#00C896", fillOpacity: 1,
-      }).addTo(map);
+      const icon = L.divIcon({
+        className: "",
+        html: `<div style="position:relative;display:flex;align-items:center;justify-content:center;width:30px;height:30px">`
+          + `<span style="position:absolute;width:30px;height:30px;border-radius:9999px;background:#00C89644;animation:opspulse 1.4s ease-out infinite"></span>`
+          + `<span style="position:relative;font-size:20px;line-height:1">\uD83D\uDE93</span></div>`,
+        iconSize: [30, 30], iconAnchor: [15, 15],
+      });
+      liveMarkerRef.current = L.marker(ll, { icon }).addTo(map);
       if (liveMarker.label) liveMarkerRef.current.bindTooltip(liveMarker.label);
     } else {
       liveMarkerRef.current.setLatLng(ll);

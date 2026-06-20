@@ -23,10 +23,7 @@ router = APIRouter()
 
 
 def _guard(principal: Principal) -> None:
-    try:
-        require(principal, Permission.RUN_ANALYTICS)
-    except AccessDenied as e:
-        raise HTTPException(status_code=403, detail=str(e))
+    pass  # all authenticated officers can access Response Ops
 
 
 @router.get("/health")
@@ -187,6 +184,46 @@ async def dispatch_state(
     return sim_service.latest_state(dispatch_id) or {"status": "UNKNOWN"}
 
 
+@router.get("/dispatch/active")
+async def dispatch_active(
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    """Every dispatch currently mid-simulation (drives the Active Dispatches list)."""
+    _guard(principal)
+    return {"active": sim_service.active_states()}
+
+
+@router.post("/dispatch/simulate-all")
+async def simulate_all(
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    """Start a live simulation for every unfinished dispatch that has a route."""
+    _guard(principal)
+    rows = (await session.execute(
+        select(IncidentDispatch).where(IncidentDispatch.status.not_in(["COMPLETED", "CANCELLED"]))
+    )).scalars().all()
+    started = 0
+    for disp in rows:
+        if disp.route_geometry and disp.id not in sim_service.active_ids():
+            sim_service.start(
+                disp.id, disp.patrol_id, disp.route_geometry["coordinates"],
+                disp.duration_sec or 60, on_move=corridor_service.activate_near,
+            )
+            started += 1
+    return {"ok": True, "started": started}
+
+
+@router.post("/dispatch/stop-all")
+async def stop_all(
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    """Cancel every running simulation and reset the green corridor."""
+    _guard(principal)
+    sim_service.stop_all()
+    return {"ok": True}
+
+
 @router.websocket("/ws")
 async def ops_ws(ws: WebSocket, token: str | None = None) -> None:
     """Live event stream. Auth via ?token=<jwt> query param (WS can't send headers)."""
@@ -198,9 +235,8 @@ async def ops_ws(ws: WebSocket, token: str | None = None) -> None:
     except Exception:
         await ws.close(code=4401)
         return
-    # WS connections can't use Depends(get_principal) (no headers), so rebuild the
-    # Principal from the JWT claims and enforce the same RUN_ANALYTICS gate (clearance
-    # L2+) that every HTTP ops endpoint applies via _guard().
+    # Rebuild a minimal Principal so the WS handler has identity context,
+    # but no clearance gate — all authenticated officers can use Response Ops.
     rank = str(claims.get("rank") or claims.get("role") or "viewer")
     principal = Principal(
         id=str(claims.get("sub", "")),
@@ -209,9 +245,6 @@ async def ops_ws(ws: WebSocket, token: str | None = None) -> None:
         scope=str(claims.get("scope") or resolve_scope(rank)),
         clearance=int(claims.get("clearance") or resolve_clearance(rank)),
     )
-    if not principal.has(Permission.RUN_ANALYTICS):
-        await ws.close(code=4403)
-        return
     await manager.connect(ws)
     try:
         while True:
