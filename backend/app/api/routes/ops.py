@@ -2,14 +2,17 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
+import datetime as dt
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_principal, get_scoped_session
 from app.core.rbac import AccessDenied, Permission, Principal, require
 from app.core.security import decode_token
-from app.db.ops_models import IncidentDispatch, PatrolSuggestion, PatrolUnit, RiskZone, TrafficSignal
+from app.db.models import Case
+from app.db.ops_models import Camera, IncidentDispatch, IncidentReview, PatrolSuggestion, PatrolUnit, RiskZone, TrafficSignal
 from app.schemas.ops import (
+    CameraOut, DetectNotify, ReviewItemOut,
     DispatchOut, DispatchRequest, PatrolOut,
     RiskZoneOut, RiskZonesResponse, SuggestionOut, SuggestionsResponse,
 )
@@ -205,3 +208,137 @@ async def signals(
     _guard(principal)
     rows = (await session.execute(select(TrafficSignal))).scalars().all()
     return [{"id": s.id, "junction_id": s.junction_id, "lat": s.lat, "lng": s.lng, "state": s.state} for s in rows]
+
+
+LOW_CONF = 0.5
+HIGH_CONF = 0.8
+
+
+@router.post("/detect/notify")
+async def detect_notify(
+    payload: DetectNotify,
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    """Called by the YOLO sibling service. Confidence-gated, like EMERGE."""
+    _guard(principal)
+    if payload.confidence < LOW_CONF:
+        return {"status": "IGNORED", "reason": "low confidence"}
+
+    # geo-fill from the camera if the detector didn't supply coords
+    lat, lng = payload.lat, payload.lng
+    if lat is None or lng is None:
+        cam = (await session.execute(select(Camera).where(Camera.camera_id == payload.camera_id))).scalar_one_or_none()
+        if cam:
+            lat, lng = cam.lat, cam.lng
+
+    item = IncidentReview(
+        camera_id=payload.camera_id, candidate_type=payload.candidate_type,
+        confidence=payload.confidence, lat=lat, lng=lng,
+        clip_path=payload.clip_path, frame_path=payload.frame_path,
+        status="PENDING",
+    )
+    session.add(item)
+    await session.flush()
+    await manager.broadcast({
+        "type": "INCIDENT_CANDIDATE", "id": item.id, "cameraId": payload.camera_id,
+        "confidence": payload.confidence, "lat": lat, "lng": lng,
+        "autoFlag": payload.confidence >= HIGH_CONF,
+    })
+    tier = "HIGH" if payload.confidence >= HIGH_CONF else "MEDIUM"
+    return {"status": "QUEUED", "tier": tier, "id": item.id}
+
+
+@router.get("/cameras", response_model=list[CameraOut])
+async def cameras(
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> list[CameraOut]:
+    _guard(principal)
+    rows = (await session.execute(select(Camera))).scalars().all()
+    return [CameraOut(id=c.id, camera_id=c.camera_id, name=c.name, location=c.location,
+                      lat=c.lat, lng=c.lng, is_active=c.is_active) for c in rows]
+
+
+@router.get("/review-queue", response_model=list[ReviewItemOut])
+async def review_queue(
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> list[ReviewItemOut]:
+    _guard(principal)
+    rows = (await session.execute(
+        select(IncidentReview).where(IncidentReview.status == "PENDING")
+        .order_by(IncidentReview.created_at.desc())
+    )).scalars().all()
+    return [ReviewItemOut(
+        id=r.id, camera_id=r.camera_id, candidate_type=r.candidate_type, confidence=r.confidence,
+        lat=r.lat, lng=r.lng, clip_path=r.clip_path, frame_path=r.frame_path, status=r.status,
+        created_at=r.created_at.isoformat() if r.created_at else None,
+    ) for r in rows]
+
+
+@router.post("/review-queue/{item_id}/reject")
+async def reject_item(
+    item_id: int,
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    _guard(principal)
+    await session.execute(
+        update(IncidentReview).where(IncidentReview.id == item_id)
+        .values(status="REJECTED", reviewed_by=principal.name or principal.id)
+    )
+    return {"ok": True, "id": item_id, "status": "REJECTED"}
+
+
+@router.post("/review-queue/{item_id}/confirm")
+async def confirm_item(
+    item_id: int,
+    auto_dispatch: bool = True,
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    """Officer confirms a candidate -> create a minimal case + (optional) dispatch."""
+    _guard(principal)
+    item = (await session.execute(select(IncidentReview).where(IncidentReview.id == item_id))).scalar_one_or_none()
+    if not item:
+        raise HTTPException(status_code=404, detail="review item not found")
+
+    # Create a minimal case row from the confirmed incident.
+    today = dt.date.today()
+    new_case = Case(
+        fir_number=f"CCTV-{item.id}", fir_year=today.year,
+        station_id=principal.station_id or 0,
+        station_name="", district=principal.district or "", range_name=principal.range_name or "",
+        crime_type="CCTV-detected incident", crime_category="SLL", legal_code="BNS",
+        fir_type="Suo Motu", status="Under Investigation",
+        report_date=today, incident_date=today,
+        latitude=item.lat, longitude=item.lng,
+        place_of_offence=f"Camera {item.camera_id}",
+    )
+    session.add(new_case)
+    await session.flush()
+    await session.execute(
+        update(IncidentReview).where(IncidentReview.id == item_id)
+        .values(status="CONFIRMED", reviewed_by=principal.name or principal.id, case_id=new_case.case_id)
+    )
+
+    dispatch_id = None
+    if auto_dispatch and item.lat is not None and item.lng is not None:
+        idle = (await session.execute(select(PatrolUnit).where(PatrolUnit.status == "IDLE"))).scalars().all()
+        patrol = min((p for p in idle if p.lat is not None),
+                     key=lambda p: routing_service.haversine_km(p.lat, p.lng, item.lat, item.lng),
+                     default=None)
+        if patrol:
+            route = await routing_service.get_route(
+                from_lat=patrol.lat, from_lng=patrol.lng, to_lat=item.lat, to_lng=item.lng)
+            disp = IncidentDispatch(
+                case_id=new_case.case_id, patrol_id=patrol.id, scene_lat=item.lat, scene_lng=item.lng,
+                status="ACCEPTED", route_geometry={"type": "LineString", "coordinates": route["coords"]},
+                distance_km=route["distance_km"], duration_sec=route["duration_sec"], eta_sec=route["duration_sec"],
+            )
+            session.add(disp)
+            await session.flush()
+            dispatch_id = disp.id
+
+    return {"ok": True, "case_id": new_case.case_id, "dispatch_id": dispatch_id}

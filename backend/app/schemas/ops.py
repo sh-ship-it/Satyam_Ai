@@ -70,3 +70,36 @@ class DispatchOut(BaseModel):
     duration_sec: Optional[int] = None
     eta_sec: Optional[int] = None
     route: list[list[float]] = []  # [[lng,lat],...]
+
+
+class DetectNotify(BaseModel):
+    camera_id: str
+    candidate_type: str = "vehicle_anomaly"
+    confidence: float
+    lat: Optional[float] = None
+    lng: Optional[float] = None
+    clip_path: Optional[str] = None
+    frame_path: Optional[str] = None
+
+
+class ReviewItemOut(BaseModel):
+    id: int
+    camera_id: str
+    candidate_type: str
+    confidence: float
+    lat: Optional[float] = None
+    lng: Optional[float] = None
+    clip_path: Optional[str] = None
+    frame_path: Optional[str] = None
+    status: str
+    created_at: Optional[str] = None
+
+
+class CameraOut(BaseModel):
+    id: int
+    camera_id: str
+    name: str
+    location: Optional[str] = None
+    lat: float
+    lng: float
+    is_active: bool

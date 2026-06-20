@@ -34,6 +34,12 @@ export type DispatchResult = {
   route: number[][];
 };
 export type Signal = { id: number; junction_id: string; lat: number; lng: number; state: "NORMAL" | "GREEN" };
+export type ReviewItem = {
+  id: number; camera_id: string; candidate_type: string; confidence: number;
+  lat?: number | null; lng?: number | null; clip_path?: string | null; frame_path?: string | null;
+  status: string; created_at?: string | null;
+};
+export type CameraInfo = { id: number; camera_id: string; name: string; location?: string | null; lat: number; lng: number; is_active: boolean };
 
 export const responseOps = {
   health: () => opsFetch<{ ok: boolean; module: string; rank: string }>("/health"),
@@ -48,6 +54,12 @@ export const responseOps = {
     opsFetch<DispatchResult>("/dispatch", { method: "POST", body: JSON.stringify(body) }),
   simulate: (id: number) => opsFetch<{ ok: boolean }>(`/dispatch/${id}/simulate`, { method: "POST" }),
   signals: () => opsFetch<Signal[]>("/signals"),
+  cameras: () => opsFetch<CameraInfo[]>("/cameras"),
+  reviewQueue: () => opsFetch<ReviewItem[]>("/review-queue"),
+  confirmReview: (id: number, autoDispatch = true) =>
+    opsFetch<{ ok: boolean; case_id: number; dispatch_id: number | null }>(`/review-queue/${id}/confirm?auto_dispatch=${autoDispatch}`, { method: "POST" }),
+  rejectReview: (id: number) =>
+    opsFetch<{ ok: boolean }>(`/review-queue/${id}/reject`, { method: "POST" }),
 };
 
 /** Open the live ops WebSocket. Returns the socket; caller attaches onmessage. */
