@@ -328,6 +328,7 @@ async def detect_notify(
     await session.flush()
     await manager.broadcast({
         "type": "INCIDENT_CANDIDATE", "id": item.id, "cameraId": payload.camera_id,
+        "candidateType": payload.candidate_type,
         "confidence": payload.confidence, "lat": lat, "lng": lng,
         "autoFlag": payload.confidence >= HIGH_CONF,
     })
@@ -446,8 +447,63 @@ async def confirm_item(
 import subprocess as _subprocess
 import sys as _sys
 import pathlib as _pathlib
+import threading as _threading
 
 _yolo_proc: "_subprocess.Popen[bytes] | None" = None
+
+
+def _drain(proc: "_subprocess.Popen[bytes]") -> None:
+    """Read and print stdout so the pipe buffer never fills and blocks the child."""
+    if proc.stdout is None:
+        return
+    try:
+        for line in iter(proc.stdout.readline, b""):
+            print("[YOLO]", line.decode("utf-8", errors="replace").rstrip(), flush=True)
+    except Exception:
+        pass
+
+
+def _resolve_python() -> str:
+    """Find a Python interpreter that has ultralytics + cv2 installed.
+
+    The backend venv usually lacks these heavy CV deps, so we probe a few
+    candidates and pick the first that can import them. Override with YOLO_PYTHON.
+    """
+    import os as _os
+    import shutil as _shutil
+
+    candidates: list[str] = []
+    env_py = _os.getenv("YOLO_PYTHON")
+    if env_py:
+        candidates.append(env_py)
+    candidates.append(_sys.executable)
+    for name in ("python", "python3"):
+        found = _shutil.which(name)
+        if found:
+            candidates.append(found)
+    # Common Windows global install locations
+    candidates += [
+        r"C:\Program Files\Python310\python.exe",
+        r"C:\Program Files\Python311\python.exe",
+        r"C:\Program Files\Python312\python.exe",
+    ]
+
+    seen: set[str] = set()
+    for py in candidates:
+        if not py or py in seen:
+            continue
+        seen.add(py)
+        try:
+            r = _subprocess.run(
+                [py, "-c", "import cv2, ultralytics"],
+                capture_output=True, timeout=30,
+            )
+            if r.returncode == 0:
+                return py
+        except Exception:
+            continue
+    # Nothing found — return backend python so the error surfaces clearly.
+    return _sys.executable
 
 
 @router.post("/camera/start")
@@ -461,30 +517,50 @@ async def camera_start(
     global _yolo_proc
     if _yolo_proc is not None and _yolo_proc.poll() is None:
         return {"ok": True, "status": "already_running", "pid": _yolo_proc.pid}
+
+    # Locate live_cctv.py relative to this file: backend/app/api/routes/ops.py
+    # parents[4] = repo root (ops.py → routes → api → app → backend → repo)
     script = _pathlib.Path(__file__).resolve().parents[4] / "model" / "inference" / "live_cctv.py"
     if not script.exists():
-        # Fallback: try relative to current working directory (repo root when run from backend/).
         script = _pathlib.Path.cwd().parent / "model" / "inference" / "live_cctv.py"
     if not script.exists():
-        raise HTTPException(status_code=404, detail=f"YOLO script not found. Expected: model/inference/live_cctv.py relative to repo root")
-    # Resolve the video path: try relative to repo root first, then absolute.
-    repo_root = script.parents[2]  # model/inference/live_cctv.py -> model/inference -> model -> repo
-    video_path = repo_root / video if not _pathlib.Path(video).is_absolute() else _pathlib.Path(video)
+        raise HTTPException(
+            status_code=404,
+            detail="YOLO script not found. Expected: model/inference/live_cctv.py relative to repo root",
+        )
+
+    # Resolve video path relative to repo root
+    repo_root = script.parents[2]  # model/inference/live_cctv.py → model/inference → model → repo
+    video_path = (repo_root / video) if not _pathlib.Path(video).is_absolute() else _pathlib.Path(video)
     if not video_path.exists():
-        # Also try from cwd
         video_path = _pathlib.Path.cwd().parent / video
     if not video_path.exists():
-        raise HTTPException(status_code=404, detail=f"Video not found: {video}. Place your video at frontend/public/total fight.mp4")
+        raise HTTPException(
+            status_code=404,
+            detail=f"Video not found: {video}. Place your video at frontend/public/total fight.mp4",
+        )
+
+    # Build a short-lived token so the YOLO subprocess can authenticate to /detect/notify
     import os as _os
-    env = {**_os.environ, "SATYAM_URL": "http://localhost:8000", "SATYAM_TOKEN": ""}
+    from app.core.security import create_access_token
+    _token = create_access_token(
+        subject=principal.id, name=principal.name, rank=principal.rank,
+        scope=principal.scope, clearance=principal.clearance,
+    )
+
+    py = _resolve_python()
+    env = {**_os.environ, "SATYAM_URL": "http://localhost:8000", "SATYAM_TOKEN": _token}
     _yolo_proc = _subprocess.Popen(
-        [_sys.executable, str(script), "--video", str(video_path), "--camera", camera_id],
+        [py, str(script), "--video", str(video_path), "--camera", camera_id, "--no-display"],
         cwd=str(script.parent),
         env=env,
         stdout=_subprocess.PIPE,
         stderr=_subprocess.STDOUT,
     )
-    return {"ok": True, "status": "started", "pid": _yolo_proc.pid}
+    # Drain the pipe in a daemon thread — prevents the child from blocking when
+    # stdout fills up (the main symptom: video freezes after ~3 s).
+    _threading.Thread(target=_drain, args=(_yolo_proc,), daemon=True).start()
+    return {"ok": True, "status": "started", "pid": _yolo_proc.pid, "python": py}
 
 
 @router.post("/camera/stop")

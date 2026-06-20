@@ -9,9 +9,11 @@ import { useT } from "@/lib/i18n";
 // Crime type → label shown in the summary card.
 // You can extend this map with your own types later.
 const CRIME_LABELS: Record<string, string> = {
-  vehicle_anomaly: "Suspicious Vehicle",
-  crowd: "Crowd Disturbance",
+  weapon: "Weapon / Firearm",
+  gun: "Firearm Detected",
   fight: "Physical Altercation",
+  crowd: "Crowd Disturbance",
+  vehicle_anomaly: "Suspicious Vehicle",
   accident: "Road Accident",
   theft: "Theft / Snatching",
 };
