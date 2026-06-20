@@ -440,3 +440,80 @@ async def confirm_item(
             dispatch_id = disp.id
 
     return {"ok": True, "case_id": new_case.case_id, "dispatch_id": dispatch_id}
+
+
+# ── Camera YOLO process control ───────────────────────────────────────────────
+import subprocess as _subprocess
+import sys as _sys
+import pathlib as _pathlib
+
+_yolo_proc: "_subprocess.Popen[bytes] | None" = None
+
+
+@router.post("/camera/start")
+async def camera_start(
+    video: str = "frontend/public/total fight.mp4",
+    camera_id: str = "CAM-001",
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    """Launch the YOLO live_cctv detector as a background process."""
+    _guard(principal)
+    global _yolo_proc
+    if _yolo_proc is not None and _yolo_proc.poll() is None:
+        return {"ok": True, "status": "already_running", "pid": _yolo_proc.pid}
+    script = _pathlib.Path(__file__).resolve().parents[4] / "model" / "inference" / "live_cctv.py"
+    if not script.exists():
+        # Fallback: try relative to current working directory (repo root when run from backend/).
+        script = _pathlib.Path.cwd().parent / "model" / "inference" / "live_cctv.py"
+    if not script.exists():
+        raise HTTPException(status_code=404, detail=f"YOLO script not found. Expected: model/inference/live_cctv.py relative to repo root")
+    # Resolve the video path: try relative to repo root first, then absolute.
+    repo_root = script.parents[2]  # model/inference/live_cctv.py -> model/inference -> model -> repo
+    video_path = repo_root / video if not _pathlib.Path(video).is_absolute() else _pathlib.Path(video)
+    if not video_path.exists():
+        # Also try from cwd
+        video_path = _pathlib.Path.cwd().parent / video
+    if not video_path.exists():
+        raise HTTPException(status_code=404, detail=f"Video not found: {video}. Place your video at frontend/public/total fight.mp4")
+    import os as _os
+    env = {**_os.environ, "SATYAM_URL": "http://localhost:8000", "SATYAM_TOKEN": ""}
+    _yolo_proc = _subprocess.Popen(
+        [_sys.executable, str(script), "--video", str(video_path), "--camera", camera_id],
+        cwd=str(script.parent),
+        env=env,
+        stdout=_subprocess.PIPE,
+        stderr=_subprocess.STDOUT,
+    )
+    return {"ok": True, "status": "started", "pid": _yolo_proc.pid}
+
+
+@router.post("/camera/stop")
+async def camera_stop(
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    """Kill the running YOLO detector process."""
+    _guard(principal)
+    global _yolo_proc
+    if _yolo_proc is None or _yolo_proc.poll() is not None:
+        _yolo_proc = None
+        return {"ok": True, "status": "not_running"}
+    _yolo_proc.terminate()
+    try:
+        _yolo_proc.wait(timeout=5)
+    except Exception:
+        _yolo_proc.kill()
+    _yolo_proc = None
+    return {"ok": True, "status": "stopped"}
+
+
+@router.get("/camera/status")
+async def camera_status(
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    """Check whether the YOLO detector is running."""
+    _guard(principal)
+    global _yolo_proc
+    running = _yolo_proc is not None and _yolo_proc.poll() is None
+    if not running:
+        _yolo_proc = None
+    return {"running": running, "pid": _yolo_proc.pid if running else None}

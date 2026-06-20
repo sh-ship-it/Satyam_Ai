@@ -74,6 +74,10 @@ export const responseOps = {
   demoActive: () =>
     opsFetch<{ active: { dispatchId: number; lat: number; lng: number; status: string; eta_sec: number }[] }>("/demo/active"),
   stopAllSims: () => opsFetch<{ stopped: number }>("/demo/stop-all", { method: "POST" }),
+  cameraStart: (video = "frontend/public/total fight.mp4", camera_id = "CAM-001") =>
+    opsFetch<{ ok: boolean; status: string; pid?: number | null }>(`/camera/start?video=${encodeURIComponent(video)}&camera_id=${encodeURIComponent(camera_id)}`, { method: "POST" }),
+  cameraStop: () => opsFetch<{ ok: boolean; status: string }>("/camera/stop", { method: "POST" }),
+  cameraStatus: () => opsFetch<{ running: boolean; pid?: number | null }>("/camera/status"),
 };
 
 /** Open the live ops WebSocket. Returns the socket; caller attaches onmessage. */

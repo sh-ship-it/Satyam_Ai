@@ -112,25 +112,27 @@ export function ProfileMenu({ onOpenSettings }: { onOpenSettings: () => void }) 
   const [addOpen, setAddOpen] = useState(false);
 
   // Live user from backend (updates on mount)
-  const [me, setMe] = useState<SessionUser | null>(getCachedUser);
+  const [me, setMe] = useState<SessionUser | null>(null);
 
   // Accounts list: starts from localStorage, enriched with live `me`
-  const [accounts, setAccounts] = useState<Account[]>(() => {
-    const stored = loadStoredAccounts();
-    if (stored.length > 0) return stored;
-    const cached = getCachedUser();
-    return cached ? [userToAccount(cached, 0)] : [];
-  });
-  const [activeId, setActiveId] = useState<string>(() => {
-    const stored = loadActiveId();
-    if (stored) return stored;
-    return getCachedUser()?.id || "";
-  });
+  // Initialised empty to avoid SSR/client hydration mismatch (localStorage is client-only).
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [activeId, setActiveId] = useState<string>("");
 
   // Account switch modal
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [phase, setPhase] = useState<SwitchPhase>("idle");
   const [stepIdx, setStepIdx] = useState(0);
+
+  // Load from localStorage after mount (client-only — avoids SSR/hydration mismatch).
+  useEffect(() => {
+    const cached = getCachedUser();
+    setMe(cached);
+    const stored = loadStoredAccounts();
+    setAccounts(stored.length > 0 ? stored : (cached ? [userToAccount(cached, 0)] : []));
+    const storedId = loadActiveId();
+    setActiveId(storedId || cached?.id || "");
+  }, []);
 
   // Fetch live user on mount
   useEffect(() => {
