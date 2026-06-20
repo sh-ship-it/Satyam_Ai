@@ -205,26 +205,33 @@ export function CrimeMap({
 
   // --- Response-Ops: static dispatch route line (no animation, fits once) ---
   const routePathRef = useRef<any>(null);
+  const routePathKeyRef = useRef<string>("");
   useEffect(() => {
     const map = mapRef.current, L = LRef.current;
     if (!map || !L || !ready) return;
     if (routePathRef.current) { map.removeLayer(routePathRef.current); routePathRef.current = null; }
-    if (!routePath || routePath.length < 2) return;
+    if (!routePath || routePath.length < 2) { routePathKeyRef.current = ""; return; }
     const line = L.polyline(routePath.map((p: Hotspot) => [p.lat, p.lng]), {
       color: "#91C5FD", weight: 5, opacity: 0.9,
     }).addTo(map);
     routePathRef.current = line;
-    map.fitBounds(line.getBounds().pad(0.2));
+    // fitBounds only when the route is genuinely new.
+    const key = `${routePath[0]?.lat},${routePath[0]?.lng}:${routePath[routePath.length-1]?.lat},${routePath[routePath.length-1]?.lng}`;
+    if (key !== routePathKeyRef.current) {
+      routePathKeyRef.current = key;
+      try { map.fitBounds(line.getBounds().pad(0.25), { maxZoom: 15 }); } catch {}
+    }
     return () => { if (routePathRef.current) { map.removeLayer(routePathRef.current); routePathRef.current = null; } };
   }, [routePath, ready]);
 
   // --- Response-Ops: green-corridor glow (3-layer polyline along the route) ---
   const corridorRef = useRef<any>(null);
+  const corridorKeyRef = useRef<string>("");
   useEffect(() => {
     const map = mapRef.current, L = LRef.current;
     if (!map || !L || !ready) return;
     if (corridorRef.current) { map.removeLayer(corridorRef.current); corridorRef.current = null; }
-    if (!corridorPath || corridorPath.length < 2) return;
+    if (!corridorPath || corridorPath.length < 2) { corridorKeyRef.current = ""; return; }
     const latlngs = corridorPath as [number, number][];
     const group = L.layerGroup();
     L.polyline(latlngs, { color: "#00C896", weight: 16, opacity: 0.18 }).addTo(group);
@@ -232,7 +239,12 @@ export function CrimeMap({
     L.polyline(latlngs, { color: "#00E6A8", weight: 3, opacity: 0.95 }).addTo(group);
     group.addTo(map);
     corridorRef.current = group;
-    try { map.fitBounds(L.latLngBounds(latlngs).pad(0.2)); } catch {}
+    // Only fitBounds when it's a brand-new corridor (not every re-render).
+    const key = `${latlngs[0]?.[0]},${latlngs[0]?.[1]}:${latlngs[latlngs.length-1]?.[0]},${latlngs[latlngs.length-1]?.[1]}`;
+    if (key !== corridorKeyRef.current) {
+      corridorKeyRef.current = key;
+      try { map.fitBounds(L.latLngBounds(latlngs).pad(0.25), { maxZoom: 15 }); } catch {}
+    }
     return () => { if (corridorRef.current) { map.removeLayer(corridorRef.current); corridorRef.current = null; } };
   }, [corridorPath, ready]);
 
@@ -247,6 +259,11 @@ export function CrimeMap({
 
   // --- Response-Ops: single live patrol marker (animated vehicle) that PANS ---
   const liveMarkerRef = useRef<any>(null);
+  // Only auto-pan on the very first placement; after that let the user control the map.
+  const liveMarkerPlacedRef = useRef(false);
+  useEffect(() => {
+    if (!liveMarker) liveMarkerPlacedRef.current = false;
+  }, [liveMarker]);
   useEffect(() => {
     const map = mapRef.current, L = LRef.current;
     if (!map || !L || !ready) return;
@@ -255,7 +272,8 @@ export function CrimeMap({
       return;
     }
     const ll: [number, number] = [liveMarker.lat, liveMarker.lng];
-    if (!liveMarkerRef.current) {
+    const isFirst = !liveMarkerRef.current;
+    if (isFirst) {
       const icon = L.divIcon({
         className: "",
         html: `<div style="position:relative;display:flex;align-items:center;justify-content:center;width:30px;height:30px">`
@@ -265,10 +283,15 @@ export function CrimeMap({
       });
       liveMarkerRef.current = L.marker(ll, { icon }).addTo(map);
       if (liveMarker.label) liveMarkerRef.current.bindTooltip(liveMarker.label);
+      // Pan only on first placement (not on every subsequent tick).
+      if (!liveMarkerPlacedRef.current) {
+        liveMarkerPlacedRef.current = true;
+        if (!map.getBounds().contains(ll)) map.panTo(ll, { animate: true });
+      }
     } else {
       liveMarkerRef.current.setLatLng(ll);
+      // Never re-pan after initial placement — let the user zoom/pan freely.
     }
-    if (!map.getBounds().contains(ll)) map.panTo(ll, { animate: true });
   }, [liveMarker, ready]);
 
   // --- Response-Ops: many live vehicle markers (Demo Simulation) ---
