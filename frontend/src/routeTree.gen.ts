@@ -21,6 +21,7 @@ import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProfilePersonIdRouteImport } from './routes/profile.$personId'
+import { Route as OperationsRouteImport } from './routes/operations'
 
 const TrendsRoute = TrendsRouteImport.update({
   id: '/trends',
@@ -82,6 +83,11 @@ const ProfilePersonIdRoute = ProfilePersonIdRouteImport.update({
   path: '/profile/$personId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OperationsRoute = OperationsRouteImport.update({
+  id: '/operations',
+  path: '/operations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/forecast': typeof ForecastRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
+  '/operations': typeof OperationsRoute
   '/reports': typeof ReportsRoute
   '/socio': typeof SocioRoute
   '/transcripts': typeof TranscriptsRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/forecast': typeof ForecastRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
+  '/operations': typeof OperationsRoute
   '/reports': typeof ReportsRoute
   '/socio': typeof SocioRoute
   '/transcripts': typeof TranscriptsRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/forecast': typeof ForecastRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
+  '/operations': typeof OperationsRoute
   '/reports': typeof ReportsRoute
   '/socio': typeof SocioRoute
   '/transcripts': typeof TranscriptsRoute
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
     | '/forecast'
     | '/login'
     | '/network'
+    | '/operations'
     | '/reports'
     | '/socio'
     | '/transcripts'
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/forecast'
     | '/login'
     | '/network'
+    | '/operations'
     | '/reports'
     | '/socio'
     | '/transcripts'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/forecast'
     | '/login'
     | '/network'
+    | '/operations'
     | '/reports'
     | '/socio'
     | '/transcripts'
@@ -179,6 +191,7 @@ export interface RootRouteChildren {
   ForecastRoute: typeof ForecastRoute
   LoginRoute: typeof LoginRoute
   NetworkRoute: typeof NetworkRoute
+  OperationsRoute: typeof OperationsRoute
   ReportsRoute: typeof ReportsRoute
   SocioRoute: typeof SocioRoute
   TranscriptsRoute: typeof TranscriptsRoute
@@ -272,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfilePersonIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/operations': {
+      id: '/operations'
+      path: '/operations'
+      fullPath: '/operations'
+      preLoaderRoute: typeof OperationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -283,6 +303,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForecastRoute: ForecastRoute,
   LoginRoute: LoginRoute,
   NetworkRoute: NetworkRoute,
+  OperationsRoute: OperationsRoute,
   ReportsRoute: ReportsRoute,
   SocioRoute: SocioRoute,
   TranscriptsRoute: TranscriptsRoute,

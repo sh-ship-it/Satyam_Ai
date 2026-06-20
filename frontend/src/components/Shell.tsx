@@ -15,6 +15,7 @@ import {
   Volume2,
   Pause,
   Play,
+  Siren,
 } from "lucide-react";
 import { type ReactNode, useState, useEffect, useRef, useCallback } from "react";
 import { ThemePicker } from "./ThemePicker";
@@ -43,6 +44,7 @@ const SCREEN_ROUTES: VoiceScreen[] = [
   { to: "/reports", words: /(report|reports|brief|dossier|pdf)|ವರದಿ/i },
   { to: "/audit", words: /(audit|compliance|chain|logs?)|ಆಡಿಟ್/i },
   { to: "/transcripts", words: /(transcripts?|recordings?)|ಪ್ರತಿಲೇಖನ/i },
+  { to: "/operations", words: /(response ops|operations|patrol|dispatch|green corridor)|ಕಾರ್ಯಾಚರಣೆ/i },
 ];
 const NAV_VERB = /(open|show|go to|goto|navigate|take me to|switch to|jump to)|ತೆರೆ|ಹೋಗು|ತೋರಿಸಿ/i;
 // Person-crime question: "what crime did X commit" / "crime rate of X" / Kannada equivalents.
@@ -658,6 +660,7 @@ export function Shell({ children }: { children: ReactNode }) {
     { to: "/reports", icon: FileText, label: t("Reports") },
     { to: "/audit", icon: ShieldCheck, label: t("Audit") },
     { to: "/transcripts", icon: ClipboardList, label: t("Transcripts") },
+    { to: "/operations", icon: Siren, label: t("Response Ops") },
   ] as const;
 
   return (

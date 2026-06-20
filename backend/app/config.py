@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     app_name: str = "Satyam"
     app_env: Literal["development", "staging", "production"] = "development"
 
+    # Response-Ops module (EMERGE-derived). Off by default — fully isolated.
+    enable_response_ops: bool = False
+
     # Infra
     database_url: str = "postgresql+asyncpg://satyam:satyam@localhost:5432/satyam"
     # Seed/migration URL — owner/superuser role, used ONLY by migrations + seed script.
