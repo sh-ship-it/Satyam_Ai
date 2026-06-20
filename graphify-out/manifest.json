@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "backend/app/config.py": {
-    "mtime": 1781589903.6240137,
-    "ast_hash": "a5a41b5fe3c85d9a285e189a5ce52c32",
+    "mtime": 1781939414.0502925,
+    "ast_hash": "54d86e78cf5367bd320b7dc68a157037",
     "semantic_hash": ""
   },
   "backend/app/core/__init__.py": {
@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1781848160.3876657,
-    "ast_hash": "421cb3026b2a4eb3276cc92ba2941faa",
+    "mtime": 1781939426.2447338,
+    "ast_hash": "e96b952335c701cb044a2cba44d27b39",
     "semantic_hash": ""
   },
   "backend/app/models/__init__.py": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1781852387.0598884,
-    "ast_hash": "2e0a808678950894582655425bfac029",
+    "mtime": 1781939453.3354015,
+    "ast_hash": "1a49d99c98a403508d08a62f9e785472",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
-    "mtime": 1781636357.9260316,
-    "ast_hash": "df063c279509e6d57e32f190708c105d",
+    "mtime": 1781939567.8708732,
+    "ast_hash": "43420f38b6222ca58e74edff05899f43",
     "semantic_hash": ""
   },
   "frontend/src/router.tsx": {
@@ -1207,6 +1207,36 @@
   "SATYAM_COPILOT_SELF_ANSWER.md": {
     "mtime": 1781852225.6708374,
     "ast_hash": "0eab710a4dd155ad4ab8d03536cfaf51",
+    "semantic_hash": ""
+  },
+  "backend/app/api/routes/ops.py": {
+    "mtime": 1781939374.026926,
+    "ast_hash": "8362c3ad35b43008116029cc65897540",
+    "semantic_hash": ""
+  },
+  "backend/app/db/ops_models.py": {
+    "mtime": 1781939345.122136,
+    "ast_hash": "0a935c76436ae4c38649cb563f75fc35",
+    "semantic_hash": ""
+  },
+  "backend/seed/init_ops.py": {
+    "mtime": 1781939364.407176,
+    "ast_hash": "1059825c3e21db5ce71665db8c88d70b",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/api/responseOps.ts": {
+    "mtime": 1781939384.2803879,
+    "ast_hash": "7b4883d42ce8ede9ddcbe6d0305e3e7d",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/operations.tsx": {
+    "mtime": 1781939405.5089104,
+    "ast_hash": "61897380c929687e3f85b8033160a1f5",
+    "semantic_hash": ""
+  },
+  "SATYAM_OPS_PHASE0_SCAFFOLD.md": {
+    "mtime": 1781899360.0346365,
+    "ast_hash": "77ced6c099e05fec428557bad8d0bba7",
     "semantic_hash": ""
   }
 }

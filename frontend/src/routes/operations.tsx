@@ -3,6 +3,7 @@ import { Shell } from "@/components/Shell";
 import { useState } from "react";
 import { Siren, Radar, Truck, TrafficCone, Video } from "lucide-react";
 import { useT } from "@/lib/i18n";
+import { PredictivePanel } from "@/components/ops/PredictivePanel";
 
 export const Route = createFileRoute("/operations")({
   head: () => ({ meta: [{ title: "Response Ops · Satyam" }] }),
@@ -49,11 +50,11 @@ function OperationsScreen() {
           ))}
         </nav>
 
-        <section className="rounded-[8px] border-2 border-foreground bg-background p-6">
-          {/* Phase 1–4 mount their panels here, keyed by `tab`. */}
-          <p className="text-sm text-muted-foreground">
-            {t("This module activates as phases are installed.")} ({tab})
-          </p>
+        <section className="rounded-[8px] border-2 border-foreground bg-background p-4">
+          {tab === "predict" && <PredictivePanel />}
+          {tab !== "predict" && (
+            <p className="text-sm text-muted-foreground">{t("Coming in a later phase.")} ({tab})</p>
+          )}
         </section>
       </div>
     </Shell>
