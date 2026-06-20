@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
-    "mtime": 1781952097.9365947,
-    "ast_hash": "9370d1210d1ea494dcb105739d4e947a",
+    "mtime": 1781956078.9966934,
+    "ast_hash": "9e70ebbac835b97fa74d2a3954a7a5af",
     "semantic_hash": ""
   },
   "frontend/src/components/DarkModeToggle.tsx": {
@@ -1210,8 +1210,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/ops.py": {
-    "mtime": 1781952063.1051662,
-    "ast_hash": "243d844ac68389db4a992eb9e726e8fb",
+    "mtime": 1781956961.5569103,
+    "ast_hash": "7e93c8b5328220df2a4640ec95d6e6a2",
     "semantic_hash": ""
   },
   "backend/app/db/ops_models.py": {
@@ -1225,13 +1225,13 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/responseOps.ts": {
-    "mtime": 1781952107.569347,
-    "ast_hash": "95cde36d7d91664d338ef6af702b332c",
+    "mtime": 1781956034.585341,
+    "ast_hash": "27e01cc3d672f703f753163f8780ac18",
     "semantic_hash": ""
   },
   "frontend/src/routes/operations.tsx": {
-    "mtime": 1781952183.188945,
-    "ast_hash": "17f52161173d27667c9bc77ea1cb839c",
+    "mtime": 1781957608.863812,
+    "ast_hash": "c5c03cc89000548bbf9b64dd73d1301d",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE0_SCAFFOLD.md": {
@@ -1270,8 +1270,8 @@
     "semantic_hash": ""
   },
   "backend/app/services/ops/sim_service.py": {
-    "mtime": 1781952051.3166175,
-    "ast_hash": "1b7edc9329215dc636b8ed0d0d2932f1",
+    "mtime": 1781955943.6046853,
+    "ast_hash": "b6a717a5cf2f6f4e525f6b89666f2067",
     "semantic_hash": ""
   },
   "backend/app/services/ops/ws_manager.py": {
@@ -1280,8 +1280,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ops/DispatchPanel.tsx": {
-    "mtime": 1781945626.1641715,
-    "ast_hash": "cff7e9e8fa8958f4d91be934613d1539",
+    "mtime": 1781956164.0173883,
+    "ast_hash": "b4e73faa63ffaec7d02505d8dd7b316d",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE2_DISPATCH_SIM.md": {
@@ -1290,8 +1290,8 @@
     "semantic_hash": ""
   },
   "backend/app/services/ops/corridor_service.py": {
-    "mtime": 1781952025.7959907,
-    "ast_hash": "b163749757b71667c62e9c310a770f7d",
+    "mtime": 1781955989.9363973,
+    "ast_hash": "7c86d901f6f0bbbc5c9aed0e97670683",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md": {
@@ -1352,6 +1352,16 @@
   "model/requirements.txt": {
     "mtime": 1781952189.9255142,
     "ast_hash": "159a2c68ffd071145340f8ad7cb1e3c8",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ops/LiveOperationsMap.tsx": {
+    "mtime": 1781957581.9946587,
+    "ast_hash": "067e1943499591f24f23c65855adb562",
+    "semantic_hash": ""
+  },
+  "SATYAM_OPS_SCREENSHOT_PARITY_PACK.md": {
+    "mtime": 1781955821.0934238,
+    "ast_hash": "ff57ff03ef8755f77976992816a0ce36",
     "semantic_hash": ""
   }
 }
