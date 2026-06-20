@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Radar, RefreshCw, MapPin, Clock, Zap, Play, Square, ShieldAlert, Info, ArrowRight,
 } from "lucide-react";
-import { CrimeMap, type Hotspot } from "@/components/CrimeMap";
+import { CrimeMap } from "@/components/CrimeMap";
 import { intelligence, type ForecastAlert, type ForecastCell } from "@/lib/api/intelligence";
 import { api } from "@/lib/api/client";
 import { useT } from "@/lib/i18n";
@@ -16,16 +16,6 @@ const RISK_BG: Record<string, string> = {
 const RISK_ORDER: Record<string, number> = { Critical: 0, High: 1, Medium: 2, Low: 3 };
 
 type LL = { lat: number; lng: number };
-const lerp = (a: number, b: number, f: number) => a + (b - a) * f;
-
-function routeBetween(a: LL, b: LL, steps = 48): Hotspot[] {
-  const out: Hotspot[] = [];
-  for (let i = 0; i <= steps; i++) {
-    const f = i / steps;
-    out.push({ lat: lerp(a.lat, b.lat, f), lng: lerp(a.lng, b.lng, f), weight: 1 });
-  }
-  return out;
-}
 
 function cellForAlert(alert: ForecastAlert, cells: ForecastCell[]): ForecastCell | null {
   if (cells.length === 0) return null;
@@ -45,17 +35,9 @@ export function PredictivePanel() {
   const [asOf, setAsOf] = useState<string | null>(null);
 
   const [simAlertId, setSimAlertId] = useState<string | null>(null);
-  const [simRoute, setSimRoute] = useState<Hotspot[] | null>(null);
   const [simCar, setSimCar] = useState<LL | null>(null);
   const [simTarget, setSimTarget] = useState<ForecastCell | null>(null);
-  const [simArrived, setSimArrived] = useState(false);
   const [fitSignal, setFitSignal] = useState(0);
-  const simTimer = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const clearSimTimer = () => {
-    if (simTimer.current) { clearInterval(simTimer.current); simTimer.current = null; }
-  };
-  useEffect(() => () => clearSimTimer(), []);
 
   async function load(refresh = false) {
     setLoading(true); setError(null);
@@ -93,36 +75,20 @@ export function PredictivePanel() {
   function startSim(alert: ForecastAlert) {
     const target = cellForAlert(alert, cells);
     if (!target) return;
-    clearSimTimer();
-    setSimArrived(false);
     setSimAlertId(alert.alert_id);
     setSimTarget(target);
-    const origin: LL = { lat: target.lat - 0.025, lng: target.lng - 0.03 };
-    const route = routeBetween(origin, { lat: target.lat, lng: target.lng }, 48);
-    setSimRoute(route);
-    setSimCar(origin);
+    // Instantly place the patrol car at the hotspot — simulating pre-deployment.
+    setSimCar({ lat: target.lat, lng: target.lng });
     setFitSignal((n) => n + 1);
-    let i = 0;
-    simTimer.current = setInterval(() => {
-      i += 1;
-      if (i >= route.length) {
-        setSimCar({ lat: target.lat, lng: target.lng });
-        setSimArrived(true);
-        clearSimTimer();
-        return;
-      }
-      setSimCar({ lat: route[i].lat, lng: route[i].lng });
-    }, 110);
   }
 
   function stopSim() {
-    clearSimTimer();
-    setSimAlertId(null); setSimRoute(null); setSimCar(null); setSimTarget(null); setSimArrived(false);
+    setSimAlertId(null); setSimCar(null); setSimTarget(null);
   }
 
   const simRunning = simAlertId !== null;
 
-  const points: Hotspot[] = useMemo(
+  const points = useMemo(
     () => cells.map((c) => ({ lat: c.lat, lng: c.lng, weight: c.risk_score, label: `${c.risk_level} · ${c.crime_type} (${c.risk_score})` })),
     [cells],
   );
@@ -138,8 +104,7 @@ export function PredictivePanel() {
         <CrimeMap
           points={points} mode="heat" darkTiles lockBounds={simRunning}
           fitSignal={fitSignal}
-          routePath={simRunning ? (simRoute ?? undefined) : undefined}
-          liveMarker={simRunning && simCar ? { lat: simCar.lat, lng: simCar.lng, weight: 3, label: t("Patrol deploying") } : null}
+          liveMarker={simRunning && simCar ? { lat: simCar.lat, lng: simCar.lng, weight: 3, label: t("Unit on station") } : null}
         />
         <div className="pointer-events-none absolute left-3 top-3 z-[1000] rounded-[8px] border-2 border-foreground bg-background/90 px-3 py-2 backdrop-blur">
           <div className="flex items-center gap-2 text-sm font-extrabold">
@@ -150,7 +115,7 @@ export function PredictivePanel() {
           </div>
           {simRunning && simTarget && (
             <div className="mt-1 text-[11px] font-bold text-[#0a8f6b]">
-              {simArrived ? t("Unit on station") : t("Deploying unit")} → {simTarget.crime_type}
+              {t("Unit on station")} → {simTarget.crime_type}
             </div>
           )}
         </div>
@@ -199,7 +164,7 @@ export function PredictivePanel() {
                 {running ? (
                   <button onClick={stopSim}
                     className="inline-flex w-full items-center justify-center gap-1 rounded-[6px] border-2 border-foreground bg-background px-2 py-1 text-xs font-bold hover:bg-muted">
-                    <Square className="h-3.5 w-3.5" /> {simArrived ? t("Unit on station — Reset") : t("Stop simulation")}
+                    <Square className="h-3.5 w-3.5" /> {t("Unit on station — Reset")}
                   </button>
                 ) : (
                   <button onClick={() => startSim(a)} disabled={cells.length === 0}
