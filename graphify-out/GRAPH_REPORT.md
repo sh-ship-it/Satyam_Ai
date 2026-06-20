@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-20)
 
 ## Corpus Check
-- 264 files · ~238,892 words
+- 264 files · ~238,694 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `bc1662ed`
+- Built from commit: `fb338989`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -984,7 +984,7 @@ Cohesion: 0.67
 Nodes (3): [2026-06-16] — Voice Panel UI Redesign (neobrutalist), New Layout, Summary
 
 ## Knowledge Gaps
-- **1078 isolated node(s):** `Why the three screens were blank`, `What each screen now does`, `Verification (static analysis)`, `1. Predictive Deployment`, `2. Demo Simulation` (+1073 more)
+- **1078 isolated node(s):** `LL`, `Phase`, `SimSignal`, `Dispatch`, `FeedItem` (+1073 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -999,7 +999,7 @@ _Questions this graph is uniquely positioned to answer:_
   _`Principal` has 87 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 53 inferred relationships involving `Permission` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Permission` has 53 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Why the three screens were blank`, `What each screen now does`, `Verification (static analysis)` to the rest of the system?**
+- **What connects `LL`, `Phase`, `SimSignal` to the rest of the system?**
   _1253 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._

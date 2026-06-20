@@ -4,96 +4,6 @@
   "graph": {},
   "nodes": [
     {
-      "label": "SATYAM_OPS_DATASET_FIX.md",
-      "file_type": "document",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "satyam_ops_dataset_fix",
-      "community": 207,
-      "norm_label": "satyam_ops_dataset_fix.md"
-    },
-    {
-      "label": "Satyam \u2014 Fix Predictive Deployment, Demo Simulation & Live Map (dataset-driven, no fake data)",
-      "file_type": "document",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
-      "community": 207,
-      "norm_label": "satyam \u2014 fix predictive deployment, demo simulation & live map (dataset-driven, no fake data)"
-    },
-    {
-      "label": "Why the three screens were blank",
-      "file_type": "document",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "satyam_ops_dataset_fix_why_the_three_screens_were_blank",
-      "community": 207,
-      "norm_label": "why the three screens were blank"
-    },
-    {
-      "label": "What each screen now does",
-      "file_type": "document",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L21",
-      "_origin": "ast",
-      "id": "satyam_ops_dataset_fix_what_each_screen_now_does",
-      "community": 207,
-      "norm_label": "what each screen now does"
-    },
-    {
-      "label": "Verification (static analysis)",
-      "file_type": "document",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "satyam_ops_dataset_fix_verification_static_analysis",
-      "community": 207,
-      "norm_label": "verification (static analysis)"
-    },
-    {
-      "label": "1. Predictive Deployment",
-      "file_type": "document",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L43",
-      "_origin": "ast",
-      "id": "satyam_ops_dataset_fix_1_predictive_deployment",
-      "community": 207,
-      "norm_label": "1. predictive deployment"
-    },
-    {
-      "label": "2. Demo Simulation",
-      "file_type": "document",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L406",
-      "_origin": "ast",
-      "id": "satyam_ops_dataset_fix_2_demo_simulation",
-      "community": 207,
-      "norm_label": "2. demo simulation"
-    },
-    {
-      "label": "3. Live Operations Map",
-      "file_type": "document",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L808",
-      "_origin": "ast",
-      "id": "satyam_ops_dataset_fix_3_live_operations_map",
-      "community": 207,
-      "norm_label": "3. live operations map"
-    },
-    {
-      "label": "After applying",
-      "file_type": "document",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L1419",
-      "_origin": "ast",
-      "id": "satyam_ops_dataset_fix_after_applying",
-      "community": 207,
-      "norm_label": "after applying"
-    },
-    {
       "label": "DemoSimPanel.tsx",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
@@ -107,7 +17,7 @@
       "label": "LL",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L7",
+      "source_location": "L6",
       "_origin": "ast",
       "id": "ops_demosimpanel_ll",
       "community": 190,
@@ -117,7 +27,7 @@
       "label": "Phase",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L8",
+      "source_location": "L7",
       "_origin": "ast",
       "id": "ops_demosimpanel_phase",
       "community": 190,
@@ -127,7 +37,7 @@
       "label": "SimSignal",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "_origin": "ast",
       "id": "ops_demosimpanel_simsignal",
       "community": 190,
@@ -137,7 +47,7 @@
       "label": "Dispatch",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L10",
+      "source_location": "L9",
       "_origin": "ast",
       "id": "ops_demosimpanel_dispatch",
       "community": 190,
@@ -147,7 +57,7 @@
       "label": "FeedItem",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L19",
+      "source_location": "L18",
       "_origin": "ast",
       "id": "ops_demosimpanel_feeditem",
       "community": 190,
@@ -157,7 +67,7 @@
       "label": "FALLBACK_SCENES",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L21",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "ops_demosimpanel_fallback_scenes",
       "community": 190,
@@ -167,7 +77,7 @@
       "label": "CALLSIGNS",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L27",
+      "source_location": "L26",
       "_origin": "ast",
       "id": "ops_demosimpanel_callsigns",
       "community": 190,
@@ -177,7 +87,7 @@
       "label": "lerp()",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L31",
+      "source_location": "L30",
       "_origin": "ast",
       "id": "ops_demosimpanel_lerp",
       "community": 190,
@@ -187,7 +97,7 @@
       "label": "straightRoute()",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L33",
+      "source_location": "L32",
       "_origin": "ast",
       "id": "ops_demosimpanel_straightroute",
       "community": 190,
@@ -197,7 +107,7 @@
       "label": "curvedRoute()",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L42",
+      "source_location": "L41",
       "_origin": "ast",
       "id": "ops_demosimpanel_curvedroute",
       "community": 190,
@@ -207,7 +117,7 @@
       "label": "haversineKm()",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L58",
+      "source_location": "L57",
       "_origin": "ast",
       "id": "ops_demosimpanel_haversinekm",
       "community": 190,
@@ -217,7 +127,7 @@
       "label": "makeSignals()",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L66",
+      "source_location": "L65",
       "_origin": "ast",
       "id": "ops_demosimpanel_makesignals",
       "community": 190,
@@ -227,11 +137,251 @@
       "label": "DemoSimPanel()",
       "file_type": "code",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L74",
+      "source_location": "L73",
       "_origin": "ast",
       "id": "ops_demosimpanel_demosimpanel",
       "community": 205,
       "norm_label": "demosimpanel()"
+    },
+    {
+      "label": "DispatchPanel.tsx",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel",
+      "community": 194,
+      "norm_label": "dispatchpanel.tsx"
+    },
+    {
+      "label": "PHASES",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_phases",
+      "community": 194,
+      "norm_label": "phases"
+    },
+    {
+      "label": "phaseIndex()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_phaseindex",
+      "community": 194,
+      "norm_label": "phaseindex()"
+    },
+    {
+      "label": "PhaseTimeline()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_phasetimeline",
+      "community": 194,
+      "norm_label": "phasetimeline()"
+    },
+    {
+      "label": "Corridor",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L44",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_corridor",
+      "community": 194,
+      "norm_label": "corridor"
+    },
+    {
+      "label": "LL",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_ll",
+      "community": 194,
+      "norm_label": "ll"
+    },
+    {
+      "label": "SimSignal",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L51",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_simsignal",
+      "community": 194,
+      "norm_label": "simsignal"
+    },
+    {
+      "label": "DemoDispatch",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L52",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_demodispatch",
+      "community": 194,
+      "norm_label": "demodispatch"
+    },
+    {
+      "label": "DEMO_DISPATCHES",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L57",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_demo_dispatches",
+      "community": 194,
+      "norm_label": "demo_dispatches"
+    },
+    {
+      "label": "lerp()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_lerp",
+      "community": 194,
+      "norm_label": "lerp()"
+    },
+    {
+      "label": "straightRoute()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L77",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_straightroute",
+      "community": 194,
+      "norm_label": "straightroute()"
+    },
+    {
+      "label": "curvedRoute()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L83",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_curvedroute",
+      "community": 194,
+      "norm_label": "curvedroute()"
+    },
+    {
+      "label": "haversineKm()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L95",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_haversinekm",
+      "community": 194,
+      "norm_label": "haversinekm()"
+    },
+    {
+      "label": "makeSignals()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L101",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_makesignals",
+      "community": 194,
+      "norm_label": "makesignals()"
+    },
+    {
+      "label": "DispatchPanel()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L108",
+      "_origin": "ast",
+      "id": "ops_dispatchpanel_dispatchpanel",
+      "community": 205,
+      "norm_label": "dispatchpanel()"
+    },
+    {
+      "label": "SATYAM_OPS_DATASET_FIX.md",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 207,
+      "norm_label": "satyam_ops_dataset_fix.md",
+      "id": "satyam_ops_dataset_fix"
+    },
+    {
+      "label": "Satyam \u2014 Fix Predictive Deployment, Demo Simulation & Live Map (dataset-driven, no fake data)",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 207,
+      "norm_label": "satyam \u2014 fix predictive deployment, demo simulation & live map (dataset-driven, no fake data)",
+      "id": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data"
+    },
+    {
+      "label": "Why the three screens were blank",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "community": 207,
+      "norm_label": "why the three screens were blank",
+      "id": "satyam_ops_dataset_fix_why_the_three_screens_were_blank"
+    },
+    {
+      "label": "What each screen now does",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L21",
+      "_origin": "ast",
+      "community": 207,
+      "norm_label": "what each screen now does",
+      "id": "satyam_ops_dataset_fix_what_each_screen_now_does"
+    },
+    {
+      "label": "Verification (static analysis)",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 207,
+      "norm_label": "verification (static analysis)",
+      "id": "satyam_ops_dataset_fix_verification_static_analysis"
+    },
+    {
+      "label": "1. Predictive Deployment",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L43",
+      "_origin": "ast",
+      "community": 207,
+      "norm_label": "1. predictive deployment",
+      "id": "satyam_ops_dataset_fix_1_predictive_deployment"
+    },
+    {
+      "label": "2. Demo Simulation",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L406",
+      "_origin": "ast",
+      "community": 207,
+      "norm_label": "2. demo simulation",
+      "id": "satyam_ops_dataset_fix_2_demo_simulation"
+    },
+    {
+      "label": "3. Live Operations Map",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L808",
+      "_origin": "ast",
+      "community": 207,
+      "norm_label": "3. live operations map",
+      "id": "satyam_ops_dataset_fix_3_live_operations_map"
+    },
+    {
+      "label": "After applying",
+      "file_type": "document",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L1419",
+      "_origin": "ast",
+      "community": 207,
+      "norm_label": "after applying",
+      "id": "satyam_ops_dataset_fix_after_applying"
     },
     {
       "label": "LiveOperationsMap.tsx",
@@ -239,9 +389,9 @@
       "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "ops_liveoperationsmap",
       "community": 48,
-      "norm_label": "liveoperationsmap.tsx"
+      "norm_label": "liveoperationsmap.tsx",
+      "id": "ops_liveoperationsmap"
     },
     {
       "label": "BENGALURU",
@@ -249,9 +399,9 @@
       "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "ops_liveoperationsmap_bengaluru",
       "community": 48,
-      "norm_label": "bengaluru"
+      "norm_label": "bengaluru",
+      "id": "ops_liveoperationsmap_bengaluru"
     },
     {
       "label": "KARNATAKA",
@@ -259,9 +409,9 @@
       "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "ops_liveoperationsmap_karnataka",
       "community": 48,
-      "norm_label": "karnataka"
+      "norm_label": "karnataka",
+      "id": "ops_liveoperationsmap_karnataka"
     },
     {
       "label": "SignalState",
@@ -269,9 +419,9 @@
       "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
       "source_location": "L12",
       "_origin": "ast",
-      "id": "ops_liveoperationsmap_signalstate",
       "community": 48,
-      "norm_label": "signalstate"
+      "norm_label": "signalstate",
+      "id": "ops_liveoperationsmap_signalstate"
     },
     {
       "label": "CorridorState",
@@ -279,9 +429,9 @@
       "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "ops_liveoperationsmap_corridorstate",
       "community": 48,
-      "norm_label": "corridorstate"
+      "norm_label": "corridorstate",
+      "id": "ops_liveoperationsmap_corridorstate"
     },
     {
       "label": "RouteLine",
@@ -289,9 +439,9 @@
       "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "ops_liveoperationsmap_routeline",
       "community": 48,
-      "norm_label": "routeline"
+      "norm_label": "routeline",
+      "id": "ops_liveoperationsmap_routeline"
     },
     {
       "label": "HeatPoint",
@@ -299,9 +449,9 @@
       "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "ops_liveoperationsmap_heatpoint",
       "community": 48,
-      "norm_label": "heatpoint"
+      "norm_label": "heatpoint",
+      "id": "ops_liveoperationsmap_heatpoint"
     },
     {
       "label": "ensureKeyframes()",
@@ -309,9 +459,9 @@
       "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "ops_liveoperationsmap_ensurekeyframes",
       "community": 48,
-      "norm_label": "ensurekeyframes()"
+      "norm_label": "ensurekeyframes()",
+      "id": "ops_liveoperationsmap_ensurekeyframes"
     },
     {
       "label": "LiveOperationsMap()",
@@ -319,9 +469,9 @@
       "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
       "source_location": "L29",
       "_origin": "ast",
-      "id": "ops_liveoperationsmap_liveoperationsmap",
       "community": 205,
-      "norm_label": "liveoperationsmap()"
+      "norm_label": "liveoperationsmap()",
+      "id": "ops_liveoperationsmap_liveoperationsmap"
     },
     {
       "label": "PredictivePanel.tsx",
@@ -329,9 +479,9 @@
       "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "ops_predictivepanel",
       "community": 101,
-      "norm_label": "predictivepanel.tsx"
+      "norm_label": "predictivepanel.tsx",
+      "id": "ops_predictivepanel"
     },
     {
       "label": "RISK_BG",
@@ -339,9 +489,9 @@
       "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "ops_predictivepanel_risk_bg",
       "community": 101,
-      "norm_label": "risk_bg"
+      "norm_label": "risk_bg",
+      "id": "ops_predictivepanel_risk_bg"
     },
     {
       "label": "RISK_ORDER",
@@ -349,9 +499,9 @@
       "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
       "source_location": "L16",
       "_origin": "ast",
-      "id": "ops_predictivepanel_risk_order",
       "community": 101,
-      "norm_label": "risk_order"
+      "norm_label": "risk_order",
+      "id": "ops_predictivepanel_risk_order"
     },
     {
       "label": "LL",
@@ -359,9 +509,9 @@
       "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "ops_predictivepanel_ll",
       "community": 101,
-      "norm_label": "ll"
+      "norm_label": "ll",
+      "id": "ops_predictivepanel_ll"
     },
     {
       "label": "lerp()",
@@ -369,9 +519,9 @@
       "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "ops_predictivepanel_lerp",
       "community": 101,
-      "norm_label": "lerp()"
+      "norm_label": "lerp()",
+      "id": "ops_predictivepanel_lerp"
     },
     {
       "label": "routeBetween()",
@@ -379,9 +529,9 @@
       "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
       "source_location": "L21",
       "_origin": "ast",
-      "id": "ops_predictivepanel_routebetween",
       "community": 101,
-      "norm_label": "routebetween()"
+      "norm_label": "routebetween()",
+      "id": "ops_predictivepanel_routebetween"
     },
     {
       "label": "cellForAlert()",
@@ -389,9 +539,9 @@
       "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
       "source_location": "L30",
       "_origin": "ast",
-      "id": "ops_predictivepanel_cellforalert",
       "community": 101,
-      "norm_label": "cellforalert()"
+      "norm_label": "cellforalert()",
+      "id": "ops_predictivepanel_cellforalert"
     },
     {
       "label": "PredictivePanel()",
@@ -399,9 +549,9 @@
       "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
       "source_location": "L39",
       "_origin": "ast",
-      "id": "ops_predictivepanel_predictivepanel",
       "community": 205,
-      "norm_label": "predictivepanel()"
+      "norm_label": "predictivepanel()",
+      "id": "ops_predictivepanel_predictivepanel"
     },
     {
       "label": "CrimeMap.tsx",
@@ -452,156 +602,6 @@
       "community": 101,
       "norm_label": "crimemap()",
       "id": "components_crimemap_crimemap"
-    },
-    {
-      "label": "DispatchPanel.tsx",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "dispatchpanel.tsx",
-      "id": "ops_dispatchpanel"
-    },
-    {
-      "label": "PHASES",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "phases",
-      "id": "ops_dispatchpanel_phases"
-    },
-    {
-      "label": "phaseIndex()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L14",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "phaseindex()",
-      "id": "ops_dispatchpanel_phaseindex"
-    },
-    {
-      "label": "PhaseTimeline()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L19",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "phasetimeline()",
-      "id": "ops_dispatchpanel_phasetimeline"
-    },
-    {
-      "label": "Corridor",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L44",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "corridor",
-      "id": "ops_dispatchpanel_corridor"
-    },
-    {
-      "label": "LL",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L50",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "ll",
-      "id": "ops_dispatchpanel_ll"
-    },
-    {
-      "label": "SimSignal",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L51",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "simsignal",
-      "id": "ops_dispatchpanel_simsignal"
-    },
-    {
-      "label": "DemoDispatch",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L52",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "demodispatch",
-      "id": "ops_dispatchpanel_demodispatch"
-    },
-    {
-      "label": "DEMO_DISPATCHES",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L57",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "demo_dispatches",
-      "id": "ops_dispatchpanel_demo_dispatches"
-    },
-    {
-      "label": "lerp()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L75",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "lerp()",
-      "id": "ops_dispatchpanel_lerp"
-    },
-    {
-      "label": "straightRoute()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L77",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "straightroute()",
-      "id": "ops_dispatchpanel_straightroute"
-    },
-    {
-      "label": "curvedRoute()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L83",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "curvedroute()",
-      "id": "ops_dispatchpanel_curvedroute"
-    },
-    {
-      "label": "haversineKm()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L95",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "haversinekm()",
-      "id": "ops_dispatchpanel_haversinekm"
-    },
-    {
-      "label": "makeSignals()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L101",
-      "_origin": "ast",
-      "community": 194,
-      "norm_label": "makesignals()",
-      "id": "ops_dispatchpanel_makesignals"
-    },
-    {
-      "label": "DispatchPanel()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L108",
-      "_origin": "ast",
-      "community": 205,
-      "norm_label": "dispatchpanel()",
-      "id": "ops_dispatchpanel_dispatchpanel"
     },
     {
       "label": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
@@ -25866,95 +25866,15 @@
   ],
   "links": [
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "satyam_ops_dataset_fix",
-      "target": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L43",
-      "weight": 1.0,
-      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
-      "target": "satyam_ops_dataset_fix_1_predictive_deployment",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L406",
-      "weight": 1.0,
-      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
-      "target": "satyam_ops_dataset_fix_2_demo_simulation",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L808",
-      "weight": 1.0,
-      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
-      "target": "satyam_ops_dataset_fix_3_live_operations_map",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L1419",
-      "weight": 1.0,
-      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
-      "target": "satyam_ops_dataset_fix_after_applying",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L31",
-      "weight": 1.0,
-      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
-      "target": "satyam_ops_dataset_fix_verification_static_analysis",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L21",
-      "weight": 1.0,
-      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
-      "target": "satyam_ops_dataset_fix_what_each_screen_now_does",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "SATYAM_OPS_DATASET_FIX.md",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
-      "target": "satyam_ops_dataset_fix_why_the_three_screens_were_blank",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_demosimpanel",
-      "target": "api_intelligence_intelligence",
-      "confidence_score": 1.0
+      "target": "api_intelligence_intelligence"
     },
     {
       "relation": "imports_from",
@@ -26072,9 +25992,9 @@
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_demosimpanel",
-      "target": "ops_demosimpanel_callsigns",
-      "confidence_score": 1.0
+      "target": "ops_demosimpanel_callsigns"
     },
     {
       "relation": "contains",
@@ -26082,9 +26002,9 @@
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_demosimpanel",
-      "target": "ops_demosimpanel_curvedroute",
-      "confidence_score": 1.0
+      "target": "ops_demosimpanel_curvedroute"
     },
     {
       "relation": "contains",
@@ -26102,9 +26022,9 @@
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_demosimpanel",
-      "target": "ops_demosimpanel_dispatch",
-      "confidence_score": 1.0
+      "target": "ops_demosimpanel_dispatch"
     },
     {
       "relation": "contains",
@@ -26112,9 +26032,9 @@
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_demosimpanel",
-      "target": "ops_demosimpanel_fallback_scenes",
-      "confidence_score": 1.0
+      "target": "ops_demosimpanel_fallback_scenes"
     },
     {
       "relation": "contains",
@@ -26132,9 +26052,9 @@
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_demosimpanel",
-      "target": "ops_demosimpanel_haversinekm",
-      "confidence_score": 1.0
+      "target": "ops_demosimpanel_haversinekm"
     },
     {
       "relation": "contains",
@@ -26142,9 +26062,9 @@
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_demosimpanel",
-      "target": "ops_demosimpanel_lerp",
-      "confidence_score": 1.0
+      "target": "ops_demosimpanel_lerp"
     },
     {
       "relation": "contains",
@@ -26152,9 +26072,9 @@
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_demosimpanel",
-      "target": "ops_demosimpanel_ll",
-      "confidence_score": 1.0
+      "target": "ops_demosimpanel_ll"
     },
     {
       "relation": "contains",
@@ -26162,9 +26082,9 @@
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_demosimpanel",
-      "target": "ops_demosimpanel_makesignals",
-      "confidence_score": 1.0
+      "target": "ops_demosimpanel_makesignals"
     },
     {
       "relation": "contains",
@@ -26172,9 +26092,9 @@
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_demosimpanel",
-      "target": "ops_demosimpanel_phase",
-      "confidence_score": 1.0
+      "target": "ops_demosimpanel_phase"
     },
     {
       "relation": "contains",
@@ -26182,9 +26102,9 @@
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_demosimpanel",
-      "target": "ops_demosimpanel_simsignal",
-      "confidence_score": 1.0
+      "target": "ops_demosimpanel_simsignal"
     },
     {
       "relation": "contains",
@@ -26192,9 +26112,9 @@
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_demosimpanel",
-      "target": "ops_demosimpanel_straightroute",
-      "confidence_score": 1.0
+      "target": "ops_demosimpanel_straightroute"
     },
     {
       "relation": "imports_from",
@@ -26214,9 +26134,9 @@
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_demosimpanel_straightroute",
-      "target": "ops_demosimpanel_lerp",
-      "confidence_score": 1.0
+      "target": "ops_demosimpanel_lerp"
     },
     {
       "relation": "imports",
@@ -26228,548 +26148,6 @@
       "confidence_score": 1.0,
       "source": "routes_operations",
       "target": "ops_demosimpanel_demosimpanel"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "api_client_api",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "api_intelligence_intelligence",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "api_responseops"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "api_responseops_activedispatch"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "api_responseops_openopssocket"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "api_responseops_patrol"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "api_responseops_responseops"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "api_responseops_signal"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "ops_liveoperationsmap_bengaluru"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "ops_liveoperationsmap_corridorstate"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "ops_liveoperationsmap_ensurekeyframes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "ops_liveoperationsmap_heatpoint",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "ops_liveoperationsmap_karnataka",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L31",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "ops_liveoperationsmap_liveoperationsmap"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "ops_liveoperationsmap_routeline"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "ops_liveoperationsmap_signalstate"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/operations.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_operations",
-      "target": "ops_liveoperationsmap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/operations.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_operations",
-      "target": "ops_liveoperationsmap_liveoperationsmap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_client_api",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_intelligence_forecastalert",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_intelligence_forecastcell",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_intelligence_intelligence",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops_responseops"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops_riskzone"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops_suggestion"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "components_crimemap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "components_crimemap_crimemap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "components_crimemap_hotspot"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L30",
-      "weight": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_cellforalert",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_lerp",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L18",
-      "weight": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_ll",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_predictivepanel"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_risk_bg"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_risk_order",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_routebetween",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/operations.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_operations",
-      "target": "ops_predictivepanel"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "source": "ops_predictivepanel_routebetween",
-      "target": "ops_predictivepanel_lerp",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/operations.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_operations",
-      "target": "ops_predictivepanel_predictivepanel"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_crimemap",
-      "target": "components_crimemap_crimemap"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_crimemap",
-      "target": "components_crimemap_hotspot"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_crimemap",
-      "target": "components_crimemap_karnataka_center"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_crimemap",
-      "target": "components_crimemap_mode"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "components_crimemap"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "components_crimemap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "components_crimemap_hotspot"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "components_crimemap_hotspot"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "components_crimemap_crimemap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "components_crimemap_crimemap"
     },
     {
       "relation": "imports_from",
@@ -26836,6 +26214,39 @@
       "confidence_score": 1.0,
       "source": "ops_dispatchpanel",
       "target": "api_responseops_responseops"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "components_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "components_crimemap_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "components_crimemap_hotspot"
     },
     {
       "relation": "imports",
@@ -27031,6 +26442,595 @@
       "confidence_score": 1.0,
       "source": "routes_operations",
       "target": "ops_dispatchpanel_dispatchpanel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_dataset_fix",
+      "target": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
+      "target": "satyam_ops_dataset_fix_1_predictive_deployment"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L406",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
+      "target": "satyam_ops_dataset_fix_2_demo_simulation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L808",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
+      "target": "satyam_ops_dataset_fix_3_live_operations_map"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L1419",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
+      "target": "satyam_ops_dataset_fix_after_applying"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
+      "target": "satyam_ops_dataset_fix_verification_static_analysis"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
+      "target": "satyam_ops_dataset_fix_what_each_screen_now_does"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_OPS_DATASET_FIX.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_ops_dataset_fix_satyam_fix_predictive_deployment_demo_simulation_live_map_dataset_driven_no_fake_data",
+      "target": "satyam_ops_dataset_fix_why_the_three_screens_were_blank"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "api_intelligence_intelligence"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "api_responseops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "api_responseops_activedispatch"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "api_responseops_openopssocket"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "api_responseops_patrol"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "api_responseops_responseops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "api_responseops_signal"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "ops_liveoperationsmap_bengaluru"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "ops_liveoperationsmap_corridorstate"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "ops_liveoperationsmap_ensurekeyframes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "ops_liveoperationsmap_heatpoint"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "ops_liveoperationsmap_karnataka"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "ops_liveoperationsmap_liveoperationsmap"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "ops_liveoperationsmap_routeline"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "ops_liveoperationsmap_signalstate"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/operations.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_operations",
+      "target": "ops_liveoperationsmap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/operations.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_operations",
+      "target": "ops_liveoperationsmap_liveoperationsmap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_intelligence_forecastalert"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_intelligence_forecastcell"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_intelligence_intelligence"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops_responseops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops_riskzone"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops_suggestion"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "components_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "components_crimemap_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "components_crimemap_hotspot"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_cellforalert"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_lerp"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_ll"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_predictivepanel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_risk_bg"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_risk_order"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_routebetween"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/operations.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_operations",
+      "target": "ops_predictivepanel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel_routebetween",
+      "target": "ops_predictivepanel_lerp"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/operations.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_operations",
+      "target": "ops_predictivepanel_predictivepanel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_crimemap",
+      "target": "components_crimemap_crimemap"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_crimemap",
+      "target": "components_crimemap_hotspot"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_crimemap",
+      "target": "components_crimemap_karnataka_center"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_crimemap",
+      "target": "components_crimemap_mode"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "components_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "components_crimemap_hotspot"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "components_crimemap_crimemap"
     },
     {
       "relation": "contains",
@@ -73533,5 +73533,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "bc1662ed84b379c66a133696e5db57d9063df031"
+  "built_at_commit": "fb33898913d827f657f90e5b7c6397a091a33331"
 }
