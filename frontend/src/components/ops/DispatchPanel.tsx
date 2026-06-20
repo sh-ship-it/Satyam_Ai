@@ -401,6 +401,7 @@ export function DispatchPanel() {
           corridorPath={simRunning ? (simCorridor ?? undefined) : (corridor?.routeCoords ?? undefined)}
           fitSignal={simFitSignal}
           lockBounds={simRunning}
+          darkTiles
           liveMarker={
             simRunning
               ? simCar ? { lat: simCar.lat, lng: simCar.lng, weight: 3, label: simDispatch ? `${simDispatch.callsign} ${t("en route")}` : t("Patrol en route") } : null

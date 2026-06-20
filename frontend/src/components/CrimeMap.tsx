@@ -28,6 +28,7 @@ export function CrimeMap({
   corridorPath,
   fitSignal,
   lockBounds,
+  darkTiles,
 }: {
   points: Hotspot[];
   mode?: Mode;
@@ -44,6 +45,8 @@ export function CrimeMap({
   fitSignal?: number;
   /** When true, suppress the automatic fitBounds that fires when `points` changes. */
   lockBounds?: boolean;
+  /** When true, use dark CARTO tiles instead of the default OSM light tiles. */
+  darkTiles?: boolean;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
@@ -60,10 +63,13 @@ export function CrimeMap({
       if (cancelled || !containerRef.current || mapRef.current) return;
       LRef.current = L;
       const map = L.map(containerRef.current, { center: KARNATAKA_CENTER, zoom: 7 });
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "© OpenStreetMap contributors",
-        maxZoom: 19,
-      }).addTo(map);
+      const tileUrl = darkTiles
+        ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
+        : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+      const attribution = darkTiles
+        ? "© OSM © CARTO"
+        : "© OpenStreetMap contributors";
+      L.tileLayer(tileUrl, { attribution, maxZoom: 19 }).addTo(map);
       mapRef.current = map;
       setReady(true);
     })();

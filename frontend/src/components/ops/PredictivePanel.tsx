@@ -42,7 +42,7 @@ export function PredictivePanel() {
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_360px]">
       <div className="h-[520px] overflow-hidden rounded-[8px] border-2 border-foreground">
-        <CrimeMap points={points} mode="heat" />
+        <CrimeMap points={points} mode="heat" darkTiles />
       </div>
 
       <div className="flex flex-col gap-3">
