@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
-    "mtime": 1781848316.3309488,
-    "ast_hash": "c58c6fccf1836d600ba8dd6ca23574f4",
+    "mtime": 1781941823.2264829,
+    "ast_hash": "2bd464123a0849bb3b0b05ecea868bd8",
     "semantic_hash": ""
   },
   "frontend/src/components/DarkModeToggle.tsx": {
@@ -1210,8 +1210,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/ops.py": {
-    "mtime": 1781940397.1234,
-    "ast_hash": "2071a93a781dd0c3d8dce21d836a29dd",
+    "mtime": 1781941780.1595292,
+    "ast_hash": "0ff491215241c1eedf397c2672bc3699",
     "semantic_hash": ""
   },
   "backend/app/db/ops_models.py": {
@@ -1225,13 +1225,13 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/responseOps.ts": {
-    "mtime": 1781940483.1290932,
-    "ast_hash": "d0215fee8c7ae4fb1bd5a510feb4d7d7",
+    "mtime": 1781941804.129035,
+    "ast_hash": "bf98663fe8b2654a8988f5d171757e3f",
     "semantic_hash": ""
   },
   "frontend/src/routes/operations.tsx": {
-    "mtime": 1781940434.0003047,
-    "ast_hash": "a1f978af5fb430663593d62c8db678aa",
+    "mtime": 1781941838.156846,
+    "ast_hash": "7c7262d011eb2c18ab48e3519daee341",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE0_SCAFFOLD.md": {
@@ -1240,8 +1240,8 @@
     "semantic_hash": ""
   },
   "backend/app/schemas/ops.py": {
-    "mtime": 1781940303.7095752,
-    "ast_hash": "5acc76b207c7625205fd3458998726fe",
+    "mtime": 1781941744.1698644,
+    "ast_hash": "d347ccdce7ffc2adbb7696f92e478734",
     "semantic_hash": ""
   },
   "backend/app/services/ops/__init__.py": {
@@ -1262,6 +1262,31 @@
   "SATYAM_OPS_PHASE1_PREDICTIVE.md": {
     "mtime": 1781899368.8711703,
     "ast_hash": "a8c391ebe5a907b51ea51dc2e2723e0a",
+    "semantic_hash": ""
+  },
+  "backend/app/services/ops/routing_service.py": {
+    "mtime": 1781941650.609901,
+    "ast_hash": "8b4536037a6978731665e847de62b8eb",
+    "semantic_hash": ""
+  },
+  "backend/app/services/ops/sim_service.py": {
+    "mtime": 1781941686.431643,
+    "ast_hash": "8e53bc3b2a8457d0e6b4c16fb202e7bd",
+    "semantic_hash": ""
+  },
+  "backend/app/services/ops/ws_manager.py": {
+    "mtime": 1781941666.1150532,
+    "ast_hash": "620e77e7c0d57aa70a8caa421935a4e9",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ops/DispatchPanel.tsx": {
+    "mtime": 1781941712.5691833,
+    "ast_hash": "181f7b4f9aa4698a9676823a1ee45c9f",
+    "semantic_hash": ""
+  },
+  "SATYAM_OPS_PHASE2_DISPATCH_SIM.md": {
+    "mtime": 1781899382.0038986,
+    "ast_hash": "a3b76b3fe8bdbc17f3eac9ffeaa6ff67",
     "semantic_hash": ""
   }
 }
