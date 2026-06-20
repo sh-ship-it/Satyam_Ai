@@ -1,20 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import "leaflet/dist/leaflet.css";
-import { Radio, Square, Route as RouteIcon, Zap } from "lucide-react";
+import { Radio, Square, Route as RouteIcon, Zap, Flame, Info } from "lucide-react";
 import { responseOps, openOpsSocket, type Patrol, type Signal, type ActiveDispatch } from "@/lib/api/responseOps";
+import { api } from "@/lib/api/client";
+import { intelligence } from "@/lib/api/intelligence";
 import { useT } from "@/lib/i18n";
 
 const BENGALURU: [number, number] = [12.9716, 77.5946];
+const KARNATAKA: [number, number] = [14.5, 75.7];
 
 type SignalState = { id?: number; junction_id: string; lat: number; lng: number; state: string };
-type CorridorState = {
-  routeCoords: [number, number][];
-  signals: { junctionId: string; lat: number; lng: number }[];
-  message: string;
-} | null;
+type CorridorState = { routeCoords: [number, number][]; signals: { junctionId: string; lat: number; lng: number }[]; message: string } | null;
 type RouteLine = { id: number; coords: [number, number][] };
+type HeatPoint = { lat: number; lng: number; weight: number; label?: string };
 
-// Inject keyframes once (pulse / dash / glow).
 const KF_ID = "ops-livemap-kf";
 function ensureKeyframes() {
   if (typeof document === "undefined" || document.getElementById(KF_ID)) return;
@@ -23,7 +22,6 @@ function ensureKeyframes() {
   st.textContent = `
 @keyframes opsmap-pulse{0%{transform:scale(.6);opacity:.85}100%{transform:scale(2.1);opacity:0}}
 @keyframes opsmap-dash{to{stroke-dashoffset:-1000}}
-@keyframes opsmap-glow{0%,100%{filter:drop-shadow(0 0 3px #3BA0FF)}50%{filter:drop-shadow(0 0 9px #3BA0FF)}}
 .opsmap-route-core{stroke-dasharray:14 10;animation:opsmap-dash 18s linear infinite}`;
   document.head.appendChild(st);
 }
@@ -43,20 +41,24 @@ export function LiveOperationsMap() {
   const [routes, setRoutes] = useState<RouteLine[]>([]);
   const [corridor, setCorridor] = useState<CorridorState>(null);
   const [showRoutes, setShowRoutes] = useState(true);
+  const [showHeat, setShowHeat] = useState(true);
   const [demoOn, setDemoOn] = useState(false);
 
-  // Layer refs
+  const [hotspots, setHotspots] = useState<HeatPoint[]>([]);
+  const [riskCount, setRiskCount] = useState(0);
+
   const tileRef = useRef<any>(null);
+  const heatLayerRef = useRef<any>(null);
   const incidentLayerRef = useRef<any>(null);
   const signalLayerRef = useRef<any>(null);
   const routeLayerRef = useRef<any>(null);
   const vehiclesRef = useRef<Map<number, any>>(new Map());
   const liveRef = useRef<Record<number, { lat: number; lng: number; etaSec: number }>>({});
+  const fittedRef = useRef(false);
 
   const refreshActive = () =>
     responseOps.activeDispatches().then((r) => setActive(r.active)).catch(() => {});
 
-  // ── Initial data load ──────────────────────────────────────────────────────
   useEffect(() => {
     responseOps.patrols().then(setPatrols).catch(() => {});
     responseOps.signals().then((s) => setSignals(s as any)).catch(() => {});
@@ -67,15 +69,25 @@ export function LiveOperationsMap() {
     return () => clearInterval(id);
   }, []);
 
-  // ── Init Leaflet (dark tiles) ──────────────────────────────────────────────
+  // Always-on base layer: real crime data from the dataset
+  useEffect(() => {
+    api.mapHotspots({ mode: "by_crime" })
+      .then((r) => setHotspots((r.points ?? []).map((p) => ({ lat: p.lat, lng: p.lng, weight: p.weight, label: p.label ?? undefined }))))
+      .catch(() => {});
+    const p = new URLSearchParams({ horizon_days: "7", grid_size: "0.02" });
+    intelligence.getForecastHotspots(p).then((h) => setRiskCount((h.cells ?? []).length)).catch(() => {});
+  }, []);
+
+  // Init Leaflet with dark tiles
   useEffect(() => {
     ensureKeyframes();
     let cancelled = false;
     (async () => {
       const L = (await import("leaflet")).default;
+      await import("leaflet.heat");
       if (cancelled || !containerRef.current || mapRef.current) return;
       LRef.current = L;
-      const map = L.map(containerRef.current, { center: BENGALURU, zoom: 12, zoomControl: true });
+      const map = L.map(containerRef.current, { center: KARNATAKA, zoom: 7, zoomControl: true });
       tileRef.current = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png", {
         attribution: "© OSM © CARTO", maxZoom: 19,
       }).addTo(map);
@@ -89,7 +101,28 @@ export function LiveOperationsMap() {
     };
   }, []);
 
-  // ── WebSocket live events ──────────────────────────────────────────────────
+  // Crime-density heat layer (always visible)
+  useEffect(() => {
+    const map = mapRef.current, L = LRef.current;
+    if (!map || !L || !ready) return;
+    if (heatLayerRef.current) { map.removeLayer(heatLayerRef.current); heatLayerRef.current = null; }
+    if (!showHeat || hotspots.length === 0) return;
+    const maxW = Math.max(1, ...hotspots.map((h) => h.weight));
+    const heat = (L as any).heatLayer(
+      hotspots.map((h) => [h.lat, h.lng, Math.max(0.15, h.weight / maxW)]),
+      { radius: 28, blur: 22, maxZoom: 14, max: 1.0, gradient: { 0.2: "#3b82f6", 0.4: "#fbbf24", 0.7: "#f97316", 1.0: "#ef4444" } },
+    );
+    heat.addTo(map);
+    heatLayerRef.current = heat;
+    if (!fittedRef.current && active.length === 0) {
+      try {
+        map.fitBounds(L.latLngBounds(hotspots.map((h) => [h.lat, h.lng])), { padding: [40, 40], maxZoom: 12 });
+        fittedRef.current = true;
+      } catch { /* ignore */ }
+    }
+  }, [hotspots, showHeat, ready, active.length]);
+
+  // WebSocket additive overlay
   useEffect(() => {
     const ws = openOpsSocket();
     ws.onmessage = (e) => {
@@ -103,14 +136,12 @@ export function LiveOperationsMap() {
             const i = prev.findIndex((a) => a.dispatchId === msg.dispatchId);
             if (i < 0) { refreshActive(); return prev; }
             const next = [...prev];
-            next[i] = { ...next[i], lat: msg.lat, lng: msg.lng, eta_sec: msg.etaSec,
-              progress: msg.progress ?? next[i].progress, phase: msg.phase ?? next[i].phase, status: "EN_ROUTE" };
+            next[i] = { ...next[i], lat: msg.lat, lng: msg.lng, eta_sec: msg.etaSec, progress: msg.progress ?? next[i].progress, phase: msg.phase ?? next[i].phase, status: "EN_ROUTE" };
             return next;
           });
           break;
         case "DISPATCH_STATUS":
-          setActive((prev) => prev.map((a) =>
-            a.dispatchId === msg.dispatchId ? { ...a, status: msg.status, phase: msg.phase ?? msg.status } : a));
+          setActive((prev) => prev.map((a) => a.dispatchId === msg.dispatchId ? { ...a, status: msg.status, phase: msg.phase ?? msg.status } : a));
           if (msg.status === "COMPLETED" || msg.status === "CANCELLED") {
             removeVehicle(msg.dispatchId);
             setRoutes((prev) => prev.filter((r) => r.id !== msg.dispatchId));
@@ -118,25 +149,16 @@ export function LiveOperationsMap() {
             setTimeout(refreshActive, 300);
           }
           break;
-        case "SIGNAL_GREEN":
-          setSignals((prev) => prev.map((s) => (s.junction_id === msg.junctionId ? { ...s, state: "GREEN" } : s)));
-          break;
-        case "SIGNAL_RESET":
-          setSignals((prev) => prev.map((s) => ({ ...s, state: "NORMAL" })));
-          break;
-        case "GREEN_CORRIDOR_ACTIVE":
-          setCorridor({ routeCoords: msg.routeCoords ?? [], signals: msg.signals ?? [], message: msg.message ?? "" });
-          break;
-        case "GREEN_CORRIDOR_DEACTIVATED":
-          setCorridor(null);
-          break;
+        case "SIGNAL_GREEN": setSignals((prev) => prev.map((s) => s.junction_id === msg.junctionId ? { ...s, state: "GREEN" } : s)); break;
+        case "SIGNAL_RESET": setSignals((prev) => prev.map((s) => ({ ...s, state: "NORMAL" }))); break;
+        case "GREEN_CORRIDOR_ACTIVE": setCorridor({ routeCoords: msg.routeCoords ?? [], signals: msg.signals ?? [], message: msg.message ?? "" }); break;
+        case "GREEN_CORRIDOR_DEACTIVATED": setCorridor(null); break;
       }
     };
     return () => ws.close();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
 
-  // ── Vehicle marker helpers (move, never re-create; panTo only off-screen) ──
   function moveVehicle(dispatchId: number, lat: number, lng: number, _patrolId?: number) {
     const map = mapRef.current, L = LRef.current;
     if (!map || !L) return;
@@ -145,16 +167,12 @@ export function LiveOperationsMap() {
     if (!m) {
       const icon = L.divIcon({
         className: "",
-        html: `<div style="position:relative;display:flex;align-items:center;justify-content:center;width:30px;height:30px">`
-          + `<span style="position:absolute;width:30px;height:30px;border-radius:9999px;background:#7c3aed55;animation:opsmap-pulse 1.4s ease-out infinite"></span>`
-          + `<span style="position:relative;display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:7px;border:2px solid #a855f7;background:#1e1b2e;font-size:15px;line-height:1">\uD83D\uDE93</span></div>`,
+        html: `<div style="position:relative;display:flex;align-items:center;justify-content:center;width:30px;height:30px"><span style="position:absolute;width:30px;height:30px;border-radius:9999px;background:#7c3aed55;animation:opsmap-pulse 1.4s ease-out infinite"></span><span style="position:relative;display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:7px;border:2px solid #a855f7;background:#1e1b2e;font-size:15px;line-height:1">\uD83D\uDE93</span></div>`,
         iconSize: [30, 30], iconAnchor: [15, 15],
       });
       m = L.marker(ll, { icon }).addTo(map);
       vehiclesRef.current.set(dispatchId, m);
-    } else {
-      m.setLatLng(ll);
-    }
+    } else { m.setLatLng(ll); }
     if (!map.getBounds().contains(ll)) map.panTo(ll, { animate: true });
   }
 
@@ -166,7 +184,7 @@ export function LiveOperationsMap() {
     delete liveRef.current[dispatchId];
   }
 
-  // ── Incident markers (pulsing orange) from review queue + risk zones ───────
+  // Incident markers
   useEffect(() => {
     const map = mapRef.current, L = LRef.current;
     if (!map || !L || !ready) return;
@@ -174,20 +192,14 @@ export function LiveOperationsMap() {
     const group = L.layerGroup();
     active.forEach((a) => {
       if (a.sceneLat == null || a.sceneLng == null) return;
-      const icon = L.divIcon({
-        className: "",
-        html: `<div style="position:relative;width:22px;height:22px;display:flex;align-items:center;justify-content:center">`
-          + `<span style="position:absolute;width:22px;height:22px;border-radius:9999px;background:#f9731688;animation:opsmap-pulse 1.6s ease-out infinite"></span>`
-          + `<span style="position:relative;width:11px;height:11px;border-radius:9999px;background:#ef4444;border:2px solid #fff"></span></div>`,
-        iconSize: [22, 22], iconAnchor: [11, 11],
-      });
+      const icon = L.divIcon({ className: "", html: `<div style="position:relative;width:22px;height:22px;display:flex;align-items:center;justify-content:center"><span style="position:absolute;width:22px;height:22px;border-radius:9999px;background:#f9731688;animation:opsmap-pulse 1.6s ease-out infinite"></span><span style="position:relative;width:11px;height:11px;border-radius:9999px;background:#ef4444;border:2px solid #fff"></span></div>`, iconSize: [22, 22], iconAnchor: [11, 11] });
       L.marker([a.sceneLat, a.sceneLng], { icon }).bindTooltip(`Scene · ${a.callsign ?? ""}`).addTo(group);
     });
     group.addTo(map);
     incidentLayerRef.current = group;
   }, [active, ready]);
 
-  // ── Signal dots (green when GREEN, grey otherwise) ─────────────────────────
+  // Signal dots
   useEffect(() => {
     const map = mapRef.current, L = LRef.current;
     if (!map || !L || !ready) return;
@@ -196,19 +208,13 @@ export function LiveOperationsMap() {
     const group = L.layerGroup();
     signals.forEach((s) => {
       const green = s.state === "GREEN";
-      L.circleMarker([s.lat, s.lng], {
-        radius: green ? 7 : 5,
-        color: green ? "#00E6A8" : "#374151",
-        weight: 2,
-        fillColor: green ? "#00E6A8" : "#6b7280",
-        fillOpacity: green ? 1 : 0.8,
-      }).bindTooltip(`${s.junction_id} · ${s.state}`).addTo(group);
+      L.circleMarker([s.lat, s.lng], { radius: green ? 7 : 5, color: green ? "#00E6A8" : "#374151", weight: 2, fillColor: green ? "#00E6A8" : "#6b7280", fillOpacity: green ? 1 : 0.8 }).bindTooltip(`${s.junction_id} · ${s.state}`).addTo(group);
     });
     group.addTo(map);
     signalLayerRef.current = group;
   }, [signals, ready]);
 
-  // ── Route polylines (3-layer glow); corridor route in green ────────────────
+  // Route glows
   useEffect(() => {
     const map = mapRef.current, L = LRef.current;
     if (!map || !L || !ready) return;
@@ -220,10 +226,7 @@ export function LiveOperationsMap() {
       L.polyline(coords, { color, weight: 16, opacity: 0.15 }).addTo(group);
       L.polyline(coords, { color, weight: 8, opacity: 0.4 }).addTo(group);
       const core = L.polyline(coords, { color, weight: 3, opacity: 0.95 }).addTo(group);
-      if (animate && core.getElement) {
-        // className set after add so the SVG path exists
-        try { core.getElement()?.classList.add("opsmap-route-core"); } catch { /* noop */ }
-      }
+      if (animate && core.getElement) try { core.getElement()?.classList.add("opsmap-route-core"); } catch { /* noop */ }
     };
     routes.forEach((r) => drawGlow(r.coords, "#3BA0FF", true));
     if (corridor && corridor.routeCoords.length >= 2) drawGlow(corridor.routeCoords, "#00E6A8", true);
@@ -231,21 +234,17 @@ export function LiveOperationsMap() {
     routeLayerRef.current = group;
   }, [routes, corridor, showRoutes, ready]);
 
-  // ── DEMO control ───────────────────────────────────────────────────────────
   async function toggleDemo() {
     if (demoOn) { await stopAll(); return; }
     setDemoOn(true);
     try {
-      // Ensure there is something to animate: seed a couple of dispatches from risk zones.
       const cur = await responseOps.activeDispatches().catch(() => ({ active: [] as ActiveDispatch[] }));
       if (cur.active.length === 0) {
         const rz = await responseOps.riskZones().catch(() => ({ zones: [] as any[] }));
-        const seeds = rz.zones.slice(0, 3);
-        for (const z of seeds) {
+        for (const z of rz.zones.slice(0, 3)) {
           try {
             const d = await responseOps.dispatch({ scene_lat: z.center_lat, scene_lng: z.center_lng });
-            const coords = (d.route ?? []).map(([lng, lat]) => [lat, lng] as [number, number]);
-            setRoutes((prev) => [...prev, { id: d.id, coords }]);
+            setRoutes((prev) => [...prev, { id: d.id, coords: (d.route ?? []).map(([lng, lat]) => [lat, lng] as [number, number]) }]);
           } catch { /* no free unit */ }
         }
       }
@@ -257,8 +256,7 @@ export function LiveOperationsMap() {
   async function stopAll() {
     setDemoOn(false);
     try { await responseOps.stopAll(); } catch { /* ignore */ }
-    setCorridor(null);
-    setRoutes([]);
+    setCorridor(null); setRoutes([]);
     liveRef.current = {};
     vehiclesRef.current.forEach((m) => { try { mapRef.current?.removeLayer(m); } catch { /* noop */ } });
     vehiclesRef.current.clear();
@@ -267,98 +265,60 @@ export function LiveOperationsMap() {
     refreshActive();
   }
 
-  // ── Derived header counts ──────────────────────────────────────────────────
   const enRouteCount = active.filter((a) => a.status === "EN_ROUTE").length;
-  const incidents = reviewCount + zoneCount;
-  const greenSignals = signals.filter((s) => s.state === "GREEN");
+  const hasLiveData = patrols.length > 0 || active.length > 0 || signals.length > 0;
+
+  // Suppress unused variable warning — BENGALURU is the fallback zoom target
+  void BENGALURU;
 
   return (
     <div className="absolute inset-0 bg-[#0b0f17]">
       <div ref={containerRef} className="absolute inset-0 z-0" />
 
-      {/* HEADER (top-left) */}
       <div className="pointer-events-none absolute left-3 top-3 z-[1000] flex flex-col gap-2">
         <div className="pointer-events-auto rounded-[8px] border-2 border-foreground bg-background/90 px-4 py-2 backdrop-blur">
           <div className="text-base font-extrabold leading-none">{t("Live Operations Map")}</div>
           <div className="mt-1 flex items-center gap-1 text-[11px] font-bold tracking-wide text-muted-foreground">
             <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-[#00E6A8]" />
-            LIVE — {incidents} {t("INCIDENTS")} — {patrols.length} {t("UNITS")} — {enRouteCount} {t("ROUTES")}
+            {hotspots.length} {t("CRIME HOTSPOTS")} — {riskCount} {t("RISK CELLS")} — {patrols.length} {t("UNITS")} — {enRouteCount} {t("EN ROUTE")}
           </div>
         </div>
-
-        {/* Green corridor banner */}
         {corridor && (
           <div className="pointer-events-auto inline-flex w-fit items-center gap-2 rounded-full border-2 border-[#00E6A8] bg-[#06281f]/90 px-3 py-1 text-[11px] font-extrabold text-[#00E6A8] backdrop-blur">
             <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-[#00E6A8]" />
             {t("GREEN CORRIDOR ACTIVE")} · {corridor.signals.length} {t("signals")}
           </div>
         )}
+        {!hasLiveData && (
+          <div className="pointer-events-auto flex w-72 items-start gap-2 rounded-[8px] border-2 border-foreground bg-background/90 px-3 py-2 text-[11px] backdrop-blur">
+            <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+            <span className="text-muted-foreground">{t("Heatmap shows real crime density from the case dataset. Patrols, scenes and green corridors appear here live once Response Ops is running.")}</span>
+          </div>
+        )}
       </div>
 
-      {/* TOP-RIGHT controls + legend */}
       <div className="absolute right-3 top-3 z-[1000] flex flex-col items-end gap-2">
         <div className="flex gap-2">
-          <button
-            onClick={toggleDemo}
-            className={`inline-flex items-center gap-1 rounded-full border-2 border-foreground px-3 py-1.5 text-xs font-extrabold backdrop-blur ${
-              demoOn ? "bg-[#00E6A8] text-black" : "bg-background/90 text-foreground"
-            }`}
-          >
+          <button onClick={() => setShowHeat((v) => !v)}
+            className={`inline-flex items-center gap-1 rounded-full border-2 border-foreground px-3 py-1.5 text-xs font-extrabold backdrop-blur ${showHeat ? "bg-[#f97316] text-black" : "bg-background/90 text-muted-foreground"}`}>
+            <Flame className="h-3.5 w-3.5" /> {t("Heatmap")}
+          </button>
+          <button onClick={toggleDemo}
+            className={`inline-flex items-center gap-1 rounded-full border-2 border-foreground px-3 py-1.5 text-xs font-extrabold backdrop-blur ${demoOn ? "bg-[#00E6A8] text-black" : "bg-background/90 text-foreground"}`}>
             {demoOn ? <Square className="h-3.5 w-3.5" /> : <Radio className="h-3.5 w-3.5" />} DEMO
           </button>
-          <button
-            onClick={() => setShowRoutes((v) => !v)}
-            className={`inline-flex items-center gap-1 rounded-full border-2 border-foreground px-3 py-1.5 text-xs font-extrabold backdrop-blur ${
-              showRoutes ? "bg-[var(--main,#91C5FD)] text-foreground" : "bg-background/90 text-muted-foreground"
-            }`}
-          >
+          <button onClick={() => setShowRoutes((v) => !v)}
+            className={`inline-flex items-center gap-1 rounded-full border-2 border-foreground px-3 py-1.5 text-xs font-extrabold backdrop-blur ${showRoutes ? "bg-[var(--main,#91C5FD)] text-foreground" : "bg-background/90 text-muted-foreground"}`}>
             <RouteIcon className="h-3.5 w-3.5" /> {t("Routes")}
           </button>
         </div>
-
         <div className="rounded-[8px] border-2 border-foreground bg-background/90 px-3 py-2 text-[10px] font-bold backdrop-blur">
+          <div className="mb-1 flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[#ef4444]" /> {t("Crime density")}</div>
           <div className="mb-1 flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[#f97316]" /> {t("Incident")}</div>
           <div className="mb-1 flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[#a855f7]" /> {t("Patrol")}</div>
-          <div className="mb-1 flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[#00E6A8]" /> {t("Signal")}</div>
-          <div className="flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[#ef4444]" /> {t("Scene")}</div>
+          <div className="flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[#00E6A8]" /> {t("Signal")}</div>
         </div>
       </div>
-
-      {/* Floating Green Corridor panel (bottom-right) */}
-      {corridor && (
-        <div className="absolute bottom-4 right-3 z-[1000] w-64 rounded-[10px] border-2 border-foreground bg-background/95 p-3 backdrop-blur">
-          <div className="mb-1 flex items-center gap-2">
-            <Zap className="h-4 w-4 text-[#00E6A8]" />
-            <span className="text-sm font-extrabold text-[#0a8f6b]">{t("Green Corridor")}</span>
-            <span className="ml-auto rounded-[4px] bg-[#00E6A8] px-1.5 py-0.5 text-[9px] font-bold text-black">{t("ACTIVE")}</span>
-          </div>
-          <p className="mb-2 text-[10px] text-muted-foreground">
-            {t("Traffic signals prioritized for emergency vehicle")}
-          </p>
-          <div className="mb-1 text-[10px] font-bold text-muted-foreground">
-            {t("ACTIVE SIGNALS")} ({corridor.signals.length})
-          </div>
-          <div className="mb-3 flex max-h-24 flex-wrap gap-1 overflow-y-auto">
-            {corridor.signals.map((s) => (
-              <span key={s.junctionId} className="rounded-[4px] border-2 border-[#00E6A8] px-1.5 py-0.5 text-[9px] font-bold text-[#0a8f6b]">
-                🚦 {s.junctionId}
-              </span>
-            ))}
-          </div>
-          <div className="mb-2 flex items-center justify-between text-[10px] font-bold">
-            <span className="text-muted-foreground">{t("SIGNALS")}: {greenSignals.length}</span>
-            <span className="inline-flex items-center gap-1">
-              <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-[#00E6A8]" /> {t("STATUS")}
-            </span>
-          </div>
-          <button
-            onClick={stopAll}
-            className="inline-flex w-full items-center justify-center gap-1 rounded-[6px] border-2 border-foreground bg-[#e11d48] px-2 py-1.5 text-[11px] font-bold text-white"
-          >
-            <Square className="h-3 w-3" /> {t("Deactivate Corridor")}
-          </button>
-        </div>
-      )}
     </div>
   );
 }

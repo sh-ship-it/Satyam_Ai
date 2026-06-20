@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
-import { RefreshCw, MapPin, Clock, CheckCircle2, XCircle, ArrowRight } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Radar, RefreshCw, MapPin, Clock, Zap, Play, Square, ShieldAlert, Info, ArrowRight,
+} from "lucide-react";
 import { CrimeMap, type Hotspot } from "@/components/CrimeMap";
-import { responseOps, type RiskZone, type Suggestion } from "@/lib/api/responseOps";
+import { intelligence, type ForecastAlert, type ForecastCell } from "@/lib/api/intelligence";
+import { api } from "@/lib/api/client";
 import { useT } from "@/lib/i18n";
 
 const RISK_BG: Record<string, string> = {
@@ -10,84 +13,204 @@ const RISK_BG: Record<string, string> = {
   Medium: "bg-warning text-foreground",
   Low: "bg-success/20 text-success",
 };
+const RISK_ORDER: Record<string, number> = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+
+type LL = { lat: number; lng: number };
+const lerp = (a: number, b: number, f: number) => a + (b - a) * f;
+
+function routeBetween(a: LL, b: LL, steps = 48): Hotspot[] {
+  const out: Hotspot[] = [];
+  for (let i = 0; i <= steps; i++) {
+    const f = i / steps;
+    out.push({ lat: lerp(a.lat, b.lat, f), lng: lerp(a.lng, b.lng, f), weight: 1 });
+  }
+  return out;
+}
+
+function cellForAlert(alert: ForecastAlert, cells: ForecastCell[]): ForecastCell | null {
+  if (cells.length === 0) return null;
+  const sameType = cells.filter(
+    (c) => c.crime_type?.toLowerCase() === alert.crime_type?.toLowerCase(),
+  );
+  const pool = sameType.length > 0 ? sameType : cells;
+  return [...pool].sort((a, b) => b.risk_score - a.risk_score)[0] ?? null;
+}
 
 export function PredictivePanel() {
   const t = useT();
-  const [zones, setZones] = useState<RiskZone[]>([]);
-  const [sugs, setSugs] = useState<Suggestion[]>([]);
+  const [cells, setCells] = useState<ForecastCell[]>([]);
+  const [alerts, setAlerts] = useState<ForecastAlert[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [asOf, setAsOf] = useState<string | null>(null);
+
+  const [simAlertId, setSimAlertId] = useState<string | null>(null);
+  const [simRoute, setSimRoute] = useState<Hotspot[] | null>(null);
+  const [simCar, setSimCar] = useState<LL | null>(null);
+  const [simTarget, setSimTarget] = useState<ForecastCell | null>(null);
+  const [simArrived, setSimArrived] = useState(false);
+  const [fitSignal, setFitSignal] = useState(0);
+  const simTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const clearSimTimer = () => {
+    if (simTimer.current) { clearInterval(simTimer.current); simTimer.current = null; }
+  };
+  useEffect(() => () => clearSimTimer(), []);
 
   async function load(refresh = false) {
-    setLoading(true);
+    setLoading(true); setError(null);
     try {
-      const [z, s] = await Promise.all([responseOps.riskZones(refresh), responseOps.suggestions()]);
-      setZones(z.zones);
-      setSugs(s.suggestions);
-    } finally {
-      setLoading(false);
-    }
+      const p = new URLSearchParams({ horizon_days: "7", grid_size: "0.02" });
+      const [a, h] = await Promise.all([
+        intelligence.getForecastAlerts(),
+        intelligence.getForecastHotspots(p),
+      ]);
+      setAlerts(a.alerts ?? []);
+      setAsOf(a.as_of_date ?? null);
+      let cs = h.cells ?? [];
+      if (cs.length === 0) {
+        try {
+          const hot = await api.mapHotspots({ mode: "by_crime" });
+          const maxW = Math.max(1, ...(hot.points ?? []).map((p2) => p2.weight));
+          cs = (hot.points ?? []).slice(0, 60).map((p2, i) => ({
+            cell_id: `hot-${i}`,
+            lat: p2.lat, lng: p2.lng,
+            risk_score: Math.round((p2.weight / maxW) * 100),
+            risk_level: p2.weight / maxW >= 0.6 ? "High" : p2.weight / maxW >= 0.3 ? "Medium" : "Low",
+            crime_type: p2.label ?? "All crime",
+            why: [`${Math.round(p2.weight)} historical incidents in this grid cell`],
+          }));
+        } catch { /* ignore */ }
+      }
+      setCells(cs);
+      if (refresh) stopSim();
+    } catch {
+      setError(t("Could not load forecast data. Check you are signed in and the backend is running."));
+    } finally { setLoading(false); }
   }
   useEffect(() => { load(false); }, []);
 
-  async function act(id: number, action: "accept" | "dismiss") {
-    await responseOps.actSuggestion(id, action);
-    setSugs((prev) => prev.filter((s) => s.id !== id));
-    if (action === "accept") load(false);
+  function startSim(alert: ForecastAlert) {
+    const target = cellForAlert(alert, cells);
+    if (!target) return;
+    clearSimTimer();
+    setSimArrived(false);
+    setSimAlertId(alert.alert_id);
+    setSimTarget(target);
+    const origin: LL = { lat: target.lat - 0.025, lng: target.lng - 0.03 };
+    const route = routeBetween(origin, { lat: target.lat, lng: target.lng }, 48);
+    setSimRoute(route);
+    setSimCar(origin);
+    setFitSignal((n) => n + 1);
+    let i = 0;
+    simTimer.current = setInterval(() => {
+      i += 1;
+      if (i >= route.length) {
+        setSimCar({ lat: target.lat, lng: target.lng });
+        setSimArrived(true);
+        clearSimTimer();
+        return;
+      }
+      setSimCar({ lat: route[i].lat, lng: route[i].lng });
+    }, 110);
   }
 
-  const points: Hotspot[] = zones.map((z) => ({
-    lat: z.center_lat, lng: z.center_lng, weight: z.risk_score, label: `${z.risk_label} (${z.risk_score})`,
-  }));
+  function stopSim() {
+    clearSimTimer();
+    setSimAlertId(null); setSimRoute(null); setSimCar(null); setSimTarget(null); setSimArrived(false);
+  }
+
+  const simRunning = simAlertId !== null;
+
+  const points: Hotspot[] = useMemo(
+    () => cells.map((c) => ({ lat: c.lat, lng: c.lng, weight: c.risk_score, label: `${c.risk_level} · ${c.crime_type} (${c.risk_score})` })),
+    [cells],
+  );
+
+  const sortedAlerts = useMemo(
+    () => [...alerts].sort((a, b) => (RISK_ORDER[a.risk_level] ?? 9) - (RISK_ORDER[b.risk_level] ?? 9)),
+    [alerts],
+  );
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_360px]">
-      <div className="h-[520px] overflow-hidden rounded-[8px] border-2 border-foreground">
-        <CrimeMap points={points} mode="heat" darkTiles />
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_380px]">
+      <div className="relative h-[560px] overflow-hidden rounded-[8px] border-2 border-foreground">
+        <CrimeMap
+          points={points} mode="heat" darkTiles lockBounds={simRunning}
+          fitSignal={fitSignal}
+          routePath={simRunning ? (simRoute ?? undefined) : undefined}
+          liveMarker={simRunning && simCar ? { lat: simCar.lat, lng: simCar.lng, weight: 3, label: t("Patrol deploying") } : null}
+        />
+        <div className="pointer-events-none absolute left-3 top-3 z-[1000] rounded-[8px] border-2 border-foreground bg-background/90 px-3 py-2 backdrop-blur">
+          <div className="flex items-center gap-2 text-sm font-extrabold">
+            <Radar className="h-4 w-4" /> {t("Predicted Risk Surface")}
+          </div>
+          <div className="mt-0.5 text-[11px] text-muted-foreground">
+            {cells.length} {t("forecast cells")}{asOf ? ` · ${t("as of")} ${asOf}` : ""}
+          </div>
+          {simRunning && simTarget && (
+            <div className="mt-1 text-[11px] font-bold text-[#0a8f6b]">
+              {simArrived ? t("Unit on station") : t("Deploying unit")} → {simTarget.crime_type}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-extrabold">{t("Deployment suggestions")}</h3>
+          <div>
+            <h3 className="text-sm font-extrabold">{t("Deployment suggestions")}</h3>
+            <p className="text-[11px] text-muted-foreground">{t("Rule-based forecast · real case data · no synthetic incidents")}</p>
+          </div>
           <button onClick={() => load(true)} disabled={loading}
             className="inline-flex items-center gap-1 rounded-[6px] border-2 border-foreground px-2 py-1 text-xs font-bold hover:bg-muted">
             <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} /> {t("Recompute")}
           </button>
         </div>
 
-        {sugs.length === 0 && (
-          <p className="text-xs text-muted-foreground">{t("No pending suggestions.")}</p>
-        )}
+        {error && <p className="rounded-[6px] border-2 border-destructive/40 bg-destructive/10 p-2 text-xs text-destructive">{error}</p>}
+        {!error && sortedAlerts.length === 0 && !loading && <p className="text-xs text-muted-foreground">{t("No active forecast alerts.")}</p>}
 
-        {sugs.map((s) => (
-          <div key={s.id} className="rounded-[8px] border-2 border-foreground bg-background p-3">
-            <div className="mb-1 flex items-center gap-2">
-              <span className="font-extrabold">{s.patrol_callsign ?? `Unit #${s.patrol_id}`}</span>
-              <ArrowRight className="h-4 w-4" />
-              <span className="inline-flex items-center gap-1 text-xs"><MapPin className="h-3 w-3" /> {s.to_lat.toFixed(3)}, {s.to_lng.toFixed(3)}</span>
-            </div>
-            <div className="mb-2 flex flex-wrap gap-1 text-[11px] text-muted-foreground">
-              {s.distance_km != null && <span>{s.distance_km} km away</span>}
-              {s.response_improve_sec != null && (
-                <span className="inline-flex items-center gap-1"><Clock className="h-3 w-3" /> ~{Math.round(s.response_improve_sec / 60)} min faster</span>
-              )}
-            </div>
-            {s.reasons?.length > 0 && (
-              <ul className="mb-2 list-disc pl-4 text-[11px] text-muted-foreground">
-                {s.reasons.slice(0, 3).map((r, i) => <li key={i}>{r}</li>)}
-              </ul>
-            )}
-            <div className="flex gap-2">
-              <button onClick={() => act(s.id, "accept")}
-                className="inline-flex flex-1 items-center justify-center gap-1 rounded-[6px] border-2 border-foreground bg-[var(--success,#00C896)] px-2 py-1 text-xs font-bold text-foreground">
-                <CheckCircle2 className="h-3.5 w-3.5" /> {t("Accept")}
-              </button>
-              <button onClick={() => act(s.id, "dismiss")}
-                className="inline-flex flex-1 items-center justify-center gap-1 rounded-[6px] border-2 border-foreground bg-background px-2 py-1 text-xs font-bold hover:bg-muted">
-                <XCircle className="h-3.5 w-3.5" /> {t("Dismiss")}
-              </button>
-            </div>
-          </div>
-        ))}
+        <div className="flex flex-col gap-3 overflow-y-auto pr-1">
+          {sortedAlerts.map((a) => {
+            const running = simAlertId === a.alert_id;
+            return (
+              <div key={a.alert_id} className={`rounded-[8px] border-2 p-3 ${running ? "border-[#00C896] bg-[#00C896]/5" : "border-foreground bg-background"}`}>
+                <div className="mb-1 flex items-center gap-2">
+                  <ShieldAlert className="h-4 w-4 shrink-0" />
+                  <span className="font-extrabold">{a.crime_type}</span>
+                  <span className={`ml-auto rounded-[4px] px-1.5 py-0.5 text-[10px] font-bold ${RISK_BG[a.risk_level] ?? "bg-muted"}`}>{a.risk_level}</span>
+                </div>
+                <div className="mb-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+                  <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" /> {a.district}</span>
+                  <span className="inline-flex items-center gap-1"><Clock className="h-3 w-3" /> {a.patrol_window}</span>
+                </div>
+                {a.why && <p className="mb-2 text-[11px] text-foreground/75">{a.why}</p>}
+                <div className="mb-2 flex items-start gap-1.5 rounded-[6px] border-2 border-foreground/20 bg-muted/30 px-2 py-1.5">
+                  <Zap className="mt-0.5 h-3 w-3 shrink-0 text-[#0a8f6b]" />
+                  <span className="text-[11px] font-semibold">{a.recommended_action}</span>
+                </div>
+                {a.fairness_note && (
+                  <div className="mb-2 flex items-start gap-1.5">
+                    <Info className="mt-0.5 h-3 w-3 shrink-0 text-muted-foreground" />
+                    <span className="text-[10px] italic text-muted-foreground">{a.fairness_note}</span>
+                  </div>
+                )}
+                {running ? (
+                  <button onClick={stopSim}
+                    className="inline-flex w-full items-center justify-center gap-1 rounded-[6px] border-2 border-foreground bg-background px-2 py-1 text-xs font-bold hover:bg-muted">
+                    <Square className="h-3.5 w-3.5" /> {simArrived ? t("Unit on station — Reset") : t("Stop simulation")}
+                  </button>
+                ) : (
+                  <button onClick={() => startSim(a)} disabled={cells.length === 0}
+                    className="inline-flex w-full items-center justify-center gap-1 rounded-[6px] border-2 border-foreground bg-[var(--success,#00C896)] px-2 py-1 text-xs font-bold text-foreground disabled:opacity-40">
+                    <Play className="h-3.5 w-3.5" /> {t("Simulate deployment")} <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
