@@ -1,16 +1,16 @@
 # Graph Report - Satyam  (2026-06-20)
 
 ## Corpus Check
-- 263 files · ~232,137 words
+- 263 files · ~232,621 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2561 nodes · 4607 edges · 218 communities (196 shown, 22 thin omitted)
+- 2561 nodes · 4608 edges · 218 communities (196 shown, 22 thin omitted)
 - Extraction: 74% EXTRACTED · 26% INFERRED · 0% AMBIGUOUS · INFERRED: 1206 edges (avg confidence: 0.53)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `aec48024`
+- Built from commit: `1d708b60`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -978,7 +978,7 @@ Cohesion: 0.67
 Nodes (3): _keyword_intent(), Intent router. Uses the LLM with a JSON schema, with a cheap keyword fallback so, route()
 
 ## Knowledge Gaps
-- **1063 isolated node(s):** `✅ Verification attestation (I actually checked this, not guessed)`, `How the simulation works`, `Drop-in — replace the WHOLE file`, `After applying`, `PHASES` (+1058 more)
+- **1063 isolated node(s):** `Mode`, `KARNATAKA_CENTER`, `PHASES`, `Corridor`, `LL` (+1058 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -986,14 +986,14 @@ Nodes (3): _keyword_intent(), Intent router. Uses the LLM with a JSON schema, wi
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 42` to `Community 127`?**
-  _High betweenness centrality (0.107) - this node is a cross-community bridge._
+  _High betweenness centrality (0.104) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 121` to `Community 194`, `Community 3`, `Community 101`, `Community 135`, `Community 169`, `Community 46`, `Community 207`, `Community 93`?**
-  _High betweenness centrality (0.050) - this node is a cross-community bridge._
+  _High betweenness centrality (0.049) - this node is a cross-community bridge._
 - **Are the 87 inferred relationships involving `Principal` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Principal` has 87 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 53 inferred relationships involving `Permission` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Permission` has 53 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `✅ Verification attestation (I actually checked this, not guessed)`, `How the simulation works`, `Drop-in — replace the WHOLE file` to the rest of the system?**
+- **What connects `Mode`, `KARNATAKA_CENTER`, `PHASES` to the rest of the system?**
   _1238 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._

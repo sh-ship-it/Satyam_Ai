@@ -4,64 +4,54 @@
   "graph": {},
   "nodes": [
     {
-      "label": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
-      "file_type": "document",
-      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "label": "CrimeMap.tsx",
+      "file_type": "code",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "satyam_dispatch_green_corridor_sim",
-      "community": 216,
-      "norm_label": "satyam_dispatch_green_corridor_sim.md"
+      "id": "components_crimemap",
+      "community": 48,
+      "norm_label": "crimemap.tsx"
     },
     {
-      "label": "Satyam \u2014 Dispatch & Green Corridor SIMULATION (self-contained, demo-only)",
-      "file_type": "document",
-      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
-      "source_location": "L1",
+      "label": "Hotspot",
+      "file_type": "code",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L4",
       "_origin": "ast",
-      "id": "satyam_dispatch_green_corridor_sim_satyam_dispatch_green_corridor_simulation_self_contained_demo_only",
-      "community": 216,
-      "norm_label": "satyam \u2014 dispatch & green corridor simulation (self-contained, demo-only)"
+      "id": "components_crimemap_hotspot",
+      "community": 48,
+      "norm_label": "hotspot"
     },
     {
-      "label": "\u2705 Verification attestation (I actually checked this, not guessed)",
-      "file_type": "document",
-      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "label": "Mode",
+      "file_type": "code",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
       "source_location": "L11",
       "_origin": "ast",
-      "id": "satyam_dispatch_green_corridor_sim_verification_attestation_i_actually_checked_this_not_guessed",
-      "community": 216,
-      "norm_label": "\u2705 verification attestation (i actually checked this, not guessed)"
+      "id": "components_crimemap_mode",
+      "community": 48,
+      "norm_label": "mode"
     },
     {
-      "label": "How the simulation works",
-      "file_type": "document",
-      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
-      "source_location": "L31",
+      "label": "KARNATAKA_CENTER",
+      "file_type": "code",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L13",
       "_origin": "ast",
-      "id": "satyam_dispatch_green_corridor_sim_how_the_simulation_works",
-      "community": 216,
-      "norm_label": "how the simulation works"
+      "id": "components_crimemap_karnataka_center",
+      "community": 48,
+      "norm_label": "karnataka_center"
     },
     {
-      "label": "Drop-in \u2014 replace the WHOLE file",
-      "file_type": "document",
-      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
-      "source_location": "L47",
+      "label": "CrimeMap()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L17",
       "_origin": "ast",
-      "id": "satyam_dispatch_green_corridor_sim_drop_in_replace_the_whole_file",
-      "community": 216,
-      "norm_label": "drop-in \u2014 replace the whole file"
-    },
-    {
-      "label": "After applying",
-      "file_type": "document",
-      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
-      "source_location": "L754",
-      "_origin": "ast",
-      "id": "satyam_dispatch_green_corridor_sim_after_applying",
-      "community": 216,
-      "norm_label": "after applying"
+      "id": "components_crimemap_crimemap",
+      "community": 48,
+      "norm_label": "crimemap()"
     },
     {
       "label": "DispatchPanel.tsx",
@@ -212,6 +202,96 @@
       "id": "ops_dispatchpanel_dispatchpanel",
       "community": 48,
       "norm_label": "dispatchpanel()"
+    },
+    {
+      "label": "PredictivePanel.tsx",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "ops_predictivepanel",
+      "community": 48,
+      "norm_label": "predictivepanel.tsx"
+    },
+    {
+      "label": "RISK_BG",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "ops_predictivepanel_risk_bg",
+      "community": 48,
+      "norm_label": "risk_bg"
+    },
+    {
+      "label": "PredictivePanel()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "ops_predictivepanel_predictivepanel",
+      "community": 48,
+      "norm_label": "predictivepanel()"
+    },
+    {
+      "label": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "file_type": "document",
+      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 216,
+      "norm_label": "satyam_dispatch_green_corridor_sim.md",
+      "id": "satyam_dispatch_green_corridor_sim"
+    },
+    {
+      "label": "Satyam \u2014 Dispatch & Green Corridor SIMULATION (self-contained, demo-only)",
+      "file_type": "document",
+      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 216,
+      "norm_label": "satyam \u2014 dispatch & green corridor simulation (self-contained, demo-only)",
+      "id": "satyam_dispatch_green_corridor_sim_satyam_dispatch_green_corridor_simulation_self_contained_demo_only"
+    },
+    {
+      "label": "\u2705 Verification attestation (I actually checked this, not guessed)",
+      "file_type": "document",
+      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "source_location": "L11",
+      "_origin": "ast",
+      "community": 216,
+      "norm_label": "\u2705 verification attestation (i actually checked this, not guessed)",
+      "id": "satyam_dispatch_green_corridor_sim_verification_attestation_i_actually_checked_this_not_guessed"
+    },
+    {
+      "label": "How the simulation works",
+      "file_type": "document",
+      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 216,
+      "norm_label": "how the simulation works",
+      "id": "satyam_dispatch_green_corridor_sim_how_the_simulation_works"
+    },
+    {
+      "label": "Drop-in \u2014 replace the WHOLE file",
+      "file_type": "document",
+      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "source_location": "L47",
+      "_origin": "ast",
+      "community": 216,
+      "norm_label": "drop-in \u2014 replace the whole file",
+      "id": "satyam_dispatch_green_corridor_sim_drop_in_replace_the_whole_file"
+    },
+    {
+      "label": "After applying",
+      "file_type": "document",
+      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "source_location": "L754",
+      "_origin": "ast",
+      "community": 216,
+      "norm_label": "after applying",
+      "id": "satyam_dispatch_green_corridor_sim_after_applying"
     },
     {
       "label": "SATYAM_OPS_SCREENSHOT_PARITY_PACK.md",
@@ -1072,56 +1152,6 @@
       "community": 172,
       "norm_label": "on_move(lat,lng) optional async hook (per-tick near-corridor activation).",
       "id": "ops_sim_service_rationale_91"
-    },
-    {
-      "label": "CrimeMap.tsx",
-      "file_type": "code",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 48,
-      "norm_label": "crimemap.tsx",
-      "id": "components_crimemap"
-    },
-    {
-      "label": "Hotspot",
-      "file_type": "code",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L4",
-      "_origin": "ast",
-      "community": 48,
-      "norm_label": "hotspot",
-      "id": "components_crimemap_hotspot"
-    },
-    {
-      "label": "Mode",
-      "file_type": "code",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L11",
-      "_origin": "ast",
-      "community": 48,
-      "norm_label": "mode",
-      "id": "components_crimemap_mode"
-    },
-    {
-      "label": "KARNATAKA_CENTER",
-      "file_type": "code",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L13",
-      "_origin": "ast",
-      "community": 48,
-      "norm_label": "karnataka_center",
-      "id": "components_crimemap_karnataka_center"
-    },
-    {
-      "label": "CrimeMap()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L17",
-      "_origin": "ast",
-      "community": 48,
-      "norm_label": "crimemap()",
-      "id": "components_crimemap_crimemap"
     },
     {
       "label": "LiveOperationsMap.tsx",
@@ -6202,36 +6232,6 @@
       "community": 169,
       "norm_label": "for the top zones, suggest the nearest idle patrol to pre-position there.",
       "id": "ops_risk_service_rationale_141"
-    },
-    {
-      "label": "PredictivePanel.tsx",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 48,
-      "norm_label": "predictivepanel.tsx",
-      "id": "ops_predictivepanel"
-    },
-    {
-      "label": "RISK_BG",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L7",
-      "_origin": "ast",
-      "community": 48,
-      "norm_label": "risk_bg",
-      "id": "ops_predictivepanel_risk_bg"
-    },
-    {
-      "label": "PredictivePanel()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L14",
-      "_origin": "ast",
-      "community": 48,
-      "norm_label": "predictivepanel()",
-      "id": "ops_predictivepanel_predictivepanel"
     },
     {
       "label": "SATYAM_OPS_PHASE0_SCAFFOLD.md",
@@ -25618,52 +25618,174 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
-      "source_location": "L1",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L25",
       "weight": 1.0,
-      "source": "satyam_dispatch_green_corridor_sim",
-      "target": "satyam_dispatch_green_corridor_sim_satyam_dispatch_green_corridor_simulation_self_contained_demo_only",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "components_crimemap",
+      "target": "components_crimemap_crimemap"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
-      "source_location": "L754",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L4",
       "weight": 1.0,
-      "source": "satyam_dispatch_green_corridor_sim_satyam_dispatch_green_corridor_simulation_self_contained_demo_only",
-      "target": "satyam_dispatch_green_corridor_sim_after_applying",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "components_crimemap",
+      "target": "components_crimemap_hotspot"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
-      "source_location": "L47",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L13",
       "weight": 1.0,
-      "source": "satyam_dispatch_green_corridor_sim_satyam_dispatch_green_corridor_simulation_self_contained_demo_only",
-      "target": "satyam_dispatch_green_corridor_sim_drop_in_replace_the_whole_file",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "components_crimemap",
+      "target": "components_crimemap_karnataka_center"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
-      "source_location": "L31",
+      "source_file": "frontend/src/components/CrimeMap.tsx",
+      "source_location": "L23",
       "weight": 1.0,
-      "source": "satyam_dispatch_green_corridor_sim_satyam_dispatch_green_corridor_simulation_self_contained_demo_only",
-      "target": "satyam_dispatch_green_corridor_sim_how_the_simulation_works",
+      "confidence_score": 1.0,
+      "source": "components_crimemap",
+      "target": "components_crimemap_mode"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_demosimpanel",
+      "target": "components_crimemap"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "components_crimemap"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "components_crimemap",
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
+      "relation": "imports_from",
+      "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L11",
       "weight": 1.0,
-      "source": "satyam_dispatch_green_corridor_sim_satyam_dispatch_green_corridor_simulation_self_contained_demo_only",
-      "target": "satyam_dispatch_green_corridor_sim_verification_attestation_i_actually_checked_this_not_guessed",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "components_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_demosimpanel",
+      "target": "components_crimemap_hotspot"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "components_crimemap_hotspot"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "components_crimemap_hotspot"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "components_crimemap_hotspot"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_demosimpanel",
+      "target": "components_crimemap_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "components_crimemap_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "components_crimemap_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "components_crimemap_crimemap"
     },
     {
       "relation": "imports_from",
@@ -25732,39 +25854,6 @@
       "target": "api_responseops_responseops"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "components_crimemap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "components_crimemap_crimemap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "components_crimemap_hotspot"
-    },
-    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -25791,9 +25880,9 @@
       "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
       "source_location": "L83",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_dispatchpanel",
-      "target": "ops_dispatchpanel_curvedroute",
-      "confidence_score": 1.0
+      "target": "ops_dispatchpanel_curvedroute"
     },
     {
       "relation": "contains",
@@ -25801,9 +25890,9 @@
       "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_dispatchpanel",
-      "target": "ops_dispatchpanel_demo_dispatches",
-      "confidence_score": 1.0
+      "target": "ops_dispatchpanel_demo_dispatches"
     },
     {
       "relation": "contains",
@@ -25811,9 +25900,9 @@
       "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_dispatchpanel",
-      "target": "ops_dispatchpanel_demodispatch",
-      "confidence_score": 1.0
+      "target": "ops_dispatchpanel_demodispatch"
     },
     {
       "relation": "contains",
@@ -25831,9 +25920,9 @@
       "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
       "source_location": "L95",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_dispatchpanel",
-      "target": "ops_dispatchpanel_haversinekm",
-      "confidence_score": 1.0
+      "target": "ops_dispatchpanel_haversinekm"
     },
     {
       "relation": "contains",
@@ -25841,9 +25930,9 @@
       "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_dispatchpanel",
-      "target": "ops_dispatchpanel_lerp",
-      "confidence_score": 1.0
+      "target": "ops_dispatchpanel_lerp"
     },
     {
       "relation": "contains",
@@ -25851,9 +25940,9 @@
       "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
       "source_location": "L50",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_dispatchpanel",
-      "target": "ops_dispatchpanel_ll",
-      "confidence_score": 1.0
+      "target": "ops_dispatchpanel_ll"
     },
     {
       "relation": "contains",
@@ -25861,9 +25950,9 @@
       "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_dispatchpanel",
-      "target": "ops_dispatchpanel_makesignals",
-      "confidence_score": 1.0
+      "target": "ops_dispatchpanel_makesignals"
     },
     {
       "relation": "contains",
@@ -25901,9 +25990,9 @@
       "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_dispatchpanel",
-      "target": "ops_dispatchpanel_simsignal",
-      "confidence_score": 1.0
+      "target": "ops_dispatchpanel_simsignal"
     },
     {
       "relation": "contains",
@@ -25911,9 +26000,9 @@
       "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
       "source_location": "L77",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_dispatchpanel",
-      "target": "ops_dispatchpanel_straightroute",
-      "confidence_score": 1.0
+      "target": "ops_dispatchpanel_straightroute"
     },
     {
       "relation": "imports_from",
@@ -25944,9 +26033,9 @@
       "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
       "source_location": "L79",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ops_dispatchpanel_straightroute",
-      "target": "ops_dispatchpanel_lerp",
-      "confidence_score": 1.0
+      "target": "ops_dispatchpanel_lerp"
     },
     {
       "relation": "imports",
@@ -25958,6 +26047,153 @@
       "confidence_score": 1.0,
       "source": "routes_operations",
       "target": "ops_dispatchpanel_dispatchpanel"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops_responseops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops_riskzone"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops_suggestion"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_predictivepanel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_risk_bg"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/operations.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_operations",
+      "target": "ops_predictivepanel"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/operations.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_operations",
+      "target": "ops_predictivepanel_predictivepanel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_dispatch_green_corridor_sim",
+      "target": "satyam_dispatch_green_corridor_sim_satyam_dispatch_green_corridor_simulation_self_contained_demo_only"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "source_location": "L754",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_dispatch_green_corridor_sim_satyam_dispatch_green_corridor_simulation_self_contained_demo_only",
+      "target": "satyam_dispatch_green_corridor_sim_after_applying"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "source_location": "L47",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_dispatch_green_corridor_sim_satyam_dispatch_green_corridor_simulation_self_contained_demo_only",
+      "target": "satyam_dispatch_green_corridor_sim_drop_in_replace_the_whole_file"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_dispatch_green_corridor_sim_satyam_dispatch_green_corridor_simulation_self_contained_demo_only",
+      "target": "satyam_dispatch_green_corridor_sim_how_the_simulation_works"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "satyam_dispatch_green_corridor_sim_satyam_dispatch_green_corridor_simulation_self_contained_demo_only",
+      "target": "satyam_dispatch_green_corridor_sim_verification_attestation_i_actually_checked_this_not_guessed"
     },
     {
       "relation": "contains",
@@ -28411,134 +28647,6 @@
       "target": "ops_sim_service_stop"
     },
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_crimemap",
-      "target": "components_crimemap_crimemap"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_crimemap",
-      "target": "components_crimemap_hotspot"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_crimemap",
-      "target": "components_crimemap_karnataka_center"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CrimeMap.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_crimemap",
-      "target": "components_crimemap_mode"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_demosimpanel",
-      "target": "components_crimemap"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "components_crimemap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_demosimpanel",
-      "target": "components_crimemap_hotspot"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "components_crimemap_hotspot"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "components_crimemap_hotspot"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_demosimpanel",
-      "target": "components_crimemap_crimemap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "components_crimemap_crimemap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "components_crimemap_crimemap"
-    },
-    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -28844,45 +28952,12 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/ops/ReviewPanel.tsx",
       "source_location": "L3",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "ops_reviewpanel",
       "target": "api_responseops"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops_riskzone"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops_suggestion"
     },
     {
       "relation": "imports",
@@ -28948,17 +29023,6 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "ops_demosimpanel",
-      "target": "api_responseops_responseops"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
       "target": "api_responseops_responseops"
     },
     {
@@ -29048,28 +29112,6 @@
       "confidence_score": 1.0,
       "source": "routes_operations",
       "target": "ops_demosimpanel_demosimpanel"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/operations.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_operations",
-      "target": "ops_predictivepanel"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/operations.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_operations",
-      "target": "ops_predictivepanel_predictivepanel"
     },
     {
       "relation": "imports_from",
@@ -35567,37 +35609,6 @@
       "confidence_score": 1.0,
       "source": "ops_risk_service_rebuild_suggestions",
       "target": "riskzone"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_predictivepanel"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_risk_bg"
     },
     {
       "relation": "contains",
@@ -72933,5 +72944,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "aec48024bc7daa3396c9a3b0fdf9ed68bc08fb3d"
+  "built_at_commit": "1d708b6055646b2112c90301694502ad958aa836"
 }
