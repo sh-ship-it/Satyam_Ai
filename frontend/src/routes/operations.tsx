@@ -1,20 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
 import { useState } from "react";
-import { Siren, Radar, Truck, Video, Radio, Map as MapIcon } from "lucide-react";
+import { Siren, Radar, Truck, Video, Map as MapIcon } from "lucide-react";
 import { useT } from "@/lib/i18n";
 import { LiveOperationsMap } from "@/components/ops/LiveOperationsMap";
 import { PredictivePanel } from "@/components/ops/PredictivePanel";
 import { DispatchPanel } from "@/components/ops/DispatchPanel";
 import { ReviewPanel } from "@/components/ops/ReviewPanel";
-import { DemoSimPanel } from "@/components/ops/DemoSimPanel";
 
 export const Route = createFileRoute("/operations")({
   head: () => ({ meta: [{ title: "Response Ops · Satyam" }] }),
   component: OperationsScreen,
 });
 
-type Tab = "live" | "demo" | "predict" | "dispatch" | "review";
+type Tab = "live" | "predict" | "dispatch" | "review";
 
 function OperationsScreen() {
   const t = useT();
@@ -22,7 +21,6 @@ function OperationsScreen() {
 
   const TABS: { id: Tab; label: string; icon: any }[] = [
     { id: "live", label: t("Live Map"), icon: MapIcon },
-    { id: "demo", label: t("Demo Simulation"), icon: Radio },
     { id: "predict", label: t("Predictive Deployment"), icon: Radar },
     { id: "dispatch", label: t("Dispatch & Green Corridor"), icon: Truck },
     { id: "review", label: t("Camera Review"), icon: Video },
@@ -74,7 +72,6 @@ function OperationsScreen() {
         {tabBar}
 
         <section className="rounded-[8px] border-2 border-foreground bg-background p-4">
-          {tab === "demo" && <DemoSimPanel />}
           {tab === "predict" && <PredictivePanel />}
           {tab === "dispatch" && <DispatchPanel />}
           {tab === "review" && <ReviewPanel />}
