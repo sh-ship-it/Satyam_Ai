@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1781939453.3354015,
-    "ast_hash": "1a49d99c98a403508d08a62f9e785472",
+    "mtime": 1781987065.0950794,
+    "ast_hash": "8b5a9292bb94b8972375c87012ddab05",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
-    "mtime": 1781948284.959201,
-    "ast_hash": "2dde67fdee1f52ef0c2aeaaf4ccd5cd5",
+    "mtime": 1781986990.8190968,
+    "ast_hash": "0e1a2e9d613c94f01dc5049bd56a57e5",
     "semantic_hash": ""
   },
   "frontend/src/router.tsx": {
@@ -1230,8 +1230,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/operations.tsx": {
-    "mtime": 1781983427.8903606,
-    "ast_hash": "b207aa615e79f97d83c3dc1994fe56d0",
+    "mtime": 1781987297.1018798,
+    "ast_hash": "1ef81855a26efe0a0a7c3f69a1ad4e9c",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE0_SCAFFOLD.md": {
@@ -1377,6 +1377,21 @@
   "frontend/public/total fight.mp4": {
     "mtime": 1781986116.8861563,
     "ast_hash": "c6e06b6563210935fd7e7a33f41ab788",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/ops-camera.tsx": {
+    "mtime": 1781986968.8435774,
+    "ast_hash": "7213573ab10024760ac1a79acde08eb1",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/ops-dispatch.tsx": {
+    "mtime": 1781986956.1608725,
+    "ast_hash": "3017590511ed81f42652d5bc2b9bda88",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/ops-predictive.tsx": {
+    "mtime": 1781989205.143389,
+    "ast_hash": "7d57e8bd5ad34714b52e57c9c03a8456",
     "semantic_hash": ""
   }
 }
