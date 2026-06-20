@@ -40,3 +40,33 @@ class SuggestionOut(BaseModel):
 class SuggestionsResponse(BaseModel):
     suggestions: list[SuggestionOut] = []
     total: int = 0
+
+
+class PatrolOut(BaseModel):
+    id: int
+    callsign: str
+    status: str
+    lat: Optional[float] = None
+    lng: Optional[float] = None
+    district: Optional[str] = None
+
+
+class DispatchRequest(BaseModel):
+    scene_lat: float
+    scene_lng: float
+    case_id: Optional[int] = None
+    patrol_id: Optional[int] = None  # if omitted, the nearest IDLE unit is chosen
+
+
+class DispatchOut(BaseModel):
+    id: int
+    patrol_id: int
+    patrol_callsign: Optional[str] = None
+    case_id: Optional[int] = None
+    scene_lat: float
+    scene_lng: float
+    status: str
+    distance_km: Optional[float] = None
+    duration_sec: Optional[int] = None
+    eta_sec: Optional[int] = None
+    route: list[list[float]] = []  # [[lng,lat],...]

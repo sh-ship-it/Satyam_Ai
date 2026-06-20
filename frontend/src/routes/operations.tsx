@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Siren, Radar, Truck, TrafficCone, Video } from "lucide-react";
 import { useT } from "@/lib/i18n";
 import { PredictivePanel } from "@/components/ops/PredictivePanel";
+import { DispatchPanel } from "@/components/ops/DispatchPanel";
 
 export const Route = createFileRoute("/operations")({
   head: () => ({ meta: [{ title: "Response Ops · Satyam" }] }),
@@ -52,7 +53,8 @@ function OperationsScreen() {
 
         <section className="rounded-[8px] border-2 border-foreground bg-background p-4">
           {tab === "predict" && <PredictivePanel />}
-          {tab !== "predict" && (
+          {tab === "dispatch" && <DispatchPanel />}
+          {tab !== "predict" && tab !== "dispatch" && (
             <p className="text-sm text-muted-foreground">{t("Coming in a later phase.")} ({tab})</p>
           )}
         </section>

@@ -136,6 +136,16 @@ export function CrimeMap({
     return () => { if (trailLayerRef.current) { map.removeLayer(trailLayerRef.current); trailLayerRef.current = null; } };
   }, [trail, animateKey, ready]);
 
+  // Route polyline for dispatch (additive; no-op when trail is empty)
+  const trailLineRef = useRef<any>(null);
+  useEffect(() => {
+    const map = mapRef.current, L = LRef.current;
+    if (!map || !L || !ready) return;
+    if (trailLineRef.current) { map.removeLayer(trailLineRef.current); trailLineRef.current = null; }
+    if (!trail || trail.length < 2) return;
+    trailLineRef.current = L.polyline(trail.map((p) => [p.lat, p.lng]), { color: "#91C5FD", weight: 5, opacity: 0.85 }).addTo(map);
+  }, [trail, ready]);
+
   // AI focus: highlight a specific person's crime locations and zoom in.
   const focusLayerRef = useRef<any>(null);
   useEffect(() => {

@@ -26,6 +26,13 @@ export type Suggestion = {
   from_lat?: number | null; from_lng?: number | null; to_lat: number; to_lng: number;
   distance_km?: number | null; response_improve_sec?: number | null; status: string; reasons: string[];
 };
+export type Patrol = { id: number; callsign: string; status: string; lat?: number | null; lng?: number | null; district?: string | null };
+export type DispatchResult = {
+  id: number; patrol_id: number; patrol_callsign?: string | null; case_id?: number | null;
+  scene_lat: number; scene_lng: number; status: string;
+  distance_km?: number | null; duration_sec?: number | null; eta_sec?: number | null;
+  route: number[][];
+};
 
 export const responseOps = {
   health: () => opsFetch<{ ok: boolean; module: string; rank: string }>("/health"),
@@ -35,4 +42,15 @@ export const responseOps = {
     opsFetch<{ suggestions: Suggestion[]; total: number }>("/suggestions"),
   actSuggestion: (id: number, action: "accept" | "dismiss") =>
     opsFetch<{ ok: boolean }>(`/suggestions/${id}/${action}`, { method: "POST" }),
+  patrols: () => opsFetch<Patrol[]>("/patrols"),
+  dispatch: (body: { scene_lat: number; scene_lng: number; case_id?: number; patrol_id?: number }) =>
+    opsFetch<DispatchResult>("/dispatch", { method: "POST", body: JSON.stringify(body) }),
+  simulate: (id: number) => opsFetch<{ ok: boolean }>(`/dispatch/${id}/simulate`, { method: "POST" }),
 };
+
+/** Open the live ops WebSocket. Returns the socket; caller attaches onmessage. */
+export function openOpsSocket(): WebSocket {
+  const base = API_BASE.replace(/^http/, "ws");
+  const token = getAuthToken() ?? "";
+  return new WebSocket(`${base}/api/ops/ws?token=${encodeURIComponent(token)}`);
+}

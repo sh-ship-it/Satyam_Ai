@@ -1,17 +1,20 @@
 """Response-Ops router. Mounted at /api/ops only when ENABLE_RESPONSE_OPS=true."""
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisconnect
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_principal, get_scoped_session
 from app.core.rbac import AccessDenied, Permission, Principal, require
-from app.db.ops_models import PatrolSuggestion, PatrolUnit, RiskZone
+from app.core.security import decode_token
+from app.db.ops_models import IncidentDispatch, PatrolSuggestion, PatrolUnit, RiskZone
 from app.schemas.ops import (
+    DispatchOut, DispatchRequest, PatrolOut,
     RiskZoneOut, RiskZonesResponse, SuggestionOut, SuggestionsResponse,
 )
-from app.services.ops import risk_service
+from app.services.ops import risk_service, routing_service, sim_service
+from app.services.ops.ws_manager import manager
 
 router = APIRouter()
 
@@ -97,3 +100,95 @@ async def act_on_suggestion(
                 .values(lat=sug.to_lat, lng=sug.to_lng)
             )
     return {"ok": True, "id": sug_id, "status": new_status}
+
+
+@router.get("/patrols", response_model=list[PatrolOut])
+async def patrols(
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> list[PatrolOut]:
+    _guard(principal)
+    rows = (await session.execute(select(PatrolUnit))).scalars().all()
+    return [PatrolOut(id=p.id, callsign=p.callsign, status=p.status, lat=p.lat, lng=p.lng, district=p.district) for p in rows]
+
+
+@router.post("/dispatch", response_model=DispatchOut)
+async def dispatch(
+    req: DispatchRequest,
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> DispatchOut:
+    _guard(principal)
+    # pick patrol
+    if req.patrol_id:
+        patrol = (await session.execute(select(PatrolUnit).where(PatrolUnit.id == req.patrol_id))).scalar_one_or_none()
+    else:
+        idle = (await session.execute(select(PatrolUnit).where(PatrolUnit.status == "IDLE"))).scalars().all()
+        patrol = min(
+            (p for p in idle if p.lat is not None),
+            key=lambda p: routing_service.haversine_km(p.lat, p.lng, req.scene_lat, req.scene_lng),
+            default=None,
+        )
+    if not patrol:
+        raise HTTPException(status_code=409, detail="no available patrol unit")
+
+    route = await routing_service.get_route(
+        from_lat=patrol.lat, from_lng=patrol.lng, to_lat=req.scene_lat, to_lng=req.scene_lng,
+    )
+    disp = IncidentDispatch(
+        case_id=req.case_id, patrol_id=patrol.id, scene_lat=req.scene_lat, scene_lng=req.scene_lng,
+        status="ACCEPTED", route_geometry={"type": "LineString", "coordinates": route["coords"]},
+        distance_km=route["distance_km"], duration_sec=route["duration_sec"], eta_sec=route["duration_sec"],
+    )
+    session.add(disp)
+    await session.flush()
+    return DispatchOut(
+        id=disp.id, patrol_id=patrol.id, patrol_callsign=patrol.callsign, case_id=req.case_id,
+        scene_lat=req.scene_lat, scene_lng=req.scene_lng, status=disp.status,
+        distance_km=route["distance_km"], duration_sec=route["duration_sec"], eta_sec=route["duration_sec"],
+        route=route["coords"],
+    )
+
+
+@router.post("/dispatch/{dispatch_id}/simulate")
+async def simulate(
+    dispatch_id: int,
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    _guard(principal)
+    disp = (await session.execute(select(IncidentDispatch).where(IncidentDispatch.id == dispatch_id))).scalar_one_or_none()
+    if not disp or not disp.route_geometry:
+        raise HTTPException(status_code=404, detail="dispatch or route not found")
+    coords = disp.route_geometry["coordinates"]
+    sim_service.start(dispatch_id, disp.patrol_id, coords, disp.duration_sec or 60)
+    return {"ok": True, "dispatchId": dispatch_id, "points": len(coords)}
+
+
+@router.get("/dispatch/{dispatch_id}/state")
+async def dispatch_state(
+    dispatch_id: int,
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    """Polling fallback for clients that can't hold a WebSocket."""
+    _guard(principal)
+    return sim_service.latest_state(dispatch_id) or {"status": "UNKNOWN"}
+
+
+@router.websocket("/ws")
+async def ops_ws(ws: WebSocket, token: str | None = None) -> None:
+    """Live event stream. Auth via ?token=<jwt> query param (WS can't send headers)."""
+    if not token:
+        await ws.close(code=4401)
+        return
+    try:
+        decode_token(token)
+    except Exception:
+        await ws.close(code=4401)
+        return
+    await manager.connect(ws)
+    try:
+        while True:
+            await ws.receive_text()  # keepalive; client may send pings
+    except WebSocketDisconnect:
+        await manager.disconnect(ws)
