@@ -7,6 +7,7 @@ from sqlalchemy import update
 
 from app.db.ops_models import IncidentDispatch, PatrolUnit
 from app.db.session import get_sessionmaker
+from app.services.ops import corridor_service
 from app.services.ops.ws_manager import manager
 
 TICK_SEC = 0.8           # interval between coordinate steps
@@ -68,6 +69,7 @@ async def _run(dispatch_id: int, patrol_id: int, coords: list[list[float]],
         await _persist_status(dispatch_id, patrol_id, "ON_SCENE", last_lat, last_lng)
         _latest[dispatch_id] = {"lat": last_lat, "lng": last_lng, "status": "ON_SCENE", "eta_sec": 0}
         await manager.broadcast({"type": "DISPATCH_STATUS", "dispatchId": dispatch_id, "status": "ON_SCENE"})
+        await corridor_service.reset_all()
     except asyncio.CancelledError:
         await _persist_status(dispatch_id, patrol_id, "CANCELLED")
         raise

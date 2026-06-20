@@ -10,10 +10,11 @@ export function DispatchPanel() {
   const [active, setActive] = useState<DispatchResult | null>(null);
   const [live, setLive] = useState<{ lat: number; lng: number; etaSec: number } | null>(null);
   const [scene, setScene] = useState({ lat: 12.9352, lng: 77.6245 });
+  const [signals, setSignals] = useState<{ id: number; junction_id: string; lat: number; lng: number; state: string }[]>([]);
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => { responseOps.patrols().then(setPatrols); }, []);
-
+  useEffect(() => { responseOps.signals().then(setSignals); }, []);
   useEffect(() => {
     const ws = openOpsSocket();
     wsRef.current = ws;
@@ -21,6 +22,12 @@ export function DispatchPanel() {
       const msg = JSON.parse(e.data);
       if (msg.type === "PATROL_LOCATION" && (!active || msg.dispatchId === active.id)) {
         setLive({ lat: msg.lat, lng: msg.lng, etaSec: msg.etaSec });
+      }
+      if (msg.type === "SIGNAL_GREEN") {
+        setSignals((prev) => prev.map((s) => s.junction_id === msg.junctionId ? { ...s, state: "GREEN" } : s));
+      }
+      if (msg.type === "SIGNAL_RESET") {
+        setSignals((prev) => prev.map((s) => ({ ...s, state: "NORMAL" })));
       }
     };
     return () => ws.close();
@@ -43,7 +50,7 @@ export function DispatchPanel() {
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_320px]">
       <div className="h-[520px] overflow-hidden rounded-[8px] border-2 border-foreground">
-        <CrimeMap points={patrolPoints} mode="pins" trail={routeLine} focus={livePoint} animateKey={live ? Date.now() : 0} />
+        <CrimeMap points={patrolPoints} mode="pins" trail={routeLine} focus={livePoint} animateKey={live ? Date.now() : 0} signals={signals} />
       </div>
       <div className="flex flex-col gap-3">
         <h3 className="text-sm font-extrabold">{t("Dispatch")}</h3>

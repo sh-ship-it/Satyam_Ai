@@ -20,12 +20,14 @@ export function CrimeMap({
   trail,
   animateKey,
   focus,
+  signals,
 }: {
   points: Hotspot[];
   mode?: Mode;
   trail?: Hotspot[];
   animateKey?: number;
   focus?: Hotspot[] | null;
+  signals?: { id: number; junction_id: string; lat: number; lng: number; state: string }[];
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
@@ -169,6 +171,27 @@ export function CrimeMap({
 
     return () => { if (focusLayerRef.current) { map.removeLayer(focusLayerRef.current); focusLayerRef.current = null; } };
   }, [focus, ready]);
+
+  // Traffic signal overlay (green corridor — additive, optional)
+  const signalLayerRef = useRef<any>(null);
+  useEffect(() => {
+    const map = mapRef.current, L = LRef.current;
+    if (!map || !L || !ready) return;
+    if (signalLayerRef.current) { map.removeLayer(signalLayerRef.current); signalLayerRef.current = null; }
+    if (!signals || signals.length === 0) return;
+    const group = L.layerGroup();
+    signals.forEach((s) => {
+      L.circleMarker([s.lat, s.lng], {
+        radius: 6,
+        color: "#1a1a1a",
+        weight: 2,
+        fillColor: s.state === "GREEN" ? "#00C896" : "#9ca3af",
+        fillOpacity: 0.95,
+      }).bindTooltip(`${s.junction_id} · ${s.state}`).addTo(group);
+    });
+    group.addTo(map);
+    signalLayerRef.current = group;
+  }, [signals, ready]);
 
   return <div ref={containerRef} className="absolute inset-0 z-0 bg-muted" />;
 }

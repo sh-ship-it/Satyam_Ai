@@ -33,6 +33,7 @@ export type DispatchResult = {
   distance_km?: number | null; duration_sec?: number | null; eta_sec?: number | null;
   route: number[][];
 };
+export type Signal = { id: number; junction_id: string; lat: number; lng: number; state: "NORMAL" | "GREEN" };
 
 export const responseOps = {
   health: () => opsFetch<{ ok: boolean; module: string; rank: string }>("/health"),
@@ -46,6 +47,7 @@ export const responseOps = {
   dispatch: (body: { scene_lat: number; scene_lng: number; case_id?: number; patrol_id?: number }) =>
     opsFetch<DispatchResult>("/dispatch", { method: "POST", body: JSON.stringify(body) }),
   simulate: (id: number) => opsFetch<{ ok: boolean }>(`/dispatch/${id}/simulate`, { method: "POST" }),
+  signals: () => opsFetch<Signal[]>("/signals"),
 };
 
 /** Open the live ops WebSocket. Returns the socket; caller attaches onmessage. */

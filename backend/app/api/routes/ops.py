@@ -8,12 +8,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import get_principal, get_scoped_session
 from app.core.rbac import AccessDenied, Permission, Principal, require
 from app.core.security import decode_token
-from app.db.ops_models import IncidentDispatch, PatrolSuggestion, PatrolUnit, RiskZone
+from app.db.ops_models import IncidentDispatch, PatrolSuggestion, PatrolUnit, RiskZone, TrafficSignal
 from app.schemas.ops import (
     DispatchOut, DispatchRequest, PatrolOut,
     RiskZoneOut, RiskZonesResponse, SuggestionOut, SuggestionsResponse,
 )
-from app.services.ops import risk_service, routing_service, sim_service
+from app.services.ops import corridor_service, risk_service, routing_service, sim_service
 from app.services.ops.ws_manager import manager
 
 router = APIRouter()
@@ -161,7 +161,10 @@ async def simulate(
     if not disp or not disp.route_geometry:
         raise HTTPException(status_code=404, detail="dispatch or route not found")
     coords = disp.route_geometry["coordinates"]
-    sim_service.start(dispatch_id, disp.patrol_id, coords, disp.duration_sec or 60)
+    sim_service.start(
+        dispatch_id, disp.patrol_id, coords, disp.duration_sec or 60,
+        on_move=corridor_service.activate_near,
+    )
     return {"ok": True, "dispatchId": dispatch_id, "points": len(coords)}
 
 
@@ -192,3 +195,13 @@ async def ops_ws(ws: WebSocket, token: str | None = None) -> None:
             await ws.receive_text()  # keepalive; client may send pings
     except WebSocketDisconnect:
         await manager.disconnect(ws)
+
+
+@router.get("/signals")
+async def signals(
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> list[dict]:
+    _guard(principal)
+    rows = (await session.execute(select(TrafficSignal))).scalars().all()
+    return [{"id": s.id, "junction_id": s.junction_id, "lat": s.lat, "lng": s.lng, "state": s.state} for s in rows]
