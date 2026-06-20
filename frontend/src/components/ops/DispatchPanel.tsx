@@ -324,31 +324,6 @@ export function DispatchPanel() {
           </button>
         </div>
 
-        <h3 className="text-sm font-extrabold">{t("Active Dispatches")} ({active.length})</h3>
-        {active.length === 0 && <p className="text-xs text-muted-foreground">{t("No active dispatches. Use Simulate All or dispatch a unit.")}</p>}
-        {active.map((a) => (
-          <div key={a.dispatchId} className="rounded-[8px] border-2 border-foreground bg-background p-3 text-xs">
-            <div className="mb-1 flex items-center justify-between">
-              <span className="inline-flex items-center gap-1 font-extrabold"><Truck className="h-4 w-4" /> {a.callsign}</span>
-              <span className={`rounded-[4px] px-2 py-0.5 text-[10px] font-bold ${
-                a.status === "EN_ROUTE" ? "bg-[var(--main,#91C5FD)] text-foreground"
-                : a.status === "ON_SCENE" ? "bg-warning text-foreground"
-                : a.status === "COMPLETED" ? "bg-success/20 text-success"
-                : "bg-muted"}`}>
-                {a.status === "EN_ROUTE" ? t("ACTIVE") : a.status}
-              </span>
-            </div>
-            <div className="mb-2"><PhaseTimeline phase={a.phase} /></div>
-            <div className="mb-1 flex items-center gap-2">
-              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
-                <div className="h-full rounded-full bg-[var(--main,#91C5FD)] transition-all" style={{ width: `${Math.round((a.progress ?? 0) * 100)}%` }} />
-              </div>
-              <span className="w-8 text-right font-mono text-[10px] text-muted-foreground">{Math.round((a.progress ?? 0) * 100)}%</span>
-            </div>
-            <div className="text-[11px] text-muted-foreground">{t("ETA")} {a.eta_sec > 60 ? `${Math.ceil(a.eta_sec / 60)}m` : `${a.eta_sec}s`}</div>
-          </div>
-        ))}
-
         {/* Self-contained Dispatch + Green Corridor simulation */}
         <div className="mt-1 rounded-[8px] border-2 border-foreground p-3">
           <div className="mb-1 flex items-center gap-1 text-sm font-extrabold">

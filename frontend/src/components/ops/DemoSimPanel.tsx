@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Radio, Square, Zap, Activity, Truck } from "lucide-react";
 import { CrimeMap, type Hotspot } from "@/components/CrimeMap";
-import { intelligence } from "@/lib/api/intelligence";
 import { useT } from "@/lib/i18n";
 
 type LL = { lat: number; lng: number };
@@ -74,7 +73,7 @@ function makeSignals(route: [number, number][], id: number): SimSignal[] {
 export function DemoSimPanel() {
   const t = useT();
   const [demoMode, setDemoMode] = useState(false);
-  const [scenes, setScenes] = useState(FALLBACK_SCENES);
+  const scenes = FALLBACK_SCENES;
   const [dispatches, setDispatches] = useState<Dispatch[]>([]);
   const [feed, setFeed] = useState<FeedItem[]>([]);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -84,16 +83,6 @@ export function DemoSimPanel() {
 
   const clearTimer = () => { if (timer.current) { clearInterval(timer.current); timer.current = null; } };
   useEffect(() => () => clearTimer(), []);
-
-  useEffect(() => {
-    const p = new URLSearchParams({ horizon_days: "7", grid_size: "0.02" });
-    intelligence.getForecastHotspots(p)
-      .then((h) => {
-        const top = (h.cells ?? []).sort((a, b) => b.risk_score - a.risk_score).slice(0, 5)
-          .map((c) => ({ name: `${c.crime_type} — risk ${c.risk_score}`, lat: c.lat, lng: c.lng }));
-        if (top.length >= 3) setScenes(top);
-      }).catch(() => {});
-  }, []);
 
   function buildDispatches(): Dispatch[] {
     return scenes.slice(0, 5).map((s, i) => {
