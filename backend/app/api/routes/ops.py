@@ -364,6 +364,21 @@ async def review_queue(
     ) for r in rows]
 
 
+@router.post("/review-queue/clear")
+async def clear_review_queue(
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    """Dismiss (mark REJECTED) every pending item in one shot."""
+    _guard(principal)
+    await session.execute(
+        update(IncidentReview)
+        .where(IncidentReview.status == "PENDING")
+        .values(status="REJECTED", reviewed_by=principal.name or principal.id)
+    )
+    return {"ok": True}
+
+
 @router.post("/review-queue/{item_id}/reject")
 async def reject_item(
     item_id: int,

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Video, Play, Square, AlertTriangle, CheckCircle2, XCircle,
-  RefreshCw, Camera, Activity,
+  RefreshCw, Camera, Activity, Trash2,
 } from "lucide-react";
 import { responseOps, openOpsSocket, type ReviewItem } from "@/lib/api/responseOps";
 import { useT } from "@/lib/i18n";
@@ -31,6 +31,7 @@ export function ReviewPanel() {
   const [detections, setDetections] = useState<FeedItem[]>([]);
   const [queueItems, setQueueItems] = useState<ReviewItem[]>([]);
   const [queueBusy, setQueueBusy] = useState(false);
+  const [clearConfirm, setClearConfirm] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const retryRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -157,6 +158,22 @@ export function ReviewPanel() {
     setQueueItems((p) => p.filter((i) => i.id !== id));
   }
 
+  async function clearQueue() {
+    setQueueBusy(true);
+    try {
+      // Reject every pending item individually using the existing live endpoint
+      await Promise.all(queueItems.map((it) => responseOps.rejectReview(it.id)));
+      setQueueItems([]);
+    } catch (err: any) {
+      alert(err?.message ?? "Failed to clear the queue. Check the backend logs.");
+      // Refresh to show current server state
+      await loadQueue();
+    } finally {
+      setQueueBusy(false);
+      setClearConfirm(false);
+    }
+  }
+
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_380px]">
       {/* LEFT: video feed placeholder + controls */}
@@ -250,10 +267,39 @@ export function ReviewPanel() {
           <h3 className="inline-flex items-center gap-2 text-sm font-extrabold">
             <Video className="h-4 w-4" /> {t("Incident Review Queue")}
           </h3>
-          <button onClick={loadQueue} disabled={queueBusy}
-            className="inline-flex items-center gap-1 rounded-[6px] border-2 border-foreground px-2 py-1 text-xs font-bold hover:bg-muted">
-            <RefreshCw className={`h-3.5 w-3.5 ${queueBusy ? "animate-spin" : ""}`} /> {t("Refresh")}
-          </button>
+          <div className="flex items-center gap-2">
+            {clearConfirm ? (
+              <div className="flex items-center gap-1.5 rounded-[6px] border-2 border-destructive bg-destructive/10 px-2 py-1">
+                <span className="text-[11px] font-bold text-destructive">{t("Clear all?")}</span>
+                <button
+                  onClick={clearQueue}
+                  disabled={queueBusy}
+                  className="rounded-[4px] bg-destructive px-2 py-0.5 text-[11px] font-bold text-destructive-foreground disabled:opacity-50"
+                >
+                  {queueBusy ? t("Clearing…") : t("Yes")}
+                </button>
+                <button
+                  onClick={() => setClearConfirm(false)}
+                  disabled={queueBusy}
+                  className="rounded-[4px] border border-foreground/30 px-2 py-0.5 text-[11px] font-bold hover:bg-muted disabled:opacity-50"
+                >
+                  {t("Cancel")}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setClearConfirm(true)}
+                disabled={queueBusy || queueItems.length === 0}
+                className="inline-flex items-center gap-1 rounded-[6px] border-2 border-destructive/70 px-2 py-1 text-xs font-bold text-destructive hover:bg-destructive/10 disabled:opacity-40"
+              >
+                <Trash2 className="h-3.5 w-3.5" /> {t("Clear All")}
+              </button>
+            )}
+            <button onClick={loadQueue} disabled={queueBusy}
+              className="inline-flex items-center gap-1 rounded-[6px] border-2 border-foreground px-2 py-1 text-xs font-bold hover:bg-muted">
+              <RefreshCw className={`h-3.5 w-3.5 ${queueBusy ? "animate-spin" : ""}`} /> {t("Refresh")}
+            </button>
+          </div>
         </div>
 
         {queueItems.length === 0 && (

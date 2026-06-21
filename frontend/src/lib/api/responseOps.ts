@@ -68,6 +68,8 @@ export const responseOps = {
     opsFetch<{ ok: boolean; case_id: number; dispatch_id: number | null }>(`/review-queue/${id}/confirm?auto_dispatch=${autoDispatch}`, { method: "POST" }),
   rejectReview: (id: number) =>
     opsFetch<{ ok: boolean }>(`/review-queue/${id}/reject`, { method: "POST" }),
+  clearQueue: () =>
+    opsFetch<{ ok: boolean }>("/review-queue/clear", { method: "POST" }),
   corridorState: () =>
     opsFetch<{ active: boolean; count: number; signals: Signal[] }>("/corridor/state"),
   resetCorridor: () => opsFetch<{ ok: boolean }>("/corridor/reset", { method: "POST" }),
