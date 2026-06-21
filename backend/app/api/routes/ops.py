@@ -581,6 +581,27 @@ async def camera_start(
     # Drain the pipe in a daemon thread — prevents the child from blocking when
     # stdout fills up (the main symptom: video freezes after ~3 s).
     _threading.Thread(target=_drain, args=(_yolo_proc,), daemon=True).start()
+
+    # ── Wait for the MJPEG server to actually bind its port ─────────────────
+    # The subprocess takes a moment to load the model and start the HTTP
+    # server. Poll the port so we don't return until the stream is ready,
+    # avoiding the ERR_CONNECTION_REFUSED race condition in the browser.
+    import asyncio as _asyncio
+    import socket as _socket
+
+    async def _wait_for_port(port: int, timeout: float = 8.0) -> bool:
+        deadline = _asyncio.get_event_loop().time() + timeout
+        while _asyncio.get_event_loop().time() < deadline:
+            try:
+                s = _socket.create_connection(("127.0.0.1", port), timeout=0.15)
+                s.close()
+                return True
+            except OSError:
+                await _asyncio.sleep(0.2)
+        return False
+
+    await _wait_for_port(mjpeg_port)
+
     return {
         "ok": True, "status": "started", "pid": _yolo_proc.pid,
         "python": py, "stream_port": mjpeg_port,

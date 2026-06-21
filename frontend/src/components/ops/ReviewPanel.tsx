@@ -26,11 +26,14 @@ export function ReviewPanel() {
   const [statusBusy, setStatusBusy] = useState(false);
   const [streamPort, setStreamPort] = useState(8089);
   const [streamReady, setStreamReady] = useState(false);
+  // Bumping this key forces the <img> to remount and retry the MJPEG URL.
+  const [streamKey, setStreamKey] = useState(0);
   const [detections, setDetections] = useState<FeedItem[]>([]);
   const [queueItems, setQueueItems] = useState<ReviewItem[]>([]);
   const [queueBusy, setQueueBusy] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
+  const retryRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // ── Check if YOLO is already running on mount ────────────────────────────
   useEffect(() => {
@@ -40,13 +43,40 @@ export function ReviewPanel() {
     }).catch(() => {});
   }, []);
 
-  // MJPEG <img> onLoad is unreliable for multipart streams — clear the
-  // "connecting" overlay after a short grace period once the feed is running.
+  // When running starts (or port changes), begin retrying the MJPEG stream
+  // every 1.5 s until it connects. This handles the race-condition where the
+  // MJPEG server hasn't fully bound its socket yet when the <img> first loads.
   useEffect(() => {
+    if (retryRef.current) { clearInterval(retryRef.current); retryRef.current = null; }
     if (!running) { setStreamReady(false); return; }
-    const id = setTimeout(() => setStreamReady(true), 2500);
-    return () => clearTimeout(id);
+    // Immediately bump key so a fresh <img> mounts right away.
+    setStreamKey((k) => k + 1);
+    setStreamReady(false);
+    // Retry every 1.5 s if the stream hasn't connected yet.
+    retryRef.current = setInterval(() => {
+      setStreamKey((k) => k + 1);
+    }, 1500);
+    // Chrome doesn't reliably fire onLoad for multipart MJPEG streams.
+    // After a 4-second grace period, assume the stream is live and clear
+    // the "Connecting…" overlay so the video frame shows through.
+    const graceTimer = setTimeout(() => {
+      setStreamReady(true);
+      if (retryRef.current) { clearInterval(retryRef.current); retryRef.current = null; }
+    }, 4000);
+    return () => {
+      clearTimeout(graceTimer);
+      if (retryRef.current) clearInterval(retryRef.current);
+    };
   }, [running, streamPort]);
+
+  // If onLoad fires before the grace timer, clear the overlay immediately
+  // and stop retrying.
+  useEffect(() => {
+    if (streamReady && retryRef.current) {
+      clearInterval(retryRef.current);
+      retryRef.current = null;
+    }
+  }, [streamReady]);
 
   // ── Poll camera/status while running ────────────────────────────────────
   useEffect(() => {
@@ -164,7 +194,7 @@ export function ReviewPanel() {
           {running ? (
             <>
               <img
-                key={`mjpeg-${streamPort}`}
+                key={`mjpeg-${streamPort}-${streamKey}`}
                 src={`http://${typeof window !== "undefined" ? window.location.hostname : "localhost"}:${streamPort}/stream`}
                 alt="Live YOLO detection stream"
                 onLoad={() => setStreamReady(true)}
