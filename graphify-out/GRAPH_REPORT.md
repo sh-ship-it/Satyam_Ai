@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-21)
 
 ## Corpus Check
-- 269 files · ~242,261 words
+- 269 files · ~242,522 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d1708764`
+- Built from commit: `4c56cf76`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -985,7 +985,7 @@ Cohesion: 0.50
 Nodes (4): 15.1 Docker, 15.2 Local Dev, 15.3 Database Tracks, 15. Deployment
 
 ## Knowledge Gaps
-- **1082 isolated node(s):** `Table of Contents`, `1. Project Overview`, `2.1 Backend`, `2.2 AI / Model Services`, `2.3 Frontend` (+1077 more)
+- **1082 isolated node(s):** `CRIME_LABELS`, `FeedItem`, `Table of Contents`, `1. Project Overview`, `2.1 Backend` (+1077 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **24 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -993,16 +993,16 @@ Nodes (4): 15.1 Docker, 15.2 Local Dev, 15.3 Database Tracks, 15. Deployment
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `dispatch()` connect `Community 51` to `Community 8`, `Community 113`, `Community 210`, `Community 205`?**
-  _High betweenness centrality (0.091) - this node is a cross-community bridge._
+  _High betweenness centrality (0.086) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 121` to `Community 131`, `Community 135`, `Community 169`, `Community 42`, `Community 46`, `Community 178`, `Community 212`, `Community 154`?**
-  _High betweenness centrality (0.046) - this node is a cross-community bridge._
+  _High betweenness centrality (0.045) - this node is a cross-community bridge._
 - **Why does `AsyncSession` connect `Community 51` to `Community 42`, `Community 188`, `Community 212`, `Community 173`?**
-  _High betweenness centrality (0.034) - this node is a cross-community bridge._
+  _High betweenness centrality (0.033) - this node is a cross-community bridge._
 - **Are the 87 inferred relationships involving `Principal` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Principal` has 87 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 53 inferred relationships involving `Permission` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Permission` has 53 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Table of Contents`, `1. Project Overview`, `2.1 Backend` to the rest of the system?**
+- **What connects `Response-Ops router. Mounted at /api/ops only when ENABLE_RESPONSE_OPS=true.`, `Cheap liveness probe for the Response-Ops module.`, `Polling fallback for clients that can't hold a WebSocket.` to the rest of the system?**
   _1263 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._

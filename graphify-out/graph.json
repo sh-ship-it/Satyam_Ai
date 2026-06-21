@@ -4,634 +4,14 @@
   "graph": {},
   "nodes": [
     {
-      "label": "ARCHITECTURE.md",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "docs_architecture",
-      "community": 34,
-      "norm_label": "architecture.md"
-    },
-    {
-      "label": "Satyam \u2014 Complete Architecture & Technical Documentation",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "community": 34,
-      "norm_label": "satyam \u2014 complete architecture & technical documentation"
-    },
-    {
-      "label": "Table of Contents",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "docs_architecture_table_of_contents",
-      "community": 34,
-      "norm_label": "table of contents"
-    },
-    {
-      "label": "1. Project Overview",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L32",
-      "_origin": "ast",
-      "id": "docs_architecture_1_project_overview",
-      "community": 34,
-      "norm_label": "1. project overview"
-    },
-    {
-      "label": "2. Tech Stack",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L50",
-      "_origin": "ast",
-      "id": "docs_architecture_2_tech_stack",
-      "community": 144,
-      "norm_label": "2. tech stack"
-    },
-    {
-      "label": "2.1 Backend",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L52",
-      "_origin": "ast",
-      "id": "docs_architecture_2_1_backend",
-      "community": 144,
-      "norm_label": "2.1 backend"
-    },
-    {
-      "label": "2.2 AI / Model Services",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L68",
-      "_origin": "ast",
-      "id": "docs_architecture_2_2_ai_model_services",
-      "community": 144,
-      "norm_label": "2.2 ai / model services"
-    },
-    {
-      "label": "2.3 Frontend",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L83",
-      "_origin": "ast",
-      "id": "docs_architecture_2_3_frontend",
-      "community": 144,
-      "norm_label": "2.3 frontend"
-    },
-    {
-      "label": "2.4 Infrastructure",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L96",
-      "_origin": "ast",
-      "id": "docs_architecture_2_4_infrastructure",
-      "community": 144,
-      "norm_label": "2.4 infrastructure"
-    },
-    {
-      "label": "3. System Architecture Diagram",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L107",
-      "_origin": "ast",
-      "id": "docs_architecture_3_system_architecture_diagram",
-      "community": 34,
-      "norm_label": "3. system architecture diagram"
-    },
-    {
-      "label": "4. Database Schema",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L146",
-      "_origin": "ast",
-      "id": "docs_architecture_4_database_schema",
-      "community": 145,
-      "norm_label": "4. database schema"
-    },
-    {
-      "label": "4.1 Core Tables (`backend/migrations/002_schema_v2.sql`)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L148",
-      "_origin": "ast",
-      "id": "docs_architecture_4_1_core_tables_backend_migrations_002_schema_v2_sql",
-      "community": 145,
-      "norm_label": "4.1 core tables (`backend/migrations/002_schema_v2.sql`)"
-    },
-    {
-      "label": "4.2 PS4/PS7 Extension Tables",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L162",
-      "_origin": "ast",
-      "id": "docs_architecture_4_2_ps4_ps7_extension_tables",
-      "community": 145,
-      "norm_label": "4.2 ps4/ps7 extension tables"
-    },
-    {
-      "label": "4.3 Response Ops Tables (`ops_*` prefix)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L170",
-      "_origin": "ast",
-      "id": "docs_architecture_4_3_response_ops_tables_ops_prefix",
-      "community": 145,
-      "norm_label": "4.3 response ops tables (`ops_*` prefix)"
-    },
-    {
-      "label": "4.4 RLS",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L182",
-      "_origin": "ast",
-      "id": "docs_architecture_4_4_rls",
-      "community": 145,
-      "norm_label": "4.4 rls"
-    },
-    {
-      "label": "4.5 Row Counts",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L186",
-      "_origin": "ast",
-      "id": "docs_architecture_4_5_row_counts",
-      "community": 145,
-      "norm_label": "4.5 row counts"
-    },
-    {
-      "label": "5. Backend Pipeline \u2014 Detailed Workflows",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L198",
-      "_origin": "ast",
-      "id": "docs_architecture_5_backend_pipeline_detailed_workflows",
-      "community": 125,
-      "norm_label": "5. backend pipeline \u2014 detailed workflows"
-    },
-    {
-      "label": "5.1 Pipeline Directory",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L200",
-      "_origin": "ast",
-      "id": "docs_architecture_5_1_pipeline_directory",
-      "community": 125,
-      "norm_label": "5.1 pipeline directory"
-    },
-    {
-      "label": "5.2 Demo-mode / Keyless Operation",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L217",
-      "_origin": "ast",
-      "id": "docs_architecture_5_2_demo_mode_keyless_operation",
-      "community": 125,
-      "norm_label": "5.2 demo-mode / keyless operation"
-    },
-    {
-      "label": "5.3 Text-to-SQL Safety",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L225",
-      "_origin": "ast",
-      "id": "docs_architecture_5_3_text_to_sql_safety",
-      "community": 125,
-      "norm_label": "5.3 text-to-sql safety"
-    },
-    {
-      "label": "6. Model Layer",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L234",
-      "_origin": "ast",
-      "id": "docs_architecture_6_model_layer",
-      "community": 34,
-      "norm_label": "6. model layer"
-    },
-    {
-      "label": "7. Voice Pipeline",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L253",
-      "_origin": "ast",
-      "id": "docs_architecture_7_voice_pipeline",
-      "community": 187,
-      "norm_label": "7. voice pipeline"
-    },
-    {
-      "label": "7.1 Overview",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L255",
-      "_origin": "ast",
-      "id": "docs_architecture_7_1_overview",
-      "community": 187,
-      "norm_label": "7.1 overview"
-    },
-    {
-      "label": "7.2 Two Independent Microphones",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L271",
-      "_origin": "ast",
-      "id": "docs_architecture_7_2_two_independent_microphones",
-      "community": 187,
-      "norm_label": "7.2 two independent microphones"
-    },
-    {
-      "label": "7.3 Copilot Mic Engine Toggle",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L278",
-      "_origin": "ast",
-      "id": "docs_architecture_7_3_copilot_mic_engine_toggle",
-      "community": 187,
-      "norm_label": "7.3 copilot mic engine toggle"
-    },
-    {
-      "label": "7.4 Chat-Box Dictation",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L289",
-      "_origin": "ast",
-      "id": "docs_architecture_7_4_chat_box_dictation",
-      "community": 187,
-      "norm_label": "7.4 chat-box dictation"
-    },
-    {
-      "label": "8. Security \u2014 RBAC \u00b7 RLS \u00b7 Masking \u00b7 Audit",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L295",
-      "_origin": "ast",
-      "id": "docs_architecture_8_security_rbac_rls_masking_audit",
-      "community": 143,
-      "norm_label": "8. security \u2014 rbac \u00b7 rls \u00b7 masking \u00b7 audit"
-    },
-    {
-      "label": "8.1 KSP Rank Hierarchy",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L297",
-      "_origin": "ast",
-      "id": "docs_architecture_8_1_ksp_rank_hierarchy",
-      "community": 143,
-      "norm_label": "8.1 ksp rank hierarchy"
-    },
-    {
-      "label": "8.2 Four-Tier PII Masking",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L310",
-      "_origin": "ast",
-      "id": "docs_architecture_8_2_four_tier_pii_masking",
-      "community": 143,
-      "norm_label": "8.2 four-tier pii masking"
-    },
-    {
-      "label": "8.3 SHA-256 Audit Hash-Chain",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L321",
-      "_origin": "ast",
-      "id": "docs_architecture_8_3_sha_256_audit_hash_chain",
-      "community": 143,
-      "norm_label": "8.3 sha-256 audit hash-chain"
-    },
-    {
-      "label": "9. Intelligence Features (PS1\u2013PS8)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L327",
-      "_origin": "ast",
-      "id": "docs_architecture_9_intelligence_features_ps1_ps8",
-      "community": 34,
-      "norm_label": "9. intelligence features (ps1\u2013ps8)"
-    },
-    {
-      "label": "10. Response Ops Module (`ENABLE_RESPONSE_OPS=true`)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L343",
-      "_origin": "ast",
-      "id": "docs_architecture_10_response_ops_module_enable_response_ops_true",
-      "community": 208,
-      "norm_label": "10. response ops module (`enable_response_ops=true`)"
-    },
-    {
-      "label": "10.1 Four Dedicated Sidebar Routes (v1.5 \u2014 was single tabbed screen)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L347",
-      "_origin": "ast",
-      "id": "docs_architecture_10_1_four_dedicated_sidebar_routes_v1_5_was_single_tabbed_screen",
-      "community": 208,
-      "norm_label": "10.1 four dedicated sidebar routes (v1.5 \u2014 was single tabbed screen)"
-    },
-    {
-      "label": "10.2 Risk Scoring (Phase 1 \u2014 Predictive Deployment)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L358",
-      "_origin": "ast",
-      "id": "docs_architecture_10_2_risk_scoring_phase_1_predictive_deployment",
-      "community": 208,
-      "norm_label": "10.2 risk scoring (phase 1 \u2014 predictive deployment)"
-    },
-    {
-      "label": "10.3 Dispatch Simulation (Phase 2)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L366",
-      "_origin": "ast",
-      "id": "docs_architecture_10_3_dispatch_simulation_phase_2",
-      "community": 208,
-      "norm_label": "10.3 dispatch simulation (phase 2)"
-    },
-    {
-      "label": "10.4 Green Corridor (Phase 3)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L373",
-      "_origin": "ast",
-      "id": "docs_architecture_10_4_green_corridor_phase_3",
-      "community": 208,
-      "norm_label": "10.4 green corridor (phase 3)"
-    },
-    {
-      "label": "10.5 Camera Review + YOLO Live Detection (Phase 4 \u2014 v1.5 redesign)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L378",
-      "_origin": "ast",
-      "id": "docs_architecture_10_5_camera_review_yolo_live_detection_phase_4_v1_5_redesign",
-      "community": 208,
-      "norm_label": "10.5 camera review + yolo live detection (phase 4 \u2014 v1.5 redesign)"
-    },
-    {
-      "label": "Backend subprocess model",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L380",
-      "_origin": "ast",
-      "id": "docs_architecture_backend_subprocess_model",
-      "community": 208,
-      "norm_label": "backend subprocess model"
-    },
-    {
-      "label": "Frontend: ReviewPanel",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L410",
-      "_origin": "ast",
-      "id": "docs_architecture_frontend_reviewpanel",
-      "community": 208,
-      "norm_label": "frontend: reviewpanel"
-    },
-    {
-      "label": "Confidence tiers",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L418",
-      "_origin": "ast",
-      "id": "docs_architecture_confidence_tiers",
-      "community": 208,
-      "norm_label": "confidence tiers"
-    },
-    {
-      "label": "10.6 Dataset-Driven Frontend (ops screens never go blank)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L427",
-      "_origin": "ast",
-      "id": "docs_architecture_10_6_dataset_driven_frontend_ops_screens_never_go_blank",
-      "community": 208,
-      "norm_label": "10.6 dataset-driven frontend (ops screens never go blank)"
-    },
-    {
-      "label": "10.7 CrimeMap.tsx Ops Extensions",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L434",
-      "_origin": "ast",
-      "id": "docs_architecture_10_7_crimemap_tsx_ops_extensions",
-      "community": 208,
-      "norm_label": "10.7 crimemap.tsx ops extensions"
-    },
-    {
-      "label": "11. Frontend Architecture",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L448",
-      "_origin": "ast",
-      "id": "docs_architecture_11_frontend_architecture",
-      "community": 211,
-      "norm_label": "11. frontend architecture"
-    },
-    {
-      "label": "11.1 Route Map",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L450",
-      "_origin": "ast",
-      "id": "docs_architecture_11_1_route_map",
-      "community": 211,
-      "norm_label": "11.1 route map"
-    },
-    {
-      "label": "11.2 Key Components",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L471",
-      "_origin": "ast",
-      "id": "docs_architecture_11_2_key_components",
-      "community": 211,
-      "norm_label": "11.2 key components"
-    },
-    {
-      "label": "11.3 Key Libraries",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L488",
-      "_origin": "ast",
-      "id": "docs_architecture_11_3_key_libraries",
-      "community": 211,
-      "norm_label": "11.3 key libraries"
-    },
-    {
-      "label": "11.4 Hydration Fix (ProfileMenu)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L510",
-      "_origin": "ast",
-      "id": "docs_architecture_11_4_hydration_fix_profilemenu",
-      "community": 211,
-      "norm_label": "11.4 hydration fix (profilemenu)"
-    },
-    {
-      "label": "12. Bilingual Support \u2014 EN + KN",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L516",
-      "_origin": "ast",
-      "id": "docs_architecture_12_bilingual_support_en_kn",
-      "community": 34,
-      "norm_label": "12. bilingual support \u2014 en + kn"
-    },
-    {
-      "label": "12.1 Four-Layer Architecture",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L518",
-      "_origin": "ast",
-      "id": "docs_architecture_12_1_four_layer_architecture",
-      "community": 34,
-      "norm_label": "12.1 four-layer architecture"
-    },
-    {
-      "label": "13. API Reference Summary",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L529",
-      "_origin": "ast",
-      "id": "docs_architecture_13_api_reference_summary",
-      "community": 218,
-      "norm_label": "13. api reference summary"
-    },
-    {
-      "label": "13.1 Core",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L531",
-      "_origin": "ast",
-      "id": "docs_architecture_13_1_core",
-      "community": 218,
-      "norm_label": "13.1 core"
-    },
-    {
-      "label": "13.2 Intelligence (`/api/`)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L543",
-      "_origin": "ast",
-      "id": "docs_architecture_13_2_intelligence_api",
-      "community": 218,
-      "norm_label": "13.2 intelligence (`/api/`)"
-    },
-    {
-      "label": "13.3 Voice & Health",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L566",
-      "_origin": "ast",
-      "id": "docs_architecture_13_3_voice_health",
-      "community": 218,
-      "norm_label": "13.3 voice & health"
-    },
-    {
-      "label": "13.4 Response Ops (`/api/ops/` \u2014 `ENABLE_RESPONSE_OPS=true`, all ranks)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L577",
-      "_origin": "ast",
-      "id": "docs_architecture_13_4_response_ops_api_ops_enable_response_ops_true_all_ranks",
-      "community": 218,
-      "norm_label": "13.4 response ops (`/api/ops/` \u2014 `enable_response_ops=true`, all ranks)"
-    },
-    {
-      "label": "14. Configuration & Environment",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L607",
-      "_origin": "ast",
-      "id": "docs_architecture_14_configuration_environment",
-      "community": 34,
-      "norm_label": "14. configuration & environment"
-    },
-    {
-      "label": "15. Deployment",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L632",
-      "_origin": "ast",
-      "id": "docs_architecture_15_deployment",
-      "community": 220,
-      "norm_label": "15. deployment"
-    },
-    {
-      "label": "15.1 Docker",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L634",
-      "_origin": "ast",
-      "id": "docs_architecture_15_1_docker",
-      "community": 220,
-      "norm_label": "15.1 docker"
-    },
-    {
-      "label": "15.2 Local Dev",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L642",
-      "_origin": "ast",
-      "id": "docs_architecture_15_2_local_dev",
-      "community": 220,
-      "norm_label": "15.2 local dev"
-    },
-    {
-      "label": "15.3 Database Tracks",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L661",
-      "_origin": "ast",
-      "id": "docs_architecture_15_3_database_tracks",
-      "community": 220,
-      "norm_label": "15.3 database tracks"
-    },
-    {
-      "label": "16. Two-Phase Roadmap",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L670",
-      "_origin": "ast",
-      "id": "docs_architecture_16_two_phase_roadmap",
-      "community": 34,
-      "norm_label": "16. two-phase roadmap"
-    },
-    {
-      "label": "17. Bug Fixes Applied",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L685",
-      "_origin": "ast",
-      "id": "docs_architecture_17_bug_fixes_applied",
-      "community": 34,
-      "norm_label": "17. bug fixes applied"
-    },
-    {
-      "label": "Appendix \u2014 File Tree (Abridged)",
-      "file_type": "document",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L710",
-      "_origin": "ast",
-      "id": "docs_architecture_appendix_file_tree_abridged",
-      "community": 34,
-      "norm_label": "appendix \u2014 file tree (abridged)"
-    },
-    {
       "label": "ops.py",
       "file_type": "code",
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "routes_ops",
       "community": 51,
-      "norm_label": "ops.py",
-      "id": "routes_ops"
+      "norm_label": "ops.py"
     },
     {
       "label": "_guard()",
@@ -639,9 +19,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L25",
       "_origin": "ast",
+      "id": "routes_ops_guard",
       "community": 51,
-      "norm_label": "_guard()",
-      "id": "routes_ops_guard"
+      "norm_label": "_guard()"
     },
     {
       "label": "Principal",
@@ -649,9 +29,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L25",
       "_origin": "ast",
+      "id": "principal",
       "community": 51,
-      "norm_label": "principal",
-      "id": "principal"
+      "norm_label": "principal"
     },
     {
       "label": "ops_health()",
@@ -659,9 +39,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L30",
       "_origin": "ast",
+      "id": "routes_ops_ops_health",
       "community": 51,
-      "norm_label": "ops_health()",
-      "id": "routes_ops_ops_health"
+      "norm_label": "ops_health()"
     },
     {
       "label": "risk_zones()",
@@ -669,9 +49,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L36",
       "_origin": "ast",
+      "id": "routes_ops_risk_zones",
       "community": 51,
-      "norm_label": "risk_zones()",
-      "id": "routes_ops_risk_zones"
+      "norm_label": "risk_zones()"
     },
     {
       "label": "AsyncSession",
@@ -679,9 +59,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L36",
       "_origin": "ast",
+      "id": "asyncsession",
       "community": 51,
-      "norm_label": "asyncsession",
-      "id": "asyncsession"
+      "norm_label": "asyncsession"
     },
     {
       "label": "RiskZonesResponse",
@@ -689,9 +69,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L36",
       "_origin": "ast",
+      "id": "riskzonesresponse",
       "community": 51,
-      "norm_label": "riskzonesresponse",
-      "id": "riskzonesresponse"
+      "norm_label": "riskzonesresponse"
     },
     {
       "label": "suggestions()",
@@ -699,9 +79,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L57",
       "_origin": "ast",
+      "id": "routes_ops_suggestions",
       "community": 51,
-      "norm_label": "suggestions()",
-      "id": "routes_ops_suggestions"
+      "norm_label": "suggestions()"
     },
     {
       "label": "SuggestionsResponse",
@@ -709,9 +89,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L57",
       "_origin": "ast",
+      "id": "suggestionsresponse",
       "community": 51,
-      "norm_label": "suggestionsresponse",
-      "id": "suggestionsresponse"
+      "norm_label": "suggestionsresponse"
     },
     {
       "label": "act_on_suggestion()",
@@ -719,9 +99,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L81",
       "_origin": "ast",
+      "id": "routes_ops_act_on_suggestion",
       "community": 51,
-      "norm_label": "act_on_suggestion()",
-      "id": "routes_ops_act_on_suggestion"
+      "norm_label": "act_on_suggestion()"
     },
     {
       "label": "patrols()",
@@ -729,9 +109,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L107",
       "_origin": "ast",
+      "id": "routes_ops_patrols",
       "community": 51,
-      "norm_label": "patrols()",
-      "id": "routes_ops_patrols"
+      "norm_label": "patrols()"
     },
     {
       "label": "PatrolOut",
@@ -739,9 +119,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L107",
       "_origin": "ast",
+      "id": "patrolout",
       "community": 51,
-      "norm_label": "patrolout",
-      "id": "patrolout"
+      "norm_label": "patrolout"
     },
     {
       "label": "dispatch()",
@@ -749,9 +129,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L117",
       "_origin": "ast",
+      "id": "routes_ops_dispatch",
       "community": 51,
-      "norm_label": "dispatch()",
-      "id": "routes_ops_dispatch"
+      "norm_label": "dispatch()"
     },
     {
       "label": "DispatchRequest",
@@ -759,9 +139,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L117",
       "_origin": "ast",
+      "id": "dispatchrequest",
       "community": 51,
-      "norm_label": "dispatchrequest",
-      "id": "dispatchrequest"
+      "norm_label": "dispatchrequest"
     },
     {
       "label": "DispatchOut",
@@ -769,9 +149,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L117",
       "_origin": "ast",
+      "id": "dispatchout",
       "community": 51,
-      "norm_label": "dispatchout",
-      "id": "dispatchout"
+      "norm_label": "dispatchout"
     },
     {
       "label": "simulate()",
@@ -779,9 +159,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L160",
       "_origin": "ast",
+      "id": "routes_ops_simulate",
       "community": 51,
-      "norm_label": "simulate()",
-      "id": "routes_ops_simulate"
+      "norm_label": "simulate()"
     },
     {
       "label": "dispatch_state()",
@@ -789,9 +169,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L178",
       "_origin": "ast",
+      "id": "routes_ops_dispatch_state",
       "community": 51,
-      "norm_label": "dispatch_state()",
-      "id": "routes_ops_dispatch_state"
+      "norm_label": "dispatch_state()"
     },
     {
       "label": "dispatch_active()",
@@ -799,9 +179,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L188",
       "_origin": "ast",
+      "id": "routes_ops_dispatch_active",
       "community": 51,
-      "norm_label": "dispatch_active()",
-      "id": "routes_ops_dispatch_active"
+      "norm_label": "dispatch_active()"
     },
     {
       "label": "simulate_all()",
@@ -809,9 +189,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L197",
       "_origin": "ast",
+      "id": "routes_ops_simulate_all",
       "community": 51,
-      "norm_label": "simulate_all()",
-      "id": "routes_ops_simulate_all"
+      "norm_label": "simulate_all()"
     },
     {
       "label": "stop_all()",
@@ -819,9 +199,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L218",
       "_origin": "ast",
+      "id": "routes_ops_stop_all",
       "community": 51,
-      "norm_label": "stop_all()",
-      "id": "routes_ops_stop_all"
+      "norm_label": "stop_all()"
     },
     {
       "label": "ops_ws()",
@@ -829,9 +209,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L228",
       "_origin": "ast",
+      "id": "routes_ops_ops_ws",
       "community": 51,
-      "norm_label": "ops_ws()",
-      "id": "routes_ops_ops_ws"
+      "norm_label": "ops_ws()"
     },
     {
       "label": "WebSocket",
@@ -839,9 +219,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L228",
       "_origin": "ast",
+      "id": "websocket",
       "community": 51,
-      "norm_label": "websocket",
-      "id": "websocket"
+      "norm_label": "websocket"
     },
     {
       "label": "signals()",
@@ -849,9 +229,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L257",
       "_origin": "ast",
+      "id": "routes_ops_signals",
       "community": 51,
-      "norm_label": "signals()",
-      "id": "routes_ops_signals"
+      "norm_label": "signals()"
     },
     {
       "label": "corridor_state()",
@@ -859,9 +239,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L267",
       "_origin": "ast",
+      "id": "routes_ops_corridor_state",
       "community": 51,
-      "norm_label": "corridor_state()",
-      "id": "routes_ops_corridor_state"
+      "norm_label": "corridor_state()"
     },
     {
       "label": "corridor_reset()",
@@ -869,9 +249,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L274",
       "_origin": "ast",
+      "id": "routes_ops_corridor_reset",
       "community": 51,
-      "norm_label": "corridor_reset()",
-      "id": "routes_ops_corridor_reset"
+      "norm_label": "corridor_reset()"
     },
     {
       "label": "demo_active()",
@@ -879,9 +259,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L282",
       "_origin": "ast",
+      "id": "routes_ops_demo_active",
       "community": 51,
-      "norm_label": "demo_active()",
-      "id": "routes_ops_demo_active"
+      "norm_label": "demo_active()"
     },
     {
       "label": "demo_stop_all()",
@@ -889,9 +269,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L289",
       "_origin": "ast",
+      "id": "routes_ops_demo_stop_all",
       "community": 51,
-      "norm_label": "demo_stop_all()",
-      "id": "routes_ops_demo_stop_all"
+      "norm_label": "demo_stop_all()"
     },
     {
       "label": "detect_notify()",
@@ -899,9 +279,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L304",
       "_origin": "ast",
+      "id": "routes_ops_detect_notify",
       "community": 51,
-      "norm_label": "detect_notify()",
-      "id": "routes_ops_detect_notify"
+      "norm_label": "detect_notify()"
     },
     {
       "label": "DetectNotify",
@@ -909,9 +289,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L304",
       "_origin": "ast",
+      "id": "detectnotify",
       "community": 51,
-      "norm_label": "detectnotify",
-      "id": "detectnotify"
+      "norm_label": "detectnotify"
     },
     {
       "label": "cameras()",
@@ -919,9 +299,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L340",
       "_origin": "ast",
+      "id": "routes_ops_cameras",
       "community": 51,
-      "norm_label": "cameras()",
-      "id": "routes_ops_cameras"
+      "norm_label": "cameras()"
     },
     {
       "label": "CameraOut",
@@ -929,9 +309,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L340",
       "_origin": "ast",
+      "id": "cameraout",
       "community": 51,
-      "norm_label": "cameraout",
-      "id": "cameraout"
+      "norm_label": "cameraout"
     },
     {
       "label": "review_queue()",
@@ -939,9 +319,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L351",
       "_origin": "ast",
+      "id": "routes_ops_review_queue",
       "community": 51,
-      "norm_label": "review_queue()",
-      "id": "routes_ops_review_queue"
+      "norm_label": "review_queue()"
     },
     {
       "label": "ReviewItemOut",
@@ -949,9 +329,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L351",
       "_origin": "ast",
+      "id": "reviewitemout",
       "community": 51,
-      "norm_label": "reviewitemout",
-      "id": "reviewitemout"
+      "norm_label": "reviewitemout"
     },
     {
       "label": "reject_item()",
@@ -959,9 +339,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L368",
       "_origin": "ast",
+      "id": "routes_ops_reject_item",
       "community": 51,
-      "norm_label": "reject_item()",
-      "id": "routes_ops_reject_item"
+      "norm_label": "reject_item()"
     },
     {
       "label": "confirm_item()",
@@ -969,59 +349,59 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L382",
       "_origin": "ast",
+      "id": "routes_ops_confirm_item",
       "community": 51,
-      "norm_label": "confirm_item()",
-      "id": "routes_ops_confirm_item"
+      "norm_label": "confirm_item()"
     },
     {
       "label": "_drain()",
       "file_type": "code",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L455",
+      "source_location": "L456",
       "_origin": "ast",
+      "id": "routes_ops_drain",
       "community": 51,
-      "norm_label": "_drain()",
-      "id": "routes_ops_drain"
+      "norm_label": "_drain()"
     },
     {
       "label": "_resolve_python()",
       "file_type": "code",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L466",
+      "source_location": "L467",
       "_origin": "ast",
+      "id": "routes_ops_resolve_python",
       "community": 51,
-      "norm_label": "_resolve_python()",
-      "id": "routes_ops_resolve_python"
+      "norm_label": "_resolve_python()"
     },
     {
       "label": "camera_start()",
       "file_type": "code",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L510",
+      "source_location": "L511",
       "_origin": "ast",
+      "id": "routes_ops_camera_start",
       "community": 51,
-      "norm_label": "camera_start()",
-      "id": "routes_ops_camera_start"
+      "norm_label": "camera_start()"
     },
     {
       "label": "camera_stop()",
       "file_type": "code",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L567",
+      "source_location": "L612",
       "_origin": "ast",
+      "id": "routes_ops_camera_stop",
       "community": 51,
-      "norm_label": "camera_stop()",
-      "id": "routes_ops_camera_stop"
+      "norm_label": "camera_stop()"
     },
     {
       "label": "camera_status()",
       "file_type": "code",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L586",
+      "source_location": "L631",
       "_origin": "ast",
+      "id": "routes_ops_camera_status",
       "community": 51,
-      "norm_label": "camera_status()",
-      "id": "routes_ops_camera_status"
+      "norm_label": "camera_status()"
     },
     {
       "label": "Response-Ops router. Mounted at /api/ops only when ENABLE_RESPONSE_OPS=true.",
@@ -1029,9 +409,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "routes_ops_rationale_1",
       "community": 51,
-      "norm_label": "response-ops router. mounted at /api/ops only when enable_response_ops=true.",
-      "id": "routes_ops_rationale_1"
+      "norm_label": "response-ops router. mounted at /api/ops only when enable_response_ops=true."
     },
     {
       "label": "Cheap liveness probe for the Response-Ops module.",
@@ -1039,9 +419,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L31",
       "_origin": "ast",
+      "id": "routes_ops_rationale_31",
       "community": 51,
-      "norm_label": "cheap liveness probe for the response-ops module.",
-      "id": "routes_ops_rationale_31"
+      "norm_label": "cheap liveness probe for the response-ops module."
     },
     {
       "label": "Polling fallback for clients that can't hold a WebSocket.",
@@ -1049,9 +429,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L182",
       "_origin": "ast",
+      "id": "routes_ops_rationale_182",
       "community": 51,
-      "norm_label": "polling fallback for clients that can't hold a websocket.",
-      "id": "routes_ops_rationale_182"
+      "norm_label": "polling fallback for clients that can't hold a websocket."
     },
     {
       "label": "Every dispatch currently mid-simulation (drives the Active Dispatches list).",
@@ -1059,9 +439,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L191",
       "_origin": "ast",
+      "id": "routes_ops_rationale_191",
       "community": 51,
-      "norm_label": "every dispatch currently mid-simulation (drives the active dispatches list).",
-      "id": "routes_ops_rationale_191"
+      "norm_label": "every dispatch currently mid-simulation (drives the active dispatches list)."
     },
     {
       "label": "Start a live simulation for every unfinished dispatch that has a route.",
@@ -1069,9 +449,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L201",
       "_origin": "ast",
+      "id": "routes_ops_rationale_201",
       "community": 51,
-      "norm_label": "start a live simulation for every unfinished dispatch that has a route.",
-      "id": "routes_ops_rationale_201"
+      "norm_label": "start a live simulation for every unfinished dispatch that has a route."
     },
     {
       "label": "Cancel every running simulation and reset the green corridor.",
@@ -1079,9 +459,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L221",
       "_origin": "ast",
+      "id": "routes_ops_rationale_221",
       "community": 51,
-      "norm_label": "cancel every running simulation and reset the green corridor.",
-      "id": "routes_ops_rationale_221"
+      "norm_label": "cancel every running simulation and reset the green corridor."
     },
     {
       "label": "Live event stream. Auth via ?token=<jwt> query param (WS can't send headers).",
@@ -1089,9 +469,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L229",
       "_origin": "ast",
+      "id": "routes_ops_rationale_229",
       "community": 51,
-      "norm_label": "live event stream. auth via ?token=<jwt> query param (ws can't send headers).",
-      "id": "routes_ops_rationale_229"
+      "norm_label": "live event stream. auth via ?token=<jwt> query param (ws can't send headers)."
     },
     {
       "label": "Green-corridor status for the Demo dashboard side panel.",
@@ -1099,9 +479,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L268",
       "_origin": "ast",
+      "id": "routes_ops_rationale_268",
       "community": 51,
-      "norm_label": "green-corridor status for the demo dashboard side panel.",
-      "id": "routes_ops_rationale_268"
+      "norm_label": "green-corridor status for the demo dashboard side panel."
     },
     {
       "label": "Deactivate the green corridor \u2014 restore every signal to NORMAL.",
@@ -1109,9 +489,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L275",
       "_origin": "ast",
+      "id": "routes_ops_rationale_275",
       "community": 51,
-      "norm_label": "deactivate the green corridor \u2014 restore every signal to normal.",
-      "id": "routes_ops_rationale_275"
+      "norm_label": "deactivate the green corridor \u2014 restore every signal to normal."
     },
     {
       "label": "Live snapshot of every running simulation (polling fallback for the dashboard).",
@@ -1119,9 +499,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L283",
       "_origin": "ast",
+      "id": "routes_ops_rationale_283",
       "community": 51,
-      "norm_label": "live snapshot of every running simulation (polling fallback for the dashboard).",
-      "id": "routes_ops_rationale_283"
+      "norm_label": "live snapshot of every running simulation (polling fallback for the dashboard)."
     },
     {
       "label": "Stop All: cancel every running simulation and clear the green corridor.",
@@ -1129,9 +509,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L290",
       "_origin": "ast",
+      "id": "routes_ops_rationale_290",
       "community": 51,
-      "norm_label": "stop all: cancel every running simulation and clear the green corridor.",
-      "id": "routes_ops_rationale_290"
+      "norm_label": "stop all: cancel every running simulation and clear the green corridor."
     },
     {
       "label": "Called by the YOLO sibling service. Confidence-gated, like EMERGE.",
@@ -1139,9 +519,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L309",
       "_origin": "ast",
+      "id": "routes_ops_rationale_309",
       "community": 51,
-      "norm_label": "called by the yolo sibling service. confidence-gated, like emerge.",
-      "id": "routes_ops_rationale_309"
+      "norm_label": "called by the yolo sibling service. confidence-gated, like emerge."
     },
     {
       "label": "Officer confirms a candidate -> create a minimal case + (optional) dispatch.",
@@ -1149,59 +529,59 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L388",
       "_origin": "ast",
+      "id": "routes_ops_rationale_388",
       "community": 51,
-      "norm_label": "officer confirms a candidate -> create a minimal case + (optional) dispatch.",
-      "id": "routes_ops_rationale_388"
+      "norm_label": "officer confirms a candidate -> create a minimal case + (optional) dispatch."
     },
     {
       "label": "Read and print stdout so the pipe buffer never fills and blocks the child.",
       "file_type": "rationale",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L456",
+      "source_location": "L457",
       "_origin": "ast",
+      "id": "routes_ops_rationale_457",
       "community": 51,
-      "norm_label": "read and print stdout so the pipe buffer never fills and blocks the child.",
-      "id": "routes_ops_rationale_456"
+      "norm_label": "read and print stdout so the pipe buffer never fills and blocks the child."
     },
     {
       "label": "Find a Python interpreter that has ultralytics + cv2 installed.      The backe",
       "file_type": "rationale",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L467",
+      "source_location": "L468",
       "_origin": "ast",
+      "id": "routes_ops_rationale_468",
       "community": 51,
-      "norm_label": "find a python interpreter that has ultralytics + cv2 installed.      the backe",
-      "id": "routes_ops_rationale_467"
+      "norm_label": "find a python interpreter that has ultralytics + cv2 installed.      the backe"
     },
     {
       "label": "Launch the YOLO live_cctv detector as a background process.",
       "file_type": "rationale",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L515",
+      "source_location": "L516",
       "_origin": "ast",
+      "id": "routes_ops_rationale_516",
       "community": 51,
-      "norm_label": "launch the yolo live_cctv detector as a background process.",
-      "id": "routes_ops_rationale_515"
+      "norm_label": "launch the yolo live_cctv detector as a background process."
     },
     {
       "label": "Kill the running YOLO detector process.",
       "file_type": "rationale",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L570",
+      "source_location": "L615",
       "_origin": "ast",
+      "id": "routes_ops_rationale_615",
       "community": 51,
-      "norm_label": "kill the running yolo detector process.",
-      "id": "routes_ops_rationale_570"
+      "norm_label": "kill the running yolo detector process."
     },
     {
       "label": "Check whether the YOLO detector is running.",
       "file_type": "rationale",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L589",
+      "source_location": "L634",
       "_origin": "ast",
+      "id": "routes_ops_rationale_634",
       "community": 51,
-      "norm_label": "check whether the yolo detector is running.",
-      "id": "routes_ops_rationale_589"
+      "norm_label": "check whether the yolo detector is running."
     },
     {
       "label": "ReviewPanel.tsx",
@@ -1209,9 +589,9 @@
       "source_file": "frontend/src/components/ops/ReviewPanel.tsx",
       "source_location": "L1",
       "_origin": "ast",
+      "id": "ops_reviewpanel",
       "community": 209,
-      "norm_label": "reviewpanel.tsx",
-      "id": "ops_reviewpanel"
+      "norm_label": "reviewpanel.tsx"
     },
     {
       "label": "CRIME_LABELS",
@@ -1219,9 +599,9 @@
       "source_file": "frontend/src/components/ops/ReviewPanel.tsx",
       "source_location": "L11",
       "_origin": "ast",
+      "id": "ops_reviewpanel_crime_labels",
       "community": 209,
-      "norm_label": "crime_labels",
-      "id": "ops_reviewpanel_crime_labels"
+      "norm_label": "crime_labels"
     },
     {
       "label": "FeedItem",
@@ -1229,9 +609,9 @@
       "source_file": "frontend/src/components/ops/ReviewPanel.tsx",
       "source_location": "L21",
       "_origin": "ast",
+      "id": "ops_reviewpanel_feeditem",
       "community": 209,
-      "norm_label": "feeditem",
-      "id": "ops_reviewpanel_feeditem"
+      "norm_label": "feeditem"
     },
     {
       "label": "ReviewPanel()",
@@ -1239,9 +619,629 @@
       "source_file": "frontend/src/components/ops/ReviewPanel.tsx",
       "source_location": "L23",
       "_origin": "ast",
+      "id": "ops_reviewpanel_reviewpanel",
       "community": 8,
-      "norm_label": "reviewpanel()",
-      "id": "ops_reviewpanel_reviewpanel"
+      "norm_label": "reviewpanel()"
+    },
+    {
+      "label": "ARCHITECTURE.md",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 34,
+      "norm_label": "architecture.md",
+      "id": "docs_architecture"
+    },
+    {
+      "label": "Satyam \u2014 Complete Architecture & Technical Documentation",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 34,
+      "norm_label": "satyam \u2014 complete architecture & technical documentation",
+      "id": "docs_architecture_satyam_complete_architecture_technical_documentation"
+    },
+    {
+      "label": "Table of Contents",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L10",
+      "_origin": "ast",
+      "community": 34,
+      "norm_label": "table of contents",
+      "id": "docs_architecture_table_of_contents"
+    },
+    {
+      "label": "1. Project Overview",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L32",
+      "_origin": "ast",
+      "community": 34,
+      "norm_label": "1. project overview",
+      "id": "docs_architecture_1_project_overview"
+    },
+    {
+      "label": "2. Tech Stack",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L50",
+      "_origin": "ast",
+      "community": 144,
+      "norm_label": "2. tech stack",
+      "id": "docs_architecture_2_tech_stack"
+    },
+    {
+      "label": "2.1 Backend",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L52",
+      "_origin": "ast",
+      "community": 144,
+      "norm_label": "2.1 backend",
+      "id": "docs_architecture_2_1_backend"
+    },
+    {
+      "label": "2.2 AI / Model Services",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L68",
+      "_origin": "ast",
+      "community": 144,
+      "norm_label": "2.2 ai / model services",
+      "id": "docs_architecture_2_2_ai_model_services"
+    },
+    {
+      "label": "2.3 Frontend",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L83",
+      "_origin": "ast",
+      "community": 144,
+      "norm_label": "2.3 frontend",
+      "id": "docs_architecture_2_3_frontend"
+    },
+    {
+      "label": "2.4 Infrastructure",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L96",
+      "_origin": "ast",
+      "community": 144,
+      "norm_label": "2.4 infrastructure",
+      "id": "docs_architecture_2_4_infrastructure"
+    },
+    {
+      "label": "3. System Architecture Diagram",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L107",
+      "_origin": "ast",
+      "community": 34,
+      "norm_label": "3. system architecture diagram",
+      "id": "docs_architecture_3_system_architecture_diagram"
+    },
+    {
+      "label": "4. Database Schema",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L146",
+      "_origin": "ast",
+      "community": 145,
+      "norm_label": "4. database schema",
+      "id": "docs_architecture_4_database_schema"
+    },
+    {
+      "label": "4.1 Core Tables (`backend/migrations/002_schema_v2.sql`)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L148",
+      "_origin": "ast",
+      "community": 145,
+      "norm_label": "4.1 core tables (`backend/migrations/002_schema_v2.sql`)",
+      "id": "docs_architecture_4_1_core_tables_backend_migrations_002_schema_v2_sql"
+    },
+    {
+      "label": "4.2 PS4/PS7 Extension Tables",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L162",
+      "_origin": "ast",
+      "community": 145,
+      "norm_label": "4.2 ps4/ps7 extension tables",
+      "id": "docs_architecture_4_2_ps4_ps7_extension_tables"
+    },
+    {
+      "label": "4.3 Response Ops Tables (`ops_*` prefix)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L170",
+      "_origin": "ast",
+      "community": 145,
+      "norm_label": "4.3 response ops tables (`ops_*` prefix)",
+      "id": "docs_architecture_4_3_response_ops_tables_ops_prefix"
+    },
+    {
+      "label": "4.4 RLS",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L182",
+      "_origin": "ast",
+      "community": 145,
+      "norm_label": "4.4 rls",
+      "id": "docs_architecture_4_4_rls"
+    },
+    {
+      "label": "4.5 Row Counts",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L186",
+      "_origin": "ast",
+      "community": 145,
+      "norm_label": "4.5 row counts",
+      "id": "docs_architecture_4_5_row_counts"
+    },
+    {
+      "label": "5. Backend Pipeline \u2014 Detailed Workflows",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L198",
+      "_origin": "ast",
+      "community": 125,
+      "norm_label": "5. backend pipeline \u2014 detailed workflows",
+      "id": "docs_architecture_5_backend_pipeline_detailed_workflows"
+    },
+    {
+      "label": "5.1 Pipeline Directory",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L200",
+      "_origin": "ast",
+      "community": 125,
+      "norm_label": "5.1 pipeline directory",
+      "id": "docs_architecture_5_1_pipeline_directory"
+    },
+    {
+      "label": "5.2 Demo-mode / Keyless Operation",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L217",
+      "_origin": "ast",
+      "community": 125,
+      "norm_label": "5.2 demo-mode / keyless operation",
+      "id": "docs_architecture_5_2_demo_mode_keyless_operation"
+    },
+    {
+      "label": "5.3 Text-to-SQL Safety",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L225",
+      "_origin": "ast",
+      "community": 125,
+      "norm_label": "5.3 text-to-sql safety",
+      "id": "docs_architecture_5_3_text_to_sql_safety"
+    },
+    {
+      "label": "6. Model Layer",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L234",
+      "_origin": "ast",
+      "community": 34,
+      "norm_label": "6. model layer",
+      "id": "docs_architecture_6_model_layer"
+    },
+    {
+      "label": "7. Voice Pipeline",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L253",
+      "_origin": "ast",
+      "community": 187,
+      "norm_label": "7. voice pipeline",
+      "id": "docs_architecture_7_voice_pipeline"
+    },
+    {
+      "label": "7.1 Overview",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L255",
+      "_origin": "ast",
+      "community": 187,
+      "norm_label": "7.1 overview",
+      "id": "docs_architecture_7_1_overview"
+    },
+    {
+      "label": "7.2 Two Independent Microphones",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L271",
+      "_origin": "ast",
+      "community": 187,
+      "norm_label": "7.2 two independent microphones",
+      "id": "docs_architecture_7_2_two_independent_microphones"
+    },
+    {
+      "label": "7.3 Copilot Mic Engine Toggle",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L278",
+      "_origin": "ast",
+      "community": 187,
+      "norm_label": "7.3 copilot mic engine toggle",
+      "id": "docs_architecture_7_3_copilot_mic_engine_toggle"
+    },
+    {
+      "label": "7.4 Chat-Box Dictation",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L289",
+      "_origin": "ast",
+      "community": 187,
+      "norm_label": "7.4 chat-box dictation",
+      "id": "docs_architecture_7_4_chat_box_dictation"
+    },
+    {
+      "label": "8. Security \u2014 RBAC \u00b7 RLS \u00b7 Masking \u00b7 Audit",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L295",
+      "_origin": "ast",
+      "community": 143,
+      "norm_label": "8. security \u2014 rbac \u00b7 rls \u00b7 masking \u00b7 audit",
+      "id": "docs_architecture_8_security_rbac_rls_masking_audit"
+    },
+    {
+      "label": "8.1 KSP Rank Hierarchy",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L297",
+      "_origin": "ast",
+      "community": 143,
+      "norm_label": "8.1 ksp rank hierarchy",
+      "id": "docs_architecture_8_1_ksp_rank_hierarchy"
+    },
+    {
+      "label": "8.2 Four-Tier PII Masking",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L310",
+      "_origin": "ast",
+      "community": 143,
+      "norm_label": "8.2 four-tier pii masking",
+      "id": "docs_architecture_8_2_four_tier_pii_masking"
+    },
+    {
+      "label": "8.3 SHA-256 Audit Hash-Chain",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L321",
+      "_origin": "ast",
+      "community": 143,
+      "norm_label": "8.3 sha-256 audit hash-chain",
+      "id": "docs_architecture_8_3_sha_256_audit_hash_chain"
+    },
+    {
+      "label": "9. Intelligence Features (PS1\u2013PS8)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L327",
+      "_origin": "ast",
+      "community": 34,
+      "norm_label": "9. intelligence features (ps1\u2013ps8)",
+      "id": "docs_architecture_9_intelligence_features_ps1_ps8"
+    },
+    {
+      "label": "10. Response Ops Module (`ENABLE_RESPONSE_OPS=true`)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L343",
+      "_origin": "ast",
+      "community": 208,
+      "norm_label": "10. response ops module (`enable_response_ops=true`)",
+      "id": "docs_architecture_10_response_ops_module_enable_response_ops_true"
+    },
+    {
+      "label": "10.1 Four Dedicated Sidebar Routes (v1.5 \u2014 was single tabbed screen)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L347",
+      "_origin": "ast",
+      "community": 208,
+      "norm_label": "10.1 four dedicated sidebar routes (v1.5 \u2014 was single tabbed screen)",
+      "id": "docs_architecture_10_1_four_dedicated_sidebar_routes_v1_5_was_single_tabbed_screen"
+    },
+    {
+      "label": "10.2 Risk Scoring (Phase 1 \u2014 Predictive Deployment)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L358",
+      "_origin": "ast",
+      "community": 208,
+      "norm_label": "10.2 risk scoring (phase 1 \u2014 predictive deployment)",
+      "id": "docs_architecture_10_2_risk_scoring_phase_1_predictive_deployment"
+    },
+    {
+      "label": "10.3 Dispatch Simulation (Phase 2)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L366",
+      "_origin": "ast",
+      "community": 208,
+      "norm_label": "10.3 dispatch simulation (phase 2)",
+      "id": "docs_architecture_10_3_dispatch_simulation_phase_2"
+    },
+    {
+      "label": "10.4 Green Corridor (Phase 3)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L373",
+      "_origin": "ast",
+      "community": 208,
+      "norm_label": "10.4 green corridor (phase 3)",
+      "id": "docs_architecture_10_4_green_corridor_phase_3"
+    },
+    {
+      "label": "10.5 Camera Review + YOLO Live Detection (Phase 4 \u2014 v1.5 redesign)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L378",
+      "_origin": "ast",
+      "community": 208,
+      "norm_label": "10.5 camera review + yolo live detection (phase 4 \u2014 v1.5 redesign)",
+      "id": "docs_architecture_10_5_camera_review_yolo_live_detection_phase_4_v1_5_redesign"
+    },
+    {
+      "label": "Backend subprocess model",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L380",
+      "_origin": "ast",
+      "community": 208,
+      "norm_label": "backend subprocess model",
+      "id": "docs_architecture_backend_subprocess_model"
+    },
+    {
+      "label": "Frontend: ReviewPanel",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L410",
+      "_origin": "ast",
+      "community": 208,
+      "norm_label": "frontend: reviewpanel",
+      "id": "docs_architecture_frontend_reviewpanel"
+    },
+    {
+      "label": "Confidence tiers",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L418",
+      "_origin": "ast",
+      "community": 208,
+      "norm_label": "confidence tiers",
+      "id": "docs_architecture_confidence_tiers"
+    },
+    {
+      "label": "10.6 Dataset-Driven Frontend (ops screens never go blank)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L427",
+      "_origin": "ast",
+      "community": 208,
+      "norm_label": "10.6 dataset-driven frontend (ops screens never go blank)",
+      "id": "docs_architecture_10_6_dataset_driven_frontend_ops_screens_never_go_blank"
+    },
+    {
+      "label": "10.7 CrimeMap.tsx Ops Extensions",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L434",
+      "_origin": "ast",
+      "community": 208,
+      "norm_label": "10.7 crimemap.tsx ops extensions",
+      "id": "docs_architecture_10_7_crimemap_tsx_ops_extensions"
+    },
+    {
+      "label": "11. Frontend Architecture",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L448",
+      "_origin": "ast",
+      "community": 211,
+      "norm_label": "11. frontend architecture",
+      "id": "docs_architecture_11_frontend_architecture"
+    },
+    {
+      "label": "11.1 Route Map",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L450",
+      "_origin": "ast",
+      "community": 211,
+      "norm_label": "11.1 route map",
+      "id": "docs_architecture_11_1_route_map"
+    },
+    {
+      "label": "11.2 Key Components",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L471",
+      "_origin": "ast",
+      "community": 211,
+      "norm_label": "11.2 key components",
+      "id": "docs_architecture_11_2_key_components"
+    },
+    {
+      "label": "11.3 Key Libraries",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L488",
+      "_origin": "ast",
+      "community": 211,
+      "norm_label": "11.3 key libraries",
+      "id": "docs_architecture_11_3_key_libraries"
+    },
+    {
+      "label": "11.4 Hydration Fix (ProfileMenu)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L510",
+      "_origin": "ast",
+      "community": 211,
+      "norm_label": "11.4 hydration fix (profilemenu)",
+      "id": "docs_architecture_11_4_hydration_fix_profilemenu"
+    },
+    {
+      "label": "12. Bilingual Support \u2014 EN + KN",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L516",
+      "_origin": "ast",
+      "community": 34,
+      "norm_label": "12. bilingual support \u2014 en + kn",
+      "id": "docs_architecture_12_bilingual_support_en_kn"
+    },
+    {
+      "label": "12.1 Four-Layer Architecture",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L518",
+      "_origin": "ast",
+      "community": 34,
+      "norm_label": "12.1 four-layer architecture",
+      "id": "docs_architecture_12_1_four_layer_architecture"
+    },
+    {
+      "label": "13. API Reference Summary",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L529",
+      "_origin": "ast",
+      "community": 218,
+      "norm_label": "13. api reference summary",
+      "id": "docs_architecture_13_api_reference_summary"
+    },
+    {
+      "label": "13.1 Core",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L531",
+      "_origin": "ast",
+      "community": 218,
+      "norm_label": "13.1 core",
+      "id": "docs_architecture_13_1_core"
+    },
+    {
+      "label": "13.2 Intelligence (`/api/`)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L543",
+      "_origin": "ast",
+      "community": 218,
+      "norm_label": "13.2 intelligence (`/api/`)",
+      "id": "docs_architecture_13_2_intelligence_api"
+    },
+    {
+      "label": "13.3 Voice & Health",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L566",
+      "_origin": "ast",
+      "community": 218,
+      "norm_label": "13.3 voice & health",
+      "id": "docs_architecture_13_3_voice_health"
+    },
+    {
+      "label": "13.4 Response Ops (`/api/ops/` \u2014 `ENABLE_RESPONSE_OPS=true`, all ranks)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L577",
+      "_origin": "ast",
+      "community": 218,
+      "norm_label": "13.4 response ops (`/api/ops/` \u2014 `enable_response_ops=true`, all ranks)",
+      "id": "docs_architecture_13_4_response_ops_api_ops_enable_response_ops_true_all_ranks"
+    },
+    {
+      "label": "14. Configuration & Environment",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L607",
+      "_origin": "ast",
+      "community": 34,
+      "norm_label": "14. configuration & environment",
+      "id": "docs_architecture_14_configuration_environment"
+    },
+    {
+      "label": "15. Deployment",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L632",
+      "_origin": "ast",
+      "community": 220,
+      "norm_label": "15. deployment",
+      "id": "docs_architecture_15_deployment"
+    },
+    {
+      "label": "15.1 Docker",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L634",
+      "_origin": "ast",
+      "community": 220,
+      "norm_label": "15.1 docker",
+      "id": "docs_architecture_15_1_docker"
+    },
+    {
+      "label": "15.2 Local Dev",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L642",
+      "_origin": "ast",
+      "community": 220,
+      "norm_label": "15.2 local dev",
+      "id": "docs_architecture_15_2_local_dev"
+    },
+    {
+      "label": "15.3 Database Tracks",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L661",
+      "_origin": "ast",
+      "community": 220,
+      "norm_label": "15.3 database tracks",
+      "id": "docs_architecture_15_3_database_tracks"
+    },
+    {
+      "label": "16. Two-Phase Roadmap",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L670",
+      "_origin": "ast",
+      "community": 34,
+      "norm_label": "16. two-phase roadmap",
+      "id": "docs_architecture_16_two_phase_roadmap"
+    },
+    {
+      "label": "17. Bug Fixes Applied",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L685",
+      "_origin": "ast",
+      "community": 34,
+      "norm_label": "17. bug fixes applied",
+      "id": "docs_architecture_17_bug_fixes_applied"
+    },
+    {
+      "label": "Appendix \u2014 File Tree (Abridged)",
+      "file_type": "document",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L710",
+      "_origin": "ast",
+      "community": 34,
+      "norm_label": "appendix \u2014 file tree (abridged)",
+      "id": "docs_architecture_appendix_file_tree_abridged"
     },
     {
       "label": "live_cctv.py",
@@ -26096,616 +26096,6 @@
   ],
   "links": [
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture",
-      "target": "docs_architecture_satyam_complete_architecture_technical_documentation"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L390",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_10_response_ops_module_enable_response_ops_true"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L472",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_11_frontend_architecture"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L516",
-      "weight": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_12_bilingual_support_en_kn",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L529",
-      "weight": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_13_api_reference_summary",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L607",
-      "weight": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_14_configuration_environment",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L632",
-      "weight": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_15_deployment",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L670",
-      "weight": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_16_two_phase_roadmap",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L685",
-      "weight": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_17_bug_fixes_applied",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_1_project_overview"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L46",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_2_tech_stack"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L103",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_3_system_architecture_diagram"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L195",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_4_database_schema"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L299",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_5_backend_pipeline_detailed_workflows"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L533",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_6_model_layer"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L642",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_7_voice_pipeline"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L727",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_8_security_rbac_rls_masking_audit"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L840",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_9_intelligence_features_ps1_ps8"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L1491",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_appendix_file_tree_abridged"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
-      "target": "docs_architecture_table_of_contents"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L48",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_2_tech_stack",
-      "target": "docs_architecture_2_1_backend"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L64",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_2_tech_stack",
-      "target": "docs_architecture_2_2_ai_model_services"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L78",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_2_tech_stack",
-      "target": "docs_architecture_2_3_frontend"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L92",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_2_tech_stack",
-      "target": "docs_architecture_2_4_infrastructure"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L197",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_4_database_schema",
-      "target": "docs_architecture_4_1_core_tables_backend_migrations_002_schema_v2_sql"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L252",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_4_database_schema",
-      "target": "docs_architecture_4_2_ps4_ps7_extension_tables"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L170",
-      "weight": 1.0,
-      "source": "docs_architecture_4_database_schema",
-      "target": "docs_architecture_4_3_response_ops_tables_ops_prefix",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L182",
-      "weight": 1.0,
-      "source": "docs_architecture_4_database_schema",
-      "target": "docs_architecture_4_4_rls",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L186",
-      "weight": 1.0,
-      "source": "docs_architecture_4_database_schema",
-      "target": "docs_architecture_4_5_row_counts",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L301",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_5_backend_pipeline_detailed_workflows",
-      "target": "docs_architecture_5_1_pipeline_directory"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L217",
-      "weight": 1.0,
-      "source": "docs_architecture_5_backend_pipeline_detailed_workflows",
-      "target": "docs_architecture_5_2_demo_mode_keyless_operation",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L248",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_5_backend_pipeline_detailed_workflows",
-      "target": "docs_architecture_5_3_text_to_sql_safety"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L277",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_7_voice_pipeline",
-      "target": "docs_architecture_7_1_overview"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L294",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_7_voice_pipeline",
-      "target": "docs_architecture_7_2_two_independent_microphones"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L305",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_7_voice_pipeline",
-      "target": "docs_architecture_7_3_copilot_mic_engine_toggle"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L289",
-      "weight": 1.0,
-      "source": "docs_architecture_7_voice_pipeline",
-      "target": "docs_architecture_7_4_chat_box_dictation",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L296",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_8_security_rbac_rls_masking_audit",
-      "target": "docs_architecture_8_1_ksp_rank_hierarchy"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L309",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_8_security_rbac_rls_masking_audit",
-      "target": "docs_architecture_8_2_four_tier_pii_masking"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L320",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_8_security_rbac_rls_masking_audit",
-      "target": "docs_architecture_8_3_sha_256_audit_hash_chain"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L347",
-      "weight": 1.0,
-      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
-      "target": "docs_architecture_10_1_four_dedicated_sidebar_routes_v1_5_was_single_tabbed_screen",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L358",
-      "weight": 1.0,
-      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
-      "target": "docs_architecture_10_2_risk_scoring_phase_1_predictive_deployment",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L366",
-      "weight": 1.0,
-      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
-      "target": "docs_architecture_10_3_dispatch_simulation_phase_2",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L373",
-      "weight": 1.0,
-      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
-      "target": "docs_architecture_10_4_green_corridor_phase_3",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L378",
-      "weight": 1.0,
-      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
-      "target": "docs_architecture_10_5_camera_review_yolo_live_detection_phase_4_v1_5_redesign",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L427",
-      "weight": 1.0,
-      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
-      "target": "docs_architecture_10_6_dataset_driven_frontend_ops_screens_never_go_blank",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L434",
-      "weight": 1.0,
-      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
-      "target": "docs_architecture_10_7_crimemap_tsx_ops_extensions",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L380",
-      "weight": 1.0,
-      "source": "docs_architecture_10_5_camera_review_yolo_live_detection_phase_4_v1_5_redesign",
-      "target": "docs_architecture_backend_subprocess_model",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L418",
-      "weight": 1.0,
-      "source": "docs_architecture_10_5_camera_review_yolo_live_detection_phase_4_v1_5_redesign",
-      "target": "docs_architecture_confidence_tiers",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L410",
-      "weight": 1.0,
-      "source": "docs_architecture_10_5_camera_review_yolo_live_detection_phase_4_v1_5_redesign",
-      "target": "docs_architecture_frontend_reviewpanel",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L474",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_11_frontend_architecture",
-      "target": "docs_architecture_11_1_route_map"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L471",
-      "weight": 1.0,
-      "source": "docs_architecture_11_frontend_architecture",
-      "target": "docs_architecture_11_2_key_components",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L509",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "docs_architecture_11_frontend_architecture",
-      "target": "docs_architecture_11_3_key_libraries"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L510",
-      "weight": 1.0,
-      "source": "docs_architecture_11_frontend_architecture",
-      "target": "docs_architecture_11_4_hydration_fix_profilemenu",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L518",
-      "weight": 1.0,
-      "source": "docs_architecture_12_bilingual_support_en_kn",
-      "target": "docs_architecture_12_1_four_layer_architecture",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L531",
-      "weight": 1.0,
-      "source": "docs_architecture_13_api_reference_summary",
-      "target": "docs_architecture_13_1_core",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L543",
-      "weight": 1.0,
-      "source": "docs_architecture_13_api_reference_summary",
-      "target": "docs_architecture_13_2_intelligence_api",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L566",
-      "weight": 1.0,
-      "source": "docs_architecture_13_api_reference_summary",
-      "target": "docs_architecture_13_3_voice_health",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L577",
-      "weight": 1.0,
-      "source": "docs_architecture_13_api_reference_summary",
-      "target": "docs_architecture_13_4_response_ops_api_ops_enable_response_ops_true_all_ranks",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L634",
-      "weight": 1.0,
-      "source": "docs_architecture_15_deployment",
-      "target": "docs_architecture_15_1_docker",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L642",
-      "weight": 1.0,
-      "source": "docs_architecture_15_deployment",
-      "target": "docs_architecture_15_2_local_dev",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L661",
-      "weight": 1.0,
-      "source": "docs_architecture_15_deployment",
-      "target": "docs_architecture_15_3_database_tracks",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -28273,9 +27663,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L14",
       "weight": 0.8,
-      "confidence_score": 0.5,
       "source": "riskzonesresponse",
-      "target": "riskzonesresponse"
+      "target": "riskzonesresponse",
+      "confidence_score": 0.5
     },
     {
       "relation": "uses",
@@ -28385,9 +27775,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L14",
       "weight": 0.8,
-      "confidence_score": 0.5,
       "source": "suggestionsresponse",
-      "target": "suggestionsresponse"
+      "target": "suggestionsresponse",
+      "confidence_score": 0.5
     },
     {
       "relation": "uses",
@@ -28456,9 +27846,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L14",
       "weight": 0.8,
-      "confidence_score": 0.5,
       "source": "patrolout",
-      "target": "patrolout"
+      "target": "patrolout",
+      "confidence_score": 0.5
     },
     {
       "relation": "uses",
@@ -28613,9 +28003,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L14",
       "weight": 0.8,
-      "confidence_score": 0.5,
       "source": "dispatchrequest",
-      "target": "dispatchrequest"
+      "target": "dispatchrequest",
+      "confidence_score": 0.5
     },
     {
       "relation": "uses",
@@ -28663,9 +28053,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L14",
       "weight": 0.8,
-      "confidence_score": 0.5,
       "source": "dispatchout",
-      "target": "dispatchout"
+      "target": "dispatchout",
+      "confidence_score": 0.5
     },
     {
       "relation": "uses",
@@ -28855,9 +28245,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L14",
       "weight": 0.8,
-      "confidence_score": 0.5,
       "source": "detectnotify",
-      "target": "detectnotify"
+      "target": "detectnotify",
+      "confidence_score": 0.5
     },
     {
       "relation": "uses",
@@ -28886,9 +28276,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L14",
       "weight": 0.8,
-      "confidence_score": 0.5,
       "source": "cameraout",
-      "target": "cameraout"
+      "target": "cameraout",
+      "confidence_score": 0.5
     },
     {
       "relation": "uses",
@@ -28917,9 +28307,9 @@
       "source_file": "backend/app/api/routes/ops.py",
       "source_location": "L14",
       "weight": 0.8,
-      "confidence_score": 0.5,
       "source": "reviewitemout",
-      "target": "reviewitemout"
+      "target": "reviewitemout",
+      "confidence_score": 0.5
     },
     {
       "relation": "rationale_for",
@@ -28935,11 +28325,11 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L456",
+      "source_location": "L457",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_ops_rationale_456",
-      "target": "routes_ops_drain"
+      "source": "routes_ops_rationale_457",
+      "target": "routes_ops_drain",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -28956,41 +28346,41 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L467",
+      "source_location": "L468",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_ops_rationale_467",
-      "target": "routes_ops_resolve_python"
+      "source": "routes_ops_rationale_468",
+      "target": "routes_ops_resolve_python",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L515",
+      "source_location": "L516",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_ops_rationale_515",
-      "target": "routes_ops_camera_start"
+      "source": "routes_ops_rationale_516",
+      "target": "routes_ops_camera_start",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L570",
+      "source_location": "L615",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_ops_rationale_570",
-      "target": "routes_ops_camera_stop"
+      "source": "routes_ops_rationale_615",
+      "target": "routes_ops_camera_stop",
+      "confidence_score": 1.0
     },
     {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "backend/app/api/routes/ops.py",
-      "source_location": "L589",
+      "source_location": "L634",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_ops_rationale_589",
-      "target": "routes_ops_camera_status"
+      "source": "routes_ops_rationale_634",
+      "target": "routes_ops_camera_status",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -29120,6 +28510,616 @@
       "confidence_score": 1.0,
       "source": "routes_ops_camera",
       "target": "ops_reviewpanel_reviewpanel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture",
+      "target": "docs_architecture_satyam_complete_architecture_technical_documentation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L390",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_10_response_ops_module_enable_response_ops_true"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L472",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_11_frontend_architecture"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L516",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_12_bilingual_support_en_kn"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L529",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_13_api_reference_summary"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L607",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_14_configuration_environment"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L632",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_15_deployment"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L670",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_16_two_phase_roadmap"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L685",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_17_bug_fixes_applied"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_1_project_overview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L46",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_2_tech_stack"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L103",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_3_system_architecture_diagram"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L195",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_4_database_schema"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L299",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_5_backend_pipeline_detailed_workflows"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L533",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_6_model_layer"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L642",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_7_voice_pipeline"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L727",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_8_security_rbac_rls_masking_audit"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L840",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_9_intelligence_features_ps1_ps8"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L1491",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_appendix_file_tree_abridged"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_satyam_complete_architecture_technical_documentation",
+      "target": "docs_architecture_table_of_contents"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L48",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_2_tech_stack",
+      "target": "docs_architecture_2_1_backend"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L64",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_2_tech_stack",
+      "target": "docs_architecture_2_2_ai_model_services"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L78",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_2_tech_stack",
+      "target": "docs_architecture_2_3_frontend"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L92",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_2_tech_stack",
+      "target": "docs_architecture_2_4_infrastructure"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L197",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_4_database_schema",
+      "target": "docs_architecture_4_1_core_tables_backend_migrations_002_schema_v2_sql"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L252",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_4_database_schema",
+      "target": "docs_architecture_4_2_ps4_ps7_extension_tables"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L170",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_4_database_schema",
+      "target": "docs_architecture_4_3_response_ops_tables_ops_prefix"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L182",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_4_database_schema",
+      "target": "docs_architecture_4_4_rls"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L186",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_4_database_schema",
+      "target": "docs_architecture_4_5_row_counts"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L301",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_5_backend_pipeline_detailed_workflows",
+      "target": "docs_architecture_5_1_pipeline_directory"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L217",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_5_backend_pipeline_detailed_workflows",
+      "target": "docs_architecture_5_2_demo_mode_keyless_operation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L248",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_5_backend_pipeline_detailed_workflows",
+      "target": "docs_architecture_5_3_text_to_sql_safety"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L277",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_7_voice_pipeline",
+      "target": "docs_architecture_7_1_overview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L294",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_7_voice_pipeline",
+      "target": "docs_architecture_7_2_two_independent_microphones"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L305",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_7_voice_pipeline",
+      "target": "docs_architecture_7_3_copilot_mic_engine_toggle"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L289",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_7_voice_pipeline",
+      "target": "docs_architecture_7_4_chat_box_dictation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L296",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_8_security_rbac_rls_masking_audit",
+      "target": "docs_architecture_8_1_ksp_rank_hierarchy"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L309",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_8_security_rbac_rls_masking_audit",
+      "target": "docs_architecture_8_2_four_tier_pii_masking"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L320",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_8_security_rbac_rls_masking_audit",
+      "target": "docs_architecture_8_3_sha_256_audit_hash_chain"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L347",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
+      "target": "docs_architecture_10_1_four_dedicated_sidebar_routes_v1_5_was_single_tabbed_screen"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L358",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
+      "target": "docs_architecture_10_2_risk_scoring_phase_1_predictive_deployment"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L366",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
+      "target": "docs_architecture_10_3_dispatch_simulation_phase_2"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L373",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
+      "target": "docs_architecture_10_4_green_corridor_phase_3"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L378",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
+      "target": "docs_architecture_10_5_camera_review_yolo_live_detection_phase_4_v1_5_redesign"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L427",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
+      "target": "docs_architecture_10_6_dataset_driven_frontend_ops_screens_never_go_blank"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L434",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_10_response_ops_module_enable_response_ops_true",
+      "target": "docs_architecture_10_7_crimemap_tsx_ops_extensions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L380",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_10_5_camera_review_yolo_live_detection_phase_4_v1_5_redesign",
+      "target": "docs_architecture_backend_subprocess_model"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L418",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_10_5_camera_review_yolo_live_detection_phase_4_v1_5_redesign",
+      "target": "docs_architecture_confidence_tiers"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L410",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_10_5_camera_review_yolo_live_detection_phase_4_v1_5_redesign",
+      "target": "docs_architecture_frontend_reviewpanel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L474",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_11_frontend_architecture",
+      "target": "docs_architecture_11_1_route_map"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L471",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_11_frontend_architecture",
+      "target": "docs_architecture_11_2_key_components"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L509",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_11_frontend_architecture",
+      "target": "docs_architecture_11_3_key_libraries"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L510",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_11_frontend_architecture",
+      "target": "docs_architecture_11_4_hydration_fix_profilemenu"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L518",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_12_bilingual_support_en_kn",
+      "target": "docs_architecture_12_1_four_layer_architecture"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L531",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_13_api_reference_summary",
+      "target": "docs_architecture_13_1_core"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L543",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_13_api_reference_summary",
+      "target": "docs_architecture_13_2_intelligence_api"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L566",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_13_api_reference_summary",
+      "target": "docs_architecture_13_3_voice_health"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L577",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_13_api_reference_summary",
+      "target": "docs_architecture_13_4_response_ops_api_ops_enable_response_ops_true_all_ranks"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L634",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_15_deployment",
+      "target": "docs_architecture_15_1_docker"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L642",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_15_deployment",
+      "target": "docs_architecture_15_2_local_dev"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ARCHITECTURE.md",
+      "source_location": "L661",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "docs_architecture_15_deployment",
+      "target": "docs_architecture_15_3_database_tracks"
     },
     {
       "relation": "contains",
@@ -74292,5 +74292,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "d170876473b6c22fc9f018d60c820da1f91c9ac6"
+  "built_at_commit": "4c56cf76635e7d67110128dc70dd756cac021206"
 }
