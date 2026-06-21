@@ -1210,8 +1210,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/ops.py": {
-    "mtime": 1782026160.6508224,
-    "ast_hash": "cfc7f961f6f59f570700326c68992624",
+    "mtime": 1782059774.571188,
+    "ast_hash": "e068719a1fac398fce2665599dc15ad7",
     "semantic_hash": ""
   },
   "backend/app/db/ops_models.py": {
@@ -1225,8 +1225,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/responseOps.ts": {
-    "mtime": 1781991225.025798,
-    "ast_hash": "ad39e64aae97178a139dec81d493477e",
+    "mtime": 1782059715.7703786,
+    "ast_hash": "6fd1e2462c3d60e148d87e4776643e08",
     "semantic_hash": ""
   },
   "frontend/src/routes/operations.tsx": {
@@ -1310,8 +1310,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ops/ReviewPanel.tsx": {
-    "mtime": 1782026437.8426096,
-    "ast_hash": "1483ba637607b593f4ce5355e06c5846",
+    "mtime": 1782059794.0274403,
+    "ast_hash": "4a4d384bc3b96024da7cdebdd1fc04f9",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE4_CAMERA_REVIEW.md": {
