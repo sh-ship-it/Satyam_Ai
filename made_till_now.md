@@ -3465,3 +3465,160 @@ Major update to `docs/ARCHITECTURE.md`:
 - §14: `YOLO_PYTHON`, `YOLO_MJPEG_PORT`, `SELF_BASE_URL` env vars documented
 - §17: 10 new OPS bug fixes (OPS-1 through OPS-10) added
 - Appendix: `model/` folder documented with optional `gun.pt` weapon model note
+
+
+---
+
+### [2026-06-22] — Deep Security & Bug Fixes + NLP Improvements
+
+#### Deep audit scan → `SATYAM_DEEP_AUDIT_2026-06-22.md`
+Full project scan produced 2 critical, 5 high, 9 medium, 10 low issues. All fixable items addressed.
+
+#### Fixes applied (see audit doc for full list)
+- **C1** `core/audit.py` — `pg_advisory_xact_lock` serializes all audit chain appends (prevents fork under concurrent load)
+- **C2** `ops.py` — `_guard_write()` added; write-capable ops endpoints (confirm, dispatch, notify, camera/start) now require L2+
+- **H1** `main.py` — startup refuses to boot in production if JWT secret is the default value
+- **H2** `ops.py` — `_resolve_python()` now cached + called via `asyncio.to_thread` (removes event-loop block)
+- **H5** `ops.py` — `confirm_item` nearest-patrol filter guards both `lat` and `lng` (was lat-only → null-lng 500)
+- **M1** `chat_service.py` — audit row committed in its own transaction (survives mid-stream client disconnect)
+- **M2/M4** `sim_service.py` — task done-callback logs exceptions + cleans `_latest` registry
+- **M3** `ops.py` — camera spawn wrapped in `async with _yolo_lock`
+- **M5** `orchestrator.py` — except block logs real errors; only guardrail blocks show "safety filter"
+- **M6** `config.py` + `ops.py` — new `self_base_url` setting replaces hardcoded `localhost:8000`
+- **M9** `ops.py` — port-wait uses `asyncio.open_connection` (non-blocking)
+- **L2** `live_cctv.py` — track dicts pruned every 300 frames
+- **L3** `ops.py` — `_guard_write` now uses the previously unused `require`/`Permission` imports
+- **L5** `routing_service.py` — OSRM fallback logged via `log.warning`
+- **L7** `ops.py act_on_suggestion` — returns 404 when rowcount == 0
+- **L10** Frontend — Prettier formatted
+
+#### NLP / Chat Intelligence upgrades
+- **`SQL_SYSTEM` prompt rewritten** — instructs Gemini to interpret intent not literal words, always use ILIKE for fuzzy matching, handle relative dates, keep filters minimal, carry conversation context for follow-ups
+- **Conversational memory** — `generate_sql()` now receives `history: list[dict]` and builds a context-aware prompt with last 6 turns so follow-ups ("what about last year?") resolve correctly
+- **Progressive zero-result recovery** — `build_sql(relax=0..3)` + `relaxation_note()` in `rule_sql.py`; `answer_with_sql()` progressively broadens (drop date → drop crime → drop place → show latest) and surfaces a recovery note to the user instead of dead-ending
+- **`rule_sql.py` place extraction** — full phrase kept (not single token), temporal words stripped from place, `_q()` allows `%` for ILIKE wildcards, `"police"/"station"` removed from stopwords so "Cyber Crime Police Station" matches correctly
+
+---
+
+### [2026-06-22] — Chat Spoken Summary (Voice Intelligence)
+
+#### Backend `pipeline/orchestrator.py`
+- `_build_spoken_summary(rows, message, lang)` — generates a 2–3 sentence spoken briefing directly from SQL rows; works in demo mode (no LLM needed); supports `lang="kn"` for Kannada output
+- `_extract_speak(answer)` — pulls `[SPEAK]...[/SPEAK]` block from Gemini answer; prefers Gemini's contextual summary, falls back to deterministic
+- `"speak"` SSE event emitted before tokens; carries the spoken summary text
+- `prompts.py` `ANSWER_SYSTEM` + `build_answer_system()` — VOICE SUMMARY RULE added: Gemini instructed to wrap spoken summary in `[SPEAK]...[/SPEAK]` at the top of every grounded answer
+- Recovery note prepended to answer (italic) when query was auto-broadened
+
+#### Frontend `routes/console.tsx`
+- `spokenSummary` state captures `"speak"` SSE event
+- `speak(spokenSummary || finalAi.text, opts)` — uses smart summary for TTS; force `speak: true` when summary exists
+- `speak()` function language priority: explicit voice locale → UI language toggle (`lang === "KN"`) → no auto-detect from text
+
+#### Language fix
+- Voice output now strictly follows the EN/KN toggle — EN selected → always speaks English regardless of response content; KN selected → spoken summary generated in Kannada
+
+---
+
+### [2026-06-22] — Chat Width Resize (drag handle)
+
+#### `frontend/src/routes/console.tsx`
+- `chatWidth` state (default 420px), `isDraggingRef`, `dragStartXRef`, `dragStartWidthRef`
+- `onDividerMouseDown()` — mousedown starts drag; `document.addEventListener` tracks mousemove/mouseup globally; clamps 260px–60% of window
+- Left `<section>` uses `style={{ width: chatWidth }}` instead of fixed `w-[420px]`
+- Thin **1px divider bar** between chat and canvas; cursor `col-resize` on hover, 3 grip dots appear
+
+---
+
+### [2026-06-22] — CaseDrawer Improvements
+
+#### Data fetching / caching
+- `dataCache` ref — per-caseId+lang cache; instant switch on already-loaded cases
+- `langRef` instead of `lang` in useEffect dep array — prevents re-fetch on i18n context re-renders
+- `prevCaseIdRef` — only resets lazy data when caseId actually changes
+- Component stays mounted (never returns null) — `hidden` CSS instead; cache survives between opens
+
+#### Map tab
+- Replaced plain text coordinates with: location info + **"Take me to map" button** (inline with coordinates) + no mini-map (was causing 1s load flash)
+- `← Back` sticky bar between tabs and scrollable content (never scrolls off screen)
+- "Take me to map" closes drawer, switches console canvas to map tab, drops pin at exact case location
+
+#### Console canvas
+- Back bar for map view rendered in normal DOM flow (above `<CrimeMap>`) — no longer hidden by Leaflet stacking context
+- `onShowOnMap` prop: `setDrawerCaseId(null)` + `setCanvasTab("map")` + `setMapMode("pins")` + `setMapFocus([{lat,lng}])`
+
+---
+
+### [2026-06-22] — AI "Ask AI about this area" fix
+
+#### `rule_sql.py`
+- `_extract_place()` — keeps full phrase from preposition ("Cyber Crime Police Station" not stripped to "cyber")
+- Temporal phrases ("this year", "last year") cut from place before ILIKE
+- `"police"` and `"station"` removed from `_GENERIC` stopwords
+- `_q()` regex now allows `%` for ILIKE wildcards (was stripping them → exact match instead of substring)
+- `_crime_value()` skips crime hints that appear in the place name (prevents `AND crime_type ILIKE '%cyber%'` doubling up)
+- `build_sql(relax=0..3)` + `relaxation_note()` exported
+
+---
+
+### [2026-06-22] — Investigation Board (`/board`)
+
+#### Backend (isolated, additive)
+- `migrations/005_boards.sql` — `boards` + `board_snapshots` tables; nullable FK to `users`; no RLS; no seed/embed involvement
+- `app/db/board_models.py` — Board + BoardSnapshot SQLAlchemy ORM
+- `app/schemas/board.py` — BoardImage, BoardGenerateRequest, SceneNode, SceneEdge, SceneGraph, BoardSaveRequest
+- `app/services/board_service.py` — `generate_scene` (text path via `get_llm("gemini")` + self-contained multimodal httpx path), `save_board`, `load_board`, `list_boards`. Zero references to real dataset tables.
+- `app/api/routes/board.py` — POST /generate (Permission.CHAT + audit), POST /save, GET /list, GET /{id}
+- `app/main.py` — `/api/board` router wired
+
+#### Frontend
+- `lib/api/board.ts` — typed client with Zod schema validation on `generate()` (invalid AI JSON → toast, board never cleared)
+- `routes/board.tsx` — full React Flow canvas:
+  - 3 node types: Photo (image card), Note (sticky note), Entity (person/case chip)
+  - **Undo / Redo** — `useReducer` history stack (50 deep), Ctrl+Z / Ctrl+Y keyboard shortcuts, toolbar buttons grayed when unavailable
+  - **Freehand pencil drawing** — SVG overlay layer, 7 preset colors + custom hex picker, 4 thickness levels, Clear ink button; drawings saved in `state_json.drawPaths`
+  - **Red Link mode** — click two nodes → red arrow with editable label
+  - Photo drag-drop / file picker → image node on canvas
+  - **AI chatbox** (bottom-right) — prompt + optional photo attachments → Gemini generates scene graph → Zod validates → nodes+edges added to canvas
+  - Save / Open / New board via `/api/board` CRUD
+  - Board title editable inline
+- `Shell.tsx` — `Workflow` icon, `/board` nav entry (not admin-gated), voice command `/(board|canvas|crime board|ಬೋರ್ಡ್)/i`
+- `lib/i18n.tsx` — `"Board"` + all new settings strings added
+
+---
+
+### [2026-06-22] — AI Chat Model Settings + OpenAI/ChatGPT Engine
+
+#### Backend
+- `app/models/api/openai_llm.py` — OpenAI ChatGPT adapter (mirrors GroqLLM protocol); demo mode when key unset
+- `app/config.py` — `openai_api_key`, `openai_model`, `openai_base_url`; `brain_engine` Literal widened to include `"openai"`
+- `app/models/registry.py` — `get_llm("openai")` branch added
+- `app/schemas/chat.py`, `orchestrator.py`, `chat_service.py` — `"openai"` added to `brain_engine` Literal unions
+- `app/api/routes/settings.py` — `GET /settings/db-source/models` returns `{gemini_configured, openai_configured, groq_configured, local_available}` booleans only — never the keys
+- `.env.example` — `OPENAI_API_KEY`, `OPENAI_MODEL` documented
+
+#### Frontend
+- `lib/api/client.ts` — `ModelProviderStatus` type, `api.modelProviders()`, `brain_engine` union widened
+- `components/SettingsDialog.tsx` — Brain engine `<select>` replaced with **AI Chat Model** card section: 3 provider buttons (Gemini 2.5 Flash / ChatGPT / Groq Llama-3.3-70B) each showing env key name + green "Configured" / red "No key" badge fetched live. Selecting changes brain engine for all subsequent chats. `brainEngine` type widened.
+
+---
+
+### [2026-06-22] — Person 360 Admin Dossier (`/dossier`)
+
+#### Backend (isolated, admin-only)
+- `migrations/004_demo_dossier.sql` — 5 isolated tables: `demo_dossier_persons`, `_family`, `_bank_accounts`, `_crimes`, `_contacts`; no FKs to real tables; no RLS
+- `app/db/demo_dossier_models.py` — full ORM with selectin eager loading
+- `app/schemas/dossier.py` — DossierListItem, DossierDetail, nested child schemas, computed aggregates
+- `app/services/dossier_service.py` — list + detail; zero references to real dataset tables
+- `app/api/routes/dossier.py` — admin-gated (L4+ or DGP/ADGP/IGP/SP/admin), 403 otherwise, audit logged
+- `seed/demo_dossier.json` — 10 fictional Karnataka personas with full crime history, family, contacts, banks
+- `seed/load_demo_dossier.py` — idempotent seed, only touches `demo_dossier_*` tables
+
+#### Frontend
+- `lib/api/dossier.ts` — typed client with pre-fetch cache (all 10 profiles loaded in background on mount → subsequent clicks instant)
+- `routes/dossier.tsx` — full Person 360 screen:
+  - Searchable person rail (thumbnail + risk badge)
+  - **FaceCard** — 3-angle mugshot (front/left/right) with forensic height grid lines + lightbox on click
+  - Personal & Physical, Contact details, Bank Accounts table (flagged rows highlighted red, total balance), Crime History timeline, Family members, Known Associates
+  - Print/Export PDF button, client-side admin guard (non-admins see lock screen), "DEMO — fictional" pill
+- `Shell.tsx` — `Fingerprint` icon, `/dossier` nav entry visible only to L4+ (isAdmin state from JWT)
+- `frontend/public/demo-dossier/<slug>/front|left|right.png` — placeholder SVG images (replace with AI-generated photos)

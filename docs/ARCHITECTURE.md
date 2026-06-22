@@ -756,4 +756,108 @@ satyam/
 
 ---
 
-*Last updated: 2026-06-21 · Satyam v1.5 · Datathon 2026 KSP × hack2skill*
+*Last updated: 2026-06-22 · Satyam v1.6 · Datathon 2026 KSP × hack2skill*
+
+
+---
+
+## Addendum — v1.6 Changes (2026-06-22)
+
+### New Screens
+
+| Route | Screen | Guard | Notes |
+|-------|--------|-------|-------|
+| `/board` | Investigation Board | `Permission.CHAT` (all officers) | React Flow canvas, undo/redo, pencil draw, AI scene generation |
+| `/dossier` | Person 360 Dossier | Clearance L4+ / admin rank | 10 isolated demo personas, mugshot face card, crime history, bank accounts |
+
+### New Backend Files
+
+| File | Purpose |
+|------|---------|
+| `migrations/005_boards.sql` | `boards` + `board_snapshots` tables (isolated) |
+| `migrations/004_demo_dossier.sql` | 5 `demo_dossier_*` tables (isolated) |
+| `app/db/board_models.py` | Board + BoardSnapshot ORM |
+| `app/db/demo_dossier_models.py` | Full dossier ORM (5 models) |
+| `app/schemas/board.py` | SceneGraph, SceneNode, SceneEdge, BoardGenerateRequest, BoardSaveRequest |
+| `app/schemas/dossier.py` | DossierListItem, DossierDetail, nested schemas |
+| `app/services/board_service.py` | AI scene generation (text + multimodal), CRUD |
+| `app/services/dossier_service.py` | list + detail (isolated from real tables) |
+| `app/api/routes/board.py` | POST /generate, POST /save, GET /list, GET /{id} |
+| `app/api/routes/dossier.py` | GET /list, GET /{id} — admin-gated |
+| `app/models/api/openai_llm.py` | ChatGPT (OpenAI) brain adapter |
+| `seed/demo_dossier.json` | 10 fictional Karnataka police dossier personas |
+| `seed/load_demo_dossier.py` | Idempotent dossier seed (only touches demo_dossier_* tables) |
+
+### New Config Fields (`app/config.py`)
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `OPENAI_API_KEY` | `""` | ChatGPT / OpenAI brain engine |
+| `OPENAI_MODEL` | `gpt-4o` | OpenAI model name |
+| `OPENAI_BASE_URL` | `https://api.openai.com/v1` | API base (override for Azure etc.) |
+| `SELF_BASE_URL` | `http://localhost:8000` | Backend self-URL for YOLO subprocess callback |
+
+### New API Endpoints
+
+| Path | Guard | Purpose |
+|------|-------|---------|
+| `POST /api/board/generate` | CHAT + audit | Generate SceneGraph from prompt + optional images |
+| `POST /api/board/save` | CHAT | Insert/update board |
+| `GET /api/board/list` | CHAT | List user's boards |
+| `GET /api/board/{id}` | CHAT | Load board by id |
+| `GET /api/dossier/list` | L4+ admin | List all 10 dossier subjects |
+| `GET /api/dossier/{id}` | L4+ admin | Full dossier with nested data |
+| `GET /settings/db-source/models` | CHAT | Provider availability booleans (never returns keys) |
+
+### Intelligence Upgrades
+
+- **`brain_engine`** now accepts `"openai"` in all Literal unions (`config`, `schemas/chat`, `orchestrator`, `chat_service`, `registry`)
+- **SettingsDialog** — Brain engine select replaced with AI Chat Model card showing 3 providers (Gemini/ChatGPT/Groq) with configured/unconfigured badge
+- **SQL_SYSTEM prompt** rewritten for fuzzy NL understanding (ILIKE, relative dates, context carry-forward)
+- **`generate_sql()`** accepts `history` for conversational follow-ups
+- **Progressive zero-result recovery** — `rule_sql.build_sql(relax=0..3)` broadens query instead of returning empty results
+- **`_build_spoken_summary()`** generates smart spoken briefings from SQL rows (works without LLM); `[SPEAK]` SSE event carries the text to TTS
+- **Voice output** strictly respects EN/KN UI toggle (no more text-content auto-detect)
+
+### Frontend New Files
+
+| File | Purpose |
+|------|---------|
+| `lib/api/board.ts` | Typed board API client + Zod SceneGraph validation |
+| `lib/api/dossier.ts` | Typed dossier API client with background pre-fetch cache |
+| `routes/board.tsx` | Investigation Board (React Flow canvas) |
+| `routes/dossier.tsx` | Person 360 Dossier screen |
+
+### Investigation Board Features
+
+- **React Flow canvas** — infinite pan/zoom, 3 node types (Photo / Note / Entity)
+- **Undo/Redo** — `useReducer` history (50 deep), Ctrl+Z / Ctrl+Y, toolbar buttons
+- **Freehand drawing** — SVG overlay, 7 preset colors + custom hex, 4 thickness levels, clear ink button; drawings persisted in `state_json.drawPaths`
+- **Red Link mode** — connect any two nodes with a labeled red arrow
+- **AI chatbox** — prompt + photos → Gemini SceneGraph → Zod validated → added to canvas; invalid AI JSON shows toast, board never cleared
+- **Save/Load** via `boards` table; board title editable
+
+### Security Fixes (from deep audit)
+
+| ID | Fix |
+|----|-----|
+| C1 | `pg_advisory_xact_lock` serializes audit chain writes |
+| C2 | `_guard_write()` on all ops write endpoints (L2+ required) |
+| H1 | Backend refuses to start in production with default JWT secret |
+| H2 | `_resolve_python()` cached + runs in thread pool |
+| H5 | `confirm_item` guards both lat and lng |
+| M1 | Audit row committed in own transaction (disconnect-safe) |
+| M2/M4 | Sim tasks log exceptions + clean `_latest` on completion |
+| M3 | `_yolo_lock` prevents double-spawn |
+| M5 | Orchestrator logs real errors instead of calling them "safety filter" |
+| M6 | `SELF_BASE_URL` config replaces hardcoded localhost |
+
+### Chat Width Resize
+Left chat rail now uses `resize: horizontal` CSS via a drag divider — chat panel width adjustable from 260px to 60% of window; position remembered in React state.
+
+### CaseDrawer Improvements
+- Data cached per caseId (component stays mounted, never unmounts on close)
+- Map tab: coordinates + "Take me to map" inline button (no mini-map); `← Back` sticky bar always visible
+- Console canvas back button rendered in normal DOM flow (above Leaflet) so it's never hidden
+
+*Last updated: 2026-06-22 · Satyam v1.6 · Datathon 2026 KSP × hack2skill*
