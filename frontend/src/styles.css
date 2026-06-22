@@ -264,3 +264,18 @@
 @layer base {
   .rounded-xl, .rounded-lg, .rounded-md { border-radius: 5px !important; }
 }
+
+/* Neobrutalist form input/select — used by Access Control + other admin screens */
+.nb-input {
+  width: 100%;
+  border: 2px solid var(--color-foreground, #0a160a);
+  border-radius: 5px;
+  background: var(--color-background, #fff);
+  padding: 0.5rem 0.625rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  outline: none;
+}
+.nb-input:focus {
+  box-shadow: 2px 2px 0 var(--color-foreground, #0a160a);
+}

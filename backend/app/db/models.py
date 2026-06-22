@@ -150,6 +150,9 @@ class User(Base):
     assigned_rank: Mapped[Optional[str]] = mapped_column(ForeignKey("rank_access.rank"))
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=_now)
+    created_by: Mapped[Optional[int]] = mapped_column(ForeignKey("users.user_id"), nullable=True)
+    clearance_override: Mapped[Optional[int]] = mapped_column(SmallInteger, nullable=True)
+    scope_override: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
 
 # ---------------------------------------------------------------------------

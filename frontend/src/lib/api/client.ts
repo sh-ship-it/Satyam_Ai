@@ -211,6 +211,15 @@ export const api = {
   modelProviders(): Promise<ModelProviderStatus> {
     return request<ModelProviderStatus>("/settings/db-source/models");
   },
+  adminUsers(): Promise<{ rows: AdminUserRow[]; total: number }> {
+    return request("/admin/users");
+  },
+  updateUserPolicy(userId: number, body: PolicyUpdate): Promise<AdminUserRow> {
+    return request(`/admin/users/${userId}/policy`, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    });
+  },
 };
 
 export type TtsResult = { audio_base64: string; mime: string; provider: string };
@@ -272,6 +281,30 @@ function loadEngineSettingsForDebug(): string {
   return "sarvam";
 }
 // The backend streams grounded answers token-by-token over SSE.
+export type AdminUserRow = {
+  user_id: number;
+  username: string;
+  full_name: string;
+  email?: string | null;
+  assigned_rank?: string | null;
+  clearance: 1 | 2 | 3 | 4;
+  scope: "state" | "range" | "district" | "station";
+  is_active: boolean;
+  created_at?: string | null;
+  created_by_id?: number | null;
+  created_by_name?: string | null;
+  has_override: boolean;
+};
+
+export type PolicyUpdate = {
+  rank?: string;
+  clearance?: 1 | 2 | 3 | 4 | null;
+  scope?: "state" | "range" | "district" | "station";
+  is_active?: boolean;
+  reason: string;
+  clear_overrides?: boolean;
+};
+
 export type ModelProviderStatus = {
   default_brain_engine: string;
   gemini_configured: boolean;

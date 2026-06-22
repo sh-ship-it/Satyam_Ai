@@ -71,10 +71,12 @@ async def _get_or_create_officer(
 
 
 def _build_token_and_user(
-    uid: str, name: str, rank: str, officer_id: int | None
+    uid: str, name: str, rank: str, officer_id: int | None,
+    clearance_override: int | None = None,
+    scope_override: str | None = None,
 ) -> tuple[str, SessionUser]:
-    clearance = resolve_clearance(rank)
-    scope = resolve_scope(rank)
+    clearance = clearance_override if clearance_override is not None else resolve_clearance(rank)
+    scope = scope_override or resolve_scope(rank)
     geo = _DEMO_STATIONS.get(rank, _DEMO_STATIONS["investigator"])
     user = SessionUser(
         id=uid, name=name, rank=rank, scope=scope, clearance=clearance,
@@ -175,6 +177,9 @@ async def login(req: LoginRequest) -> LoginResponse:
             db_user = (await session.execute(stmt)).scalar_one_or_none()
 
             if db_user:
+                if not db_user.is_active:
+                    raise HTTPException(status_code=403, detail="Account is disabled. Contact an administrator.")
+
                 # Verify password
                 if settings.app_env == "production":
                     if not verify_password(req.password or "", db_user.password_hash):
@@ -189,7 +194,11 @@ async def login(req: LoginRequest) -> LoginResponse:
                 # Rank comes from the DB record, not the request
                 assigned_rank = db_user.assigned_rank or "CI"
                 officer_id = db_user.user_id
-                token, user = _build_token_and_user(username, name, assigned_rank, officer_id)
+                token, user = _build_token_and_user(
+                    username, name, assigned_rank, officer_id,
+                    clearance_override=db_user.clearance_override,
+                    scope_override=db_user.scope_override,
+                )
                 return LoginResponse(token=token, user=user)
 
             else:
