@@ -13,6 +13,8 @@ const DICT: Record<string, string> = {
 
   // Investigation Board + AI Model Settings
   "Board": "ಬೋರ್ಡ್",
+  "Board AI (scene generator)": "ಬೋರ್ಡ್ AI (ದೃಶ್ಯ ರಚನೆ)",
+  "Powers the AI Scene Generator on the Board screen": "ಬೋರ್ಡ್ ಪರದೆಯ AI ದೃಶ್ಯ ಜನರೇಟರ್ ಅನ್ನು ಚಾಲನೆ ಮಾಡುತ್ತದೆ",
   "AI Chat Model": "AI ಚಾಟ್ ಮಾದರಿ",
   "Configured": "ಸಂರಚಿಸಲಾಗಿದೆ",
   "No key": "ಕೀ ಇಲ್ಲ",

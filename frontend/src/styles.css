@@ -279,3 +279,14 @@
 .nb-input:focus {
   box-shadow: 2px 2px 0 var(--color-foreground, #0a160a);
 }
+
+/*
+ * tldraw/tldraw.css is imported on the Board route.
+ * Restore cursor for the rest of the app shell (tldraw sets cursor styles globally).
+ */
+body {
+  cursor: auto !important;
+}
+input, textarea {
+  cursor: text;
+}

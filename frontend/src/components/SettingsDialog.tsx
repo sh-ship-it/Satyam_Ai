@@ -25,6 +25,7 @@ export type EngineSettings = {
   localModelEnabled: boolean;
   brainEngine: "gemini" | "groq" | "openai" | "local";
   sqlEngine: "gemini" | "qwen3-coder-next" | "local";
+  boardEngine: "gemini" | "groq" | "openai";
   voiceBackend: "sarvam" | "google" | "webspeech";
   /** Copilot (top-right) microphone STT engine — independent of the chat voice. */
   copilotStt: "browser" | "sarvam";
@@ -38,6 +39,7 @@ const defaultEngineSettings: EngineSettings = {
   localModelEnabled: false,
   brainEngine: "gemini",
   sqlEngine: "gemini",
+  boardEngine: "gemini",
   voiceBackend: "sarvam",
   copilotStt: "browser" as const, // lowest-latency live captions; switch to Sarvam for best Kannada
   dbSource: "cloud",
@@ -355,6 +357,26 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                     </select>
                     <span className="text-[10px] text-muted-foreground">
                       sqlglot guard applies to all
+                    </span>
+                  </div>
+                </Row>
+
+                {/* Investigation Board AI engine */}
+                <Row label={t("Board AI (scene generator)")}>
+                  <div className="flex flex-col items-end gap-0.5">
+                    <select
+                      value={engines.boardEngine}
+                      onChange={(e) =>
+                        updateEngine("boardEngine", e.target.value as EngineSettings["boardEngine"])
+                      }
+                      className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
+                    >
+                      <option value="gemini">Gemini 2.5 Flash (recommended)</option>
+                      <option value="groq">Groq Llama-3.3-70B (fast)</option>
+                      <option value="openai">ChatGPT / OpenAI (GPT-4o)</option>
+                    </select>
+                    <span className="text-[10px] text-muted-foreground">
+                      {t("Powers the AI Scene Generator on the Board screen")}
                     </span>
                   </div>
                 </Row>

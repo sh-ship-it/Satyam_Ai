@@ -74,12 +74,17 @@ export const boardApi = {
     prompt: string;
     images?: BoardImage[];
     lang?: string;
+    brain_engine?: string;
   }): Promise<SceneGraph> => {
     const raw = await apiFetch<unknown>("/api/board/generate", {
       method: "POST",
-      body: JSON.stringify({ prompt: args.prompt, images: args.images ?? [], lang: args.lang ?? "en" }),
+      body: JSON.stringify({
+        prompt: args.prompt,
+        images: args.images ?? [],
+        lang: args.lang ?? "en",
+        brain_engine: args.brain_engine,
+      }),
     });
-    // Validate server response — never lets a bad AI response corrupt the canvas.
     return SceneGraphZ.parse(raw);
   },
 

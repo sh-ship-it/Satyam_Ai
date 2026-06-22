@@ -161,24 +161,89 @@ async def _multimodal_generate(prompt: str, images: list[Any], lang: str) -> str
     return "".join(p.get("text", "") for p in parts_out)
 
 
+def _keyword_scene(prompt: str) -> SceneGraph:
+    """Deterministic fallback scene built from keywords in the user's prompt.
+
+    Runs entirely without an LLM — guaranteed to return something even when
+    the API is rate-limited or unavailable. Extracts noun-phrases and creates
+    entity nodes with labelled edges between them so the board is never blank.
+    """
+    import re
+    words = re.findall(r'[A-Za-z0-9\u0C00-\u0CFF]+', prompt)
+    # De-duplicate while preserving order; skip short stopwords
+    STOP = {'a','an','the','and','or','in','on','of','for','to','by','with','is','was','has','have','been','be','as','at','from','this','that','these','those','about','into','over','under','through'}
+    seen: set[str] = set()
+    labels: list[str] = []
+    for w in words:
+        lw = w.lower()
+        if lw not in STOP and len(lw) > 2 and lw not in seen:
+            seen.add(lw)
+            labels.append(w.title())
+        if len(labels) >= 8:
+            break
+
+    if not labels:
+        labels = ["Subject A", "Subject B", "Case"]
+
+    # Layout in a rough circle so nodes don't overlap
+    import math
+    n = len(labels)
+    cx, cy, radius = 800, 500, 300
+    nodes: list[SceneNode] = []
+    for i, label in enumerate(labels):
+        angle = (2 * math.pi * i / n) - math.pi / 2
+        nodes.append(SceneNode(
+            id=f"kw-{i}",
+            type="entity",
+            x=round(cx + radius * math.cos(angle) - 110),
+            y=round(cy + radius * math.sin(angle) - 70),
+            w=220, h=140,
+            label=label,
+            color="#3b82f6",
+            entity_kind="person" if i % 3 != 2 else "case",
+        ))
+
+    # Connect consecutive nodes and first → last for a ring
+    edges: list[SceneEdge] = []
+    for i in range(n):
+        j = (i + 1) % n
+        edges.append(SceneEdge(
+            source=f"kw-{i}", target=f"kw-{j}",
+            label="linked to", color="#ef4444", style="solid", kind="inferred",
+        ))
+
+    return SceneGraph(nodes=nodes, edges=edges)
+
+
 async def generate_scene(req: BoardGenerateRequest) -> SceneGraph:
-    """Generate a SceneGraph from a text prompt (+ optional images)."""
+    """Generate a SceneGraph from a text prompt (+ optional images).
+
+    Uses the requested brain_engine (gemini/groq/openai). Falls back to a
+    keyword-based deterministic scene if the LLM call fails (e.g. 429 rate
+    limit) so the board always gets something useful.
+    """
     s = get_settings()
+    engine = req.brain_engine or "gemini"
 
-    if req.images and s.gemini_api_key:
-        # Multimodal path — self-contained httpx call
-        raw = await _multimodal_generate(req.prompt, req.images, req.lang)
-    else:
-        # Text-only path — use the standard LLM adapter
-        llm = get_llm("gemini")
-        raw = await llm.complete(
-            req.prompt,
-            system=SYSTEM,
-            temperature=0.2,
-            json_schema=SCENE_SCHEMA,
-        )
+    try:
+        if req.images and s.gemini_api_key and engine == "gemini":
+            raw = await _multimodal_generate(req.prompt, req.images, req.lang)
+        else:
+            llm = get_llm(engine)
+            raw = await llm.complete(
+                req.prompt,
+                system=SYSTEM,
+                temperature=0.2,
+                json_schema=SCENE_SCHEMA,
+            )
+        scene = _parse(raw)
+        # If LLM returned an empty scene, fall through to keyword fallback
+        if scene.nodes:
+            return scene
+    except Exception as exc:  # noqa: BLE001
+        log.warning("board_service.generate_scene LLM call failed (%s) — using keyword fallback", exc)
 
-    return _parse(raw)
+    return _keyword_scene(req.prompt)
 
 
 # ---------------------------------------------------------------------------
