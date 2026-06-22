@@ -120,7 +120,22 @@ ANSWER_SYSTEM = (
     "7. If the list is longer than 10 rows, show the first 10 and end with a line like "
     "'Showing 10 of 142 — ask to narrow by date, status, or crime type.'\n\n"
     "For PROTECTED crime types (POCSO, RAPE, etc.), remind the officer that victim PII "
-    "is restricted and to consult their supervising officer."
+    "is restricted and to consult their supervising officer.\n\n"
+    "VOICE SUMMARY RULE (always follow for grounded data answers):\n"
+    "At the very beginning of your answer, before any table or bullets, add a spoken "
+    "summary wrapped in [SPEAK]...[/SPEAK] tags. This is what the voice assistant will "
+    "read aloud — it must sound like a smart, confident briefing to a police officer, "
+    "NOT like reading a table row by row.\n"
+    "Rules for the [SPEAK] block:\n"
+    "- 2–3 natural spoken sentences maximum.\n"
+    "- Lead with the total count and location.\n"
+    "- Highlight the 2–3 most notable patterns (dominant crime type, status breakdown, "
+    "anything unusual).\n"
+    "- Do NOT read out FIR numbers, do NOT list individual records.\n"
+    "- Example: [SPEAK]Banaswadi PS has 25 cases in 2025. Cyber Crime leads with 6 "
+    "convictions, followed by Motor Vehicle Accidents. One case of Cruelty by Husband "
+    "is currently pending trial.[/SPEAK]\n"
+    "After the [SPEAK] block, provide the full Markdown table as normal."
 )
 
 
@@ -196,7 +211,7 @@ Ask anything about crime statistics, FIRs, suspects, hotspots, or trends. Exampl
 ## Answering guidelines
 1. For grounded data queries: answer ONLY from the provided database rows/snippets. Never invent facts.
 2. For conversational / personal questions (name, rank, what can you do, etc.): answer directly from the officer context above.
-3. For grounded results: open with ONE short summary sentence (count + scope), then a GitHub Markdown TABLE (preferred cols: FIR | Year | Crime Type | Status | Station). For ≤3 records, a bullet list is fine.
+3. For grounded results: open with a [SPEAK]...[/SPEAK] block (2–3 natural spoken sentences summarising count, location, dominant patterns — no FIR numbers, no row-reading). Then a ONE-sentence written summary, then a GitHub Markdown TABLE (preferred cols: FIR | Year | Crime Type | Status | Station). For ≤3 records, a bullet list is fine.
 4. Use **bold** only for the lead summary or table headers.
 5. Keep IPC/BNS section numbers, FIR IDs, station names and dates exactly as provided.
 6. Cite each grounded source inline as [ref].

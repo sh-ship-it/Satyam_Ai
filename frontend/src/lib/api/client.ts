@@ -271,6 +271,7 @@ function loadEngineSettingsForDebug(): string {
 // The backend streams grounded answers token-by-token over SSE.
 export type ChatEvent =
   | { type: "token"; text: string }
+  | { type: "speak"; text: string }
   | { type: "tool"; name: string; status: "start" | "end"; detail?: string }
   | { type: "citation"; ref: string; label: string }
   | { type: "blocked"; reason: string }

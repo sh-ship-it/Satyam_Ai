@@ -42,6 +42,93 @@ def _rows_context(rows: list[dict], limit: int = 25) -> str:
     return json.dumps(rows[:limit], default=str)
 
 
+import re as _re
+from collections import Counter as _Counter
+
+_SPEAK_RE = _re.compile(r"\[SPEAK\](.*?)\[/SPEAK\]", _re.DOTALL | _re.IGNORECASE)
+
+
+def _build_spoken_summary(rows: list[dict], message: str, lang: str = "en") -> str:
+    """Build a 2–3 sentence spoken briefing from raw SQL rows.
+
+    Works entirely from the data — no LLM needed — so it is guaranteed to work
+    in demo/keyless mode AND when Gemini doesn't follow the [SPEAK] convention.
+
+    Respects `lang`: when "kn", generates Kannada output so the TTS reads in
+    the correct language matching the user's UI language toggle.
+    """
+    if not rows:
+        return ""
+
+    total = len(rows)
+    is_kn = lang == "kn"
+
+    # Detect location hint from the question / rows
+    location = ""
+    for key in ("station_name", "district"):
+        vals = [str(r.get(key, "")).strip() for r in rows if r.get(key)]
+        if vals:
+            most_common = _Counter(vals).most_common(1)[0][0]
+            if most_common:
+                location = most_common
+                break
+
+    if is_kn:
+        lead = f"{location + ' ನಲ್ಲಿ ' if location else ''}{total} ಪ್ರಕರಣ{'ಗಳು' if total != 1 else ''} ದಾಖಲಾಗಿವೆ."
+    else:
+        lead = f"Found {total} case{'s' if total != 1 else ''}"
+        lead += f" at {location}." if location else "."
+
+    # Top crime types
+    crime_counts = _Counter(
+        str(r.get("crime_type", "")).strip().title()
+        for r in rows if r.get("crime_type")
+    )
+    top_crimes = crime_counts.most_common(2)
+    crime_sentence = ""
+    if top_crimes:
+        if is_kn:
+            crime_sentence = f"ಅತಿ ಹೆಚ್ಚಿನ ಪ್ರಕರಣಗಳು {top_crimes[0][0]} ವರ್ಗದಲ್ಲಿವೆ."
+        else:
+            parts = [f"{name} with {cnt}" for name, cnt in top_crimes]
+            crime_sentence = f"The most common crime type is {parts[0]} record{'s' if top_crimes[0][1] != 1 else ''}"
+            if len(parts) > 1:
+                crime_sentence += f", followed by {parts[1]}"
+            crime_sentence += "."
+
+    # Status breakdown
+    status_counts = _Counter(
+        str(r.get("status", "")).strip().title()
+        for r in rows if r.get("status")
+    )
+    status_sentence = ""
+    if status_counts:
+        top_status, top_n = status_counts.most_common(1)[0]
+        if top_n > 1:
+            pct = round(top_n / total * 100)
+            if is_kn:
+                status_sentence = f"ಇವುಗಳಲ್ಲಿ {top_n} ಪ್ರಕರಣಗಳು {top_status} ಸ್ಥಿತಿಯಲ್ಲಿವೆ."
+            else:
+                status_sentence = f"{top_n} of these ({pct}%) are {top_status}."
+
+    parts = [p for p in [lead, crime_sentence, status_sentence] if p]
+    return " ".join(parts[:3])
+
+
+def _extract_speak(answer: str) -> tuple[str, str]:
+    """Return (spoken_summary, display_text).
+
+    Pulls out the [SPEAK]...[/SPEAK] block from a Gemini answer when it exists.
+    If not found returns ("", answer) — caller falls back to the deterministic summary.
+    """
+    m = _SPEAK_RE.search(answer)
+    if not m:
+        return "", answer
+    spoken = m.group(1).strip()
+    display = _SPEAK_RE.sub("", answer).strip()
+    return spoken, display
+
+
 def _render_grounded(question: str, context: str) -> str:
     """D5.3 FIX: deterministic, no-LLM answer used in demo/keyless mode."""
     try:
@@ -150,18 +237,20 @@ async def run(
     citations: list[dict] = []
     context = ""
     sql_used: str | None = None
+    spoken_summary = ""   # built from rows; sent as "speak" SSE event for TTS
+    rows_data: list[dict] = []   # kept for deterministic spoken summary
 
     try:
         if intent == "sql_query":
             yield PipelineEvent("tool", {"name": "text_to_sql", "status": "start"})
             try:
-                sql_used, rows = await answer_with_sql(
+                sql_used, rows_data = await answer_with_sql(
                     session, message, state.slots,
                     principal=principal, sql_engine=sql_engine
                 )
-                context = _rows_context(rows)
+                context = _rows_context(rows_data)
                 citations = [{"ref": r.get("fir_number", str(i)), "label": "case"}
-                             for i, r in enumerate(rows[:5]) if r.get("fir_number")]
+                             for i, r in enumerate(rows_data[:5]) if r.get("fir_number")]
             except UnsafeSQL as e:
                 yield PipelineEvent("tool", {"name": "text_to_sql", "status": "end",
                                              "detail": f"rejected: {e}"})
@@ -173,6 +262,7 @@ async def run(
         elif intent == "narrative_search":
             yield PipelineEvent("tool", {"name": "rag", "status": "start"})
             hits = await rag.search_narratives(session, message, k=5)
+            rows_data = hits
             context = _rows_context(hits)
             citations = [{"ref": h["case_id"], "label": "narrative"} for h in hits]
             yield PipelineEvent("tool", {"name": "rag", "status": "end",
@@ -241,11 +331,27 @@ async def run(
 
         # 3) compose grounded answer (token stream)
         answer = await _compose(message, context, lang, brain_engine=brain_engine, principal=principal)
-        for chunk in answer.split(" "):
+
+        # Build the spoken summary two ways and take the best one:
+        # (a) Deterministic — built directly from rows, always available.
+        # (b) LLM tag — Gemini may have wrapped [SPEAK]...[/SPEAK] in its answer.
+        # Prefer (b) when it exists (more contextual), fall back to (a).
+        gemini_spoken, display_answer = _extract_speak(answer)
+        if gemini_spoken:
+            spoken_summary = gemini_spoken
+        else:
+            # Gemini didn't include the tag (demo mode, or it forgot) —
+            # build it deterministically from the raw rows.
+            display_answer = answer
+            spoken_summary = _build_spoken_summary(rows_data, message, lang=lang)
+
+        if spoken_summary:
+            yield PipelineEvent("speak", {"text": spoken_summary})
+        for chunk in display_answer.split(" "):
             yield PipelineEvent("token", {"text": chunk + " "})
         for c in citations:
             yield PipelineEvent("citation", c)
-        state.add_turn("assistant", answer)
+        state.add_turn("assistant", display_answer)
 
     except Exception as e:  # noqa: BLE001
         # Distinguish a genuine guardrail/safety block (carries a `reason`) from

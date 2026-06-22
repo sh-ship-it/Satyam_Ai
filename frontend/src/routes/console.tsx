@@ -333,16 +333,25 @@ function Console() {
     // (Sarvam or Google) is active in Settings — browser Web Speech is opt-in only.
     const shouldSpeak = opts?.speak || isServerVoiceEnabled();
     if (!shouldSpeak) return;
-    // TASK 2A: Auto-detect language from the reply text itself.
-    // opts.lang may be a BCP-47 locale like "kn-IN" OR the sentinel "auto".
-    // resolveLang() handles all cases: "auto"/falsy → detectLang(text),
-    // "kn-IN" → "kn", anything else → "en".
-    const resolvedLang: "en" | "kn" = resolveLang(opts?.lang, text);
+
+    // Language priority:
+    // 1. If a voice turn explicitly passed a BCP-47 locale (e.g. "kn-IN"), use it.
+    // 2. Otherwise use the UI language toggle (EN / KN) set by the user.
+    //    This ensures "I set English → AI speaks English" always holds,
+    //    regardless of what characters appear in the response text.
+    let resolvedLang: "en" | "kn";
+    const explicitLang = (opts?.lang || "").toLowerCase();
+    if (explicitLang && explicitLang !== "auto") {
+      resolvedLang = explicitLang.startsWith("kn") ? "kn" : "en";
+    } else {
+      // Respect the UI toggle as the source of truth.
+      resolvedLang = lang === "KN" ? "kn" : "en";
+    }
+
     console.debug(
-      "[console] speak lang=",
-      resolvedLang,
-      "provider=",
-      loadEngineSettings().voiceBackend,
+      "[console] speak lang=", resolvedLang,
+      "uiLang=", lang,
+      "provider=", loadEngineSettings().voiceBackend,
     );
     void speakViaSarvam(text, resolvedLang, opts?.rate ?? 1, {
       onStart: () => emit("speaking"),
@@ -414,6 +423,7 @@ function Console() {
     const citations: string[] = [];
     let blocked = false;
     let streamError = false;
+    let spokenSummary = ""; // [SPEAK] block from the backend — used for TTS
 
     try {
       await streamChat(
@@ -428,6 +438,7 @@ function Console() {
         },
         (ev: ChatEvent) => {
           if (ev.type === "token") acc += ev.text;
+          else if (ev.type === "speak") spokenSummary = ev.text ?? "";
           else if (ev.type === "citation") citations.push(ev.label || ev.ref);
           else if (ev.type === "blocked") {
             blocked = true;
@@ -485,7 +496,15 @@ function Console() {
     setMessages(finalMessages);
     persistMessages(finalMessages);
     setStreamingIdx(null);
-    speak(finalAi.text, opts);
+    // If the backend sent a [SPEAK] smart summary, always speak it (force speak:true
+    // so it plays on both voice and typed turns, regardless of provider setting).
+    // If no summary, fall back to old behaviour: respect opts (voice turns) or
+    // server-provider check (typed turns).
+    if (spokenSummary) {
+      speak(spokenSummary, { speak: true, lang: opts?.lang, rate: opts?.rate });
+    } else {
+      speak(finalAi.text, opts);
+    }
   }
 
   // Chat-box dictation — fills ONLY the chat input. It must never open the
