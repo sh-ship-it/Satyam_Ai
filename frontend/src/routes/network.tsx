@@ -59,6 +59,24 @@ const GROUP_COLOR = [
 ];
 const GROUP_SHAPE = ["circle", "circle", "circle", "diamond"];
 
+// Lighter tint per group for the radial-gradient highlight (glossy 3D look).
+const GROUP_COLOR_LIGHT = [
+  "oklch(0.74 0.16 262)", // blue light
+  "oklch(0.80 0.15 50)", // orange light
+  "oklch(0.78 0.14 150)", // green light
+  "oklch(0.74 0.13 300)", // purple light
+];
+
+// White icon glyph drawn inside each node (24×24 source coords).
+// Person silhouette for people (groups 0/1/2), document for case (group 3).
+const ICON_PERSON =
+  "M12 12.6a3.4 3.4 0 100-6.8 3.4 3.4 0 000 6.8zm0 1.7c-3.4 0-6.2 1.8-6.2 4.1v1.3h12.4v-1.3c0-2.3-2.8-4.1-6.2-4.1z";
+const ICON_DOC =
+  "M7 3.5h6.5L18 8v12.5H7zM13 3.7V8h4.3";
+function groupIcon(group: number): { path: string; filled: boolean } {
+  return group === 3 ? { path: ICON_DOC, filled: false } : { path: ICON_PERSON, filled: true };
+}
+
 type PosMap = Record<
   string,
   { x: number; y: number; vx: number; vy: number; fx?: number | null; fy?: number | null }
@@ -1300,27 +1318,63 @@ function NetworkScreen() {
                 onWheel={onWheel}
                 style={{ cursor: dragRef.current.panning ? "grabbing" : "grab" }}
               >
+                <defs>
+                  {/* Soft outer glow for nodes */}
+                  <filter id="nodeGlow" x="-80%" y="-80%" width="260%" height="260%">
+                    <feGaussianBlur stdDeviation="1.1" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                  {/* Glossy radial gradient per group (light highlight top-left) */}
+                  {GROUP_COLOR.map((c, gi) => (
+                    <radialGradient
+                      key={gi}
+                      id={`nodeGrad${gi}`}
+                      cx="35%"
+                      cy="30%"
+                      r="75%"
+                    >
+                      <stop offset="0%" stopColor={GROUP_COLOR_LIGHT[gi]} />
+                      <stop offset="100%" stopColor={c} />
+                    </radialGradient>
+                  ))}
+                </defs>
                 {EDGES.map(([a, b], i) => {
                   const A = pos[a];
                   const B = pos[b];
                   if (!A || !B) return null;
-                  const isSeedA = NODES.find((n) => n.id === a)?.role === "seed";
-                  const isSeedB = NODES.find((n) => n.id === b)?.role === "seed";
+                  const nodeA = NODES.find((n) => n.id === a);
+                  const nodeB = NODES.find((n) => n.id === b);
+                  const isSeedA = nodeA?.role === "seed";
+                  const isSeedB = nodeB?.role === "seed";
                   const isCore = isSeedA || isSeedB;
                   const inSelection =
                     selectedSet.size > 1 && selectedSet.has(a) && selectedSet.has(b);
                   const dimmed = selectedSet.size > 1 && !inSelection;
+                  // Curve the edge: control point offset perpendicular to the midpoint.
+                  const mx = (A.x + B.x) / 2;
+                  const my = (A.y + B.y) / 2;
+                  const dx = B.x - A.x;
+                  const dy = B.y - A.y;
+                  const len = Math.hypot(dx, dy) || 1;
+                  const curve = Math.min(len * 0.12, 4); // gentle bow
+                  const cx = mx + (-dy / len) * curve;
+                  const cy = my + (dx / len) * curve;
+                  // Edge colour follows the non-seed end's group for a typed look.
+                  const edgeGroup = (isSeedA ? nodeB?.group : nodeA?.group) ?? nodeB?.group ?? 0;
+                  const edgeColor = GROUP_COLOR[edgeGroup];
                   return (
-                    <line
+                    <path
                       key={i}
-                      x1={A.x}
-                      y1={A.y}
-                      x2={B.x}
-                      y2={B.y}
-                      stroke="currentColor"
-                      strokeOpacity={dimmed ? 0.08 : isCore ? 0.6 : 0.22}
-                      strokeWidth={isCore ? 0.32 : 0.18}
-                      strokeDasharray={isCore ? undefined : "0.6 0.6"}
+                      d={`M ${A.x} ${A.y} Q ${cx} ${cy} ${B.x} ${B.y}`}
+                      fill="none"
+                      stroke={edgeColor}
+                      strokeOpacity={dimmed ? 0.07 : isCore ? 0.55 : 0.28}
+                      strokeWidth={isCore ? 0.34 : 0.2}
+                      strokeLinecap="round"
+                      strokeDasharray={isCore ? undefined : "0.7 0.7"}
                     />
                   );
                 })}
@@ -1364,14 +1418,41 @@ function NetworkScreen() {
                         />
                       )}
                       {GROUP_SHAPE[n.group] === "circle" && (
-                        <circle
-                          cx={p.x}
-                          cy={p.y}
-                          r={r}
-                          fill={color}
-                          stroke="currentColor"
-                          strokeWidth={isSeed ? 0.7 : 0.45}
-                        />
+                        <>
+                          {/* Soft colour glow halo */}
+                          <circle
+                            cx={p.x}
+                            cy={p.y}
+                            r={r + 0.9}
+                            fill={color}
+                            opacity={0.22}
+                            filter="url(#nodeGlow)"
+                          />
+                          {/* Glossy gradient body */}
+                          <circle
+                            cx={p.x}
+                            cy={p.y}
+                            r={r}
+                            fill={`url(#nodeGrad${n.group})`}
+                            stroke="#ffffff"
+                            strokeWidth={isSeed ? 0.5 : 0.32}
+                            strokeOpacity={0.85}
+                          />
+                          {/* White icon glyph centred in the node */}
+                          <g
+                            transform={`translate(${p.x - r * 0.62}, ${p.y - r * 0.62}) scale(${(r * 1.24) / 24})`}
+                            pointerEvents="none"
+                          >
+                            <path
+                              d={groupIcon(n.group).path}
+                              fill={groupIcon(n.group).filled ? "#ffffff" : "none"}
+                              stroke="#ffffff"
+                              strokeWidth={groupIcon(n.group).filled ? 0 : 1.6}
+                              strokeLinejoin="round"
+                              opacity={0.95}
+                            />
+                          </g>
+                        </>
                       )}
                       {GROUP_SHAPE[n.group] === "square" && (
                         <rect
@@ -1385,12 +1466,34 @@ function NetworkScreen() {
                         />
                       )}
                       {GROUP_SHAPE[n.group] === "diamond" && (
-                        <polygon
-                          points={`${p.x},${p.y - r} ${p.x + r},${p.y} ${p.x},${p.y + r} ${p.x - r},${p.y}`}
-                          fill={color}
-                          stroke="currentColor"
-                          strokeWidth="0.45"
-                        />
+                        <>
+                          <polygon
+                            points={`${p.x},${p.y - r - 0.7} ${p.x + r + 0.7},${p.y} ${p.x},${p.y + r + 0.7} ${p.x - r - 0.7},${p.y}`}
+                            fill={color}
+                            opacity={0.22}
+                            filter="url(#nodeGlow)"
+                          />
+                          <polygon
+                            points={`${p.x},${p.y - r} ${p.x + r},${p.y} ${p.x},${p.y + r} ${p.x - r},${p.y}`}
+                            fill={`url(#nodeGrad${n.group})`}
+                            stroke="#ffffff"
+                            strokeWidth="0.4"
+                            strokeOpacity={0.85}
+                          />
+                          <g
+                            transform={`translate(${p.x - r * 0.52}, ${p.y - r * 0.52}) scale(${(r * 1.04) / 24})`}
+                            pointerEvents="none"
+                          >
+                            <path
+                              d={ICON_DOC}
+                              fill="none"
+                              stroke="#ffffff"
+                              strokeWidth={1.6}
+                              strokeLinejoin="round"
+                              opacity={0.95}
+                            />
+                          </g>
+                        </>
                       )}
                       {GROUP_SHAPE[n.group] === "triangle" && (
                         <polygon
