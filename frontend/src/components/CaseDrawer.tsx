@@ -1,5 +1,5 @@
-import { X, Lock, FileDown, Plus, Clock, Sparkles, Network } from "lucide-react";
-import { useEffect, useState } from "react";
+import { X, Lock, FileDown, Plus, Clock, Sparkles, Network, MapPin } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 import { tData } from "@/lib/tData";
@@ -10,10 +10,12 @@ export function CaseDrawer({
   open,
   onClose,
   caseId,
+  onShowOnMap,
 }: {
   open: boolean;
   onClose: () => void;
   caseId?: number | string;
+  onShowOnMap?: (lat: number, lng: number, label: string) => void;
 }) {
   const { t, lang } = useI18n();
   const navigate = useNavigate();
@@ -25,22 +27,36 @@ export function CaseDrawer({
   const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
   const [timelineLoading, setTimelineLoading] = useState(false);
 
+  // Cache: keep data in a ref so switching tabs never triggers a reload.
+  const dataCache = useRef<Record<string, any>>({});
+  const langRef = useRef(lang);
+  langRef.current = lang; // always current without being a dep
+
   useEffect(() => {
     if (!open || caseId == null) return;
+    const currentLang = langRef.current === "KN" ? "kn" : "en";
+    const key = `${caseId}-${currentLang}`;
+    // Already cached — set instantly, zero loading
+    if (dataCache.current[key]) {
+      setData(dataCache.current[key]);
+      setLoading(false);
+      return;
+    }
     let active = true;
     setLoading(true);
-    setData(null);
     api
-      .caseById(String(caseId), lang === "KN" ? "kn" : "en")
-      .then((d: any) => active && setData(d))
+      .caseById(String(caseId), currentLang)
+      .then((d: any) => {
+        if (!active) return;
+        dataCache.current[key] = d;
+        setData(d);
+      })
       .catch(() => active && setData(null))
       .finally(() => active && setLoading(false));
-    return () => {
-      active = false;
-    };
-  }, [open, caseId]);
+    return () => { active = false; };
+  }, [open, caseId]); // NO lang dep — langRef.current is read at call time
 
-  // Load similar cases + timeline lazily when tab selected
+  // Lazy-load similar + timeline only once per case — guard by length check
   useEffect(() => {
     if (!open || caseId == null) return;
     const id = Number(caseId);
@@ -63,19 +79,24 @@ export function CaseDrawer({
     }
   }, [tab, open, caseId]);
 
+  const prevCaseIdRef = useRef<number | string | undefined>(undefined);
   useEffect(() => {
-    if (open) {
+    if (!open) return;
+    // Only reset lazy-loaded data when the case actually changes, not on re-open of same case
+    if (caseId !== prevCaseIdRef.current) {
       setTab("summary");
       setSimilar([]);
       setTimeline([]);
+      prevCaseIdRef.current = caseId;
     }
   }, [open, caseId]);
 
-  if (!open) return null;
+  // Keep component mounted (never return null) so the dataCache ref survives
+  // between opens — prevents re-fetching the same case data every time the drawer opens.
   const persons: any[] = data?.persons ?? [];
 
   return (
-    <div className="fixed inset-0 z-40">
+    <div className={`fixed inset-0 z-40 ${open ? "" : "hidden"}`}>
       <div className="absolute inset-0 bg-foreground/30 backdrop-blur-[2px]" onClick={onClose} />
       <aside className="absolute right-0 top-0 h-full w-full max-w-xl bg-card shadow-2xl flex flex-col">
         <div className="flex items-center justify-between border-b border-border px-5 py-4">
@@ -121,6 +142,21 @@ export function CaseDrawer({
           ))}
         </div>
 
+        {/* Back bar — sticky, outside scroll area, only visible on the Map tab */}
+        {tab === "map" && (
+          <div className="flex shrink-0 items-center gap-3 border-b border-border bg-card px-4 py-2">
+            <button
+              onClick={() => setTab("summary")}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-muted px-3 py-1.5 text-xs font-bold text-foreground hover:bg-accent transition"
+            >
+              ← {t("Back")}
+            </button>
+            <span className="text-xs text-muted-foreground font-medium">
+              {data?.fir_number ?? ""} · {t("Map")}
+            </span>
+          </div>
+        )}
+
         <div className="flex-1 overflow-auto p-5 space-y-4">
           {loading && <div className="text-sm text-muted-foreground">{t("Loading…")}</div>}
           {!loading && !data && caseId != null && (
@@ -154,9 +190,12 @@ export function CaseDrawer({
                         key={s}
                         className="rounded-md bg-accent px-2 py-1 text-xs font-mono font-semibold text-accent-foreground"
                       >
-                        § {s}
+                        § {s.trim()}
                       </span>
                     ))}
+                  {!data.sections && (
+                    <span className="text-xs text-muted-foreground">—</span>
+                  )}
                 </div>
               </div>
               <div>
@@ -283,15 +322,43 @@ export function CaseDrawer({
             </div>
           )}
 
-          {!loading && data && tab === "map" && (
-            <div className="text-sm text-foreground/80">
-              <div className="font-medium">{data.place_of_offence ?? "—"}</div>
-              <div className="text-xs text-muted-foreground">
-                {data.latitude != null && data.longitude != null
-                  ? `${data.latitude}° N, ${data.longitude}° E`
-                  : t("Coordinates unavailable")}{" "}
-                · {data.district}
-              </div>
+          {tab === "map" && (
+            <div className="space-y-4">
+              {!loading && data ? (
+                <>
+                  {/* Place name */}
+                  <div className="text-sm font-medium text-foreground">
+                    {data.place_of_offence ?? "—"}
+                  </div>
+
+                  {/* Coordinates row + Take me to map button side by side */}
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <div className="text-xs text-muted-foreground">
+                      {data.latitude != null && data.longitude != null
+                        ? `${Number(data.latitude).toFixed(5)}° N, ${Number(data.longitude).toFixed(5)}° E · ${tData("district", data.district, lang)}`
+                        : t("Coordinates unavailable")}
+                    </div>
+                    {data.latitude != null && data.longitude != null && onShowOnMap && (
+                      <button
+                        onClick={() =>
+                          onShowOnMap(
+                            Number(data.latitude),
+                            Number(data.longitude),
+                            data.place_of_offence || data.fir_number || "Incident",
+                          )
+                        }
+                        className="shrink-0 inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition"
+                      >
+                        <MapPin className="h-3.5 w-3.5" /> {t("Take me to map")}
+                      </button>
+                    )}
+                  </div>
+                </>
+              ) : loading ? (
+                <div className="text-sm text-muted-foreground">{t("Loading…")}</div>
+              ) : (
+                <div className="text-sm text-muted-foreground">{t("Could not load case data.")}</div>
+              )}
             </div>
           )}
         </div>

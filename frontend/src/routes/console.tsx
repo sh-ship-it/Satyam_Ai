@@ -1004,10 +1004,20 @@ function Console() {
               </div>
             </div>
           ) : (
-            <div className="relative flex-1 min-h-[420px]">
-              {/* Layer + view controls */}
-              <div className="absolute left-4 top-4 z-[400] flex items-center gap-2">
-                <div className="flex rounded-md border border-border bg-card/95 p-0.5 shadow">
+            <div className="flex flex-col flex-1 min-h-0">
+              {/* ── Back bar — rendered in normal flow ABOVE the map, never covered by Leaflet ── */}
+              <div className="flex items-center gap-2 border-b border-border bg-card px-4 py-2 shrink-0">
+                <button
+                  onClick={() => {
+                    setCanvasTab("data");
+                    setMapFocus(null);
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-muted px-3 py-1.5 text-xs font-bold text-foreground hover:bg-card transition"
+                >
+                  ← {t("Back")}
+                </button>
+                {/* Layer + view controls */}
+                <div className="flex rounded-md border border-border bg-card p-0.5">
                   {(["crime", "offender"] as const).map((v) => (
                     <button
                       key={v}
@@ -1022,7 +1032,7 @@ function Console() {
                     </button>
                   ))}
                 </div>
-                <div className="flex items-center gap-1 rounded-md border border-border bg-card/95 p-1 shadow">
+                <div className="flex items-center gap-1 rounded-md border border-border bg-card p-1">
                   <Layers className="ml-1 h-3.5 w-3.5 text-muted-foreground" />
                   {(["heat", "pins", "grid"] as const).map((l) => (
                     <button
@@ -1043,12 +1053,14 @@ function Console() {
                     const seed = prompt(t("Enter offender name or ID:"), "");
                     if (seed) connectDots(seed);
                   }}
-                  className="rounded-md border border-border bg-card/95 px-2.5 py-1 text-xs font-semibold text-foreground shadow hover:bg-muted"
+                  className="rounded-md border border-border bg-card px-2.5 py-1 text-xs font-semibold text-foreground hover:bg-muted"
                 >
                   {t("Connect the dots")}
                 </button>
               </div>
 
+              {/* Map fills the remaining space */}
+              <div className="relative flex-1 min-h-[380px]">
               <CrimeMap
                 points={hotspots}
                 mode={mapMode}
@@ -1068,8 +1080,7 @@ function Console() {
                   <span className="text-muted-foreground">{t("low → high")}</span>
                 </div>
               </div>
-
-              {/* Live top-hotspot card */}
+              {/* Live top-hotspot card — sits over the inner map div */}
               {stations[0] && (
                 <div className="absolute right-6 top-6 z-[400] w-72 rounded-xl border border-border bg-card/95 backdrop-blur p-4 shadow-xl">
                   <div className="flex items-center justify-between">
@@ -1105,6 +1116,7 @@ function Console() {
                   </button>
                 </div>
               )}
+              </div>
             </div>
           )}
         </section>
@@ -1113,6 +1125,14 @@ function Console() {
         open={drawerCaseId != null}
         caseId={drawerCaseId ?? undefined}
         onClose={() => setDrawerCaseId(null)}
+        onShowOnMap={(lat, lng, label) => {
+          // Switch the results canvas to map and drop a pin at the case location.
+          // Also close the drawer so the map is fully visible.
+          setDrawerCaseId(null);
+          setCanvasTab("map");
+          setMapMode("pins");
+          setMapFocus([{ lat, lng, weight: 3, label }]);
+        }}
       />
     </Shell>
   );

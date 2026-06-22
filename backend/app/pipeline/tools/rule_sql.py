@@ -8,7 +8,7 @@ through sql_guard.sanitize() so the same safety rules apply.
 Matching philosophy: be forgiving. Use ILIKE substring matching on the most
 specific place token so 'Mysuru City' matches 'Mysuru', 'Bengaluru' matches
 'Bengaluru City', and 'Cyber Crime Police Station' matches a station_name
-containing 'Cyber'.
+containing 'Cyber Crime'.
 """
 from __future__ import annotations
 
@@ -17,8 +17,10 @@ import re
 from app.pipeline.tools.sql_guard import UnsafeSQL, sanitize
 
 # Words that are never a useful place/crime token.
+# NOTE: "police" and "station" are intentionally NOT here — they appear in
+# real KSP station names like "Cyber Crime Police Station", "Banaswadi PS".
 _GENERIC = {
-    "city", "rural", "urban", "district", "range", "police", "station", "ps",
+    "city", "rural", "urban", "district", "range",
     "the", "a", "an", "in", "at", "near", "around", "of", "for", "about",
     "crime", "crimes", "case", "cases", "fir", "firs", "this", "last",
     "year", "top", "show", "list", "me", "tell", "summarize", "summary",
@@ -45,7 +47,7 @@ _CASE_COLUMNS = (
 
 def _q(value: str) -> str:
     """Quote a string literal for inline SQL (defensive; also re-guarded later)."""
-    cleaned = re.sub(r"[^A-Za-z0-9 .,&/_-]", "", value).strip()
+    cleaned = re.sub(r"[^A-Za-z0-9 .,&%/_-]", "", value).strip()
     return "'" + cleaned.replace("'", "''") + "'"
 
 
@@ -59,25 +61,33 @@ def _extract_place(question: str, slots: dict) -> str | None:
         v = (slots or {}).get(key)
         if v:
             return str(v)
-    # Otherwise: capture the phrase after a locative preposition.
+    # Capture the phrase after a locative preposition — keep the FULL phrase,
+    # don't strip individual tokens (station names often contain "Police Station").
     m = re.search(r"\b(?:in|at|near|around|for|of)\s+([A-Za-z][A-Za-z .]+)", question, re.I)
     if not m:
         return None
-    phrase = m.group(1)
-    toks = _tokens(phrase)
-    if not toks:
+    phrase = m.group(1).strip()
+    # Remove trailing generic sentence words but keep meaningful multi-word phrases
+    phrase = re.sub(r"\b(based on|the current|query|please|and)\b.*", "", phrase, flags=re.I).strip()
+    if not phrase:
         return None
-    # Use the longest specific token (most discriminating).
-    return max(toks, key=len)
+    # Return the full phrase so "Cyber Crime Police Station" is searched as-is
+    return phrase
 
 
-def _crime_value(question: str, slots: dict) -> str | None:
+def _crime_value(question: str, slots: dict, place: str | None = None) -> str | None:
     v = (slots or {}).get("crime_type")
     if v:
         return str(v)
     ql = question.lower()
+    place_lower = (place or "").lower()
     for kw, val in _CRIME_HINTS.items():
         if kw in ql:
+            # Don't add a crime filter if the keyword is already part of the
+            # place name (e.g. "Cyber" in "Cyber Crime Police Station") —
+            # that would AND together two conflicting conditions.
+            if place_lower and kw in place_lower:
+                continue
             return val
     return None
 
@@ -115,7 +125,7 @@ def build_sql(question: str, slots: dict | None = None) -> str | None:
     ql = question.lower()
 
     place = _extract_place(question, slots)
-    crime = _crime_value(question, slots)
+    crime = _crime_value(question, slots, place=place)
     year = _year_clause(question, slots)
 
     where = []
