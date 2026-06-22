@@ -18,7 +18,7 @@ from app.models.registry import get_sql_llm
 from app.pipeline.prompts import SQL_SCHEMA, SQL_SYSTEM
 from app.pipeline.tools.sql_guard import UnsafeSQL, sanitize
 from app.config import get_settings
-from app.pipeline.tools.rule_sql import build_sql as build_rule_sql
+from app.pipeline.tools.rule_sql import build_sql as build_rule_sql, relaxation_note
 
 if TYPE_CHECKING:
     from app.core.rbac import Principal
@@ -76,6 +76,7 @@ async def generate_sql(
     question: str,
     slots: dict | None = None,
     *,
+    history: list[dict] | None = None,
     sql_engine: Literal["gemini", "qwen3-coder-next"] | None = None,
 ) -> str:
     # D5.2 FIX: in demo/keyless mode the model stubs only echo — skip them
@@ -86,7 +87,23 @@ async def generate_sql(
             return rule
 
     llm = get_sql_llm(sql_engine)
-    prompt = question if not slots else f"{question}\n\nKnown filters: {json.dumps(slots)}"
+
+    # Build a context-aware prompt: include recent conversation turns so the
+    # model can resolve follow-ups ("what about last year", "and in Mysuru").
+    parts = []
+    if history:
+        convo = "\n".join(
+            f"{turn.get('role', 'user')}: {turn.get('text', '')}"
+            for turn in history[-6:]
+            if turn.get("text")
+        )
+        if convo:
+            parts.append(f"Conversation so far:\n{convo}")
+    if slots:
+        parts.append(f"Known filters (carry forward unless changed): {json.dumps(slots)}")
+    parts.append(f"Current question: {question}")
+    prompt = "\n\n".join(parts)
+
     try:
         raw = await llm.complete(prompt, system=SQL_SYSTEM, temperature=0.0, json_schema=SQL_SCHEMA)
     except Exception:
@@ -127,21 +144,44 @@ async def answer_with_sql(
     slots: dict | None = None,
     *,
     principal: "Principal",
+    history: list[dict] | None = None,
     sql_engine: Literal["gemini", "qwen3-coder-next"] | None = None,
-) -> tuple[str, list[dict]]:
-    """Return (safe_sql, masked_rows). Raises UnsafeSQL if no usable SQL exists."""
-    sql = await generate_sql(question, slots, sql_engine=sql_engine)
+) -> tuple[str, list[dict], str | None]:
+    """Return (safe_sql, masked_rows, recovery_note).
+
+    recovery_note is a human-friendly string when the query had to be broadened
+    to find results (e.g. dropping a year filter), else None. Raises UnsafeSQL
+    if no usable SQL exists at all.
+    """
+    sql = await generate_sql(question, slots, history=history, sql_engine=sql_engine)
     rows = await run_sql(session, sql)
+    note: str | None = None
 
-    # D5.2 FIX: 0-row recovery — try the deterministic generator (fuzzy ILIKE) once.
+    # ── State-of-the-art zero-result recovery ──────────────────────────────
+    # If the primary query returns nothing, progressively broaden the search
+    # instead of dead-ending with "no records". Each level relaxes one filter
+    # and we surface a note so the officer knows what was widened.
     if not rows:
-        rule = build_rule_sql(question, slots)
-        if rule and rule.strip() != sql.strip():
-            rule_rows = await run_sql(session, rule)
-            if rule_rows:
-                sql, rows = rule, rule_rows
+        # Level 0: deterministic rule SQL with full filters (catches LLM over-constraint)
+        rule0 = build_rule_sql(question, slots, relax=0)
+        if rule0 and rule0.strip() != sql.strip():
+            r = await run_sql(session, rule0)
+            if r:
+                sql, rows = rule0, r
 
-    return sql, _mask_rows(rows, principal)
+    if not rows:
+        # Levels 1-3: drop time filter, then crime filter, then all filters.
+        for level in (1, 2, 3):
+            relaxed = build_rule_sql(question, slots, relax=level)
+            if not relaxed:
+                continue
+            r = await run_sql(session, relaxed)
+            if r:
+                sql, rows = relaxed, r
+                note = relaxation_note(question, slots, level)
+                break
+
+    return sql, _mask_rows(rows, principal), note
 
 
 __all__ = ["answer_with_sql", "generate_sql", "run_sql", "UnsafeSQL"]

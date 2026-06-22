@@ -67,11 +67,19 @@ def _extract_place(question: str, slots: dict) -> str | None:
     if not m:
         return None
     phrase = m.group(1).strip()
-    # Remove trailing generic sentence words but keep meaningful multi-word phrases
-    phrase = re.sub(r"\b(based on|the current|query|please|and)\b.*", "", phrase, flags=re.I).strip()
-    if not phrase:
+    # Cut the phrase at any trailing temporal / filler clause so we don't fold
+    # "this year", "last month", "based on the current query" into the place name.
+    phrase = re.split(
+        r"\b(this|last|current|recent|latest|based|during|over|since|between|in\s+20\d{2}|20\d{2})\b",
+        phrase, maxsplit=1, flags=re.I,
+    )[0].strip()
+    # Drop trailing generic stop-words (e.g. "Bengaluru city cases" -> "Bengaluru city")
+    words = phrase.split()
+    while words and words[-1].lower() in _GENERIC:
+        words.pop()
+    phrase = " ".join(words).strip()
+    if not phrase or len(phrase) < 3:
         return None
-    # Return the full phrase so "Cyber Crime Police Station" is searched as-is
     return phrase
 
 
@@ -119,14 +127,29 @@ def _place_clause(place: str | None) -> str:
     return f"(district ILIKE {p} OR station_name ILIKE {p} OR \"range\" ILIKE {p})"
 
 
-def build_sql(question: str, slots: dict | None = None) -> str | None:
-    """Return a guarded SELECT string, or None if we can't form one."""
+def build_sql(question: str, slots: dict | None = None, *, relax: int = 0) -> str | None:
+    """Return a guarded SELECT string, or None if we can't form one.
+
+    `relax` progressively broadens the query for zero-result recovery:
+      0 = full filters (place + crime + date)
+      1 = drop the date/year filter
+      2 = drop date AND crime filters (place only)
+      3 = no filters at all (most recent cases overall)
+    """
     slots = slots or {}
     ql = question.lower()
 
     place = _extract_place(question, slots)
     crime = _crime_value(question, slots, place=place)
     year = _year_clause(question, slots)
+
+    # Apply progressive relaxation
+    if relax >= 1:
+        year = ""           # drop time filter
+    if relax >= 2:
+        crime = None        # drop crime filter (keep place)
+    if relax >= 3:
+        place = None        # drop everything
 
     where = []
     if place:
@@ -163,4 +186,18 @@ def build_sql(question: str, slots: dict | None = None) -> str | None:
         return None
 
 
-__all__ = ["build_sql"]
+def relaxation_note(question: str, slots: dict | None, level: int) -> str:
+    """Human-friendly explanation of what was broadened at a given relax level."""
+    place = _extract_place(question, slots or {})
+    crime = _crime_value(question, slots or {}, place=place)
+    if level == 1:
+        return "No records for that time period — showing results across all years."
+    if level == 2:
+        loc = place or "that area"
+        return f"No matching crime type found — showing all recent cases in {loc}."
+    if level == 3:
+        return "No close matches — showing the most recent cases instead."
+    return ""
+
+
+__all__ = ["build_sql", "relaxation_note"]

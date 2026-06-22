@@ -239,14 +239,15 @@ async def run(
     sql_used: str | None = None
     spoken_summary = ""   # built from rows; sent as "speak" SSE event for TTS
     rows_data: list[dict] = []   # kept for deterministic spoken summary
+    recovery_note: str | None = None  # set when a query had to be broadened
 
     try:
         if intent == "sql_query":
             yield PipelineEvent("tool", {"name": "text_to_sql", "status": "start"})
             try:
-                sql_used, rows_data = await answer_with_sql(
+                sql_used, rows_data, recovery_note = await answer_with_sql(
                     session, message, state.slots,
-                    principal=principal, sql_engine=sql_engine
+                    principal=principal, history=state.turns, sql_engine=sql_engine
                 )
                 context = _rows_context(rows_data)
                 citations = [{"ref": r.get("fir_number", str(i)), "label": "case"}
@@ -331,6 +332,11 @@ async def run(
 
         # 3) compose grounded answer (token stream)
         answer = await _compose(message, context, lang, brain_engine=brain_engine, principal=principal)
+
+        # Prepend a recovery note when the query was auto-broadened, so the
+        # officer understands why these results (not an empty dead-end) appear.
+        if recovery_note and rows_data:
+            answer = f"*{recovery_note}*\n\n{answer}"
 
         # Build the spoken summary two ways and take the best one:
         # (a) Deterministic — built directly from rows, always available.
