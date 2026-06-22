@@ -30,8 +30,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/auth.py": {
-    "mtime": 1781812220.8274298,
-    "ast_hash": "0926154402fc0851413e3ea09baedd7b",
+    "mtime": 1782158769.1560771,
+    "ast_hash": "1e5453cdf395e053dbf3a1599b994f1b",
     "semantic_hash": ""
   },
   "backend/app/api/routes/cases.py": {
@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "backend/app/db/models.py": {
-    "mtime": 1781756509.2538364,
-    "ast_hash": "f7b629eb822ffb62a4b8813b3eae5757",
+    "mtime": 1782158746.7310772,
+    "ast_hash": "6f6941cdc675e5e078b54fdd0324f1e1",
     "semantic_hash": ""
   },
   "backend/app/db/rls.py": {
@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1782137484.5976944,
-    "ast_hash": "b23c86d220640ad0fc093b45c18ccb8f",
+    "mtime": 1782158823.8770702,
+    "ast_hash": "e92d36ab8e43c7032d06f172aebded60",
     "semantic_hash": ""
   },
   "backend/app/models/__init__.py": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1782139009.1407866,
-    "ast_hash": "cbc22996a3fd511dd6d0e2254796b00f",
+    "mtime": 1782159407.6945348,
+    "ast_hash": "883534ea8cb835e4549c71dfb51dff17",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/client.ts": {
-    "mtime": 1782139537.965062,
-    "ast_hash": "ae15af0c2ba8efc680039a54e059ae08",
+    "mtime": 1782158900.5049696,
+    "ast_hash": "58332ba137cb4ded5476d224d8d20370",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/example.functions.ts": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1782139098.5454893,
-    "ast_hash": "a51789070094001b7b7c22f451f98045",
+    "mtime": 1782159556.193124,
+    "ast_hash": "13e5dbc9c2b2381bba064dae6c25a978",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
-    "mtime": 1782138952.481737,
-    "ast_hash": "2dde43a0edf9a53ebc8e92362f8d05b4",
+    "mtime": 1782159895.7182012,
+    "ast_hash": "f219b1d19b19c0cc79ff47a0f4fee2e7",
     "semantic_hash": ""
   },
   "frontend/src/router.tsx": {
@@ -1657,6 +1657,31 @@
   "PARTICLE_PHYSICS_V2.md": {
     "mtime": 1782152300.4711125,
     "ast_hash": "eb667e77a528cb7e73a93b6c222dc6c4",
+    "semantic_hash": ""
+  },
+  "backend/app/api/routes/admin.py": {
+    "mtime": 1782158809.26292,
+    "ast_hash": "6811adafab6de14430ea4c742b34d8b2",
+    "semantic_hash": ""
+  },
+  "backend/app/schemas/admin.py": {
+    "mtime": 1782158783.1286833,
+    "ast_hash": "795cd5629b11e5b00f3883ba602f9076",
+    "semantic_hash": ""
+  },
+  "backend/migrations/006_admin_access_control.sql": {
+    "mtime": 1782158681.797446,
+    "ast_hash": "6b151be397ef9359c7c3a799a0a04772",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/admin.tsx": {
+    "mtime": 1782159229.269078,
+    "ast_hash": "8d4d786b935717fbae5126c8fc2c82a1",
+    "semantic_hash": ""
+  },
+  "Satyam_Admin_Access_Control_Build_Prompt.md": {
+    "mtime": 1782158454.9337225,
+    "ast_hash": "11752077a21444c5748169f272dda2c1",
     "semantic_hash": ""
   }
 }
