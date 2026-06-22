@@ -360,8 +360,8 @@
     "semantic_hash": ""
   },
   "frontend/package.json": {
-    "mtime": 1782147846.248556,
-    "ast_hash": "6910b441a7bc2ba6f831dbc7ff1a0fa3",
+    "mtime": 1782161602.842224,
+    "ast_hash": "1f5ab4acb26962a2d612bb652d223e37",
     "semantic_hash": ""
   },
   "frontend/src/assets/police.mp4.asset.json": {
@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/SettingsDialog.tsx": {
-    "mtime": 1782139689.8870833,
-    "ast_hash": "155c59e8a73e485fa708ca517a1786a1",
+    "mtime": 1782160889.3994648,
+    "ast_hash": "357f13bc3cc814f6e9667ca76e16059c",
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1782159556.193124,
-    "ast_hash": "13e5dbc9c2b2381bba064dae6c25a978",
+    "mtime": 1782161056.6799004,
+    "ast_hash": "4d750c2d45d98b4ee62faa99db5305e4",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -1625,13 +1625,13 @@
     "semantic_hash": ""
   },
   "backend/app/schemas/board.py": {
-    "mtime": 1782137409.4265764,
-    "ast_hash": "c900d81fe11eb443215f633ca0cbd9c5",
+    "mtime": 1782160956.1461418,
+    "ast_hash": "b14be94512c2a79c11dff2cc78fc173a",
     "semantic_hash": ""
   },
   "backend/app/services/board_service.py": {
-    "mtime": 1782137557.8537848,
-    "ast_hash": "60d2604774d6f8522a383733dd79ce37",
+    "mtime": 1782161010.5496328,
+    "ast_hash": "325b297aba8794f1888a4c9c1eafa69b",
     "semantic_hash": ""
   },
   "backend/migrations/005_boards.sql": {
@@ -1640,13 +1640,13 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/board.ts": {
-    "mtime": 1782138338.988153,
-    "ast_hash": "15569f6965a1269e026deadaecd07543",
+    "mtime": 1782160906.301448,
+    "ast_hash": "671ea41a48f458183672fdc6fdb63822",
     "semantic_hash": ""
   },
   "frontend/src/routes/board.tsx": {
-    "mtime": 1782140552.9672446,
-    "ast_hash": "ca7f2dcbc784caa92a7b87fe492946f3",
+    "mtime": 1782163617.101675,
+    "ast_hash": "8beab5f5593da688c37fd41b081482f9",
     "semantic_hash": ""
   },
   "Satyam_Investigation_Board_and_AI_Model_Settings_Build_Prompt.md": {
