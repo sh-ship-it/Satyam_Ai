@@ -4,1062 +4,12 @@
   "graph": {},
   "nodes": [
     {
-      "label": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt",
-      "community": 154,
-      "norm_label": "satyam_person360_dossier_build_prompt.md"
-    },
-    {
-      "label": "Satyam \u2014 \u201cPerson 360\u201d Admin Dossier Screen \u2014 Build Prompt",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "community": 154,
-      "norm_label": "satyam \u2014 \u201cperson 360\u201d admin dossier screen \u2014 build prompt"
-    },
-    {
-      "label": "0. Why a separate table namespace (do this, not the alternative)",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L20",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_0_why_a_separate_table_namespace_do_this_not_the_alternative",
-      "community": 154,
-      "norm_label": "0. why a separate table namespace (do this, not the alternative)"
-    },
-    {
-      "label": "1. Database \u2014 new migration (isolated tables)",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L32",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_1_database_new_migration_isolated_tables",
-      "community": 154,
-      "norm_label": "1. database \u2014 new migration (isolated tables)"
-    },
-    {
-      "label": "2. ORM models",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L134",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_2_orm_models",
-      "community": 154,
-      "norm_label": "2. orm models"
-    },
-    {
-      "label": "3. Pydantic schema",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L166",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_3_pydantic_schema",
-      "community": 154,
-      "norm_label": "3. pydantic schema"
-    },
-    {
-      "label": "4. Service",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L176",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_4_service",
-      "community": 154,
-      "norm_label": "4. service"
-    },
-    {
-      "label": "5. Route (admin-gated) + wiring",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L202",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_5_route_admin_gated_wiring",
-      "community": 154,
-      "norm_label": "5. route (admin-gated) + wiring"
-    },
-    {
-      "label": "6. Frontend API client",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L249",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_6_frontend_api_client",
-      "community": 154,
-      "norm_label": "6. frontend api client"
-    },
-    {
-      "label": "7. Frontend screen",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L258",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_7_frontend_screen",
-      "community": 154,
-      "norm_label": "7. frontend screen"
-    },
-    {
-      "label": "Nav entry (admin-gated)",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L289",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_nav_entry_admin_gated",
-      "community": 154,
-      "norm_label": "nav entry (admin-gated)"
-    },
-    {
-      "label": "8. Seeding the 10 demo records (isolated)",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L308",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_8_seeding_the_10_demo_records_isolated",
-      "community": 154,
-      "norm_label": "8. seeding the 10 demo records (isolated)"
-    },
-    {
-      "label": "The 10 demo personas (fictional \u2014 copy into `demo_dossier.json`)",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L327",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_the_10_demo_personas_fictional_copy_into_demo_dossier_json",
-      "community": 154,
-      "norm_label": "the 10 demo personas (fictional \u2014 copy into `demo_dossier.json`)"
-    },
-    {
-      "label": "9. AI-generated face photos (front / left / right)",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L367",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_9_ai_generated_face_photos_front_left_right",
-      "community": 154,
-      "norm_label": "9. ai-generated face photos (front / left / right)"
-    },
-    {
-      "label": "Consistency rules (critical for a believable mugshot card)",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L379",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_consistency_rules_critical_for_a_believable_mugshot_card",
-      "community": 154,
-      "norm_label": "consistency rules (critical for a believable mugshot card)"
-    },
-    {
-      "label": "Base prompt template (fill `[\u2026]` per persona, run 3x with the angle line)",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L389",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_base_prompt_template_fill_per_persona_run_3x_with_the_angle_line",
-      "community": 154,
-      "norm_label": "base prompt template (fill `[...]` per persona, run 3x with the angle line)"
-    },
-    {
-      "label": "Per-persona face briefs (use these so the 10 look distinct)",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L405",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_per_persona_face_briefs_use_these_so_the_10_look_distinct",
-      "community": 154,
-      "norm_label": "per-persona face briefs (use these so the 10 look distinct)"
-    },
-    {
-      "label": "10. Acceptance criteria (\u201cdoes it work + nothing broke\u201d)",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L422",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_10_acceptance_criteria_does_it_work_nothing_broke",
-      "community": 154,
-      "norm_label": "10. acceptance criteria (\u201cdoes it work + nothing broke\u201d)"
-    },
-    {
-      "label": "11. Build order (suggested)",
-      "file_type": "document",
-      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
-      "source_location": "L447",
-      "_origin": "ast",
-      "id": "satyam_person360_dossier_build_prompt_11_build_order_suggested",
-      "community": 154,
-      "norm_label": "11. build order (suggested)"
-    },
-    {
-      "label": "dossier.py",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/dossier.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "backend_app_api_routes_dossier_py_routes_dossier",
-      "community": 101,
-      "norm_label": "dossier.py"
-    },
-    {
-      "label": "_require_admin()",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/dossier.py",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "routes_dossier_require_admin",
-      "community": 101,
-      "norm_label": "_require_admin()"
-    },
-    {
-      "label": "Principal",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/dossier.py",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "principal",
-      "community": 101,
-      "norm_label": "principal"
-    },
-    {
-      "label": "list_dossiers()",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/dossier.py",
-      "source_location": "L38",
-      "_origin": "ast",
-      "id": "routes_dossier_list_dossiers",
-      "community": 101,
-      "norm_label": "list_dossiers()"
-    },
-    {
-      "label": "AsyncSession",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/dossier.py",
-      "source_location": "L38",
-      "_origin": "ast",
-      "id": "backend_app_api_routes_dossier_py_asyncsession",
-      "community": 101,
-      "norm_label": "asyncsession"
-    },
-    {
-      "label": "DossierListItem",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/dossier.py",
-      "source_location": "L38",
-      "_origin": "ast",
-      "id": "backend_app_api_routes_dossier_py_dossierlistitem",
-      "community": 101,
-      "norm_label": "dossierlistitem"
-    },
-    {
-      "label": "get_dossier()",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/dossier.py",
-      "source_location": "L47",
-      "_origin": "ast",
-      "id": "routes_dossier_get_dossier",
-      "community": 101,
-      "norm_label": "get_dossier()"
-    },
-    {
-      "label": "DossierDetail",
-      "file_type": "code",
-      "source_file": "backend/app/api/routes/dossier.py",
-      "source_location": "L47",
-      "_origin": "ast",
-      "id": "backend_app_api_routes_dossier_py_dossierdetail",
-      "community": 101,
-      "norm_label": "dossierdetail"
-    },
-    {
-      "label": "Person 360 dossier endpoints \u2014 admin-gated (clearance 4+ or senior rank).  GET",
-      "file_type": "rationale",
-      "source_file": "backend/app/api/routes/dossier.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "routes_dossier_rationale_1",
-      "community": 101,
-      "norm_label": "person 360 dossier endpoints \u2014 admin-gated (clearance 4+ or senior rank).  get"
-    },
-    {
-      "label": "Raise 403 unless the caller has clearance >= 4 or a permitted rank.",
-      "file_type": "rationale",
-      "source_file": "backend/app/api/routes/dossier.py",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "routes_dossier_rationale_24",
-      "community": 101,
-      "norm_label": "raise 403 unless the caller has clearance >= 4 or a permitted rank."
-    },
-    {
-      "label": "demo_dossier_models.py",
-      "file_type": "code",
-      "source_file": "backend/app/db/demo_dossier_models.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "db_demo_dossier_models",
-      "community": 101,
-      "norm_label": "demo_dossier_models.py"
-    },
-    {
-      "label": "DossierPerson",
-      "file_type": "code",
-      "source_file": "backend/app/db/demo_dossier_models.py",
-      "source_location": "L20",
-      "_origin": "ast",
-      "id": "db_demo_dossier_models_dossierperson",
-      "community": 101,
-      "norm_label": "dossierperson"
-    },
-    {
-      "label": "Base",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "base",
-      "community": 101,
-      "norm_label": "base"
-    },
-    {
-      "label": "DossierFamily",
-      "file_type": "code",
-      "source_file": "backend/app/db/demo_dossier_models.py",
-      "source_location": "L59",
-      "_origin": "ast",
-      "id": "db_demo_dossier_models_dossierfamily",
-      "community": 101,
-      "norm_label": "dossierfamily"
-    },
-    {
-      "label": "DossierBankAccount",
-      "file_type": "code",
-      "source_file": "backend/app/db/demo_dossier_models.py",
-      "source_location": "L75",
-      "_origin": "ast",
-      "id": "db_demo_dossier_models_dossierbankaccount",
-      "community": 101,
-      "norm_label": "dossierbankaccount"
-    },
-    {
-      "label": "DossierCrime",
-      "file_type": "code",
-      "source_file": "backend/app/db/demo_dossier_models.py",
-      "source_location": "L94",
-      "_origin": "ast",
-      "id": "db_demo_dossier_models_dossiercrime",
-      "community": 101,
-      "norm_label": "dossiercrime"
-    },
-    {
-      "label": "DossierContact",
-      "file_type": "code",
-      "source_file": "backend/app/db/demo_dossier_models.py",
-      "source_location": "L113",
-      "_origin": "ast",
-      "id": "db_demo_dossier_models_dossiercontact",
-      "community": 101,
-      "norm_label": "dossiercontact"
-    },
-    {
-      "label": "ORM models for demo_dossier_* tables.  FULLY ISOLATED from the synthetic datas",
-      "file_type": "rationale",
-      "source_file": "backend/app/db/demo_dossier_models.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "db_demo_dossier_models_rationale_1",
-      "community": 101,
-      "norm_label": "orm models for demo_dossier_* tables.  fully isolated from the synthetic datas"
-    },
-    {
-      "label": "main.py",
-      "file_type": "code",
-      "source_file": "backend/app/main.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_main",
-      "community": 39,
-      "norm_label": "main.py"
-    },
-    {
-      "label": "lifespan()",
-      "file_type": "code",
-      "source_file": "backend/app/main.py",
-      "source_location": "L35",
-      "_origin": "ast",
-      "id": "app_main_lifespan",
-      "community": 39,
-      "norm_label": "lifespan()"
-    },
-    {
-      "label": "FastAPI",
-      "file_type": "code",
-      "source_file": "backend/app/main.py",
-      "source_location": "L35",
-      "_origin": "ast",
-      "id": "fastapi",
-      "community": 39,
-      "norm_label": "fastapi"
-    },
-    {
-      "label": "create_app()",
-      "file_type": "code",
-      "source_file": "backend/app/main.py",
-      "source_location": "L84",
-      "_origin": "ast",
-      "id": "app_main_create_app",
-      "community": 39,
-      "norm_label": "create_app()"
-    },
-    {
-      "label": "FastAPI application factory for Satyam.",
-      "file_type": "rationale",
-      "source_file": "backend/app/main.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "app_main_rationale_1",
-      "community": 39,
-      "norm_label": "fastapi application factory for satyam."
-    },
-    {
-      "label": "dossier.py",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/dossier.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "schemas_dossier",
-      "community": 209,
-      "norm_label": "dossier.py"
-    },
-    {
-      "label": "DossierFamilyItem",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/dossier.py",
-      "source_location": "L15",
-      "_origin": "ast",
-      "id": "schemas_dossier_dossierfamilyitem",
-      "community": 209,
-      "norm_label": "dossierfamilyitem"
-    },
-    {
-      "label": "BaseModel",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "basemodel",
-      "community": 18,
-      "norm_label": "basemodel"
-    },
-    {
-      "label": "DossierBankAccountItem",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/dossier.py",
-      "source_location": "L28",
-      "_origin": "ast",
-      "id": "schemas_dossier_dossierbankaccountitem",
-      "community": 209,
-      "norm_label": "dossierbankaccountitem"
-    },
-    {
-      "label": "DossierCrimeItem",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/dossier.py",
-      "source_location": "L44",
-      "_origin": "ast",
-      "id": "schemas_dossier_dossiercrimeitem",
-      "community": 209,
-      "norm_label": "dossiercrimeitem"
-    },
-    {
-      "label": "DossierContactItem",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/dossier.py",
-      "source_location": "L60",
-      "_origin": "ast",
-      "id": "schemas_dossier_dossiercontactitem",
-      "community": 209,
-      "norm_label": "dossiercontactitem"
-    },
-    {
-      "label": "DossierListItem",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/dossier.py",
-      "source_location": "L75",
-      "_origin": "ast",
-      "id": "schemas_dossier_dossierlistitem",
-      "community": 209,
-      "norm_label": "dossierlistitem"
-    },
-    {
-      "label": "DossierDetail",
-      "file_type": "code",
-      "source_file": "backend/app/schemas/dossier.py",
-      "source_location": "L92",
-      "_origin": "ast",
-      "id": "schemas_dossier_dossierdetail",
-      "community": 209,
-      "norm_label": "dossierdetail"
-    },
-    {
-      "label": "Pydantic response schemas for the Person 360 dossier feature.",
-      "file_type": "rationale",
-      "source_file": "backend/app/schemas/dossier.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "schemas_dossier_rationale_1",
-      "community": 209,
-      "norm_label": "pydantic response schemas for the person 360 dossier feature."
-    },
-    {
-      "label": "dossier_service.py",
-      "file_type": "code",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "services_dossier_service",
-      "community": 101,
-      "norm_label": "dossier_service.py"
-    },
-    {
-      "label": "list_dossiers()",
-      "file_type": "code",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "services_dossier_service_list_dossiers",
-      "community": 101,
-      "norm_label": "list_dossiers()"
-    },
-    {
-      "label": "AsyncSession",
-      "file_type": "code",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "backend_app_services_dossier_service_py_asyncsession",
-      "community": 101,
-      "norm_label": "asyncsession"
-    },
-    {
-      "label": "DossierListItem",
-      "file_type": "code",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "backend_app_services_dossier_service_py_dossierlistitem",
-      "community": 101,
-      "norm_label": "dossierlistitem"
-    },
-    {
-      "label": "get_dossier()",
-      "file_type": "code",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L44",
-      "_origin": "ast",
-      "id": "services_dossier_service_get_dossier",
-      "community": 101,
-      "norm_label": "get_dossier()"
-    },
-    {
-      "label": "DossierDetail",
-      "file_type": "code",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L44",
-      "_origin": "ast",
-      "id": "backend_app_services_dossier_service_py_dossierdetail",
-      "community": 101,
-      "norm_label": "dossierdetail"
-    },
-    {
-      "label": "Service layer for the Person 360 demo dossier feature.  Queries ONLY demo_doss",
-      "file_type": "rationale",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "services_dossier_service_rationale_1",
-      "community": 101,
-      "norm_label": "service layer for the person 360 demo dossier feature.  queries only demo_doss"
-    },
-    {
-      "label": "Return lightweight list of all dossier subjects.",
-      "file_type": "rationale",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L25",
-      "_origin": "ast",
-      "id": "services_dossier_service_rationale_25",
-      "community": 101,
-      "norm_label": "return lightweight list of all dossier subjects."
-    },
-    {
-      "label": "Return full 360 dossier for a given demo_id, or None if not found.",
-      "file_type": "rationale",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "services_dossier_service_rationale_45",
-      "community": 101,
-      "norm_label": "return full 360 dossier for a given demo_id, or none if not found."
-    },
-    {
-      "label": "load_demo_dossier.py",
-      "file_type": "code",
-      "source_file": "backend/seed/load_demo_dossier.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "seed_load_demo_dossier",
-      "community": 101,
-      "norm_label": "load_demo_dossier.py"
-    },
-    {
-      "label": "_date()",
-      "file_type": "code",
-      "source_file": "backend/seed/load_demo_dossier.py",
-      "source_location": "L17",
-      "_origin": "ast",
-      "id": "seed_load_demo_dossier_date",
-      "community": 101,
-      "norm_label": "_date()"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "backend/seed/load_demo_dossier.py",
-      "source_location": "L25",
-      "_origin": "ast",
-      "id": "seed_load_demo_dossier_main",
-      "community": 101,
-      "norm_label": "main()"
-    },
-    {
-      "label": "Seed the 10 isolated demo dossiers. Safe and idempotent. Usage: python -m seed.",
-      "file_type": "rationale",
-      "source_file": "backend/seed/load_demo_dossier.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "seed_load_demo_dossier_rationale_1",
-      "community": 101,
-      "norm_label": "seed the 10 isolated demo dossiers. safe and idempotent. usage: python -m seed."
-    },
-    {
-      "label": "Shell.tsx",
-      "file_type": "code",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "components_shell",
-      "community": 103,
-      "norm_label": "shell.tsx"
-    },
-    {
-      "label": "VoiceScreen",
-      "file_type": "code",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L43",
-      "_origin": "ast",
-      "id": "components_shell_voicescreen",
-      "community": 103,
-      "norm_label": "voicescreen"
-    },
-    {
-      "label": "SCREEN_ROUTES",
-      "file_type": "code",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L44",
-      "_origin": "ast",
-      "id": "components_shell_screen_routes",
-      "community": 103,
-      "norm_label": "screen_routes"
-    },
-    {
-      "label": "ParsedVoice",
-      "file_type": "code",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L68",
-      "_origin": "ast",
-      "id": "components_shell_parsedvoice",
-      "community": 103,
-      "norm_label": "parsedvoice"
-    },
-    {
-      "label": "parseVoiceCommand()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L78",
-      "_origin": "ast",
-      "id": "components_shell_parsevoicecommand",
-      "community": 103,
-      "norm_label": "parsevoicecommand()"
-    },
-    {
-      "label": "Shell()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L119",
-      "_origin": "ast",
-      "id": "components_shell_shell",
-      "community": 33,
-      "norm_label": "shell()"
-    },
-    {
-      "label": "dossier.ts",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/dossier.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "api_dossier",
-      "community": 138,
-      "norm_label": "dossier.ts"
-    },
-    {
-      "label": "apiFetch()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/dossier.ts",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "api_dossier_apifetch",
-      "community": 138,
-      "norm_label": "apifetch()"
-    },
-    {
-      "label": "DossierListItem",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/dossier.ts",
-      "source_location": "L21",
-      "_origin": "ast",
-      "id": "api_dossier_dossierlistitem",
-      "community": 138,
-      "norm_label": "dossierlistitem"
-    },
-    {
-      "label": "DossierFamilyItem",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/dossier.ts",
-      "source_location": "L32",
-      "_origin": "ast",
-      "id": "api_dossier_dossierfamilyitem",
-      "community": 138,
-      "norm_label": "dossierfamilyitem"
-    },
-    {
-      "label": "DossierBankAccount",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/dossier.ts",
-      "source_location": "L43",
-      "_origin": "ast",
-      "id": "api_dossier_dossierbankaccount",
-      "community": 138,
-      "norm_label": "dossierbankaccount"
-    },
-    {
-      "label": "DossierCrime",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/dossier.ts",
-      "source_location": "L57",
-      "_origin": "ast",
-      "id": "api_dossier_dossiercrime",
-      "community": 138,
-      "norm_label": "dossiercrime"
-    },
-    {
-      "label": "DossierContact",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/dossier.ts",
-      "source_location": "L71",
-      "_origin": "ast",
-      "id": "api_dossier_dossiercontact",
-      "community": 138,
-      "norm_label": "dossiercontact"
-    },
-    {
-      "label": "DossierDetail",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/dossier.ts",
-      "source_location": "L80",
-      "_origin": "ast",
-      "id": "api_dossier_dossierdetail",
-      "community": 138,
-      "norm_label": "dossierdetail"
-    },
-    {
-      "label": "dossier",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/api/dossier.ts",
-      "source_location": "L118",
-      "_origin": "ast",
-      "id": "api_dossier_dossier",
-      "community": 138,
-      "norm_label": "dossier"
-    },
-    {
-      "label": "routeTree.gen.ts",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "src_routetree_gen",
-      "community": 8,
-      "norm_label": "routetree.gen.ts"
-    },
-    {
-      "label": "TrendsRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L30",
-      "_origin": "ast",
-      "id": "src_routetree_gen_trendsroute",
-      "community": 8,
-      "norm_label": "trendsroute"
-    },
-    {
-      "label": "TranscriptsRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L35",
-      "_origin": "ast",
-      "id": "src_routetree_gen_transcriptsroute",
-      "community": 8,
-      "norm_label": "transcriptsroute"
-    },
-    {
-      "label": "SocioRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L40",
-      "_origin": "ast",
-      "id": "src_routetree_gen_socioroute",
-      "community": 8,
-      "norm_label": "socioroute"
-    },
-    {
-      "label": "ReportsRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L45",
-      "_origin": "ast",
-      "id": "src_routetree_gen_reportsroute",
-      "community": 8,
-      "norm_label": "reportsroute"
-    },
-    {
-      "label": "OpsPredictiveRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L50",
-      "_origin": "ast",
-      "id": "src_routetree_gen_opspredictiveroute",
-      "community": 8,
-      "norm_label": "opspredictiveroute"
-    },
-    {
-      "label": "OpsDispatchRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L55",
-      "_origin": "ast",
-      "id": "src_routetree_gen_opsdispatchroute",
-      "community": 8,
-      "norm_label": "opsdispatchroute"
-    },
-    {
-      "label": "OpsCameraRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L60",
-      "_origin": "ast",
-      "id": "src_routetree_gen_opscameraroute",
-      "community": 8,
-      "norm_label": "opscameraroute"
-    },
-    {
-      "label": "OperationsRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L65",
-      "_origin": "ast",
-      "id": "src_routetree_gen_operationsroute",
-      "community": 8,
-      "norm_label": "operationsroute"
-    },
-    {
-      "label": "NetworkRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L70",
-      "_origin": "ast",
-      "id": "src_routetree_gen_networkroute",
-      "community": 8,
-      "norm_label": "networkroute"
-    },
-    {
-      "label": "LoginRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L75",
-      "_origin": "ast",
-      "id": "src_routetree_gen_loginroute",
-      "community": 8,
-      "norm_label": "loginroute"
-    },
-    {
-      "label": "ForecastRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L80",
-      "_origin": "ast",
-      "id": "src_routetree_gen_forecastroute",
-      "community": 8,
-      "norm_label": "forecastroute"
-    },
-    {
-      "label": "DossierRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L85",
-      "_origin": "ast",
-      "id": "src_routetree_gen_dossierroute",
-      "community": 8,
-      "norm_label": "dossierroute"
-    },
-    {
-      "label": "ConsoleRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L90",
-      "_origin": "ast",
-      "id": "src_routetree_gen_consoleroute",
-      "community": 8,
-      "norm_label": "consoleroute"
-    },
-    {
-      "label": "AuditRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L95",
-      "_origin": "ast",
-      "id": "src_routetree_gen_auditroute",
-      "community": 8,
-      "norm_label": "auditroute"
-    },
-    {
-      "label": "AboutRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L100",
-      "_origin": "ast",
-      "id": "src_routetree_gen_aboutroute",
-      "community": 8,
-      "norm_label": "aboutroute"
-    },
-    {
-      "label": "IndexRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L105",
-      "_origin": "ast",
-      "id": "src_routetree_gen_indexroute",
-      "community": 8,
-      "norm_label": "indexroute"
-    },
-    {
-      "label": "ProfilePersonIdRoute",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L110",
-      "_origin": "ast",
-      "id": "src_routetree_gen_profilepersonidroute",
-      "community": 8,
-      "norm_label": "profilepersonidroute"
-    },
-    {
-      "label": "FileRoutesByFullPath",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L116",
-      "_origin": "ast",
-      "id": "src_routetree_gen_fileroutesbyfullpath",
-      "community": 8,
-      "norm_label": "fileroutesbyfullpath"
-    },
-    {
-      "label": "FileRoutesByTo",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L135",
-      "_origin": "ast",
-      "id": "src_routetree_gen_fileroutesbyto",
-      "community": 8,
-      "norm_label": "fileroutesbyto"
-    },
-    {
-      "label": "FileRoutesById",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L154",
-      "_origin": "ast",
-      "id": "src_routetree_gen_fileroutesbyid",
-      "community": 8,
-      "norm_label": "fileroutesbyid"
-    },
-    {
-      "label": "FileRouteTypes",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L174",
-      "_origin": "ast",
-      "id": "src_routetree_gen_fileroutetypes",
-      "community": 8,
-      "norm_label": "fileroutetypes"
-    },
-    {
-      "label": "RootRouteChildren",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L234",
-      "_origin": "ast",
-      "id": "src_routetree_gen_rootroutechildren",
-      "community": 8,
-      "norm_label": "rootroutechildren"
-    },
-    {
-      "label": "FileRoutesByPath",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L255",
-      "_origin": "ast",
-      "id": "src_routetree_gen_fileroutesbypath",
-      "community": 8,
-      "norm_label": "fileroutesbypath"
-    },
-    {
-      "label": "routeTree",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L397",
-      "_origin": "ast",
-      "id": "src_routetree_gen_routetree",
-      "community": 8,
-      "norm_label": "routetree"
-    },
-    {
-      "label": "Register",
-      "file_type": "code",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L404",
-      "_origin": "ast",
-      "id": "src_routetree_gen_register",
-      "community": 8,
-      "norm_label": "register"
-    },
-    {
       "label": "dossier.tsx",
       "file_type": "code",
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "frontend_src_routes_dossier_tsx_routes_dossier",
+      "id": "routes_dossier",
       "community": 138,
       "norm_label": "dossier.tsx"
     },
@@ -1147,11 +97,1061 @@
       "label": "DossierDetailPane()",
       "file_type": "code",
       "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L258",
+      "source_location": "L298",
       "_origin": "ast",
       "id": "routes_dossier_dossierdetailpane",
       "community": 138,
       "norm_label": "dossierdetailpane()"
+    },
+    {
+      "label": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "satyam_person360_dossier_build_prompt.md",
+      "id": "satyam_person360_dossier_build_prompt"
+    },
+    {
+      "label": "Satyam \u2014 \u201cPerson 360\u201d Admin Dossier Screen \u2014 Build Prompt",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "satyam \u2014 \u201cperson 360\u201d admin dossier screen \u2014 build prompt",
+      "id": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt"
+    },
+    {
+      "label": "0. Why a separate table namespace (do this, not the alternative)",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L20",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "0. why a separate table namespace (do this, not the alternative)",
+      "id": "satyam_person360_dossier_build_prompt_0_why_a_separate_table_namespace_do_this_not_the_alternative"
+    },
+    {
+      "label": "1. Database \u2014 new migration (isolated tables)",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L32",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "1. database \u2014 new migration (isolated tables)",
+      "id": "satyam_person360_dossier_build_prompt_1_database_new_migration_isolated_tables"
+    },
+    {
+      "label": "2. ORM models",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L134",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "2. orm models",
+      "id": "satyam_person360_dossier_build_prompt_2_orm_models"
+    },
+    {
+      "label": "3. Pydantic schema",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L166",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "3. pydantic schema",
+      "id": "satyam_person360_dossier_build_prompt_3_pydantic_schema"
+    },
+    {
+      "label": "4. Service",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L176",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "4. service",
+      "id": "satyam_person360_dossier_build_prompt_4_service"
+    },
+    {
+      "label": "5. Route (admin-gated) + wiring",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L202",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "5. route (admin-gated) + wiring",
+      "id": "satyam_person360_dossier_build_prompt_5_route_admin_gated_wiring"
+    },
+    {
+      "label": "6. Frontend API client",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L249",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "6. frontend api client",
+      "id": "satyam_person360_dossier_build_prompt_6_frontend_api_client"
+    },
+    {
+      "label": "7. Frontend screen",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L258",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "7. frontend screen",
+      "id": "satyam_person360_dossier_build_prompt_7_frontend_screen"
+    },
+    {
+      "label": "Nav entry (admin-gated)",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L289",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "nav entry (admin-gated)",
+      "id": "satyam_person360_dossier_build_prompt_nav_entry_admin_gated"
+    },
+    {
+      "label": "8. Seeding the 10 demo records (isolated)",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L308",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "8. seeding the 10 demo records (isolated)",
+      "id": "satyam_person360_dossier_build_prompt_8_seeding_the_10_demo_records_isolated"
+    },
+    {
+      "label": "The 10 demo personas (fictional \u2014 copy into `demo_dossier.json`)",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L327",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "the 10 demo personas (fictional \u2014 copy into `demo_dossier.json`)",
+      "id": "satyam_person360_dossier_build_prompt_the_10_demo_personas_fictional_copy_into_demo_dossier_json"
+    },
+    {
+      "label": "9. AI-generated face photos (front / left / right)",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L367",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "9. ai-generated face photos (front / left / right)",
+      "id": "satyam_person360_dossier_build_prompt_9_ai_generated_face_photos_front_left_right"
+    },
+    {
+      "label": "Consistency rules (critical for a believable mugshot card)",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L379",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "consistency rules (critical for a believable mugshot card)",
+      "id": "satyam_person360_dossier_build_prompt_consistency_rules_critical_for_a_believable_mugshot_card"
+    },
+    {
+      "label": "Base prompt template (fill `[\u2026]` per persona, run 3x with the angle line)",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L389",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "base prompt template (fill `[...]` per persona, run 3x with the angle line)",
+      "id": "satyam_person360_dossier_build_prompt_base_prompt_template_fill_per_persona_run_3x_with_the_angle_line"
+    },
+    {
+      "label": "Per-persona face briefs (use these so the 10 look distinct)",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L405",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "per-persona face briefs (use these so the 10 look distinct)",
+      "id": "satyam_person360_dossier_build_prompt_per_persona_face_briefs_use_these_so_the_10_look_distinct"
+    },
+    {
+      "label": "10. Acceptance criteria (\u201cdoes it work + nothing broke\u201d)",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L422",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "10. acceptance criteria (\u201cdoes it work + nothing broke\u201d)",
+      "id": "satyam_person360_dossier_build_prompt_10_acceptance_criteria_does_it_work_nothing_broke"
+    },
+    {
+      "label": "11. Build order (suggested)",
+      "file_type": "document",
+      "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
+      "source_location": "L447",
+      "_origin": "ast",
+      "community": 154,
+      "norm_label": "11. build order (suggested)",
+      "id": "satyam_person360_dossier_build_prompt_11_build_order_suggested"
+    },
+    {
+      "label": "dossier.py",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/dossier.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossier.py",
+      "id": "backend_app_api_routes_dossier_py_routes_dossier"
+    },
+    {
+      "label": "_require_admin()",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/dossier.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "_require_admin()",
+      "id": "routes_dossier_require_admin"
+    },
+    {
+      "label": "Principal",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/dossier.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "principal",
+      "id": "principal"
+    },
+    {
+      "label": "list_dossiers()",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/dossier.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "list_dossiers()",
+      "id": "routes_dossier_list_dossiers"
+    },
+    {
+      "label": "AsyncSession",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/dossier.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "asyncsession",
+      "id": "backend_app_api_routes_dossier_py_asyncsession"
+    },
+    {
+      "label": "DossierListItem",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/dossier.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossierlistitem",
+      "id": "backend_app_api_routes_dossier_py_dossierlistitem"
+    },
+    {
+      "label": "get_dossier()",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/dossier.py",
+      "source_location": "L47",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "get_dossier()",
+      "id": "routes_dossier_get_dossier"
+    },
+    {
+      "label": "DossierDetail",
+      "file_type": "code",
+      "source_file": "backend/app/api/routes/dossier.py",
+      "source_location": "L47",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossierdetail",
+      "id": "backend_app_api_routes_dossier_py_dossierdetail"
+    },
+    {
+      "label": "Person 360 dossier endpoints \u2014 admin-gated (clearance 4+ or senior rank).  GET",
+      "file_type": "rationale",
+      "source_file": "backend/app/api/routes/dossier.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "person 360 dossier endpoints \u2014 admin-gated (clearance 4+ or senior rank).  get",
+      "id": "routes_dossier_rationale_1"
+    },
+    {
+      "label": "Raise 403 unless the caller has clearance >= 4 or a permitted rank.",
+      "file_type": "rationale",
+      "source_file": "backend/app/api/routes/dossier.py",
+      "source_location": "L24",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "raise 403 unless the caller has clearance >= 4 or a permitted rank.",
+      "id": "routes_dossier_rationale_24"
+    },
+    {
+      "label": "demo_dossier_models.py",
+      "file_type": "code",
+      "source_file": "backend/app/db/demo_dossier_models.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "demo_dossier_models.py",
+      "id": "db_demo_dossier_models"
+    },
+    {
+      "label": "DossierPerson",
+      "file_type": "code",
+      "source_file": "backend/app/db/demo_dossier_models.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossierperson",
+      "id": "db_demo_dossier_models_dossierperson"
+    },
+    {
+      "label": "Base",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "base",
+      "id": "base"
+    },
+    {
+      "label": "DossierFamily",
+      "file_type": "code",
+      "source_file": "backend/app/db/demo_dossier_models.py",
+      "source_location": "L59",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossierfamily",
+      "id": "db_demo_dossier_models_dossierfamily"
+    },
+    {
+      "label": "DossierBankAccount",
+      "file_type": "code",
+      "source_file": "backend/app/db/demo_dossier_models.py",
+      "source_location": "L75",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossierbankaccount",
+      "id": "db_demo_dossier_models_dossierbankaccount"
+    },
+    {
+      "label": "DossierCrime",
+      "file_type": "code",
+      "source_file": "backend/app/db/demo_dossier_models.py",
+      "source_location": "L94",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossiercrime",
+      "id": "db_demo_dossier_models_dossiercrime"
+    },
+    {
+      "label": "DossierContact",
+      "file_type": "code",
+      "source_file": "backend/app/db/demo_dossier_models.py",
+      "source_location": "L113",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossiercontact",
+      "id": "db_demo_dossier_models_dossiercontact"
+    },
+    {
+      "label": "ORM models for demo_dossier_* tables.  FULLY ISOLATED from the synthetic datas",
+      "file_type": "rationale",
+      "source_file": "backend/app/db/demo_dossier_models.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "orm models for demo_dossier_* tables.  fully isolated from the synthetic datas",
+      "id": "db_demo_dossier_models_rationale_1"
+    },
+    {
+      "label": "main.py",
+      "file_type": "code",
+      "source_file": "backend/app/main.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 39,
+      "norm_label": "main.py",
+      "id": "app_main"
+    },
+    {
+      "label": "lifespan()",
+      "file_type": "code",
+      "source_file": "backend/app/main.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "community": 39,
+      "norm_label": "lifespan()",
+      "id": "app_main_lifespan"
+    },
+    {
+      "label": "FastAPI",
+      "file_type": "code",
+      "source_file": "backend/app/main.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "community": 39,
+      "norm_label": "fastapi",
+      "id": "fastapi"
+    },
+    {
+      "label": "create_app()",
+      "file_type": "code",
+      "source_file": "backend/app/main.py",
+      "source_location": "L84",
+      "_origin": "ast",
+      "community": 39,
+      "norm_label": "create_app()",
+      "id": "app_main_create_app"
+    },
+    {
+      "label": "FastAPI application factory for Satyam.",
+      "file_type": "rationale",
+      "source_file": "backend/app/main.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 39,
+      "norm_label": "fastapi application factory for satyam.",
+      "id": "app_main_rationale_1"
+    },
+    {
+      "label": "dossier.py",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/dossier.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 209,
+      "norm_label": "dossier.py",
+      "id": "schemas_dossier"
+    },
+    {
+      "label": "DossierFamilyItem",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/dossier.py",
+      "source_location": "L15",
+      "_origin": "ast",
+      "community": 209,
+      "norm_label": "dossierfamilyitem",
+      "id": "schemas_dossier_dossierfamilyitem"
+    },
+    {
+      "label": "BaseModel",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 18,
+      "norm_label": "basemodel",
+      "id": "basemodel"
+    },
+    {
+      "label": "DossierBankAccountItem",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/dossier.py",
+      "source_location": "L28",
+      "_origin": "ast",
+      "community": 209,
+      "norm_label": "dossierbankaccountitem",
+      "id": "schemas_dossier_dossierbankaccountitem"
+    },
+    {
+      "label": "DossierCrimeItem",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/dossier.py",
+      "source_location": "L44",
+      "_origin": "ast",
+      "community": 209,
+      "norm_label": "dossiercrimeitem",
+      "id": "schemas_dossier_dossiercrimeitem"
+    },
+    {
+      "label": "DossierContactItem",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/dossier.py",
+      "source_location": "L60",
+      "_origin": "ast",
+      "community": 209,
+      "norm_label": "dossiercontactitem",
+      "id": "schemas_dossier_dossiercontactitem"
+    },
+    {
+      "label": "DossierListItem",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/dossier.py",
+      "source_location": "L75",
+      "_origin": "ast",
+      "community": 209,
+      "norm_label": "dossierlistitem",
+      "id": "schemas_dossier_dossierlistitem"
+    },
+    {
+      "label": "DossierDetail",
+      "file_type": "code",
+      "source_file": "backend/app/schemas/dossier.py",
+      "source_location": "L92",
+      "_origin": "ast",
+      "community": 209,
+      "norm_label": "dossierdetail",
+      "id": "schemas_dossier_dossierdetail"
+    },
+    {
+      "label": "Pydantic response schemas for the Person 360 dossier feature.",
+      "file_type": "rationale",
+      "source_file": "backend/app/schemas/dossier.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 209,
+      "norm_label": "pydantic response schemas for the person 360 dossier feature.",
+      "id": "schemas_dossier_rationale_1"
+    },
+    {
+      "label": "dossier_service.py",
+      "file_type": "code",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossier_service.py",
+      "id": "services_dossier_service"
+    },
+    {
+      "label": "list_dossiers()",
+      "file_type": "code",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L24",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "list_dossiers()",
+      "id": "services_dossier_service_list_dossiers"
+    },
+    {
+      "label": "AsyncSession",
+      "file_type": "code",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L24",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "asyncsession",
+      "id": "backend_app_services_dossier_service_py_asyncsession"
+    },
+    {
+      "label": "DossierListItem",
+      "file_type": "code",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L24",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossierlistitem",
+      "id": "backend_app_services_dossier_service_py_dossierlistitem"
+    },
+    {
+      "label": "get_dossier()",
+      "file_type": "code",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L44",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "get_dossier()",
+      "id": "services_dossier_service_get_dossier"
+    },
+    {
+      "label": "DossierDetail",
+      "file_type": "code",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L44",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossierdetail",
+      "id": "backend_app_services_dossier_service_py_dossierdetail"
+    },
+    {
+      "label": "Service layer for the Person 360 demo dossier feature.  Queries ONLY demo_doss",
+      "file_type": "rationale",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "service layer for the person 360 demo dossier feature.  queries only demo_doss",
+      "id": "services_dossier_service_rationale_1"
+    },
+    {
+      "label": "Return lightweight list of all dossier subjects.",
+      "file_type": "rationale",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L25",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "return lightweight list of all dossier subjects.",
+      "id": "services_dossier_service_rationale_25"
+    },
+    {
+      "label": "Return full 360 dossier for a given demo_id, or None if not found.",
+      "file_type": "rationale",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L45",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "return full 360 dossier for a given demo_id, or none if not found.",
+      "id": "services_dossier_service_rationale_45"
+    },
+    {
+      "label": "load_demo_dossier.py",
+      "file_type": "code",
+      "source_file": "backend/seed/load_demo_dossier.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 169,
+      "norm_label": "load_demo_dossier.py",
+      "id": "seed_load_demo_dossier"
+    },
+    {
+      "label": "_date()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_demo_dossier.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "community": 169,
+      "norm_label": "_date()",
+      "id": "seed_load_demo_dossier_date"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_demo_dossier.py",
+      "source_location": "L25",
+      "_origin": "ast",
+      "community": 169,
+      "norm_label": "main()",
+      "id": "seed_load_demo_dossier_main"
+    },
+    {
+      "label": "Seed the 10 isolated demo dossiers. Safe and idempotent. Usage: python -m seed.",
+      "file_type": "rationale",
+      "source_file": "backend/seed/load_demo_dossier.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 169,
+      "norm_label": "seed the 10 isolated demo dossiers. safe and idempotent. usage: python -m seed.",
+      "id": "seed_load_demo_dossier_rationale_1"
+    },
+    {
+      "label": "Shell.tsx",
+      "file_type": "code",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "shell.tsx",
+      "id": "components_shell"
+    },
+    {
+      "label": "VoiceScreen",
+      "file_type": "code",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L43",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "voicescreen",
+      "id": "components_shell_voicescreen"
+    },
+    {
+      "label": "SCREEN_ROUTES",
+      "file_type": "code",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L44",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "screen_routes",
+      "id": "components_shell_screen_routes"
+    },
+    {
+      "label": "ParsedVoice",
+      "file_type": "code",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L68",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "parsedvoice",
+      "id": "components_shell_parsedvoice"
+    },
+    {
+      "label": "parseVoiceCommand()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L78",
+      "_origin": "ast",
+      "community": 113,
+      "norm_label": "parsevoicecommand()",
+      "id": "components_shell_parsevoicecommand"
+    },
+    {
+      "label": "Shell()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L119",
+      "_origin": "ast",
+      "community": 205,
+      "norm_label": "shell()",
+      "id": "components_shell_shell"
+    },
+    {
+      "label": "dossier.ts",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/dossier.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 138,
+      "norm_label": "dossier.ts",
+      "id": "api_dossier"
+    },
+    {
+      "label": "apiFetch()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/dossier.ts",
+      "source_location": "L7",
+      "_origin": "ast",
+      "community": 138,
+      "norm_label": "apifetch()",
+      "id": "api_dossier_apifetch"
+    },
+    {
+      "label": "DossierListItem",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/dossier.ts",
+      "source_location": "L21",
+      "_origin": "ast",
+      "community": 138,
+      "norm_label": "dossierlistitem",
+      "id": "api_dossier_dossierlistitem"
+    },
+    {
+      "label": "DossierFamilyItem",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/dossier.ts",
+      "source_location": "L32",
+      "_origin": "ast",
+      "community": 138,
+      "norm_label": "dossierfamilyitem",
+      "id": "api_dossier_dossierfamilyitem"
+    },
+    {
+      "label": "DossierBankAccount",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/dossier.ts",
+      "source_location": "L43",
+      "_origin": "ast",
+      "community": 138,
+      "norm_label": "dossierbankaccount",
+      "id": "api_dossier_dossierbankaccount"
+    },
+    {
+      "label": "DossierCrime",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/dossier.ts",
+      "source_location": "L57",
+      "_origin": "ast",
+      "community": 138,
+      "norm_label": "dossiercrime",
+      "id": "api_dossier_dossiercrime"
+    },
+    {
+      "label": "DossierContact",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/dossier.ts",
+      "source_location": "L71",
+      "_origin": "ast",
+      "community": 138,
+      "norm_label": "dossiercontact",
+      "id": "api_dossier_dossiercontact"
+    },
+    {
+      "label": "DossierDetail",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/dossier.ts",
+      "source_location": "L80",
+      "_origin": "ast",
+      "community": 138,
+      "norm_label": "dossierdetail",
+      "id": "api_dossier_dossierdetail"
+    },
+    {
+      "label": "dossier",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/api/dossier.ts",
+      "source_location": "L118",
+      "_origin": "ast",
+      "community": 138,
+      "norm_label": "dossier",
+      "id": "api_dossier_dossier"
+    },
+    {
+      "label": "routeTree.gen.ts",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "routetree.gen.ts",
+      "id": "src_routetree_gen"
+    },
+    {
+      "label": "TrendsRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L30",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "trendsroute",
+      "id": "src_routetree_gen_trendsroute"
+    },
+    {
+      "label": "TranscriptsRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L35",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "transcriptsroute",
+      "id": "src_routetree_gen_transcriptsroute"
+    },
+    {
+      "label": "SocioRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L40",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "socioroute",
+      "id": "src_routetree_gen_socioroute"
+    },
+    {
+      "label": "ReportsRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L45",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "reportsroute",
+      "id": "src_routetree_gen_reportsroute"
+    },
+    {
+      "label": "OpsPredictiveRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L50",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "opspredictiveroute",
+      "id": "src_routetree_gen_opspredictiveroute"
+    },
+    {
+      "label": "OpsDispatchRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L55",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "opsdispatchroute",
+      "id": "src_routetree_gen_opsdispatchroute"
+    },
+    {
+      "label": "OpsCameraRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L60",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "opscameraroute",
+      "id": "src_routetree_gen_opscameraroute"
+    },
+    {
+      "label": "OperationsRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L65",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "operationsroute",
+      "id": "src_routetree_gen_operationsroute"
+    },
+    {
+      "label": "NetworkRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L70",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "networkroute",
+      "id": "src_routetree_gen_networkroute"
+    },
+    {
+      "label": "LoginRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L75",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "loginroute",
+      "id": "src_routetree_gen_loginroute"
+    },
+    {
+      "label": "ForecastRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L80",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "forecastroute",
+      "id": "src_routetree_gen_forecastroute"
+    },
+    {
+      "label": "DossierRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L85",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "dossierroute",
+      "id": "src_routetree_gen_dossierroute"
+    },
+    {
+      "label": "ConsoleRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L90",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "consoleroute",
+      "id": "src_routetree_gen_consoleroute"
+    },
+    {
+      "label": "AuditRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L95",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "auditroute",
+      "id": "src_routetree_gen_auditroute"
+    },
+    {
+      "label": "AboutRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L100",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "aboutroute",
+      "id": "src_routetree_gen_aboutroute"
+    },
+    {
+      "label": "IndexRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L105",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "indexroute",
+      "id": "src_routetree_gen_indexroute"
+    },
+    {
+      "label": "ProfilePersonIdRoute",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L110",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "profilepersonidroute",
+      "id": "src_routetree_gen_profilepersonidroute"
+    },
+    {
+      "label": "FileRoutesByFullPath",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L116",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "fileroutesbyfullpath",
+      "id": "src_routetree_gen_fileroutesbyfullpath"
+    },
+    {
+      "label": "FileRoutesByTo",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L135",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "fileroutesbyto",
+      "id": "src_routetree_gen_fileroutesbyto"
+    },
+    {
+      "label": "FileRoutesById",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L154",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "fileroutesbyid",
+      "id": "src_routetree_gen_fileroutesbyid"
+    },
+    {
+      "label": "FileRouteTypes",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L174",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "fileroutetypes",
+      "id": "src_routetree_gen_fileroutetypes"
+    },
+    {
+      "label": "RootRouteChildren",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L234",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "rootroutechildren",
+      "id": "src_routetree_gen_rootroutechildren"
+    },
+    {
+      "label": "FileRoutesByPath",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L255",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "fileroutesbypath",
+      "id": "src_routetree_gen_fileroutesbypath"
+    },
+    {
+      "label": "routeTree",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L397",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "routetree",
+      "id": "src_routetree_gen_routetree"
+    },
+    {
+      "label": "Register",
+      "file_type": "code",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L404",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "register",
+      "id": "src_routetree_gen_register"
     },
     {
       "label": "network.tsx",
@@ -1409,7 +1409,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L179",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "_compose()",
       "id": "pipeline_orchestrator_compose"
     },
@@ -1439,7 +1439,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L213",
       "_origin": "ast",
-      "community": 42,
+      "community": 121,
       "norm_label": "conversationstate",
       "id": "conversationstate"
     },
@@ -1489,7 +1489,7 @@
       "source_file": "backend/app/pipeline/orchestrator.py",
       "source_location": "L186",
       "_origin": "ast",
-      "community": 42,
+      "community": 188,
       "norm_label": "grounded answer composition with groq fallback on primary failure.",
       "id": "pipeline_orchestrator_rationale_186"
     },
@@ -1909,7 +1909,7 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L88",
       "_origin": "ast",
-      "community": 113,
+      "community": 205,
       "norm_label": "console()",
       "id": "routes_console_console"
     },
@@ -2069,7 +2069,7 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 210,
+      "community": 35,
       "norm_label": "apierror",
       "id": "api_client_apierror"
     },
@@ -2079,7 +2079,7 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 210,
+      "community": 35,
       "norm_label": ".constructor()",
       "id": "api_client_apierror_constructor"
     },
@@ -2169,7 +2169,7 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L115",
       "_origin": "ast",
-      "community": 205,
+      "community": 210,
       "norm_label": "api",
       "id": "api_client_api"
     },
@@ -2209,7 +2209,7 @@
       "source_file": "frontend/src/lib/api/client.ts",
       "source_location": "L237",
       "_origin": "ast",
-      "community": 103,
+      "community": 124,
       "norm_label": "stttranscribe()",
       "id": "api_client_stttranscribe"
     },
@@ -3299,7 +3299,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 93,
+      "community": 175,
       "norm_label": "rls.py",
       "id": "db_rls"
     },
@@ -3309,7 +3309,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 93,
+      "community": 175,
       "norm_label": "apply_rls_context()",
       "id": "db_rls_apply_rls_context"
     },
@@ -3319,7 +3319,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 93,
+      "community": 175,
       "norm_label": "asyncsession",
       "id": "backend_app_db_rls_py_asyncsession"
     },
@@ -3329,7 +3329,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 93,
+      "community": 175,
       "norm_label": "row-level security helpers \u2014 v2 schema.  the new schema uses `app.*` gucs (app.s",
       "id": "db_rls_rationale_1"
     },
@@ -3339,7 +3339,7 @@
       "source_file": "backend/app/db/rls.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 93,
+      "community": 175,
       "norm_label": "stamp the current transaction with the caller's jurisdiction context.      note",
       "id": "db_rls_rationale_29"
     },
@@ -3699,7 +3699,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 205,
+      "community": 210,
       "norm_label": "createaccountdialog.tsx",
       "id": "components_createaccountdialog"
     },
@@ -3709,7 +3709,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 205,
+      "community": 210,
       "norm_label": "role_options",
       "id": "components_createaccountdialog_role_options"
     },
@@ -3719,7 +3719,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 205,
+      "community": 210,
       "norm_label": "role_by_value",
       "id": "components_createaccountdialog_role_by_value"
     },
@@ -3729,7 +3729,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 205,
+      "community": 210,
       "norm_label": "role_groups",
       "id": "components_createaccountdialog_role_groups"
     },
@@ -3739,7 +3739,7 @@
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 205,
+      "community": 210,
       "norm_label": "createaccountdialog()",
       "id": "components_createaccountdialog_createaccountdialog"
     },
@@ -3909,7 +3909,7 @@
       "source_file": "frontend/src/components/ModelInferenceTheater.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 115,
+      "community": 33,
       "norm_label": "modelinferencetheater.tsx",
       "id": "components_modelinferencetheater"
     },
@@ -3919,7 +3919,7 @@
       "source_file": "frontend/src/components/ModelInferenceTheater.tsx",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 115,
+      "community": 33,
       "norm_label": "risk_hex",
       "id": "components_modelinferencetheater_risk_hex"
     },
@@ -3929,7 +3929,7 @@
       "source_file": "frontend/src/components/ModelInferenceTheater.tsx",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 115,
+      "community": 33,
       "norm_label": "levelof()",
       "id": "components_modelinferencetheater_levelof"
     },
@@ -3939,7 +3939,7 @@
       "source_file": "frontend/src/components/ModelInferenceTheater.tsx",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 115,
+      "community": 33,
       "norm_label": "usecountup()",
       "id": "components_modelinferencetheater_usecountup"
     },
@@ -3949,7 +3949,7 @@
       "source_file": "frontend/src/components/ModelInferenceTheater.tsx",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 115,
+      "community": 33,
       "norm_label": "modelinferencetheater()",
       "id": "components_modelinferencetheater_modelinferencetheater"
     },
@@ -3959,7 +3959,7 @@
       "source_file": "frontend/src/components/ModelInferenceTheater.tsx",
       "source_location": "L343",
       "_origin": "ast",
-      "community": 115,
+      "community": 33,
       "norm_label": "metric()",
       "id": "components_modelinferencetheater_metric"
     },
@@ -4159,7 +4159,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "loadenginesettings()",
       "id": "components_settingsdialog_loadenginesettings"
     },
@@ -4179,7 +4179,7 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 103,
+      "community": 205,
       "norm_label": "settingsdialog()",
       "id": "components_settingsdialog_settingsdialog"
     },
@@ -4299,7 +4299,7 @@
       "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 113,
+      "community": 115,
       "norm_label": "similarcasesearch.tsx",
       "id": "components_similarcasesearch"
     },
@@ -4309,7 +4309,7 @@
       "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 113,
+      "community": 115,
       "norm_label": "props",
       "id": "components_similarcasesearch_props"
     },
@@ -4319,7 +4319,7 @@
       "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 113,
+      "community": 115,
       "norm_label": "similarcasesearch()",
       "id": "components_similarcasesearch_similarcasesearch"
     },
@@ -4329,7 +4329,7 @@
       "source_file": "frontend/src/components/ThemePicker.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 189,
+      "community": 9,
       "norm_label": "themepicker.tsx",
       "id": "components_themepicker"
     },
@@ -4339,7 +4339,7 @@
       "source_file": "frontend/src/components/ThemePicker.tsx",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 189,
+      "community": 9,
       "norm_label": "theme",
       "id": "components_themepicker_theme"
     },
@@ -4349,7 +4349,7 @@
       "source_file": "frontend/src/components/ThemePicker.tsx",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 189,
+      "community": 9,
       "norm_label": "themes",
       "id": "components_themepicker_themes"
     },
@@ -4359,7 +4359,7 @@
       "source_file": "frontend/src/components/ThemePicker.tsx",
       "source_location": "L135",
       "_origin": "ast",
-      "community": 189,
+      "community": 9,
       "norm_label": "data_theme_ids",
       "id": "components_themepicker_data_theme_ids"
     },
@@ -4369,7 +4369,7 @@
       "source_file": "frontend/src/components/ThemePicker.tsx",
       "source_location": "L137",
       "_origin": "ast",
-      "community": 189,
+      "community": 9,
       "norm_label": "applytheme()",
       "id": "components_themepicker_applytheme"
     },
@@ -4379,7 +4379,7 @@
       "source_file": "frontend/src/components/ThemePicker.tsx",
       "source_location": "L159",
       "_origin": "ast",
-      "community": 189,
+      "community": 9,
       "norm_label": "themepickerprops",
       "id": "components_themepicker_themepickerprops"
     },
@@ -4389,7 +4389,7 @@
       "source_file": "frontend/src/components/ThemePicker.tsx",
       "source_location": "L163",
       "_origin": "ast",
-      "community": 189,
+      "community": 9,
       "norm_label": "themepicker()",
       "id": "components_themepicker_themepicker"
     },
@@ -4399,7 +4399,7 @@
       "source_file": "frontend/src/components/ThemePicker.tsx",
       "source_location": "L266",
       "_origin": "ast",
-      "community": 189,
+      "community": 9,
       "norm_label": "themerow()",
       "id": "components_themepicker_themerow"
     },
@@ -4539,7 +4539,7 @@
       "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
       "source_location": "L85",
       "_origin": "ast",
-      "community": 205,
+      "community": 190,
       "norm_label": "demosimpanel()",
       "id": "ops_demosimpanel_demosimpanel"
     },
@@ -4779,7 +4779,7 @@
       "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
       "source_location": "L39",
       "_origin": "ast",
-      "community": 205,
+      "community": 190,
       "norm_label": "liveoperationsmap()",
       "id": "ops_liveoperationsmap_liveoperationsmap"
     },
@@ -4879,7 +4879,7 @@
       "source_file": "frontend/src/components/ops/ReviewPanel.tsx",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 205,
+      "community": 190,
       "norm_label": "reviewpanel()",
       "id": "ops_reviewpanel_reviewpanel"
     },
@@ -5079,7 +5079,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 190,
+      "community": 124,
       "norm_label": "apifetch()",
       "id": "api_intelligence_apifetch"
     },
@@ -5089,7 +5089,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 205,
+      "community": 115,
       "norm_label": "searchresult",
       "id": "api_intelligence_searchresult"
     },
@@ -5099,7 +5099,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 205,
+      "community": 115,
       "norm_label": "offenderlistitem",
       "id": "api_intelligence_offenderlistitem"
     },
@@ -5169,7 +5169,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L79",
       "_origin": "ast",
-      "community": 115,
+      "community": 33,
       "norm_label": "similarcasematch",
       "id": "api_intelligence_similarcasematch"
     },
@@ -5179,7 +5179,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L87",
       "_origin": "ast",
-      "community": 113,
+      "community": 115,
       "norm_label": "similarcasesresponse",
       "id": "api_intelligence_similarcasesresponse"
     },
@@ -5189,7 +5189,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L89",
       "_origin": "ast",
-      "community": 115,
+      "community": 33,
       "norm_label": "timelineevent",
       "id": "api_intelligence_timelineevent"
     },
@@ -5289,7 +5289,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L124",
       "_origin": "ast",
-      "community": 115,
+      "community": 33,
       "norm_label": "forecastcell",
       "id": "api_intelligence_forecastcell"
     },
@@ -5329,7 +5329,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L149",
       "_origin": "ast",
-      "community": 115,
+      "community": 33,
       "norm_label": "backtestresponse",
       "id": "api_intelligence_backtestresponse"
     },
@@ -5489,7 +5489,7 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L206",
       "_origin": "ast",
-      "community": 33,
+      "community": 115,
       "norm_label": "intelligence",
       "id": "api_intelligence_intelligence"
     },
@@ -5719,7 +5719,7 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L609",
       "_origin": "ast",
-      "community": 206,
+      "community": 8,
       "norm_label": "i18nprovider()",
       "id": "lib_i18n_i18nprovider"
     },
@@ -5729,7 +5729,7 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L634",
       "_origin": "ast",
-      "community": 33,
+      "community": 205,
       "norm_label": "usei18n()",
       "id": "lib_i18n_usei18n"
     },
@@ -5999,7 +5999,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "tts.ts",
       "id": "voice_tts"
     },
@@ -6009,7 +6009,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "speakhooks",
       "id": "voice_tts_speakhooks"
     },
@@ -6019,7 +6019,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "stripmarkdown()",
       "id": "voice_tts_stripmarkdown"
     },
@@ -6029,7 +6029,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "voicescache",
       "id": "voice_tts_voicescache"
     },
@@ -6039,7 +6039,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L70",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "warmvoices()",
       "id": "voice_tts_warmvoices"
     },
@@ -6049,7 +6049,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L81",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "pickvoice()",
       "id": "voice_tts_pickvoice"
     },
@@ -6059,7 +6059,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L106",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "unlockaudioplayback()",
       "id": "voice_tts_unlockaudioplayback"
     },
@@ -6069,7 +6069,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L135",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "cancelspeech()",
       "id": "voice_tts_cancelspeech"
     },
@@ -6079,7 +6079,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L155",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "pausespeech()",
       "id": "voice_tts_pausespeech"
     },
@@ -6089,7 +6089,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L173",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "resumespeech()",
       "id": "voice_tts_resumespeech"
     },
@@ -6099,7 +6099,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L187",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "isspeechactive()",
       "id": "voice_tts_isspeechactive"
     },
@@ -6109,7 +6109,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L198",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "browserspeak()",
       "id": "voice_tts_browserspeak"
     },
@@ -6119,7 +6119,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L251",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "b64toblob()",
       "id": "voice_tts_b64toblob"
     },
@@ -6129,7 +6129,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L271",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "speak()",
       "id": "voice_tts_speak"
     },
@@ -6139,7 +6139,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L334",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "isservervoiceenabled()",
       "id": "voice_tts_isservervoiceenabled"
     },
@@ -6149,7 +6149,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 206,
+      "community": 8,
       "norm_label": "__root.tsx",
       "id": "routes_root"
     },
@@ -6159,7 +6159,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 206,
+      "community": 8,
       "norm_label": "notfoundcomponent()",
       "id": "routes_root_notfoundcomponent"
     },
@@ -6169,7 +6169,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "community": 206,
+      "community": 8,
       "norm_label": "errorcomponent()",
       "id": "routes_root_errorcomponent"
     },
@@ -6189,7 +6189,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L107",
       "_origin": "ast",
-      "community": 206,
+      "community": 8,
       "norm_label": "rootshell()",
       "id": "routes_root_rootshell"
     },
@@ -6199,7 +6199,7 @@
       "source_file": "frontend/src/routes/__root.tsx",
       "source_location": "L121",
       "_origin": "ast",
-      "community": 206,
+      "community": 8,
       "norm_label": "rootcomponent()",
       "id": "routes_root_rootcomponent"
     },
@@ -6449,7 +6449,7 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L309",
       "_origin": "ast",
-      "community": 33,
+      "community": 205,
       "norm_label": "forecastscreen()",
       "id": "routes_forecast_forecastscreen"
     },
@@ -6539,7 +6539,7 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 205,
+      "community": 210,
       "norm_label": "login.tsx",
       "id": "routes_login"
     },
@@ -6549,7 +6549,7 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 205,
+      "community": 210,
       "norm_label": "route",
       "id": "routes_login_route"
     },
@@ -6559,7 +6559,7 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 205,
+      "community": 210,
       "norm_label": "login()",
       "id": "routes_login_login"
     },
@@ -6569,7 +6569,7 @@
       "source_file": "frontend/src/routes/login.tsx",
       "source_location": "L302",
       "_origin": "ast",
-      "community": 205,
+      "community": 210,
       "norm_label": "trustbadge()",
       "id": "routes_login_trustbadge"
     },
@@ -6649,7 +6649,7 @@
       "source_file": "frontend/src/routes/ops-predictive.tsx",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 205,
+      "community": 8,
       "norm_label": "route",
       "id": "routes_ops_predictive_route"
     },
@@ -6669,7 +6669,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 33,
+      "community": 115,
       "norm_label": "profile.$personid.tsx",
       "id": "routes_profile_personid"
     },
@@ -6689,7 +6689,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 33,
+      "community": 115,
       "norm_label": "risk_bg",
       "id": "routes_profile_personid_risk_bg"
     },
@@ -6699,7 +6699,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 33,
+      "community": 115,
       "norm_label": "risk_ring",
       "id": "routes_profile_personid_risk_ring"
     },
@@ -6709,7 +6709,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 33,
+      "community": 115,
       "norm_label": "offenderpicker()",
       "id": "routes_profile_personid_offenderpicker"
     },
@@ -6719,7 +6719,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L81",
       "_origin": "ast",
-      "community": 205,
+      "community": 115,
       "norm_label": "personsearch()",
       "id": "routes_profile_personid_personsearch"
     },
@@ -6729,7 +6729,7 @@
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L226",
       "_origin": "ast",
-      "community": 33,
+      "community": 115,
       "norm_label": "injectprintstyles()",
       "id": "routes_profile_personid_injectprintstyles"
     },
@@ -7309,7 +7309,7 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L327",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "speakviasarvam",
       "id": "voice_tts_speakviasarvam"
     },
@@ -7969,7 +7969,7 @@
       "source_file": "frontend/src/routes/operations.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 205,
+      "community": 190,
       "norm_label": "operations.tsx",
       "id": "routes_operations"
     },
@@ -7979,7 +7979,7 @@
       "source_file": "frontend/src/routes/operations.tsx",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 8,
+      "community": 190,
       "norm_label": "route",
       "id": "routes_operations_route"
     },
@@ -7989,7 +7989,7 @@
       "source_file": "frontend/src/routes/operations.tsx",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 205,
+      "community": 190,
       "norm_label": "operationsscreen()",
       "id": "routes_operations_operationsscreen"
     },
@@ -12039,7 +12039,7 @@
       "source_file": "backend/app/services/ops/risk_service.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "risk_service.py",
       "id": "ops_risk_service"
     },
@@ -12049,7 +12049,7 @@
       "source_file": "backend/app/services/ops/risk_service.py",
       "source_location": "L39",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "_grid_key()",
       "id": "ops_risk_service_grid_key"
     },
@@ -12059,7 +12059,7 @@
       "source_file": "backend/app/services/ops/risk_service.py",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "_severity()",
       "id": "ops_risk_service_severity"
     },
@@ -12069,7 +12069,7 @@
       "source_file": "backend/app/services/ops/risk_service.py",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "_parse_hour()",
       "id": "ops_risk_service_parse_hour"
     },
@@ -12079,7 +12079,7 @@
       "source_file": "backend/app/services/ops/risk_service.py",
       "source_location": "L63",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "_haversine_km()",
       "id": "ops_risk_service_haversine_km"
     },
@@ -12089,7 +12089,7 @@
       "source_file": "backend/app/services/ops/risk_service.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "_label()",
       "id": "ops_risk_service_label"
     },
@@ -12099,7 +12099,7 @@
       "source_file": "backend/app/services/ops/risk_service.py",
       "source_location": "L81",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "recompute_if_stale()",
       "id": "ops_risk_service_recompute_if_stale"
     },
@@ -12109,7 +12109,7 @@
       "source_file": "backend/app/services/ops/risk_service.py",
       "source_location": "L81",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "asyncsession",
       "id": "backend_app_services_ops_risk_service_py_asyncsession"
     },
@@ -12119,7 +12119,7 @@
       "source_file": "backend/app/services/ops/risk_service.py",
       "source_location": "L140",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "_rebuild_suggestions()",
       "id": "ops_risk_service_rebuild_suggestions"
     },
@@ -12129,7 +12129,7 @@
       "source_file": "backend/app/services/ops/risk_service.py",
       "source_location": "L140",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "riskzone",
       "id": "riskzone"
     },
@@ -12139,7 +12139,7 @@
       "source_file": "backend/app/services/ops/risk_service.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "predictive risk grid \u2014 python port of emerge predictivereadinessservice.js.  l",
       "id": "ops_risk_service_rationale_1"
     },
@@ -12149,7 +12149,7 @@
       "source_file": "backend/app/services/ops/risk_service.py",
       "source_location": "L82",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "recompute the risk grid if the debounce window elapsed. returns true if it recom",
       "id": "ops_risk_service_rationale_82"
     },
@@ -12159,7 +12159,7 @@
       "source_file": "backend/app/services/ops/risk_service.py",
       "source_location": "L141",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "for the top zones, suggest the nearest idle patrol to pre-position there.",
       "id": "ops_risk_service_rationale_141"
     },
@@ -13659,7 +13659,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "auth.py",
       "id": "routes_auth"
     },
@@ -13669,7 +13669,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "_db_rank()",
       "id": "routes_auth_db_rank"
     },
@@ -13679,7 +13679,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "_get_or_create_officer()",
       "id": "routes_auth_get_or_create_officer"
     },
@@ -13689,7 +13689,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 127,
+      "community": 175,
       "norm_label": "officer",
       "id": "officer"
     },
@@ -13699,7 +13699,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "_build_token_and_user()",
       "id": "routes_auth_build_token_and_user"
     },
@@ -13709,7 +13709,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 127,
+      "community": 175,
       "norm_label": "sessionuser",
       "id": "sessionuser"
     },
@@ -13719,7 +13719,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L91",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "get_or_create_user()",
       "id": "routes_auth_get_or_create_user"
     },
@@ -13729,7 +13729,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L91",
       "_origin": "ast",
-      "community": 127,
+      "community": 175,
       "norm_label": "user",
       "id": "user"
     },
@@ -13739,7 +13739,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L146",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "list_stations()",
       "id": "routes_auth_list_stations"
     },
@@ -13749,7 +13749,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L146",
       "_origin": "ast",
-      "community": 127,
+      "community": 175,
       "norm_label": "stationoption",
       "id": "stationoption"
     },
@@ -13759,7 +13759,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L165",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "login()",
       "id": "routes_auth_login"
     },
@@ -13769,7 +13769,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L165",
       "_origin": "ast",
-      "community": 127,
+      "community": 175,
       "norm_label": "loginrequest",
       "id": "loginrequest"
     },
@@ -13779,7 +13779,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L165",
       "_origin": "ast",
-      "community": 127,
+      "community": 175,
       "norm_label": "loginresponse",
       "id": "loginresponse"
     },
@@ -13789,7 +13789,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L205",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "register()",
       "id": "routes_auth_register"
     },
@@ -13799,7 +13799,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L205",
       "_origin": "ast",
-      "community": 127,
+      "community": 175,
       "norm_label": "registerrequest",
       "id": "registerrequest"
     },
@@ -13809,7 +13809,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L280",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "me()",
       "id": "routes_auth_me"
     },
@@ -13819,7 +13819,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "authentication routes.  login:    looks up the user by username (derived from em",
       "id": "routes_auth_rationale_1"
     },
@@ -13829,7 +13829,7 @@
       "source_file": "backend/app/api/routes/auth.py",
       "source_location": "L49",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "normalise ui rank values to the db rank_access.rank strings.",
       "id": "routes_auth_rationale_49"
     },
@@ -13939,7 +13939,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "security.py",
       "id": "core_security"
     },
@@ -13949,7 +13949,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "_bcrypt()",
       "id": "core_security_bcrypt"
     },
@@ -13959,7 +13959,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "hash_password()",
       "id": "core_security_hash_password"
     },
@@ -13969,7 +13969,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "verify_password()",
       "id": "core_security_verify_password"
     },
@@ -13979,7 +13979,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L43",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "create_access_token()",
       "id": "core_security_create_access_token"
     },
@@ -13989,7 +13989,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "decode_token()",
       "id": "core_security_decode_token"
     },
@@ -13999,7 +13999,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "jwt issuing / verification + password hashing.",
       "id": "core_security_rationale_1"
     },
@@ -14009,7 +14009,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L13",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "lazy import so the module loads without bcrypt if it's not installed.",
       "id": "core_security_rationale_13"
     },
@@ -14019,7 +14019,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "return a bcrypt hash of *plain*. falls back to a placeholder if bcrypt is unavai",
       "id": "core_security_rationale_22"
     },
@@ -14029,7 +14029,7 @@
       "source_file": "backend/app/core/security.py",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 180,
+      "community": 175,
       "norm_label": "return true if *plain* matches *hashed*. handles both bcrypt and the plain senti",
       "id": "core_security_rationale_31"
     },
@@ -14069,7 +14069,7 @@
       "source_file": "backend/app/db/models.py",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "_now()",
       "id": "db_models_now"
     },
@@ -14079,7 +14079,7 @@
       "source_file": "backend/app/db/models.py",
       "source_location": "L28",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "datetime",
       "id": "datetime"
     },
@@ -14099,7 +14099,7 @@
       "source_file": "backend/app/db/models.py",
       "source_location": "L46",
       "_origin": "ast",
-      "community": 127,
+      "community": 175,
       "norm_label": "officer",
       "id": "db_models_officer"
     },
@@ -14159,7 +14159,7 @@
       "source_file": "backend/app/db/models.py",
       "source_location": "L141",
       "_origin": "ast",
-      "community": 127,
+      "community": 175,
       "norm_label": "user",
       "id": "db_models_user"
     },
@@ -14229,7 +14229,7 @@
       "source_file": "backend/app/api/routes/health.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
+      "community": 177,
       "norm_label": "health.py",
       "id": "routes_health"
     },
@@ -14239,7 +14239,7 @@
       "source_file": "backend/app/api/routes/health.py",
       "source_location": "L17",
       "_origin": "ast",
-      "community": 39,
+      "community": 177,
       "norm_label": "health()",
       "id": "routes_health_health"
     },
@@ -14249,7 +14249,7 @@
       "source_file": "backend/app/api/routes/health.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 204,
+      "community": 177,
       "norm_label": "models()",
       "id": "routes_health_models"
     },
@@ -14259,7 +14259,7 @@
       "source_file": "backend/app/api/routes/health.py",
       "source_location": "L67",
       "_origin": "ast",
-      "community": 39,
+      "community": 177,
       "norm_label": "health_data()",
       "id": "routes_health_health_data"
     },
@@ -14269,7 +14269,7 @@
       "source_file": "backend/app/api/routes/health.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
+      "community": 177,
       "norm_label": "liveness / readiness probe + model-routing diagnostics.",
       "id": "routes_health_rationale_1"
     },
@@ -14279,7 +14279,7 @@
       "source_file": "backend/app/api/routes/health.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 204,
+      "community": 177,
       "norm_label": "model-routing diagnostics \u2014 no auth, dev only.      returns the resolved impleme",
       "id": "routes_health_rationale_30"
     },
@@ -14289,7 +14289,7 @@
       "source_file": "backend/app/api/routes/health.py",
       "source_location": "L68",
       "_origin": "ast",
-      "community": 39,
+      "community": 177,
       "norm_label": "row-count probe \u2014 confirms the db is seeded before a demo.     returns table row",
       "id": "routes_health_rationale_68"
     },
@@ -16649,7 +16649,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 93,
+      "community": 175,
       "norm_label": "deps.py",
       "id": "api_deps"
     },
@@ -16659,7 +16659,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 93,
+      "community": 175,
       "norm_label": "get_principal()",
       "id": "api_deps_get_principal"
     },
@@ -16669,7 +16669,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L20",
       "_origin": "ast",
-      "community": 93,
+      "community": 175,
       "norm_label": "principal",
       "id": "backend_app_api_deps_py_principal"
     },
@@ -16679,7 +16679,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 93,
+      "community": 175,
       "norm_label": "get_scoped_session()",
       "id": "api_deps_get_scoped_session"
     },
@@ -16689,7 +16689,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L47",
       "_origin": "ast",
-      "community": 93,
+      "community": 175,
       "norm_label": "asyncsession",
       "id": "backend_app_api_deps_py_asyncsession"
     },
@@ -16699,7 +16699,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 93,
+      "community": 175,
       "norm_label": "fastapi dependencies: authenticated principal + rls-scoped db session.  the jwt",
       "id": "api_deps_rationale_1"
     },
@@ -16709,7 +16709,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 93,
+      "community": 175,
       "norm_label": "decode the bearer jwt into a principal. raises 401 on any problem.",
       "id": "api_deps_rationale_21"
     },
@@ -16719,7 +16719,7 @@
       "source_file": "backend/app/api/deps.py",
       "source_location": "L50",
       "_origin": "ast",
-      "community": 93,
+      "community": 175,
       "norm_label": "yield a transaction-scoped session stamped with the caller's rls context.",
       "id": "api_deps_rationale_50"
     },
@@ -17129,7 +17129,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 148,
+      "community": 175,
       "norm_label": "settings.py",
       "id": "routes_settings"
     },
@@ -17139,7 +17139,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 148,
+      "community": 175,
       "norm_label": "dbsourcerequest",
       "id": "routes_settings_dbsourcerequest"
     },
@@ -17149,7 +17149,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L27",
       "_origin": "ast",
-      "community": 148,
+      "community": 175,
       "norm_label": "dbsourceresponse",
       "id": "routes_settings_dbsourceresponse"
     },
@@ -17159,7 +17159,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 148,
+      "community": 175,
       "norm_label": "switch_db_source()",
       "id": "routes_settings_switch_db_source"
     },
@@ -17169,7 +17169,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L33",
       "_origin": "ast",
-      "community": 148,
+      "community": 175,
       "norm_label": "principal",
       "id": "backend_app_api_routes_settings_py_principal"
     },
@@ -17179,7 +17179,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L48",
       "_origin": "ast",
-      "community": 148,
+      "community": 175,
       "norm_label": "current_db_source()",
       "id": "routes_settings_current_db_source"
     },
@@ -17189,7 +17189,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L60",
       "_origin": "ast",
-      "community": 148,
+      "community": 175,
       "norm_label": "get_db_source_host()",
       "id": "routes_settings_get_db_source_host"
     },
@@ -17199,7 +17199,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 148,
+      "community": 175,
       "norm_label": "runtime settings endpoint.  allows the frontend settings panel to flip the act",
       "id": "routes_settings_rationale_1"
     },
@@ -17209,7 +17209,7 @@
       "source_file": "backend/app/api/routes/settings.py",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 148,
+      "community": 175,
       "norm_label": "return host:port only \u2014 never expose credentials in the response.",
       "id": "routes_settings_rationale_61"
     },
@@ -17499,7 +17499,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L71",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "resolve_scope()",
       "id": "core_rbac_resolve_scope"
     },
@@ -17509,7 +17509,7 @@
       "source_file": "backend/app/core/rbac.py",
       "source_location": "L75",
       "_origin": "ast",
-      "community": 173,
+      "community": 175,
       "norm_label": "resolve_clearance()",
       "id": "core_rbac_resolve_clearance"
     },
@@ -17739,7 +17739,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L40",
       "_origin": "ast",
-      "community": 148,
+      "community": 175,
       "norm_label": "active_url()",
       "id": "db_session_active_url"
     },
@@ -17819,7 +17819,7 @@
       "source_file": "backend/app/db/session.py",
       "source_location": "L41",
       "_origin": "ast",
-      "community": 148,
+      "community": 175,
       "norm_label": "return the url for the currently active source.",
       "id": "db_session_rationale_41"
     },
@@ -17849,7 +17849,7 @@
       "source_file": "backend/app/logging_config.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
+      "community": 37,
       "norm_label": "logging_config.py",
       "id": "app_logging_config"
     },
@@ -17859,7 +17859,7 @@
       "source_file": "backend/app/logging_config.py",
       "source_location": "L9",
       "_origin": "ast",
-      "community": 39,
+      "community": 37,
       "norm_label": "configure_logging()",
       "id": "app_logging_config_configure_logging"
     },
@@ -17879,7 +17879,7 @@
       "source_file": "backend/app/logging_config.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 39,
+      "community": 37,
       "norm_label": "structured logging setup.",
       "id": "app_logging_config_rationale_1"
     },
@@ -18839,7 +18839,7 @@
       "source_file": "backend/app/models/local/llm_local.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 204,
+      "community": 188,
       "norm_label": "llm_local.py",
       "id": "local_llm_local"
     },
@@ -18849,7 +18849,7 @@
       "source_file": "backend/app/models/local/llm_local.py",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 204,
+      "community": 188,
       "norm_label": "localllm",
       "id": "local_llm_local_localllm"
     },
@@ -18859,7 +18859,7 @@
       "source_file": "backend/app/models/local/llm_local.py",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 204,
+      "community": 188,
       "norm_label": ".complete()",
       "id": "local_llm_local_localllm_complete"
     },
@@ -18869,7 +18869,7 @@
       "source_file": "backend/app/models/local/llm_local.py",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 204,
+      "community": 188,
       "norm_label": ".stream()",
       "id": "local_llm_local_localllm_stream"
     },
@@ -18879,7 +18879,7 @@
       "source_file": "backend/app/models/local/llm_local.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 204,
+      "community": 188,
       "norm_label": "local llm via an openai-compatible server (vllm / ollama). demo stub.  point ope",
       "id": "local_llm_local_rationale_1"
     },
@@ -19069,7 +19069,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 204,
+      "community": 177,
       "norm_label": "registry.py",
       "id": "models_registry"
     },
@@ -19079,7 +19079,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 204,
+      "community": 188,
       "norm_label": "get_llm()",
       "id": "models_registry_get_llm"
     },
@@ -19109,7 +19109,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 204,
+      "community": 177,
       "norm_label": "get_sql_llm()",
       "id": "models_registry_get_sql_llm"
     },
@@ -19139,7 +19139,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L96",
       "_origin": "ast",
-      "community": 204,
+      "community": 177,
       "norm_label": "get_reranker()",
       "id": "models_registry_get_reranker"
     },
@@ -19159,7 +19159,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L104",
       "_origin": "ast",
-      "community": 204,
+      "community": 177,
       "norm_label": "get_stt()",
       "id": "models_registry_get_stt"
     },
@@ -19199,7 +19199,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L152",
       "_origin": "ast",
-      "community": 204,
+      "community": 177,
       "norm_label": "get_translator()",
       "id": "models_registry_get_translator"
     },
@@ -19219,7 +19219,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 204,
+      "community": 177,
       "norm_label": "factory that resolves the configured backend to concrete model instances.  cache",
       "id": "models_registry_rationale_1"
     },
@@ -19229,7 +19229,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L30",
       "_origin": "ast",
-      "community": 204,
+      "community": 188,
       "norm_label": "return the brain llm.      resolution order:       1. explicit `engine` arg (per",
       "id": "models_registry_rationale_30"
     },
@@ -19249,7 +19249,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 204,
+      "community": 177,
       "norm_label": "return the text-to-sql llm.      resolution order:       1. explicit `engine` ar",
       "id": "models_registry_rationale_62"
     },
@@ -19259,7 +19259,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L105",
       "_origin": "ast",
-      "community": 204,
+      "community": 177,
       "norm_label": "sarvam (primary) \u2192 google \u2192 bhashini (fallback) \u2192 local whisper.      resolution",
       "id": "models_registry_rationale_105"
     },
@@ -19279,7 +19279,7 @@
       "source_file": "backend/app/models/registry.py",
       "source_location": "L153",
       "_origin": "ast",
-      "community": 204,
+      "community": 177,
       "norm_label": "sarvam translate (primary) \u2192 bhashini nmt (fallback).     falls back to bhashini",
       "id": "models_registry_rationale_153"
     },
@@ -20249,7 +20249,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "report_service.py",
       "id": "services_report_service"
     },
@@ -20309,7 +20309,7 @@
       "source_file": "backend/app/services/report_service.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "report builder. produces a structured (json) report payload; the pdf export can",
       "id": "services_report_service_rationale_1"
     },
@@ -20439,7 +20439,7 @@
       "source_file": "backend/seed/load_neon_60pct.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "load_neon_60pct.py",
       "id": "seed_load_neon_60pct"
     },
@@ -20449,7 +20449,7 @@
       "source_file": "backend/seed/load_neon_60pct.py",
       "source_location": "L44",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "load_env()",
       "id": "seed_load_neon_60pct_load_env"
     },
@@ -20459,7 +20459,7 @@
       "source_file": "backend/seed/load_neon_60pct.py",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "parse_url()",
       "id": "seed_load_neon_60pct_parse_url"
     },
@@ -20469,7 +20469,7 @@
       "source_file": "backend/seed/load_neon_60pct.py",
       "source_location": "L61",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "take_60pct()",
       "id": "seed_load_neon_60pct_take_60pct"
     },
@@ -20479,7 +20479,7 @@
       "source_file": "backend/seed/load_neon_60pct.py",
       "source_location": "L65",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "progress()",
       "id": "seed_load_neon_60pct_progress"
     },
@@ -20489,7 +20489,7 @@
       "source_file": "backend/seed/load_neon_60pct.py",
       "source_location": "L69",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "main()",
       "id": "seed_load_neon_60pct_main"
     },
@@ -20499,7 +20499,7 @@
       "source_file": "backend/seed/load_neon_60pct.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "reload neon cloud with 60% of each dataset table.  strategy:   - truncate all",
       "id": "seed_load_neon_60pct_rationale_1"
     },
@@ -20509,7 +20509,7 @@
       "source_file": "backend/seed/load_neon_60pct.py",
       "source_location": "L62",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "take deterministically ~60% of rows (every row where index % 10 < 6).",
       "id": "seed_load_neon_60pct_rationale_62"
     },
@@ -20709,7 +20709,7 @@
       "source_file": "backend/seed/synthetic.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "synthetic.py",
       "id": "seed_synthetic"
     },
@@ -20719,7 +20719,7 @@
       "source_file": "backend/seed/synthetic.py",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "generate()",
       "id": "seed_synthetic_generate"
     },
@@ -20729,7 +20729,7 @@
       "source_file": "backend/seed/synthetic.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 101,
+      "community": 169,
       "norm_label": "synthetic ksp-style crime data generator.  important (spec risk r4): this is syn",
       "id": "seed_synthetic_rationale_1"
     },
@@ -22139,7 +22139,7 @@
       "source_file": "frontend/src/components/DarkModeToggle.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "darkmodetoggle.tsx",
       "id": "components_darkmodetoggle"
     },
@@ -22149,7 +22149,7 @@
       "source_file": "frontend/src/components/DarkModeToggle.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 103,
+      "community": 113,
       "norm_label": "darkmodetoggle()",
       "id": "components_darkmodetoggle_darkmodetoggle"
     },
@@ -24859,7 +24859,7 @@
       "source_file": "frontend/src/lib/error-reporting.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 206,
+      "community": 8,
       "norm_label": "error-reporting.ts",
       "id": "lib_error_reporting"
     },
@@ -24869,7 +24869,7 @@
       "source_file": "frontend/src/lib/error-reporting.ts",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 206,
+      "community": 8,
       "norm_label": "reporterror()",
       "id": "lib_error_reporting_reporterror"
     },
@@ -27386,14 +27386,181 @@
   ],
   "links": [
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "api_dossier_dossier",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "api_dossier_dossierdetail",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "api_dossier_dossierlistitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "components_shell_shell",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "lib_i18n_uset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L298",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "routes_dossier_dossierdetailpane",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "routes_dossier_dossierscreen",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "routes_dossier_facecard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "routes_dossier_field",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "routes_dossier_risk_bg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "routes_dossier_riskbadge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "routes_dossier_route",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L105",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "routes_dossier_section",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "routes_dossier",
+      "target": "routes_dossier_wanted_bg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_routetree_gen",
+      "target": "routes_dossier_route"
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L333",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_routetree_gen_fileroutesbypath",
+      "target": "routes_dossier_route"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt",
-      "target": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt"
     },
     {
       "relation": "contains",
@@ -27401,9 +27568,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "target": "satyam_person360_dossier_build_prompt_0_why_a_separate_table_namespace_do_this_not_the_alternative",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_0_why_a_separate_table_namespace_do_this_not_the_alternative"
     },
     {
       "relation": "contains",
@@ -27411,9 +27578,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L422",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "target": "satyam_person360_dossier_build_prompt_10_acceptance_criteria_does_it_work_nothing_broke",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_10_acceptance_criteria_does_it_work_nothing_broke"
     },
     {
       "relation": "contains",
@@ -27421,9 +27588,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L447",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "target": "satyam_person360_dossier_build_prompt_11_build_order_suggested",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_11_build_order_suggested"
     },
     {
       "relation": "contains",
@@ -27431,9 +27598,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "target": "satyam_person360_dossier_build_prompt_1_database_new_migration_isolated_tables",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_1_database_new_migration_isolated_tables"
     },
     {
       "relation": "contains",
@@ -27441,9 +27608,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L134",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "target": "satyam_person360_dossier_build_prompt_2_orm_models",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_2_orm_models"
     },
     {
       "relation": "contains",
@@ -27451,9 +27618,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L166",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "target": "satyam_person360_dossier_build_prompt_3_pydantic_schema",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_3_pydantic_schema"
     },
     {
       "relation": "contains",
@@ -27461,9 +27628,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L176",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "target": "satyam_person360_dossier_build_prompt_4_service",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_4_service"
     },
     {
       "relation": "contains",
@@ -27471,9 +27638,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L202",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "target": "satyam_person360_dossier_build_prompt_5_route_admin_gated_wiring",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_5_route_admin_gated_wiring"
     },
     {
       "relation": "contains",
@@ -27481,9 +27648,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L249",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "target": "satyam_person360_dossier_build_prompt_6_frontend_api_client",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_6_frontend_api_client"
     },
     {
       "relation": "contains",
@@ -27491,9 +27658,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L258",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "target": "satyam_person360_dossier_build_prompt_7_frontend_screen",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_7_frontend_screen"
     },
     {
       "relation": "contains",
@@ -27501,9 +27668,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L308",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "target": "satyam_person360_dossier_build_prompt_8_seeding_the_10_demo_records_isolated",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_8_seeding_the_10_demo_records_isolated"
     },
     {
       "relation": "contains",
@@ -27511,9 +27678,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L367",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_satyam_person_360_admin_dossier_screen_build_prompt",
-      "target": "satyam_person360_dossier_build_prompt_9_ai_generated_face_photos_front_left_right",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_9_ai_generated_face_photos_front_left_right"
     },
     {
       "relation": "contains",
@@ -27521,9 +27688,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L289",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_7_frontend_screen",
-      "target": "satyam_person360_dossier_build_prompt_nav_entry_admin_gated",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_nav_entry_admin_gated"
     },
     {
       "relation": "contains",
@@ -27531,9 +27698,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L327",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_8_seeding_the_10_demo_records_isolated",
-      "target": "satyam_person360_dossier_build_prompt_the_10_demo_personas_fictional_copy_into_demo_dossier_json",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_the_10_demo_personas_fictional_copy_into_demo_dossier_json"
     },
     {
       "relation": "contains",
@@ -27541,9 +27708,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L389",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_9_ai_generated_face_photos_front_left_right",
-      "target": "satyam_person360_dossier_build_prompt_base_prompt_template_fill_per_persona_run_3x_with_the_angle_line",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_base_prompt_template_fill_per_persona_run_3x_with_the_angle_line"
     },
     {
       "relation": "contains",
@@ -27551,9 +27718,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L379",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_9_ai_generated_face_photos_front_left_right",
-      "target": "satyam_person360_dossier_build_prompt_consistency_rules_critical_for_a_believable_mugshot_card",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_consistency_rules_critical_for_a_believable_mugshot_card"
     },
     {
       "relation": "contains",
@@ -27561,9 +27728,9 @@
       "source_file": "Satyam_Person360_Dossier_Build_Prompt.md",
       "source_location": "L405",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "satyam_person360_dossier_build_prompt_9_ai_generated_face_photos_front_left_right",
-      "target": "satyam_person360_dossier_build_prompt_per_persona_face_briefs_use_these_so_the_10_look_distinct",
-      "confidence_score": 1.0
+      "target": "satyam_person360_dossier_build_prompt_per_persona_face_briefs_use_these_so_the_10_look_distinct"
     },
     {
       "relation": "imports_from",
@@ -27572,9 +27739,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_app_api_routes_dossier_py_routes_dossier",
-      "target": "fastapi",
-      "confidence_score": 1.0
+      "target": "fastapi"
     },
     {
       "relation": "contains",
@@ -27582,9 +27749,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_app_api_routes_dossier_py_routes_dossier",
-      "target": "routes_dossier_get_dossier",
-      "confidence_score": 1.0
+      "target": "routes_dossier_get_dossier"
     },
     {
       "relation": "contains",
@@ -27592,9 +27759,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_app_api_routes_dossier_py_routes_dossier",
-      "target": "routes_dossier_list_dossiers",
-      "confidence_score": 1.0
+      "target": "routes_dossier_list_dossiers"
     },
     {
       "relation": "contains",
@@ -27602,9 +27769,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "backend_app_api_routes_dossier_py_routes_dossier",
-      "target": "routes_dossier_require_admin",
-      "confidence_score": 1.0
+      "target": "routes_dossier_require_admin"
     },
     {
       "relation": "rationale_for",
@@ -27612,9 +27779,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier_rationale_1",
-      "target": "backend_app_api_routes_dossier_py_routes_dossier",
-      "confidence_score": 1.0
+      "target": "backend_app_api_routes_dossier_py_routes_dossier"
     },
     {
       "relation": "calls",
@@ -27623,9 +27790,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier_get_dossier",
-      "target": "routes_dossier_require_admin",
-      "confidence_score": 1.0
+      "target": "routes_dossier_require_admin"
     },
     {
       "relation": "calls",
@@ -27634,9 +27801,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier_list_dossiers",
-      "target": "routes_dossier_require_admin",
-      "confidence_score": 1.0
+      "target": "routes_dossier_require_admin"
     },
     {
       "relation": "rationale_for",
@@ -27644,9 +27811,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier_rationale_24",
-      "target": "routes_dossier_require_admin",
-      "confidence_score": 1.0
+      "target": "routes_dossier_require_admin"
     },
     {
       "relation": "references",
@@ -27655,9 +27822,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier_require_admin",
-      "target": "principal",
-      "confidence_score": 1.0
+      "target": "principal"
     },
     {
       "relation": "references",
@@ -27676,9 +27843,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "principal",
-      "target": "backend_app_api_routes_dossier_py_dossierdetail",
-      "confidence_score": 0.5
+      "target": "backend_app_api_routes_dossier_py_dossierdetail"
     },
     {
       "relation": "uses",
@@ -27686,9 +27853,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "principal",
-      "target": "backend_app_api_routes_dossier_py_dossierlistitem",
-      "confidence_score": 0.5
+      "target": "backend_app_api_routes_dossier_py_dossierlistitem"
     },
     {
       "relation": "references",
@@ -27697,9 +27864,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier_get_dossier",
-      "target": "principal",
-      "confidence_score": 1.0
+      "target": "principal"
     },
     {
       "relation": "references",
@@ -27708,9 +27875,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier_list_dossiers",
-      "target": "principal",
-      "confidence_score": 1.0
+      "target": "principal"
     },
     {
       "relation": "references",
@@ -27719,9 +27886,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier_list_dossiers",
-      "target": "backend_app_api_routes_dossier_py_asyncsession",
-      "confidence_score": 1.0
+      "target": "backend_app_api_routes_dossier_py_asyncsession"
     },
     {
       "relation": "references",
@@ -27730,9 +27897,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier_list_dossiers",
-      "target": "backend_app_api_routes_dossier_py_dossierlistitem",
-      "confidence_score": 1.0
+      "target": "backend_app_api_routes_dossier_py_dossierlistitem"
     },
     {
       "relation": "uses",
@@ -27740,9 +27907,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_api_routes_dossier_py_asyncsession",
-      "target": "backend_app_api_routes_dossier_py_dossierdetail",
-      "confidence_score": 0.5
+      "target": "backend_app_api_routes_dossier_py_dossierdetail"
     },
     {
       "relation": "uses",
@@ -27750,9 +27917,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_api_routes_dossier_py_asyncsession",
-      "target": "backend_app_api_routes_dossier_py_dossierlistitem",
-      "confidence_score": 0.5
+      "target": "backend_app_api_routes_dossier_py_dossierlistitem"
     },
     {
       "relation": "references",
@@ -27761,9 +27928,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier_get_dossier",
-      "target": "backend_app_api_routes_dossier_py_asyncsession",
-      "confidence_score": 1.0
+      "target": "backend_app_api_routes_dossier_py_asyncsession"
     },
     {
       "relation": "uses",
@@ -27771,9 +27938,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_api_routes_dossier_py_dossierdetail",
-      "target": "backend_app_api_routes_dossier_py_dossierlistitem",
-      "confidence_score": 0.5
+      "target": "backend_app_api_routes_dossier_py_dossierlistitem"
     },
     {
       "relation": "uses",
@@ -27781,9 +27948,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_api_routes_dossier_py_dossierlistitem",
-      "target": "backend_app_api_routes_dossier_py_dossierlistitem",
-      "confidence_score": 0.5
+      "target": "backend_app_api_routes_dossier_py_dossierlistitem"
     },
     {
       "relation": "uses",
@@ -27791,9 +27958,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L21",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "backend_app_api_routes_dossier_py_dossierlistitem",
-      "confidence_score": 0.5
+      "target": "backend_app_api_routes_dossier_py_dossierlistitem"
     },
     {
       "relation": "uses",
@@ -27801,9 +27968,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L21",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierdetail",
-      "target": "backend_app_api_routes_dossier_py_dossierlistitem",
-      "confidence_score": 0.5
+      "target": "backend_app_api_routes_dossier_py_dossierlistitem"
     },
     {
       "relation": "uses",
@@ -27811,9 +27978,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L21",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierlistitem",
-      "target": "backend_app_api_routes_dossier_py_dossierlistitem",
-      "confidence_score": 0.5
+      "target": "backend_app_api_routes_dossier_py_dossierlistitem"
     },
     {
       "relation": "references",
@@ -27822,9 +27989,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L47",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier_get_dossier",
-      "target": "backend_app_api_routes_dossier_py_dossierdetail",
-      "confidence_score": 1.0
+      "target": "backend_app_api_routes_dossier_py_dossierdetail"
     },
     {
       "relation": "uses",
@@ -27832,9 +27999,9 @@
       "source_file": "backend/app/api/routes/dossier.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_api_routes_dossier_py_dossierdetail",
-      "target": "backend_app_api_routes_dossier_py_dossierdetail",
-      "confidence_score": 0.5
+      "target": "backend_app_api_routes_dossier_py_dossierdetail"
     },
     {
       "relation": "uses",
@@ -27842,9 +28009,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L21",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "backend_app_api_routes_dossier_py_dossierdetail",
-      "confidence_score": 0.5
+      "target": "backend_app_api_routes_dossier_py_dossierdetail"
     },
     {
       "relation": "uses",
@@ -27852,9 +28019,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L21",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierdetail",
-      "target": "backend_app_api_routes_dossier_py_dossierdetail",
-      "confidence_score": 0.5
+      "target": "backend_app_api_routes_dossier_py_dossierdetail"
     },
     {
       "relation": "uses",
@@ -27862,9 +28029,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L21",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierlistitem",
-      "target": "backend_app_api_routes_dossier_py_dossierdetail",
-      "confidence_score": 0.5
+      "target": "backend_app_api_routes_dossier_py_dossierdetail"
     },
     {
       "relation": "imports",
@@ -27873,9 +28040,9 @@
       "source_file": "backend/app/db/demo_dossier_models.py",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_demo_dossier_models",
-      "target": "datetime",
-      "confidence_score": 1.0
+      "target": "datetime"
     },
     {
       "relation": "contains",
@@ -27883,9 +28050,9 @@
       "source_file": "backend/app/db/demo_dossier_models.py",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_demo_dossier_models",
-      "target": "db_demo_dossier_models_dossierbankaccount",
-      "confidence_score": 1.0
+      "target": "db_demo_dossier_models_dossierbankaccount"
     },
     {
       "relation": "contains",
@@ -27893,9 +28060,9 @@
       "source_file": "backend/app/db/demo_dossier_models.py",
       "source_location": "L113",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_demo_dossier_models",
-      "target": "db_demo_dossier_models_dossiercontact",
-      "confidence_score": 1.0
+      "target": "db_demo_dossier_models_dossiercontact"
     },
     {
       "relation": "contains",
@@ -27903,9 +28070,9 @@
       "source_file": "backend/app/db/demo_dossier_models.py",
       "source_location": "L94",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_demo_dossier_models",
-      "target": "db_demo_dossier_models_dossiercrime",
-      "confidence_score": 1.0
+      "target": "db_demo_dossier_models_dossiercrime"
     },
     {
       "relation": "contains",
@@ -27913,9 +28080,9 @@
       "source_file": "backend/app/db/demo_dossier_models.py",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_demo_dossier_models",
-      "target": "db_demo_dossier_models_dossierfamily",
-      "confidence_score": 1.0
+      "target": "db_demo_dossier_models_dossierfamily"
     },
     {
       "relation": "contains",
@@ -27923,9 +28090,9 @@
       "source_file": "backend/app/db/demo_dossier_models.py",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_demo_dossier_models",
-      "target": "db_demo_dossier_models_dossierperson",
-      "confidence_score": 1.0
+      "target": "db_demo_dossier_models_dossierperson"
     },
     {
       "relation": "rationale_for",
@@ -27933,9 +28100,9 @@
       "source_file": "backend/app/db/demo_dossier_models.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_demo_dossier_models_rationale_1",
-      "target": "db_demo_dossier_models",
-      "confidence_score": 1.0
+      "target": "db_demo_dossier_models"
     },
     {
       "relation": "uses",
@@ -27943,9 +28110,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "db_demo_dossier_models_dossierperson",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossierperson"
     },
     {
       "relation": "uses",
@@ -27953,9 +28120,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierdetail",
-      "target": "db_demo_dossier_models_dossierperson",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossierperson"
     },
     {
       "relation": "uses",
@@ -27963,9 +28130,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierlistitem",
-      "target": "db_demo_dossier_models_dossierperson",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossierperson"
     },
     {
       "relation": "inherits",
@@ -27973,9 +28140,9 @@
       "source_file": "backend/app/db/demo_dossier_models.py",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_demo_dossier_models_dossierperson",
-      "target": "base",
-      "confidence_score": 1.0
+      "target": "base"
     },
     {
       "relation": "inherits",
@@ -27983,9 +28150,9 @@
       "source_file": "backend/app/db/demo_dossier_models.py",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_demo_dossier_models_dossierbankaccount",
-      "target": "base",
-      "confidence_score": 1.0
+      "target": "base"
     },
     {
       "relation": "inherits",
@@ -27993,9 +28160,9 @@
       "source_file": "backend/app/db/demo_dossier_models.py",
       "source_location": "L113",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_demo_dossier_models_dossiercontact",
-      "target": "base",
-      "confidence_score": 1.0
+      "target": "base"
     },
     {
       "relation": "inherits",
@@ -28003,9 +28170,9 @@
       "source_file": "backend/app/db/demo_dossier_models.py",
       "source_location": "L94",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_demo_dossier_models_dossiercrime",
-      "target": "base",
-      "confidence_score": 1.0
+      "target": "base"
     },
     {
       "relation": "inherits",
@@ -28013,9 +28180,9 @@
       "source_file": "backend/app/db/demo_dossier_models.py",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "db_demo_dossier_models_dossierfamily",
-      "target": "base",
-      "confidence_score": 1.0
+      "target": "base"
     },
     {
       "relation": "inherits",
@@ -28093,9 +28260,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "db_demo_dossier_models_dossierfamily",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossierfamily"
     },
     {
       "relation": "uses",
@@ -28103,9 +28270,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierdetail",
-      "target": "db_demo_dossier_models_dossierfamily",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossierfamily"
     },
     {
       "relation": "uses",
@@ -28113,9 +28280,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierlistitem",
-      "target": "db_demo_dossier_models_dossierfamily",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossierfamily"
     },
     {
       "relation": "uses",
@@ -28123,9 +28290,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "db_demo_dossier_models_dossierbankaccount",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossierbankaccount"
     },
     {
       "relation": "uses",
@@ -28133,9 +28300,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierdetail",
-      "target": "db_demo_dossier_models_dossierbankaccount",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossierbankaccount"
     },
     {
       "relation": "uses",
@@ -28143,9 +28310,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierlistitem",
-      "target": "db_demo_dossier_models_dossierbankaccount",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossierbankaccount"
     },
     {
       "relation": "uses",
@@ -28153,9 +28320,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "db_demo_dossier_models_dossiercrime",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossiercrime"
     },
     {
       "relation": "uses",
@@ -28163,9 +28330,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierdetail",
-      "target": "db_demo_dossier_models_dossiercrime",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossiercrime"
     },
     {
       "relation": "uses",
@@ -28173,9 +28340,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierlistitem",
-      "target": "db_demo_dossier_models_dossiercrime",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossiercrime"
     },
     {
       "relation": "uses",
@@ -28183,9 +28350,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "db_demo_dossier_models_dossiercontact",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossiercontact"
     },
     {
       "relation": "uses",
@@ -28193,9 +28360,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierdetail",
-      "target": "db_demo_dossier_models_dossiercontact",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossiercontact"
     },
     {
       "relation": "uses",
@@ -28203,9 +28370,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L14",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "backend_app_services_dossier_service_py_dossierlistitem",
-      "target": "db_demo_dossier_models_dossiercontact",
-      "confidence_score": 0.5
+      "target": "db_demo_dossier_models_dossiercontact"
     },
     {
       "relation": "imports_from",
@@ -28563,9 +28730,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier",
-      "target": "datetime",
-      "confidence_score": 1.0
+      "target": "datetime"
     },
     {
       "relation": "contains",
@@ -28573,9 +28740,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier",
-      "target": "schemas_dossier_dossierbankaccountitem",
-      "confidence_score": 1.0
+      "target": "schemas_dossier_dossierbankaccountitem"
     },
     {
       "relation": "contains",
@@ -28583,9 +28750,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier",
-      "target": "schemas_dossier_dossiercontactitem",
-      "confidence_score": 1.0
+      "target": "schemas_dossier_dossiercontactitem"
     },
     {
       "relation": "contains",
@@ -28593,9 +28760,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier",
-      "target": "schemas_dossier_dossiercrimeitem",
-      "confidence_score": 1.0
+      "target": "schemas_dossier_dossiercrimeitem"
     },
     {
       "relation": "contains",
@@ -28603,9 +28770,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier",
-      "target": "schemas_dossier_dossierdetail",
-      "confidence_score": 1.0
+      "target": "schemas_dossier_dossierdetail"
     },
     {
       "relation": "contains",
@@ -28613,9 +28780,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier",
-      "target": "schemas_dossier_dossierfamilyitem",
-      "confidence_score": 1.0
+      "target": "schemas_dossier_dossierfamilyitem"
     },
     {
       "relation": "contains",
@@ -28623,9 +28790,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier",
-      "target": "schemas_dossier_dossierlistitem",
-      "confidence_score": 1.0
+      "target": "schemas_dossier_dossierlistitem"
     },
     {
       "relation": "rationale_for",
@@ -28633,9 +28800,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier_rationale_1",
-      "target": "schemas_dossier",
-      "confidence_score": 1.0
+      "target": "schemas_dossier"
     },
     {
       "relation": "inherits",
@@ -28643,9 +28810,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier_dossierfamilyitem",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "inherits",
@@ -28773,9 +28940,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier_dossierbankaccountitem",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "inherits",
@@ -28783,9 +28950,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier_dossiercontactitem",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "inherits",
@@ -28793,9 +28960,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier_dossiercrimeitem",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "inherits",
@@ -28803,9 +28970,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier_dossierdetail",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "inherits",
@@ -28813,9 +28980,9 @@
       "source_file": "backend/app/schemas/dossier.py",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "schemas_dossier_dossierlistitem",
-      "target": "basemodel",
-      "confidence_score": 1.0
+      "target": "basemodel"
     },
     {
       "relation": "inherits",
@@ -29573,9 +29740,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_service",
-      "target": "services_dossier_service_get_dossier",
-      "confidence_score": 1.0
+      "target": "services_dossier_service_get_dossier"
     },
     {
       "relation": "contains",
@@ -29583,9 +29750,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_service",
-      "target": "services_dossier_service_list_dossiers",
-      "confidence_score": 1.0
+      "target": "services_dossier_service_list_dossiers"
     },
     {
       "relation": "rationale_for",
@@ -29593,9 +29760,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_service_rationale_1",
-      "target": "services_dossier_service",
-      "confidence_score": 1.0
+      "target": "services_dossier_service"
     },
     {
       "relation": "references",
@@ -29604,9 +29771,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_service_list_dossiers",
-      "target": "backend_app_services_dossier_service_py_asyncsession",
-      "confidence_score": 1.0
+      "target": "backend_app_services_dossier_service_py_asyncsession"
     },
     {
       "relation": "references",
@@ -29615,9 +29782,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_service_list_dossiers",
-      "target": "backend_app_services_dossier_service_py_dossierlistitem",
-      "confidence_score": 1.0
+      "target": "backend_app_services_dossier_service_py_dossierlistitem"
     },
     {
       "relation": "rationale_for",
@@ -29625,9 +29792,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_service_rationale_25",
-      "target": "services_dossier_service_list_dossiers",
-      "confidence_score": 1.0
+      "target": "services_dossier_service_list_dossiers"
     },
     {
       "relation": "references",
@@ -29636,9 +29803,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_service_get_dossier",
-      "target": "backend_app_services_dossier_service_py_asyncsession",
-      "confidence_score": 1.0
+      "target": "backend_app_services_dossier_service_py_asyncsession"
     },
     {
       "relation": "references",
@@ -29647,9 +29814,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_service_get_dossier",
-      "target": "backend_app_services_dossier_service_py_dossierdetail",
-      "confidence_score": 1.0
+      "target": "backend_app_services_dossier_service_py_dossierdetail"
     },
     {
       "relation": "rationale_for",
@@ -29657,9 +29824,9 @@
       "source_file": "backend/app/services/dossier_service.py",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "services_dossier_service_rationale_45",
-      "target": "services_dossier_service_get_dossier",
-      "confidence_score": 1.0
+      "target": "services_dossier_service_get_dossier"
     },
     {
       "relation": "imports",
@@ -29668,9 +29835,9 @@
       "source_file": "backend/seed/load_demo_dossier.py",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "seed_load_demo_dossier",
-      "target": "datetime",
-      "confidence_score": 1.0
+      "target": "datetime"
     },
     {
       "relation": "contains",
@@ -29678,9 +29845,9 @@
       "source_file": "backend/seed/load_demo_dossier.py",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "seed_load_demo_dossier",
-      "target": "seed_load_demo_dossier_date",
-      "confidence_score": 1.0
+      "target": "seed_load_demo_dossier_date"
     },
     {
       "relation": "contains",
@@ -29688,9 +29855,9 @@
       "source_file": "backend/seed/load_demo_dossier.py",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "seed_load_demo_dossier",
-      "target": "seed_load_demo_dossier_main",
-      "confidence_score": 1.0
+      "target": "seed_load_demo_dossier_main"
     },
     {
       "relation": "rationale_for",
@@ -29698,9 +29865,9 @@
       "source_file": "backend/seed/load_demo_dossier.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "seed_load_demo_dossier_rationale_1",
-      "target": "seed_load_demo_dossier",
-      "confidence_score": 1.0
+      "target": "seed_load_demo_dossier"
     },
     {
       "relation": "calls",
@@ -29709,9 +29876,9 @@
       "source_file": "backend/seed/load_demo_dossier.py",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "seed_load_demo_dossier_main",
-      "target": "seed_load_demo_dossier_date",
-      "confidence_score": 1.0
+      "target": "seed_load_demo_dossier_date"
     },
     {
       "relation": "imports_from",
@@ -30075,17 +30242,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "components_shell",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/ops-dispatch.tsx",
       "source_location": "L2",
       "weight": 1.0,
@@ -30240,17 +30396,6 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L2",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "components_shell_shell",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/ops-dispatch.tsx",
       "source_location": "L2",
       "weight": 1.0,
@@ -30397,9 +30542,9 @@
       "source_file": "frontend/src/lib/api/dossier.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_dossier",
-      "target": "api_client_getauthtoken",
-      "confidence_score": 1.0
+      "target": "api_client_getauthtoken"
     },
     {
       "relation": "contains",
@@ -30407,9 +30552,9 @@
       "source_file": "frontend/src/lib/api/dossier.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_dossier",
-      "target": "api_dossier_apifetch",
-      "confidence_score": 1.0
+      "target": "api_dossier_apifetch"
     },
     {
       "relation": "contains",
@@ -30417,9 +30562,9 @@
       "source_file": "frontend/src/lib/api/dossier.ts",
       "source_location": "L118",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_dossier",
-      "target": "api_dossier_dossier",
-      "confidence_score": 1.0
+      "target": "api_dossier_dossier"
     },
     {
       "relation": "contains",
@@ -30427,9 +30572,9 @@
       "source_file": "frontend/src/lib/api/dossier.ts",
       "source_location": "L43",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_dossier",
-      "target": "api_dossier_dossierbankaccount",
-      "confidence_score": 1.0
+      "target": "api_dossier_dossierbankaccount"
     },
     {
       "relation": "contains",
@@ -30437,9 +30582,9 @@
       "source_file": "frontend/src/lib/api/dossier.ts",
       "source_location": "L71",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_dossier",
-      "target": "api_dossier_dossiercontact",
-      "confidence_score": 1.0
+      "target": "api_dossier_dossiercontact"
     },
     {
       "relation": "contains",
@@ -30447,9 +30592,9 @@
       "source_file": "frontend/src/lib/api/dossier.ts",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_dossier",
-      "target": "api_dossier_dossiercrime",
-      "confidence_score": 1.0
+      "target": "api_dossier_dossiercrime"
     },
     {
       "relation": "contains",
@@ -30457,9 +30602,9 @@
       "source_file": "frontend/src/lib/api/dossier.ts",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_dossier",
-      "target": "api_dossier_dossierdetail",
-      "confidence_score": 1.0
+      "target": "api_dossier_dossierdetail"
     },
     {
       "relation": "contains",
@@ -30467,9 +30612,9 @@
       "source_file": "frontend/src/lib/api/dossier.ts",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_dossier",
-      "target": "api_dossier_dossierfamilyitem",
-      "confidence_score": 1.0
+      "target": "api_dossier_dossierfamilyitem"
     },
     {
       "relation": "contains",
@@ -30477,53 +30622,9 @@
       "source_file": "frontend/src/lib/api/dossier.ts",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_dossier",
-      "target": "api_dossier_dossierlistitem",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "api_dossier",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "api_dossier_dossierlistitem",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "api_dossier_dossierdetail",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "api_dossier_dossier",
-      "confidence_score": 1.0
+      "target": "api_dossier_dossierlistitem"
     },
     {
       "relation": "imports_from",
@@ -30590,17 +30691,6 @@
       "confidence_score": 1.0,
       "source": "src_routetree_gen",
       "target": "routes_console_route"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L23",
-      "weight": 1.0,
-      "source": "src_routetree_gen",
-      "target": "routes_dossier_route",
-      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -30924,9 +31014,9 @@
       "source_file": "frontend/src/routeTree.gen.ts",
       "source_location": "L85",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_routetree_gen",
-      "target": "src_routetree_gen_dossierroute",
-      "confidence_score": 1.0
+      "target": "src_routetree_gen_dossierroute"
     },
     {
       "relation": "contains",
@@ -31209,17 +31299,6 @@
       "context": "field",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L333",
-      "weight": 1.0,
-      "source": "src_routetree_gen_fileroutesbypath",
-      "target": "routes_dossier_route",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "field",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routeTree.gen.ts",
       "source_location": "L233",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -31401,107 +31480,6 @@
       "confidence_score": 1.0,
       "source": "src_routetree_gen_register",
       "target": "src_start_startinstance"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "lib_i18n_uset",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L258",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "routes_dossier_dossierdetailpane",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L130",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "routes_dossier_dossierscreen",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L44",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "routes_dossier_facecard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L120",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "routes_dossier_field",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "routes_dossier_risk_bg",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L34",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "routes_dossier_riskbadge",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "routes_dossier_route",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L105",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "routes_dossier_section",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L26",
-      "weight": 1.0,
-      "source": "frontend_src_routes_dossier_tsx_routes_dossier",
-      "target": "routes_dossier_wanted_bg",
-      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -77866,5 +77844,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "beeb3fface8acadcf189e30fc5429f2027f5ae7f"
+  "built_at_commit": "0187c0348aa43e831359fcf71619dc8ad58449f8"
 }
