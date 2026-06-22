@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Fingerprint, Search, Shield, ShieldAlert, AlertTriangle,
   User, Phone, MapPin, Banknote, Scale, Users, Contact,
@@ -146,20 +146,39 @@ function DossierScreen() {
 
   const [list, setList]           = useState<DossierListItem[]>([]);
   const [selected, setSelected]   = useState<DossierDetail | null>(null);
-  const [loading, setLoading]     = useState(false);
+  const [loadingDetail, setLoadingDetail] = useState(false);
   const [search, setSearch]       = useState("");
+
+  // In-memory cache so clicking a previously loaded person is instant.
+  const cacheRef = useRef<Record<number, DossierDetail>>({});
 
   useEffect(() => {
     if (!isAdmin) return;
-    setLoading(true);
-    dossier.list().then(setList).catch(() => {}).finally(() => setLoading(false));
+    // Load the list, then pre-fetch all details in the background so
+    // every subsequent click is instant (no visible delay).
+    dossier.list().then(items => {
+      setList(items);
+      // Pre-fetch all 10 detail pages silently after list arrives.
+      items.forEach(item => {
+        dossier.detail(item.demo_id).then(d => {
+          cacheRef.current[item.demo_id] = d;
+        }).catch(() => {});
+      });
+    }).catch(() => {});
   }, [isAdmin]);
 
-  async function open(id: number) {
-    setLoading(true);
-    try { setSelected(await dossier.detail(id)); }
-    catch { /* ignore */ }
-    finally { setLoading(false); }
+  function open(id: number) {
+    // If already cached → instant switch, no spinner.
+    if (cacheRef.current[id]) {
+      setSelected(cacheRef.current[id]);
+      return;
+    }
+    // Not yet in cache (e.g. pre-fetch hasn't finished) → show spinner once.
+    setLoadingDetail(true);
+    dossier.detail(id)
+      .then(d => { cacheRef.current[id] = d; setSelected(d); })
+      .catch(() => {})
+      .finally(() => setLoadingDetail(false));
   }
 
   const filtered = list.filter(p =>
@@ -200,8 +219,8 @@ function DossierScreen() {
             </div>
           </div>
           <div className="flex-1 overflow-auto">
-            {loading && !list.length && (
-              <div className="p-4 text-xs text-muted-foreground">Loading…</div>
+            {list.length === 0 && (
+              <div className="p-4 text-xs text-muted-foreground animate-pulse">Loading…</div>
             )}
             {filtered.map(p => (
               <button
@@ -240,7 +259,28 @@ function DossierScreen() {
 
         {/* Right detail pane */}
         <main className="flex-1 min-w-0 overflow-auto bg-background">
-          {!selected ? (
+          {loadingDetail ? (
+            /* Skeleton while loading detail for the first time */
+            <div className="p-5 space-y-4 max-w-4xl mx-auto animate-pulse">
+              <div className="rounded-[8px] border-2 border-foreground/20 bg-card p-4">
+                <div className="flex gap-3 mb-4">
+                  <div className="h-7 w-48 rounded bg-muted" />
+                  <div className="h-6 w-20 rounded bg-muted" />
+                  <div className="h-6 w-20 rounded bg-muted" />
+                </div>
+                <div className="h-4 w-full rounded bg-muted mb-2" />
+                <div className="h-4 w-3/4 rounded bg-muted mb-4" />
+                <div className="flex gap-3 justify-center">
+                  {[1,2,3].map(i => <div key={i} className="h-32 w-28 rounded-[6px] bg-muted" />)}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="rounded-[8px] border-2 border-foreground/20 h-48 bg-card" />
+                <div className="rounded-[8px] border-2 border-foreground/20 h-48 bg-card" />
+              </div>
+              <div className="rounded-[8px] border-2 border-foreground/20 h-40 bg-card" />
+            </div>
+          ) : !selected ? (
             <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground">
               <Fingerprint className="h-12 w-12 opacity-30" />
               <p className="text-sm">Select a person from the list</p>
