@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-22)
 
 ## Corpus Check
-- 270 files · ~249,799 words
+- 270 files · ~249,948 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c745abba`
+- Built from commit: `a056d49b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -932,7 +932,7 @@ Cohesion: 0.50
 Nodes (4): 15.1 Docker, 15.2 Local Dev, 15.3 Database Tracks, 15. Deployment
 
 ## Knowledge Gaps
-- **1106 isolated node(s):** `Principal`, `AsyncSession`, `Role`, `StationOption`, `HotspotPoint` (+1101 more)
+- **1106 isolated node(s):** `ChatMessage`, `Conversation`, `Principal`, `AsyncSession`, `Role` (+1101 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -940,14 +940,14 @@ Nodes (4): 15.1 Docker, 15.2 Local Dev, 15.3 Database Tracks, 15. Deployment
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 42` to `Community 217`?**
-  _High betweenness centrality (0.107) - this node is a cross-community bridge._
+  _High betweenness centrality (0.104) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 121` to `Community 3`, `Community 135`, `Community 169`, `Community 42`, `Community 173`, `Community 46`, `Community 148`, `Community 154`, `Community 93`?**
   _High betweenness centrality (0.043) - this node is a cross-community bridge._
 - **Are the 87 inferred relationships involving `Principal` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Principal` has 87 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 53 inferred relationships involving `Permission` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Permission` has 53 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Principal`, `AsyncSession`, `Router-first orchestration.  Given a user message + RLS-scoped session + princip` to the rest of the system?**
+- **What connects `ChatMessage`, `Conversation`, `Principal` to the rest of the system?**
   _1293 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._

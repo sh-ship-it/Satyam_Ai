@@ -565,8 +565,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ui/resizable.tsx": {
-    "mtime": 1781282330.7026968,
-    "ast_hash": "d9fcb9203c749fcab4e125a99bb12a86",
+    "mtime": 1782115438.3660452,
+    "ast_hash": "e75b085089e54727f0deabc8f662ee6e",
     "semantic_hash": ""
   },
   "frontend/src/components/ui/scroll-area.tsx": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
-    "mtime": 1782110114.008479,
-    "ast_hash": "f1bd5db9b9aa17a4c071b67712c516b3",
+    "mtime": 1782116037.619128,
+    "ast_hash": "03893dd3cf424d3016f065fdcfcff5cd",
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
