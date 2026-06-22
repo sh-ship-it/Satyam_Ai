@@ -19,6 +19,7 @@ import {
   Radar,
   Truck,
   Video,
+  Fingerprint,
 } from "lucide-react";
 import { type ReactNode, useState, useEffect, useRef, useCallback } from "react";
 import { ThemePicker } from "./ThemePicker";
@@ -51,6 +52,7 @@ const SCREEN_ROUTES: VoiceScreen[] = [
   { to: "/ops-predictive", words: /(predictive|deployment|predict)|ಭವಿಷ್ಯಸೂಚಕ/i },
   { to: "/ops-dispatch", words: /(dispatch|green corridor|corridor)|ಕಾರ್ ತಳ/i },
   { to: "/ops-camera", words: /(camera|cctv|review|yolo)|ಕ್ಯಾಮೆರಾ/i },
+  { to: "/dossier", words: /(dossier|person 360|360|fingerprint|admin dossier)/i },
 ];
 const NAV_VERB = /(open|show|go to|goto|navigate|take me to|switch to|jump to)|ತೆರೆ|ಹೋಗು|ತೋರಿಸಿ/i;
 // Person-crime question: "what crime did X commit" / "crime rate of X" / Kannada equivalents.
@@ -119,6 +121,20 @@ export function Shell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const { lang, setLang, t } = useI18n();
   const [settingsOpen, setSettingsOpen] = useState(false);
+
+  // Detect admin/L4 once from the stored JWT so the Person 360 nav shows only for admins.
+  const [isAdmin, setIsAdmin] = useState(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    try {
+      const tok = typeof window !== "undefined" ? localStorage.getItem("satyam.token") : null;
+      if (!tok) return;
+      const payload = JSON.parse(atob(tok.split(".")[1]));
+      const cl = Number(payload.clearance ?? 0);
+      const rank = String(payload.rank ?? payload.role ?? "");
+      setIsAdmin(cl >= 4 || ["admin","DGP","ADGP","IGP","SP"].includes(rank));
+    } catch { /* ignore */ }
+  }, []);
   const [listening, setListening] = useState(false);
   const [micActive, setMicActive] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -809,6 +825,7 @@ export function Shell({ children }: { children: ReactNode }) {
     { to: "/ops-predictive", icon: Radar, label: t("Predictive") },
     { to: "/ops-dispatch", icon: Truck, label: t("Dispatch") },
     { to: "/ops-camera", icon: Video, label: t("Camera") },
+    ...(isAdmin ? [{ to: "/dossier" as const, icon: Fingerprint, label: t("Person 360") }] : []),
   ] as const;
 
   return (

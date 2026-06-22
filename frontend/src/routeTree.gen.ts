@@ -20,6 +20,7 @@ import { Route as OperationsRouteImport } from './routes/operations'
 import { Route as NetworkRouteImport } from './routes/network'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForecastRouteImport } from './routes/forecast'
+import { Route as DossierRouteImport } from './routes/dossier'
 import { Route as ConsoleRouteImport } from './routes/console'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AboutRouteImport } from './routes/about'
@@ -81,6 +82,11 @@ const ForecastRoute = ForecastRouteImport.update({
   path: '/forecast',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DossierRoute = DossierRouteImport.update({
+  id: '/dossier',
+  path: '/dossier',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ConsoleRoute = ConsoleRouteImport.update({
   id: '/console',
   path: '/console',
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
   '/console': typeof ConsoleRoute
+  '/dossier': typeof DossierRoute
   '/forecast': typeof ForecastRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
   '/console': typeof ConsoleRoute
+  '/dossier': typeof DossierRoute
   '/forecast': typeof ForecastRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
   '/console': typeof ConsoleRoute
+  '/dossier': typeof DossierRoute
   '/forecast': typeof ForecastRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
@@ -169,6 +178,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/audit'
     | '/console'
+    | '/dossier'
     | '/forecast'
     | '/login'
     | '/network'
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/audit'
     | '/console'
+    | '/dossier'
     | '/forecast'
     | '/login'
     | '/network'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/audit'
     | '/console'
+    | '/dossier'
     | '/forecast'
     | '/login'
     | '/network'
@@ -224,6 +236,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuditRoute: typeof AuditRoute
   ConsoleRoute: typeof ConsoleRoute
+  DossierRoute: typeof DossierRoute
   ForecastRoute: typeof ForecastRoute
   LoginRoute: typeof LoginRoute
   NetworkRoute: typeof NetworkRoute
@@ -317,6 +330,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForecastRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dossier': {
+      id: '/dossier'
+      path: '/dossier'
+      fullPath: '/dossier'
+      preLoaderRoute: typeof DossierRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/console': {
       id: '/console'
       path: '/console'
@@ -360,6 +380,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AuditRoute: AuditRoute,
   ConsoleRoute: ConsoleRoute,
+  DossierRoute: DossierRoute,
   ForecastRoute: ForecastRoute,
   LoginRoute: LoginRoute,
   NetworkRoute: NetworkRoute,

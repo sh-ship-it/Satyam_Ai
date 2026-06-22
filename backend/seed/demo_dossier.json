@@ -1,0 +1,448 @@
+[
+  {
+    "slug": "rakesh-gowda",
+    "full_name": "Rakesh Gowda",
+    "aliases": ["Rakesh G", "Raki"],
+    "gender": "Male",
+    "dob": "1986-03-15",
+    "age": 38,
+    "height_cm": 172,
+    "build": "Athletic",
+    "complexion": "Wheatish",
+    "identifying_marks": "Scar on left eyebrow",
+    "blood_group": "B+",
+    "nationality": "Indian",
+    "risk_level": "Critical",
+    "wanted_status": "Wanted",
+    "primary_phone": "+91 98450 11234",
+    "secondary_phone": "+91 99720 44567",
+    "email": "rgowda1986@example.com",
+    "home_address": "No. 14, 3rd Cross, Vijayanagar Layout, Bengaluru",
+    "district": "Bengaluru Urban",
+    "pincode": "560040",
+    "photo_front": "/demo-dossier/rakesh-gowda/front.png",
+    "photo_left": "/demo-dossier/rakesh-gowda/left.png",
+    "photo_right": "/demo-dossier/rakesh-gowda/right.png",
+    "summary": "Rakesh Gowda is a repeat offender heading an organized vehicle theft ring operating across Bengaluru Urban and Rural districts. He has 3 previous convictions and is currently wanted for a 2024 vehicle theft case. Known to use multiple aliases and safe houses.",
+    "family": [
+      {"name": "Govinda Gowda", "relation": "Father", "age": 68, "phone": "+91 94480 22111", "occupation": "Retired farmer", "address": "Same as above", "notes": "Unaware of son's criminal activities"},
+      {"name": "Sunita Gowda", "relation": "Spouse", "age": 34, "phone": "+91 98456 33221", "occupation": "Homemaker", "address": "Same as above", "notes": null},
+      {"name": "Rajan Gowda", "relation": "Brother", "age": 32, "phone": "+91 97420 55678", "occupation": "Auto-rickshaw driver", "address": "Nearby locality", "notes": "Known associate in theft ring"}
+    ],
+    "contacts": [
+      {"label": "Known associate", "name": "Srinivas Naidu", "relation": "Crime partner", "phone": "+91 98443 67890", "notes": "Involved in vehicle disposal"},
+      {"label": "Employer (cover)", "name": "Speedway Garage", "relation": "Workshop", "phone": "+91 80 4567 8901", "notes": "Used as front for stolen vehicles"}
+    ],
+    "banks": [
+      {"bank_name": "State Bank of India", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 4821", "ifsc": "SBIN0040112", "branch": "Vijayanagar Branch", "account_type": "Savings", "balance_inr": 145000.00, "status": "Active", "opened_on": "2014-06-10", "flagged": true, "flag_reason": "Multiple large cash deposits inconsistent with declared income"},
+      {"bank_name": "Canara Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 7734", "ifsc": "CNRB0002341", "branch": "Rajajinagar Branch", "account_type": "Current", "balance_inr": 820000.00, "status": "Active", "opened_on": "2018-11-22", "flagged": true, "flag_reason": "Suspected proceeds from vehicle theft — under investigation"},
+      {"bank_name": "HDFC Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 1192", "ifsc": "HDFC0001234", "branch": "Malleshwaram Branch", "account_type": "Savings", "balance_inr": 32000.00, "status": "Dormant", "opened_on": "2011-03-05", "flagged": false, "flag_reason": null}
+    ],
+    "crimes": [
+      {"case_ref": "DEMO/2024/0142", "crime_type": "Vehicle Theft", "sections": "IPC 379 / BNS 303", "role": "Accused", "status": "Open", "occurred_on": "2024-02-14", "station": "Vijayanagar PS", "district": "Bengaluru Urban", "sentence": null, "narrative": "Accused allegedly led a 4-member team that stole 3 high-end motorcycles from a gated community parking. CCTV footage obtained; accused absconding."},
+      {"case_ref": "DEMO/2022/0387", "crime_type": "Organized Vehicle Theft", "sections": "IPC 379, 411, 34 / BNS 303", "role": "Convicted", "status": "Convicted", "occurred_on": "2022-07-22", "station": "Yeshwanthpur PS", "district": "Bengaluru Urban", "sentence": "18 months rigorous imprisonment (served)", "narrative": "Ran a racket selling stolen two-wheelers with fake documents. 12 vehicles recovered. Convicted after trial."},
+      {"case_ref": "DEMO/2020/0091", "crime_type": "Vehicle Theft", "sections": "IPC 379", "role": "Convicted", "status": "Convicted", "occurred_on": "2020-01-08", "station": "Hesaraghatta Road PS", "district": "Bengaluru Rural", "sentence": "6 months simple imprisonment (served)", "narrative": "Theft of a Maruti Swift from hospital parking. Accused arrested within 48 hours."}
+    ]
+  },
+  {
+    "slug": "imran-shariff",
+    "full_name": "Imran Shariff",
+    "aliases": ["Immu", "I. Shariff"],
+    "gender": "Male",
+    "dob": "1993-08-22",
+    "age": 31,
+    "height_cm": 168,
+    "build": "Slim",
+    "complexion": "Fair",
+    "identifying_marks": "Tattoo of a crescent on right forearm",
+    "blood_group": "O+",
+    "nationality": "Indian",
+    "risk_level": "High",
+    "wanted_status": "Wanted",
+    "primary_phone": "+91 97410 28834",
+    "secondary_phone": "+91 98860 57721",
+    "email": "imranshariff93@example.com",
+    "home_address": "No. 7, Mandi Mohalla, Mysuru",
+    "district": "Mysuru",
+    "pincode": "570021",
+    "photo_front": "/demo-dossier/imran-shariff/front.png",
+    "photo_left": "/demo-dossier/imran-shariff/left.png",
+    "photo_right": "/demo-dossier/imran-shariff/right.png",
+    "summary": "Imran Shariff is a serial chain-snatcher operating in busy market areas of Mysuru city. He targets elderly women and solo pedestrians near temples and bus stands. Has 2 prior convictions and is currently absconding after jumping bail.",
+    "family": [
+      {"name": "Zareena Banu", "relation": "Mother", "age": 57, "phone": "+91 94483 10092", "occupation": "Tailoring", "address": "Same as above", "notes": "Cooperating with police"},
+      {"name": "Rukhsar Shariff", "relation": "Spouse", "age": 28, "phone": "+91 97418 66340", "occupation": "Homemaker", "address": "Same as above", "notes": "Unaware of husband's current whereabouts per statement"}
+    ],
+    "contacts": [
+      {"label": "Fence / receiver", "name": "Aslam Pasha", "relation": "Known associate", "phone": "+91 99000 34512", "notes": "Receives and resells stolen gold ornaments"},
+      {"label": "Former employer", "name": "Al-Noor Jewellers", "relation": "Ex-employer", "phone": "+91 821 244 5566", "notes": "Employment terminated after first arrest"}
+    ],
+    "banks": [
+      {"bank_name": "Karnataka Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 3345", "ifsc": "KARB0000782", "branch": "Mandi Mohalla Branch", "account_type": "Savings", "balance_inr": 78500.00, "status": "Active", "opened_on": "2016-04-18", "flagged": true, "flag_reason": "Frequent small cash deposits followed by immediate withdrawals — structuring pattern suspected"},
+      {"bank_name": "Bank of Baroda", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 8820", "ifsc": "BARB0MYSRUU", "branch": "Mysuru City Branch", "account_type": "Savings", "balance_inr": 12000.00, "status": "Dormant", "opened_on": "2013-09-01", "flagged": false, "flag_reason": null}
+    ],
+    "crimes": [
+      {"case_ref": "DEMO/2024/0318", "crime_type": "Chain Snatching", "sections": "IPC 379 / BNS 303", "role": "Accused", "status": "Open", "occurred_on": "2024-03-05", "station": "Devaraja PS", "district": "Mysuru", "sentence": null, "narrative": "Accused snatched a gold chain from a 65-year-old woman near Devaraja Market. Victim sustained minor injuries from fall. Accused fled on a two-wheeler; absconding after bail jump."},
+      {"case_ref": "DEMO/2022/0204", "crime_type": "Chain Snatching", "sections": "IPC 379, 34", "role": "Convicted", "status": "Convicted", "occurred_on": "2022-04-11", "station": "Nazarbad PS", "district": "Mysuru", "sentence": "9 months simple imprisonment (served)", "narrative": "Two-member team snatched ornaments worth ₹1.2 lakh from two separate victims on the same day. Arrested within a week; convicted after plea."},
+      {"case_ref": "DEMO/2020/0155", "crime_type": "Theft", "sections": "IPC 379", "role": "Convicted", "status": "Convicted", "occurred_on": "2020-06-30", "station": "Lashkar Mohalla PS", "district": "Mysuru", "sentence": "3 months simple imprisonment (served)", "narrative": "Stole a mobile phone and a purse from a crowded bus. First registered case."}
+    ]
+  },
+  {
+    "slug": "naveen-kumar",
+    "full_name": "Naveen Kumar",
+    "aliases": ["Navi", "N.K. Finance"],
+    "gender": "Male",
+    "dob": "1979-11-04",
+    "age": 45,
+    "height_cm": 175,
+    "build": "Heavy",
+    "complexion": "Wheatish",
+    "identifying_marks": "Mole on chin; wears thick-framed spectacles",
+    "blood_group": "A+",
+    "nationality": "Indian",
+    "risk_level": "High",
+    "wanted_status": "Wanted",
+    "primary_phone": "+91 98449 74412",
+    "secondary_phone": "+91 96863 20011",
+    "email": "naveenkumar.fin@example.com",
+    "home_address": "Flat 302, Mangala Residency, Kankanady, Mangaluru",
+    "district": "Dakshina Kannada",
+    "pincode": "575002",
+    "photo_front": "/demo-dossier/naveen-kumar/front.png",
+    "photo_left": "/demo-dossier/naveen-kumar/left.png",
+    "photo_right": "/demo-dossier/naveen-kumar/right.png",
+    "summary": "Naveen Kumar ran a sophisticated financial fraud scheme targeting small business owners and salaried individuals in Mangaluru. Operated fake loan facilitation and investment firms. Defrauded over 80 victims of an estimated ₹1.8 crore. Currently wanted on non-bailable warrant.",
+    "family": [
+      {"name": "Shantha Kumar", "relation": "Spouse", "age": 41, "phone": "+91 94481 55302", "occupation": "School teacher", "address": "Same as above", "notes": "Claims no knowledge of fraudulent business"},
+      {"name": "Aditya Kumar", "relation": "Son", "age": 19, "phone": "+91 99809 44123", "occupation": "College student", "address": "Same as above", "notes": null},
+      {"name": "Deepika Kumar", "relation": "Daughter", "age": 16, "phone": null, "occupation": "School student", "address": "Same as above", "notes": null}
+    ],
+    "contacts": [
+      {"label": "Business partner", "name": "Ramesh Bhat", "relation": "Co-accused", "phone": "+91 98451 90034", "notes": "Ran front company 'Shri Lakshmi Investments'; arrested and out on bail"},
+      {"label": "Accountant", "name": "Pradeep Saldanha", "relation": "Known associate", "phone": "+91 94482 61100", "notes": "Allegedly falsified books of accounts; under investigation"},
+      {"label": "Lawyer (defence)", "name": "Adv. Mohan Rao", "relation": "Legal counsel", "phone": "+91 824 244 7890", "notes": null}
+    ],
+    "banks": [
+      {"bank_name": "Axis Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 5503", "ifsc": "UTIB0001820", "branch": "Mangaluru City Branch", "account_type": "Current", "balance_inr": 1800000.00, "status": "Frozen", "opened_on": "2017-03-14", "flagged": true, "flag_reason": "Account frozen per court order; suspected proceeds of financial fraud"},
+      {"bank_name": "State Bank of India", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 2298", "ifsc": "SBIN0007421", "branch": "Kankanady Branch", "account_type": "Savings", "balance_inr": 320000.00, "status": "Active", "opened_on": "2009-07-22", "flagged": true, "flag_reason": "Unexplained credits totalling ₹12 lakh in 6 months"},
+      {"bank_name": "Karnataka Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 9910", "ifsc": "KARB0000561", "branch": "Balmatta Branch", "account_type": "Savings", "balance_inr": 55000.00, "status": "Active", "opened_on": "2015-01-19", "flagged": false, "flag_reason": null},
+      {"bank_name": "HDFC Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 4471", "ifsc": "HDFC0002901", "branch": "Mangaluru Main Branch", "account_type": "Current", "balance_inr": 430000.00, "status": "Frozen", "opened_on": "2019-08-30", "flagged": true, "flag_reason": "Linked to front company; frozen pending investigation"}
+    ],
+    "crimes": [
+      {"case_ref": "DEMO/2024/0077", "crime_type": "Financial Fraud", "sections": "IPC 420, 406, 120B / BNS 316", "role": "Accused", "status": "Open", "occurred_on": "2024-01-10", "station": "Mangaluru East PS", "district": "Dakshina Kannada", "sentence": null, "narrative": "Accused and associates collected deposits from 40+ investors promising 30% annual returns. No returns paid; accused absconding after NBW issued."},
+      {"case_ref": "DEMO/2022/0509", "crime_type": "Cheating and Forgery", "sections": "IPC 420, 465, 468", "role": "Accused", "status": "Chargesheeted", "occurred_on": "2022-09-15", "station": "Pandeshwar PS", "district": "Dakshina Kannada", "sentence": null, "narrative": "Used forged NOCs and fake credit scores to facilitate fraudulent loans from two private financiers. Chargesheet filed; trial pending."},
+      {"case_ref": "DEMO/2021/0233", "crime_type": "Cheating", "sections": "IPC 420", "role": "Convicted", "status": "Convicted", "occurred_on": "2021-03-08", "station": "Mangaluru North PS", "district": "Dakshina Kannada", "sentence": "1 year simple imprisonment (served)", "narrative": "Defrauded 12 individuals under the guise of a government housing scheme. Convicted after trial; served sentence."},
+      {"case_ref": "DEMO/2019/0188", "crime_type": "Cheating", "sections": "IPC 420, 34", "role": "Convicted", "status": "Convicted", "occurred_on": "2019-11-20", "station": "Urwa PS", "district": "Dakshina Kannada", "sentence": "6 months simple imprisonment (served)", "narrative": "First fraud case registered; collected advance fees for non-existent plot sales."}
+    ]
+  },
+  {
+    "slug": "suresh-patil",
+    "full_name": "Suresh Patil",
+    "aliases": ["Suri Anna", "Patil Saab"],
+    "gender": "Male",
+    "dob": "1972-05-18",
+    "age": 52,
+    "height_cm": 178,
+    "build": "Heavy",
+    "complexion": "Dark",
+    "identifying_marks": "Missing tip of right index finger",
+    "blood_group": "AB+",
+    "nationality": "Indian",
+    "risk_level": "Medium",
+    "wanted_status": "Under Observation",
+    "primary_phone": "+91 94490 63312",
+    "secondary_phone": null,
+    "email": "sureshpatilblg@example.com",
+    "home_address": "Plot 9, Camp Area Extension, Belagavi",
+    "district": "Belagavi",
+    "pincode": "590001",
+    "photo_front": "/demo-dossier/suresh-patil/front.png",
+    "photo_left": "/demo-dossier/suresh-patil/left.png",
+    "photo_right": "/demo-dossier/suresh-patil/right.png",
+    "summary": "Suresh Patil is a local strongman with political connections who runs land-grab and extortion operations in the Belagavi border district. Uses hired henchmen to intimidate farmers into surrendering land. Has faced multiple cases but acquittals due to witness tampering.",
+    "family": [
+      {"name": "Kavitha Patil", "relation": "Spouse", "age": 47, "phone": "+91 98449 71123", "occupation": "Running a saree shop (front business)", "address": "Same as above", "notes": "Suspected to manage proceeds"},
+      {"name": "Dilip Patil", "relation": "Brother", "age": 48, "phone": "+91 94487 30045", "occupation": "Builder", "address": "Tilakwadi, Belagavi", "notes": "Construction business used for money laundering"}
+    ],
+    "contacts": [
+      {"label": "Political contact", "name": "Ex-Corporator Shinde", "relation": "Patron", "phone": "+91 98230 55410", "notes": "Provides political cover; under separate inquiry"},
+      {"label": "Henchman", "name": "Basavaraj Teli", "relation": "Enforcer", "phone": "+91 97424 80021", "notes": "Carries out physical intimidation on accused's behalf"},
+      {"label": "Land broker", "name": "Prakash Gaddi", "relation": "Associate", "phone": "+91 96869 44512", "notes": "Front for land acquisition deals"}
+    ],
+    "banks": [
+      {"bank_name": "State Bank of India", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 8801", "ifsc": "SBIN0020431", "branch": "Camp Branch, Belagavi", "account_type": "Current", "balance_inr": 950000.00, "status": "Active", "opened_on": "2005-02-28", "flagged": true, "flag_reason": "High-value real estate credits with no matching business registration"},
+      {"bank_name": "Canara Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 4402", "ifsc": "CNRB0004521", "branch": "Tilakwadi Branch", "account_type": "Savings", "balance_inr": 180000.00, "status": "Active", "opened_on": "2010-06-14", "flagged": false, "flag_reason": null}
+    ],
+    "crimes": [
+      {"case_ref": "DEMO/2023/0601", "crime_type": "Extortion", "sections": "IPC 383, 385 / BNS 308", "role": "Accused", "status": "Chargesheeted", "occurred_on": "2023-05-19", "station": "Camp PS, Belagavi", "district": "Belagavi", "sentence": null, "narrative": "Accused allegedly sent henchmen to threaten a farmer family to vacate 3 acres of agricultural land. Victims filed complaint after receiving threatening calls. Chargesheet filed; trial ongoing."},
+      {"case_ref": "DEMO/2021/0445", "crime_type": "Land Grabbing", "sections": "IPC 447, 448, 506", "role": "Accused", "status": "Acquitted", "occurred_on": "2021-08-03", "station": "Bogarves PS", "district": "Belagavi", "sentence": null, "narrative": "Encroached government land and forcibly constructed compound wall. Three witnesses turned hostile; acquitted by lower court."},
+      {"case_ref": "DEMO/2018/0312", "crime_type": "Assault and Intimidation", "sections": "IPC 323, 506", "role": "Accused", "status": "Acquitted", "occurred_on": "2018-02-11", "station": "Camp PS, Belagavi", "district": "Belagavi", "sentence": null, "narrative": "Assaulted a rival builder during a property dispute. Victim later withdrew complaint; case closed."}
+    ]
+  },
+  {
+    "slug": "anwar-baig",
+    "full_name": "Anwar Baig",
+    "aliases": ["Anwar Bhai", "A.B."],
+    "gender": "Male",
+    "dob": "1995-12-09",
+    "age": 29,
+    "height_cm": 165,
+    "build": "Slim",
+    "complexion": "Wheatish",
+    "identifying_marks": "Burn scar on left hand dorsum",
+    "blood_group": "B-",
+    "nationality": "Indian",
+    "risk_level": "High",
+    "wanted_status": "Wanted",
+    "primary_phone": "+91 96869 12203",
+    "secondary_phone": "+91 94488 87654",
+    "email": "anwarbaig95@example.com",
+    "home_address": "H. No. 44, Supermarket Area, Kalaburagi",
+    "district": "Kalaburagi",
+    "pincode": "585102",
+    "photo_front": "/demo-dossier/anwar-baig/front.png",
+    "photo_left": "/demo-dossier/anwar-baig/left.png",
+    "photo_right": "/demo-dossier/anwar-baig/right.png",
+    "summary": "Anwar Baig is an active narcotics trafficker in the Kalaburagi–Bidar corridor, transporting methamphetamine and ganja from cross-border networks into Karnataka. Has previous NDPS convictions and is currently absconding after a 2024 seizure in which his accomplices were arrested.",
+    "family": [
+      {"name": "Karim Baig", "relation": "Father", "age": 62, "phone": "+91 94482 44001", "occupation": "Retired government peon", "address": "Same as above", "notes": "Unaware of son's activities"},
+      {"name": "Nasreen Baig", "relation": "Mother", "age": 56, "phone": "+91 97423 09812", "occupation": "Housewife", "address": "Same as above", "notes": null}
+    ],
+    "contacts": [
+      {"label": "Supplier", "name": "Dawood Mirza", "relation": "Drug supplier", "phone": "+91 98000 31122", "notes": "Believed to be based in Hyderabad; cross-border network"},
+      {"label": "Courier", "name": "Shabbir Hussain", "relation": "Arrested accomplice", "phone": "+91 96400 78833", "notes": "Currently in judicial custody — provided information on Anwar"}
+    ],
+    "banks": [
+      {"bank_name": "Bank of Baroda", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 6614", "ifsc": "BARB0KALBRG", "branch": "Kalaburagi Main Branch", "account_type": "Savings", "balance_inr": 210000.00, "status": "Frozen", "opened_on": "2018-05-07", "flagged": true, "flag_reason": "Account flagged by NCB; suspected proceeds from narcotics trade"},
+      {"bank_name": "State Bank of India", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 3307", "ifsc": "SBIN0030561", "branch": "Supermarket Area Branch", "account_type": "Savings", "balance_inr": 18000.00, "status": "Active", "opened_on": "2014-08-20", "flagged": false, "flag_reason": null}
+    ],
+    "crimes": [
+      {"case_ref": "DEMO/2024/0500", "crime_type": "Narcotics Trafficking", "sections": "NDPS Act Sec. 20, 21, 29", "role": "Accused", "status": "Open", "occurred_on": "2024-04-22", "station": "Kalaburagi City PS", "district": "Kalaburagi", "sentence": null, "narrative": "5 kg of ganja and 200g methamphetamine seized from a vehicle; two couriers arrested. Accused Anwar Baig identified as organiser; absconding."},
+      {"case_ref": "DEMO/2022/0331", "crime_type": "Narcotics Possession and Sale", "sections": "NDPS Act Sec. 20, 21", "role": "Convicted", "status": "Convicted", "occurred_on": "2022-01-17", "station": "Aland Road PS", "district": "Kalaburagi", "sentence": "2 years rigorous imprisonment (served)", "narrative": "Arrested with 1.2 kg ganja and ₹40,000 in cash. Convicted; served sentence. NSA detention order also issued."},
+      {"case_ref": "DEMO/2019/0099", "crime_type": "Narcotics Possession", "sections": "NDPS Act Sec. 20", "role": "Convicted", "status": "Convicted", "occurred_on": "2019-06-05", "station": "Kalaburagi Rural PS", "district": "Kalaburagi", "sentence": "10 months simple imprisonment (served)", "narrative": "First NDPS case; found in possession of 400g ganja during a routine check."}
+    ]
+  },
+  {
+    "slug": "manjunath-shetty",
+    "full_name": "Manjunath Shetty",
+    "aliases": ["Manju", "Shetty Anna"],
+    "gender": "Male",
+    "dob": "1983-07-30",
+    "age": 41,
+    "height_cm": 170,
+    "build": "Medium",
+    "complexion": "Wheatish",
+    "identifying_marks": "Scar on right cheek from old injury",
+    "blood_group": "O+",
+    "nationality": "Indian",
+    "risk_level": "Medium",
+    "wanted_status": "Bail",
+    "primary_phone": "+91 98443 51109",
+    "secondary_phone": "+91 94482 37721",
+    "email": "manjushetty.udupi@example.com",
+    "home_address": "Door No. 3-45, Manipal Road, Udupi",
+    "district": "Udupi",
+    "pincode": "576101",
+    "photo_front": "/demo-dossier/manjunath-shetty/front.png",
+    "photo_left": "/demo-dossier/manjunath-shetty/left.png",
+    "photo_right": "/demo-dossier/manjunath-shetty/right.png",
+    "summary": "Manjunath Shetty operates illegal money-lending (blade patti) rings preying on fishermen and daily wage workers in the coastal Udupi district. Charges usurious interest rates and uses physical intimidation for recovery. Currently out on bail pending trial.",
+    "family": [
+      {"name": "Radha Shetty", "relation": "Spouse", "age": 37, "phone": "+91 98443 77221", "occupation": "Homemaker", "address": "Same as above", "notes": "Allegedly assists in collecting installments"},
+      {"name": "Vasudeva Shetty", "relation": "Father", "age": 70, "phone": "+91 94481 20034", "occupation": "Retired fisherman", "address": "Same as above", "notes": null}
+    ],
+    "contacts": [
+      {"label": "Recovery agent", "name": "Kishore Poojary", "relation": "Enforcer", "phone": "+91 96867 44512", "notes": "Uses threats to recover loan amounts; one assault case filed"},
+      {"label": "Co-lender", "name": "Dinesh Bangera", "relation": "Business partner", "phone": "+91 97420 88023", "notes": "Operates a parallel blade patti operation in Kundapur"}
+    ],
+    "banks": [
+      {"bank_name": "Karnataka Gramin Bank (KVGB)", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 7721", "ifsc": "KVGB0004412", "branch": "Udupi Main Branch", "account_type": "Savings", "balance_inr": 390000.00, "status": "Active", "opened_on": "2012-03-22", "flagged": true, "flag_reason": "Irregular high-value cash deposits inconsistent with declared income from fishing trade"},
+      {"bank_name": "Canara Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 5509", "ifsc": "CNRB0005612", "branch": "Udupi Branch", "account_type": "Current", "balance_inr": 125000.00, "status": "Active", "opened_on": "2016-09-10", "flagged": false, "flag_reason": null},
+      {"bank_name": "Karnataka Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 2234", "ifsc": "KARB0000912", "branch": "Manipal Branch", "account_type": "Savings", "balance_inr": 52000.00, "status": "Dormant", "opened_on": "2008-11-05", "flagged": false, "flag_reason": null}
+    ],
+    "crimes": [
+      {"case_ref": "DEMO/2023/0714", "crime_type": "Illegal Money Lending / Usury", "sections": "Karnataka Money Lenders Act Sec. 7; IPC 506", "role": "Accused", "status": "Chargesheeted", "occurred_on": "2023-09-04", "station": "Udupi Town PS", "district": "Udupi", "sentence": null, "narrative": "18 victims filed complaint citing interest rates of 10% per month and threats on default. Chargesheet filed; accused on bail."},
+      {"case_ref": "DEMO/2022/0289", "crime_type": "Assault and Intimidation", "sections": "IPC 323, 506", "role": "Accused", "status": "Chargesheeted", "occurred_on": "2022-06-18", "station": "Udupi Town PS", "district": "Udupi", "sentence": null, "narrative": "Recovery agent acting on Shetty's instructions assaulted a fisherman who defaulted on loan repayment. Both accused chargesheeted."},
+      {"case_ref": "DEMO/2019/0177", "crime_type": "Illegal Money Lending", "sections": "Karnataka Money Lenders Act Sec. 7", "role": "Convicted", "status": "Convicted", "occurred_on": "2019-04-22", "station": "Kundapur PS", "district": "Udupi", "sentence": "Fine of ₹50,000 (paid)", "narrative": "First registered case; fined under state usury law."}
+    ]
+  },
+  {
+    "slug": "prakash-reddy",
+    "full_name": "Prakash Reddy",
+    "aliases": ["PK Reddy", "Reddy Saab"],
+    "gender": "Male",
+    "dob": "1988-02-26",
+    "age": 36,
+    "height_cm": 176,
+    "build": "Athletic",
+    "complexion": "Wheatish",
+    "identifying_marks": "Scar on right shoulder; thick moustache",
+    "blood_group": "A-",
+    "nationality": "Indian",
+    "risk_level": "Critical",
+    "wanted_status": "Wanted",
+    "primary_phone": "+91 99009 34456",
+    "secondary_phone": "+91 98455 22891",
+    "email": "pkreddy.ballari@example.com",
+    "home_address": "H. No. 7, Gandhi Nagar, Ballari",
+    "district": "Ballari",
+    "pincode": "583101",
+    "photo_front": "/demo-dossier/prakash-reddy/front.png",
+    "photo_left": "/demo-dossier/prakash-reddy/left.png",
+    "photo_right": "/demo-dossier/prakash-reddy/right.png",
+    "summary": "Prakash Reddy is a key operator in the illegal iron-ore mining belt of Ballari. Allegedly controls bootleg mining leases through intimidation and bribery. Has connections to an interstate minerals smuggling network. Currently wanted on an SFIO referral and two criminal intimidation cases.",
+    "family": [
+      {"name": "Suma Reddy", "relation": "Spouse", "age": 33, "phone": "+91 97420 44123", "occupation": "Director of Reddy Minerals Pvt. Ltd. (shell company)", "address": "Same as above", "notes": "Company believed to be a front"},
+      {"name": "Chandrashekhar Reddy", "relation": "Brother", "age": 40, "phone": "+91 94480 67712", "occupation": "Transport contractor", "address": "Sandur, Ballari", "notes": "Operates trucks used to transport illegally mined ore"},
+      {"name": "Venkataramaiah Reddy", "relation": "Father", "age": 70, "phone": "+91 98445 01239", "occupation": "Retired", "address": "Same as above", "notes": null}
+    ],
+    "contacts": [
+      {"label": "SFIO target", "name": "Reddy Minerals Pvt. Ltd.", "relation": "Shell company", "phone": "+91 8394 233 445", "notes": "SFIO investigating financial irregularities worth ₹4 crore"},
+      {"label": "Govt official (suspect)", "name": "S. Raju (DMG officer)", "relation": "Alleged bribe recipient", "phone": null, "notes": "ACB inquiry pending; name appears in intercepts"}
+    ],
+    "banks": [
+      {"bank_name": "Axis Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 9012", "ifsc": "UTIB0003401", "branch": "Ballari Main Branch", "account_type": "Current", "balance_inr": 1650000.00, "status": "Frozen", "opened_on": "2016-07-18", "flagged": true, "flag_reason": "SFIO freeze order; suspected illegal mining proceeds"},
+      {"bank_name": "State Bank of India", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 6634", "ifsc": "SBIN0050341", "branch": "Gandhi Nagar Branch", "account_type": "Savings", "balance_inr": 280000.00, "status": "Active", "opened_on": "2010-04-12", "flagged": true, "flag_reason": "Multiple high-value RTGS credits from unregistered entities"},
+      {"bank_name": "HDFC Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 3381", "ifsc": "HDFC0004521", "branch": "Ballari Branch", "account_type": "Savings", "balance_inr": 67000.00, "status": "Active", "opened_on": "2014-10-09", "flagged": false, "flag_reason": null}
+    ],
+    "crimes": [
+      {"case_ref": "DEMO/2024/0210", "crime_type": "Illegal Mining / MMDR Act Violation", "sections": "MMDR Act Sec. 21; IPC 379, 120B / BNS 303", "role": "Accused", "status": "Open", "occurred_on": "2024-01-29", "station": "Sandur PS", "district": "Ballari", "sentence": null, "narrative": "Mining department raided a pit operated under Reddy's control; 4 excavators and 12 trucks seized. SFIO referral made. Accused absconding."},
+      {"case_ref": "DEMO/2023/0405", "crime_type": "Criminal Intimidation", "sections": "IPC 506, 34 / BNS 351", "role": "Accused", "status": "Chargesheeted", "occurred_on": "2023-07-11", "station": "Ballari Urban PS", "district": "Ballari", "sentence": null, "narrative": "Rival lease holder received death threats over mining territory. Accused identified from call records and eyewitness accounts. Chargesheet filed."},
+      {"case_ref": "DEMO/2021/0388", "crime_type": "Illegal Mining", "sections": "MMDR Act Sec. 21; IPC 379", "role": "Convicted", "status": "Convicted", "occurred_on": "2021-05-04", "station": "Kudligi PS", "district": "Ballari", "sentence": "18 months rigorous imprisonment (served); fine ₹2,00,000", "narrative": "First conviction for illegal quarrying. Served sentence. Released 2022."},
+      {"case_ref": "DEMO/2019/0302", "crime_type": "Encroachment of Forest Land", "sections": "Forest Act Sec. 26; IPC 447", "role": "Accused", "status": "Acquitted", "occurred_on": "2019-09-22", "station": "Hospet Forest Range PS", "district": "Ballari", "sentence": null, "narrative": "Encroached protected forest land for illegal quarrying. Acquitted due to insufficient evidence."}
+    ]
+  },
+  {
+    "slug": "farhan-khan",
+    "full_name": "Farhan Khan",
+    "aliases": ["Farhaan", "FK"],
+    "gender": "Male",
+    "dob": "1997-04-14",
+    "age": 27,
+    "height_cm": 163,
+    "build": "Slim",
+    "complexion": "Fair",
+    "identifying_marks": "Small cut scar on lower lip",
+    "blood_group": "O-",
+    "nationality": "Indian",
+    "risk_level": "Medium",
+    "wanted_status": "Bail",
+    "primary_phone": "+91 98444 60013",
+    "secondary_phone": null,
+    "email": "farhankhan97@example.com",
+    "home_address": "House No. 22, Kotur Colony, Hubballi",
+    "district": "Hubballi-Dharwad",
+    "pincode": "580031",
+    "photo_front": "/demo-dossier/farhan-khan/front.png",
+    "photo_left": "/demo-dossier/farhan-khan/left.png",
+    "photo_right": "/demo-dossier/farhan-khan/right.png",
+    "summary": "Farhan Khan is a mobile phone thief and pickpocket who operates in bus stands, crowded markets and railway stations in Hubballi-Dharwad. Sells stolen devices through an online resale network. Has two prior convictions and is currently on bail for a 2023 theft case.",
+    "family": [
+      {"name": "Ameena Bi", "relation": "Mother", "age": 52, "phone": "+91 96861 38802", "occupation": "Vegetable vendor", "address": "Same as above", "notes": null},
+      {"name": "Reshma Khan", "relation": "Sister", "age": 24, "phone": "+91 97425 01123", "occupation": "Garment worker", "address": "Same as above", "notes": null}
+    ],
+    "contacts": [
+      {"label": "Device reseller", "name": "Irfan Mobile Zone", "relation": "Fence", "phone": "+91 836 244 9012", "notes": "Second-hand phone shop used to move stolen handsets; under police watch"}
+    ],
+    "banks": [
+      {"bank_name": "Karnataka Gramin Bank (KVGB)", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 1198", "ifsc": "KVGB0003312", "branch": "Hubballi Branch", "account_type": "Savings", "balance_inr": 24000.00, "status": "Active", "opened_on": "2019-07-09", "flagged": false, "flag_reason": null}
+    ],
+    "crimes": [
+      {"case_ref": "DEMO/2023/0819", "crime_type": "Mobile Phone Theft", "sections": "IPC 379 / BNS 303", "role": "Accused", "status": "Chargesheeted", "occurred_on": "2023-11-14", "station": "Hubballi Town PS", "district": "Hubballi-Dharwad", "sentence": null, "narrative": "Stole 2 smartphones from passengers at Hubballi Bus Stand. Identified from CCTV; arrested. Currently on bail pending trial."},
+      {"case_ref": "DEMO/2022/0101", "crime_type": "Pickpocketing", "sections": "IPC 379", "role": "Convicted", "status": "Convicted", "occurred_on": "2022-03-07", "station": "Dharwad PS", "district": "Hubballi-Dharwad", "sentence": "3 months simple imprisonment (served)", "narrative": "Pickpocketed wallets from three passengers at Dharwad railway station."},
+      {"case_ref": "DEMO/2021/0044", "crime_type": "Theft", "sections": "IPC 379", "role": "Convicted", "status": "Convicted", "occurred_on": "2021-01-29", "station": "Hubballi Rural PS", "district": "Hubballi-Dharwad", "sentence": "2 months simple imprisonment (served)", "narrative": "First registered case; stole a mobile phone from a passenger on a state bus."}
+    ]
+  },
+  {
+    "slug": "lokesh-naik",
+    "full_name": "Lokesh Naik",
+    "aliases": ["Loki", "Forest Lokesh"],
+    "gender": "Male",
+    "dob": "1975-09-03",
+    "age": 49,
+    "height_cm": 174,
+    "build": "Medium",
+    "complexion": "Dark",
+    "identifying_marks": "Tribal tattoo on upper arm; prominent limp in left leg",
+    "blood_group": "B+",
+    "nationality": "Indian",
+    "risk_level": "High",
+    "wanted_status": "Wanted",
+    "primary_phone": "+91 94490 52234",
+    "secondary_phone": "+91 99720 01178",
+    "email": "lokeshnaik.smg@example.com",
+    "home_address": "Sy. No. 12, Jambagiri Road, Shivamogga",
+    "district": "Shivamogga",
+    "pincode": "577201",
+    "photo_front": "/demo-dossier/lokesh-naik/front.png",
+    "photo_left": "/demo-dossier/lokesh-naik/left.png",
+    "photo_right": "/demo-dossier/lokesh-naik/right.png",
+    "summary": "Lokesh Naik is a wildlife smuggler operating in the Western Ghats belt around Shivamogga and Chikkamagaluru. Involved in trafficking of star tortoises, red sanders, and deer antlers. Has deep forest network connections and uses tribal contacts for poaching. Currently absconding.",
+    "family": [
+      {"name": "Savitha Naik", "relation": "Spouse", "age": 44, "phone": "+91 97422 66009", "occupation": "Homemaker", "address": "Same as above", "notes": null},
+      {"name": "Kiran Naik", "relation": "Son", "age": 22, "phone": "+91 96862 44512", "occupation": "Unemployed", "address": "Same as above", "notes": "Suspected of assisting in transport of contraband"}
+    ],
+    "contacts": [
+      {"label": "Buyer network", "name": "Ravi Sharma (Chennai)", "relation": "Contraband buyer", "phone": "+91 98400 55671", "notes": "Collects and exports wildlife parts; Tamil Nadu STF alerted"},
+      {"label": "Forest guide", "name": "Chinna Swamy", "relation": "Poaching associate", "phone": "+91 94483 12234", "notes": "Former forest department informer turned poacher"}
+    ],
+    "banks": [
+      {"bank_name": "State Bank of India", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 4490", "ifsc": "SBIN0011342", "branch": "Shivamogga Main Branch", "account_type": "Savings", "balance_inr": 320000.00, "status": "Active", "opened_on": "2007-06-15", "flagged": true, "flag_reason": "Unexplained cash deposits; flagged by Forest Dept financial probe"},
+      {"bank_name": "Canara Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 6623", "ifsc": "CNRB0006712", "branch": "Jambagiri Road Branch", "account_type": "Savings", "balance_inr": 45000.00, "status": "Active", "opened_on": "2015-02-28", "flagged": false, "flag_reason": null}
+    ],
+    "crimes": [
+      {"case_ref": "DEMO/2024/0389", "crime_type": "Wildlife Smuggling", "sections": "Wildlife Protection Act Sec. 49B, 51; IPC 120B", "role": "Accused", "status": "Open", "occurred_on": "2024-03-18", "station": "Shivamogga Forest Range PS", "district": "Shivamogga", "sentence": null, "narrative": "Forest officials intercepted a vehicle carrying 14 star tortoises and 4 kg red sanders. Accused identified as organiser; accomplices arrested. NBW issued."},
+      {"case_ref": "DEMO/2022/0477", "crime_type": "Illegal Hunting / Poaching", "sections": "Wildlife Protection Act Sec. 9, 51", "role": "Convicted", "status": "Convicted", "occurred_on": "2022-08-10", "station": "Sagar Forest PS", "district": "Shivamogga", "sentence": "3 years rigorous imprisonment (served); fine ₹1,00,000", "narrative": "Arrested with carcasses of 2 spotted deer and illegal snares. Convicted after trial."},
+      {"case_ref": "DEMO/2018/0240", "crime_type": "Wildlife Smuggling", "sections": "Wildlife Protection Act Sec. 49B", "role": "Accused", "status": "Acquitted", "occurred_on": "2018-04-06", "station": "Thirthahalli PS", "district": "Shivamogga", "sentence": null, "narrative": "Arrested with red sanders but released on bail; prosecution witness turned hostile. Acquitted."},
+      {"case_ref": "DEMO/2016/0088", "crime_type": "Forest Encroachment", "sections": "Forest Act Sec. 26", "role": "Convicted", "status": "Convicted", "occurred_on": "2016-11-14", "station": "Shivamogga Forest Range PS", "district": "Shivamogga", "sentence": "Fine of ₹20,000 (paid)", "narrative": "Encroached forest land for illegal timber extraction. First registered offence."}
+    ]
+  },
+  {
+    "slug": "vijay-rao",
+    "full_name": "Vijay Rao",
+    "aliases": ["VJ", "Digital Vijay"],
+    "gender": "Male",
+    "dob": "1990-06-28",
+    "age": 34,
+    "height_cm": 169,
+    "build": "Slim",
+    "complexion": "Fair",
+    "identifying_marks": "Wears glasses; small birthmark on left cheek",
+    "blood_group": "A+",
+    "nationality": "Indian",
+    "risk_level": "Medium",
+    "wanted_status": "Bail",
+    "primary_phone": "+91 97418 88902",
+    "secondary_phone": "+91 94483 60041",
+    "email": "vijayrao.tmkr@example.com",
+    "home_address": "Flat 11, Shree Residency, B.H. Road, Tumakuru",
+    "district": "Tumakuru",
+    "pincode": "572101",
+    "photo_front": "/demo-dossier/vijay-rao/front.png",
+    "photo_left": "/demo-dossier/vijay-rao/left.png",
+    "photo_right": "/demo-dossier/vijay-rao/right.png",
+    "summary": "Vijay Rao runs a sophisticated UPI and online banking fraud operation, luring victims with fake investment apps and KYC scam calls. Operates across multiple states using a network of mule accounts. Has defrauded over 60 victims of approximately ₹38 lakh. Currently on bail pending chargesheet.",
+    "family": [
+      {"name": "Rekha Rao", "relation": "Spouse", "age": 30, "phone": "+91 96865 44100", "occupation": "Data entry operator", "address": "Same as above", "notes": "Unaware of husband's criminal activities per statement"},
+      {"name": "Krishnappa Rao", "relation": "Father", "age": 64, "phone": "+91 94480 77321", "occupation": "Retired bank clerk", "address": "Same as above", "notes": null},
+      {"name": "Usha Rao", "relation": "Mother", "age": 60, "phone": "+91 98448 53200", "occupation": "Housewife", "address": "Same as above", "notes": null}
+    ],
+    "contacts": [
+      {"label": "Tech accomplice", "name": "Navneet Gupta", "relation": "Co-accused", "phone": "+91 98100 74423", "notes": "Developed fake investment app; based in Rajasthan; arrest warrant issued"},
+      {"label": "Mule account handler", "name": "Suresh L.", "relation": "Co-accused", "phone": "+91 94492 31102", "notes": "Recruited bank mule accounts; currently in judicial custody"},
+      {"label": "Call centre operator", "name": "Unknown alias 'Rahul'", "relation": "Suspect", "phone": "+91 99990 00231", "notes": "Handles KYC scam calls; identity under investigation"}
+    ],
+    "banks": [
+      {"bank_name": "HDFC Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 7790", "ifsc": "HDFC0003401", "branch": "Tumakuru Branch", "account_type": "Savings", "balance_inr": 560000.00, "status": "Frozen", "opened_on": "2018-01-15", "flagged": true, "flag_reason": "Cyber Crime Cell freeze order; multiple UPI fraud credits traced to this account"},
+      {"bank_name": "Axis Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 4412", "ifsc": "UTIB0005512", "branch": "Tumakuru Main Branch", "account_type": "Current", "balance_inr": 310000.00, "status": "Frozen", "opened_on": "2020-08-22", "flagged": true, "flag_reason": "Linked to fake investment app proceeds; frozen on MHA I4C directive"},
+      {"bank_name": "State Bank of India", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 9023", "ifsc": "SBIN0021234", "branch": "B.H. Road Branch", "account_type": "Savings", "balance_inr": 48000.00, "status": "Active", "opened_on": "2012-03-30", "flagged": false, "flag_reason": null},
+      {"bank_name": "Canara Bank", "account_no": "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 1189", "ifsc": "CNRB0007823", "branch": "Tumakuru Branch", "account_type": "Savings", "balance_inr": 92000.00, "status": "Active", "opened_on": "2015-07-11", "flagged": true, "flag_reason": "Identified as routing account for scam proceeds; under monitoring"}
+    ],
+    "crimes": [
+      {"case_ref": "DEMO/2024/0455", "crime_type": "UPI / Online Banking Fraud", "sections": "IT Act Sec. 66C, 66D; IPC 420 / BNS 316", "role": "Accused", "status": "Chargesheeted", "occurred_on": "2024-02-09", "station": "Tumakuru CEN PS", "district": "Tumakuru", "sentence": null, "narrative": "Operated a fake investment app 'GrowFast' defrauding 40 victims of ₹22 lakh. App harvested banking credentials. Arrested; released on bail; chargesheet filed."},
+      {"case_ref": "DEMO/2023/0711", "crime_type": "KYC Phishing Fraud", "sections": "IT Act Sec. 66C, 66D; IPC 420", "role": "Accused", "status": "Chargesheeted", "occurred_on": "2023-06-17", "station": "Tumakuru CEN PS", "district": "Tumakuru", "sentence": null, "narrative": "Ran a call centre impersonating a nationalised bank, harvesting OTPs from elderly victims and draining savings accounts. 22 victims; total loss ₹16 lakh."},
+      {"case_ref": "DEMO/2021/0599", "crime_type": "Online Fraud", "sections": "IT Act Sec. 66D; IPC 420", "role": "Convicted", "status": "Convicted", "occurred_on": "2021-10-02", "station": "Tumakuru CEN PS", "district": "Tumakuru", "sentence": "1 year simple imprisonment (served)", "narrative": "Created fake e-commerce portal to collect payments without delivery. 8 victims; loss ₹1.8 lakh. Convicted after trial."},
+      {"case_ref": "DEMO/2020/0148", "crime_type": "SIM Swap Fraud", "sections": "IT Act Sec. 66C; IPC 420", "role": "Accused", "status": "Acquitted", "occurred_on": "2020-04-21", "station": "Tumakuru North PS", "district": "Tumakuru", "sentence": null, "narrative": "SIM swap attack on a business owner's number to gain UPI access. Digital forensics inconclusive; accused acquitted."}
+    ]
+  }
+]
