@@ -68,12 +68,7 @@ export function isBackendSttSupported(): boolean {
 /** Pick the first MediaRecorder mime type this browser supports. */
 function pickMimeType(): string {
   const MR: any = (window as any).MediaRecorder;
-  const candidates = [
-    "audio/webm;codecs=opus",
-    "audio/webm",
-    "audio/ogg;codecs=opus",
-    "audio/mp4",
-  ];
+  const candidates = ["audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus", "audio/mp4"];
   for (const c of candidates) {
     try {
       if (MR?.isTypeSupported?.(c)) return c;
@@ -84,16 +79,8 @@ function pickMimeType(): string {
   return ""; // let the browser choose its default
 }
 
-export async function startSttSession(
-  opts: SttSessionOptions = {},
-): Promise<SttSession> {
-  const {
-    lang = "auto",
-    silenceMs = 1500,
-    maxMs = 15000,
-    manual = false,
-    callbacks = {},
-  } = opts;
+export async function startSttSession(opts: SttSessionOptions = {}): Promise<SttSession> {
+  const { lang = "auto", silenceMs = 1500, maxMs = 15000, manual = false, callbacks = {} } = opts;
 
   const status = (s: string) => {
     try {
@@ -137,9 +124,7 @@ export async function startSttSession(
   const mimeType = pickMimeType();
   let recorder: MediaRecorder;
   try {
-    recorder = mimeType
-      ? new MediaRecorder(stream, { mimeType })
-      : new MediaRecorder(stream);
+    recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
   } catch (e: any) {
     callbacks.onError?.(`MediaRecorder could not start: ${e?.message || e}`);
     try {
@@ -189,9 +174,7 @@ export async function startSttSession(
     const blob = new Blob(chunks, { type: mimeType || "audio/webm" });
     console.debug("[stt] recorded blob", { bytes: blob.size, mimeType });
     if (!blob.size) {
-      callbacks.onError?.(
-        "No audio was recorded (0 bytes). The mic may be muted at the OS level.",
-      );
+      callbacks.onError?.("No audio was recorded (0 bytes). The mic may be muted at the OS level.");
       return;
     }
     status(`Transcribing\u2026 (${Math.round(blob.size / 1024)} KB)`);
@@ -330,10 +313,7 @@ async function blobToWav(blob: Blob, targetRate: number): Promise<Blob> {
 }
 
 /** decodeAudioData with both promise + callback forms (idempotent resolve). */
-function decodeAudio(
-  ctx: AudioContext,
-  arrayBuf: ArrayBuffer,
-): Promise<AudioBuffer> {
+function decodeAudio(ctx: AudioContext, arrayBuf: ArrayBuffer): Promise<AudioBuffer> {
   return new Promise<AudioBuffer>((resolve, reject) => {
     let settled = false;
     const done = (b: AudioBuffer) => {
@@ -358,11 +338,7 @@ function decodeAudio(
 }
 
 // ── WAV helpers ─────────────────────────────────────────────
-function downsample(
-  buf: Float32Array,
-  inRate: number,
-  outRate: number,
-): Float32Array {
+function downsample(buf: Float32Array, inRate: number, outRate: number): Float32Array {
   if (outRate >= inRate) return buf;
   const ratio = inRate / outRate;
   const outLen = Math.floor(buf.length / ratio);
@@ -381,11 +357,7 @@ function downsample(
   return out;
 }
 
-function encodeWav(
-  samples: Float32Array,
-  inRate: number,
-  outRate: number,
-): Blob {
+function encodeWav(samples: Float32Array, inRate: number, outRate: number): Blob {
   const pcm = downsample(samples, inRate, outRate);
   const buffer = new ArrayBuffer(44 + pcm.length * 2);
   const view = new DataView(buffer);
@@ -397,11 +369,11 @@ function encodeWav(
   writeStr(8, "WAVE");
   writeStr(12, "fmt ");
   view.setUint32(16, 16, true); // PCM chunk size
-  view.setUint16(20, 1, true);  // PCM format
-  view.setUint16(22, 1, true);  // mono
-  view.setUint32(24, outRate, true);     // sample rate
+  view.setUint16(20, 1, true); // PCM format
+  view.setUint16(22, 1, true); // mono
+  view.setUint32(24, outRate, true); // sample rate
   view.setUint32(28, outRate * 2, true); // byte rate
-  view.setUint16(32, 2, true);  // block align
+  view.setUint16(32, 2, true); // block align
   view.setUint16(34, 16, true); // bits per sample
   writeStr(36, "data");
   view.setUint32(40, pcm.length * 2, true);

@@ -1,5 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { X, Users, Trash2, AlertTriangle, Check, Loader2, RefreshCcw, UserPlus, Inbox } from "lucide-react";
+import {
+  X,
+  Users,
+  Trash2,
+  AlertTriangle,
+  Check,
+  Loader2,
+  RefreshCcw,
+  UserPlus,
+  Inbox,
+} from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 type Account = {
@@ -16,7 +26,12 @@ type Account = {
 type FetchState = "loading" | "ready" | "error";
 
 function Avatar({ acc, size = "md" }: { acc: Account; size?: "sm" | "md" | "lg" }) {
-  const dim = size === "lg" ? "h-12 w-12 text-base" : size === "sm" ? "h-7 w-7 text-[10px]" : "h-9 w-9 text-xs";
+  const dim =
+    size === "lg"
+      ? "h-12 w-12 text-base"
+      : size === "sm"
+        ? "h-7 w-7 text-[10px]"
+        : "h-9 w-9 text-xs";
   if (acc.photo) {
     return (
       <img
@@ -86,7 +101,9 @@ export function AccountManager({
       if (cancelled) return;
       if (fail) {
         setFetchState("error");
-        setFetchError(t("Could not load your linked accounts. Check your connection and try again."));
+        setFetchError(
+          t("Could not load your linked accounts. Check your connection and try again."),
+        );
       } else {
         setFetchState("ready");
       }
@@ -220,9 +237,7 @@ export function AccountManager({
                   {t("Add a workspace account to start switching between identities.")}
                 </p>
               </div>
-              <button
-                className="flex items-center gap-1.5 rounded-[5px] border-2 border-foreground bg-primary px-3 py-1.5 text-xs font-extrabold text-primary-foreground nb-shadow-sm transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
-              >
+              <button className="flex items-center gap-1.5 rounded-[5px] border-2 border-foreground bg-primary px-3 py-1.5 text-xs font-extrabold text-primary-foreground nb-shadow-sm transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none">
                 <UserPlus className="h-3.5 w-3.5" /> {t("Add an account")}
               </button>
             </div>
@@ -311,7 +326,9 @@ export function AccountManager({
           {fetchState === "ready" && !isEmpty && !canRemove && (
             <div className="mt-3 flex items-center gap-2 rounded-[5px] border-2 border-foreground bg-warning/20 p-3 text-xs font-bold">
               <AlertTriangle className="h-4 w-4 shrink-0" />
-              {t("You must keep at least one account. Add another account before removing this one.")}
+              {t(
+                "You must keep at least one account. Add another account before removing this one.",
+              )}
             </div>
           )}
         </div>
@@ -339,13 +356,17 @@ export function AccountManager({
           >
             <div className="flex items-center gap-2 border-b-2 border-foreground bg-header px-4 py-3 text-header-foreground">
               <AlertTriangle className="h-4 w-4" />
-              <h3 className="text-sm font-extrabold uppercase tracking-wide">{t("Remove account?")}</h3>
+              <h3 className="text-sm font-extrabold uppercase tracking-wide">
+                {t("Remove account?")}
+              </h3>
             </div>
             <div className="p-4 text-sm">
               <p className="font-bold">{t("This account will be removed from the switcher.")}</p>
               {confirmId === activeId && (
                 <p className="mt-2 text-xs font-bold text-foreground/70">
-                  {t("It is currently active. After removal you will be switched to another account.")}
+                  {t(
+                    "It is currently active. After removal you will be switched to another account.",
+                  )}
                 </p>
               )}
             </div>

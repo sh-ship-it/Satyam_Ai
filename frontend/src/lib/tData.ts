@@ -20,11 +20,7 @@ import knData from "@/locales/kn-data.json";
 type KnData = typeof knData;
 type FieldKey = keyof KnData;
 
-export function tData(
-  field: string,
-  value: string | null | undefined,
-  lang: string,
-): string {
+export function tData(field: string, value: string | null | undefined, lang: string): string {
   if (value == null || value === "") return value ?? "";
   if (lang !== "KN" && lang !== "kn") return value;
 

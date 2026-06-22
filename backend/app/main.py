@@ -34,6 +34,14 @@ log = get_logger()
 async def lifespan(app: FastAPI):
     configure_logging()
     settings = get_settings()
+    # ── Fail fast on an insecure JWT secret in production ────────────────────
+    # The default secret is public; signing tokens with it lets anyone forge
+    # any officer/rank and bypass all RBAC/RLS. Refuse to boot in production.
+    if settings.app_env == "production" and settings.jwt_secret == "change-me-in-production":
+        raise RuntimeError(
+            "JWT_SECRET is still the default value in production. "
+            "Set a strong, unique JWT_SECRET before starting Satyam."
+        )
     log.info(
         "satyam.startup",
         env=settings.app_env,

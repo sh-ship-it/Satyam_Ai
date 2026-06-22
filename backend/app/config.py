@@ -33,6 +33,10 @@ class Settings(BaseSettings):
     # CORS (comma-separated)
     cors_origins: str = "http://localhost:3000"
 
+    # Base URL the backend reaches itself on — used by spawned subprocesses
+    # (e.g. the YOLO detector) to call back into /api/ops/detect/notify.
+    self_base_url: str = "http://localhost:8000"
+
     # ── Model adapter layer ───────────────────────────────────────────────────
     # MODEL_BACKEND: selects the overall compute plane (api | local).
     model_backend: Literal["api", "local"] = "api"

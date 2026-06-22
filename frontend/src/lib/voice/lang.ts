@@ -24,10 +24,7 @@ export function detectLang(text: string): "en" | "kn" {
  * "kn-IN" / anything starting with "kn" → "kn"
  * anything else → "en"
  */
-export function resolveLang(
-  voiceLang: string | null | undefined,
-  text: string,
-): "en" | "kn" {
+export function resolveLang(voiceLang: string | null | undefined, text: string): "en" | "kn" {
   const v = (voiceLang || "").toLowerCase();
   if (!v || v === "auto") return detectLang(text);
   if (v.startsWith("kn")) return "kn";

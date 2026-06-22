@@ -78,35 +78,105 @@ type PipelineStep = {
 
 function AboutPage() {
   const pipeline: PipelineStep[] = [
-    { n: "01", t: "Ingest", Icon: Upload, tone: "primary",
-      d: "Upload disk images, mobile dumps, cloud exports, and case files into a single evidence vault." },
-    { n: "02", t: "Hash & Custody", Icon: Fingerprint, tone: "accent",
-      d: "SHA-256 fingerprint every artifact; sign a chain-of-custody entry with timestamp and investigator identity." },
-    { n: "03", t: "AI Triage", Icon: Sparkles, tone: "primary",
-      d: "Classify, deduplicate, and rank artifacts by investigative relevance using on-demand AI models." },
-    { n: "04", t: "Entity Extraction", Icon: Users, tone: "accent",
-      d: "Pull people, accounts, devices, locations, transactions, and communication threads from raw data." },
-    { n: "05", t: "Link & Geo Analysis", Icon: Network, tone: "primary",
-      d: "Build interactive network graphs and plot movements on a tactical heatmap with a time-slider." },
-    { n: "06", t: "Investigator Review", Icon: MessageSquare, tone: "accent",
-      d: "Voice + chat console, multi-user task boards, structured peer review, and redaction workflows." },
-    { n: "07", t: "Court-Ready Report", Icon: FileText, tone: "primary",
-      d: "Generate signed, exhibit-numbered PDFs with full provenance, timeline, and citations." },
+    {
+      n: "01",
+      t: "Ingest",
+      Icon: Upload,
+      tone: "primary",
+      d: "Upload disk images, mobile dumps, cloud exports, and case files into a single evidence vault.",
+    },
+    {
+      n: "02",
+      t: "Hash & Custody",
+      Icon: Fingerprint,
+      tone: "accent",
+      d: "SHA-256 fingerprint every artifact; sign a chain-of-custody entry with timestamp and investigator identity.",
+    },
+    {
+      n: "03",
+      t: "AI Triage",
+      Icon: Sparkles,
+      tone: "primary",
+      d: "Classify, deduplicate, and rank artifacts by investigative relevance using on-demand AI models.",
+    },
+    {
+      n: "04",
+      t: "Entity Extraction",
+      Icon: Users,
+      tone: "accent",
+      d: "Pull people, accounts, devices, locations, transactions, and communication threads from raw data.",
+    },
+    {
+      n: "05",
+      t: "Link & Geo Analysis",
+      Icon: Network,
+      tone: "primary",
+      d: "Build interactive network graphs and plot movements on a tactical heatmap with a time-slider.",
+    },
+    {
+      n: "06",
+      t: "Investigator Review",
+      Icon: MessageSquare,
+      tone: "accent",
+      d: "Voice + chat console, multi-user task boards, structured peer review, and redaction workflows.",
+    },
+    {
+      n: "07",
+      t: "Court-Ready Report",
+      Icon: FileText,
+      tone: "primary",
+      d: "Generate signed, exhibit-numbered PDFs with full provenance, timeline, and citations.",
+    },
   ];
 
   const stack = [
-    { cat: "Frontend", Icon: Code2,
-      items: ["React 19", "TanStack Start", "TanStack Router", "Vite 7", "TypeScript", "Tailwind CSS v4"] },
-    { cat: "UI & Visualization", Icon: Palette,
-      items: ["shadcn/ui", "Lucide Icons", "Leaflet + heatmap", "Neo-brutalist system"] },
-    { cat: "Backend & Data", Icon: Database,
-      items: ["PostgreSQL 16 + pgvector", "Row-Level Security", "Server Functions (RPC)", "FastAPI (Python)"] },
-    { cat: "AI & Intelligence", Icon: Brain,
-      items: ["Gemini 2.5 Flash (API lane)", "Bhashini + Groq (fallback)", "Web Speech (STT + TTS)", "Multilingual EN / KN"] },
-    { cat: "Security & Auth", Icon: Lock,
-      items: ["OIDC + JWT", "Role-based access", "Tamper-evident logs", "SHA-256 hashing"] },
-    { cat: "DevOps", Icon: Wrench,
-      items: ["Bun runtime", "ESLint + Prettier", "CI build verification", "Zoho Catalyst deploy"] },
+    {
+      cat: "Frontend",
+      Icon: Code2,
+      items: [
+        "React 19",
+        "TanStack Start",
+        "TanStack Router",
+        "Vite 7",
+        "TypeScript",
+        "Tailwind CSS v4",
+      ],
+    },
+    {
+      cat: "UI & Visualization",
+      Icon: Palette,
+      items: ["shadcn/ui", "Lucide Icons", "Leaflet + heatmap", "Neo-brutalist system"],
+    },
+    {
+      cat: "Backend & Data",
+      Icon: Database,
+      items: [
+        "PostgreSQL 16 + pgvector",
+        "Row-Level Security",
+        "Server Functions (RPC)",
+        "FastAPI (Python)",
+      ],
+    },
+    {
+      cat: "AI & Intelligence",
+      Icon: Brain,
+      items: [
+        "Gemini 2.5 Flash (API lane)",
+        "Bhashini + Groq (fallback)",
+        "Web Speech (STT + TTS)",
+        "Multilingual EN / KN",
+      ],
+    },
+    {
+      cat: "Security & Auth",
+      Icon: Lock,
+      items: ["OIDC + JWT", "Role-based access", "Tamper-evident logs", "SHA-256 hashing"],
+    },
+    {
+      cat: "DevOps",
+      Icon: Wrench,
+      items: ["Bun runtime", "ESLint + Prettier", "CI build verification", "Zoho Catalyst deploy"],
+    },
   ];
 
   const [openStep, setOpenStep] = useState<string | null>("01");
@@ -149,7 +219,8 @@ function AboutPage() {
               Working Pipeline
             </h2>
             <p className="mt-2 max-w-xl text-sm text-foreground/70">
-              End-to-end flow from raw evidence to court-ready exhibit. Click any step to expand details.
+              End-to-end flow from raw evidence to court-ready exhibit. Click any step to expand
+              details.
             </p>
           </div>
           <div className="flex items-center gap-2 text-xs font-bold text-foreground/70">
@@ -244,9 +315,7 @@ function AboutPage() {
                   <span className="font-black opacity-70">{s.n}</span>
                   {s.t}
                 </button>
-                {i < pipeline.length - 1 && (
-                  <div className="h-0.5 w-6 bg-foreground/40" />
-                )}
+                {i < pipeline.length - 1 && <div className="h-0.5 w-6 bg-foreground/40" />}
               </div>
             ))}
           </div>
@@ -270,7 +339,10 @@ function AboutPage() {
         <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {stack.map((group, i) => {
             const Icon = group.Icon;
-            const tone = i % 2 === 0 ? "bg-primary text-primary-foreground" : "bg-accent text-accent-foreground";
+            const tone =
+              i % 2 === 0
+                ? "bg-primary text-primary-foreground"
+                : "bg-accent text-accent-foreground";
             return (
               <NB key={group.cat} className="p-5">
                 <div className="flex items-center gap-3">

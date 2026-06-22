@@ -1,5 +1,19 @@
 import { useEffect, useState } from "react";
-import { X, User, Bell, Lock, Monitor, Database, Check, Download, Trash2, AlertTriangle, Cpu, CloudCog, HardDrive } from "lucide-react";
+import {
+  X,
+  User,
+  Bell,
+  Lock,
+  Monitor,
+  Database,
+  Check,
+  Download,
+  Trash2,
+  AlertTriangle,
+  Cpu,
+  CloudCog,
+  HardDrive,
+} from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { api, type SessionUser } from "@/lib/api/client";
 
@@ -39,7 +53,9 @@ export function loadEngineSettings(): EngineSettings {
 }
 
 function saveEngineSettings(s: EngineSettings) {
-  try { localStorage.setItem(ENGINE_KEY, JSON.stringify(s)); } catch {}
+  try {
+    localStorage.setItem(ENGINE_KEY, JSON.stringify(s));
+  } catch {}
 }
 
 export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -50,7 +66,10 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
 
   useEffect(() => {
     if (open) {
-      api.me().then(setMe).catch(() => {});
+      api
+        .me()
+        .then(setMe)
+        .catch(() => {});
     }
   }, [open]);
 
@@ -132,7 +151,14 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
               <Section title={t("Profile")} subtitle={t("Your investigator details")}>
                 <div className="flex items-center gap-4">
                   <div className="grid h-16 w-16 place-items-center rounded-[5px] border-2 border-foreground bg-primary text-lg font-extrabold text-primary-foreground nb-shadow-sm">
-                    {me?.name ? me.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2) : "RK"}
+                    {me?.name
+                      ? me.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toUpperCase()
+                          .slice(0, 2)
+                      : "RK"}
                   </div>
                   <div>
                     <div className="text-base font-bold">{me?.name || "R. Kumar"}</div>
@@ -141,18 +167,39 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                     </div>
                   </div>
                 </div>
-                <Field key={me?.name} label={t("Full name")} defaultValue={me?.name || "R. Kumar"} />
-                <Field key={me?.id} label={t("Email")} defaultValue={me?.id ? `${me.id}@ksp.gov.in` : "r.kumar@ksp.gov.in"} />
-                <Field key={me?.id ? "badge" : "default"} label={t("Badge ID")} defaultValue={me?.id ? `KSP-${me.id.toUpperCase()}` : "KSP-08842"} />
-                <Field key={me?.district || me?.range_name} label={t("Station")} defaultValue={me?.district || me?.range_name || "Bengaluru PS"} />
+                <Field
+                  key={me?.name}
+                  label={t("Full name")}
+                  defaultValue={me?.name || "R. Kumar"}
+                />
+                <Field
+                  key={me?.id}
+                  label={t("Email")}
+                  defaultValue={me?.id ? `${me.id}@ksp.gov.in` : "r.kumar@ksp.gov.in"}
+                />
+                <Field
+                  key={me?.id ? "badge" : "default"}
+                  label={t("Badge ID")}
+                  defaultValue={me?.id ? `KSP-${me.id.toUpperCase()}` : "KSP-08842"}
+                />
+                <Field
+                  key={me?.district || me?.range_name}
+                  label={t("Station")}
+                  defaultValue={me?.district || me?.range_name || "Bengaluru PS"}
+                />
               </Section>
             )}
 
             {tab === "models" && (
-              <Section title={t("Models & Backend")} subtitle={t("Live-switch engines without redeploying")}>
+              <Section
+                title={t("Models & Backend")}
+                subtitle={t("Live-switch engines without redeploying")}
+              >
                 {/* Model backend toggles */}
                 <div className="space-y-2">
-                  <span className="block text-xs font-bold uppercase tracking-wide">{t("Model backend")}</span>
+                  <span className="block text-xs font-bold uppercase tracking-wide">
+                    {t("Model backend")}
+                  </span>
                   <div className="flex flex-col gap-2">
                     <ModelToggle
                       label={t("API model (cloud)")}
@@ -173,10 +220,12 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                 <div className="rounded-[5px] border-2 border-foreground bg-background p-3 space-y-2">
                   <div className="flex items-center gap-2">
                     <HardDrive className="h-3.5 w-3.5 text-success shrink-0" />
-                    <span className="text-xs font-bold uppercase tracking-wide">{t("Downloaded local models")}</span>
+                    <span className="text-xs font-bold uppercase tracking-wide">
+                      {t("Downloaded local models")}
+                    </span>
                   </div>
                   <div className="space-y-1.5">
-                    {([
+                    {[
                       {
                         name: "BGE-M3",
                         path: "models/bge-m3",
@@ -191,11 +240,16 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                         size: "2.12 GB · FP16",
                         always: true,
                       },
-                    ]).map((m) => (
-                      <div key={m.name} className="flex items-start justify-between gap-2 rounded-[3px] bg-muted/40 px-2.5 py-2">
+                    ].map((m) => (
+                      <div
+                        key={m.name}
+                        className="flex items-start justify-between gap-2 rounded-[3px] bg-muted/40 px-2.5 py-2"
+                      >
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <span className="text-[11px] font-bold font-mono text-foreground">{m.name}</span>
+                            <span className="text-[11px] font-bold font-mono text-foreground">
+                              {m.name}
+                            </span>
                             {m.always && (
                               <span className="rounded-[3px] bg-success/15 px-1 py-0.5 text-[9px] font-bold uppercase tracking-wide text-success">
                                 always on
@@ -203,14 +257,21 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                             )}
                           </div>
                           <div className="text-[10px] text-muted-foreground">{m.role}</div>
-                          <div className="text-[10px] font-mono text-muted-foreground/70">{m.size}</div>
+                          <div className="text-[10px] font-mono text-muted-foreground/70">
+                            {m.size}
+                          </div>
                         </div>
-                        <div className="h-2 w-2 mt-1 shrink-0 rounded-full bg-success" title="Downloaded" />
+                        <div
+                          className="h-2 w-2 mt-1 shrink-0 rounded-full bg-success"
+                          title="Downloaded"
+                        />
                       </div>
                     ))}
                   </div>
                   <p className="text-[10px] text-muted-foreground">
-                    {t("Both models run on the RTX 4070 (8 GB VRAM) and are always active — they are not switchable.")}
+                    {t(
+                      "Both models run on the RTX 4070 (8 GB VRAM) and are always active — they are not switchable.",
+                    )}
                   </p>
                 </div>
 
@@ -219,14 +280,18 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                   <div className="flex flex-col items-end gap-0.5">
                     <select
                       value={engines.brainEngine}
-                      onChange={(e) => updateEngine("brainEngine", e.target.value as EngineSettings["brainEngine"])}
+                      onChange={(e) =>
+                        updateEngine("brainEngine", e.target.value as EngineSettings["brainEngine"])
+                      }
                       className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
                     >
                       <option value="gemini">Gemini 2.5 Flash (cloud)</option>
                       <option value="groq">Groq llama-3.3-70b (cloud · fast)</option>
                       <option value="local">Local LLM (on-prem · GPU)</option>
                     </select>
-                    <span className="text-[10px] text-muted-foreground">chat · slots · routing</span>
+                    <span className="text-[10px] text-muted-foreground">
+                      chat · slots · routing
+                    </span>
                   </div>
                 </Row>
 
@@ -235,27 +300,47 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                   <div className="flex flex-col items-end gap-0.5">
                     <select
                       value={engines.sqlEngine}
-                      onChange={(e) => updateEngine("sqlEngine", e.target.value as EngineSettings["sqlEngine"])}
+                      onChange={(e) =>
+                        updateEngine("sqlEngine", e.target.value as EngineSettings["sqlEngine"])
+                      }
                       className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
                     >
                       <option value="gemini">Gemini 2.5 Flash (cloud)</option>
                       <option value="qwen3-coder-next">qwen3-coder-next (Ollama Cloud)</option>
                       <option value="local">Local LLM (on-prem · GPU)</option>
                     </select>
-                    <span className="text-[10px] text-muted-foreground">sqlglot guard applies to all</span>
+                    <span className="text-[10px] text-muted-foreground">
+                      sqlglot guard applies to all
+                    </span>
                   </div>
                 </Row>
 
                 {/* Voice provider — three-way picker */}
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-foreground">{t("Voice (Text-to-Speech)")}</label>
-                  <p className="text-xs text-muted-foreground">{t("Which engine speaks replies aloud.")}</p>
+                  <label className="text-sm font-bold text-foreground">
+                    {t("Voice (Text-to-Speech)")}
+                  </label>
+                  <p className="text-xs text-muted-foreground">
+                    {t("Which engine speaks replies aloud.")}
+                  </p>
                   <div className="grid grid-cols-3 gap-2">
-                    {([
-                      { id: "sarvam" as const, label: "Sarvam API", hint: t("Best Kannada (default)") },
-                      { id: "google" as const, label: "Google API", hint: t("Cloud Neural voices") },
-                      { id: "webspeech" as const, label: "Web Speech API", hint: t("Browser, offline") },
-                    ]).map((opt) => (
+                    {[
+                      {
+                        id: "sarvam" as const,
+                        label: "Sarvam API",
+                        hint: t("Best Kannada (default)"),
+                      },
+                      {
+                        id: "google" as const,
+                        label: "Google API",
+                        hint: t("Cloud Neural voices"),
+                      },
+                      {
+                        id: "webspeech" as const,
+                        label: "Web Speech API",
+                        hint: t("Browser, offline"),
+                      },
+                    ].map((opt) => (
                       <button
                         key={opt.id}
                         type="button"
@@ -271,7 +356,9 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                           {engines.voiceBackend === opt.id && <Check className="h-3 w-3" />}
                           {opt.label}
                         </span>
-                        <span className="mt-0.5 block font-normal text-[10px] opacity-70">{opt.hint}</span>
+                        <span className="mt-0.5 block font-normal text-[10px] opacity-70">
+                          {opt.hint}
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -279,13 +366,27 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
 
                 {/* Copilot mic — Speech-to-Text engine (independent of the chat voice/mic) */}
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-foreground">{t("Voice copilot mic (Speech-to-Text)")}</label>
-                  <p className="text-xs text-muted-foreground">{t("Engine for the top-right voice copilot only. Does not affect the chat box mic or the chat voice.")}</p>
+                  <label className="text-sm font-bold text-foreground">
+                    {t("Voice copilot mic (Speech-to-Text)")}
+                  </label>
+                  <p className="text-xs text-muted-foreground">
+                    {t(
+                      "Engine for the top-right voice copilot only. Does not affect the chat box mic or the chat voice.",
+                    )}
+                  </p>
                   <div className="grid grid-cols-2 gap-2">
-                    {([
-                      { id: "browser" as const, label: t("Browser"), hint: t("Lowest latency · live captions") },
-                      { id: "sarvam" as const, label: "Sarvam API", hint: t("Best Kannada accuracy") },
-                    ]).map((opt) => (
+                    {[
+                      {
+                        id: "browser" as const,
+                        label: t("Browser"),
+                        hint: t("Lowest latency · live captions"),
+                      },
+                      {
+                        id: "sarvam" as const,
+                        label: "Sarvam API",
+                        hint: t("Best Kannada accuracy"),
+                      },
+                    ].map((opt) => (
                       <button
                         key={opt.id}
                         type="button"
@@ -301,7 +402,9 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                           {engines.copilotStt === opt.id && <Check className="h-3 w-3" />}
                           {opt.label}
                         </span>
-                        <span className="mt-0.5 block font-normal text-[10px] opacity-70">{opt.hint}</span>
+                        <span className="mt-0.5 block font-normal text-[10px] opacity-70">
+                          {opt.hint}
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -309,19 +412,25 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
 
                 {/* Database source */}
                 <div className="space-y-2">
-                  <span className="block text-xs font-bold uppercase tracking-wide">Database source</span>
+                  <span className="block text-xs font-bold uppercase tracking-wide">
+                    Database source
+                  </span>
                   <DbSourceRow
                     value={engines.dbSource}
                     onChange={(v) => {
                       updateEngine("dbSource", v);
                       // Notify backend so the active connection switches immediately
-                      api.setDbSource(v).catch(() => {/* backend may be down — setting persists for next request */});
+                      api.setDbSource(v).catch(() => {
+                        /* backend may be down — setting persists for next request */
+                      });
                     }}
                   />
                 </div>
 
                 <div className="rounded-[5px] border-2 border-foreground bg-background p-3 text-[11px] font-bold text-muted-foreground">
-                  {t("Changes apply to new requests in this session. Reload to reset to server defaults.")}
+                  {t(
+                    "Changes apply to new requests in this session. Reload to reset to server defaults.",
+                  )}
                 </div>
               </Section>
             )}
@@ -330,7 +439,9 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
               <Section title={t("Preferences")} subtitle={t("Workspace appearance & language")}>
                 <Row label={t("Language")}>
                   <div className="flex gap-2">
-                    <Pill active={lang === "EN"} onClick={() => setLang("EN")}>EN</Pill>
+                    <Pill active={lang === "EN"} onClick={() => setLang("EN")}>
+                      EN
+                    </Pill>
                     <Pill active={lang === "KN"} onClick={() => setLang("KN")}>
                       <span className="font-kn">ಕನ್ನಡ</span>
                     </Pill>
@@ -400,7 +511,15 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
   );
 }
 
-function Section({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
+function Section({
+  title,
+  subtitle,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="space-y-4">
       <div>
@@ -413,8 +532,16 @@ function Section({ title, subtitle, children }: { title: string; subtitle?: stri
 }
 
 function Field({
-  label, defaultValue, type = "text", placeholder,
-}: { label: string; defaultValue?: string; type?: string; placeholder?: string }) {
+  label,
+  defaultValue,
+  type = "text",
+  placeholder,
+}: {
+  label: string;
+  defaultValue?: string;
+  type?: string;
+  placeholder?: string;
+}) {
   return (
     <label className="block">
       <span className="mb-1 block text-xs font-bold uppercase tracking-wide">{label}</span>
@@ -440,17 +567,29 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 function Select({ options }: { options: string[] }) {
   return (
     <select className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-sm font-bold">
-      {options.map((o) => <option key={o}>{o}</option>)}
+      {options.map((o) => (
+        <option key={o}>{o}</option>
+      ))}
     </select>
   );
 }
 
-function Pill({ active, onClick, children }: { active?: boolean; onClick?: () => void; children: React.ReactNode }) {
+function Pill({
+  active,
+  onClick,
+  children,
+}: {
+  active?: boolean;
+  onClick?: () => void;
+  children: React.ReactNode;
+}) {
   return (
     <button
       onClick={onClick}
       className={`rounded-[5px] border-2 border-foreground px-3 py-1 text-xs font-extrabold transition ${
-        active ? "bg-primary text-primary-foreground nb-shadow-sm" : "bg-secondary-background text-foreground/60"
+        active
+          ? "bg-primary text-primary-foreground nb-shadow-sm"
+          : "bg-secondary-background text-foreground/60"
       }`}
     >
       {children}
@@ -479,7 +618,11 @@ function Toggle({ label, defaultOn }: { label: string; defaultOn?: boolean }) {
 const DELETION_KEY = "satyam.account.deletionScheduledAt";
 const GRACE_MS = 7 * 24 * 60 * 60 * 1000;
 
-type Status = { kind: "idle" } | { kind: "exporting" } | { kind: "exported"; file: string } | { kind: "deleting" };
+type Status =
+  | { kind: "idle" }
+  | { kind: "exporting" }
+  | { kind: "exported"; file: string }
+  | { kind: "deleting" };
 
 function DbSourceRow({
   value,
@@ -488,20 +631,21 @@ function DbSourceRow({
   value: "cloud" | "local";
   onChange: (v: "cloud" | "local") => void;
 }) {
-  const options: { val: "cloud" | "local"; label: string; sub: string; icon: React.ElementType }[] = [
-    {
-      val: "cloud",
-      label: "Neon cloud (PostgreSQL 16)",
-      sub: "Deployed link · judges · authentication",
-      icon: CloudCog,
-    },
-    {
-      val: "local",
-      label: "Local PostgreSQL 17",
-      sub: "Full 100k dataset · GPU embeddings · on-prem demo",
-      icon: HardDrive,
-    },
-  ];
+  const options: { val: "cloud" | "local"; label: string; sub: string; icon: React.ElementType }[] =
+    [
+      {
+        val: "cloud",
+        label: "Neon cloud (PostgreSQL 16)",
+        sub: "Deployed link · judges · authentication",
+        icon: CloudCog,
+      },
+      {
+        val: "local",
+        label: "Local PostgreSQL 17",
+        sub: "Full 100k dataset · GPU embeddings · on-prem demo",
+        icon: HardDrive,
+      },
+    ];
   return (
     <div className="flex flex-col gap-2">
       {options.map(({ val, label, sub, icon: Icon }) => {
@@ -519,7 +663,9 @@ function DbSourceRow({
           >
             <div
               className={`grid h-8 w-8 shrink-0 place-items-center rounded-[5px] border-2 border-foreground ${
-                active ? "bg-primary text-primary-foreground" : "bg-secondary-background text-foreground/60"
+                active
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary-background text-foreground/60"
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -614,7 +760,9 @@ function DataActions({ t }: { t: (s: string) => string }) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     const file = `satyam-data-${Date.now()}.json`;
-    a.href = url; a.download = file; a.click();
+    a.href = url;
+    a.download = file;
+    a.click();
     URL.revokeObjectURL(url);
     setConfirm(null);
     setStatus({ kind: "exported", file });
@@ -642,14 +790,21 @@ function DataActions({ t }: { t: (s: string) => string }) {
   return (
     <>
       <button
-        onClick={() => { setStatus({ kind: "idle" }); setConfirm("export"); }}
+        onClick={() => {
+          setStatus({ kind: "idle" });
+          setConfirm("export");
+        }}
         className="flex w-full items-center justify-center gap-2 rounded-[5px] border-2 border-foreground bg-secondary-background px-4 py-2 text-sm font-bold nb-shadow-sm transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
       >
         <Download className="h-4 w-4" /> {t("Export my account data")}
       </button>
       <button
         disabled={scheduledAt !== null}
-        onClick={() => { setStatus({ kind: "idle" }); setTyped(""); setConfirm("delete"); }}
+        onClick={() => {
+          setStatus({ kind: "idle" });
+          setTyped("");
+          setConfirm("delete");
+        }}
         className="flex w-full items-center justify-center gap-2 rounded-[5px] border-2 border-foreground bg-destructive px-4 py-2 text-sm font-bold text-destructive-foreground nb-shadow-sm transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none disabled:cursor-not-allowed disabled:opacity-50"
       >
         <Trash2 className="h-4 w-4" /> {t("Delete my account data")}
@@ -686,7 +841,6 @@ function DataActions({ t }: { t: (s: string) => string }) {
         </div>
       )}
 
-
       {confirm && (
         <div
           className="fixed inset-0 z-[1100] grid place-items-center bg-foreground/50 p-4 backdrop-blur-sm"
@@ -697,21 +851,33 @@ function DataActions({ t }: { t: (s: string) => string }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-2 border-b-2 border-foreground bg-header px-4 py-3 text-header-foreground">
-              {confirm === "delete" ? <AlertTriangle className="h-4 w-4" /> : <Download className="h-4 w-4" />}
+              {confirm === "delete" ? (
+                <AlertTriangle className="h-4 w-4" />
+              ) : (
+                <Download className="h-4 w-4" />
+              )}
               <h3 className="text-sm font-extrabold uppercase tracking-wide">
                 {confirm === "export" ? t("Confirm data export") : t("Confirm account deletion")}
               </h3>
             </div>
             <div className="space-y-3 p-4 text-sm">
               {confirm === "export" ? (
-                <p>{t("A JSON file containing your profile, preferences, and activity log will be downloaded to this device. Continue?")}</p>
+                <p>
+                  {t(
+                    "A JSON file containing your profile, preferences, and activity log will be downloaded to this device. Continue?",
+                  )}
+                </p>
               ) : (
                 <>
                   <div className="rounded-[5px] border-2 border-foreground bg-destructive/15 p-3 text-xs font-bold">
-                    {t("Your account enters a 7-day grace period. After 7 days it is permanently removed along with cases assigned only to you and your activity logs. You can cancel anytime during the grace period.")}
+                    {t(
+                      "Your account enters a 7-day grace period. After 7 days it is permanently removed along with cases assigned only to you and your activity logs. You can cancel anytime during the grace period.",
+                    )}
                   </div>
                   <label className="block">
-                    <span className="mb-1 block text-xs font-bold uppercase tracking-wide">{t("Type DELETE to confirm")}</span>
+                    <span className="mb-1 block text-xs font-bold uppercase tracking-wide">
+                      {t("Type DELETE to confirm")}
+                    </span>
                     <input
                       autoFocus
                       value={typed}
@@ -735,7 +901,8 @@ function DataActions({ t }: { t: (s: string) => string }) {
                   disabled={status.kind === "exporting"}
                   className="flex items-center gap-1.5 rounded-[5px] border-2 border-foreground bg-primary px-3 py-2 text-xs font-extrabold text-primary-foreground nb-shadow transition hover:translate-x-[2px] hover:translate-y-[2px] hover:nb-shadow-sm disabled:opacity-60"
                 >
-                  <Download className="h-4 w-4" /> {status.kind === "exporting" ? t("Preparing…") : t("Download export")}
+                  <Download className="h-4 w-4" />{" "}
+                  {status.kind === "exporting" ? t("Preparing…") : t("Download export")}
                 </button>
               ) : (
                 <button
@@ -743,7 +910,8 @@ function DataActions({ t }: { t: (s: string) => string }) {
                   disabled={typed !== "DELETE" || status.kind === "deleting"}
                   className="flex items-center gap-1.5 rounded-[5px] border-2 border-foreground bg-destructive px-3 py-2 text-xs font-extrabold text-destructive-foreground nb-shadow transition hover:translate-x-[2px] hover:translate-y-[2px] hover:nb-shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <Trash2 className="h-4 w-4" /> {status.kind === "deleting" ? t("Scheduling…") : t("Schedule deletion (7 days)")}
+                  <Trash2 className="h-4 w-4" />{" "}
+                  {status.kind === "deleting" ? t("Scheduling…") : t("Schedule deletion (7 days)")}
                 </button>
               )}
             </div>
@@ -753,4 +921,3 @@ function DataActions({ t }: { t: (s: string) => string }) {
     </>
   );
 }
-

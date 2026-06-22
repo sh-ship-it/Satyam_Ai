@@ -26,7 +26,14 @@ async def apply_rls_context(
     clearance: int,
     officer_id: int | None = None,
 ) -> None:
-    """Stamp the current transaction with the caller's jurisdiction context."""
+    """Stamp the current transaction with the caller's jurisdiction context.
+
+    NOTE on officer_id: it is currently stamped into `app.officer_id` for
+    completeness but is NOT referenced by any RLS policy (`fn_scope_ok` keys off
+    scope/range/district/station only). At login it carries `users.user_id`. If a
+    future policy compares it against `officers.officer_id`, pass the real
+    officer PK here instead of the user id to avoid a scope mismatch.
+    """
     await session.execute(
         text(
             "SELECT"

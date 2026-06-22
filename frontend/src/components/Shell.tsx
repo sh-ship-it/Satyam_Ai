@@ -54,7 +54,8 @@ const SCREEN_ROUTES: VoiceScreen[] = [
 ];
 const NAV_VERB = /(open|show|go to|goto|navigate|take me to|switch to|jump to)|ತೆರೆ|ಹೋಗು|ತೋರಿಸಿ/i;
 // Person-crime question: "what crime did X commit" / "crime rate of X" / Kannada equivalents.
-const PERSON_CRIME_INTENT = /(crime rate|what crime|which crime|crimes?|offences?|offenses?|record of|history of)|ಅಪರಾಧ|ಕ್ರಿಮಿನಲ್|ಅಪರಾಧಗಳು/i;
+const PERSON_CRIME_INTENT =
+  /(crime rate|what crime|which crime|crimes?|offences?|offenses?|record of|history of)|ಅಪರಾಧ|ಕ್ರಿಮಿನಲ್|ಅಪರಾಧಗಳು/i;
 // Follow-up affirmatives + the two suggested actions.
 const AFFIRM = /\b(yes|yeah|yep|sure|ok|okay|please do|go ahead|details)\b|ಹೌದು|ಸರಿ|ವಿವರ|ಮಾಡಿ/i;
 const MAP_ACTION = /(map|location|place|where|pin|on the map)|ನಕ್ಷೆ|ಸ್ಥಳ|ಎಲ್ಲಿ/i;
@@ -139,7 +140,9 @@ export function Shell({ children }: { children: ReactNode }) {
     return "auto"; // default to auto-detect
   };
   const [voiceLang, setVoiceLang] = useState<string>(() => {
-    try { return coerceVoiceLang(localStorage.getItem("satyam-voice-lang")); } catch {}
+    try {
+      return coerceVoiceLang(localStorage.getItem("satyam-voice-lang"));
+    } catch {}
     return "auto";
   });
   const [speechRate, setSpeechRate] = useState(() => {
@@ -164,22 +167,36 @@ export function Shell({ children }: { children: ReactNode }) {
   const listeningRef = useRef(false);
   const voiceLangRef = useRef(voiceLang);
   const speechRateRef = useRef(speechRate);
-  const liveFinalRef = useRef("");      // finalized speech this turn
-  const liveInterimRef = useRef("");    // latest interim words
+  const liveFinalRef = useRef(""); // finalized speech this turn
+  const liveInterimRef = useRef(""); // latest interim words
   const turnSubmittedRef = useRef(false);
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const thinkWatchdogRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => { conversationModeRef.current = conversationMode; }, [conversationMode]);
-  useEffect(() => { listeningRef.current = listening; }, [listening]);
-  useEffect(() => { voiceLangRef.current = voiceLang; }, [voiceLang]);
-  useEffect(() => { speechRateRef.current = speechRate; }, [speechRate]);
+  useEffect(() => {
+    conversationModeRef.current = conversationMode;
+  }, [conversationMode]);
+  useEffect(() => {
+    listeningRef.current = listening;
+  }, [listening]);
+  useEffect(() => {
+    voiceLangRef.current = voiceLang;
+  }, [voiceLang]);
+  useEffect(() => {
+    speechRateRef.current = speechRate;
+  }, [speechRate]);
 
   const clearSilenceTimer = useCallback(() => {
-    if (silenceTimerRef.current) { clearTimeout(silenceTimerRef.current); silenceTimerRef.current = null; }
+    if (silenceTimerRef.current) {
+      clearTimeout(silenceTimerRef.current);
+      silenceTimerRef.current = null;
+    }
   }, []);
   const clearThinkWatchdog = useCallback(() => {
-    if (thinkWatchdogRef.current) { clearTimeout(thinkWatchdogRef.current); thinkWatchdogRef.current = null; }
+    if (thinkWatchdogRef.current) {
+      clearTimeout(thinkWatchdogRef.current);
+      thinkWatchdogRef.current = null;
+    }
   }, []);
 
   // Re-open the mic for the user's next turn. Idempotent and self-gating.
@@ -256,7 +273,10 @@ export function Shell({ children }: { children: ReactNode }) {
       const speechLang = resolved === "kn" ? "kn-IN" : "en-IN";
       const rate = detail.rate ?? speechRate;
       const closePanel = () => {
-        if (conversationModeRef.current) { setMicActive(false); return; }
+        if (conversationModeRef.current) {
+          setMicActive(false);
+          return;
+        }
         setListening(false);
         setMicActive(false);
       };
@@ -277,13 +297,20 @@ export function Shell({ children }: { children: ReactNode }) {
         const finish = () => {
           let answer = acc.trim();
           if (streamError)
-            answer = t("I couldn't reach the backend just now. Please retry once the API is running.");
+            answer = t(
+              "I couldn't reach the backend just now. Please retry once the API is running.",
+            );
           else if (!answer)
-            answer = t("No results matched your query. Try a broader question or different filters.");
+            answer = t(
+              "No results matched your query. Try a broader question or different filters.",
+            );
           // For a person-crime turn we append the spoken follow-up offer so it is
           // one continuous utterance (no mid-answer mic re-arm race).
           const toSpeak = followUp && !streamError ? `${answer}. ${followUp}` : answer;
-          if (detail.speak === false) { aiState("done"); return; }
+          if (detail.speak === false) {
+            aiState("done");
+            return;
+          }
           const spokenLang: "en" | "kn" = resolveLang(speechLang, toSpeak);
           void speakViaSarvam(stripMarkdown(toSpeak), spokenLang, rate, {
             onStart: () => aiState("speaking"),
@@ -302,13 +329,18 @@ export function Shell({ children }: { children: ReactNode }) {
           (ev: ChatEvent) => {
             if (ev.type === "token") acc += ev.text;
             else if (ev.type === "blocked")
-              acc = t("Your role can't view named accused records. Showing aggregate counts instead.");
+              acc = t(
+                "Your role can't view named accused records. Showing aggregate counts instead.",
+              );
             else if (ev.type === "done") copilotConvId.current = ev.conversation_id;
             else if (ev.type === "error") streamError = true;
           },
         )
           .then(finish)
-          .catch(() => { streamError = true; finish(); });
+          .catch(() => {
+            streamError = true;
+            finish();
+          });
       };
 
       // 0) Pure language switch ("speak in Kannada").
@@ -340,7 +372,14 @@ export function Shell({ children }: { children: ReactNode }) {
         navigate({ to: cmd.route });
         window.dispatchEvent(
           new CustomEvent("satyam:run-task", {
-            detail: { route: cmd.route, query: cmd.query, task: cmd.task, lang: resolved, rate, speak: !!detail.speak },
+            detail: {
+              route: cmd.route,
+              query: cmd.query,
+              task: cmd.task,
+              lang: resolved,
+              rate,
+              speak: !!detail.speak,
+            },
           }),
         );
         closePanel();
@@ -348,17 +387,45 @@ export function Shell({ children }: { children: ReactNode }) {
         return;
       }
       // 2.5) Follow-up actions after a person-crime answer ("yes / on the map / in the network").
-      if (lastPersonRef.current && (AFFIRM.test(cmd.query) || MAP_ACTION.test(cmd.query) || NETWORK_ACTION.test(cmd.query))) {
+      if (
+        lastPersonRef.current &&
+        (AFFIRM.test(cmd.query) || MAP_ACTION.test(cmd.query) || NETWORK_ACTION.test(cmd.query))
+      ) {
         const who = lastPersonRef.current;
         if (MAP_ACTION.test(cmd.query)) {
           navigate({ to: "/console" });
           window.dispatchEvent(new CustomEvent("satyam:map-focus", { detail: { person: who } }));
-          if (detail.speak) speakText(resolved === "kn" ? `${who} ಅವರ ಅಪರಾಧ ಸ್ಥಳವನ್ನು ನಕ್ಷೆಯಲ್ಲಿ ತೋರಿಸಲಾಗುತ್ತಿದೆ` : `Showing ${who}'s crime location on the map`, speechLang, rate);
+          if (detail.speak)
+            speakText(
+              resolved === "kn"
+                ? `${who} ಅವರ ಅಪರಾಧ ಸ್ಥಳವನ್ನು ನಕ್ಷೆಯಲ್ಲಿ ತೋರಿಸಲಾಗುತ್ತಿದೆ`
+                : `Showing ${who}'s crime location on the map`,
+              speechLang,
+              rate,
+            );
         } else {
           // default / "network" / bare "yes" -> open the Network graph for this person
           navigate({ to: "/network" });
-          window.dispatchEvent(new CustomEvent("satyam:run-task", { detail: { route: "/network", query: who, task: who, lang: resolved, rate, speak: !!detail.speak } }));
-          if (detail.speak) speakText(resolved === "kn" ? `${who} ಅವರ ನೆಟ್‌ವರ್ಕ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ` : `Opening ${who}'s network`, speechLang, rate);
+          window.dispatchEvent(
+            new CustomEvent("satyam:run-task", {
+              detail: {
+                route: "/network",
+                query: who,
+                task: who,
+                lang: resolved,
+                rate,
+                speak: !!detail.speak,
+              },
+            }),
+          );
+          if (detail.speak)
+            speakText(
+              resolved === "kn"
+                ? `${who} ಅವರ ನೆಟ್‌ವರ್ಕ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ`
+                : `Opening ${who}'s network`,
+              speechLang,
+              rate,
+            );
         }
         lastPersonRef.current = "";
         if (conversationModeRef.current) setTimeout(() => resumeListening(), 700);
@@ -372,8 +439,12 @@ export function Shell({ children }: { children: ReactNode }) {
         // Best-effort name extraction: strip the intent words and common fillers.
         const who = cmd.query
           .replace(PERSON_CRIME_INTENT, " ")
-          .replace(/\b(did|does|do|commit|committed|of|the|by|for|show|me|what|which|is|are|his|her|their|tell)\b/gi, " ")
-          .replace(/\s+/g, " ").trim();
+          .replace(
+            /\b(did|does|do|commit|committed|of|the|by|for|show|me|what|which|is|are|his|her|their|tell)\b/gi,
+            " ",
+          )
+          .replace(/\s+/g, " ")
+          .trim();
         if (who) lastPersonRef.current = who;
         const followUp =
           resolved === "kn"
@@ -396,11 +467,15 @@ export function Shell({ children }: { children: ReactNode }) {
   }, [pathname, lang, voiceLang, speechRate, navigate, setLang, t, resumeListening]);
 
   useEffect(() => {
-    try { localStorage.setItem("satyam-voice-lang", voiceLang); } catch {}
+    try {
+      localStorage.setItem("satyam-voice-lang", voiceLang);
+    } catch {}
   }, [voiceLang]);
 
   useEffect(() => {
-    try { localStorage.setItem("satyam-voice-rate", String(speechRate)); } catch {}
+    try {
+      localStorage.setItem("satyam-voice-rate", String(speechRate));
+    } catch {}
   }, [speechRate]);
 
   useEffect(() => {
@@ -417,8 +492,12 @@ export function Shell({ children }: { children: ReactNode }) {
     phaseRef.current = "listening";
 
     // Secure-context guard (shared): mic is blocked on plain http://<LAN-IP>.
-    if (typeof window !== "undefined" && !window.isSecureContext &&
-        location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
+    if (
+      typeof window !== "undefined" &&
+      !window.isSecureContext &&
+      location.hostname !== "localhost" &&
+      location.hostname !== "127.0.0.1"
+    ) {
       setSpeechError("Microphone needs https or localhost. Open the app at http://localhost:3000.");
       return;
     }
@@ -439,9 +518,11 @@ export function Shell({ children }: { children: ReactNode }) {
       setMicActive(false);
       const turnLang = voiceLangRef.current; // "auto" | "kn-IN" | "en-IN"
       console.debug("[voice] dispatchTurn", { engine: sttEngine, text, turnLang });
-      window.dispatchEvent(new CustomEvent("satyam:voice-command", {
-        detail: { text, lang: turnLang, rate: speechRateRef.current, speak: true },
-      }));
+      window.dispatchEvent(
+        new CustomEvent("satyam:voice-command", {
+          detail: { text, lang: turnLang, rate: speechRateRef.current, speak: true },
+        }),
+      );
     };
 
     // === OPTION A - BROWSER (Web Speech API) =================================
@@ -450,9 +531,12 @@ export function Shell({ children }: { children: ReactNode }) {
     if (sttEngine === "browser") {
       const SR: any =
         (typeof window !== "undefined" &&
-          ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) || null;
+          ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) ||
+        null;
       if (!SR) {
-        setSpeechError("This browser has no speech recognition. Use Chrome/Edge, or switch the copilot mic to Sarvam in Settings.");
+        setSpeechError(
+          "This browser has no speech recognition. Use Chrome/Edge, or switch the copilot mic to Sarvam in Settings.",
+        );
         return;
       }
       console.debug("[voice] SpeechRecognition start", { voiceLang, uiLang: lang });
@@ -463,8 +547,10 @@ export function Shell({ children }: { children: ReactNode }) {
       // Concrete language hint; "auto" falls back to the UI language.
       rec.lang =
         voiceLang === "auto"
-          ? (lang === "KN" ? "kn-IN" : "en-IN")
-          : (coerceVoiceLang(voiceLang) || "en-IN");
+          ? lang === "KN"
+            ? "kn-IN"
+            : "en-IN"
+          : coerceVoiceLang(voiceLang) || "en-IN";
 
       const armSilence = () => {
         if (turnSubmittedRef.current) return;
@@ -476,11 +562,19 @@ export function Shell({ children }: { children: ReactNode }) {
         }, 1500);
       };
 
-      rec.onstart = () => { setSpeechError(null); setCaptureStatus(null); };
-      rec.onaudiostart = () => { setCaptureStatus(null); };
-      rec.onspeechstart = () => { setInterimTranscript("\u2026"); };
+      rec.onstart = () => {
+        setSpeechError(null);
+        setCaptureStatus(null);
+      };
+      rec.onaudiostart = () => {
+        setCaptureStatus(null);
+      };
+      rec.onspeechstart = () => {
+        setInterimTranscript("\u2026");
+      };
       rec.onresult = (e: any) => {
-        let interim = "", finals = "";
+        let interim = "",
+          finals = "";
         for (let i = e.resultIndex; i < e.results.length; i++) {
           const r = e.results[i];
           if (r.isFinal) finals += r[0].transcript;
@@ -516,7 +610,11 @@ export function Shell({ children }: { children: ReactNode }) {
         if (turnSubmittedRef.current) return;
         setTimeout(() => {
           if (recognitionRef.current !== rec || turnSubmittedRef.current) return;
-          try { rec.start(); } catch { /* effect re-creates on next render */ }
+          try {
+            rec.start();
+          } catch {
+            /* effect re-creates on next render */
+          }
         }, 200);
       };
 
@@ -525,11 +623,20 @@ export function Shell({ children }: { children: ReactNode }) {
         stop: () => {
           const text = `${liveFinalRef.current} ${liveInterimRef.current}`.trim();
           if (text && !turnSubmittedRef.current) dispatchTurn(text);
-          try { rec.stop(); } catch { /* noop */ }
+          try {
+            rec.stop();
+          } catch {
+            /* noop */
+          }
         },
         cancel: () => {
           recognitionRef.current = null;
-          try { rec.onend = null; rec.stop(); } catch { /* noop */ }
+          try {
+            rec.onend = null;
+            rec.stop();
+          } catch {
+            /* noop */
+          }
         },
       };
 
@@ -544,7 +651,12 @@ export function Shell({ children }: { children: ReactNode }) {
       return () => {
         recognitionRef.current = null;
         clearSilenceTimer();
-        try { rec.onend = null; rec.stop(); } catch { /* noop */ }
+        try {
+          rec.onend = null;
+          rec.stop();
+        } catch {
+          /* noop */
+        }
         sttSessionRef.current = null;
       };
     }
@@ -566,10 +678,12 @@ export function Shell({ children }: { children: ReactNode }) {
     unlockAudioPlayback();
     void startSttSession({
       lang: sttLang,
-      silenceMs: 1500,   // auto-end the utterance ~1.5s after speech stops
+      silenceMs: 1500, // auto-end the utterance ~1.5s after speech stops
       maxMs: 15000,
       callbacks: {
-        onStatus: (s: string) => { if (!cancelled) setCaptureStatus(s); },
+        onStatus: (s: string) => {
+          if (!cancelled) setCaptureStatus(s);
+        },
         onSpeechStart: () => {
           if (cancelled) return;
           setInterimTranscript("\u2026");
@@ -589,16 +703,37 @@ export function Shell({ children }: { children: ReactNode }) {
             setCaptureStatus("Didn't catch that \u2014 tap the mic to try again.");
           }
         },
-        onError: (msg: string) => { if (!cancelled) setSpeechError(msg); },
+        onError: (msg: string) => {
+          if (!cancelled) setSpeechError(msg);
+        },
       },
     })
       .then((s) => {
-        if (cancelled) { try { s.cancel(); } catch { /* noop */ } return; }
+        if (cancelled) {
+          try {
+            s.cancel();
+          } catch {
+            /* noop */
+          }
+          return;
+        }
         session = s;
         recognitionRef.current = s; // keep the ref live for cleanup / orb-tap stop
         sttSessionRef.current = {
-          stop: () => { try { s.stop(); } catch { /* noop */ } },
-          cancel: () => { try { s.cancel(); } catch { /* noop */ } },
+          stop: () => {
+            try {
+              s.stop();
+            } catch {
+              /* noop */
+            }
+          },
+          cancel: () => {
+            try {
+              s.cancel();
+            } catch {
+              /* noop */
+            }
+          },
         };
       })
       .catch(() => {
@@ -609,7 +744,11 @@ export function Shell({ children }: { children: ReactNode }) {
       cancelled = true;
       recognitionRef.current = null;
       clearSilenceTimer();
-      try { session?.cancel(); } catch { /* noop */ }
+      try {
+        session?.cancel();
+      } catch {
+        /* noop */
+      }
       sttSessionRef.current = null;
     };
   }, [listening, micActive, lang, voiceLang, clearSilenceTimer]);
@@ -674,8 +813,6 @@ export function Shell({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-
-
       {/* Top bar */}
       <header className="flex h-14 items-center justify-between border-b-2 border-foreground bg-header px-5 text-header-foreground">
         <div className="flex items-center gap-3">
@@ -686,7 +823,6 @@ export function Shell({ children }: { children: ReactNode }) {
           <span className="mx-1 h-6 w-px bg-header-foreground/20" />
           <ProfileMenu onOpenSettings={() => setSettingsOpen(true)} />
         </div>
-
 
         <div className="flex items-center gap-1.5">
           <ThemePicker />
@@ -702,7 +838,17 @@ export function Shell({ children }: { children: ReactNode }) {
               ಕನ್ನಡ
             </span>
           </button>
-          <button onClick={() => { unlockAudioPlayback(); setListening(true); setMicActive(true); setIsSpeaking(false); setIsPaused(false); }} className="rounded-[5px] border-2 border-header-foreground bg-secondary-background p-2 text-foreground hover:translate-x-[2px] hover:translate-y-[2px] transition" aria-label={t("Voice")}>
+          <button
+            onClick={() => {
+              unlockAudioPlayback();
+              setListening(true);
+              setMicActive(true);
+              setIsSpeaking(false);
+              setIsPaused(false);
+            }}
+            className="rounded-[5px] border-2 border-header-foreground bg-secondary-background p-2 text-foreground hover:translate-x-[2px] hover:translate-y-[2px] transition"
+            aria-label={t("Voice")}
+          >
             <Mic className="h-4 w-4" />
           </button>
           <button
@@ -740,7 +886,9 @@ export function Shell({ children }: { children: ReactNode }) {
             {/* Header bar */}
             <div className="flex items-center justify-between border-b-2 border-foreground bg-header px-5 py-3 text-header-foreground">
               <div className="flex items-center gap-2">
-                <div className={`h-2 w-2 rounded-full ${isSpeaking ? "bg-success animate-pulse" : speechError ? "bg-destructive" : interimTranscript ? "bg-success animate-ping" : "bg-primary animate-ping"}`} />
+                <div
+                  className={`h-2 w-2 rounded-full ${isSpeaking ? "bg-success animate-pulse" : speechError ? "bg-destructive" : interimTranscript ? "bg-success animate-ping" : "bg-primary animate-ping"}`}
+                />
                 <span className="text-xs font-extrabold uppercase tracking-wider">
                   {isSpeaking
                     ? t("Speaking…")
@@ -768,7 +916,16 @@ export function Shell({ children }: { children: ReactNode }) {
                 className={`relative grid h-24 w-24 place-items-center ${!isSpeaking ? "cursor-pointer" : ""}`}
                 role="button"
                 title={t("Tap to stop & send")}
-                onClick={() => { if (!isSpeaking) { setCaptureStatus("Finishing\u2026"); try { sttSessionRef.current?.stop(); } catch { /* noop */ } } }}
+                onClick={() => {
+                  if (!isSpeaking) {
+                    setCaptureStatus("Finishing\u2026");
+                    try {
+                      sttSessionRef.current?.stop();
+                    } catch {
+                      /* noop */
+                    }
+                  }
+                }}
               >
                 {!isSpeaking ? (
                   <>
@@ -790,16 +947,39 @@ export function Shell({ children }: { children: ReactNode }) {
 
               {/* Waveform bars */}
               <div className="flex items-end gap-[3px] h-6">
-                {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15].map((i) => (
-                  <div key={i} className="w-[3px] rounded-full bg-primary transition-all"
-                    style={{ height: !isSpeaking && !captureStatus?.includes("Transcrib") ? `${10 + Math.round(Math.sin(i * 0.8) * 8 + Math.cos(i * 1.2) * 6)}px` : "4px", opacity: !isSpeaking && !captureStatus?.includes("Transcrib") ? 0.8 : 0.3 }}
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((i) => (
+                  <div
+                    key={i}
+                    className="w-[3px] rounded-full bg-primary transition-all"
+                    style={{
+                      height:
+                        !isSpeaking && !captureStatus?.includes("Transcrib")
+                          ? `${10 + Math.round(Math.sin(i * 0.8) * 8 + Math.cos(i * 1.2) * 6)}px`
+                          : "4px",
+                      opacity: !isSpeaking && !captureStatus?.includes("Transcrib") ? 0.8 : 0.3,
+                    }}
                   />
                 ))}
               </div>
 
               {/* Conversation toggle */}
-              <button type="button"
-                onClick={() => { unlockAudioPlayback(); setConversationMode((on) => { const next = !on; if (next) { phaseRef.current = "listening"; setIsSpeaking(false); setIsPaused(false); setMicActive(true); } else { stopConversation(); } return next; }); }}
+              <button
+                type="button"
+                onClick={() => {
+                  unlockAudioPlayback();
+                  setConversationMode((on) => {
+                    const next = !on;
+                    if (next) {
+                      phaseRef.current = "listening";
+                      setIsSpeaking(false);
+                      setIsPaused(false);
+                      setMicActive(true);
+                    } else {
+                      stopConversation();
+                    }
+                    return next;
+                  });
+                }}
                 className={`inline-flex items-center gap-1.5 rounded-[5px] border-2 border-foreground px-4 py-1.5 text-[11px] font-bold uppercase tracking-wide nb-shadow-sm transition hover:translate-x-[1px] hover:translate-y-[1px] ${conversationMode ? "bg-primary text-primary-foreground" : "bg-secondary-background text-foreground"}`}
               >
                 <Volume2 className="h-3.5 w-3.5" />
@@ -808,24 +988,50 @@ export function Shell({ children }: { children: ReactNode }) {
 
               {/* State hint */}
               <p className="text-[11px] text-muted-foreground text-center">
-                {conversationMode ? (phaseRef.current === "processing" ? t("Thinking…") : isSpeaking ? t("Speaking… (mic paused)") : t("Conversation mode · just talk, the agent replies and listens again.")) : isSpeaking ? t("Tap Pause to pause, Stop to end.") : t("Tap the mic to stop & send, or wait for silence.")}
+                {conversationMode
+                  ? phaseRef.current === "processing"
+                    ? t("Thinking…")
+                    : isSpeaking
+                      ? t("Speaking… (mic paused)")
+                      : t("Conversation mode · just talk, the agent replies and listens again.")
+                  : isSpeaking
+                    ? t("Tap Pause to pause, Stop to end.")
+                    : t("Tap the mic to stop & send, or wait for silence.")}
               </p>
             </div>
 
             {/* Settings row */}
             <div className="border-t border-border px-5 py-3 flex flex-col gap-2 bg-background/50">
               <div className="flex items-center gap-3">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground w-20 shrink-0">{t("Speech output")}</span>
-                <select value={voiceLang} onChange={(e) => setVoiceLang(coerceVoiceLang(e.target.value))} className="flex-1 rounded-[5px] border-2 border-foreground bg-background px-2 py-1 text-xs font-bold text-foreground outline-none">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground w-20 shrink-0">
+                  {t("Speech output")}
+                </span>
+                <select
+                  value={voiceLang}
+                  onChange={(e) => setVoiceLang(coerceVoiceLang(e.target.value))}
+                  className="flex-1 rounded-[5px] border-2 border-foreground bg-background px-2 py-1 text-xs font-bold text-foreground outline-none"
+                >
                   <option value="auto">{t("Auto (detect)")}</option>
                   <option value="en-IN">English (India)</option>
                   <option value="kn-IN">Kannada (ಕನ್ನಡ)</option>
                 </select>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground w-20 shrink-0">{t("Rate")}</span>
-                <input type="range" min={0.5} max={2} step={0.1} value={speechRate} onChange={(e) => setSpeechRate(parseFloat(e.target.value))} className="flex-1 h-1.5 accent-primary cursor-pointer" />
-                <span className="text-[11px] font-bold text-muted-foreground w-8 text-right tabular-nums">{speechRate.toFixed(1)}×</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground w-20 shrink-0">
+                  {t("Rate")}
+                </span>
+                <input
+                  type="range"
+                  min={0.5}
+                  max={2}
+                  step={0.1}
+                  value={speechRate}
+                  onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
+                  className="flex-1 h-1.5 accent-primary cursor-pointer"
+                />
+                <span className="text-[11px] font-bold text-muted-foreground w-8 text-right tabular-nums">
+                  {speechRate.toFixed(1)}×
+                </span>
               </div>
             </div>
 
@@ -833,20 +1039,35 @@ export function Shell({ children }: { children: ReactNode }) {
             <div className="px-5 py-3 border-t border-border">
               <div className="relative rounded-[6px] border-2 border-foreground bg-background nb-shadow-sm">
                 <textarea
-                  value={editableTranscript + (interimTranscript ? (editableTranscript ? " " : "") + interimTranscript : "")}
-                  onChange={(e) => { const val = e.target.value; setEditableTranscript(val); setFinalTranscript(val); setInterimTranscript(""); liveFinalRef.current = val; liveInterimRef.current = ""; }}
+                  value={
+                    editableTranscript +
+                    (interimTranscript ? (editableTranscript ? " " : "") + interimTranscript : "")
+                  }
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setEditableTranscript(val);
+                    setFinalTranscript(val);
+                    setInterimTranscript("");
+                    liveFinalRef.current = val;
+                    liveInterimRef.current = "";
+                  }}
                   rows={3}
                   className="w-full max-h-36 overflow-y-auto bg-transparent px-3 py-2.5 text-sm leading-relaxed text-foreground resize-none outline-none"
                   placeholder={t("Waiting for speech…")}
                 />
                 {interimTranscript && !editableTranscript.endsWith(interimTranscript) && (
-                  <span className="pointer-events-none absolute bottom-2.5 left-3 text-sm text-muted-foreground/60 leading-relaxed">{editableTranscript ? " " : ""}{interimTranscript}</span>
+                  <span className="pointer-events-none absolute bottom-2.5 left-3 text-sm text-muted-foreground/60 leading-relaxed">
+                    {editableTranscript ? " " : ""}
+                    {interimTranscript}
+                  </span>
                 )}
               </div>
               {speechError ? (
                 <p className="mt-1.5 text-[11px] font-bold text-destructive">{speechError}</p>
               ) : (
-                <p className="mt-1.5 text-[10px] text-muted-foreground">{interimTranscript ? t("Listening…") : t("Tap textarea to edit")}</p>
+                <p className="mt-1.5 text-[10px] text-muted-foreground">
+                  {interimTranscript ? t("Listening…") : t("Tap textarea to edit")}
+                </p>
               )}
             </div>
 
@@ -856,92 +1077,182 @@ export function Shell({ children }: { children: ReactNode }) {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-muted-foreground">{t("Speaking…")}</span>
                   <div className="flex gap-2">
-                    <button onClick={() => { if (isPaused) { resumeSpeech(); setIsPaused(false); } else { pauseSpeech(); setIsPaused(true); } }} className="flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-secondary-background px-3 py-1 text-[11px] font-bold hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm">
+                    <button
+                      onClick={() => {
+                        if (isPaused) {
+                          resumeSpeech();
+                          setIsPaused(false);
+                        } else {
+                          pauseSpeech();
+                          setIsPaused(true);
+                        }
+                      }}
+                      className="flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-secondary-background px-3 py-1 text-[11px] font-bold hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm"
+                    >
                       {isPaused ? <Play className="h-3 w-3" /> : <Pause className="h-3 w-3" />}
                       {isPaused ? t("Resume") : t("Pause")}
                     </button>
-                    <button onClick={() => { cancelSpeech(); setIsSpeaking(false); setIsPaused(false); setMicActive(true); }} className="flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-destructive px-3 py-1 text-[11px] font-bold text-destructive-foreground hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm">
-                      <Volume2 className="h-3 w-3" />{t("Stop")}
+                    <button
+                      onClick={() => {
+                        cancelSpeech();
+                        setIsSpeaking(false);
+                        setIsPaused(false);
+                        setMicActive(true);
+                      }}
+                      className="flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-destructive px-3 py-1 text-[11px] font-bold text-destructive-foreground hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm"
+                    >
+                      <Volume2 className="h-3 w-3" />
+                      {t("Stop")}
                     </button>
                   </div>
                 </div>
               ) : (
                 <div className="flex items-center gap-2 flex-wrap">
-                  <button onClick={async () => { try { await navigator.clipboard.writeText(editableTranscript); setCopied(true); setTimeout(() => setCopied(false), 1500); } catch {} }} disabled={!editableTranscript} className="flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-secondary-background px-2.5 py-1 text-[11px] font-bold hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm disabled:opacity-40 disabled:cursor-not-allowed">
-                    {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}{copied ? t("Copied") : t("Copy")}
+                  <button
+                    onClick={async () => {
+                      try {
+                        await navigator.clipboard.writeText(editableTranscript);
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 1500);
+                      } catch {}
+                    }}
+                    disabled={!editableTranscript}
+                    className="flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-secondary-background px-2.5 py-1 text-[11px] font-bold hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                    {copied ? t("Copied") : t("Copy")}
                   </button>
-                  <button onClick={() => { if (!editableTranscript.trim()) return; window.dispatchEvent(new CustomEvent("satyam:insert-transcript", { detail: editableTranscript.trim() })); setListening(false); }} disabled={!editableTranscript.trim()} className="flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-primary px-2.5 py-1 text-[11px] font-bold text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm disabled:opacity-40 disabled:cursor-not-allowed">
-                    <CornerDownLeft className="h-3 w-3" />{t("Send to chat")}
+                  <button
+                    onClick={() => {
+                      if (!editableTranscript.trim()) return;
+                      window.dispatchEvent(
+                        new CustomEvent("satyam:insert-transcript", {
+                          detail: editableTranscript.trim(),
+                        }),
+                      );
+                      setListening(false);
+                    }}
+                    disabled={!editableTranscript.trim()}
+                    className="flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-primary px-2.5 py-1 text-[11px] font-bold text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    <CornerDownLeft className="h-3 w-3" />
+                    {t("Send to chat")}
                   </button>
-                  <button onClick={() => { const text = editableTranscript.trim(); if (!text) return; window.dispatchEvent(new CustomEvent("satyam:voice-command", { detail: { text, lang: voiceLang, rate: speechRate, speak: true } })); setIsPaused(false); }} disabled={!editableTranscript.trim()} className="flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-primary px-2.5 py-1 text-[11px] font-bold text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm disabled:opacity-40 disabled:cursor-not-allowed">
-                    <Volume2 className="h-3 w-3" />{t("Speak reply")}
+                  <button
+                    onClick={() => {
+                      const text = editableTranscript.trim();
+                      if (!text) return;
+                      window.dispatchEvent(
+                        new CustomEvent("satyam:voice-command", {
+                          detail: { text, lang: voiceLang, rate: speechRate, speak: true },
+                        }),
+                      );
+                      setIsPaused(false);
+                    }}
+                    disabled={!editableTranscript.trim()}
+                    className="flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-primary px-2.5 py-1 text-[11px] font-bold text-primary-foreground hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    <Volume2 className="h-3 w-3" />
+                    {t("Speak reply")}
                   </button>
-                  <button onClick={() => { if (!editableTranscript.trim()) return; const list = JSON.parse(localStorage.getItem("satyam-transcripts") || "[]"); list.unshift({ id: crypto.randomUUID(), text: editableTranscript.trim(), lang: lang === "KN" ? "kn-IN" : "en-IN", createdAt: new Date().toISOString() }); localStorage.setItem("satyam-transcripts", JSON.stringify(list)); setSaved(true); setTimeout(() => setSaved(false), 1500); }} disabled={!editableTranscript.trim()} className="flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-secondary-background px-2.5 py-1 text-[11px] font-bold hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm disabled:opacity-40 disabled:cursor-not-allowed">
-                    {saved ? <Check className="h-3 w-3" /> : <Save className="h-3 w-3" />}{saved ? t("Saved") : t("Save")}
+                  <button
+                    onClick={() => {
+                      if (!editableTranscript.trim()) return;
+                      const list = JSON.parse(localStorage.getItem("satyam-transcripts") || "[]");
+                      list.unshift({
+                        id: crypto.randomUUID(),
+                        text: editableTranscript.trim(),
+                        lang: lang === "KN" ? "kn-IN" : "en-IN",
+                        createdAt: new Date().toISOString(),
+                      });
+                      localStorage.setItem("satyam-transcripts", JSON.stringify(list));
+                      setSaved(true);
+                      setTimeout(() => setSaved(false), 1500);
+                    }}
+                    disabled={!editableTranscript.trim()}
+                    className="flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-secondary-background px-2.5 py-1 text-[11px] font-bold hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    {saved ? <Check className="h-3 w-3" /> : <Save className="h-3 w-3" />}
+                    {saved ? t("Saved") : t("Save")}
                   </button>
-                  <button onClick={() => { setListening(false); setMicActive(false); setIsSpeaking(false); setIsPaused(false); setConversationMode(false); setCaptureStatus(null); stopConversation(); if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel(); }} className="ml-auto flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-secondary-background px-3 py-1 text-[11px] font-bold hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm">
+                  <button
+                    onClick={() => {
+                      setListening(false);
+                      setMicActive(false);
+                      setIsSpeaking(false);
+                      setIsPaused(false);
+                      setConversationMode(false);
+                      setCaptureStatus(null);
+                      stopConversation();
+                      if (typeof window !== "undefined" && "speechSynthesis" in window)
+                        window.speechSynthesis.cancel();
+                    }}
+                    className="ml-auto flex items-center gap-1 rounded-[5px] border-2 border-foreground bg-secondary-background px-3 py-1 text-[11px] font-bold hover:translate-x-[1px] hover:translate-y-[1px] transition nb-shadow-sm"
+                  >
                     {t("Close")}
                   </button>
                 </div>
               )}
             </div>
           </div>
-            <div
-              className={`relative grid h-20 w-20 place-items-center ${!isSpeaking ? "cursor-pointer" : ""}`}
-              role="button"
-              title={t("Tap to stop & send")}
-              onClick={() => {
-                if (!isSpeaking) {
-                  setCaptureStatus("Finishing\u2026");
-                  try { sttSessionRef.current?.stop(); } catch { /* noop */ }
+          <div
+            className={`relative grid h-20 w-20 place-items-center ${!isSpeaking ? "cursor-pointer" : ""}`}
+            role="button"
+            title={t("Tap to stop & send")}
+            onClick={() => {
+              if (!isSpeaking) {
+                setCaptureStatus("Finishing\u2026");
+                try {
+                  sttSessionRef.current?.stop();
+                } catch {
+                  /* noop */
                 }
-              }}
-            >
-              {!isSpeaking ? (
-                <>
-                  <span className="absolute inset-0 animate-ping rounded-full bg-primary/40" />
-                  <span className="absolute inset-2 animate-pulse rounded-full bg-primary/60" />
-                  <div className="relative grid h-16 w-16 place-items-center rounded-full border-2 border-foreground bg-primary text-primary-foreground">
-                    <Mic className="h-7 w-7" />
-                  </div>
-                </>
-              ) : (
-                <>
-                  <span className="absolute inset-0 animate-pulse rounded-full bg-primary/30" />
-                  <div className="relative grid h-16 w-16 place-items-center rounded-full border-2 border-foreground bg-primary text-primary-foreground">
-                    <Volume2 className="h-7 w-7" />
-                  </div>
-                </>
-              )}
-            </div>
-            {captureStatus && !speechError && (
-              <p className="text-center text-xs font-bold text-primary">{captureStatus}</p>
+              }
+            }}
+          >
+            {!isSpeaking ? (
+              <>
+                <span className="absolute inset-0 animate-ping rounded-full bg-primary/40" />
+                <span className="absolute inset-2 animate-pulse rounded-full bg-primary/60" />
+                <div className="relative grid h-16 w-16 place-items-center rounded-full border-2 border-foreground bg-primary text-primary-foreground">
+                  <Mic className="h-7 w-7" />
+                </div>
+              </>
+            ) : (
+              <>
+                <span className="absolute inset-0 animate-pulse rounded-full bg-primary/30" />
+                <div className="relative grid h-16 w-16 place-items-center rounded-full border-2 border-foreground bg-primary text-primary-foreground">
+                  <Volume2 className="h-7 w-7" />
+                </div>
+              </>
             )}
-            <div className="text-center">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                {isSpeaking
-                  ? `${t("Speech output")} · ${voiceLang === "auto" ? t("Auto (detect)") : voiceLang}`
-                  : `${t("Voice input")} · ${voiceLang === "auto" ? (lang === "KN" ? "kn-IN" : "en-IN") + " " + t("(auto)") : voiceLang}`}
-              </div>
-              <div className="mt-1 text-lg font-semibold">
-                {isSpeaking ? t("Speaking…") : t("Listening…")}
-              </div>
-              <div className="mt-1 text-xs text-muted-foreground">
-                {conversationMode
-                  ? phaseRef.current === "processing"
-                    ? t("Thinking…")
-                    : isSpeaking
-                      ? t("Speaking… (mic paused)")
-                      : t("Conversation mode · just talk, the agent replies and listens again.")
+          </div>
+          {captureStatus && !speechError && (
+            <p className="text-center text-xs font-bold text-primary">{captureStatus}</p>
+          )}
+          <div className="text-center">
+            <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+              {isSpeaking
+                ? `${t("Speech output")} · ${voiceLang === "auto" ? t("Auto (detect)") : voiceLang}`
+                : `${t("Voice input")} · ${voiceLang === "auto" ? (lang === "KN" ? "kn-IN" : "en-IN") + " " + t("(auto)") : voiceLang}`}
+            </div>
+            <div className="mt-1 text-lg font-semibold">
+              {isSpeaking ? t("Speaking…") : t("Listening…")}
+            </div>
+            <div className="mt-1 text-xs text-muted-foreground">
+              {conversationMode
+                ? phaseRef.current === "processing"
+                  ? t("Thinking…")
                   : isSpeaking
-                    ? t("Tap Pause to pause, Stop to end.")
-                    : t("Speak now. Tap anywhere to stop.")}
-              </div>
+                    ? t("Speaking… (mic paused)")
+                    : t("Conversation mode · just talk, the agent replies and listens again.")
+                : isSpeaking
+                  ? t("Tap Pause to pause, Stop to end.")
+                  : t("Speak now. Tap anywhere to stop.")}
+            </div>
           </div>
         </div>
       )}
-
-
 
       {/* Body: rail + content */}
       <div className="flex flex-1 min-h-0">

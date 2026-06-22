@@ -323,7 +323,10 @@ function Features() {
 
       <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {items.map(({ icon: Icon, tint, title, body }) => (
-          <NB key={title} className="p-6 transition hover:-translate-x-1 hover:-translate-y-1 hover:nb-shadow">
+          <NB
+            key={title}
+            className="p-6 transition hover:-translate-x-1 hover:-translate-y-1 hover:nb-shadow"
+          >
             <div className="grid h-12 w-12 place-items-center rounded-[5px] border-2 border-foreground bg-background nb-shadow-sm">
               <Icon className={`h-6 w-6 ${tint}`} strokeWidth={2.5} />
             </div>

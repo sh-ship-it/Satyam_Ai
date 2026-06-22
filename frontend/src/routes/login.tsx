@@ -16,7 +16,6 @@ import { useT } from "@/lib/i18n";
 import { api } from "@/lib/api/client";
 import { CreateAccountDialog } from "@/components/CreateAccountDialog";
 
-
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
@@ -69,14 +68,25 @@ function Login() {
             {t("Welcome back, Investigator.")}
           </h1>
           <p className="mt-5 max-w-md text-base text-foreground/70 md:text-lg">
-            {t("Access your secure forensics workspace and continue transforming evidence into court-ready intelligence.")}
+            {t(
+              "Access your secure forensics workspace and continue transforming evidence into court-ready intelligence.",
+            )}
           </p>
 
           {/* Trust badges */}
           <div className="mt-10 flex flex-wrap gap-8">
-            <TrustBadge icon={<ShieldCheck className="h-7 w-7 text-success" strokeWidth={2.5} />} label={t("Chain-of-Custody")} />
-            <TrustBadge icon={<Fingerprint className="h-7 w-7 text-primary" strokeWidth={2.5} />} label={t("Forensically Sound")} />
-            <TrustBadge icon={<Lock className="h-7 w-7 text-destructive" strokeWidth={2.5} />} label={t("Secure Login")} />
+            <TrustBadge
+              icon={<ShieldCheck className="h-7 w-7 text-success" strokeWidth={2.5} />}
+              label={t("Chain-of-Custody")}
+            />
+            <TrustBadge
+              icon={<Fingerprint className="h-7 w-7 text-primary" strokeWidth={2.5} />}
+              label={t("Forensically Sound")}
+            />
+            <TrustBadge
+              icon={<Lock className="h-7 w-7 text-destructive" strokeWidth={2.5} />}
+              label={t("Secure Login")}
+            />
           </div>
         </div>
 
@@ -84,8 +94,12 @@ function Login() {
         <div className="flex flex-col items-center lg:items-end">
           <div className="w-full max-w-md rounded-[5px] border-2 border-foreground bg-secondary-background p-7 nb-shadow-lg">
             <div className="mb-6 text-center">
-              <h3 className="text-2xl font-extrabold tracking-tight">{t("Sign in to your account")}</h3>
-              <p className="mt-1 text-sm text-foreground/60">{t("Access your forensics workspace")}</p>
+              <h3 className="text-2xl font-extrabold tracking-tight">
+                {t("Sign in to your account")}
+              </h3>
+              <p className="mt-1 text-sm text-foreground/60">
+                {t("Access your forensics workspace")}
+              </p>
             </div>
 
             <form
@@ -96,7 +110,11 @@ function Login() {
                 const data = new FormData(e.currentTarget);
                 const email = String(data.get("email") || "").trim();
                 const password = String(data.get("password") || "").trim();
-                if (!email) { setError(t("Please enter your email address.")); setLoading(false); return; }
+                if (!email) {
+                  setError(t("Please enter your email address."));
+                  setLoading(false);
+                  return;
+                }
                 const username = email.includes("@") ? email.split("@")[0] : email;
                 try {
                   await api.login(username, password);
@@ -106,7 +124,11 @@ function Login() {
                   const msg = err?.body?.detail || err?.message || "";
                   if (status === 404 || msg.includes("Account not found")) {
                     setError(t("No account found for this email. Please create an account first."));
-                  } else if (status === 401 || msg.includes("Invalid password") || msg.includes("Invalid credentials")) {
+                  } else if (
+                    status === 401 ||
+                    msg.includes("Invalid password") ||
+                    msg.includes("Invalid credentials")
+                  ) {
                     setError(t("Invalid email or password. Please try again."));
                   } else if (msg) {
                     setError(msg);
@@ -122,7 +144,9 @@ function Login() {
             >
               {/* Email */}
               <div>
-                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide">{t("Email address")}</label>
+                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide">
+                  {t("Email address")}
+                </label>
                 <div className="relative">
                   <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/50" />
                   <input
@@ -137,7 +161,9 @@ function Login() {
 
               {/* Password */}
               <div>
-                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide">{t("Password")}</label>
+                <label className="mb-1.5 block text-xs font-bold uppercase tracking-wide">
+                  {t("Password")}
+                </label>
                 <div className="relative">
                   <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground/50" />
                   <input
@@ -147,9 +173,12 @@ function Login() {
                     placeholder={t("Enter your password")}
                     className="h-11 w-full rounded-[5px] border-2 border-foreground bg-background pl-9 pr-10 text-sm font-medium placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring nb-shadow-sm"
                   />
-                  <button type="button" onClick={() => setShowPw((s) => !s)}
+                  <button
+                    type="button"
+                    onClick={() => setShowPw((s) => !s)}
                     className="absolute right-2 top-1/2 -translate-y-1/2 rounded-[5px] p-1.5 text-foreground/60 hover:text-foreground"
-                    aria-label="Toggle password visibility">
+                    aria-label="Toggle password visibility"
+                  >
                     {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
@@ -158,14 +187,19 @@ function Login() {
               {/* Remember me + Forgot */}
               <div className="flex items-center justify-between pt-1">
                 <label className="flex cursor-pointer items-center gap-2 text-sm font-medium">
-                  <button type="button" onClick={() => setRemember((r) => !r)}
+                  <button
+                    type="button"
+                    onClick={() => setRemember((r) => !r)}
                     className={`grid h-5 w-5 place-items-center rounded-[5px] border-2 border-foreground transition ${remember ? "bg-primary text-primary-foreground" : "bg-background"}`}
-                    aria-pressed={remember}>
+                    aria-pressed={remember}
+                  >
                     {remember && <span className="text-[12px] font-extrabold leading-none">✓</span>}
                   </button>
                   {t("Remember me")}
                 </label>
-                <a href="#" className="text-sm font-bold underline-offset-4 hover:underline">{t("Forgot password?")}</a>
+                <a href="#" className="text-sm font-bold underline-offset-4 hover:underline">
+                  {t("Forgot password?")}
+                </a>
               </div>
 
               {/* Error banner */}
@@ -175,43 +209,78 @@ function Login() {
                   <span>
                     {error}
                     {error.includes("create an account") && (
-                      <> {" "}<button type="button" onClick={() => { setError(null); setShowCreate(true); }}
-                        className="underline underline-offset-2 hover:no-underline cursor-pointer">{t("Create account")}</button></>
+                      <>
+                        {" "}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setError(null);
+                            setShowCreate(true);
+                          }}
+                          className="underline underline-offset-2 hover:no-underline cursor-pointer"
+                        >
+                          {t("Create account")}
+                        </button>
+                      </>
                     )}
                   </span>
                 </div>
               )}
 
               {/* Sign in button */}
-              <button type="submit" disabled={loading}
-                className="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-[5px] border-2 border-foreground bg-primary text-sm font-extrabold uppercase tracking-wide text-primary-foreground nb-shadow transition hover:translate-x-[2px] hover:translate-y-[2px] hover:nb-shadow-sm active:translate-x-[4px] active:translate-y-[4px] active:shadow-none disabled:opacity-60 disabled:cursor-not-allowed">
+              <button
+                type="submit"
+                disabled={loading}
+                className="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-[5px] border-2 border-foreground bg-primary text-sm font-extrabold uppercase tracking-wide text-primary-foreground nb-shadow transition hover:translate-x-[2px] hover:translate-y-[2px] hover:nb-shadow-sm active:translate-x-[4px] active:translate-y-[4px] active:shadow-none disabled:opacity-60 disabled:cursor-not-allowed"
+              >
                 {loading ? (
                   <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                   </svg>
-                ) : <Shield className="h-4 w-4" />}
+                ) : (
+                  <Shield className="h-4 w-4" />
+                )}
                 {loading ? t("Signing in…") : t("Sign in")}
               </button>
 
               {/* SSO */}
-              <button type="button" onClick={() => navigate({ to: "/console" })}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-[5px] border-2 border-foreground bg-secondary-background text-sm font-bold nb-shadow-sm transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none">
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/console" })}
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-[5px] border-2 border-foreground bg-secondary-background text-sm font-bold nb-shadow-sm transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+              >
                 <KeyRound className="h-4 w-4" />
                 {t("Sign in with SSO (OIDC)")}
               </button>
 
               <p className="pt-2 text-center text-sm text-foreground/70">
                 {t("Don't have an account?")}{" "}
-                <button type="button" onClick={() => { setError(null); setShowCreate(true); }}
-                  className="font-bold underline-offset-4 hover:underline cursor-pointer">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setError(null);
+                    setShowCreate(true);
+                  }}
+                  className="font-bold underline-offset-4 hover:underline cursor-pointer"
+                >
                   {t("Create account")}
                 </button>
               </p>
             </form>
           </div>
 
-          <Link to="/" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-foreground/70 hover:text-foreground">
+          <Link
+            to="/"
+            className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-foreground/70 hover:text-foreground"
+          >
             <ArrowLeft className="h-4 w-4" />
             {t("Back to home")}
           </Link>

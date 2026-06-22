@@ -79,7 +79,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Satyam — Crime Intelligence Workspace" },
-      { name: "description", content: "Bilingual, voice-enabled conversational AI for police crime intelligence." },
+      {
+        name: "description",
+        content: "Bilingual, voice-enabled conversational AI for police crime intelligence.",
+      },
       { property: "og:title", content: "Satyam" },
       { property: "og:description", content: "Command-center copilot for crime intelligence." },
       { property: "og:type", content: "website" },
@@ -89,7 +92,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Kannada:wght@400;500;600&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Kannada:wght@400;500;600&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,

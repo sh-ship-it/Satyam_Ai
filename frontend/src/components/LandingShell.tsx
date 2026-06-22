@@ -2,7 +2,13 @@ import { Link } from "@tanstack/react-router";
 import { Shield, Palette } from "lucide-react";
 import { ThemePicker } from "./ThemePicker";
 
-export function NB({ className = "", children }: { className?: string; children: React.ReactNode }) {
+export function NB({
+  className = "",
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div
       className={`rounded-[5px] border-2 border-foreground bg-secondary-background nb-shadow ${className}`}
@@ -44,7 +50,6 @@ export function Header() {
               <span className="text-[10px] font-bold text-foreground/70">build by Teen Titans</span>
             </div>
           </div>
-
         </Link>
 
         <nav className="hidden items-center gap-7 text-sm font-bold md:flex">
@@ -77,7 +82,10 @@ function FooterCol({ title, links }: { title: string; links: string[] }) {
       <ul className="mt-4 space-y-3 text-sm">
         {links.map((l) => (
           <li key={l}>
-            <a href="#" className="text-background/75 hover:text-background hover:underline underline-offset-4">
+            <a
+              href="#"
+              className="text-background/75 hover:text-background hover:underline underline-offset-4"
+            >
               {l}
             </a>
           </li>
@@ -120,7 +128,6 @@ export function Footer() {
           <span>build by Teen Titans</span>
         </div>
       </div>
-
     </footer>
   );
 }

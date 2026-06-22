@@ -23,7 +23,21 @@ router = APIRouter()
 
 
 def _guard(principal: Principal) -> None:
-    pass  # all authenticated officers can access Response Ops
+    # Read access to Response Ops is open to all authenticated officers
+    # (explicit product decision). Writes are gated separately by _guard_write.
+    pass
+
+
+def _guard_write(principal: Principal) -> None:
+    """Gate side-effecting ops (file case, dispatch, notify, spawn process).
+
+    These create real rows / launch OS processes, so they require analyst-level
+    clearance (L2+) even though reads are open. Raises 403 on failure.
+    """
+    try:
+        require(principal, Permission.RUN_ANALYTICS)
+    except AccessDenied as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
 
 
 @router.get("/health")
@@ -83,13 +97,15 @@ async def act_on_suggestion(
     session: AsyncSession = Depends(get_scoped_session),
     principal: Principal = Depends(get_principal),
 ) -> dict:
-    _guard(principal)
+    _guard_write(principal)
     if action not in ("accept", "dismiss"):
         raise HTTPException(status_code=400, detail="action must be accept|dismiss")
     new_status = "ACCEPTED" if action == "accept" else "DISMISSED"
-    await session.execute(
+    result = await session.execute(
         update(PatrolSuggestion).where(PatrolSuggestion.id == sug_id).values(status=new_status)
     )
+    if result.rowcount == 0:
+        raise HTTPException(status_code=404, detail=f"suggestion {sug_id} not found")
     # Accepting pre-positions the patrol (status stays IDLE, just relocates on the map).
     if action == "accept":
         sug = (await session.execute(
@@ -119,7 +135,7 @@ async def dispatch(
     session: AsyncSession = Depends(get_scoped_session),
     principal: Principal = Depends(get_principal),
 ) -> DispatchOut:
-    _guard(principal)
+    _guard_write(principal)
     # pick patrol
     if req.patrol_id:
         patrol = (await session.execute(select(PatrolUnit).where(PatrolUnit.id == req.patrol_id))).scalar_one_or_none()
@@ -162,7 +178,7 @@ async def simulate(
     session: AsyncSession = Depends(get_scoped_session),
     principal: Principal = Depends(get_principal),
 ) -> dict:
-    _guard(principal)
+    _guard_write(principal)
     disp = (await session.execute(select(IncidentDispatch).where(IncidentDispatch.id == dispatch_id))).scalar_one_or_none()
     if not disp or not disp.route_geometry:
         raise HTTPException(status_code=404, detail="dispatch or route not found")
@@ -199,7 +215,7 @@ async def simulate_all(
     principal: Principal = Depends(get_principal),
 ) -> dict:
     """Start a live simulation for every unfinished dispatch that has a route."""
-    _guard(principal)
+    _guard_write(principal)
     rows = (await session.execute(
         select(IncidentDispatch).where(IncidentDispatch.status.not_in(["COMPLETED", "CANCELLED"]))
     )).scalars().all()
@@ -219,7 +235,7 @@ async def stop_all(
     principal: Principal = Depends(get_principal),
 ) -> dict:
     """Cancel every running simulation and reset the green corridor."""
-    _guard(principal)
+    _guard_write(principal)
     sim_service.stop_all()
     return {"ok": True}
 
@@ -273,7 +289,7 @@ async def corridor_state(principal: Principal = Depends(get_principal)) -> dict:
 @router.post("/corridor/reset")
 async def corridor_reset(principal: Principal = Depends(get_principal)) -> dict:
     """Deactivate the green corridor — restore every signal to NORMAL."""
-    _guard(principal)
+    _guard_write(principal)
     await corridor_service.reset_all()
     return {"ok": True}
 
@@ -288,7 +304,7 @@ async def demo_active(principal: Principal = Depends(get_principal)) -> dict:
 @router.post("/demo/stop-all")
 async def demo_stop_all(principal: Principal = Depends(get_principal)) -> dict:
     """Stop All: cancel every running simulation and clear the green corridor."""
-    _guard(principal)
+    _guard_write(principal)
     ids = sim_service.active_ids()
     for did in ids:
         sim_service.stop(did)
@@ -307,7 +323,7 @@ async def detect_notify(
     principal: Principal = Depends(get_principal),
 ) -> dict:
     """Called by the YOLO sibling service. Confidence-gated, like EMERGE."""
-    _guard(principal)
+    _guard_write(principal)
     if payload.confidence < LOW_CONF:
         return {"status": "IGNORED", "reason": "low confidence"}
 
@@ -370,7 +386,7 @@ async def clear_review_queue(
     principal: Principal = Depends(get_principal),
 ) -> dict:
     """Dismiss (mark REJECTED) every pending item in one shot."""
-    _guard(principal)
+    _guard_write(principal)
     await session.execute(
         update(IncidentReview)
         .where(IncidentReview.status == "PENDING")
@@ -385,7 +401,7 @@ async def reject_item(
     session: AsyncSession = Depends(get_scoped_session),
     principal: Principal = Depends(get_principal),
 ) -> dict:
-    _guard(principal)
+    _guard_write(principal)
     await session.execute(
         update(IncidentReview).where(IncidentReview.id == item_id)
         .values(status="REJECTED", reviewed_by=principal.name or principal.id)
@@ -401,7 +417,7 @@ async def confirm_item(
     principal: Principal = Depends(get_principal),
 ) -> dict:
     """Officer confirms a candidate -> create a minimal case + (optional) dispatch."""
-    _guard(principal)
+    _guard_write(principal)
     item = (await session.execute(select(IncidentReview).where(IncidentReview.id == item_id))).scalar_one_or_none()
     if not item:
         raise HTTPException(status_code=404, detail="review item not found")
@@ -437,7 +453,7 @@ async def confirm_item(
     dispatch_id = None
     if auto_dispatch and item.lat is not None and item.lng is not None:
         idle = (await session.execute(select(PatrolUnit).where(PatrolUnit.status == "IDLE"))).scalars().all()
-        patrol = min((p for p in idle if p.lat is not None),
+        patrol = min((p for p in idle if p.lat is not None and p.lng is not None),
                      key=lambda p: routing_service.haversine_km(p.lat, p.lng, item.lat, item.lng),
                      default=None)
         if patrol:
@@ -463,9 +479,16 @@ import subprocess as _subprocess
 import sys as _sys
 import pathlib as _pathlib
 import threading as _threading
+import asyncio as _asyncio
 
 _yolo_proc: "_subprocess.Popen[bytes] | None" = None
 _yolo_stream_port: int = 0
+# Serialize camera start/stop so two concurrent requests can't double-spawn the
+# detector and orphan a Popen handle / leak the MJPEG port.
+_yolo_lock = _asyncio.Lock()
+# Cache the resolved YOLO interpreter so we only run the (blocking) import
+# probe once per process instead of on every camera start.
+_yolo_python: str | None = None
 
 
 def _drain(proc: "_subprocess.Popen[bytes]") -> None:
@@ -484,7 +507,12 @@ def _resolve_python() -> str:
 
     The backend venv usually lacks these heavy CV deps, so we probe a few
     candidates and pick the first that can import them. Override with YOLO_PYTHON.
+    Result is cached in `_yolo_python` (this is a blocking call — run in a thread).
     """
+    global _yolo_python
+    if _yolo_python is not None:
+        return _yolo_python
+
     import os as _os
     import shutil as _shutil
 
@@ -515,11 +543,13 @@ def _resolve_python() -> str:
                 capture_output=True, timeout=30,
             )
             if r.returncode == 0:
+                _yolo_python = py
                 return py
         except Exception:
             continue
     # Nothing found — return backend python so the error surfaces clearly.
-    return _sys.executable
+    _yolo_python = _sys.executable
+    return _yolo_python
 
 
 @router.post("/camera/start")
@@ -529,87 +559,92 @@ async def camera_start(
     principal: Principal = Depends(get_principal),
 ) -> dict:
     """Launch the YOLO live_cctv detector as a background process."""
-    _guard(principal)
+    _guard_write(principal)
     global _yolo_proc, _yolo_stream_port
-    if _yolo_proc is not None and _yolo_proc.poll() is None:
-        return {"ok": True, "status": "already_running", "pid": _yolo_proc.pid,
-                "stream_port": _yolo_stream_port}
 
-    # Locate live_cctv.py relative to this file: backend/app/api/routes/ops.py
-    # parents[4] = repo root (ops.py → routes → api → app → backend → repo)
-    script = _pathlib.Path(__file__).resolve().parents[4] / "model" / "inference" / "live_cctv.py"
-    if not script.exists():
-        script = _pathlib.Path.cwd().parent / "model" / "inference" / "live_cctv.py"
-    if not script.exists():
-        raise HTTPException(
-            status_code=404,
-            detail="YOLO script not found. Expected: model/inference/live_cctv.py relative to repo root",
+    async with _yolo_lock:
+        if _yolo_proc is not None and _yolo_proc.poll() is None:
+            return {"ok": True, "status": "already_running", "pid": _yolo_proc.pid,
+                    "stream_port": _yolo_stream_port}
+
+        # Locate live_cctv.py relative to this file: backend/app/api/routes/ops.py
+        # parents[4] = repo root (ops.py → routes → api → app → backend → repo)
+        script = _pathlib.Path(__file__).resolve().parents[4] / "model" / "inference" / "live_cctv.py"
+        if not script.exists():
+            script = _pathlib.Path.cwd().parent / "model" / "inference" / "live_cctv.py"
+        if not script.exists():
+            raise HTTPException(
+                status_code=404,
+                detail="YOLO script not found. Expected: model/inference/live_cctv.py relative to repo root",
+            )
+
+        # Resolve video path relative to repo root
+        repo_root = script.parents[2]  # model/inference/live_cctv.py → model/inference → model → repo
+        video_path = (repo_root / video) if not _pathlib.Path(video).is_absolute() else _pathlib.Path(video)
+        if not video_path.exists():
+            video_path = _pathlib.Path.cwd().parent / video
+        if not video_path.exists():
+            raise HTTPException(
+                status_code=404,
+                detail=f"Video not found: {video}. Place your video at frontend/public/total fight.mp4",
+            )
+
+        # Build a short-lived token so the YOLO subprocess can authenticate to /detect/notify
+        import os as _os
+        from app.core.security import create_access_token
+        from app.config import get_settings
+        _token = create_access_token(
+            subject=principal.id, name=principal.name, rank=principal.rank,
+            scope=principal.scope, clearance=principal.clearance,
         )
 
-    # Resolve video path relative to repo root
-    repo_root = script.parents[2]  # model/inference/live_cctv.py → model/inference → model → repo
-    video_path = (repo_root / video) if not _pathlib.Path(video).is_absolute() else _pathlib.Path(video)
-    if not video_path.exists():
-        video_path = _pathlib.Path.cwd().parent / video
-    if not video_path.exists():
-        raise HTTPException(
-            status_code=404,
-            detail=f"Video not found: {video}. Place your video at frontend/public/total fight.mp4",
+        # _resolve_python runs blocking subprocess probes — keep them off the
+        # event loop so other requests aren't stalled during camera start.
+        py = await _asyncio.to_thread(_resolve_python)
+
+        # Pick a guaranteed-free port for the MJPEG stream (avoids "address in use").
+        def _free_port(preferred: int) -> int:
+            import socket as _socket
+            for cand in (preferred, 0):
+                s = _socket.socket(_socket.AF_INET, _socket.SOCK_STREAM)
+                try:
+                    s.bind(("0.0.0.0", cand))
+                    port = s.getsockname()[1]
+                    s.close()
+                    return port
+                except OSError:
+                    s.close()
+                    continue
+            return preferred
+
+        mjpeg_port = _free_port(int(_os.getenv("YOLO_MJPEG_PORT", "8089")))
+        _yolo_stream_port = mjpeg_port
+        env = {**_os.environ,
+               "SATYAM_URL": get_settings().self_base_url,
+               "SATYAM_TOKEN": _token}
+        _yolo_proc = _subprocess.Popen(
+            [py, str(script), "--video", str(video_path), "--camera", camera_id,
+             "--no-display", "--mjpeg-port", str(mjpeg_port)],
+            cwd=str(script.parent),
+            env=env,
+            stdout=_subprocess.PIPE,
+            stderr=_subprocess.STDOUT,
         )
+        # Drain the pipe in a daemon thread — prevents the child from blocking when
+        # stdout fills up (the main symptom: video freezes after ~3 s).
+        _threading.Thread(target=_drain, args=(_yolo_proc,), daemon=True).start()
+        pid = _yolo_proc.pid
 
-    # Build a short-lived token so the YOLO subprocess can authenticate to /detect/notify
-    import os as _os
-    from app.core.security import create_access_token
-    _token = create_access_token(
-        subject=principal.id, name=principal.name, rank=principal.rank,
-        scope=principal.scope, clearance=principal.clearance,
-    )
-
-    py = _resolve_python()
-    # Pick a guaranteed-free port for the MJPEG stream (avoids "address in use").
-    def _free_port(preferred: int) -> int:
-        import socket as _socket
-        # Try the preferred port first, fall back to an OS-assigned free port.
-        for cand in (preferred, 0):
-            s = _socket.socket(_socket.AF_INET, _socket.SOCK_STREAM)
-            try:
-                s.bind(("0.0.0.0", cand))
-                port = s.getsockname()[1]
-                s.close()
-                return port
-            except OSError:
-                s.close()
-                continue
-        return preferred
-
-    mjpeg_port = _free_port(int(_os.getenv("YOLO_MJPEG_PORT", "8089")))
-    _yolo_stream_port = mjpeg_port
-    env = {**_os.environ, "SATYAM_URL": "http://localhost:8000", "SATYAM_TOKEN": _token}
-    _yolo_proc = _subprocess.Popen(
-        [py, str(script), "--video", str(video_path), "--camera", camera_id,
-         "--no-display", "--mjpeg-port", str(mjpeg_port)],
-        cwd=str(script.parent),
-        env=env,
-        stdout=_subprocess.PIPE,
-        stderr=_subprocess.STDOUT,
-    )
-    # Drain the pipe in a daemon thread — prevents the child from blocking when
-    # stdout fills up (the main symptom: video freezes after ~3 s).
-    _threading.Thread(target=_drain, args=(_yolo_proc,), daemon=True).start()
-
-    # ── Wait for the MJPEG server to actually bind its port ─────────────────
-    # The subprocess takes a moment to load the model and start the HTTP
-    # server. Poll the port so we don't return until the stream is ready,
-    # avoiding the ERR_CONNECTION_REFUSED race condition in the browser.
-    import asyncio as _asyncio
-    import socket as _socket
-
+    # ── Wait for the MJPEG server to bind its port (outside the lock) ────────
+    # Avoids the ERR_CONNECTION_REFUSED race where the browser connects before
+    # the subprocess has finished loading the model and starting the server.
     async def _wait_for_port(port: int, timeout: float = 8.0) -> bool:
-        deadline = _asyncio.get_event_loop().time() + timeout
-        while _asyncio.get_event_loop().time() < deadline:
+        loop = _asyncio.get_event_loop()
+        deadline = loop.time() + timeout
+        while loop.time() < deadline:
             try:
-                s = _socket.create_connection(("127.0.0.1", port), timeout=0.15)
-                s.close()
+                _r, _w = await _asyncio.open_connection("127.0.0.1", port)
+                _w.close()
                 return True
             except OSError:
                 await _asyncio.sleep(0.2)
@@ -618,7 +653,7 @@ async def camera_start(
     await _wait_for_port(mjpeg_port)
 
     return {
-        "ok": True, "status": "started", "pid": _yolo_proc.pid,
+        "ok": True, "status": "started", "pid": pid,
         "python": py, "stream_port": mjpeg_port,
     }
 
@@ -628,7 +663,7 @@ async def camera_stop(
     principal: Principal = Depends(get_principal),
 ) -> dict:
     """Kill the running YOLO detector process."""
-    _guard(principal)
+    _guard_write(principal)
     global _yolo_proc
     if _yolo_proc is None or _yolo_proc.poll() is not None:
         _yolo_proc = None

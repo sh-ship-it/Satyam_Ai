@@ -20,7 +20,9 @@ function CameraScreen() {
           </div>
           <div>
             <h1 className="text-xl font-extrabold leading-none">{t("Camera Review")}</h1>
-            <p className="text-xs text-muted-foreground">{t("AI detection · human confirmation · incident filing")}</p>
+            <p className="text-xs text-muted-foreground">
+              {t("AI detection · human confirmation · incident filing")}
+            </p>
           </div>
         </header>
         <ReviewPanel />

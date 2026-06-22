@@ -12,10 +12,16 @@ import hashlib
 import json
 from typing import Optional
 
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models import AuditLog
+
+# Constant key for the transaction-level advisory lock that serializes every
+# audit-chain append. All writers contend on this single key, so the
+# read-prev-hash → insert sequence is atomic across concurrent requests and the
+# hash chain can never fork. The lock auto-releases at transaction end.
+_AUDIT_CHAIN_LOCK_KEY = 728_311_042
 
 
 def _digest(prev_hash: str, payload: dict) -> str:
@@ -38,6 +44,13 @@ async def write_audit(
     resource: Optional[str] = None,
     detail: Optional[str] = None,
 ) -> AuditLog:
+    # Serialize the read-prev-hash → insert against all other audit writers in
+    # this DB. pg_advisory_xact_lock blocks until held, auto-releases on commit/
+    # rollback. Without this, two concurrent transactions read the same
+    # prev_hash and fork the chain (verify_chain would then report tamper).
+    await session.execute(
+        text("SELECT pg_advisory_xact_lock(:k)"), {"k": _AUDIT_CHAIN_LOCK_KEY}
+    )
     last = (
         await session.execute(
             select(AuditLog).order_by(AuditLog.audit_id.desc()).limit(1)

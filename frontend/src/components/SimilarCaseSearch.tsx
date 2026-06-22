@@ -37,7 +37,9 @@ export function SimilarCaseSearch({ onOpenCase }: Props) {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter") run(); }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") run();
+          }}
           placeholder={t("e.g. chain snatching near bus stand at night")}
           className="flex-1 rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
         />
@@ -58,24 +60,32 @@ export function SimilarCaseSearch({ onOpenCase }: Props) {
       )}
 
       {res && res.matches.length === 0 && (
-        <p className="text-xs text-muted-foreground text-center py-2">{t("No similar cases found.")}</p>
+        <p className="text-xs text-muted-foreground text-center py-2">
+          {t("No similar cases found.")}
+        </p>
       )}
 
       {res && res.matches.length > 0 && (
         <ul className="space-y-2">
           {res.matches.map((m) => (
-            <li key={m.case_id}
+            <li
+              key={m.case_id}
               className={`rounded-xl border border-border bg-muted/20 p-3 transition hover:bg-muted/40 ${onOpenCase ? "cursor-pointer" : ""}`}
-              onClick={() => onOpenCase?.(m.case_id)}>
+              onClick={() => onOpenCase?.(m.case_id)}
+            >
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm font-semibold text-foreground font-mono">
                   {m.fir_number ?? `Case #${m.case_id}`}
                 </span>
-                <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
-                  m.similarity_percent >= 80 ? "bg-primary/20 text-primary" :
-                  m.similarity_percent >= 60 ? "bg-orange-500/20 text-orange-600" :
-                  "bg-muted text-muted-foreground"
-                }`}>
+                <span
+                  className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                    m.similarity_percent >= 80
+                      ? "bg-primary/20 text-primary"
+                      : m.similarity_percent >= 60
+                        ? "bg-orange-500/20 text-orange-600"
+                        : "bg-muted text-muted-foreground"
+                  }`}
+                >
                   {m.similarity_percent}% match
                 </span>
               </div>
@@ -85,7 +95,12 @@ export function SimilarCaseSearch({ onOpenCase }: Props) {
               {m.why_similar.length > 0 && (
                 <div className="flex flex-wrap gap-1">
                   {m.why_similar.map((w, i) => (
-                    <span key={i} className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">{w}</span>
+                    <span
+                      key={i}
+                      className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground"
+                    >
+                      {w}
+                    </span>
                   ))}
                 </div>
               )}

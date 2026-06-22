@@ -252,10 +252,12 @@ def main() -> None:
         # ── Collect person positions + speeds ─────────────────────────────
         person_centers: list[tuple[float, float]] = []
         person_speeds:  list[float]               = []
+        seen_tids: set[int] = set()
 
         if res.boxes is not None and res.boxes.id is not None:
             for box, cls_t, tid_t in zip(res.boxes.xyxy, res.boxes.cls, res.boxes.id):
                 cls, tid = int(cls_t), int(tid_t)
+                seen_tids.add(tid)
                 x1, y1, x2, y2 = map(float, box.tolist())
                 cx, cy = (x1 + x2) / 2, (y1 + y2) / 2
 
@@ -277,6 +279,13 @@ def main() -> None:
                             fire("vehicle_anomaly", conf)
                     else:
                         stopped_since.pop(tid, None)
+
+        # Evict track IDs no longer visible so the per-track dicts can't grow
+        # without bound over a long stream.
+        if frame_idx % 300 == 0:
+            for d in (prev_center, prev_speed, stopped_since):
+                for gone in [k for k in d if k not in seen_tids]:
+                    d.pop(gone, None)
 
         n_people = len(person_centers)
 

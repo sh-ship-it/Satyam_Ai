@@ -7,6 +7,7 @@ stop-all support, and up-front whole-route green-corridor activation.
 from __future__ import annotations
 
 import asyncio
+import logging
 
 from sqlalchemy import select, update
 
@@ -14,6 +15,8 @@ from app.db.ops_models import IncidentDispatch, PatrolUnit
 from app.db.session import get_sessionmaker
 from app.services.ops import corridor_service
 from app.services.ops.ws_manager import manager
+
+log = logging.getLogger("satyam.ops.sim")
 
 TICK_SEC = 0.8            # interval between coordinate steps
 MAX_POINTS = 60           # subsample long routes to <= this many steps
@@ -154,9 +157,24 @@ def start(dispatch_id: int, patrol_id: int, coords: list[list[float]],
           duration_sec: int, on_move=None) -> None:
     if dispatch_id in _running:
         return
-    _running[dispatch_id] = asyncio.create_task(
+    task = asyncio.create_task(
         _run(dispatch_id, patrol_id, coords, duration_sec, on_move)
     )
+    _running[dispatch_id] = task
+
+    def _on_done(t: asyncio.Task) -> None:
+        # Surface any non-cancellation error instead of silently swallowing it
+        # ("Task exception was never retrieved"). Also drop the stale latest
+        # state so the in-memory registry doesn't leak completed dispatches.
+        try:
+            exc = t.exception()
+        except asyncio.CancelledError:
+            exc = None
+        if exc is not None:
+            log.error("sim task failed for dispatch %s: %r", dispatch_id, exc)
+        _latest.pop(dispatch_id, None)
+
+    task.add_done_callback(_on_done)
 
 
 def stop(dispatch_id: int) -> None:

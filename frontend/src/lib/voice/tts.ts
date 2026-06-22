@@ -27,43 +27,51 @@ let currentAudio: HTMLAudioElement | null = null;
  * "asterisk asterisk bold asterisk asterisk pipe column pipe".
  */
 export function stripMarkdown(text: string): string {
-  return (text || "")
-    // fenced code blocks
-    .replace(/```[\s\S]*?```/g, "")
-    // inline code
-    .replace(/`[^`]*`/g, "")
-    // headings
-    .replace(/^#{1,6}\s+/gm, "")
-    // bold/italic
-    .replace(/\*{1,3}([^*]+)\*{1,3}/g, "$1")
-    .replace(/_{1,3}([^_]+)_{1,3}/g, "$1")
-    // GFM table rows → comma-separated
-    .replace(/\|([^\n]+)\|/g, (_m, inner: string) =>
-      inner.split("|").map((c: string) => c.trim()).filter(Boolean).join(", ")
-    )
-    // table separator rows
-    .replace(/^[\s|:-]+$/gm, "")
-    // markdown links [text](url)
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-    // inline citations like [ref]
-    .replace(/\[[^\]]+\]/g, "")
-    // blockquotes
-    .replace(/^>\s*/gm, "")
-    // horizontal rules
-    .replace(/^[-*_]{3,}$/gm, "")
-    // bullet/numbered list markers
-    .replace(/^[\s]*[-*+]\s+/gm, "")
-    .replace(/^\s*\d+\.\s+/gm, "")
-    // excess blank lines
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
+  return (
+    (text || "")
+      // fenced code blocks
+      .replace(/```[\s\S]*?```/g, "")
+      // inline code
+      .replace(/`[^`]*`/g, "")
+      // headings
+      .replace(/^#{1,6}\s+/gm, "")
+      // bold/italic
+      .replace(/\*{1,3}([^*]+)\*{1,3}/g, "$1")
+      .replace(/_{1,3}([^_]+)_{1,3}/g, "$1")
+      // GFM table rows → comma-separated
+      .replace(/\|([^\n]+)\|/g, (_m, inner: string) =>
+        inner
+          .split("|")
+          .map((c: string) => c.trim())
+          .filter(Boolean)
+          .join(", "),
+      )
+      // table separator rows
+      .replace(/^[\s|:-]+$/gm, "")
+      // markdown links [text](url)
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      // inline citations like [ref]
+      .replace(/\[[^\]]+\]/g, "")
+      // blockquotes
+      .replace(/^>\s*/gm, "")
+      // horizontal rules
+      .replace(/^[-*_]{3,}$/gm, "")
+      // bullet/numbered list markers
+      .replace(/^[\s]*[-*+]\s+/gm, "")
+      .replace(/^\s*\d+\.\s+/gm, "")
+      // excess blank lines
+      .replace(/\n{3,}/g, "\n\n")
+      .trim()
+  );
 }
 
 // ── browser voice pre-loading (V2) ───────────────────────────────────────────
 let voicesCache: SpeechSynthesisVoice[] = [];
 function warmVoices(): void {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-  const load = () => { voicesCache = window.speechSynthesis.getVoices() || []; };
+  const load = () => {
+    voicesCache = window.speechSynthesis.getVoices() || [];
+  };
   load();
   // Chrome populates voices asynchronously.
   window.speechSynthesis.onvoiceschanged = load;
@@ -73,12 +81,12 @@ warmVoices();
 function pickVoice(lang: "en" | "kn"): SpeechSynthesisVoice | null {
   const all = voicesCache.length
     ? voicesCache
-    : (typeof window !== "undefined" && "speechSynthesis" in window
-        ? window.speechSynthesis.getVoices()
-        : []);
+    : typeof window !== "undefined" && "speechSynthesis" in window
+      ? window.speechSynthesis.getVoices()
+      : [];
   if (!all || !all.length) return null;
-  const exact  = lang === "kn" ? "kn-in" : "en-in";
-  const prefix = lang === "kn" ? "kn"    : "en";
+  const exact = lang === "kn" ? "kn-in" : "en-in";
+  const prefix = lang === "kn" ? "kn" : "en";
   return (
     all.find((v) => v.lang?.toLowerCase() === exact) ||
     all.find((v) => v.lang?.toLowerCase().startsWith(prefix)) ||
@@ -103,11 +111,22 @@ export function unlockAudioPlayback(): void {
       "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=",
     );
     a.volume = 0;
-    void a.play().then(() => { a.pause(); }).catch(() => {});
+    void a
+      .play()
+      .then(() => {
+        a.pause();
+      })
+      .catch(() => {});
     audioUnlocked = true;
-  } catch { /* noop */ }
+  } catch {
+    /* noop */
+  }
   // Also nudge speechSynthesis so the first utterance isn't swallowed on Chrome.
-  try { window.speechSynthesis?.resume(); } catch { /* noop */ }
+  try {
+    window.speechSynthesis?.resume();
+  } catch {
+    /* noop */
+  }
 }
 
 // ── public controls ──────────────────────────────────────────────────────────
@@ -115,21 +134,38 @@ export function unlockAudioPlayback(): void {
 /** Stop any in-flight speech — fetched clip AND browser voice. */
 export function cancelSpeech(): void {
   if (currentAudio) {
-    try { currentAudio.pause(); currentAudio.src = ""; } catch { /* noop */ }
+    try {
+      currentAudio.pause();
+      currentAudio.src = "";
+    } catch {
+      /* noop */
+    }
     currentAudio = null;
   }
   if (typeof window !== "undefined" && "speechSynthesis" in window) {
-    try { window.speechSynthesis.cancel(); } catch { /* noop */ }
+    try {
+      window.speechSynthesis.cancel();
+    } catch {
+      /* noop */
+    }
   }
 }
 
 /** Pause whichever channel is active (V4). */
 export function pauseSpeech(): void {
   if (currentAudio && !currentAudio.paused) {
-    try { currentAudio.pause(); } catch { /* noop */ }
+    try {
+      currentAudio.pause();
+    } catch {
+      /* noop */
+    }
   }
   if (typeof window !== "undefined" && "speechSynthesis" in window) {
-    try { if (window.speechSynthesis.speaking) window.speechSynthesis.pause(); } catch { /* noop */ }
+    try {
+      if (window.speechSynthesis.speaking) window.speechSynthesis.pause();
+    } catch {
+      /* noop */
+    }
   }
 }
 
@@ -139,7 +175,11 @@ export function resumeSpeech(): void {
     void currentAudio.play().catch(() => {});
   }
   if (typeof window !== "undefined" && "speechSynthesis" in window) {
-    try { window.speechSynthesis.resume(); } catch { /* noop */ }
+    try {
+      window.speechSynthesis.resume();
+    } catch {
+      /* noop */
+    }
   }
 }
 
@@ -155,12 +195,7 @@ export function isSpeechActive(): boolean {
 // ── internal helpers ─────────────────────────────────────────────────────────
 
 /** Browser Web Speech fallback — always fires exactly one onEnd. */
-function browserSpeak(
-  text: string,
-  lang: "en" | "kn",
-  rate: number,
-  hooks?: SpeakHooks,
-): void {
+function browserSpeak(text: string, lang: "en" | "kn", rate: number, hooks?: SpeakHooks): void {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) {
     hooks?.onEnd?.();
     return;
@@ -178,13 +213,20 @@ function browserSpeak(
         console.warn("[tts] no kn-IN browser voice; output may be silent. Use Sarvam/Google.");
       }
       u.onstart = () => hooks?.onStart?.();
-      u.onend   = () => hooks?.onEnd?.();
+      u.onend = () => hooks?.onEnd?.();
       u.onerror = () => hooks?.onEnd?.();
       window.speechSynthesis.speak(u);
       // Chrome bug: long utterances pause themselves ~15 s in. Kick resume every 8 s.
       const kick = setInterval(() => {
-        if (!window.speechSynthesis.speaking) { clearInterval(kick); return; }
-        try { window.speechSynthesis.resume(); } catch { /* noop */ }
+        if (!window.speechSynthesis.speaking) {
+          clearInterval(kick);
+          return;
+        }
+        try {
+          window.speechSynthesis.resume();
+        } catch {
+          /* noop */
+        }
       }, 8000);
     } catch {
       hooks?.onEnd?.();
@@ -234,7 +276,10 @@ export async function speak(
 ): Promise<void> {
   cancelSpeech();
   const cleaned = stripMarkdown(text);
-  if (!cleaned) { hooks?.onEnd?.(); return; }
+  if (!cleaned) {
+    hooks?.onEnd?.();
+    return;
+  }
 
   const provider = loadEngineSettings().voiceBackend; // "sarvam" | "google" | "webspeech"
   console.debug("[tts] speak provider=", provider, "lang=", lang);

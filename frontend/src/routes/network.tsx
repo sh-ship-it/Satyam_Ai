@@ -4,24 +4,38 @@ import { CaseDrawer } from "@/components/CaseDrawer";
 import { FinancialLinksPanel } from "@/components/FinancialLinksPanel";
 import { RingsPanel } from "@/components/RingsPanel";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
-import { ChevronDown, Maximize2, Download, FileJson, ImageDown, Save, Trash2, Sliders, Search, User, Hash, Loader2, TrendingUp } from "lucide-react";
+import {
+  ChevronDown,
+  Maximize2,
+  Download,
+  FileJson,
+  ImageDown,
+  Save,
+  Trash2,
+  Sliders,
+  Search,
+  User,
+  Hash,
+  Loader2,
+  TrendingUp,
+} from "lucide-react";
 import { useT } from "@/lib/i18n";
 import { api } from "@/lib/api/client";
 import { intelligence, type SearchResult, type OffenderListItem } from "@/lib/api/intelligence";
 import { createPortal } from "react-dom";
 
 type SimParams = { repulsion: number; spring: number; gravity: number; damping: number };
-const SIM_DEFAULTS: SimParams = { repulsion: 18, spring: 0.012, gravity: 0.0020, damping: 0.82 };
+const SIM_DEFAULTS: SimParams = { repulsion: 18, spring: 0.012, gravity: 0.002, damping: 0.82 };
 const SIM_PRESETS: Record<string, SimParams> = {
   Default: SIM_DEFAULTS,
-  Spread:  { repulsion: 36, spring: 0.008, gravity: 0.0010, damping: 0.85 },
-  Tight:   { repulsion: 10, spring: 0.020, gravity: 0.0040, damping: 0.75 },
+  Spread: { repulsion: 36, spring: 0.008, gravity: 0.001, damping: 0.85 },
+  Tight: { repulsion: 10, spring: 0.02, gravity: 0.004, damping: 0.75 },
 };
 const SLIDER_META = [
-  { key: "repulsion", label: "Repulsion", min: 0,  max: 60,   step: 1 },
-  { key: "spring",    label: "Spring",    min: 0,  max: 0.05, step: 0.001 },
-  { key: "gravity",   label: "Gravity",   min: 0,  max: 0.01, step: 0.0001 },
-  { key: "damping",   label: "Damping",   min: 0,  max: 1,    step: 0.01 },
+  { key: "repulsion", label: "Repulsion", min: 0, max: 60, step: 1 },
+  { key: "spring", label: "Spring", min: 0, max: 0.05, step: 0.001 },
+  { key: "gravity", label: "Gravity", min: 0, max: 0.01, step: 0.0001 },
+  { key: "damping", label: "Damping", min: 0, max: 1, step: 0.01 },
 ] as const;
 
 export const Route = createFileRoute("/network")({
@@ -38,14 +52,17 @@ export const Route = createFileRoute("/network")({
 
 // Group colours: 0=seed(blue), 1=accused(orange), 2=victim(green), 3=case(purple)
 const GROUP_COLOR = [
-  "oklch(0.546 0.215 262)",  // 0 seed — blue
-  "oklch(0.65 0.18 50)",     // 1 accused — orange
-  "oklch(0.60 0.17 150)",    // 2 victim/complainant — green
-  "oklch(0.55 0.15 300)",    // 3 case node — purple
+  "oklch(0.546 0.215 262)", // 0 seed — blue
+  "oklch(0.65 0.18 50)", // 1 accused — orange
+  "oklch(0.60 0.17 150)", // 2 victim/complainant — green
+  "oklch(0.55 0.15 300)", // 3 case node — purple
 ];
 const GROUP_SHAPE = ["circle", "circle", "circle", "diamond"];
 
-type PosMap = Record<string, { x: number; y: number; vx: number; vy: number; fx?: number | null; fy?: number | null }>;
+type PosMap = Record<
+  string,
+  { x: number; y: number; vx: number; vy: number; fx?: number | null; fy?: number | null }
+>;
 
 // ── Seed entity autocomplete ──────────────────────────────────────────────────
 function SeedSearch({
@@ -73,8 +90,9 @@ function SeedSearch({
   // Pre-load top offenders shown before user types
   useEffect(() => {
     const p = new URLSearchParams({ limit: "8", min_offenses: "1" });
-    intelligence.listOffenders(p)
-      .then(r => setPopular(r.offenders.slice(0, 8)))
+    intelligence
+      .listOffenders(p)
+      .then((r) => setPopular(r.offenders.slice(0, 8)))
       .catch(() => {});
   }, []);
 
@@ -87,12 +105,21 @@ function SeedSearch({
     if (debounce.current) clearTimeout(debounce.current);
     debounce.current = setTimeout(() => {
       setSearching(true);
-      intelligence.searchPersonsAndCases(value.trim(), 10)
-        .then(r => { setResults(r); setActiveIdx(-1); })
-        .catch(err => { console.error("[seed search] failed:", err); setResults([]); })
+      intelligence
+        .searchPersonsAndCases(value.trim(), 10)
+        .then((r) => {
+          setResults(r);
+          setActiveIdx(-1);
+        })
+        .catch((err) => {
+          console.error("[seed search] failed:", err);
+          setResults([]);
+        })
         .finally(() => setSearching(false));
     }, 180);
-    return () => { if (debounce.current) clearTimeout(debounce.current); };
+    return () => {
+      if (debounce.current) clearTimeout(debounce.current);
+    };
   }, [value]);
 
   // Close on outside click
@@ -106,7 +133,8 @@ function SeedSearch({
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const showDropdown = open && (value.trim().length < 1 ? popular.length > 0 : results.length > 0 || searching);
+  const showDropdown =
+    open && (value.trim().length < 1 ? popular.length > 0 : results.length > 0 || searching);
 
   function pick(name: string) {
     onChange(name);
@@ -116,35 +144,59 @@ function SeedSearch({
   }
 
   function handleKey(e: React.KeyboardEvent) {
-    const items = value.trim().length < 1 ? popular.map(p => p.display_name) : results.map(r => r.label);
+    const items =
+      value.trim().length < 1 ? popular.map((p) => p.display_name) : results.map((r) => r.label);
     if (!showDropdown) return;
-    if (e.key === "ArrowDown") { e.preventDefault(); setActiveIdx(i => Math.min(i + 1, items.length - 1)); }
-    if (e.key === "ArrowUp")   { e.preventDefault(); setActiveIdx(i => Math.max(i - 1, 0)); }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIdx((i) => Math.min(i + 1, items.length - 1));
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIdx((i) => Math.max(i - 1, 0));
+    }
     if (e.key === "Enter") {
-      if (activeIdx >= 0 && items[activeIdx]) { pick(items[activeIdx]); }
-      else if (value.trim()) { setOpen(false); onSelect(value.trim()); }
+      if (activeIdx >= 0 && items[activeIdx]) {
+        pick(items[activeIdx]);
+      } else if (value.trim()) {
+        setOpen(false);
+        onSelect(value.trim());
+      }
     }
     if (e.key === "Escape") setOpen(false);
   }
 
   return (
     <div ref={containerRef} className="relative">
-      <div className={`flex items-center gap-1 rounded-md border bg-card transition-all ${open ? "border-primary ring-1 ring-primary/20" : "border-input"}`}>
-        {searching
-          ? <Loader2 className="ml-2 h-3.5 w-3.5 text-muted-foreground animate-spin shrink-0" />
-          : <Search className="ml-2 h-3.5 w-3.5 text-muted-foreground shrink-0" />}
+      <div
+        className={`flex items-center gap-1 rounded-md border bg-card transition-all ${open ? "border-primary ring-1 ring-primary/20" : "border-input"}`}
+      >
+        {searching ? (
+          <Loader2 className="ml-2 h-3.5 w-3.5 text-muted-foreground animate-spin shrink-0" />
+        ) : (
+          <Search className="ml-2 h-3.5 w-3.5 text-muted-foreground shrink-0" />
+        )}
         <input
           ref={inputRef}
           value={value}
-          onChange={e => { onChange(e.target.value); setOpen(true); }}
+          onChange={(e) => {
+            onChange(e.target.value);
+            setOpen(true);
+          }}
           onFocus={() => setOpen(true)}
           onKeyDown={handleKey}
           placeholder={t("Enter name or ID…")}
           className="w-44 bg-transparent px-1 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
         />
         {value && (
-          <button onClick={() => { onChange(""); setResults([]); inputRef.current?.focus(); }}
-            className="mr-1 text-muted-foreground hover:text-foreground transition">
+          <button
+            onClick={() => {
+              onChange("");
+              setResults([]);
+              inputRef.current?.focus();
+            }}
+            className="mr-1 text-muted-foreground hover:text-foreground transition"
+          >
             <span className="text-xs">✕</span>
           </button>
         )}
@@ -158,22 +210,33 @@ function SeedSearch({
               <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted/30 flex items-center gap-1.5">
                 <TrendingUp className="h-3 w-3" /> {t("Top offenders")}
               </div>
-              {popular.map(p => (
-                <button key={p.person_id} onClick={() => pick(p.display_name)}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 text-left transition">
+              {popular.map((p) => (
+                <button
+                  key={p.person_id}
+                  onClick={() => pick(p.display_name)}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 text-left transition"
+                >
                   <div className="h-7 w-7 rounded-full bg-destructive/10 flex items-center justify-center shrink-0">
                     <User className="h-3.5 w-3.5 text-destructive" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-semibold text-foreground truncate">{p.display_name}</div>
+                    <div className="text-xs font-semibold text-foreground truncate">
+                      {p.display_name}
+                    </div>
                     <div className="text-[10px] text-muted-foreground truncate">
-                      {p.offense_count} cases · {p.top_crime_type || "—"}{p.district ? ` · ${p.district}` : ""}
+                      {p.offense_count} cases · {p.top_crime_type || "—"}
+                      {p.district ? ` · ${p.district}` : ""}
                     </div>
                   </div>
-                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ${
-                    p.risk_label === "Critical" ? "bg-destructive/15 text-destructive" :
-                    p.risk_label === "High" ? "bg-orange-500/15 text-orange-600" :
-                    "bg-muted text-muted-foreground"}`}>
+                  <span
+                    className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ${
+                      p.risk_label === "Critical"
+                        ? "bg-destructive/15 text-destructive"
+                        : p.risk_label === "High"
+                          ? "bg-orange-500/15 text-orange-600"
+                          : "bg-muted text-muted-foreground"
+                    }`}
+                  >
                     {p.risk_label}
                   </span>
                 </button>
@@ -192,57 +255,74 @@ function SeedSearch({
               No results for "<strong>{value}</strong>"
             </div>
           )}
-          {value.trim().length >= 1 && !searching && results.length > 0 && (() => {
-            const persons = results.filter(r => r.type === "person");
-            const cases   = results.filter(r => r.type === "case");
-            return (
-              <>
-                {persons.length > 0 && (
-                  <>
-                    <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted/30 flex items-center gap-1.5">
-                      <User className="h-3 w-3" /> {t("Persons")}
-                    </div>
-                    {persons.map((r, i) => (
-                      <button key={r.id} onClick={() => pick(r.label)}
-                        className={`w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 text-left transition ${activeIdx === i ? "bg-muted/50" : ""}`}>
-                        <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                          <User className="h-3.5 w-3.5 text-primary" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-semibold text-foreground truncate">{r.label}</div>
-                          <div className="text-[10px] text-muted-foreground truncate">{r.sub}</div>
-                        </div>
-                        {(r.case_count ?? 0) > 0 && (
-                          <span className="text-[10px] font-bold bg-destructive/10 text-destructive px-1.5 py-0.5 rounded-full shrink-0">
-                            {r.case_count} cases
-                          </span>
-                        )}
-                      </button>
-                    ))}
-                  </>
-                )}
-                {cases.length > 0 && (
-                  <>
-                    <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted/30 flex items-center gap-1.5">
-                      <Hash className="h-3 w-3" /> {t("Cases / FIRs")}
-                    </div>
-                    {cases.map((r, i) => (
-                      <button key={r.id} onClick={() => pick(r.label)}
-                        className={`w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 text-left transition ${activeIdx === persons.length + i ? "bg-muted/50" : ""}`}>
-                        <div className="h-7 w-7 rounded-full bg-orange-500/10 flex items-center justify-center shrink-0">
-                          <Hash className="h-3.5 w-3.5 text-orange-500" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-semibold font-mono text-foreground truncate">{r.label}</div>
-                          <div className="text-[10px] text-muted-foreground truncate">{r.sub}</div>
-                        </div>
-                      </button>
-                    ))}
-                  </>
-                )}
-              </>
-            );
-          })()}
+          {value.trim().length >= 1 &&
+            !searching &&
+            results.length > 0 &&
+            (() => {
+              const persons = results.filter((r) => r.type === "person");
+              const cases = results.filter((r) => r.type === "case");
+              return (
+                <>
+                  {persons.length > 0 && (
+                    <>
+                      <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted/30 flex items-center gap-1.5">
+                        <User className="h-3 w-3" /> {t("Persons")}
+                      </div>
+                      {persons.map((r, i) => (
+                        <button
+                          key={r.id}
+                          onClick={() => pick(r.label)}
+                          className={`w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 text-left transition ${activeIdx === i ? "bg-muted/50" : ""}`}
+                        >
+                          <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                            <User className="h-3.5 w-3.5 text-primary" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-xs font-semibold text-foreground truncate">
+                              {r.label}
+                            </div>
+                            <div className="text-[10px] text-muted-foreground truncate">
+                              {r.sub}
+                            </div>
+                          </div>
+                          {(r.case_count ?? 0) > 0 && (
+                            <span className="text-[10px] font-bold bg-destructive/10 text-destructive px-1.5 py-0.5 rounded-full shrink-0">
+                              {r.case_count} cases
+                            </span>
+                          )}
+                        </button>
+                      ))}
+                    </>
+                  )}
+                  {cases.length > 0 && (
+                    <>
+                      <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted/30 flex items-center gap-1.5">
+                        <Hash className="h-3 w-3" /> {t("Cases / FIRs")}
+                      </div>
+                      {cases.map((r, i) => (
+                        <button
+                          key={r.id}
+                          onClick={() => pick(r.label)}
+                          className={`w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 text-left transition ${activeIdx === persons.length + i ? "bg-muted/50" : ""}`}
+                        >
+                          <div className="h-7 w-7 rounded-full bg-orange-500/10 flex items-center justify-center shrink-0">
+                            <Hash className="h-3.5 w-3.5 text-orange-500" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-xs font-semibold font-mono text-foreground truncate">
+                              {r.label}
+                            </div>
+                            <div className="text-[10px] text-muted-foreground truncate">
+                              {r.sub}
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </>
+                  )}
+                </>
+              );
+            })()}
         </div>
       )}
     </div>
@@ -258,7 +338,7 @@ function NetworkScreen() {
 
   // Live graph data
   const [NODES, setNODES] = useState<any[]>([]);
-  const [EDGES, setEDGES] = useState<[string,string][]>([]);
+  const [EDGES, setEDGES] = useState<[string, string][]>([]);
   const [seedInput, setSeedInput] = useState("");
   const [graphLoading, setGraphLoading] = useState(false);
   const [graphEmpty, setGraphEmpty] = useState(true);
@@ -266,84 +346,88 @@ function NetworkScreen() {
   const [linkMode, setLinkMode] = useState<"people" | "financial" | "rings">("people");
   const [ringCtx, setRingCtx] = useState<{ district?: string; crime_type?: string } | null>(null);
 
-  const fetchGraph = useCallback(async (seedName: string, queryDepth: number = depth) => {
-    setGraphLoading(true);
-    setGraphEmpty(false);
-    setPos({}); // clear old positions so new nodes animate in
-    try {
-      const res: any = await api.network({ entity_name: seedName, depth: queryDepth });
+  const fetchGraph = useCallback(
+    async (seedName: string, queryDepth: number = depth) => {
+      setGraphLoading(true);
+      setGraphEmpty(false);
+      setPos({}); // clear old positions so new nodes animate in
+      try {
+        const res: any = await api.network({ entity_name: seedName, depth: queryDepth });
 
-      if (!res?.nodes?.length) {
+        if (!res?.nodes?.length) {
+          setNODES([]);
+          setEDGES([]);
+          setGraphEmpty(true);
+          return;
+        }
+
+        const seedId = String(res.seed_id ?? res.root ?? "");
+
+        // Map API nodes — backend returns `kind` not `entity_type`
+        const mappedNodes = res.nodes.map((n: any, idx: number) => {
+          const nid = String(n.id ?? idx);
+          const isSeed = nid === seedId;
+          const kind = (n.kind || n.entity_type || "person").toLowerCase();
+          const isCase = kind === "case";
+          const role = n.role || (isSeed ? "seed" : undefined);
+
+          // Colour group:
+          //   0 = seed person (blue)
+          //   1 = co-accused person (orange)
+          //   2 = victim/complainant (green)
+          //   3 = case node (purple)
+          let group = 3;
+          if (isCase) {
+            group = 3;
+          } else if (isSeed) {
+            group = 0;
+          } else {
+            const r = (role || "").toLowerCase();
+            if (r.includes("accused")) group = 1;
+            else if (r.includes("victim") || r.includes("complainant")) group = 2;
+            else group = 1; // default co-involved = orange
+          }
+
+          // Spread nodes in a circle around center
+          const angle = (idx / Math.max(res.nodes.length - 1, 1)) * 2 * Math.PI;
+          const radius = isSeed ? 0 : isCase ? 18 : 28;
+          const cx = 50,
+            cy = 50;
+
+          return {
+            id: nid,
+            x: isSeed ? cx : cx + radius * Math.cos(angle) + (Math.random() - 0.5) * 4,
+            y: isSeed ? cy : cy + radius * Math.sin(angle) + (Math.random() - 0.5) * 4,
+            r: isSeed ? 24 : isCase ? 7 : 10 + Math.min(n.degree ?? 1, 6),
+            group,
+            label: n.label ?? n.name ?? nid,
+            role: isSeed ? "seed" : role,
+            kind,
+            crime_type: n.crime_type,
+            caseIds: n.case_ids ?? [],
+          };
+        });
+
+        const mappedEdges: [string, string][] = (res.edges ?? []).map(
+          (e: any) => [String(e.source), String(e.target)] as [string, string],
+        );
+
+        setNODES(mappedNodes);
+        setEDGES(mappedEdges);
+        setSelected(seedId);
+        setSelectedSet(new Set(seedId ? [seedId] : []));
+        setGraphEmpty(mappedNodes.length === 0);
+      } catch (err) {
+        console.error("[network] fetchGraph error:", err);
         setNODES([]);
         setEDGES([]);
         setGraphEmpty(true);
-        return;
+      } finally {
+        setGraphLoading(false);
       }
-
-      const seedId = String(res.seed_id ?? res.root ?? "");
-
-      // Map API nodes — backend returns `kind` not `entity_type`
-      const mappedNodes = res.nodes.map((n: any, idx: number) => {
-        const nid = String(n.id ?? idx);
-        const isSeed = nid === seedId;
-        const kind = (n.kind || n.entity_type || "person").toLowerCase();
-        const isCase = kind === "case";
-        const role = n.role || (isSeed ? "seed" : undefined);
-
-        // Colour group:
-        //   0 = seed person (blue)
-        //   1 = co-accused person (orange)
-        //   2 = victim/complainant (green)
-        //   3 = case node (purple)
-        let group = 3;
-        if (isCase) {
-          group = 3;
-        } else if (isSeed) {
-          group = 0;
-        } else {
-          const r = (role || "").toLowerCase();
-          if (r.includes("accused")) group = 1;
-          else if (r.includes("victim") || r.includes("complainant")) group = 2;
-          else group = 1; // default co-involved = orange
-        }
-
-        // Spread nodes in a circle around center
-        const angle = (idx / Math.max(res.nodes.length - 1, 1)) * 2 * Math.PI;
-        const radius = isSeed ? 0 : isCase ? 18 : 28;
-        const cx = 50, cy = 50;
-
-        return {
-          id: nid,
-          x: isSeed ? cx : cx + radius * Math.cos(angle) + (Math.random() - 0.5) * 4,
-          y: isSeed ? cy : cy + radius * Math.sin(angle) + (Math.random() - 0.5) * 4,
-          r: isSeed ? 24 : isCase ? 7 : 10 + Math.min(n.degree ?? 1, 6),
-          group,
-          label: n.label ?? n.name ?? nid,
-          role: isSeed ? "seed" : role,
-          kind,
-          crime_type: n.crime_type,
-          caseIds: n.case_ids ?? [],
-        };
-      });
-
-      const mappedEdges: [string, string][] = (res.edges ?? []).map(
-        (e: any) => [String(e.source), String(e.target)] as [string, string]
-      );
-
-      setNODES(mappedNodes);
-      setEDGES(mappedEdges);
-      setSelected(seedId);
-      setSelectedSet(new Set(seedId ? [seedId] : []));
-      setGraphEmpty(mappedNodes.length === 0);
-    } catch (err) {
-      console.error("[network] fetchGraph error:", err);
-      setNODES([]);
-      setEDGES([]);
-      setGraphEmpty(true);
-    } finally {
-      setGraphLoading(false);
-    }
-  }, [depth]);
+    },
+    [depth],
+  );
 
   const handleDepthChange = (newDepth: number) => {
     setDepth(newDepth);
@@ -358,7 +442,10 @@ function NetworkScreen() {
       const d = (e as CustomEvent).detail;
       if (!d || d.route !== "/network") return;
       setTaskMsg(d.task || d.query || null);
-      if (d.task) { setSeedInput(d.task); fetchGraph(d.task); } // show the name in the Seed box AND search it
+      if (d.task) {
+        setSeedInput(d.task);
+        fetchGraph(d.task);
+      } // show the name in the Seed box AND search it
     };
     window.addEventListener("satyam:run-task", onTask);
     return () => window.removeEventListener("satyam:run-task", onTask);
@@ -373,11 +460,19 @@ function NetworkScreen() {
 
   useEffect(() => {
     let raw: string | null = null;
-    try { raw = sessionStorage.getItem("satyam:network-context"); } catch {}
+    try {
+      raw = sessionStorage.getItem("satyam:network-context");
+    } catch {}
     if (!raw) return;
-    try { sessionStorage.removeItem("satyam:network-context"); } catch {}
+    try {
+      sessionStorage.removeItem("satyam:network-context");
+    } catch {}
     let ctx: { district?: string; crime_type?: string } = {};
-    try { ctx = JSON.parse(raw); } catch { return; }
+    try {
+      ctx = JSON.parse(raw);
+    } catch {
+      return;
+    }
     if (!ctx.district && !ctx.crime_type) return;
     setRingCtx({ district: ctx.district || undefined, crime_type: ctx.crime_type || undefined });
     setLinkMode("rings");
@@ -388,13 +483,15 @@ function NetworkScreen() {
   const [exportScope, setExportScope] = useState<"selection" | "all">("selection");
   const graphSvgRef = useRef<SVGSVGElement>(null);
   const node = useMemo(() => {
-    return NODES.find((n) => n.id === selected) || {
-      id: "",
-      label: t("No selection"),
-      group: 0,
-      role: "",
-      caseIds: [],
-    };
+    return (
+      NODES.find((n) => n.id === selected) || {
+        id: "",
+        label: t("No selection"),
+        group: 0,
+        role: "",
+        caseIds: [],
+      }
+    );
   }, [NODES, selected, t]);
 
   // ---- Physics tuning state ----
@@ -402,7 +499,11 @@ function NetworkScreen() {
   const ACTIVE_KEY = "network.physics.active.v1";
   const [userPresets, setUserPresets] = useState<Record<string, SimParams>>(() => {
     if (typeof window === "undefined") return {};
-    try { return JSON.parse(localStorage.getItem(PRESETS_KEY) || "{}"); } catch { return {}; }
+    try {
+      return JSON.parse(localStorage.getItem(PRESETS_KEY) || "{}");
+    } catch {
+      return {};
+    }
   });
   const [activePreset, setActivePreset] = useState<string>(() => {
     if (typeof window === "undefined") return "Default";
@@ -445,12 +546,12 @@ function NetworkScreen() {
     updateCoords();
     window.addEventListener("resize", updateCoords);
     window.addEventListener("scroll", updateCoords, true);
-    
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setPresetsOpen(false);
     };
     window.addEventListener("keydown", handleKeyDown);
-    
+
     return () => {
       window.removeEventListener("resize", updateCoords);
       window.removeEventListener("scroll", updateCoords, true);
@@ -463,7 +564,9 @@ function NetworkScreen() {
     if (!p) return;
     setSim(p);
     setActivePreset(name);
-    try { localStorage.setItem(ACTIVE_KEY, name); } catch {}
+    try {
+      localStorage.setItem(ACTIVE_KEY, name);
+    } catch {}
     setPresetsOpen(false);
   };
   const saveCurrentAsPreset = () => {
@@ -485,7 +588,9 @@ function NetworkScreen() {
     if (name in SIM_PRESETS) return;
     const { [name]: _, ...rest } = userPresets;
     setUserPresets(rest);
-    try { localStorage.setItem(PRESETS_KEY, JSON.stringify(rest)); } catch {}
+    try {
+      localStorage.setItem(PRESETS_KEY, JSON.stringify(rest));
+    } catch {}
     if (activePreset === name) applyPreset("Default");
   };
   // Mark active as "Custom" when sliders drift from the named preset
@@ -511,7 +616,12 @@ function NetworkScreen() {
   posRef.current = pos;
   const [view, setView] = useState({ x: 0, y: 0, scale: 1 });
   const [frameMs, setFrameMs] = useState(16);
-  const dragRef = useRef<{ id: string | null; panning: boolean; lastX: number; lastY: number }>({ id: null, panning: false, lastX: 0, lastY: 0 });
+  const dragRef = useRef<{ id: string | null; panning: boolean; lastX: number; lastY: number }>({
+    id: null,
+    panning: false,
+    lastX: 0,
+    lastY: 0,
+  });
 
   // Force simulation loop
   useEffect(() => {
@@ -567,8 +677,8 @@ function NetworkScreen() {
         const dx = B.x - A.x;
         const dy = B.y - A.y;
         const d = Math.sqrt(dx * dx + dy * dy) || 0.01;
-        const isSeedA = nodesRef.current.find(n => n.id === a)?.role === "seed";
-        const isSeedB = nodesRef.current.find(n => n.id === b)?.role === "seed";
+        const isSeedA = nodesRef.current.find((n) => n.id === a)?.role === "seed";
+        const isSeedB = nodesRef.current.find((n) => n.id === b)?.role === "seed";
         const rest = isSeedA || isSeedB ? 26 : 22;
         const k = ph.spring * (d - rest);
         const fx = (dx / d) * k;
@@ -628,7 +738,10 @@ function NetworkScreen() {
     const d = dragRef.current;
     if (d.id) {
       const { x, y } = clientToSvg(e.clientX, e.clientY);
-      setPos((prev) => ({ ...prev, [d.id!]: { ...prev[d.id!], x, y, fx: x, fy: y, vx: 0, vy: 0 } }));
+      setPos((prev) => ({
+        ...prev,
+        [d.id!]: { ...prev[d.id!], x, y, fx: x, fy: y, vx: 0, vy: 0 },
+      }));
     } else if (d.panning) {
       const dx = e.clientX - d.lastX;
       const dy = e.clientY - d.lastY;
@@ -658,7 +771,8 @@ function NetworkScreen() {
     });
   };
 
-  const zoomBy = (factor: number) => setView((v) => ({ ...v, scale: Math.max(0.4, Math.min(3, v.scale * factor)) }));
+  const zoomBy = (factor: number) =>
+    setView((v) => ({ ...v, scale: Math.max(0.4, Math.min(3, v.scale * factor)) }));
   const recenter = () => setView({ x: 0, y: 0, scale: 1 });
 
   const viewBox = useMemo(() => {
@@ -745,8 +859,8 @@ function NetworkScreen() {
       .map(([a, b]) => {
         const A = nodeMap.get(a)!;
         const B = nodeMap.get(b)!;
-        const isSeedA = nodes.find(n => n.id === a)?.role === "seed";
-        const isSeedB = nodes.find(n => n.id === b)?.role === "seed";
+        const isSeedA = nodes.find((n) => n.id === a)?.role === "seed";
+        const isSeedB = nodes.find((n) => n.id === b)?.role === "seed";
         const isCore = isSeedA || isSeedB;
         return `<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="#1a1f2e" stroke-opacity="${isCore ? 0.6 : 0.25}" stroke-width="${isCore ? 0.32 : 0.18}" ${isCore ? "" : 'stroke-dasharray="0.6 0.6"'}/>`;
       })
@@ -758,10 +872,14 @@ function NetworkScreen() {
         const shape = GROUP_SHAPE[n.group];
         const isSeed = (n as any).role === "seed";
         let shapeXml = "";
-        if (shape === "circle") shapeXml = `<circle cx="${n.x}" cy="${n.y}" r="${r}" fill="${color}" stroke="#1a1f2e" stroke-width="${isSeed ? 0.7 : 0.45}"/>`;
-        else if (shape === "square") shapeXml = `<rect x="${n.x - r}" y="${n.y - r}" width="${r * 2}" height="${r * 2}" fill="${color}" stroke="#1a1f2e" stroke-width="0.45"/>`;
-        else if (shape === "diamond") shapeXml = `<polygon points="${n.x},${n.y - r} ${n.x + r},${n.y} ${n.x},${n.y + r} ${n.x - r},${n.y}" fill="${color}" stroke="#1a1f2e" stroke-width="0.45"/>`;
-        else shapeXml = `<polygon points="${n.x},${n.y - r} ${n.x + r},${n.y + r} ${n.x - r},${n.y + r}" fill="${color}" stroke="#1a1f2e" stroke-width="0.45"/>`;
+        if (shape === "circle")
+          shapeXml = `<circle cx="${n.x}" cy="${n.y}" r="${r}" fill="${color}" stroke="#1a1f2e" stroke-width="${isSeed ? 0.7 : 0.45}"/>`;
+        else if (shape === "square")
+          shapeXml = `<rect x="${n.x - r}" y="${n.y - r}" width="${r * 2}" height="${r * 2}" fill="${color}" stroke="#1a1f2e" stroke-width="0.45"/>`;
+        else if (shape === "diamond")
+          shapeXml = `<polygon points="${n.x},${n.y - r} ${n.x + r},${n.y} ${n.x},${n.y + r} ${n.x - r},${n.y}" fill="${color}" stroke="#1a1f2e" stroke-width="0.45"/>`;
+        else
+          shapeXml = `<polygon points="${n.x},${n.y - r} ${n.x + r},${n.y + r} ${n.x - r},${n.y + r}" fill="${color}" stroke="#1a1f2e" stroke-width="0.45"/>`;
         const labelW = Math.max(n.label.length * 0.88, 6);
         const labelBg = isSeed ? "#1a1f2e" : "#ffffff";
         const labelFg = isSeed ? "#ffffff" : "#1a1f2e";
@@ -827,8 +945,6 @@ function NetworkScreen() {
     return { nodes: nodes.length, edges: edges.length };
   })();
 
-
-
   return (
     <Shell>
       <div className="flex h-[calc(100vh-3.5rem-26px)]">
@@ -846,10 +962,16 @@ function NetworkScreen() {
                   key={m}
                   onClick={() => setLinkMode(m)}
                   className={`rounded-md px-3 py-1.5 transition ${
-                    linkMode === m ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                    linkMode === m
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {m === "people" ? t("People & Cases") : m === "financial" ? t("Financial links") : t("Rings")}
+                  {m === "people"
+                    ? t("People & Cases")
+                    : m === "financial"
+                      ? t("Financial links")
+                      : t("Rings")}
                 </button>
               ))}
             </div>
@@ -869,7 +991,9 @@ function NetworkScreen() {
                   onClick={() => seedInput.trim() && fetchGraph(seedInput.trim())}
                   disabled={graphLoading}
                   className="rounded-md border border-border bg-card px-2 py-1.5 text-xs font-medium hover:bg-muted disabled:opacity-50"
-                >{graphLoading ? "…" : "▶"}</button>
+                >
+                  {graphLoading ? "…" : "▶"}
+                </button>
               </div>
             </Control>
             <Control label={t("Depth")}>
@@ -887,10 +1011,14 @@ function NetworkScreen() {
               </div>
             </Control>
             <Control label={t("Edge type")}>
-              <Select options={[t("All"), t("Co-accused"), t("Phone"), t("Vehicle"), t("Location")]} />
+              <Select
+                options={[t("All"), t("Co-accused"), t("Phone"), t("Vehicle"), t("Location")]}
+              />
             </Control>
             <Control label={t("Community")}>
-              <Select options={[t("All"), "C-01 (Theft ring)", "C-02 (Cyber)", "C-03 (Narcotics)"]} />
+              <Select
+                options={[t("All"), "C-01 (Theft ring)", "C-02 (Cyber)", "C-03 (Narcotics)"]}
+              />
             </Control>
             <div className="hidden xl:flex items-center gap-3 border-l border-border pl-3">
               <div className="relative">
@@ -904,66 +1032,84 @@ function NetworkScreen() {
                   <span className="max-w-[90px] truncate">{t(activePreset)}</span>
                   <ChevronDown className="size-3" />
                 </button>
-                {presetsOpen && createPortal(
-                  <>
-                    <div className="fixed inset-0 z-[9999]" onClick={() => setPresetsOpen(false)} />
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: `${coords.top + 4}px`,
-                        left: `${coords.left}px`,
-                      }}
-                      className="z-[10000] w-56 max-h-[60vh] overflow-y-auto rounded-[5px] border-2 border-foreground bg-secondary-background p-1 nb-shadow"
-                    >
-                      <div className="px-2 py-1 text-[10px] uppercase tracking-wide text-muted-foreground whitespace-nowrap">{t("Built-in")}</div>
-                      {Object.keys(SIM_PRESETS).map((name) => (
-                        <button
-                          key={name}
-                          onClick={() => applyPreset(name)}
-                          className={`flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-xs hover:bg-muted whitespace-nowrap ${activePreset === name ? "bg-muted" : ""}`}
-                        >
-                          <span className="truncate">{t(name)}</span>
-                          {activePreset === name && <span className="ml-2 text-[10px] text-muted-foreground shrink-0">✓</span>}
-                        </button>
-                      ))}
-                      {Object.keys(userPresets).length > 0 && (
-                        <>
-                          <div className="mt-1 px-2 py-1 text-[10px] uppercase tracking-wide text-muted-foreground whitespace-nowrap">{t("Saved")}</div>
-                          {Object.keys(userPresets).map((name) => (
-                            <div key={name} className={`group flex items-center justify-between rounded px-2 py-1.5 text-xs hover:bg-muted whitespace-nowrap ${activePreset === name ? "bg-muted" : ""}`}>
-                              <button onClick={() => applyPreset(name)} className="flex-1 text-left truncate mr-1">
-                                {t(name)}
-                              </button>
-                              <button
-                                onClick={() => deletePreset(name)}
-                                className="ml-1 rounded p-1 text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-card hover:text-destructive shrink-0"
-                                title={t("Delete preset")}
-                              >
-                                <Trash2 className="size-3" />
-                              </button>
-                            </div>
-                          ))}
-                        </>
-                      )}
-                      <div className="my-1 h-px bg-border" />
-                      <button
-                        onClick={saveCurrentAsPreset}
-                        className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs hover:bg-muted whitespace-nowrap"
+                {presetsOpen &&
+                  createPortal(
+                    <>
+                      <div
+                        className="fixed inset-0 z-[9999]"
+                        onClick={() => setPresetsOpen(false)}
+                      />
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: `${coords.top + 4}px`,
+                          left: `${coords.left}px`,
+                        }}
+                        className="z-[10000] w-56 max-h-[60vh] overflow-y-auto rounded-[5px] border-2 border-foreground bg-secondary-background p-1 nb-shadow"
                       >
-                        <Save className="size-3.5 shrink-0" />
-                        <span>{t("Save current as preset…")}</span>
-                      </button>
-                    </div>
-                  </>,
-                  document.body
-                )}
+                        <div className="px-2 py-1 text-[10px] uppercase tracking-wide text-muted-foreground whitespace-nowrap">
+                          {t("Built-in")}
+                        </div>
+                        {Object.keys(SIM_PRESETS).map((name) => (
+                          <button
+                            key={name}
+                            onClick={() => applyPreset(name)}
+                            className={`flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-xs hover:bg-muted whitespace-nowrap ${activePreset === name ? "bg-muted" : ""}`}
+                          >
+                            <span className="truncate">{t(name)}</span>
+                            {activePreset === name && (
+                              <span className="ml-2 text-[10px] text-muted-foreground shrink-0">
+                                ✓
+                              </span>
+                            )}
+                          </button>
+                        ))}
+                        {Object.keys(userPresets).length > 0 && (
+                          <>
+                            <div className="mt-1 px-2 py-1 text-[10px] uppercase tracking-wide text-muted-foreground whitespace-nowrap">
+                              {t("Saved")}
+                            </div>
+                            {Object.keys(userPresets).map((name) => (
+                              <div
+                                key={name}
+                                className={`group flex items-center justify-between rounded px-2 py-1.5 text-xs hover:bg-muted whitespace-nowrap ${activePreset === name ? "bg-muted" : ""}`}
+                              >
+                                <button
+                                  onClick={() => applyPreset(name)}
+                                  className="flex-1 text-left truncate mr-1"
+                                >
+                                  {t(name)}
+                                </button>
+                                <button
+                                  onClick={() => deletePreset(name)}
+                                  className="ml-1 rounded p-1 text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-card hover:text-destructive shrink-0"
+                                  title={t("Delete preset")}
+                                >
+                                  <Trash2 className="size-3" />
+                                </button>
+                              </div>
+                            ))}
+                          </>
+                        )}
+                        <div className="my-1 h-px bg-border" />
+                        <button
+                          onClick={saveCurrentAsPreset}
+                          className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs hover:bg-muted whitespace-nowrap"
+                        >
+                          <Save className="size-3.5 shrink-0" />
+                          <span>{t("Save current as preset…")}</span>
+                        </button>
+                      </div>
+                    </>,
+                    document.body,
+                  )}
               </div>
               {SLIDER_META.map(({ key, label, min, max, step }) => {
                 let fmt: ((v: number) => string) | undefined;
                 if (key === "spring") fmt = (v) => v.toFixed(3);
                 else if (key === "gravity") fmt = (v) => v.toFixed(4);
                 else if (key === "damping") fmt = (v) => v.toFixed(2);
-                
+
                 return (
                   <Slider
                     key={key}
@@ -1007,7 +1153,9 @@ function NetworkScreen() {
                     <div className="fixed inset-0 z-40" onClick={() => setExportOpen(false)} />
                     <div className="absolute right-0 top-full z-50 mt-1 w-64 overflow-hidden rounded-md border border-border bg-card shadow-lg">
                       <div className="border-b border-border p-2">
-                        <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{t("Scope")}</div>
+                        <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                          {t("Scope")}
+                        </div>
                         <div className="grid grid-cols-2 gap-1">
                           <button
                             onClick={() => setExportScope("selection")}
@@ -1034,7 +1182,9 @@ function NetworkScreen() {
                         <ImageDown className="h-3.5 w-3.5" />
                         <div className="flex flex-col">
                           <span>{exporting === "png" ? t("Exporting…") : t("PNG image")}</span>
-                          <span className="text-[10px] text-muted-foreground">{t("Rendered graph snapshot")}</span>
+                          <span className="text-[10px] text-muted-foreground">
+                            {t("Rendered graph snapshot")}
+                          </span>
                         </div>
                       </button>
                       <button
@@ -1045,7 +1195,9 @@ function NetworkScreen() {
                         <FileJson className="h-3.5 w-3.5" />
                         <div className="flex flex-col">
                           <span>{exporting === "json" ? t("Exporting…") : t("JSON snapshot")}</span>
-                          <span className="text-[10px] text-muted-foreground">{t("Nodes, edges, metadata")}</span>
+                          <span className="text-[10px] text-muted-foreground">
+                            {t("Nodes, edges, metadata")}
+                          </span>
                         </div>
                       </button>
                       <div className="border-t border-border bg-muted/30 px-3 py-1.5 text-[10px] text-muted-foreground">
@@ -1059,10 +1211,7 @@ function NetworkScreen() {
                 <Maximize2 className="h-3.5 w-3.5" /> {t("Fullscreen")}
               </button>
             </div>
-
-
           </div>
-
           {/* Graph / Financial panel */}
           {linkMode === "financial" ? (
             <div className="flex-1 overflow-hidden">
@@ -1073,246 +1222,346 @@ function NetworkScreen() {
               <RingsPanel crimeType={ringCtx?.crime_type} district={ringCtx?.district} />
             </div>
           ) : (
-          <div
-            className="relative flex-1 overflow-hidden bg-background text-foreground/20"
-            style={{
-              backgroundImage: "radial-gradient(currentColor 1.2px, transparent 1.2px)",
-              backgroundSize: "28px 28px",
-            }}
-          >
-            {graphEmpty && !graphLoading && (
-              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-background/85 p-6 text-center">
-                <div className="max-w-md rounded-[5px] border-2 border-foreground bg-secondary-background p-6 nb-shadow-md text-foreground">
-                  <h3 className="text-lg font-extrabold uppercase tracking-wide mb-2">{t("Seed Entity Link Graph")}</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {t("Enter a suspect, victim, case, or vehicle in the search bar above to build and explore the criminal relationship network.")}
-                  </p>
-                  <div className="flex justify-center">
-                    <input
-                      value={seedInput}
-                      onChange={(e) => setSeedInput(e.target.value)}
-                      onKeyDown={(e) => { if (e.key === "Enter" && seedInput.trim()) fetchGraph(seedInput.trim()); }}
-                      placeholder={t("Enter suspect name…")}
-                      className="w-48 rounded-[5px] border-2 border-foreground bg-background px-3 py-1.5 text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                    />
-                    <button
-                      onClick={() => seedInput.trim() && fetchGraph(seedInput.trim())}
-                      className="ml-2 rounded-[5px] border-2 border-foreground bg-primary px-4 py-1.5 text-sm font-extrabold text-primary-foreground nb-shadow-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
-                    >
-                      {t("Build")}
-                    </button>
+            <div
+              className="relative flex-1 overflow-hidden bg-background text-foreground/20"
+              style={{
+                backgroundImage: "radial-gradient(currentColor 1.2px, transparent 1.2px)",
+                backgroundSize: "28px 28px",
+              }}
+            >
+              {graphEmpty && !graphLoading && (
+                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-background/85 p-6 text-center">
+                  <div className="max-w-md rounded-[5px] border-2 border-foreground bg-secondary-background p-6 nb-shadow-md text-foreground">
+                    <h3 className="text-lg font-extrabold uppercase tracking-wide mb-2">
+                      {t("Seed Entity Link Graph")}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {t(
+                        "Enter a suspect, victim, case, or vehicle in the search bar above to build and explore the criminal relationship network.",
+                      )}
+                    </p>
+                    <div className="flex justify-center">
+                      <input
+                        value={seedInput}
+                        onChange={(e) => setSeedInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && seedInput.trim()) fetchGraph(seedInput.trim());
+                        }}
+                        placeholder={t("Enter suspect name…")}
+                        className="w-48 rounded-[5px] border-2 border-foreground bg-background px-3 py-1.5 text-sm font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                      />
+                      <button
+                        onClick={() => seedInput.trim() && fetchGraph(seedInput.trim())}
+                        className="ml-2 rounded-[5px] border-2 border-foreground bg-primary px-4 py-1.5 text-sm font-extrabold text-primary-foreground nb-shadow-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+                      >
+                        {t("Build")}
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {graphLoading && (
-              <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/50">
-                <div className="rounded-[5px] border-2 border-foreground bg-secondary-background px-6 py-4 nb-shadow-md text-foreground font-extrabold flex items-center gap-3">
-                  <span className="animate-spin">🌀</span> {t("Building Network Graph…")}
+              {graphLoading && (
+                <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/50">
+                  <div className="rounded-[5px] border-2 border-foreground bg-secondary-background px-6 py-4 nb-shadow-md text-foreground font-extrabold flex items-center gap-3">
+                    <span className="animate-spin">🌀</span> {t("Building Network Graph…")}
+                  </div>
                 </div>
+              )}
+
+              {/* Coordinate labels */}
+              <div className="pointer-events-none absolute left-3 top-3 z-10 space-y-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-foreground/40">
+                <div>SECTOR · 04-B</div>
+                <div>EGO · DEPTH {depth}</div>
               </div>
-            )}
 
-            {/* Coordinate labels */}
-            <div className="pointer-events-none absolute left-3 top-3 z-10 space-y-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-foreground/40">
-              <div>SECTOR · 04-B</div>
-              <div>EGO · DEPTH {depth}</div>
-            </div>
+              {/* Range rings */}
+              <svg
+                className="pointer-events-none absolute inset-0 h-full w-full"
+                preserveAspectRatio="none"
+              >
+                <g stroke="currentColor" className="text-foreground/10" fill="none">
+                  <circle cx="50%" cy="50%" r="110" strokeWidth="1.5" strokeDasharray="3 5" />
+                  <circle cx="50%" cy="50%" r="200" strokeWidth="1.5" strokeDasharray="3 5" />
+                  <circle cx="50%" cy="50%" r="300" strokeWidth="1.5" strokeDasharray="3 5" />
+                </g>
+              </svg>
 
-            {/* Range rings */}
-            <svg className="pointer-events-none absolute inset-0 h-full w-full" preserveAspectRatio="none">
-              <g stroke="currentColor" className="text-foreground/10" fill="none">
-                <circle cx="50%" cy="50%" r="110" strokeWidth="1.5" strokeDasharray="3 5" />
-                <circle cx="50%" cy="50%" r="200" strokeWidth="1.5" strokeDasharray="3 5" />
-                <circle cx="50%" cy="50%" r="300" strokeWidth="1.5" strokeDasharray="3 5" />
-              </g>
-            </svg>
+              {/* Graph SVG */}
+              <svg
+                ref={graphSvgRef}
+                viewBox={viewBox}
+                className="absolute inset-0 h-full w-full touch-none select-none text-foreground"
+                preserveAspectRatio="xMidYMid meet"
+                onPointerDown={onBgPointerDown}
+                onPointerMove={onPointerMove}
+                onPointerUp={onPointerUp()}
+                onPointerLeave={onPointerUp()}
+                onWheel={onWheel}
+                style={{ cursor: dragRef.current.panning ? "grabbing" : "grab" }}
+              >
+                {EDGES.map(([a, b], i) => {
+                  const A = pos[a];
+                  const B = pos[b];
+                  if (!A || !B) return null;
+                  const isSeedA = NODES.find((n) => n.id === a)?.role === "seed";
+                  const isSeedB = NODES.find((n) => n.id === b)?.role === "seed";
+                  const isCore = isSeedA || isSeedB;
+                  const inSelection =
+                    selectedSet.size > 1 && selectedSet.has(a) && selectedSet.has(b);
+                  const dimmed = selectedSet.size > 1 && !inSelection;
+                  return (
+                    <line
+                      key={i}
+                      x1={A.x}
+                      y1={A.y}
+                      x2={B.x}
+                      y2={B.y}
+                      stroke="currentColor"
+                      strokeOpacity={dimmed ? 0.08 : isCore ? 0.6 : 0.22}
+                      strokeWidth={isCore ? 0.32 : 0.18}
+                      strokeDasharray={isCore ? undefined : "0.6 0.6"}
+                    />
+                  );
+                })}
 
-            {/* Graph SVG */}
-            <svg
-              ref={graphSvgRef}
-              viewBox={viewBox}
-              className="absolute inset-0 h-full w-full touch-none select-none text-foreground"
-              preserveAspectRatio="xMidYMid meet"
-              onPointerDown={onBgPointerDown}
-              onPointerMove={onPointerMove}
-              onPointerUp={onPointerUp()}
-              onPointerLeave={onPointerUp()}
-              onWheel={onWheel}
-              style={{ cursor: dragRef.current.panning ? "grabbing" : "grab" }}
-            >
-              {EDGES.map(([a, b], i) => {
-                const A = pos[a];
-                const B = pos[b];
-                if (!A || !B) return null;
-                const isSeedA = NODES.find(n => n.id === a)?.role === "seed";
-                const isSeedB = NODES.find(n => n.id === b)?.role === "seed";
-                const isCore = isSeedA || isSeedB;
-                const inSelection = selectedSet.size > 1 && selectedSet.has(a) && selectedSet.has(b);
-                const dimmed = selectedSet.size > 1 && !inSelection;
-                return (
-                  <line
-                    key={i}
-                    x1={A.x}
-                    y1={A.y}
-                    x2={B.x}
-                    y2={B.y}
-                    stroke="currentColor"
-                    strokeOpacity={dimmed ? 0.08 : isCore ? 0.6 : 0.22}
-                    strokeWidth={isCore ? 0.32 : 0.18}
-                    strokeDasharray={isCore ? undefined : "0.6 0.6"}
-                  />
-                );
-              })}
-
-              {NODES.map((n) => {
-                const p = pos[n.id];
-                if (!p) return null;
-                const sel = n.id === selected;
-                const inSet = selectedSet.has(n.id);
-                const color = GROUP_COLOR[n.group];
-                const r = n.r / 10;
-                const isSeed = n.role === "seed";
-                const labelW = Math.max(n.label.length * 0.88, 6);
-                return (
-                  <g
-                    key={n.id}
-                    onClick={(e) => handleNodeClick(n.id, e)}
-                    onPointerDown={(e) => onNodePointerDown(n.id, e)}
-                    onPointerUp={onPointerUp(n.id)}
-                    className="cursor-grab active:cursor-grabbing"
-                  >
-                    {inSet && (
-                      <circle cx={p.x} cy={p.y} r={r + 1.4} fill="none" stroke="currentColor" strokeWidth={sel ? 0.45 : 0.3} strokeDasharray="0.5 0.5" />
-                    )}
-                    {isSeed && (
-                      <circle cx={p.x} cy={p.y} r={r + 2.4} fill={color} opacity="0.18" className="animate-pulse" />
-                    )}
-                    {GROUP_SHAPE[n.group] === "circle" && (
-                      <circle cx={p.x} cy={p.y} r={r} fill={color} stroke="currentColor" strokeWidth={isSeed ? 0.7 : 0.45} />
-                    )}
-                    {GROUP_SHAPE[n.group] === "square" && (
-                      <rect x={p.x - r} y={p.y - r} width={r * 2} height={r * 2} fill={color} stroke="currentColor" strokeWidth="0.45" />
-                    )}
-                    {GROUP_SHAPE[n.group] === "diamond" && (
-                      <polygon points={`${p.x},${p.y - r} ${p.x + r},${p.y} ${p.x},${p.y + r} ${p.x - r},${p.y}`} fill={color} stroke="currentColor" strokeWidth="0.45" />
-                    )}
-                    {GROUP_SHAPE[n.group] === "triangle" && (
-                      <polygon points={`${p.x},${p.y - r} ${p.x + r},${p.y + r} ${p.x - r},${p.y + r}`} fill={color} stroke="currentColor" strokeWidth="0.45" />
-                    )}
-                    {/* Label pill */}
-                    <g transform={`translate(${p.x}, ${p.y + r + 2.6})`} className="text-foreground">
-                      <rect
-                        x={-labelW / 2}
-                        y={-1.2}
-                        width={labelW}
-                        height="2.5"
-                        fill={isSeed ? "var(--foreground)" : "var(--secondary-background)"}
-                        stroke="currentColor"
-                        strokeWidth="0.18"
-                      />
-                      <text
-                        x="0"
-                        y="0.65"
-                        textAnchor="middle"
-                        fontSize="1.35"
-                        fontWeight={sel || isSeed ? 800 : 700}
-                        fill={isSeed ? "var(--background)" : "currentColor"}
-                        style={{ fontFamily: "ui-monospace, monospace", letterSpacing: "0.03em" }}
+                {NODES.map((n) => {
+                  const p = pos[n.id];
+                  if (!p) return null;
+                  const sel = n.id === selected;
+                  const inSet = selectedSet.has(n.id);
+                  const color = GROUP_COLOR[n.group];
+                  const r = n.r / 10;
+                  const isSeed = n.role === "seed";
+                  const labelW = Math.max(n.label.length * 0.88, 6);
+                  return (
+                    <g
+                      key={n.id}
+                      onClick={(e) => handleNodeClick(n.id, e)}
+                      onPointerDown={(e) => onNodePointerDown(n.id, e)}
+                      onPointerUp={onPointerUp(n.id)}
+                      className="cursor-grab active:cursor-grabbing"
+                    >
+                      {inSet && (
+                        <circle
+                          cx={p.x}
+                          cy={p.y}
+                          r={r + 1.4}
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={sel ? 0.45 : 0.3}
+                          strokeDasharray="0.5 0.5"
+                        />
+                      )}
+                      {isSeed && (
+                        <circle
+                          cx={p.x}
+                          cy={p.y}
+                          r={r + 2.4}
+                          fill={color}
+                          opacity="0.18"
+                          className="animate-pulse"
+                        />
+                      )}
+                      {GROUP_SHAPE[n.group] === "circle" && (
+                        <circle
+                          cx={p.x}
+                          cy={p.y}
+                          r={r}
+                          fill={color}
+                          stroke="currentColor"
+                          strokeWidth={isSeed ? 0.7 : 0.45}
+                        />
+                      )}
+                      {GROUP_SHAPE[n.group] === "square" && (
+                        <rect
+                          x={p.x - r}
+                          y={p.y - r}
+                          width={r * 2}
+                          height={r * 2}
+                          fill={color}
+                          stroke="currentColor"
+                          strokeWidth="0.45"
+                        />
+                      )}
+                      {GROUP_SHAPE[n.group] === "diamond" && (
+                        <polygon
+                          points={`${p.x},${p.y - r} ${p.x + r},${p.y} ${p.x},${p.y + r} ${p.x - r},${p.y}`}
+                          fill={color}
+                          stroke="currentColor"
+                          strokeWidth="0.45"
+                        />
+                      )}
+                      {GROUP_SHAPE[n.group] === "triangle" && (
+                        <polygon
+                          points={`${p.x},${p.y - r} ${p.x + r},${p.y + r} ${p.x - r},${p.y + r}`}
+                          fill={color}
+                          stroke="currentColor"
+                          strokeWidth="0.45"
+                        />
+                      )}
+                      {/* Label pill */}
+                      <g
+                        transform={`translate(${p.x}, ${p.y + r + 2.6})`}
+                        className="text-foreground"
                       >
-                        {n.label.toUpperCase()}
-                      </text>
+                        <rect
+                          x={-labelW / 2}
+                          y={-1.2}
+                          width={labelW}
+                          height="2.5"
+                          fill={isSeed ? "var(--foreground)" : "var(--secondary-background)"}
+                          stroke="currentColor"
+                          strokeWidth="0.18"
+                        />
+                        <text
+                          x="0"
+                          y="0.65"
+                          textAnchor="middle"
+                          fontSize="1.35"
+                          fontWeight={sel || isSeed ? 800 : 700}
+                          fill={isSeed ? "var(--background)" : "currentColor"}
+                          style={{ fontFamily: "ui-monospace, monospace", letterSpacing: "0.03em" }}
+                        >
+                          {n.label.toUpperCase()}
+                        </text>
+                      </g>
                     </g>
-                  </g>
-                );
-              })}
-            </svg>
+                  );
+                })}
+              </svg>
 
-            {/* Live status HUD (bottom-left) */}
-            <div className="absolute bottom-4 left-4 z-10 flex items-center gap-3 rounded-[5px] border-2 border-foreground bg-foreground px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-background nb-shadow-sm">
-              <span className="flex items-center gap-1.5">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+              {/* Live status HUD (bottom-left) */}
+              <div className="absolute bottom-4 left-4 z-10 flex items-center gap-3 rounded-[5px] border-2 border-foreground bg-foreground px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-background nb-shadow-sm">
+                <span className="flex items-center gap-1.5">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                  </span>
+                  {graphLoading && <span className="animate-pulse">…</span>}
+                  {t("Live")}
                 </span>
-                {graphLoading && <span className="animate-pulse">…</span>}
-                {t("Live")}
-              </span>
-              <span className="h-3 w-px bg-background/30" />
-              <span className="font-mono">{NODES.length} NODES · {EDGES.length} EDGES</span>
-              <span className="h-3 w-px bg-background/30 hidden sm:inline-block" />
-              <span className="font-mono opacity-60 hidden sm:inline">Δ {frameMs.toFixed(1)}ms</span>
-              <span className="h-3 w-px bg-background/30 hidden md:inline-block" />
-              <span className="font-mono opacity-60 hidden md:inline">{(view.scale * 100).toFixed(0)}%</span>
-            </div>
+                <span className="h-3 w-px bg-background/30" />
+                <span className="font-mono">
+                  {NODES.length} NODES · {EDGES.length} EDGES
+                </span>
+                <span className="h-3 w-px bg-background/30 hidden sm:inline-block" />
+                <span className="font-mono opacity-60 hidden sm:inline">
+                  Δ {frameMs.toFixed(1)}ms
+                </span>
+                <span className="h-3 w-px bg-background/30 hidden md:inline-block" />
+                <span className="font-mono opacity-60 hidden md:inline">
+                  {(view.scale * 100).toFixed(0)}%
+                </span>
+              </div>
 
-            {/* Zoom HUD (bottom-right) */}
-            <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1.5">
-              <button onClick={() => zoomBy(0.83)} className="grid h-8 w-8 place-items-center rounded-[5px] border-2 border-foreground bg-card text-foreground nb-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition" aria-label="Zoom in">
-                <span className="text-base font-black leading-none">+</span>
-              </button>
-              <button onClick={() => zoomBy(1.2)} className="grid h-8 w-8 place-items-center rounded-[5px] border-2 border-foreground bg-card text-foreground nb-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition" aria-label="Zoom out">
-                <span className="text-base font-black leading-none">−</span>
-              </button>
-              <button onClick={recenter} className="grid h-8 w-8 place-items-center rounded-[5px] border-2 border-foreground bg-card text-[11px] font-black text-foreground nb-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition" aria-label="Recenter">
-                ⊙
-              </button>
+              {/* Zoom HUD (bottom-right) */}
+              <div className="absolute bottom-4 right-4 z-10 flex flex-col gap-1.5">
+                <button
+                  onClick={() => zoomBy(0.83)}
+                  className="grid h-8 w-8 place-items-center rounded-[5px] border-2 border-foreground bg-card text-foreground nb-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition"
+                  aria-label="Zoom in"
+                >
+                  <span className="text-base font-black leading-none">+</span>
+                </button>
+                <button
+                  onClick={() => zoomBy(1.2)}
+                  className="grid h-8 w-8 place-items-center rounded-[5px] border-2 border-foreground bg-card text-foreground nb-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition"
+                  aria-label="Zoom out"
+                >
+                  <span className="text-base font-black leading-none">−</span>
+                </button>
+                <button
+                  onClick={recenter}
+                  className="grid h-8 w-8 place-items-center rounded-[5px] border-2 border-foreground bg-card text-[11px] font-black text-foreground nb-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition"
+                  aria-label="Recenter"
+                >
+                  ⊙
+                </button>
+              </div>
             </div>
-          </div>
-          )} {/* end linkMode === "financial" ternary */}
+          )}{" "}
+          {/* end linkMode === "financial" ternary */}
         </section>
-
 
         {/* Node inspector */}
         <aside className="w-80 shrink-0 border-l border-border bg-card overflow-auto">
           <div className="border-b border-border px-4 py-3">
-            <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{t("Node inspector")}</div>
+            <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
+              {t("Node inspector")}
+            </div>
             <h3 className="text-sm font-semibold text-foreground">{node.label}</h3>
           </div>
           <div className="p-4 space-y-4">
             {(() => {
-              const selNode = NODES.find(n => n.id === selected) as any;
+              const selNode = NODES.find((n) => n.id === selected) as any;
               const edgeCount = EDGES.filter(([a, b]) => a === selected || b === selected).length;
               const isSeed = selNode?.role === "seed";
               const kind = selNode?.kind || "person";
               const isCase = kind === "case";
               const roleLabel = selNode?.role
                 ? selNode.role.charAt(0).toUpperCase() + selNode.role.slice(1)
-                : isCase ? "FIR / Case" : "—";
+                : isCase
+                  ? "FIR / Case"
+                  : "—";
               const crimeType = selNode?.crime_type;
-              const groupLabel = ["Seed Person", "Accused", "Victim / Complainant", "Case / FIR"][selNode?.group ?? 0] || "—";
+              const groupLabel =
+                ["Seed Person", "Accused", "Victim / Complainant", "Case / FIR"][
+                  selNode?.group ?? 0
+                ] || "—";
 
               return (
                 <>
                   {/* Role badge */}
                   <div className="flex items-center gap-2">
-                    <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${
-                      isSeed ? "bg-primary text-primary-foreground" :
-                      selNode?.group === 1 ? "bg-orange-500/15 text-orange-700 dark:text-orange-400" :
-                      selNode?.group === 2 ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400" :
-                      "bg-purple-500/15 text-purple-700 dark:text-purple-400"
-                    }`}>{groupLabel}</span>
-                    {isSeed && <span className="rounded-full bg-primary/10 text-primary px-2 py-0.5 text-[10px] font-bold">SEED</span>}
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-xs font-bold ${
+                        isSeed
+                          ? "bg-primary text-primary-foreground"
+                          : selNode?.group === 1
+                            ? "bg-orange-500/15 text-orange-700 dark:text-orange-400"
+                            : selNode?.group === 2
+                              ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400"
+                              : "bg-purple-500/15 text-purple-700 dark:text-purple-400"
+                      }`}
+                    >
+                      {groupLabel}
+                    </span>
+                    {isSeed && (
+                      <span className="rounded-full bg-primary/10 text-primary px-2 py-0.5 text-[10px] font-bold">
+                        SEED
+                      </span>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
                     <Stat label={t("Connections")} value={String(edgeCount)} />
                     <Stat label={t("Node type")} value={isCase ? "FIR/Case" : "Person"} />
-                    <Stat label={t("Role")} value={roleLabel} tone={selNode?.group === 1 ? "red" : undefined} />
+                    <Stat
+                      label={t("Role")}
+                      value={roleLabel}
+                      tone={selNode?.group === 1 ? "red" : undefined}
+                    />
                     {crimeType && <Stat label={t("Crime type")} value={crimeType} />}
                   </div>
 
                   {/* Linked cases */}
                   {(selNode?.caseIds?.length ?? 0) > 0 && (
                     <div>
-                      <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("Linked cases")}</div>
+                      <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                        {t("Linked cases")}
+                      </div>
                       <div className="space-y-1.5">
                         {(selNode?.caseIds ?? []).slice(0, 5).map((cid: number) => (
-                          <button key={cid} onClick={() => setDrawerCaseId(cid)}
-                            className="flex w-full items-center justify-between rounded-md border border-border bg-muted/30 px-2.5 py-1.5 text-left text-sm hover:bg-muted">
+                          <button
+                            key={cid}
+                            onClick={() => setDrawerCaseId(cid)}
+                            className="flex w-full items-center justify-between rounded-md border border-border bg-muted/30 px-2.5 py-1.5 text-left text-sm hover:bg-muted"
+                          >
                             <span className="font-mono text-foreground">#{cid}</span>
-                            <span className="text-[10px] text-primary hover:underline">{t("Open")} →</span>
+                            <span className="text-[10px] text-primary hover:underline">
+                              {t("Open")} →
+                            </span>
                           </button>
                         ))}
                       </div>
@@ -1321,14 +1570,18 @@ function NetworkScreen() {
 
                   {/* Case node: open directly */}
                   {isCase && selected.startsWith("case:") && (
-                    <button onClick={() => setDrawerCaseId(parseInt(selected.replace("case:", ""), 10))}
-                      className="w-full flex items-center justify-center gap-1.5 rounded-md bg-primary text-primary-foreground px-3 py-2 text-xs font-bold hover:bg-primary/90 transition">
+                    <button
+                      onClick={() => setDrawerCaseId(parseInt(selected.replace("case:", ""), 10))}
+                      className="w-full flex items-center justify-center gap-1.5 rounded-md bg-primary text-primary-foreground px-3 py-2 text-xs font-bold hover:bg-primary/90 transition"
+                    >
                       {t("Open case")} →
                     </button>
                   )}
 
                   {(selNode?.caseIds?.length ?? 0) === 0 && !isCase && (
-                    <p className="text-xs text-muted-foreground">{t("No linked cases found for this node.")}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {t("No linked cases found for this node.")}
+                    </p>
                   )}
 
                   {/* Network summary */}
@@ -1336,19 +1589,26 @@ function NetworkScreen() {
                     <div className="rounded-lg border border-border bg-muted/20 p-3 text-xs space-y-1">
                       <div className="font-bold text-foreground mb-2">{t("Network summary")}</div>
                       <div className="flex justify-between text-muted-foreground">
-                        <span>{t("Total nodes")}</span><span className="font-bold text-foreground">{NODES.length}</span>
+                        <span>{t("Total nodes")}</span>
+                        <span className="font-bold text-foreground">{NODES.length}</span>
                       </div>
                       <div className="flex justify-between text-muted-foreground">
                         <span>{t("Accused")}</span>
-                        <span className="font-bold text-orange-600">{NODES.filter((n: any) => n.group === 1).length}</span>
+                        <span className="font-bold text-orange-600">
+                          {NODES.filter((n: any) => n.group === 1).length}
+                        </span>
                       </div>
                       <div className="flex justify-between text-muted-foreground">
                         <span>{t("Victims")}</span>
-                        <span className="font-bold text-emerald-600">{NODES.filter((n: any) => n.group === 2).length}</span>
+                        <span className="font-bold text-emerald-600">
+                          {NODES.filter((n: any) => n.group === 2).length}
+                        </span>
                       </div>
                       <div className="flex justify-between text-muted-foreground">
                         <span>{t("Cases / FIRs")}</span>
-                        <span className="font-bold text-purple-600">{NODES.filter((n: any) => n.group === 3).length}</span>
+                        <span className="font-bold text-purple-600">
+                          {NODES.filter((n: any) => n.group === 3).length}
+                        </span>
                       </div>
                     </div>
                   )}
@@ -1359,7 +1619,11 @@ function NetworkScreen() {
         </aside>
       </div>
 
-      <CaseDrawer open={drawerCaseId != null} caseId={drawerCaseId ?? undefined} onClose={() => setDrawerCaseId(null)} />
+      <CaseDrawer
+        open={drawerCaseId != null}
+        caseId={drawerCaseId ?? undefined}
+        onClose={() => setDrawerCaseId(null)}
+      />
     </Shell>
   );
 }
@@ -1367,7 +1631,9 @@ function NetworkScreen() {
 function Control({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</div>
+      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+        {label}
+      </div>
       {children}
     </div>
   );
@@ -1375,8 +1641,13 @@ function Control({ label, children }: { label: string; children: React.ReactNode
 function Select({ options, value }: { options: string[]; value?: string }) {
   return (
     <div className="relative">
-      <select defaultValue={value} className="appearance-none rounded-md border border-input bg-card px-2.5 py-1.5 pr-7 text-sm text-foreground">
-        {options.map((o) => <option key={o}>{o}</option>)}
+      <select
+        defaultValue={value}
+        className="appearance-none rounded-md border border-input bg-card px-2.5 py-1.5 pr-7 text-sm text-foreground"
+      >
+        {options.map((o) => (
+          <option key={o}>{o}</option>
+        ))}
       </select>
       <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
     </div>
@@ -1386,7 +1657,11 @@ function Stat({ label, value, tone }: { label: string; value: string; tone?: "re
   return (
     <div className="rounded-md border border-border bg-muted/30 p-2">
       <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>
-      <div className={`text-sm font-semibold ${tone === "red" ? "text-destructive" : "text-foreground"}`}>{value}</div>
+      <div
+        className={`text-sm font-semibold ${tone === "red" ? "text-destructive" : "text-foreground"}`}
+      >
+        {value}
+      </div>
     </div>
   );
 }
@@ -1402,7 +1677,9 @@ function Legend() {
     <div className="hidden lg:flex items-center gap-3 text-[10px]">
       {items.map((i) => (
         <div key={i.l} className="flex items-center gap-1">
-          <span style={{ color: i.c }} className="text-sm">{i.s}</span>
+          <span style={{ color: i.c }} className="text-sm">
+            {i.s}
+          </span>
           <span className="text-muted-foreground">{i.l}</span>
         </div>
       ))}
@@ -1431,7 +1708,9 @@ function Slider({
   return (
     <div className="flex flex-col gap-0.5 w-28">
       <div className="flex items-center justify-between">
-        <span className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</span>
+        <span className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
+          {label}
+        </span>
         <span className="text-[9px] font-mono text-foreground">{fmt ? fmt(value) : value}</span>
       </div>
       <div className="relative h-4 flex items-center">

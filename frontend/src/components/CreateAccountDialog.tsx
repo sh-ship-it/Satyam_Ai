@@ -4,24 +4,24 @@ import { useT } from "@/lib/i18n";
 import { api } from "@/lib/api/client";
 
 export const ROLE_OPTIONS = [
-  { value: "DGP",  label: "DGP — Director General (state)" },
-  { value: "IGP",  label: "IGP — Inspector General (state)" },
-  { value: "DIG",  label: "DIG — Dy. Inspector General (range)" },
-  { value: "SP",   label: "SP — Superintendent (district)" },
+  { value: "DGP", label: "DGP — Director General (state)" },
+  { value: "IGP", label: "IGP — Inspector General (state)" },
+  { value: "DIG", label: "DIG — Dy. Inspector General (range)" },
+  { value: "SP", label: "SP — Superintendent (district)" },
   { value: "DySP", label: "DySP — Dy. Superintendent (district)" },
-  { value: "CI",   label: "CI / PI — Circle/Police Inspector (station)" },
-  { value: "PSI",  label: "PSI / SI — Sub-Inspector (station)" },
-  { value: "ASI",  label: "ASI — Asst. Sub-Inspector (station)" },
-  { value: "HC",   label: "HC — Head Constable (station)" },
-  { value: "PC",   label: "PC — Police Constable (station)" },
+  { value: "CI", label: "CI / PI — Circle/Police Inspector (station)" },
+  { value: "PSI", label: "PSI / SI — Sub-Inspector (station)" },
+  { value: "ASI", label: "ASI — Asst. Sub-Inspector (station)" },
+  { value: "HC", label: "HC — Head Constable (station)" },
+  { value: "PC", label: "PC — Police Constable (station)" },
 ];
 
 const ROLE_BY_VALUE = Object.fromEntries(ROLE_OPTIONS.map((r) => [r.value, r]));
 
 export const ROLE_GROUPS: { label: string; roles: typeof ROLE_OPTIONS }[] = [
   { label: "Highest access", roles: ["DGP", "IGP", "DIG", "SP"].map((v) => ROLE_BY_VALUE[v]) },
-  { label: "Medium access",  roles: ["DySP", "CI"].map((v) => ROLE_BY_VALUE[v]) },
-  { label: "Low access",     roles: ["PSI", "ASI", "HC", "PC"].map((v) => ROLE_BY_VALUE[v]) },
+  { label: "Medium access", roles: ["DySP", "CI"].map((v) => ROLE_BY_VALUE[v]) },
+  { label: "Low access", roles: ["PSI", "ASI", "HC", "PC"].map((v) => ROLE_BY_VALUE[v]) },
 ];
 
 export function CreateAccountDialog({
@@ -38,9 +38,11 @@ export function CreateAccountDialog({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const [stationId, setStationId] = useState<string>("");      // "" = none
+  const [stationId, setStationId] = useState<string>(""); // "" = none
   const [stationSearch, setStationSearch] = useState<string>("");
-  const [stations, setStations] = useState<{ station_id: number; station_name: string; district: string }[]>([]);
+  const [stations, setStations] = useState<
+    { station_id: number; station_name: string; district: string }[]
+  >([]);
   const [photo, setPhoto] = useState<string | null>(null);
   const [camOn, setCamOn] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -101,7 +103,10 @@ export function CreateAccountDialog({
 
   useEffect(() => {
     if (!open) return;
-    api.stations().then(setStations).catch(() => setStations([]));
+    api
+      .stations()
+      .then(setStations)
+      .catch(() => setStations([]));
   }, [open]);
 
   // Revert search text to match selected station when dropdown closes
@@ -127,7 +132,8 @@ export function CreateAccountDialog({
   });
 
   const stationsByDistrict = filteredStations.reduce<Record<string, typeof stations>>((acc, s) => {
-    (acc[s.district] ??= []).push(s); return acc;
+    (acc[s.district] ??= []).push(s);
+    return acc;
   }, {});
 
   const capture = () => {
@@ -257,11 +263,15 @@ export function CreateAccountDialog({
             onChange={(e) => setRole(e.target.value)}
             className="h-10 w-full rounded-[5px] border-2 border-foreground bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring nb-shadow-sm"
           >
-            <option value="" disabled>{t("Select your rank / role")}</option>
+            <option value="" disabled>
+              {t("Select your rank / role")}
+            </option>
             {ROLE_GROUPS.map((g) => (
               <optgroup key={g.label} label={t(g.label)}>
                 {g.roles.map((r) => (
-                  <option key={r.value} value={r.value}>{t(r.label)}</option>
+                  <option key={r.value} value={r.value}>
+                    {t(r.label)}
+                  </option>
                 ))}
               </optgroup>
             ))}
@@ -327,31 +337,33 @@ export function CreateAccountDialog({
                     {t("No entries match your search.")}
                   </div>
                 ) : (
-                  Object.keys(stationsByDistrict).sort().map((district) => (
-                    <div key={district}>
-                      <div className="px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-muted-foreground bg-secondary-background border-y border-foreground/10 first:border-t-0 select-none">
-                        {district}
+                  Object.keys(stationsByDistrict)
+                    .sort()
+                    .map((district) => (
+                      <div key={district}>
+                        <div className="px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-muted-foreground bg-secondary-background border-y border-foreground/10 first:border-t-0 select-none">
+                          {district}
+                        </div>
+                        {stationsByDistrict[district].map((s) => {
+                          const isSelected = String(s.station_id) === stationId;
+                          return (
+                            <div
+                              key={s.station_id}
+                              onClick={() => {
+                                setStationId(String(s.station_id));
+                                setStationSearch(s.station_name);
+                                setIsOpen(false);
+                              }}
+                              className={`cursor-pointer px-3 py-2 text-sm transition-colors font-medium hover:bg-primary hover:text-primary-foreground ${
+                                isSelected ? "bg-primary/20 font-bold" : "text-foreground"
+                              }`}
+                            >
+                              {s.station_name}
+                            </div>
+                          );
+                        })}
                       </div>
-                      {stationsByDistrict[district].map((s) => {
-                        const isSelected = String(s.station_id) === stationId;
-                        return (
-                          <div
-                            key={s.station_id}
-                            onClick={() => {
-                              setStationId(String(s.station_id));
-                              setStationSearch(s.station_name);
-                              setIsOpen(false);
-                            }}
-                            className={`cursor-pointer px-3 py-2 text-sm transition-colors font-medium hover:bg-primary hover:text-primary-foreground ${
-                              isSelected ? "bg-primary/20 font-bold" : "text-foreground"
-                            }`}
-                          >
-                            {s.station_name}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ))
+                    ))
                 )}
               </div>
             )}
@@ -364,7 +376,9 @@ export function CreateAccountDialog({
           onClick={submit}
           disabled={busy || !name || !email || !password || !role}
           className="mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-[5px] border-2 border-foreground bg-primary text-sm font-extrabold uppercase text-primary-foreground nb-shadow disabled:opacity-60 disabled:cursor-not-allowed select-none"
-        >          {busy ? <RefreshCw className="h-4 w-4 animate-spin" /> : null}
+        >
+          {" "}
+          {busy ? <RefreshCw className="h-4 w-4 animate-spin" /> : null}
           {t("Create account")}
         </button>
       </div>

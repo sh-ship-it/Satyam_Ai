@@ -44,7 +44,7 @@ function useCountUp(target: number, dur = 850) {
 }
 
 const SWEEP = 3.2; // seconds — scan beam + node ignite + bloom share this period
-const FLOW = 2.4;  // seconds — pipeline packet + checkpoint pulse share this period
+const FLOW = 2.4; // seconds — pipeline packet + checkpoint pulse share this period
 
 export function ModelInferenceTheater({
   cells,
@@ -66,9 +66,12 @@ export function ModelInferenceTheater({
     if (top.length === 0) return [];
     const lats = top.map((c) => c.lat);
     const lngs = top.map((c) => c.lng);
-    const minLat = Math.min(...lats), maxLat = Math.max(...lats);
-    const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
-    const latSpan = maxLat - minLat, lngSpan = maxLng - minLng;
+    const minLat = Math.min(...lats),
+      maxLat = Math.max(...lats);
+    const minLng = Math.min(...lngs),
+      maxLng = Math.max(...lngs);
+    const latSpan = maxLat - minLat,
+      lngSpan = maxLng - minLng;
     const geo = latSpan > 1e-6 && lngSpan > 1e-6;
     const cols = Math.ceil(Math.sqrt(top.length));
     const rows = Math.ceil(top.length / cols);
@@ -80,7 +83,8 @@ export function ModelInferenceTheater({
         x = pad + ((c.lng - minLng) / lngSpan) * span;
         y = pad + (1 - (c.lat - minLat) / latSpan) * span;
       } else {
-        const r = Math.floor(i / cols), cc = i % cols;
+        const r = Math.floor(i / cols),
+          cc = i % cols;
         x = pad + (cols <= 1 ? 0.5 : cc / (cols - 1)) * span;
         y = pad + (rows <= 1 ? 0.5 : r / (rows - 1)) * span;
       }
@@ -96,8 +100,8 @@ export function ModelInferenceTheater({
   const pai = backtest ? Math.round(backtest.hit_rate_top_10_percent_cells * 100) : null;
 
   const scoredUp = useCountUp(nodes.length);
-  const highUp   = useCountUp(highCount);
-  const paiUp    = useCountUp(pai ?? 0);
+  const highUp = useCountUp(highCount);
+  const paiUp = useCountUp(pai ?? 0);
 
   // Live "scoring" ticker cycling through the real cells.
   const [tickIdx, setTickIdx] = useState(0);
@@ -111,10 +115,10 @@ export function ModelInferenceTheater({
   const [hover, setHover] = useState<number | null>(null);
 
   const stages = [
-    { key: "fir",     label: t("FIR intake"),   icon: Database },
-    { key: "feat",    label: t("Features"),      icon: Activity },
-    { key: "model",   label: t("Risk model"),    icon: Cpu },
-    { key: "surface", label: t("Risk surface"),  icon: Radar },
+    { key: "fir", label: t("FIR intake"), icon: Database },
+    { key: "feat", label: t("Features"), icon: Activity },
+    { key: "model", label: t("Risk model"), icon: Cpu },
+    { key: "surface", label: t("Risk surface"), icon: Radar },
   ];
 
   return (
@@ -133,13 +137,14 @@ export function ModelInferenceTheater({
               <Zap className="h-3.5 w-3.5 text-primary" /> {t("Neural forecast engine")}
             </span>
             <span className="text-[10px] text-muted-foreground">
-              {loading ? t("Acquiring signal…") : t("Live inference")}{asOf ? ` · ${asOf}` : ""}
+              {loading ? t("Acquiring signal…") : t("Live inference")}
+              {asOf ? ` · ${asOf}` : ""}
             </span>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <Metric label={t("Cells scored")} value={scoredUp} />
-          <Metric label={t("High risk")}    value={highUp}   tone="warn" />
+          <Metric label={t("High risk")} value={highUp} tone="warn" />
           {pai !== null && <Metric label={t("PAI")} value={`${paiUp}%`} tone="ok" />}
         </div>
       </div>
@@ -249,7 +254,9 @@ export function ModelInferenceTheater({
             }}
           >
             <div className="flex items-center justify-between gap-2">
-              <span className="text-[11px] font-bold text-white truncate">{nodes[hover].crime_type}</span>
+              <span className="text-[11px] font-bold text-white truncate">
+                {nodes[hover].crime_type}
+              </span>
               <span
                 className="rounded px-1.5 py-0.5 text-[9px] font-extrabold"
                 style={{ backgroundColor: RISK_HEX[nodes[hover].level], color: "#0a0a0a" }}
@@ -259,11 +266,15 @@ export function ModelInferenceTheater({
             </div>
             <div className="mt-1 flex items-center gap-1.5">
               <span className="text-[9px] uppercase tracking-wider text-white/50">{t("Risk")}</span>
-              <span className="font-mono text-[11px] font-bold text-cyan-300">{Math.round(nodes[hover].risk_score)}</span>
+              <span className="font-mono text-[11px] font-bold text-cyan-300">
+                {Math.round(nodes[hover].risk_score)}
+              </span>
               <span className="text-[9px] text-white/40 truncate">· {nodes[hover].cell_id}</span>
             </div>
             {nodes[hover].why?.[0] && (
-              <div className="mt-1 text-[9px] leading-snug text-white/60">{nodes[hover].why[0]}</div>
+              <div className="mt-1 text-[9px] leading-snug text-white/60">
+                {nodes[hover].why[0]}
+              </div>
             )}
           </div>
         )}
@@ -281,7 +292,9 @@ export function ModelInferenceTheater({
         {/* Empty state */}
         {!loading && nodes.length === 0 && (
           <div className="absolute inset-0 grid place-items-center">
-            <span className="text-xs text-white/50">{t("No grid cells for the current filters.")}</span>
+            <span className="text-xs text-white/50">
+              {t("No grid cells for the current filters.")}
+            </span>
           </div>
         )}
 
@@ -313,7 +326,10 @@ export function ModelInferenceTheater({
           <div className="flex shrink-0 items-center gap-2">
             <span className="text-[10px] text-muted-foreground">{t("Backtest PAI")}</span>
             <div className="h-1.5 w-24 overflow-hidden rounded-full bg-muted">
-              <div className="h-full rounded-full bg-success" style={{ width: `${Math.min(100, paiUp)}%` }} />
+              <div
+                className="h-full rounded-full bg-success"
+                style={{ width: `${Math.min(100, paiUp)}%` }}
+              />
             </div>
             <span className="text-[11px] font-extrabold text-success tabular-nums">{paiUp}%</span>
           </div>
@@ -324,7 +340,15 @@ export function ModelInferenceTheater({
 }
 
 // ── Metric pill ───────────────────────────────────────────────────────────────
-function Metric({ label, value, tone }: { label: string; value: number | string; tone?: "warn" | "ok" }) {
+function Metric({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: number | string;
+  tone?: "warn" | "ok";
+}) {
   const color = tone === "warn" ? "text-warning" : tone === "ok" ? "text-success" : "text-primary";
   return (
     <div className="flex flex-col items-end rounded-lg border border-border bg-muted/30 px-2.5 py-1 leading-tight">

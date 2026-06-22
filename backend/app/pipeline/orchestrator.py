@@ -10,6 +10,7 @@ ChatRequest so the Settings panel can flip lanes live without redeploying.
 from __future__ import annotations
 
 import json
+import logging
 from dataclasses import dataclass
 from typing import AsyncIterator, Literal
 
@@ -24,6 +25,8 @@ from app.pipeline.router import route
 from app.pipeline.slots import ConversationState
 from app.pipeline.tools import analytics, rag
 from app.pipeline.tools.text_to_sql import UnsafeSQL, answer_with_sql
+
+log = logging.getLogger("satyam.pipeline")
 
 
 @dataclass
@@ -245,9 +248,19 @@ async def run(
         state.add_turn("assistant", answer)
 
     except Exception as e:  # noqa: BLE001
-        # If the safety filter fired (always-on child-safety etc.), template-fallback.
-        reason = getattr(e, "reason", str(e))
-        msg = guardrails.safety_fallback(reason)
+        # Distinguish a genuine guardrail/safety block (carries a `reason`) from
+        # an unexpected failure (DB/LLM/tool error). Only the former should tell
+        # the user a safety filter fired; the latter is logged and reported as a
+        # generic error instead of being silently mislabeled.
+        reason = getattr(e, "reason", None)
+        if reason is not None:
+            msg = guardrails.safety_fallback(reason)
+        else:
+            log.exception("pipeline.unexpected_error", exc_info=e)
+            msg = (
+                "Sorry — something went wrong while answering that. "
+                "Please try rephrasing, or try again in a moment."
+            )
         yield PipelineEvent("token", {"text": msg})
 
     yield PipelineEvent("done", {"conversation_id": state.conversation_id})

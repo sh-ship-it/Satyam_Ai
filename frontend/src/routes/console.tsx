@@ -3,8 +3,16 @@ import { Shell } from "@/components/Shell";
 import { CaseDrawer } from "@/components/CaseDrawer";
 import { useState, useEffect, useRef } from "react";
 import {
-  Mic, Send, Sparkles, ShieldAlert, History, X,
-  Map as MapIcon, Layers, Filter, Volume2,
+  Mic,
+  Send,
+  Sparkles,
+  ShieldAlert,
+  History,
+  X,
+  Map as MapIcon,
+  Layers,
+  Filter,
+  Volume2,
 } from "lucide-react";
 import { useT, useI18n } from "@/lib/i18n";
 import { tData } from "@/lib/tData";
@@ -20,7 +28,13 @@ import remarkGfm from "remark-gfm";
 
 type ChatMessage =
   | { role: "user"; text: string }
-  | { role: "ai"; text: string; citations?: string[]; streaming?: boolean; action?: React.ReactNode };
+  | {
+      role: "ai";
+      text: string;
+      citations?: string[];
+      streaming?: boolean;
+      action?: React.ReactNode;
+    };
 
 type Conversation = {
   id: string;
@@ -115,19 +129,20 @@ function Console() {
   const connectDots = async (seed: string) => {
     try {
       const res = await api.offenderTrail({ entity_name: seed });
-      setTrail(res.points.map((p) => ({
-        lat: p.lat,
-        lng: p.lng,
-        weight: 1,
-        label: p.fir_number ?? p.crime_type ?? "CrimePoint"
-      })));
+      setTrail(
+        res.points.map((p) => ({
+          lat: p.lat,
+          lng: p.lng,
+          weight: 1,
+          label: p.fir_number ?? p.crime_type ?? "CrimePoint",
+        })),
+      );
       setTrailKey((k) => k + 1);
       setCanvasTab("map");
     } catch {
       // ignore
     }
   };
-
 
   // Open the Map tab if a voice "show map" intent navigated here
   useEffect(() => {
@@ -166,9 +181,14 @@ function Console() {
           api.stationBreakdown({ ...body, limit: 25 }),
         ]);
         if (cancelled) return;
-        setHotspots((hot.points || []).map((p) => ({
-          lat: p.lat, lng: p.lng, weight: p.weight, label: p.label ?? undefined,
-        })));
+        setHotspots(
+          (hot.points || []).map((p) => ({
+            lat: p.lat,
+            lng: p.lng,
+            weight: p.weight,
+            label: p.label ?? undefined,
+          })),
+        );
         setStations(brk.rows || []);
       } catch (err: any) {
         if (!cancelled) {
@@ -189,7 +209,9 @@ function Console() {
         if (!cancelled) setCanvasLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [mapView, crimeType, district]);
 
   const totalFirs = stations.reduce((s, r) => s + r.firs, 0);
@@ -228,7 +250,8 @@ function Console() {
       const d = JSON.parse(raw);
       if (d && typeof d.text === "string" && d.text.trim()) {
         setTimeout(
-          () => sendMessage(d.text.trim(), { speak: d.speak !== false, lang: d.lang, rate: d.rate }),
+          () =>
+            sendMessage(d.text.trim(), { speak: d.speak !== false, lang: d.lang, rate: d.rate }),
           90,
         );
       }
@@ -267,7 +290,7 @@ function Console() {
       const d = (e as CustomEvent).detail || {};
       const who = d.person || d.place || "";
       if (!who) return;
-      setCanvasTab("map");   // make sure the map panel is showing
+      setCanvasTab("map"); // make sure the map panel is showing
       setMapMode("pins");
       try {
         const locs = await intelligence.personLocations(who);
@@ -315,14 +338,22 @@ function Console() {
     // resolveLang() handles all cases: "auto"/falsy → detectLang(text),
     // "kn-IN" → "kn", anything else → "en".
     const resolvedLang: "en" | "kn" = resolveLang(opts?.lang, text);
-    console.debug("[console] speak lang=", resolvedLang, "provider=", loadEngineSettings().voiceBackend);
+    console.debug(
+      "[console] speak lang=",
+      resolvedLang,
+      "provider=",
+      loadEngineSettings().voiceBackend,
+    );
     void speakViaSarvam(text, resolvedLang, opts?.rate ?? 1, {
       onStart: () => emit("speaking"),
       onEnd: () => emit("done"),
     });
   }
 
-  async function sendMessage(text: string, opts?: { speak?: boolean; lang?: string; rate?: number }) {
+  async function sendMessage(
+    text: string,
+    opts?: { speak?: boolean; lang?: string; rate?: number },
+  ) {
     const trimmed = text.trim();
     if (!trimmed) return;
 
@@ -356,25 +387,23 @@ function Console() {
 
     // TASK 2A: auto-detect chat request language from the user's text,
     // falling back to the UI language toggle if detection gives nothing.
-    const reqLang: "en" | "kn" =
-      (opts?.lang || "").toLowerCase().startsWith("kn")
+    const reqLang: "en" | "kn" = (opts?.lang || "").toLowerCase().startsWith("kn")
+      ? "kn"
+      : detectLang(trimmed) === "kn"
         ? "kn"
-        : detectLang(trimmed) === "kn"
+        : lang === "KN"
           ? "kn"
-          : lang === "KN"
-            ? "kn"
-            : "en";
+          : "en";
 
     // TASK 3: forward per-session engine settings from the Settings panel.
     const engines = loadEngineSettings();
 
     // Neutral fallback — no fabricated data
     const cannedFallback = () => {
-      const aiText = t("I couldn't reach the backend just now. Please retry once the API is running.");
-      const finalMessages: ChatMessage[] = [
-        ...baseMessages,
-        { role: "ai", text: aiText },
-      ];
+      const aiText = t(
+        "I couldn't reach the backend just now. Please retry once the API is running.",
+      );
+      const finalMessages: ChatMessage[] = [...baseMessages, { role: "ai", text: aiText }];
       setMessages(finalMessages);
       persistMessages(finalMessages);
       setStreamingIdx(null);
@@ -402,12 +431,19 @@ function Console() {
           else if (ev.type === "citation") citations.push(ev.label || ev.ref);
           else if (ev.type === "blocked") {
             blocked = true;
-            acc = t("Your role can't view named accused records. Showing aggregate counts instead.");
+            acc = t(
+              "Your role can't view named accused records. Showing aggregate counts instead.",
+            );
           } else if (ev.type === "done") backendConvId.current = ev.conversation_id;
           else if (ev.type === "error") streamError = true;
           setMessages([
             ...baseMessages,
-            { role: "ai", text: acc, citations: citations.length ? [...citations] : undefined, streaming: true },
+            {
+              role: "ai",
+              text: acc,
+              citations: citations.length ? [...citations] : undefined,
+              streaming: true,
+            },
           ]);
         },
       );
@@ -429,7 +465,9 @@ function Console() {
       return;
     }
     if (!acc.trim()) {
-      const empty = t("No results matched your query. Try a broader question or different filters.");
+      const empty = t(
+        "No results matched your query. Try a broader question or different filters.",
+      );
       const finalMessages: ChatMessage[] = [...baseMessages, { role: "ai", text: empty }];
       setMessages(finalMessages);
       persistMessages(finalMessages);
@@ -454,12 +492,17 @@ function Console() {
   // top-right voice copilot (no "satyam:open-voice") or touch copilot state.
   function toggleChatDictation() {
     if (chatRecRef.current) {
-      try { chatRecRef.current.stop(); } catch { /* noop */ }
+      try {
+        chatRecRef.current.stop();
+      } catch {
+        /* noop */
+      }
       return; // onend clears the ref + flag
     }
     const SR: any =
       (typeof window !== "undefined" &&
-        ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) || null;
+        ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) ||
+      null;
     if (!SR) {
       alert("This browser has no speech recognition. Use Chrome or Edge.");
       return;
@@ -481,7 +524,9 @@ function Console() {
       }
       setInput((prefix + finalText + interim).replace(/\s+/g, " ").trimStart());
     };
-    rec.onerror = () => { /* swallow; onend cleans up */ };
+    rec.onerror = () => {
+      /* swallow; onend cleans up */
+    };
     rec.onend = () => {
       chatRecRef.current = null;
       setChatDictating(false);
@@ -490,10 +535,17 @@ function Console() {
 
     chatRecRef.current = rec;
     setChatDictating(true);
-    try { rec.start(); } catch { chatRecRef.current = null; setChatDictating(false); }
+    try {
+      rec.start();
+    } catch {
+      chatRecRef.current = null;
+      setChatDictating(false);
+    }
   }
 
-  function handleSend() { sendMessage(input); }
+  function handleSend() {
+    sendMessage(input);
+  }
 
   function handleNewChat() {
     const newConv: Conversation = {
@@ -539,7 +591,8 @@ function Console() {
     const d = new Date(iso);
     const now = new Date();
     const diffDays = Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
-    if (diffDays === 0) return t("Today") + " · " + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    if (diffDays === 0)
+      return t("Today") + " · " + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     if (diffDays === 1) return t("Yesterday");
     if (diffDays < 7) return t("Last week");
     return d.toLocaleDateString();
@@ -560,7 +613,9 @@ function Console() {
         <section className="flex w-[420px] flex-col border-r border-border bg-card">
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <div>
-              <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{t("Conversation")}</div>
+              <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                {t("Conversation")}
+              </div>
               <h2 className="text-sm font-semibold text-foreground truncate max-w-[220px]">
                 {activeConv?.title || t("New conversation")}
               </h2>
@@ -579,20 +634,29 @@ function Console() {
                 <History className="h-3.5 w-3.5" />
                 {t("History")}
               </button>
-              <button onClick={handleNewChat} className="text-xs text-primary hover:underline">{t("+ New")}</button>
+              <button onClick={handleNewChat} className="text-xs text-primary hover:underline">
+                {t("+ New")}
+              </button>
             </div>
           </div>
 
           {historyOpen && (
             <div className="border-b border-border bg-muted/40 px-4 py-3 max-h-[280px] overflow-auto">
               <div className="mb-2 flex items-center justify-between">
-                <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{t("Chat history")}</div>
-                <button onClick={() => setHistoryOpen(false)} className="text-muted-foreground hover:text-foreground">
+                <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                  {t("Chat history")}
+                </div>
+                <button
+                  onClick={() => setHistoryOpen(false)}
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   <X className="h-3.5 w-3.5" />
                 </button>
               </div>
               {conversations.length === 0 ? (
-                <div className="text-xs text-muted-foreground py-2">{t("No conversations yet.")}</div>
+                <div className="text-xs text-muted-foreground py-2">
+                  {t("No conversations yet.")}
+                </div>
               ) : (
                 <ul className="space-y-1">
                   {conversations.map((c) => (
@@ -633,13 +697,18 @@ function Console() {
             )}
             {messages.map((msg, i) => {
               if (msg.role === "user") return <UserMsg key={i} text={msg.text} />;
-              if (msg.text === t("Your role can't view named accused records. Showing aggregate counts instead.")) {
+              if (
+                msg.text ===
+                t("Your role can't view named accused records. Showing aggregate counts instead.")
+              ) {
                 return (
                   <div key={i} className="rounded-xl border border-warning/40 bg-warning/10 p-3">
                     <div className="flex items-start gap-2.5">
                       <ShieldAlert className="mt-0.5 h-4 w-4 text-warning" />
                       <div>
-                        <div className="text-sm font-semibold text-foreground">{t("Answer restricted")}</div>
+                        <div className="text-sm font-semibold text-foreground">
+                          {t("Answer restricted")}
+                        </div>
                         <p className="mt-0.5 text-xs text-foreground/80">{msg.text}</p>
                       </div>
                     </div>
@@ -677,7 +746,10 @@ function Console() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend();
+                  }
                 }}
                 placeholder={t("Ask Satyam… (EN or ಕನ್ನಡ)")}
                 className="flex-1 resize-none bg-transparent px-2 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
@@ -685,7 +757,12 @@ function Console() {
               <button
                 type="button"
                 onClick={toggleChatDictation}
-                className={"grid h-8 w-8 place-items-center rounded-md " + (chatDictating ? "bg-destructive text-destructive-foreground animate-pulse" : "text-muted-foreground hover:bg-muted hover:text-foreground")}
+                className={
+                  "grid h-8 w-8 place-items-center rounded-md " +
+                  (chatDictating
+                    ? "bg-destructive text-destructive-foreground animate-pulse"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground")
+                }
                 aria-label={chatDictating ? t("Stop dictation") : t("Dictate into chat")}
                 title={chatDictating ? t("Stop dictation") : t("Dictate into chat")}
               >
@@ -707,25 +784,39 @@ function Console() {
           {/* Canvas header + tab switcher */}
           <div className="border-b border-border bg-card px-6 py-3 flex items-center justify-between">
             <div>
-              <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{t("Results Canvas")}</div>
+              <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                {t("Results Canvas")}
+              </div>
               <h3 className="text-sm font-semibold text-foreground">
-                {(crimeType || district)
+                {crimeType || district
                   ? `${crimeType || t("All crimes")} · ${district || t("All districts")}`
                   : t("Crime overview · live")}
               </h3>
             </div>
             <div className="flex rounded-md border border-border bg-muted/40 p-0.5">
-              {([["data", t("Data")], ["map", t("Map")]] as const).map(([v, l]) => (
+              {(
+                [
+                  ["data", t("Data")],
+                  ["map", t("Map")],
+                ] as const
+              ).map(([v, l]) => (
                 <button
                   key={v}
                   onClick={() => setCanvasTab(v as "data" | "map")}
                   className={`rounded px-3 py-1.5 text-xs font-medium transition ${
-                    canvasTab === v ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                    canvasTab === v
+                      ? "bg-card text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {v === "map"
-                    ? <span className="inline-flex items-center gap-1"><MapIcon className="h-3.5 w-3.5" />{l}</span>
-                    : l}
+                  {v === "map" ? (
+                    <span className="inline-flex items-center gap-1">
+                      <MapIcon className="h-3.5 w-3.5" />
+                      {l}
+                    </span>
+                  ) : (
+                    l
+                  )}
                 </button>
               ))}
             </div>
@@ -741,7 +832,9 @@ function Console() {
             >
               <option value="">{t("All crime types")}</option>
               {["Theft", "Burglary", "Assault", "Cyber Crime", "Narcotics", "Murder"].map((c) => (
-                <option key={c} value={c}>{t(c)}</option>
+                <option key={c} value={c}>
+                  {t(c)}
+                </option>
               ))}
             </select>
             <select
@@ -750,27 +843,49 @@ function Console() {
               className="rounded-md border border-input bg-card px-2 py-1 text-xs"
             >
               <option value="">{t("All districts")}</option>
-              {["Bengaluru City", "Bengaluru Dist", "Mysuru City", "Mangaluru City", "Hubballi Dharwad City", "Belagavi City"].map((d) => (
-                <option key={d} value={d}>{d}</option>
+              {[
+                "Bengaluru City",
+                "Bengaluru Dist",
+                "Mysuru City",
+                "Mangaluru City",
+                "Hubballi Dharwad City",
+                "Belagavi City",
+              ].map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
               ))}
             </select>
-            {canvasLoading && <span className="text-[11px] text-muted-foreground">{t("Loading…")}</span>}
+            {canvasLoading && (
+              <span className="text-[11px] text-muted-foreground">{t("Loading…")}</span>
+            )}
             {canvasErr && <span className="text-[11px] text-destructive">{canvasErr}</span>}
           </div>
 
           {canvasTab === "data" ? (
             <div className="flex-1 overflow-auto">
               <div className="grid grid-cols-3 gap-4 p-6">
-                <Stat label={t("Total FIRs")} value={String(totalFirs)} delta={`${stations.length} ${t("stations")}`} trend="flat" />
+                <Stat
+                  label={t("Total FIRs")}
+                  value={String(totalFirs)}
+                  delta={`${stations.length} ${t("stations")}`}
+                  trend="flat"
+                />
                 <Stat label={t("Avg / day")} value={avgPerDay} delta="" trend="flat" />
-                <Stat label={t("Cleared")} value={String(totalCleared)} delta={`${clearedPct}%`} trend="flat" />
+                <Stat
+                  label={t("Cleared")}
+                  value={String(totalCleared)}
+                  delta={`${clearedPct}%`}
+                  trend="flat"
+                />
               </div>
               <div className="px-6 pb-6">
                 <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
                   <div className="flex items-center justify-between border-b border-border px-4 py-2.5 text-xs">
                     <div className="font-medium text-foreground">{t("By Station")}</div>
                     <div className="text-muted-foreground">
-                      {stations.length} {t("rows")}{canvasLoading ? " · " + t("loading…") : ""}
+                      {stations.length} {t("rows")}
+                      {canvasLoading ? " · " + t("loading…") : ""}
                     </div>
                   </div>
                   <table className="w-full text-sm">
@@ -800,11 +915,17 @@ function Console() {
                           <td className="px-4 py-2.5 font-medium text-foreground">{r.station}</td>
                           <td className="px-4 py-2.5 text-foreground">{r.firs}</td>
                           <td className="px-4 py-2.5 text-muted-foreground">{r.cleared}</td>
-                          <td className="px-4 py-2.5"><Spark data={r.trend} /></td>
                           <td className="px-4 py-2.5">
-                            {r.top_legal_code
-                              ? <span className="rounded bg-accent px-1.5 py-0.5 text-[11px] font-medium text-accent-foreground">{tData("crime_type", r.top_legal_code, lang)}</span>
-                              : <span className="text-muted-foreground">—</span>}
+                            <Spark data={r.trend} />
+                          </td>
+                          <td className="px-4 py-2.5">
+                            {r.top_legal_code ? (
+                              <span className="rounded bg-accent px-1.5 py-0.5 text-[11px] font-medium text-accent-foreground">
+                                {tData("crime_type", r.top_legal_code, lang)}
+                              </span>
+                            ) : (
+                              <span className="text-muted-foreground">—</span>
+                            )}
                           </td>
                         </tr>
                       ))}
@@ -830,7 +951,9 @@ function Console() {
                       key={v}
                       onClick={() => setMapView(v)}
                       className={`rounded px-2.5 py-1 text-xs font-medium transition ${
-                        mapView === v ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                        mapView === v
+                          ? "bg-primary text-primary-foreground"
+                          : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
                       {v === "crime" ? t("By crime type") : t("By offender")}
@@ -844,7 +967,9 @@ function Console() {
                       key={l}
                       onClick={() => setMapMode(l)}
                       className={`rounded px-2.5 py-1 text-xs font-medium capitalize transition ${
-                        mapMode === l ? "bg-card text-foreground shadow-sm ring-1 ring-border" : "text-muted-foreground hover:text-foreground"
+                        mapMode === l
+                          ? "bg-card text-foreground shadow-sm ring-1 ring-border"
+                          : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
                       {t(l)}
@@ -862,13 +987,22 @@ function Console() {
                 </button>
               </div>
 
-              <CrimeMap points={hotspots} mode={mapMode} trail={trail} animateKey={trailKey} focus={mapFocus} />
+              <CrimeMap
+                points={hotspots}
+                mode={mapMode}
+                trail={trail}
+                animateKey={trailKey}
+                focus={mapFocus}
+              />
 
               {/* Legend */}
               <div className="absolute bottom-4 left-4 z-[400] rounded-lg border border-border bg-card/95 backdrop-blur px-3 py-2 text-xs shadow-lg">
                 <div className="mb-1 font-medium text-foreground">{t("Intensity")}</div>
                 <div className="flex items-center gap-2">
-                  <div className="h-2 w-32 rounded-full" style={{ background: "linear-gradient(90deg,#3b82f6,#fbbf24,#f97316,#ef4444)" }} />
+                  <div
+                    className="h-2 w-32 rounded-full"
+                    style={{ background: "linear-gradient(90deg,#3b82f6,#fbbf24,#f97316,#ef4444)" }}
+                  />
                   <span className="text-muted-foreground">{t("low → high")}</span>
                 </div>
               </div>
@@ -877,21 +1011,32 @@ function Console() {
               {stations[0] && (
                 <div className="absolute right-6 top-6 z-[400] w-72 rounded-xl border border-border bg-card/95 backdrop-blur p-4 shadow-xl">
                   <div className="flex items-center justify-between">
-                    <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{t("Top hotspot")}</div>
-                    <span className="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-medium text-success">{t("live")}</span>
+                    <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                      {t("Top hotspot")}
+                    </div>
+                    <span className="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-medium text-success">
+                      {t("live")}
+                    </span>
                   </div>
                   <h3 className="text-base font-semibold text-foreground">{stations[0].station}</h3>
                   <div className="mt-3 grid grid-cols-3 gap-2">
                     <Mini label={t("FIRs")} value={String(stations[0].firs)} />
                     <Mini label={t("Cleared")} value={String(stations[0].cleared)} />
-                    <Mini label={t("Top IPC")} value={stations[0].top_legal_code ? "§ " + stations[0].top_legal_code : "—"} />
+                    <Mini
+                      label={t("Top IPC")}
+                      value={stations[0].top_legal_code ? "§ " + stations[0].top_legal_code : "—"}
+                    />
                   </div>
                   <div className="mt-3">
-                    <div className="mb-1 text-[11px] font-medium text-muted-foreground">{t("Trend")}</div>
+                    <div className="mb-1 text-[11px] font-medium text-muted-foreground">
+                      {t("Trend")}
+                    </div>
                     <Spark data={stations[0].trend} />
                   </div>
                   <button
-                    onClick={() => sendMessage(`${t("Summarize crime around")} ${stations[0].station}`)}
+                    onClick={() =>
+                      sendMessage(`${t("Summarize crime around")} ${stations[0].station}`)
+                    }
                     className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition"
                   >
                     <Sparkles className="h-3.5 w-3.5" /> {t("Ask AI about this area")}
@@ -923,8 +1068,16 @@ function UserMsg({ text }: { text: string }) {
 }
 
 function AiMsg({
-  text, citations, streaming, action,
-}: { text: string; citations?: string[]; streaming?: boolean; action?: React.ReactNode }) {
+  text,
+  citations,
+  streaming,
+  action,
+}: {
+  text: string;
+  citations?: string[];
+  streaming?: boolean;
+  action?: React.ReactNode;
+}) {
   const t = useT();
   return (
     <div className="flex gap-2">
@@ -936,49 +1089,89 @@ function AiMsg({
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
-              h1: ({ node, ...props }) => <h1 className="text-base font-bold my-2 text-foreground" {...props} />,
-              h2: ({ node, ...props }) => <h2 className="text-sm font-bold my-1.5 text-foreground" {...props} />,
-              h3: ({ node, ...props }) => <h3 className="text-xs font-bold my-1 text-foreground" {...props} />,
+              h1: ({ node, ...props }) => (
+                <h1 className="text-base font-bold my-2 text-foreground" {...props} />
+              ),
+              h2: ({ node, ...props }) => (
+                <h2 className="text-sm font-bold my-1.5 text-foreground" {...props} />
+              ),
+              h3: ({ node, ...props }) => (
+                <h3 className="text-xs font-bold my-1 text-foreground" {...props} />
+              ),
               p: ({ node, ...props }) => <p className="my-1.5 leading-relaxed" {...props} />,
-              ul: ({ node, ...props }) => <ul className="list-disc pl-4 my-1.5 space-y-0.5" {...props} />,
-              ol: ({ node, ...props }) => <ol className="list-decimal pl-4 my-1.5 space-y-0.5" {...props} />,
+              ul: ({ node, ...props }) => (
+                <ul className="list-disc pl-4 my-1.5 space-y-0.5" {...props} />
+              ),
+              ol: ({ node, ...props }) => (
+                <ol className="list-decimal pl-4 my-1.5 space-y-0.5" {...props} />
+              ),
               li: ({ node, ...props }) => <li className="my-0.5" {...props} />,
               table: ({ node, ...props }) => (
                 <div className="my-2 block max-w-full overflow-x-auto rounded border border-border">
-                  <table className="w-full text-xs border-collapse divide-y divide-border" {...props} />
+                  <table
+                    className="w-full text-xs border-collapse divide-y divide-border"
+                    {...props}
+                  />
                 </div>
               ),
               thead: ({ node, ...props }) => <thead className="bg-muted/60" {...props} />,
-              tbody: ({ node, ...props }) => <tbody className="divide-y divide-border" {...props} />,
+              tbody: ({ node, ...props }) => (
+                <tbody className="divide-y divide-border" {...props} />
+              ),
               tr: ({ node, ...props }) => <tr className="hover:bg-muted/20" {...props} />,
-              th: ({ node, ...props }) => <th className="px-2 py-1.5 text-left font-semibold border-r border-border last:border-r-0" {...props} />,
-              td: ({ node, ...props }) => <td className="px-2 py-1.5 align-top border-r border-border last:border-r-0" {...props} />,
+              th: ({ node, ...props }) => (
+                <th
+                  className="px-2 py-1.5 text-left font-semibold border-r border-border last:border-r-0"
+                  {...props}
+                />
+              ),
+              td: ({ node, ...props }) => (
+                <td
+                  className="px-2 py-1.5 align-top border-r border-border last:border-r-0"
+                  {...props}
+                />
+              ),
               code: ({ node, className, children, ...props }) => {
                 const match = /language-(\w+)/.exec(className || "");
                 return !match ? (
-                  <code className="rounded bg-muted px-1 py-0.5 text-[12px] font-mono" {...props}>{children}</code>
+                  <code className="rounded bg-muted px-1 py-0.5 text-[12px] font-mono" {...props}>
+                    {children}
+                  </code>
                 ) : (
-                  <pre className="rounded bg-muted p-2 overflow-x-auto text-[12px] font-mono my-2"><code className={className} {...props}>{children}</code></pre>
+                  <pre className="rounded bg-muted p-2 overflow-x-auto text-[12px] font-mono my-2">
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  </pre>
                 );
               },
-              strong: ({ node, ...props }) => <strong className="font-bold text-foreground" {...props} />,
+              strong: ({ node, ...props }) => (
+                <strong className="font-bold text-foreground" {...props} />
+              ),
             }}
           >
             {text || ""}
           </ReactMarkdown>
-          {streaming && <span className="ml-1 inline-block h-3.5 w-1.5 translate-y-0.5 animate-pulse bg-primary" />}
+          {streaming && (
+            <span className="ml-1 inline-block h-3.5 w-1.5 translate-y-0.5 animate-pulse bg-primary" />
+          )}
         </div>
         {citations && (
           <div className="mt-1.5 flex flex-wrap gap-1">
             {citations.map((c) => (
-              <span key={c} className="rounded border border-border bg-card px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground">
+              <span
+                key={c}
+                className="rounded border border-border bg-card px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground"
+              >
                 ↳ {c}
               </span>
             ))}
           </div>
         )}
         {citations && (
-          <button className="mt-1 text-[11px] text-primary hover:underline">{t("View SQL / sources →")}</button>
+          <button className="mt-1 text-[11px] text-primary hover:underline">
+            {t("View SQL / sources →")}
+          </button>
         )}
         {action}
       </div>
@@ -986,16 +1179,34 @@ function AiMsg({
   );
 }
 
-function Stat({ label, value, delta, trend }: { label: string; value: string; delta: string; trend: "up" | "down" | "flat" }) {
+function Stat({
+  label,
+  value,
+  delta,
+  trend,
+}: {
+  label: string;
+  value: string;
+  delta: string;
+  trend: "up" | "down" | "flat";
+}) {
   return (
     <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</div>
       <div className="mt-1 flex items-baseline gap-2">
         <div className="text-2xl font-semibold text-foreground tabular-nums">{value}</div>
         {delta && (
-          <div className={`text-xs font-medium ${
-            trend === "up" ? "text-success" : trend === "down" ? "text-destructive" : "text-muted-foreground"
-          }`}>{delta}</div>
+          <div
+            className={`text-xs font-medium ${
+              trend === "up"
+                ? "text-success"
+                : trend === "down"
+                  ? "text-destructive"
+                  : "text-muted-foreground"
+            }`}
+          >
+            {delta}
+          </div>
         )}
       </div>
     </div>

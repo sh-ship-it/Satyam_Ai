@@ -18,7 +18,9 @@ const FLAG_LABEL: Record<string, string> = {
 
 function inr(n: number): string {
   return new Intl.NumberFormat("en-IN", {
-    style: "currency", currency: "INR", maximumFractionDigits: 0,
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
   }).format(n);
 }
 
@@ -31,21 +33,41 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
   const [selectedNode, setSelectedNode] = useState<MoneyNode | null>(null);
 
   useEffect(() => {
-    if (!seed?.trim()) { setData(null); return; }
+    if (!seed?.trim()) {
+      setData(null);
+      return;
+    }
     let alive = true;
-    setLoading(true); setError(null); setSelectedNode(null);
+    setLoading(true);
+    setError(null);
+    setSelectedNode(null);
     financial
-      .moneyTrail({ entity_name: seed.trim(), depth: 2, suspicious_only: suspiciousOnly, min_amount: minAmount })
-      .then((r) => { if (alive) setData(r); })
-      .catch(() => { if (alive) setError("Could not load financial links for this seed."); })
-      .finally(() => { if (alive) setLoading(false); });
-    return () => { alive = false; };
+      .moneyTrail({
+        entity_name: seed.trim(),
+        depth: 2,
+        suspicious_only: suspiciousOnly,
+        min_amount: minAmount,
+      })
+      .then((r) => {
+        if (alive) setData(r);
+      })
+      .catch(() => {
+        if (alive) setError("Could not load financial links for this seed.");
+      })
+      .finally(() => {
+        if (alive) setLoading(false);
+      });
+    return () => {
+      alive = false;
+    };
   }, [seed, suspiciousOnly, minAmount]);
 
   // Circular layout for nodes.
   const layout = useMemo(() => {
     const nodes = data?.nodes ?? [];
-    const cx = 360, cy = 230, R = 170;
+    const cx = 360,
+      cy = 230,
+      R = 170;
     const pos: Record<string, { x: number; y: number; n: MoneyNode }> = {};
     const seedNodes = nodes.filter((n) => n.is_seed);
     const otherNodes = nodes.filter((n) => !n.is_seed);
@@ -67,32 +89,40 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
     return pos;
   }, [data]);
 
-  if (!seed?.trim()) return (
-    <div className="flex flex-col items-center justify-center gap-3 h-full p-8 text-center">
-      <DollarSign className="h-10 w-10 text-muted-foreground/40" />
-      <p className="text-sm text-muted-foreground">Enter a seed person above to view their financial links.</p>
-    </div>
-  );
+  if (!seed?.trim())
+    return (
+      <div className="flex flex-col items-center justify-center gap-3 h-full p-8 text-center">
+        <DollarSign className="h-10 w-10 text-muted-foreground/40" />
+        <p className="text-sm text-muted-foreground">
+          Enter a seed person above to view their financial links.
+        </p>
+      </div>
+    );
 
-  if (loading) return (
-    <div className="flex items-center justify-center gap-3 h-full p-8 text-muted-foreground text-sm">
-      <div className="h-4 w-4 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-      Loading financial links…
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="flex items-center justify-center gap-3 h-full p-8 text-muted-foreground text-sm">
+        <div className="h-4 w-4 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+        Loading financial links…
+      </div>
+    );
 
-  if (error) return (
-    <div className="flex items-center gap-2 m-4 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
-      <AlertTriangle className="h-4 w-4 shrink-0" /> {error}
-    </div>
-  );
+  if (error)
+    return (
+      <div className="flex items-center gap-2 m-4 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+        <AlertTriangle className="h-4 w-4 shrink-0" /> {error}
+      </div>
+    );
 
-  if (!data || data.nodes.length === 0) return (
-    <div className="flex flex-col items-center justify-center gap-3 h-full p-8 text-center">
-      <Shield className="h-10 w-10 text-muted-foreground/40" />
-      <p className="text-sm text-muted-foreground">No financial accounts or transactions linked to this seed.</p>
-    </div>
-  );
+  if (!data || data.nodes.length === 0)
+    return (
+      <div className="flex flex-col items-center justify-center gap-3 h-full p-8 text-center">
+        <Shield className="h-10 w-10 text-muted-foreground/40" />
+        <p className="text-sm text-muted-foreground">
+          No financial accounts or transactions linked to this seed.
+        </p>
+      </div>
+    );
 
   const flagCounts = data.edges.reduce<Record<string, number>>((acc, e) => {
     if (e.pattern_flag) acc[e.pattern_flag] = (acc[e.pattern_flag] || 0) + 1;
@@ -106,10 +136,23 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
         {[
           { label: "Accounts", val: data.nodes.length, icon: DollarSign, color: "text-primary" },
           { label: "Flows", val: data.edges.length, icon: TrendingUp, color: "text-foreground" },
-          { label: "Flagged", val: data.flagged_count, icon: AlertTriangle, color: "text-destructive" },
-          { label: "Total", val: inr(data.total_amount), icon: DollarSign, color: "text-emerald-600 dark:text-emerald-400" },
-        ].map(s => (
-          <div key={s.label} className="rounded-xl border border-border bg-card p-3 flex items-center gap-2">
+          {
+            label: "Flagged",
+            val: data.flagged_count,
+            icon: AlertTriangle,
+            color: "text-destructive",
+          },
+          {
+            label: "Total",
+            val: inr(data.total_amount),
+            icon: DollarSign,
+            color: "text-emerald-600 dark:text-emerald-400",
+          },
+        ].map((s) => (
+          <div
+            key={s.label}
+            className="rounded-xl border border-border bg-card p-3 flex items-center gap-2"
+          >
             <s.icon className={`h-4 w-4 ${s.color} shrink-0`} />
             <div>
               <div className={`text-sm font-bold tabular-nums ${s.color}`}>{s.val}</div>
@@ -123,8 +166,15 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
       {Object.keys(flagCounts).length > 0 && (
         <div className="flex flex-wrap gap-2">
           {Object.entries(flagCounts).map(([flag, count]) => (
-            <span key={flag} className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold"
-              style={{ borderColor: FLAG_COLOR[flag] + "60", color: FLAG_COLOR[flag], background: FLAG_COLOR[flag] + "15" }}>
+            <span
+              key={flag}
+              className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold"
+              style={{
+                borderColor: FLAG_COLOR[flag] + "60",
+                color: FLAG_COLOR[flag],
+                background: FLAG_COLOR[flag] + "15",
+              }}
+            >
               <span className="h-1.5 w-1.5 rounded-full" style={{ background: FLAG_COLOR[flag] }} />
               {FLAG_LABEL[flag] || flag} ({count})
             </span>
@@ -135,15 +185,21 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
       {/* Controls */}
       <div className="flex flex-wrap items-center gap-3 text-xs">
         <label className="flex items-center gap-1.5 cursor-pointer">
-          <input type="checkbox" checked={suspiciousOnly}
+          <input
+            type="checkbox"
+            checked={suspiciousOnly}
             onChange={(e) => setSuspiciousOnly(e.target.checked)}
-            className="rounded accent-destructive" />
+            className="rounded accent-destructive"
+          />
           <span className="text-muted-foreground">Suspicious only</span>
         </label>
         <label className="flex items-center gap-1.5">
           <span className="text-muted-foreground">Min amount</span>
-          <select value={minAmount} onChange={e => setMinAmount(Number(e.target.value))}
-            className="rounded-lg border border-input bg-background px-2 py-1 text-xs">
+          <select
+            value={minAmount}
+            onChange={(e) => setMinAmount(Number(e.target.value))}
+            className="rounded-lg border border-input bg-background px-2 py-1 text-xs"
+          >
             <option value={0}>Any</option>
             <option value={10000}>₹10K+</option>
             <option value={100000}>₹1L+</option>
@@ -162,37 +218,63 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
           </defs>
           {/* Edges */}
           {data.edges.map((e, i) => {
-            const a = layout[e.source], b = layout[e.target];
+            const a = layout[e.source],
+              b = layout[e.target];
             if (!a || !b) return null;
             const color = e.pattern_flag ? (FLAG_COLOR[e.pattern_flag] ?? "#64748b") : "#94a3b8";
             const w = e.is_suspicious ? 2.5 : 1.2;
             return (
-              <line key={i}
-                x1={a.x} y1={a.y} x2={b.x} y2={b.y}
-                stroke={color} strokeWidth={w} strokeOpacity={0.7}
-                markerEnd="url(#fin-arrow)" />
+              <line
+                key={i}
+                x1={a.x}
+                y1={a.y}
+                x2={b.x}
+                y2={b.y}
+                stroke={color}
+                strokeWidth={w}
+                strokeOpacity={0.7}
+                markerEnd="url(#fin-arrow)"
+              />
             );
           })}
           {/* Nodes */}
           {Object.values(layout).map(({ x, y, n }) => {
             const isSelected = selectedNode?.id === n.id;
-            const fill = n.is_seed ? "#2563eb"
-              : n.kyc_risk_level === "High" ? "#dc2626"
-              : n.kyc_risk_level === "Medium" ? "#d97706"
-              : "#0ea5e9";
+            const fill = n.is_seed
+              ? "#2563eb"
+              : n.kyc_risk_level === "High"
+                ? "#dc2626"
+                : n.kyc_risk_level === "Medium"
+                  ? "#d97706"
+                  : "#0ea5e9";
             const r = n.is_seed ? 14 : 9;
             return (
-              <g key={n.id} transform={`translate(${x},${y})`}
-                className="cursor-pointer" onClick={() => setSelectedNode(n)}>
-                <circle r={r + (isSelected ? 3 : 0)}
-                  fill={fill} stroke={isSelected ? "#fff" : "#1e293b"}
-                  strokeWidth={isSelected ? 2.5 : 1.5} opacity={0.9} />
-                <text y={-(r + 6)} textAnchor="middle" fontSize={9}
-                  fill="currentColor" className="pointer-events-none">
+              <g
+                key={n.id}
+                transform={`translate(${x},${y})`}
+                className="cursor-pointer"
+                onClick={() => setSelectedNode(n)}
+              >
+                <circle
+                  r={r + (isSelected ? 3 : 0)}
+                  fill={fill}
+                  stroke={isSelected ? "#fff" : "#1e293b"}
+                  strokeWidth={isSelected ? 2.5 : 1.5}
+                  opacity={0.9}
+                />
+                <text
+                  y={-(r + 6)}
+                  textAnchor="middle"
+                  fontSize={9}
+                  fill="currentColor"
+                  className="pointer-events-none"
+                >
                   {n.label.length > 16 ? n.label.slice(0, 15) + "…" : n.label}
                 </text>
                 {n.kyc_risk_level === "High" && (
-                  <text y={4} textAnchor="middle" fontSize={8} fill="#fff" fontWeight="bold">!</text>
+                  <text y={4} textAnchor="middle" fontSize={8} fill="#fff" fontWeight="bold">
+                    !
+                  </text>
                 )}
               </g>
             );
@@ -204,8 +286,15 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
           {selectedNode ? (
             <div className="p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground">Account Details</div>
-                <button onClick={() => setSelectedNode(null)} className="text-muted-foreground hover:text-foreground text-xs">✕</button>
+                <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                  Account Details
+                </div>
+                <button
+                  onClick={() => setSelectedNode(null)}
+                  className="text-muted-foreground hover:text-foreground text-xs"
+                >
+                  ✕
+                </button>
               </div>
               {[
                 ["Label", selectedNode.label],
@@ -224,7 +313,9 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
                 </div>
               ))}
               {selectedNode.is_seed && (
-                <div className="rounded-lg bg-primary/10 text-primary px-2 py-1 text-[10px] font-bold text-center">SEED ACCOUNT</div>
+                <div className="rounded-lg bg-primary/10 text-primary px-2 py-1 text-[10px] font-bold text-center">
+                  SEED ACCOUNT
+                </div>
               )}
             </div>
           ) : (
@@ -242,7 +333,9 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
                 </thead>
                 <tbody>
                   {data.edges
-                    .slice().sort((a, b) => b.amount - a.amount).slice(0, 15)
+                    .slice()
+                    .sort((a, b) => b.amount - a.amount)
+                    .slice(0, 15)
                     .map((e, i) => (
                       <tr key={i} className={e.is_suspicious ? "text-destructive" : ""}>
                         <td className="px-2 py-1 text-[10px] truncate max-w-[80px]">
@@ -251,11 +344,18 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
                         <td className="px-2 py-1 font-bold tabular-nums">{inr(e.amount)}</td>
                         <td className="px-2 py-1">
                           {e.pattern_flag ? (
-                            <span className="rounded-full px-1.5 py-0.5 text-[9px] font-bold"
-                              style={{ background: (FLAG_COLOR[e.pattern_flag] || "#64748b") + "20", color: FLAG_COLOR[e.pattern_flag] || "#64748b" }}>
+                            <span
+                              className="rounded-full px-1.5 py-0.5 text-[9px] font-bold"
+                              style={{
+                                background: (FLAG_COLOR[e.pattern_flag] || "#64748b") + "20",
+                                color: FLAG_COLOR[e.pattern_flag] || "#64748b",
+                              }}
+                            >
                               {FLAG_LABEL[e.pattern_flag] || e.pattern_flag}
                             </span>
-                          ) : "—"}
+                          ) : (
+                            "—"
+                          )}
                         </td>
                       </tr>
                     ))}

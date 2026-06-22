@@ -51,7 +51,11 @@ function authHeaders(extra: Record<string, string> = {}): Record<string, string>
 }
 
 export class ApiError extends Error {
-  constructor(public status: number, message: string, public body?: unknown) {
+  constructor(
+    public status: number,
+    message: string,
+    public body?: unknown,
+  ) {
     super(message);
     this.name = "ApiError";
   }
@@ -148,7 +152,6 @@ export const api = {
     return request<StationOption[]>("/auth/stations");
   },
 
-
   // --- read APIs (grounded; backed by Postgres + RLS) ---
   cases(params: Record<string, string | number> = {}) {
     const q = new URLSearchParams(params as Record<string, string>).toString();
@@ -158,16 +161,35 @@ export const api = {
     return request(`/cases/${encodeURIComponent(caseId)}?lang=${encodeURIComponent(lang)}`);
   },
   mapHotspots(body: Record<string, unknown>): Promise<HotspotResponse> {
-    return request<HotspotResponse>("/map/hotspots", { method: "POST", body: JSON.stringify(body) });
+    return request<HotspotResponse>("/map/hotspots", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
   },
   stationBreakdown(body: Record<string, unknown>): Promise<StationBreakdownResponse> {
-    return request<StationBreakdownResponse>("/map/station-breakdown", { method: "POST", body: JSON.stringify(body) });
+    return request<StationBreakdownResponse>("/map/station-breakdown", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
   },
-  offenderTrail(body: { person_id?: string; entity_name?: string }): Promise<{ person_id: string; label: string; points: { lat: number; lng: number; date?: string; fir_number?: string; crime_type?: string; station?: string }[] }> {
+  offenderTrail(body: {
+    person_id?: string;
+    entity_name?: string;
+  }): Promise<{
+    person_id: string;
+    label: string;
+    points: {
+      lat: number;
+      lng: number;
+      date?: string;
+      fir_number?: string;
+      crime_type?: string;
+      station?: string;
+    }[];
+  }> {
     return request("/map/offender-trail", { method: "POST", body: JSON.stringify(body) });
   },
   network(body: Record<string, unknown>) {
-
     return request("/network/ego", { method: "POST", body: JSON.stringify(body) });
   },
   buildReport(body: Record<string, unknown>) {
@@ -198,7 +220,12 @@ export async function ttsSynthesize(
   backend?: "sarvam" | "google" | "bhashini",
 ): Promise<TtsResult> {
   // TASK 1 verification: log the provider actually being used for TTS.
-  console.debug("[tts] ttsSynthesize provider=", backend ?? loadEngineSettingsForDebug(), "lang=", lang);
+  console.debug(
+    "[tts] ttsSynthesize provider=",
+    backend ?? loadEngineSettingsForDebug(),
+    "lang=",
+    lang,
+  );
   return request<TtsResult>("/voice/tts", {
     method: "POST",
     body: JSON.stringify({ text, lang, backend }),
@@ -213,10 +240,13 @@ export async function sttTranscribe(
 ): Promise<SttResult> {
   const fd = new FormData();
   // Use the actual MIME type as filename hint so Sarvam/Google can sniff format.
-  const ext = audio.type.includes("webm") ? "webm"
-    : audio.type.includes("ogg") ? "ogg"
-    : audio.type.includes("mp4") ? "mp4"
-    : "wav";
+  const ext = audio.type.includes("webm")
+    ? "webm"
+    : audio.type.includes("ogg")
+      ? "ogg"
+      : audio.type.includes("mp4")
+        ? "mp4"
+        : "wav";
   fd.append("file", audio, `audio.${ext}`);
   fd.append("lang", lang);
   const token = getAuthToken();

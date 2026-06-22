@@ -19,8 +19,12 @@ function DispatchScreen() {
             <Truck className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-xl font-extrabold leading-none">{t("Dispatch & Green Corridor")}</h1>
-            <p className="text-xs text-muted-foreground">{t("Dispatch patrol units · priority signal corridor · live tracking")}</p>
+            <h1 className="text-xl font-extrabold leading-none">
+              {t("Dispatch & Green Corridor")}
+            </h1>
+            <p className="text-xs text-muted-foreground">
+              {t("Dispatch patrol units · priority signal corridor · live tracking")}
+            </p>
           </div>
         </header>
         <DispatchPanel />

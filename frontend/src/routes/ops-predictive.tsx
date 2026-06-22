@@ -20,7 +20,9 @@ function PredictiveScreen() {
           </div>
           <div>
             <h1 className="text-xl font-extrabold leading-none">{t("Predictive Deployment")}</h1>
-            <p className="text-xs text-muted-foreground">{t("Crime hotspots forecasting · resource allocation planning")}</p>
+            <p className="text-xs text-muted-foreground">
+              {t("Crime hotspots forecasting · resource allocation planning")}
+            </p>
           </div>
         </header>
         <PredictivePanel />
@@ -28,4 +30,3 @@ function PredictiveScreen() {
     </Shell>
   );
 }
-

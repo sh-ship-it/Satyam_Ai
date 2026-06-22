@@ -1,12 +1,15 @@
 """Routing — Python port of EMERGE routingService.js (OSRM + straight-line fallback)."""
 from __future__ import annotations
 
+import logging
 import math
 import os
 
 import httpx
 
 OSRM_BASE_URL = os.getenv("OSRM_BASE_URL", "http://router.project-osrm.org")
+
+log = logging.getLogger("satyam.ops.routing")
 
 
 def haversine_km(lat1, lon1, lat2, lon2) -> float:
@@ -45,6 +48,7 @@ async def get_route(*, from_lat: float, from_lng: float, to_lat: float, to_lng: 
             "coords": r["geometry"]["coordinates"],  # [[lng,lat],...]
         }
     except Exception as exc:  # noqa: BLE001
+        log.warning("OSRM routing failed (%s) — using straight-line fallback", exc)
         d = haversine_km(from_lat, from_lng, to_lat, to_lng)
         return {
             "provider": "STRAIGHT_LINE",
