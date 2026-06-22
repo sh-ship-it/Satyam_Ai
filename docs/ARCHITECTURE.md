@@ -3,7 +3,7 @@
 > **Project:** Satyam — Bilingual Voice-Enabled Crime Intelligence AI
 > **Event:** Datathon 2026 · KSP × hack2skill
 > **Stack:** Python 3.11 · FastAPI · PostgreSQL 16 + pgvector · React 19 · TanStack Start
-> **Last updated:** 2026-06-21 · v1.5
+> **Last updated:** 2026-06-23 · v2.1
 
 ---
 
@@ -11,21 +11,24 @@
 
 1. [Project Overview](#1-project-overview)
 2. [Tech Stack](#2-tech-stack)
-3. [System Architecture Diagram](#3-system-architecture-diagram)
+3. [System Architecture](#3-system-architecture)
 4. [Database Schema](#4-database-schema)
-5. [Backend Pipeline — Detailed Workflows](#5-backend-pipeline--detailed-workflows)
+5. [Backend Pipeline](#5-backend-pipeline)
 6. [Model Layer](#6-model-layer)
 7. [Voice Pipeline](#7-voice-pipeline)
-8. [Security — RBAC · RLS · Masking · Audit](#8-security--rbac--rls--masking--audit)
-9. [Intelligence Features (PS1–PS8)](#9-intelligence-features-ps1ps8)
-10. [Response Ops Module](#10-response-ops-module-enable_response_opstrue)
-11. [Frontend Architecture](#11-frontend-architecture)
-12. [Bilingual Support — EN + KN](#12-bilingual-support--en--kn)
-13. [API Reference Summary](#13-api-reference-summary)
-14. [Configuration & Environment](#14-configuration--environment)
-15. [Deployment](#15-deployment)
-16. [Two-Phase Roadmap](#16-two-phase-roadmap)
-17. [Bug Fixes Applied](#17-bug-fixes-applied)
+8. [Security — RBAC · RLS · Masking · Audit](#8-security)
+9. [Intelligence Features (PS1–PS8)](#9-intelligence-features)
+10. [Response Ops Module](#10-response-ops-module)
+11. [Investigation Board](#11-investigation-board)
+12. [Person 360 Dossier](#12-person-360-dossier)
+13. [Access Control (Admin)](#13-access-control-admin)
+14. [Frontend Architecture](#14-frontend-architecture)
+15. [Bilingual Support](#15-bilingual-support)
+16. [API Reference](#16-api-reference)
+17. [Configuration & Environment](#17-configuration--environment)
+18. [Deployment](#18-deployment)
+19. [Two-Phase Roadmap](#19-two-phase-roadmap)
+20. [Bug Fixes & Security Hardening](#20-bug-fixes--security-hardening)
 
 ---
 
@@ -33,17 +36,16 @@
 
 Satyam is a **bilingual (English + Kannada), voice-enabled conversational AI** for Karnataka State Police crime intelligence. An officer asks a question in natural language — typed or spoken — and Satyam:
 
-1. Auto-detects English vs Kannada, routes the intent, and runs a **grounded** answer pipeline:
-   - **Text-to-SQL** → LLM proposes SQL → `sqlglot` guard enforces safety → read-only RLS-scoped execution. In demo/keyless mode, a deterministic `rule_sql.py` generator runs instead of the LLM stub.
-   - **RAG** → BGE-M3 embeds the query → pgvector ANN search → bge-reranker-v2-m3 cross-encoder rerank.
-   - **Analytics** → crime hotspots, ego/link networks, trend clustering, financial money trails.
-2. Composes a **cited answer** streamed token-by-token over SSE.
-3. Enforces **RBAC/ABAC** (14 KSP ranks, 4 clearance levels) + **Postgres Row-Level Security** on every lane.
-4. Appends every query to a **SHA-256 hash-chained tamper-evident audit log**.
-5. Can **speak the answer in Kannada** via Sarvam Bulbul v3 TTS and navigate to any screen by voice command.
-6. All UI strings are fully bilingual (custom i18n DICT + `tData()` categorical lookup).
+1. Auto-detects language, routes intent, runs a **grounded** answer pipeline (Text-to-SQL, RAG, analytics)
+2. Composes a **cited, spoken-summary** answer streamed token-by-token over SSE
+3. Enforces **RBAC/ABAC** (14 KSP ranks, 4 clearance levels) + **Postgres Row-Level Security**
+4. Appends every query to a **SHA-256 hash-chained tamper-evident audit log**
+5. Can **speak answers in Kannada** via Sarvam Bulbul v3 TTS and navigate screens by voice
+6. Has a full **design/investigation canvas** powered by tldraw with AI scene generation
+7. Provides **admin access control** so L4 officers can manage rank/clearance/scope
+8. Has a **Person 360 dossier** screen showing mugshots, crime history, bank accounts
 
-All data is **100% synthetic** — no real FIRs or PII are stored anywhere.
+All data is **100% synthetic** — no real FIRs or PII.
 
 ---
 
@@ -51,34 +53,37 @@ All data is **100% synthetic** — no real FIRs or PII are stored anywhere.
 
 ### 2.1 Backend
 
-| Category | Technology | Version / Notes |
-|----------|-----------|-----------------|
-| Language | Python | 3.11+ |
+| Category | Technology | Notes |
+|----------|-----------|-------|
+| Language | Python 3.11+ | |
 | Web framework | FastAPI | Async, SSE streaming |
-| ORM | SQLAlchemy (async) + asyncpg | Async Postgres driver |
+| ORM | SQLAlchemy (async) + asyncpg | |
 | Database | PostgreSQL 16 | Primary store |
-| Vector search | pgvector 0.8.x | HNSW index, cosine similarity, `vector(1024)` |
+| Vector search | pgvector 0.8.x | HNSW index, cosine, `vector(1024)` |
 | Cache | Redis | Conversation state |
-| Auth | PyJWT (HS256) | 14 KSP rank claims |
-| SQL safety | sqlglot | Parse + validate + rewrite every LLM-generated SQL |
-| NL→SQL fallback | `rule_sql.py` (custom) | Deterministic regex+ILIKE generator |
-| Structured logging | structlog | JSON format |
-| Settings | pydantic-settings | Env-file based config |
+| Auth | PyJWT (HS256) | 14 KSP rank claims + clearance overrides |
+| SQL safety | sqlglot | Parse+validate every LLM-generated SQL |
+| NL→SQL fallback | `rule_sql.py` (custom) | Progressive relaxation, 4 levels |
+| Logging | structlog | JSON format |
+| Settings | pydantic-settings | Env-file based |
 
 ### 2.2 AI / Model Services
 
-| Role | Model / Service | Provider | Notes |
-|------|----------------|----------|-------|
-| Brain LLM | **Gemini 2.5 Flash** | Google | Default |
-| Fallback LLM | **Llama-3.3-70B-Versatile** | Groq | Low-latency fallback |
-| Text-to-SQL option | **qwen3-coder-next:cloud** | Ollama Cloud | 80B MoE / 3B active |
-| Embeddings | **BGE-M3** | BAAI (local) | 1024-dim, FP16; sole embedder |
-| Reranking | **bge-reranker-v2-m3** | BAAI (local) | FP16 cross-encoder |
-| TTS | **Sarvam Bulbul v3** | Sarvam AI | Primary voice output |
-| STT | **Sarvam Saaras v3** | Sarvam AI | Primary voice input |
-| Translation | **Sarvam Mayura v1** | Sarvam AI | EN↔KN |
-| Voice fallback | **Bhashini** | Govt of India | Free, no credit cap |
-| **YOLO detection** | **YOLOv8s** | Ultralytics (COCO) | `model/yolov8s.pt`; weapon model optional at `model/gun.pt` |
+| Role | Model | Provider | Notes |
+|------|-------|----------|-------|
+| Brain LLM (chat) | Gemini 2.5 Flash | Google | Default |
+| Brain LLM (alt) | GPT-4o | OpenAI | User-selectable |
+| Fallback LLM | Llama-3.3-70B | Groq | Auto-fallback |
+| Board AI | Gemini / Groq / OpenAI | Configurable | Scene generation |
+| Text-to-SQL | Gemini 2.5 Flash | Google | Default |
+| Text-to-SQL alt | qwen3-coder-next | Ollama Cloud | Optional |
+| Embeddings | BGE-M3 (local, FP16) | BAAI | Sole embedder — not swappable |
+| Reranking | bge-reranker-v2-m3 (local) | BAAI | FP16 cross-encoder |
+| TTS | Sarvam Bulbul v3 | Sarvam AI | Primary voice output |
+| STT | Sarvam Saaras v3 | Sarvam AI | Primary voice input |
+| Translation | Sarvam Mayura v1 | Sarvam AI | EN↔KN |
+| Voice fallback | Bhashini | Govt of India | Free, no rate cap |
+| YOLO detection | YOLOv8s (COCO) | Ultralytics | Camera Review, fight/crowd/weapon |
 
 ### 2.3 Frontend
 
@@ -86,12 +91,15 @@ All data is **100% synthetic** — no real FIRs or PII are stored anywhere.
 |----------|-----------|-------|
 | Framework | React 19 | |
 | Router / SSR | TanStack Start + TanStack Router | File-based routing |
-| Build tool | Vite + Bun | |
-| Styling | Tailwind CSS v4 | CSS custom properties for themes |
-| Maps | Leaflet + leaflet.heat | Heatmap, pins, grid layers |
-| i18n | Custom (`src/lib/i18n.tsx`) | 200+ EN→KN keys; no react-i18next |
-| Categorical translation | `tData()` + `kn-data.json` | crime_type, status, district (41), role, gender |
-| Themes | 6 professional + 8 legacy | `data-theme` attribute on `<html>` |
+| Build | Vite + Bun | |
+| Styling | Tailwind CSS v4 | Neobrutalist design tokens |
+| Canvas / Board | **tldraw v5.1.1** | Full design canvas — shapes, draw, text, images, export |
+| Graph library | **@xyflow/react v12** | Network graph (crime links, rings) |
+| Maps | Leaflet + leaflet.heat | Heatmap, pins, grid, corridor |
+| Markdown | react-markdown + remark-gfm | AI answer rendering |
+| i18n | Custom (`src/lib/i18n.tsx`) | 200+ EN→KN keys |
+| Categorical i18n | `tData()` + `kn-data.json` | crime_type, district (41), role, etc. |
+| Themes | 6 professional + 8 legacy | `data-theme` on `<html>` |
 
 ### 2.4 Infrastructure
 
@@ -100,62 +108,83 @@ All data is **100% synthetic** — no real FIRs or PII are stored anywhere.
 | Containerisation | Docker + docker-compose |
 | Cloud DB | Neon (PostgreSQL 16, pgvector 0.8.0) |
 | Local DB | PostgreSQL 17 + pgvector 0.8.2 |
-| GPU (local demo) | NVIDIA RTX 4070 8 GB VRAM (BGE-M3 + reranker FP16) |
+| GPU (local) | NVIDIA RTX 4070 8 GB VRAM |
 
 ---
 
-## 3. System Architecture Diagram
+## 3. System Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────────────────────┐
-│                          OFFICER'S BROWSER                                    │
-│                                                                               │
-│  Console │ Network │ Forecast │ Trends │ Profile │ Reports │ Audit            │
-│  Live Ops │ Predictive │ Dispatch │ Camera Review  (4 separate routes)        │
-│                                                                               │
-│                  TanStack Router · Shell.tsx (Voice Router)                   │
-└────────────────────────────────────┬─────────────────────────────────────────┘
-                                     │  HTTPS / REST / SSE / WS
-                                     ▼
-┌──────────────────────────────────────────────────────────────────────────────┐
-│                            FASTAPI BACKEND                                    │
-│  /auth  /chat(SSE)  /cases  /map  /network  /financial  /api/*  /health/*    │
-│  /api/ops/*  (feature-flagged, ENABLE_RESPONSE_OPS=true)                     │
-│                                                                               │
-│  Grounded Pipeline: guardrails → router → orchestrator → tools → compose     │
-│                                                                               │
-│  Model Layer   │  Voice Layer   │  Data Layer                                │
-│  Gemini 2.5    │  Sarvam v3     │  PostgreSQL 16 + pgvector                  │
-│  Groq fallback │  Bhashini      │  Redis (conversation state)                │
-│  BGE-M3 local  │  Web Speech    │  audit_log (SHA-256 hash-chain)             │
-└────────────────────────────────────┬─────────────────────────────────────────┘
-                                     │  subprocess (global Python)
-                                     ▼
-┌──────────────────────────────────────────────────────────────────────────────┐
-│                     YOLO INFERENCE PROCESS                                    │
-│  model/inference/live_cctv.py  — runs as a separate Python process           │
-│  • YOLOv8s + ByteTrack tracking on preloaded video (loops)                   │
-│  • Detects: fight (proximity+speed), crowd (N≥4), vehicle stall, weapon      │
-│  • MJPEG stream on :8089 → browser <img> shows live annotated boxes          │
-│  • POST /api/ops/detect/notify with JWT → Incident Review Queue              │
-└──────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        OFFICER'S BROWSER                                 │
+│                                                                          │
+│  Console │ Network │ Forecast │ Trends │ Board │ Dossier │ Admin        │
+│  Live Ops │ Predictive │ Dispatch │ Camera  (12 sidebar routes)          │
+│                                                                          │
+│              TanStack Router · Shell.tsx (Voice Router)                  │
+└──────────────────────────────┬──────────────────────────────────────────┘
+                               │ HTTPS / REST / SSE / WS
+                               ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         FASTAPI BACKEND                                  │
+│  /auth  /chat(SSE)  /cases  /map  /network  /financial                  │
+│  /api/*  /api/ops/*  /api/board  /api/dossier  /admin                   │
+│                                                                          │
+│  Pipeline: guardrails → router → SQL/RAG/analytics → compose → SSE     │
+│  [SPEAK] SSE event carries TTS-ready spoken summary (not full table)    │
+│                                                                          │
+│  Gemini/Groq/OpenAI  │  Sarvam TTS/STT  │  PostgreSQL + pgvector        │
+│  BGE-M3 (local GPU)  │  Bhashini        │  Redis  │  audit_log chain    │
+└──────────────────────────────┬──────────────────────────────────────────┘
+                               │ subprocess (global Python)
+                               ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    YOLO INFERENCE PROCESS                                │
+│  model/inference/live_cctv.py  — separate Python process                │
+│  YOLOv8s + ByteTrack  →  fight/crowd/weapon/vehicle detection           │
+│  MJPEG stream :8089  →  annotated feed in browser <img>                 │
+│  POST /api/ops/detect/notify  →  Incident Review Queue                  │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### 3.1 Chat Request Flow (SSE)
+
+```
+Browser          FastAPI           Pipeline                 DB
+  │                 │                  │                     │
+  ├─POST /chat ────▶│                  │                     │
+  │                 ├─JWT decode ──────▶                     │
+  │                 ├─set app.* GUCs ────────────────────────▶ (RLS)
+  │                 ├─guardrails.precheck()                  │
+  │                 │                                        │
+  │                 │  Progressive NL→SQL recovery:          │
+  │                 │  LLM SQL → 0 rows?                      │
+  │                 │  → relax=1 (drop year)                  │
+  │                 │  → relax=2 (drop crime)                 │
+  │                 │  → relax=3 (latest N overall)           │
+  │                 │                                        │
+  │◀─SSE: [SPEAK] spoken summary ─────────────────────────── │
+  │◀─SSE: tokens (table/markdown) ─────────────────────────── │
+  │◀─SSE: citations ─────────────────────────────────────────│
+  │◀─SSE: done ──────────────────────────────────────────────│
+  │                 ├─write_audit (own txn, disconnect-safe) │
 ```
 
 ---
 
 ## 4. Database Schema
 
-### 4.1 Core Tables (`backend/migrations/002_schema_v2.sql`)
+### 4.1 Core Tables
 
 | Table | PK | Key columns |
 |-------|----|-------------|
-| `rank_access` | `rank TEXT` | `scope_level`, `clearance`, `gazetted` (14 KSP ranks) |
-| `stations` | `station_id INT` | `station_name`, `district`, `"range"`, `latitude`, `longitude` |
+| `rank_access` | `rank TEXT` | `scope_level`, `clearance` (14 KSP ranks) |
+| `stations` | `station_id INT` | `station_name`, `district`, `"range"`, lat/lng |
 | `officers` | `officer_id INT` | `name`, `rank`, `station_id FK` |
-| `users` | `user_id SERIAL` | `username`, `password_hash`, `assigned_rank FK` |
-| `cases` | `case_id INT` | `fir_number`, `fir_year`, `crime_type`, `crime_category`, `legal_code`, `fir_type`, `status`, `district`, `station_name`, `report_date`, `incident_date`, `latitude`, `longitude` |
+| `users` | `user_id SERIAL` | `username`, `password_hash`, `assigned_rank`, `is_active`, `created_by`, `clearance_override`, `scope_override` |
+| `cases` | `case_id INT` | `fir_number`, `crime_type`, `status`, `district`, lat/lng, `sections` (pipe-joined) |
 | `persons` | `person_id INT` | `name`, `gender`, `age`, `district` |
-| `case_persons` | `(case_id, person_id, role)` | role: Accused/Victim/Complainant/Witness/Arrested/IO |
+| `case_persons` | `(case_id, person_id, role)` | composite PK |
 | `narratives` | `narrative_id INT` | `case_id FK`, `language` (en/kn), `body`, `embedding vector(1024)` |
 | `audit_log` | `audit_id SERIAL` | `at`, `user_id`, `action`, `query_text`, `row_hash` (SHA-256 chain) |
 
@@ -163,71 +192,92 @@ All data is **100% synthetic** — no real FIRs or PII are stored anywhere.
 
 | Table | Purpose |
 |-------|---------|
-| `district_socio_economic_indicators` | Real `literacy_rate`, `urbanization_percent`, `income_index` per district |
-| `financial_accounts` | Synthetic bank/wallet accounts linked to persons |
-| `financial_transactions` | Synthetic transactions with `pattern_flag`, `is_suspicious`, `case_id` FK |
+| `district_socio_economic_indicators` | Real literacy/urbanisation/income per district |
+| `financial_accounts` | Synthetic bank/wallet accounts |
+| `financial_transactions` | Synthetic txns with `pattern_flag` |
 
-### 4.3 Response Ops Tables (`ops_*` prefix)
+### 4.3 Response Ops Tables (`ops_*`)
 
 | Table | Purpose |
 |-------|---------|
-| `ops_patrol_units` | callsign, lat/lng, status (IDLE\|EN_ROUTE\|ON_SCENE\|OFFLINE) |
-| `ops_traffic_signals` | junction_id, lat/lng, state (NORMAL\|GREEN) |
-| `ops_risk_zones` | grid_key, risk_score, risk_label |
-| `ops_patrol_suggestions` | risk_zone_id → patrol_id, distance_km, response_improve_sec |
-| `ops_incident_dispatches` | patrol→scene route, status lifecycle |
-| `ops_cameras` | camera metadata (lat/lng per camera) |
-| `ops_incident_review_queue` | AI-detected candidates awaiting human review; confidence, candidate_type |
+| `ops_patrol_units` | callsign, lat/lng, status (IDLE/EN_ROUTE/ON_SCENE) |
+| `ops_traffic_signals` | junction_id, state (NORMAL/GREEN) |
+| `ops_risk_zones` | grid scoring output |
+| `ops_patrol_suggestions` | risk_zone → patrol, distance_km |
+| `ops_incident_dispatches` | route, status lifecycle |
+| `ops_cameras` | camera metadata |
+| `ops_incident_review_queue` | AI detections awaiting human review |
 
-### 4.4 RLS
+### 4.4 Investigation Board Tables
 
-`fn_scope_ok()` gates every case/narrative row to the officer's station/district/range/state scope via `app.*` GUCs set per-request.
+| Table | Purpose |
+|-------|---------|
+| `boards` | owner_user_id, title, `state_json JSONB` (tldraw snapshot), thumbnail |
+| `board_snapshots` | versioned snapshots of a board |
 
-### 4.5 Row Counts
+### 4.5 Demo Dossier Tables (isolated)
 
-| Table | Neon cloud (60%) | Local PG17 (100%) |
-|-------|-----------------|-------------------|
-| cases | ~60,000 | 100,000 |
-| persons | ~249,970 | 416,616 |
-| narratives (en+kn) | ~120,000 | 200,000 |
-| financial_transactions | ~107,000 (local only) | ~107,000 |
-| district_socio_economic_indicators | 41 | 41 |
+| Table | Purpose |
+|-------|---------|
+| `demo_dossier_persons` | 10 fictional Karnataka profiles, mugshots, summary |
+| `demo_dossier_family` | Family members per person |
+| `demo_dossier_bank_accounts` | Bank accounts, flagged suspicious |
+| `demo_dossier_crimes` | Crime history per person |
+| `demo_dossier_contacts` | Known associates |
+
+### 4.6 Access Control Columns (migration 006)
+
+Added to `users`: `created_by INT NULL`, `clearance_override SMALLINT NULL`, `scope_override TEXT NULL` — allow L4 admins to manually override a user's effective clearance and scope.
+
+### 4.7 RLS
+
+`fn_scope_ok()` gates every case/narrative row to the officer's station/district/range/state scope via `app.*` GUCs set per-request. `advisor_xact_lock` serializes the audit hash-chain appends.
 
 ---
 
-## 5. Backend Pipeline — Detailed Workflows
+## 5. Backend Pipeline
 
-### 5.1 Pipeline Directory
+### 5.1 NL Intelligence Upgrades
+
+The SQL lane has been significantly upgraded for natural-language understanding:
+
+- **SQL_SYSTEM prompt** — instructs Gemini to interpret intent not exact words, always use `ILIKE '%...%'` for fuzzy matching, handle relative dates, carry conversation context for follow-ups
+- **Conversational memory** — `generate_sql()` receives last 6 turns as `history` so "what about last year?" resolves correctly
+- **Progressive zero-result recovery** — `build_sql(relax=0..3)`:
+  - `relax=0` — full filters (place + crime + date)
+  - `relax=1` — drop date filter
+  - `relax=2` — drop crime filter (place only)
+  - `relax=3` — show latest cases overall
+  - Each level surfaces a friendly note: *"No records for that time period — showing results across all years."*
+- **`rule_sql.py` extraction** — keeps full phrase ("Cyber Crime Police Station"), strips temporal words, allows `%` in ILIKE patterns
+
+### 5.2 Spoken Summary ([SPEAK] SSE event)
+
+Every grounded answer now includes a spoken summary separate from the table:
+
+1. Gemini generates `[SPEAK]...[/SPEAK]` block containing 2–3 natural spoken sentences
+2. `_extract_speak()` strips the tag from the displayed table — table stays clean
+3. If Gemini omits the tag (demo mode, 429), `_build_spoken_summary(rows, message, lang)` generates a deterministic summary from the SQL rows — works without any LLM
+4. Backend emits a `"speak"` SSE event carrying the spoken text
+5. Frontend uses it for TTS — voice output never reads the table row-by-row
+6. Language follows the UI toggle: EN selected → English summary; KN selected → Kannada summary (generated natively)
+
+### 5.3 Pipeline Directory
 
 ```
 app/pipeline/
-  guardrails.py        ← step 1: input safety pre-check
-  router.py            ← step 2: intent classification
-  slots.py             ← step 2b: cross-turn slot merging
-  orchestrator.py      ← step 3: fan-out to tools, compose/render, SSE emit
-  prompts.py           ← ROUTER_SYSTEM, SQL_SYSTEM, ANSWER_SYSTEM
+  guardrails.py        ← input safety pre-check
+  router.py            ← intent classification (Gemini JSON + keyword fallback)
+  slots.py             ← cross-turn slot merging, conversation state
+  orchestrator.py      ← fan-out to tools, compose, SSE emit, [SPEAK] extraction
+  prompts.py           ← SQL_SYSTEM (fuzzy NL), ANSWER_SYSTEM (VOICE SUMMARY RULE), ROUTER_SYSTEM
   tools/
-    text_to_sql.py     ← LLM → SQL; demo_mode shortcut; 0-row recovery
-    sql_guard.py       ← sqlglot: single SELECT, 6-table allow-list, LIMIT 200
-    rule_sql.py        ← deterministic NL→SQL (demo/keyless/recovery)
+    text_to_sql.py     ← LLM → SQL, history-aware, progressive recovery
+    sql_guard.py       ← single SELECT, 6-table allow-list, LIMIT 200
+    rule_sql.py        ← deterministic NL→SQL (relax=0..3), relaxation_note()
     rag.py             ← BGE-M3 embed → pgvector ANN → reranker
     analytics.py       ← hotspot, ego_network, station_breakdown
 ```
-
-### 5.2 Demo-mode / Keyless Operation
-
-When `GEMINI_API_KEY` and `GROQ_API_KEY` are both empty, `demo_mode = True`:
-- `rule_sql.build_sql()` generates deterministic SQL (ILIKE district/crime, year filter)
-- Passes through `sql_guard.sanitize()` unchanged
-- `_render_grounded()` composes Markdown tables from real DB rows
-- Zero API keys required for a working demo with a seeded DB
-
-### 5.3 Text-to-SQL Safety
-
-1. LLM proposes SQL (or `rule_sql` generates it deterministically)
-2. `sql_guard.sanitize()` → sqlglot AST: single SELECT, allow-list tables, cap LIMIT 200
-3. `session.execute()` under RLS → `fn_scope_ok()` gates rows to officer's scope
-4. `_mask_rows()` → PII columns redacted for clearance < L3
 
 ---
 
@@ -235,64 +285,82 @@ When `GEMINI_API_KEY` and `GROQ_API_KEY` are both empty, `demo_mode = True`:
 
 | Component | Model | Notes |
 |-----------|-------|-------|
-| Brain LLM | Gemini 2.5 Flash | Chat, routing, composition |
-| SQL LLM | Gemini 2.5 Flash (default) or qwen3-coder-next | Selectable via Settings panel |
-| Fallback LLM | Groq Llama-3.3-70B | `get_fallback_llm()` |
-| Embedder | BGE-M3 (local, FP16) | Always local; sole embedder; 1024-dim |
-| Reranker | bge-reranker-v2-m3 (local, FP16) | ~2.4 GB combined with embedder |
+| Brain LLM | Gemini 2.5 Flash | Default chat/routing |
+| Brain alt | GPT-4o (OpenAI) | Optional, `openai_llm.py` adapter |
+| Fallback LLM | Groq Llama-3.3-70B | Always Groq, not configurable |
+| SQL LLM | Gemini 2.5 Flash | Default |
+| SQL alt | qwen3-coder-next | Ollama Cloud |
+| Board AI | Configurable | Gemini / Groq / OpenAI — per `boardEngine` setting |
+| Embedder | BGE-M3 (local, FP16) | Sole embedder, 1024-dim |
+| Reranker | bge-reranker-v2-m3 (local) | ~2.4 GB combined |
 | TTS | Sarvam Bulbul v3 | `POST /voice/tts` |
 | STT | Sarvam Saaras v3 | `POST /voice/stt` |
-| Translation | Sarvam Mayura v1 | `POST /voice/translate` |
-| Voice fallback | Bhashini | Free, govt |
-| YOLO (ops) | YOLOv8s (COCO, 21.5 MB) | `model/yolov8s.pt`; run by global Python, not backend venv |
+| Translation | Sarvam Mayura v1 | EN↔KN |
+| Voice fallback | Bhashini | Free |
+| YOLO | YOLOv8s (COCO) | `model/yolov8s.pt`; optional `model/gun.pt` |
 
-**Registry (`app/models/registry.py`):** All factories use `@lru_cache` — per-request engine overrides via Settings panel are efficient.
+### 6.1 Engine Selection
+
+Three settings in `EngineSettings` (stored in `localStorage`):
+- `brainEngine` — `gemini | groq | openai | local` — powers the chat brain
+- `sqlEngine` — `gemini | qwen3-coder-next | local` — powers Text-to-SQL
+- `boardEngine` — `gemini | groq | openai` — powers the Board AI scene generator
+- `copilotStt` — `browser | sarvam` — copilot microphone transcription engine (default: `browser`)
+- `voiceBackend` — `sarvam | google | webspeech` — TTS engine for voice replies
+
+The Settings → Models tab shows each provider as a card with configured/unconfigured badge fetched from `GET /settings/db-source/models` (returns booleans only — never API keys). The copilot STT picker is a two-button selector independent of `voiceBackend`.
 
 ---
 
 ## 7. Voice Pipeline
 
-### 7.1 Overview
-
 ```
-Officer speaks → MediaRecorder (recorder.ts) → POST /voice/stt
-  → detectLang() → Sarvam Saaras v3 (or Bhashini fallback)
-  → transcript → Shell.tsx voice router
+Officer speaks → MediaRecorder → POST /voice/stt
+  → detectLang() → Sarvam Saaras v3
+  → Shell.tsx voice router
       ├─ navigation command → navigate()
-      └─ query → window.dispatchEvent("satyam:voice-send")
+      └─ query → satyam:voice-send event
                    → console.tsx sendMessage({ speak: true })
-  → Normal pipeline → composed answer
-  → speakViaSarvam(text, lang, rate) → POST /voice/tts → audio plays
-  → conversation mode: auto-re-activate mic on "done"
+  → Pipeline → composed answer + [SPEAK] summary
+  → speakViaSarvam(spokenSummary, resolvedLang) → POST /voice/tts
+  → audio plays; conversation mode auto-re-activates mic
 ```
 
-Language auto-detection: counts Kannada Unicode chars (U+0C80–U+0CFF); >20% → "kn".
+**Language priority for TTS:**
+1. Explicit voice-turn locale (e.g. `kn-IN` from mic)
+2. UI language toggle (`lang === "KN"` → speak Kannada)
+3. No more text-content auto-detect — toggle is authoritative
 
-### 7.2 Two Independent Microphones
+**Two independent microphones:**
+- **Copilot mic** (top-right) — screen navigation + Q&A; engine user-selectable in Settings → Models
+- **Chat-box mic** (textarea button) — dictation into the chat textarea only; always Browser Web Speech; never dispatches `satyam:open-voice`
 
-| Mic | Location | Purpose | Engine |
-|-----|----------|---------|--------|
-| **Copilot mic** | Top-right orb in `Shell.tsx` | Screen navigation + data Q&A | User-selectable: Browser or Sarvam |
-| **Chat-box mic** | Red mic button in console chat textarea | Dictation into chat input only | Always Browser Web Speech API |
+### 7.1 Copilot STT Engine Toggle
 
-### 7.3 Copilot Mic Engine Toggle
+The top-right copilot supports two STT engines, switchable in Settings → Models → **"Voice copilot mic (Speech-to-Text)"**:
 
-Users switch in **Settings → Models → "Voice copilot mic (Speech-to-Text)"**:
+| Engine | Key | Behaviour |
+|--------|-----|-----------|
+| **Browser** (default) | `copilotStt: "browser"` | Web Speech API — live word-by-word captions, lowest latency, Kannada via `kn-IN` (Chrome/Edge) |
+| **Sarvam Saaras v3** | `copilotStt: "sarvam"` | Utterance upload → best Kannada accuracy, ~1.5s wait, any browser |
 
-| Mode | Engine | Characteristics |
-|------|--------|-----------------|
-| **Browser** *(default)* | Web Speech API | Lowest latency · live captions · good English |
-| **Sarvam** | Sarvam Saaras v3 | Best Kannada accuracy · utterance-based · ~1.5s wait |
+- `copilotStt` is stored in `localStorage` under `satyam.engine-settings` and merged with `loadEngineSettings()` spread-defaults so existing users inherit `"browser"` automatically.
+- The copilot brain is always **Gemini** and the spoken reply always uses **Sarvam Bulbul**; the STT toggle changes only microphone transcription.
+- The chat-box mic (`toggleChatDictation` in `console.tsx`) writes only to the `input` state and never touches copilot state or dispatches `satyam:open-voice`. This is a permanent fix for the regression where the chat-box mic used to open the copilot panel.
 
-Stored in `EngineSettings.copilotStt` (`"browser" | "sarvam"`) in `localStorage`, independent of `voiceBackend`.
-
-### 7.4 Chat-Box Dictation
-
-`console.tsx` owns a `chatRecRef` + `chatDictating` state. Results go only to the chat textarea `input` state. Copilot orb and `listening` state are never touched.
+```
+Copilot mic tap  →  loadEngineSettings().copilotStt
+  ├─ "browser"  →  new SpeechRecognition(), rec.lang = "kn-IN" / "en-IN"
+  │                 → live interimResults → armSilence (1.5s) → dispatchTurn()
+  └─ "sarvam"   →  startSttSession({ backend:"sarvam", silenceMs:1500 })
+                    → Sarvam Saaras v3 → onResult → dispatchTurn()
+                    → dispatchTurn() → satyam:voice-command → Gemini brain
+                    → speakViaSarvam(answer, lang) → Sarvam Bulbul TTS
+```
 
 ---
 
-## 8. Security — RBAC · RLS · Masking · Audit
+## 8. Security
 
 ### 8.1 KSP Rank Hierarchy
 
@@ -306,21 +374,36 @@ Stored in `EngineSettings.copilotStt` (`"browser" | "sarvam"`) in `localStorage`
 | PSI, SI | station | L2 |
 | ASI | station | L2 |
 | HC, PC | station | L1 |
+| admin, analyst | state | L4/L3 |
 
 ### 8.2 Four-Tier PII Masking
 
-| Clearance | What happens |
-|-----------|-------------|
+| Clearance | Effect |
+|-----------|--------|
 | L4 | Full access |
-| L3 | Victim/complainant on PROTECTED crimes masked |
-| L2 | All names masked, place_of_offence redacted, coords coarsened |
-| L1 | L2 + PROTECTED narratives hidden, all coords coarsened |
+| L3 | PROTECTED crime victim masked |
+| L2 | All names masked, coords coarsened |
+| L1 | L2 + PROTECTED narratives hidden |
 
-**PROTECTED crimes:** POCSO, RAPE, MOLESTATION, DOWRY DEATHS, SC/ST ATROCITIES, SEXUAL HARASSMENT, STALKING, ASSAULT ON WOMEN, KIDNAPPING OF WOMEN AND GIRLS.
+**PROTECTED:** POCSO, RAPE, MOLESTATION, DOWRY DEATHS, SC/ST ATROCITIES, SEXUAL HARASSMENT, STALKING, ASSAULT ON WOMEN, KIDNAPPING OF WOMEN AND GIRLS.
 
-### 8.3 SHA-256 Audit Hash-Chain
+### 8.3 SHA-256 Audit Hash-Chain (C1 fix applied)
 
-Every query: `row_hash = SHA-256(prev_hash + timestamp + user_id + action + query + result)`. Append-only. `/audit` endpoint verifies chain in O(n).
+- Every query: `row_hash = SHA-256(prev_hash + payload)`
+- `pg_advisory_xact_lock` serializes all appends — chain can no longer fork under concurrent load
+- `write_audit()` committed in its own transaction (survives mid-stream client disconnect)
+- `verify_chain()` walks rows in `audit_id ASC` and confirms hash integrity
+
+### 8.4 JWT + Login Hardening
+
+- Startup refuses to boot in production with the default JWT secret (H1 fix)
+- `is_active` check at login — disabled accounts get HTTP 403 before password check
+- `clearance_override` / `scope_override` columns respected at login — policy changes take effect on next sign-in
+- Anti-lockout: admins cannot disable their own account or lower own clearance below L4
+
+### 8.5 Ops Write Guard
+
+`_guard_write(principal)` — requires `Permission.RUN_ANALYTICS` (L2+) on all side-effecting ops endpoints: dispatch, confirm_item, detect/notify, camera/start|stop. Read endpoints remain open to all authenticated officers.
 
 ---
 
@@ -328,536 +411,409 @@ Every query: `row_hash = SHA-256(prev_hash + timestamp + user_id + action + quer
 
 | PS | Screen | Endpoints | Status |
 |----|--------|-----------|--------|
-| PS1 | Console (Chat + Canvas) | `/chat` SSE, `/map/hotspots`, `/map/station-breakdown` | ✅ Full |
-| PS2 | Network (People / Financial / Rings) | `/network/ego`, `/api/network/rings`, `/api/network/case/{id}`, `/financial/money-trail` | ✅ Full |
-| PS3 | Trends & Patterns (4 tabs) | `/api/trends`, `/api/trends/seasonal`, `/api/mo/clusters` | ✅ Full |
-| PS4 | Socio Dashboard | `/api/socio/demographics`, `/api/socio/correlation`, `/api/socio/risk-index` | ✅ Full (real Pearson) |
-| PS5 | Offender Profile + Browse | `/api/persons/{id}/profile`, `/api/persons/{id}/timeline`, `/api/offenders` | ✅ Full |
-| PS6 | Similar Cases + Timeline | `/api/cases/{id}/similar`, `/api/cases/similar/search`, `/api/cases/{id}/timeline` | ✅ Full |
-| PS7 | Financial Intelligence | `/financial/money-trail` (BFS over financial_accounts/transactions) | ✅ Full |
-| PS8 | Early Warning & Forecast | `/api/forecast/hotspots`, `/api/forecast/alerts`, `/api/forecast/backtest` | ✅ Full (real PAI backtest) |
-| **OPS** | **Response Ops** (4 dedicated routes) | `/api/ops/*` — risk zones, dispatch, green corridor, camera+YOLO | ✅ Full |
+| PS1 | Console | `/chat` SSE, `/map/hotspots`, `/map/station-breakdown` | ✅ |
+| PS2 | Network (3 tabs) | `/network/*`, `/api/network/rings`, `/financial/money-trail` | ✅ |
+| PS3 | Trends (4 tabs) | `/api/trends`, `/api/trends/seasonal`, `/api/mo/clusters` | ✅ |
+| PS4 | Socio Dashboard | `/api/socio/*` | ✅ Real Pearson |
+| PS5 | Offender Profile | `/api/persons/{id}/profile`, `/api/offenders` | ✅ |
+| PS6 | Similar Cases | `/api/cases/{id}/similar`, `/api/cases/similar/search` | ✅ |
+| PS7 | Financial | `/financial/money-trail` (BFS, NOT via Text-to-SQL) | ✅ |
+| PS8 | Forecast | `/api/forecast/hotspots`, `/api/forecast/alerts`, `/api/forecast/backtest` | ✅ |
+
+### Console Intelligence Upgrades
+
+- **Chat width resize** — drag divider between chat rail and results canvas (260px–60%)
+- **CaseDrawer** — persistent component (never unmounts), per-caseId cache so re-opening is instant, Map tab shows real embedded mini-map + "Take me to map" button
+- **"Ask AI about this area"** fix — place extraction keeps full phrases, no false "no records" from rate-limited prompts, progressive broadening fallback
 
 ---
 
 ## 10. Response Ops Module (`ENABLE_RESPONSE_OPS=true`)
 
-Feature-flagged, fully isolated. Activated via `ENABLE_RESPONSE_OPS=true` in `backend/.env`. All ops tables are `ops_*` prefixed; no existing table is altered. Open to all authenticated officers (no rank gate).
-
-### 10.1 Four Dedicated Sidebar Routes (v1.5 — was single tabbed screen)
+### 10.1 Four Dedicated Sidebar Routes
 
 | Route | Screen | Component |
 |-------|--------|-----------|
-| `/operations` | Live Ops Map | `LiveOperationsMap` — full-bleed dark CARTO heatmap, no internal tabs |
-| `/ops-predictive` | Predictive Deployment | `PredictivePanel` — forecast heat map + patrol suggestion cards |
-| `/ops-dispatch` | Dispatch & Green Corridor | `DispatchPanel` — patrol dispatch + live GPS animation + signal corridor |
-| `/ops-camera` | Camera Review | `ReviewPanel` — MJPEG live annotated feed + incident review queue |
+| `/operations` | Live Ops Map | `LiveOperationsMap` — dark CARTO heatmap; always shows real crime density base layer |
+| `/ops-predictive` | Predictive Deployment | `PredictivePanel` — forecast heatmap + patrol suggestions + deployment simulation |
+| `/ops-dispatch` | Dispatch & Green Corridor | `DemoSimPanel` — in-browser patrol simulation; scenes from real forecast hotspots |
+| `/ops-camera` | Camera Review | `ReviewPanel` — live annotated MJPEG feed + incident queue |
 
-Each route registered in `routeTree.gen.ts` at all required locations (imports, route constants, 3 interface maps, 3 type unions, `declare module`, `RootRouteChildren`, `rootRouteChildren`). Voice navigation in `Shell.tsx` `SCREEN_ROUTES` covers all four in English and Kannada.
+### 10.2 Dataset-Grounded Ops (no backend WebSocket required)
 
-### 10.2 Risk Scoring (Phase 1 — Predictive Deployment)
+All three map screens were previously gated behind `ENABLE_RESPONSE_OPS`, seeded patrols, and a live WebSocket — so they showed blank when the ops backend was off. They now fall back gracefully to the **dataset endpoints that already work**:
 
-- `GRID_SIZE=0.01` (~1.1 km cells), `LOOKBACK_DAYS=365`
-- Score = `incident_score (max 40)` + `density_score (max 30)` + `time_score (max 30)`
-- Labels: Critical ≥75 / High ≥55 / Medium ≥30 / Low
-- 5-min debounce prevents flooding on `?refresh=true`
-- Frontend: instant patrol-car placement (no animation) — 🚓 drops at hotspot; map zooms via `fitSignal`
+| Panel | Data source | Fallback |
+|-------|-------------|---------|
+| `PredictivePanel` | `GET /api/forecast/alerts` + `GET /api/forecast/hotspots` | Synthesises risk cells from `POST /map/hotspots` (real crime density) |
+| `DemoSimPanel` | `GET /api/forecast/hotspots` (top 5 by risk score) | 4 fixed Bengaluru anchor scenes |
+| `LiveOperationsMap` | `GET /api/forecast/hotspots` + `GET /api/risk-zones` | Always shows crime density heatmap; live ops overlay layered additively on top when WebSocket is running |
 
-### 10.3 Dispatch Simulation (Phase 2)
+**No synthetic or hard-coded coordinates** — every lat/lng comes from the real case dataset.
 
-- OSRM driving route (free public API); straight-line fallback with error key
-- Simulation runs as an `asyncio.Task` — walks route coords at `TICK_SEC=0.8s`
-- Broadcasts `PATROL_LOCATION` events over `/api/ops/ws` WebSocket
-- Status lifecycle: `IDLE → EN_ROUTE → ON_SCENE (6s hold) → COMPLETED → IDLE`
+**Deployment simulation (client-side only):**  
+`PredictivePanel` animates a patrol car from an idle origin to the forecast hotspot using a straight lerp route (48 steps, 110 ms/tick). `DemoSimPanel` adds a curved Bézier approach path + green signal corridor leg + live event feed — 100% browser-side, zero backend writes.
 
-### 10.4 Green Corridor (Phase 3)
-
-- `ACTIVATION_RADIUS_KM=0.3` — per-tick signal activation on route
-- `reset_all()` on arrival → `SIGNAL_RESET` broadcast → map dots go gray
-
-### 10.5 Camera Review + YOLO Live Detection (Phase 4 — v1.5 redesign)
-
-#### Backend subprocess model
+### 10.2 YOLO Camera Review Pipeline
 
 ```
-Backend FastAPI (backend/.venv Python)
+Backend FastAPI
   └─ POST /camera/start
-       ├─ _resolve_python()  — probes for a Python with cv2+ultralytics
-       │   (backend venv lacks them; global C:\Program Files\Python310 has both)
-       ├─ _free_port(8089)   — picks a guaranteed-free port (no "address in use")
-       ├─ creates JWT via create_access_token() for the YOLO process to authenticate
-       └─ Popen([global_python, live_cctv.py, --video, --camera, --no-display, --mjpeg-port])
-            └─ _drain() thread reads stdout continuously (prevents pipe-buffer freeze)
+       ├─ _resolve_python()  — probes for Python with cv2+ultralytics (cached)
+       │   → run via asyncio.to_thread (non-blocking)
+       ├─ _free_port(8089)   — guaranteed-free port
+       ├─ _yolo_lock         — prevents double-spawn
+       ├─ JWT via create_access_token() for subprocess auth
+       └─ Popen([python, live_cctv.py, --no-display, --mjpeg-port N])
+            └─ _drain() thread reads stdout (prevents pipe-buffer freeze)
 
-YOLO Process (model/inference/live_cctv.py — global Python with ultralytics)
+YOLO Process (model/inference/live_cctv.py)
   ├─ Loads model/yolov8s.pt (COCO)
-  ├─ Optional weapon model: auto-loads model/gun.pt if present
-  ├─ Loops video file (cv2.CAP_PROP_POS_FRAMES=0 on end-of-file)
-  ├─ Runs YOLOv8 track() with ByteTrack on each frame
-  ├─ Detection logic:
-  │   ├─ Fight:   ≥2 people within 80px AND speed > 6px/frame → conf 0.65–0.92
-  │   ├─ Crowd:   ≥4 people in frame → conf 0.55–0.90
-  │   ├─ Vehicle: stalled ≥3s → conf ramp 0.6–0.95
-  │   └─ Weapon:  class name in {gun,pistol,rifle,knife,...} OR dedicated gun.pt model
-  ├─ Per-type 15s cooldown prevents alert spam
-  ├─ notify() → POST /api/ops/detect/notify with JWT (fire-and-forget thread)
-  └─ MJPEG server (ThreadingHTTPServer, port 8089)
-       ├─ Annotates frame: res.plot() + people count overlay + alert banner (2.5s)
-       ├─ JPEG-encodes and pushes to _FrameBuffer (Condition-based, thread-safe)
-       └─ GET /stream → multipart/x-mixed-replace; boundary=--frameboundary
+  ├─ Optional model/gun.pt for weapon detection
+  ├─ Detection: fight (proximity+speed), crowd (≥4 people), vehicle stall, weapon
+  ├─ 15s cooldown per detection type
+  ├─ notify() → POST /api/ops/detect/notify with JWT
+  └─ MJPEG server on :N  →  annotated frames with bounding boxes + detection banners
 ```
 
-#### Frontend: ReviewPanel
-
-- **`<img src="http://localhost:8089/stream">`** — displays the live annotated MJPEG feed with bounding boxes, track IDs, and detection banners
-- Stream port returned from `/camera/start` and `/camera/status`; stored in `streamPort` state
-- "Connecting…" overlay auto-clears after 2.5s grace period (browser `onLoad` unreliable for multipart streams)
-- Detection Feed — populates from WebSocket `INCIDENT_CANDIDATE` events (fight, crowd, weapon, vehicle_anomaly)
-- Incident Review Queue — Confirm → files case + auto-dispatches nearest patrol; Reject → marks rejected
-
-#### Confidence tiers
-
-| Confidence | Action |
-|-----------|--------|
-| < 0.5 | Ignored |
-| 0.5 – 0.8 | MEDIUM — queued for review |
-| ≥ 0.8 | HIGH — auto-flagged in queue |
-
-
-### 10.6 Dataset-Driven Frontend (ops screens never go blank)
-
-| Screen | Data source | Works without ops backend? |
-|--------|-------------|---------------------------|
-| **Predictive Deployment** | `intelligence.getForecastAlerts()` + `getForecastHotspots()` → fallback `api.mapHotspots()` | ✅ Yes |
-| **Live Operations Map** | `api.mapHotspots({mode:"by_crime"})` heatmap always; ops overlay additive | ✅ Heatmap always |
-
-### 10.7 CrimeMap.tsx Ops Extensions
-
-| Prop | Purpose |
-|------|---------|
-| `darkTiles` | CARTO dark base tiles (Predictive + Dispatch maps) |
-| `lockBounds` | Suppresses auto-fitBounds during active simulation |
-| `fitSignal` | Increment to trigger one-shot zoom to current route |
-| `liveMarker` | Single animated 🚓 divIcon; pans map once on placement |
-| `routePath` | Blue polyline (dispatch route) |
-| `corridorPath` | 3-layer green glow (active signal corridor) |
-| `signals` | Junction dots: green=active, gray=normal |
+**Frontend:** `<img src="http://localhost:{streamPort}/stream">` shows live annotated feed.
 
 ---
 
-## 11. Frontend Architecture
+## 11. Investigation Board (`/board`)
 
-### 11.1 Route Map
+### 11.1 Architecture
+
+**Frontend:** tldraw v5.1.1 — full design canvas in a React route
+
+**Features:**
+- All tldraw built-in tools: shapes (rect/ellipse/triangle/star/arrow), freehand draw, text, image, stickers
+- Resize handles on every shape
+- Inline text editing (double-click any shape)
+- Color fills, borders, shadows, dash styles
+- Infinite pan/zoom with snap-to-grid and rulers
+- Layers (pages panel)
+- Alignment + distribution tools
+- Export to PNG (2× resolution) via `editor.toImage()`
+
+**AI Scene Generator (bottom-right chatbox):**
+1. User types a crime scene description (+ optional photos)
+2. `POST /api/board/generate` → Gemini (or Groq/OpenAI per `boardEngine` setting)
+3. Returns `SceneGraph` (nodes + edges) validated by Zod
+4. `applySceneToEditor()` creates geo shapes + bound arrows in tldraw
+5. `editor.zoomToFit()` ensures every scene fits regardless of complexity
+6. If LLM returns empty or 429 → `_keyword_scene()` fallback builds a ring layout from prompt keywords
+
+**Save/Load:** `POST /api/board/save` stores tldraw `editor.getSnapshot()` as JSONB in `boards` table.
+
+**Backend isolation:** `boards` / `board_snapshots` tables have no FK to real dataset tables, no RLS.
+
+### 11.2 Pointer Events Architecture
+
+The `BoardInner` overlay wrapper is `pointer-events: none` — only the toolbar bar and AI chatbox have `pointer-events: auto`. This ensures tldraw receives all draw/click/drag events uninterrupted.
+
+---
+
+## 12. Person 360 Dossier (`/dossier`)
+
+**Access:** L4+ admins only (clearance ≥ 4 or rank in DGP/ADGP/IGP/SP/admin)
+
+**10 fictional Karnataka personas** — each has:
+- Mugshot face card (front/left/right angles) with forensic height grid lines
+- Physical description, contact details, home address
+- Crime history timeline (DEMO/year/nnnn case refs)
+- Family members table
+- Known associates table
+- Bank accounts with flagged suspicious accounts
+
+**Data isolation:** All data in `demo_dossier_*` tables — no FKs to real dataset, no RLS, no seed/embed involvement.
+
+**Performance:** Background pre-fetch of all 10 profiles on mount — subsequent clicks are instant (cache hit, zero network call).
+
+---
+
+## 13. Access Control Admin (`/admin`)
+
+**Access:** L4+ only — `Permission.ADMIN` guard on all endpoints
+
+**Features:**
+- Searchable table of all users with: name, rank, effective clearance, scope, "Created by" (or "Self-registered"), active/disabled status
+- **Edit Policy modal** — change rank, clearance override (L1-L4), scope override (state/range/district/station), enable/disable account
+- Every change writes `ADMIN_POLICY_CHANGE` to the hash-chained audit log with before/after state and mandatory reason
+- **Anti-lockout:** admins cannot disable themselves or drop their own clearance below L4
+- Changes take effect on target's next login (JWT re-minted with overrides)
+
+**New `users` columns (migration 006):**
+- `created_by INT NULL` — tracks who provisioned the account
+- `clearance_override SMALLINT NULL` — overrides rank-derived clearance
+- `scope_override TEXT NULL` — overrides rank-derived scope
+
+---
+
+## 14. Frontend Architecture
+
+### 14.1 Route Map (12 sidebar routes + landing)
 
 ```
-/                     Landing page
-/login                Demo login — 14 KSP ranks
-/console              PS1: Chat + Results Canvas
-/network              PS2: People graph / Financial Links / Rings (3-tab)
-/trends               PS3: Overview / Time Series / MO Clusters / Seasonal (4-tab)
+/                     Animated landing page (tldraw Brain particle + Three.js)
+/login                Demo login — 14 KSP ranks (grouped by access tier)
+/console              PS1: Chat + Results Canvas (resize divider, CaseDrawer)
+/network              PS2: People / Financial Links / Rings (3 tabs)
+/trends               PS3: Overview / Time Series / MO Clusters / Seasonal
 /socio                PS4: Socio-Economic Dashboard
 /profile/:personId    PS5: Offender dossier
 /forecast             PS8: Early Warning + Forecast Risk Grid
 /reports              Report builder + PDF print
 /audit                Hash-chain audit log
-/transcripts          Conversations + Voice transcripts (2-tab)
-/operations           Live Ops Map (full-bleed, no tabs)
-/ops-predictive       Predictive Deployment (NEW — separate route)
-/ops-dispatch         Dispatch & Green Corridor (NEW — separate route)
-/ops-camera           Camera Review + YOLO live feed (NEW — separate route)
+/transcripts          Conversations + Voice transcripts
+/operations           Live Ops Map (full-bleed dark CARTO)
+/ops-predictive       Predictive Deployment
+/ops-dispatch         Dispatch & Green Corridor
+/ops-camera           Camera Review + YOLO MJPEG feed
+/board                Investigation Board (tldraw design canvas)
+/dossier              Person 360 Dossier (L4+ only)
+/admin                Access Control (L4+ only)
 /about                Project info
 ```
 
-### 11.2 Key Components
+### 14.2 Key Components
 
 | Component | Purpose |
 |-----------|---------|
-| `Shell.tsx` | Nav rail (12 routes) + voice command router + language toggle + theme picker |
-| `CrimeMap.tsx` | Leaflet map with all ops props (see §10.7) |
-| `CaseDrawer.tsx` | Sliding case detail (Summary / Persons / Timeline / Similar / Map) |
-| `FinancialLinksPanel.tsx` | SVG money-trail graph (PS7) |
-| `RingsPanel.tsx` | Criminal ring detection cards (PS2) |
-| `ops/PredictivePanel.tsx` | Forecast heat map + instant patrol-car placement |
-| `ops/DispatchPanel.tsx` | Patrol dispatch + live GPS simulation + green corridor |
-| `ops/ReviewPanel.tsx` | MJPEG annotated feed + incident review queue |
-| `ops/LiveOperationsMap.tsx` | Full-bleed dark ops map with ops overlay |
-| `ProfileMenu.tsx` | User profile + logout (SSR-safe: localStorage read in useEffect) |
-| `SettingsDialog.tsx` | Live engine overrides + DB source picker |
-| `ThemePicker.tsx` | 6 professional + 8 legacy colour themes |
+| `Shell.tsx` | Nav rail (18 routes) + voice router + language toggle + `isAdmin` gate |
+| `CrimeMap.tsx` | Leaflet map with `darkTiles`, `lockBounds`, `fitSignal`, `liveMarker`, `corridorPath` |
+| `CaseDrawer.tsx` | Persistent (never unmounts), per-caseId cache, Map tab with embedded map + "Take me to map" |
+| `SettingsDialog.tsx` | 3-provider AI Chat Model cards, Board AI engine dropdown, copilot STT toggle (Browser / Sarvam) |
+| `board.tsx` | tldraw design canvas — `pointer-events-none` overlay, `applySceneToEditor`, AI chatbox |
+| `dossier.tsx` | Person 360 — background pre-fetch, FaceCard with lightbox, crime timeline |
+| `admin.tsx` | Access Control — policy editor modal, anti-lockout warning |
+| `index.tsx` | Landing page — Three.js particle brain (v2 velocity physics), tldraw-inspired look |
 
-### 11.3 Key Libraries
+### 14.3 Landing Page (/)
 
-```
-src/lib/
-  i18n.tsx              Custom i18n: I18nProvider, useI18n(), useT(), DICT (200+ EN→KN)
-  tData.ts              tData(field, value, lang) — categorical DB value lookup
-  conversationStore.ts  Chat history for Transcripts screen
-  pdf/conversationPdf.ts exportConversationPdf() — branded print-to-PDF
-  api/
-    client.ts           REST + SSE streamChat()
-    intelligence.ts     PS2–PS8 typed wrappers
-    financial.ts        financial.moneyTrail() for PS7
-    responseOps.ts      Ops typed client (opsFetch, openOpsSocket)
-                        cameraStart() returns stream_port; cameraStatus() returns stream_port
-  voice/
-    tts.ts              speakViaSarvam(), stripMarkdown()
-    recorder.ts         MediaRecorder STT + startSttSession()
-    lang.ts             detectLang(), resolveLang()
-locales/
-  kn-data.json          Kannada lookup: 9 fields, 150+ entries (all 41 districts)
-```
+- **Three.js v0.160.0** — 9,000-particle morphing brain (`/` route only, SSR-safe `useEffect`)
+- **Velocity physics v2** — `vel[N*3]` buffer, spring (SPRING=0.05) + damping (DAMP=0.87) + radial lift + tangential swirl + wake/drag for comet-trail effect
+- **7 themes + light/dark** — `window.satyamState`, `localStorage`, scoped CSS under `.satyam-landing`
+- **Routing:** Login → `<Link to="/login">`, Features → `#sl-features`, Console → `<Link to="/console">`
+- CSS scoped under `.satyam-landing` — never bleeds into the authenticated app
 
-### 11.4 Hydration Fix (ProfileMenu)
+### 14.4 API Client (`lib/api/client.ts`)
 
-`useState` initializers that read `localStorage` (`loadStoredAccounts`, `loadActiveId`, `getCachedUser`) were replaced with empty initial state + `useEffect` population to prevent SSR/client hydration mismatch.
+Key exports:
+- `api.adminUsers()` / `api.updateUserPolicy()`
+- `api.modelProviders()` → configured booleans only
+- `api.cameraStart()` / `api.cameraStatus()` → returns `stream_port`
+- `streamChat()` — SSE with `"speak"` event type for spoken summary
 
 ---
 
-## 12. Bilingual Support — EN + KN
-
-### 12.1 Four-Layer Architecture
+## 15. Bilingual Support — EN + KN
 
 | Layer | Scope | Implementation |
 |-------|-------|---------------|
-| 1. Static UI strings | Nav, buttons, headers | `i18n.tsx` DICT — 200+ EN→KN entries |
-| 2. Categorical DB values | crime_type, status, district, role, gender | `tData(field, value, lang)` + `kn-data.json` |
-| 3. Case narratives | `narratives.body` | `?lang=kn` → backend prefers `language='kn'` row |
-| 4. AI-generated answers | Chat responses | `lang_directive` injected into ANSWER_SYSTEM prompt |
+| 1. Static UI | Nav, buttons, labels | `i18n.tsx` DICT — 250+ EN→KN entries |
+| 2. Categorical DB | crime_type, status, district | `tData(field, value, lang)` + `kn-data.json` |
+| 3. Case narratives | `narratives.body` | `?lang=kn` → backend prefers `language='kn'` |
+| 4. AI answers | Chat responses | `lang_directive` in ANSWER_SYSTEM prompt |
+| 5. Spoken summary | TTS voice output | `_build_spoken_summary(lang="kn")` for Kannada |
+
+**Language toggle authority:** The EN/KN button in the header is the sole source of truth for TTS language. Text content auto-detection is disabled — if you set EN, voice always speaks English regardless of response content.
 
 ---
 
-## 13. API Reference Summary
+## 16. API Reference
 
-### 13.1 Core
+### 16.1 Core
 
 | Method | Path | Notes |
 |--------|------|-------|
-| `POST` | `/auth/login` | JWT login, 14 KSP ranks |
-| `POST` | `/chat/stream` | SSE: token, citation, blocked, done events |
-| `GET` | `/cases` | RLS-scoped list |
-| `GET` | `/cases/{id}?lang=` | Full case + persons + narrative (lang-aware) |
-| `GET` | `/cases/search?q=` | Unified person + case autocomplete |
-| `POST` | `/map/hotspots` | Lat/lng heat points |
+| `POST` | `/auth/login` | JWT, respects clearance/scope overrides |
+| `POST` | `/auth/register` | Creates user + officer row |
+| `GET` | `/auth/stations` | All KSP stations (for sign-up picker) |
+| `POST` | `/chat/stream` | SSE with `speak`, `token`, `citation`, `done` events |
+| `GET` | `/cases/{id}?lang=` | Case + persons + narrative |
+| `POST` | `/map/hotspots` | Heatmap points |
 | `POST` | `/map/station-breakdown` | Station FIR table |
 
-### 13.2 Intelligence (`/api/`)
-
-| Path | Clearance | Notes |
-|------|-----------|-------|
-| `GET /offenders` | L2+ | Browse all offenders |
-| `GET /persons/{id}/profile` | L2+ | Risk score + MO fingerprint + associates |
-| `GET /persons/{id}/timeline` | L1 | Crime history |
-| `GET /cases/{id}/similar` | L1 | RAG similarity |
-| `POST /cases/similar/search` | L1 | Description-based search |
-| `GET /trends` | L1 | Series + QoQ/YoY deltas |
-| `GET /trends/seasonal` | L1 | True lift % vs monthly baseline |
-| `GET /mo/clusters` | L1 | MO clustering |
-| `GET /socio/demographics` | L3+ | Age/gender/district (real JOIN) |
-| `GET /socio/correlation` | L3+ | Real Pearson vs seeded indicators |
-| `GET /socio/risk-index` | L2+ | Social risk score per district |
-| `GET /forecast/hotspots` | L2+ | Risk grid with PAI scoring |
-| `GET /forecast/alerts` | L2+ | Early warning alerts |
-| `GET /forecast/backtest` | L1 | PAI hit-rate validation |
-| `GET /network/rings` | L2+ | Criminal ring detection |
-| `GET /network/case/{id}` | L1 | Case co-accused graph |
-| `GET /network/person/{id}` | L1 | Person ego-graph |
-| `POST /financial/money-trail` | L2+ | BFS money-trail graph |
-
-### 13.3 Voice & Health
-
-| Path | Clearance | Notes |
-|------|-----------|-------|
-| `POST /voice/tts` | L1 | Text → audio |
-| `POST /voice/stt` | L1 | Audio → transcript |
-| `POST /voice/translate` | L1 | MT EN↔KN |
-| `GET /health` | None | Liveness + demo_mode flag |
-| `GET /health/models` | None | Resolved model class names |
-| `GET /health/data` | Session | Row counts + `seeded` flag |
-
-### 13.4 Response Ops (`/api/ops/` — `ENABLE_RESPONSE_OPS=true`, all ranks)
+### 16.2 Intelligence (`/api/`)
 
 | Path | Notes |
 |------|-------|
-| `GET /api/ops/health` | Liveness probe |
-| `GET /api/ops/risk-zones` | Scored grid zones; `?refresh=true` forces recompute |
-| `GET /api/ops/suggestions` | Pending patrol pre-positioning suggestions |
-| `POST /api/ops/suggestions/{id}/{action}` | accept \| dismiss |
-| `GET /api/ops/patrols` | All patrol units |
-| `POST /api/ops/dispatch` | Create dispatch (nearest or explicit patrol) |
-| `POST /api/ops/dispatch/{id}/simulate` | Start live GPS animation |
-| `GET /api/ops/dispatch/{id}/state` | Polling fallback for latest position |
-| `GET /api/ops/dispatch/active` | All mid-simulation dispatches |
-| `POST /api/ops/dispatch/simulate-all` | Start simulation for every pending dispatch |
-| `POST /api/ops/dispatch/stop-all` | Cancel all simulations |
-| `GET /api/ops/signals` | All traffic signal states |
-| `GET /api/ops/corridor/state` | Current green-signal count |
-| `POST /api/ops/corridor/reset` | Deactivate corridor, restore all signals |
-| `POST /api/ops/detect/notify` | YOLO process posts detection candidate |
-| `GET /api/ops/cameras` | Camera list |
-| `GET /api/ops/review-queue` | Pending CCTV review items |
-| `POST /api/ops/review-queue/{id}/confirm` | File case + auto-dispatch |
-| `POST /api/ops/review-queue/{id}/reject` | Reject candidate |
-| `POST /api/ops/camera/start` | Launch YOLO subprocess (returns `stream_port`) |
-| `POST /api/ops/camera/stop` | Kill YOLO subprocess |
-| `GET /api/ops/camera/status` | Running status + `stream_port` |
-| `WS /api/ops/ws?token=` | Live event stream (PATROL_LOCATION, SIGNAL_GREEN, INCIDENT_CANDIDATE, …) |
+| `GET /offenders` | L2+ — browse all accused |
+| `GET /persons/{id}/profile` | L2+ — risk, MO, associates |
+| `GET /cases/{id}/similar` | RAG similarity |
+| `POST /cases/similar/search` | Description-based search |
+| `GET /trends` | Series + QoQ/YoY |
+| `GET /forecast/hotspots` | Risk grid with PAI |
+| `GET /network/rings` | Criminal ring detection |
+| `POST /financial/money-trail` | L2+ — BFS money trail (NOT via Text-to-SQL) |
+
+### 16.3 Response Ops (`/api/ops/`)
+
+| Path | Notes |
+|------|-------|
+| `GET /risk-zones` | Scored patrol grid |
+| `POST /dispatch` | Nearest patrol dispatch |
+| `POST /detect/notify` | YOLO posts detection |
+| `GET /review-queue` | Pending CCTV items |
+| `POST /review-queue/{id}/confirm` | File case + auto-dispatch |
+| `POST /camera/start` | Launch YOLO, returns `stream_port` |
+| `WS /ws?token=` | Live events (PATROL_LOCATION, INCIDENT_CANDIDATE, …) |
+
+### 16.4 Board (`/api/board/`)
+
+| Path | Notes |
+|------|-------|
+| `POST /generate` | SceneGraph from prompt + optional images |
+| `POST /save` | Upsert board (stores tldraw snapshot as JSONB) |
+| `GET /list` | User's boards |
+| `GET /{id}` | Load board |
+
+### 16.5 Dossier (`/api/dossier/`)
+
+| Path | Notes |
+|------|-------|
+| `GET /list` | L4+ — all 10 demo personas |
+| `GET /{id}` | Full dossier with nested data |
+
+### 16.6 Admin (`/admin/`)
+
+| Path | Notes |
+|------|-------|
+| `GET /users` | L4+ — all users with creator info |
+| `PATCH /users/{id}/policy` | L4+ — change rank/clearance/scope, audit-logged |
+
+### 16.7 Settings
+
+| Path | Notes |
+|------|-------|
+| `GET /settings/db-source/models` | Configured provider booleans (never keys) |
 
 ---
 
-## 14. Configuration & Environment
+## 17. Configuration & Environment
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| `DATABASE_URL` | local asyncpg URL | Primary DB |
+| `DATABASE_URL` | local asyncpg | Primary DB |
 | `REDIS_URL` | `redis://localhost:6379/0` | Conversation state |
-| `JWT_SECRET` | `change-me-in-production` | HS256 signing |
-| `MODEL_BACKEND` | `api` | `api` \| `local` |
-| `BRAIN_ENGINE` | `gemini` | `gemini` \| `groq` |
-| `SQL_ENGINE` | `gemini` | `gemini` \| `qwen3-coder-next` |
-| `VOICE_BACKEND` | `sarvam` | `sarvam` \| `google` \| `bhashini` |
+| `JWT_SECRET` | `change-me-in-production` | HS256 — **fails to start in production if default** |
+| `MODEL_BACKEND` | `api` | `api` or `local` |
+| `BRAIN_ENGINE` | `gemini` | `gemini \| groq \| openai` |
+| `SQL_ENGINE` | `gemini` | `gemini \| qwen3-coder-next` |
+| `VOICE_BACKEND` | `sarvam` | `sarvam \| google \| bhashini` |
 | `GEMINI_API_KEY` | `""` | Gemini 2.5 Flash |
 | `GROQ_API_KEY` | `""` | Groq fallback |
+| `OPENAI_API_KEY` | `""` | ChatGPT (gpt-4o) |
+| `OPENAI_MODEL` | `gpt-4o` | OpenAI model name |
 | `SARVAM_API_KEY` | `""` | TTS/STT/MT |
 | `BHASHINI_API_KEY` | `""` | Voice fallback |
-| `VITE_API_BASE_URL` | `http://localhost:8000` | Frontend base URL |
-| `VECTOR_TYPE` | `vector` | `vector` (local) \| `halfvec` (Neon) |
-| `ENABLE_RESPONSE_OPS` | `false` | `true` to activate Response Ops module |
-| `YOLO_PYTHON` | auto-detected | Override the Python interpreter for YOLO subprocess |
-| `YOLO_MJPEG_PORT` | `8089` | Preferred MJPEG stream port (auto-adjusts if busy) |
+| `VITE_API_BASE_URL` | `http://localhost:8000` | Frontend → backend URL |
+| `ENABLE_RESPONSE_OPS` | `false` | `true` to activate ops module |
+| `SELF_BASE_URL` | `http://localhost:8000` | Backend self-URL for YOLO subprocess |
+| `YOLO_PYTHON` | auto-detected | Python interpreter path for YOLO |
+| `YOLO_MJPEG_PORT` | `8089` | MJPEG stream port (auto-finds free port) |
 
-**Demo mode:** when both `GEMINI_API_KEY` and `GROQ_API_KEY` are empty, `demo_mode = True` — `rule_sql.py` + `_render_grounded()` handle everything. No API keys required.
+**Demo mode:** Both `GEMINI_API_KEY` and `GROQ_API_KEY` empty → `demo_mode=True` → `rule_sql.py` handles SQL, `_render_grounded()` handles answers, no API calls needed.
 
 ---
 
-## 15. Deployment
+## 18. Deployment
 
-### 15.1 Docker
+### 18.1 Docker
 
 ```bash
-cp .env.example .env   # fill GEMINI_API_KEY (optional for demo)
+cp .env.example .env
 docker compose up --build
-# frontend → http://localhost:3000  |  backend → http://localhost:8000/docs
+# frontend http://localhost:3000 | backend http://localhost:8000/docs
 ```
 
-### 15.2 Local Dev
+### 18.2 Local Dev
 
 ```bash
 # Backend
 cd backend && python -m venv .venv && .venv\Scripts\activate
 pip install -r requirements.txt
-docker compose up db redis -d
 psql "$DATABASE_URL" -f migrations/002_schema_v2.sql
+psql "$DATABASE_URL" -f migrations/004_demo_dossier.sql
+psql "$DATABASE_URL" -f migrations/005_boards.sql
+psql "$DATABASE_URL" -f migrations/006_admin_access_control.sql
 python -m seed.load_seed
+python -m seed.load_demo_dossier
 uvicorn app.main:app --reload --port 8000
 
 # Frontend
 cd frontend && bun install && bun run dev
 
-# YOLO inference (requires global Python with ultralytics)
-# pip install ultralytics opencv-python httpx   ← in global Python, not backend venv
-# The backend auto-detects the correct interpreter and launches it on Start.
+# YOLO (needs global Python with ultralytics)
+# pip install ultralytics opencv-python httpx   (in global Python, not backend venv)
+# Backend auto-detects the correct interpreter on camera/start
 ```
 
-### 15.3 Database Tracks
+### 18.3 Migrations Applied (in order)
 
-| Track | `DATABASE_URL` | Dataset |
-|-------|---------------|---------|
-| **Neon cloud** | Neon pooler + `ssl=require` | 60% (~192 MB) |
-| **Local PG17** | `localhost:5432/satyam` | 100% |
+| File | Purpose |
+|------|---------|
+| `001_init.sql` | Legacy v1 schema |
+| `002_schema_v2.sql` | Core schema — cases, persons, narratives, users, audit_log, RLS |
+| `003_users_extend.sql` | full_name, email, photo_b64 on users |
+| `004_demo_dossier.sql` | 5 isolated demo_dossier_* tables |
+| `005_boards.sql` | boards + board_snapshots |
+| `006_admin_access_control.sql` | created_by, clearance_override, scope_override on users |
 
 ---
 
-## 16. Two-Phase Roadmap
+## 19. Two-Phase Roadmap
 
-| Layer | Phase 1 (Hackathon demo) | Phase 2 (Sovereign on-prem) |
+| Layer | Phase 1 (Datathon demo) | Phase 2 (Sovereign on-prem) |
 |-------|--------------------------|------------------------------|
-| Brain / chat | Gemini 2.5 Flash | Sarvam-M / Sarvam 30B |
-| Text-to-SQL | Gemini 2.5 Flash + qwen3-coder-next | Qwen-Coder local |
-| Voice | Sarvam → Bhashini fallback | Bhashini + Sarvam |
+| Brain | Gemini 2.5 Flash | Sarvam-M / Sarvam 30B |
+| SQL | Gemini 2.5 Flash | Qwen-Coder local |
+| Voice | Sarvam → Bhashini | Bhashini + Sarvam |
+| Board AI | Gemini / Groq / OpenAI | Local Ollama |
+| YOLO | YOLOv8s (COCO) + optional gun.pt | Custom KSP-trained model |
 | Embeddings | BGE-M3 (local GPU) | BGE-M3 (local) |
-| YOLO detection | YOLOv8s (COCO) + optional gun.pt | Custom-trained KSP-specific model |
-| Hosting | External cloud OK (synthetic data) | Fully on-prem / India-hosted |
-
-**Sovereignty principle:** external clouds are used only with synthetic data. For live KSP data, every component must run on-premises or India-hosted infrastructure.
+| Hosting | External cloud (synthetic data) | Fully on-prem / India-hosted |
 
 ---
 
-## 17. Bug Fixes Applied
+## 20. Bug Fixes & Security Hardening
 
-| ID | Description | Fix |
-|----|-------------|-----|
-| D1 | Socio-demographics filters silently ignored | Rewrote queries to JOIN persons→case_persons→cases |
-| D2 | Socio-correlation fabricated indicators | Now JOINs real `district_socio_economic_indicators`; Pearson in Python |
-| D3 | Trends QoQ delta split by list index not time | Collapses to `{period: count}` dict, sorts chronologically |
-| D4 | Seasonal fake lift% | CTE computes `(cnt / AVG(cnt) - 1) * 100` vs real monthly baseline |
-| D5 | Demo-mode echo corrupts all chat lanes | `rule_sql.py` + `_render_grounded()` + demo_mode shortcircuit |
-| D6 | Console "backend unreachable" for blocked/empty | Three distinct branches: transport error / RBAC block / empty result |
-| D8 | Forecast patrol always 18:00 | Uses `incident_time TEXT`: `split_part(incident_time, ':', 1)::int` |
-| D9 | Similar-cases anchors to case #1 on no match | Returns `matches=[]`; deterministic `ORDER BY (ILIKE) DESC` |
-| OPS-1 | Hydration error (ProfileMenu localStorage in render) | `useState` empty init + `useEffect` population |
-| OPS-2 | YOLO subprocess launched with backend venv Python (no cv2) | `_resolve_python()` probes for a Python with cv2+ultralytics |
-| OPS-3 | Video stops after 3s (pipe buffer fills) | `_drain()` daemon thread continuously reads subprocess stdout |
-| OPS-4 | Empty SATYAM_TOKEN → 401 on every notify | Backend generates JWT via `create_access_token()` at launch |
-| OPS-5 | YOLO only detected stationary vehicles (wrong for fight video) | Added fight (proximity+speed), crowd (N≥4), weapon class detection |
-| OPS-6 | MJPEG server port conflict → port not listening → black feed | `_free_port()` picks guaranteed-free port; stored + returned from status API |
-| OPS-7 | `onLoad` never fires for multipart streams → overlay stuck | Auto-clear overlay after 2.5s grace period via `setTimeout` |
-| OPS-8 | Browser shows raw unannotated video (no bounding boxes) | MJPEG stream serves `res.plot()` annotated frames; `<video>` replaced with `<img>` |
-| OPS-9 | Operations screen had internal tab bar after split to separate routes | `operations.tsx` rewritten to render only `LiveOperationsMap` |
-| OPS-10 | New ops routes showed "Hello /ops-predictive!" (stale Vite cache) | `node_modules/.vite` cleared; server restarted with `--force` |
-
----
-
-## Appendix — File Tree (Abridged)
-
-```
-satyam/
-├── backend/
-│   ├── app/
-│   │   ├── api/routes/    auth, chat, cases, map, network, financial,
-│   │   │                  intelligence, reports, audit, voice, settings, health, ops
-│   │   ├── core/          rbac, masking, audit, security
-│   │   ├── db/            models (ORM), ops_models, rls, session
-│   │   ├── models/        registry + api/(gemini,groq,sarvam,bhashini,ollama_cloud)
-│   │   │                          + local/(embedder_bge,reranker_bge,stubs)
-│   │   ├── pipeline/      guardrails, router, slots, orchestrator, prompts
-│   │   │   └── tools/     text_to_sql, sql_guard, rule_sql, rag, analytics
-│   │   ├── schemas/       auth, chat, case, intelligence, map, network, financial, ops
-│   │   └── services/      case, chat, intelligence, financial, map, network, report
-│   │       └── ops/       risk_service, routing_service, sim_service,
-│   │                      corridor_service, ws_manager
-│   └── migrations/        002_schema_v2.sql
-│
-├── model/
-│   ├── yolov8s.pt          COCO YOLOv8s weights (21.5 MB)
-│   ├── gun.pt              (optional) weapon-trained model — place here to enable
-│   ├── requirements.txt    ultralytics, opencv-python, httpx, numpy
-│   └── inference/
-│       ├── live_cctv.py    Main detector: fight/crowd/weapon/vehicle + MJPEG server
-│       └── notify.py       POST candidates to /api/ops/detect/notify
-│
-├── frontend/src/
-│   ├── routes/            console, network, forecast, trends, socio, profile.$personId,
-│   │                      reports, audit, transcripts, login, index, about,
-│   │                      operations, ops-predictive, ops-dispatch, ops-camera
-│   ├── components/        Shell, CaseDrawer, CrimeMap(+ops-props),
-│   │                      FinancialLinksPanel, RingsPanel, SimilarCaseSearch,
-│   │                      ThemePicker, SettingsDialog, ProfileMenu
-│   │   └── ops/           PredictivePanel, DispatchPanel, ReviewPanel,
-│   │                      LiveOperationsMap, DemoSimPanel
-│   ├── lib/
-│   │   ├── i18n.tsx        Custom i18n DICT (200+ EN→KN keys)
-│   │   ├── tData.ts        Categorical DB value translation
-│   │   ├── api/            client.ts, intelligence.ts, financial.ts, responseOps.ts
-│   │   └── voice/          tts.ts, recorder.ts, lang.ts
-│   └── locales/            kn-data.json (150+ entries), en.json
-│
-└── docs/ARCHITECTURE.md   ← this file
-```
-
----
-
-*Last updated: 2026-06-22 · Satyam v1.6 · Datathon 2026 KSP × hack2skill*
-
-
----
-
-## Addendum — v1.6 Changes (2026-06-22)
-
-### New Screens
-
-| Route | Screen | Guard | Notes |
-|-------|--------|-------|-------|
-| `/board` | Investigation Board | `Permission.CHAT` (all officers) | React Flow canvas, undo/redo, pencil draw, AI scene generation |
-| `/dossier` | Person 360 Dossier | Clearance L4+ / admin rank | 10 isolated demo personas, mugshot face card, crime history, bank accounts |
-
-### New Backend Files
-
-| File | Purpose |
-|------|---------|
-| `migrations/005_boards.sql` | `boards` + `board_snapshots` tables (isolated) |
-| `migrations/004_demo_dossier.sql` | 5 `demo_dossier_*` tables (isolated) |
-| `app/db/board_models.py` | Board + BoardSnapshot ORM |
-| `app/db/demo_dossier_models.py` | Full dossier ORM (5 models) |
-| `app/schemas/board.py` | SceneGraph, SceneNode, SceneEdge, BoardGenerateRequest, BoardSaveRequest |
-| `app/schemas/dossier.py` | DossierListItem, DossierDetail, nested schemas |
-| `app/services/board_service.py` | AI scene generation (text + multimodal), CRUD |
-| `app/services/dossier_service.py` | list + detail (isolated from real tables) |
-| `app/api/routes/board.py` | POST /generate, POST /save, GET /list, GET /{id} |
-| `app/api/routes/dossier.py` | GET /list, GET /{id} — admin-gated |
-| `app/models/api/openai_llm.py` | ChatGPT (OpenAI) brain adapter |
-| `seed/demo_dossier.json` | 10 fictional Karnataka police dossier personas |
-| `seed/load_demo_dossier.py` | Idempotent dossier seed (only touches demo_dossier_* tables) |
-
-### New Config Fields (`app/config.py`)
-
-| Variable | Default | Purpose |
-|----------|---------|---------|
-| `OPENAI_API_KEY` | `""` | ChatGPT / OpenAI brain engine |
-| `OPENAI_MODEL` | `gpt-4o` | OpenAI model name |
-| `OPENAI_BASE_URL` | `https://api.openai.com/v1` | API base (override for Azure etc.) |
-| `SELF_BASE_URL` | `http://localhost:8000` | Backend self-URL for YOLO subprocess callback |
-
-### New API Endpoints
-
-| Path | Guard | Purpose |
-|------|-------|---------|
-| `POST /api/board/generate` | CHAT + audit | Generate SceneGraph from prompt + optional images |
-| `POST /api/board/save` | CHAT | Insert/update board |
-| `GET /api/board/list` | CHAT | List user's boards |
-| `GET /api/board/{id}` | CHAT | Load board by id |
-| `GET /api/dossier/list` | L4+ admin | List all 10 dossier subjects |
-| `GET /api/dossier/{id}` | L4+ admin | Full dossier with nested data |
-| `GET /settings/db-source/models` | CHAT | Provider availability booleans (never returns keys) |
-
-### Intelligence Upgrades
-
-- **`brain_engine`** now accepts `"openai"` in all Literal unions (`config`, `schemas/chat`, `orchestrator`, `chat_service`, `registry`)
-- **SettingsDialog** — Brain engine select replaced with AI Chat Model card showing 3 providers (Gemini/ChatGPT/Groq) with configured/unconfigured badge
-- **SQL_SYSTEM prompt** rewritten for fuzzy NL understanding (ILIKE, relative dates, context carry-forward)
-- **`generate_sql()`** accepts `history` for conversational follow-ups
-- **Progressive zero-result recovery** — `rule_sql.build_sql(relax=0..3)` broadens query instead of returning empty results
-- **`_build_spoken_summary()`** generates smart spoken briefings from SQL rows (works without LLM); `[SPEAK]` SSE event carries the text to TTS
-- **Voice output** strictly respects EN/KN UI toggle (no more text-content auto-detect)
-
-### Frontend New Files
-
-| File | Purpose |
-|------|---------|
-| `lib/api/board.ts` | Typed board API client + Zod SceneGraph validation |
-| `lib/api/dossier.ts` | Typed dossier API client with background pre-fetch cache |
-| `routes/board.tsx` | Investigation Board (React Flow canvas) |
-| `routes/dossier.tsx` | Person 360 Dossier screen |
-
-### Investigation Board Features
-
-- **React Flow canvas** — infinite pan/zoom, 3 node types (Photo / Note / Entity)
-- **Undo/Redo** — `useReducer` history (50 deep), Ctrl+Z / Ctrl+Y, toolbar buttons
-- **Freehand drawing** — SVG overlay, 7 preset colors + custom hex, 4 thickness levels, clear ink button; drawings persisted in `state_json.drawPaths`
-- **Red Link mode** — connect any two nodes with a labeled red arrow
-- **AI chatbox** — prompt + photos → Gemini SceneGraph → Zod validated → added to canvas; invalid AI JSON shows toast, board never cleared
-- **Save/Load** via `boards` table; board title editable
-
-### Security Fixes (from deep audit)
+### 20.1 Security
 
 | ID | Fix |
 |----|-----|
-| C1 | `pg_advisory_xact_lock` serializes audit chain writes |
-| C2 | `_guard_write()` on all ops write endpoints (L2+ required) |
-| H1 | Backend refuses to start in production with default JWT secret |
-| H2 | `_resolve_python()` cached + runs in thread pool |
-| H5 | `confirm_item` guards both lat and lng |
-| M1 | Audit row committed in own transaction (disconnect-safe) |
-| M2/M4 | Sim tasks log exceptions + clean `_latest` on completion |
-| M3 | `_yolo_lock` prevents double-spawn |
-| M5 | Orchestrator logs real errors instead of calling them "safety filter" |
-| M6 | `SELF_BASE_URL` config replaces hardcoded localhost |
+| H1 | Backend refuses to start in production if `JWT_SECRET` is the default `"change-me-in-production"` |
+| H2 | `is_active` checked before password comparison — disabled accounts get HTTP 403, not 401 |
+| H3 | `pg_advisory_xact_lock` serialises all audit-chain appends — hash chain can no longer fork under concurrent load |
+| H4 | `write_audit()` committed in its own transaction — survives mid-stream client disconnect |
+| H5 | `_guard_write(principal)` on all side-effecting ops endpoints (`dispatch`, `confirm_item`, `detect/notify`, `camera/start/stop`) — requires `Permission.RUN_ANALYTICS` (L2+) |
 
-### Chat Width Resize
-Left chat rail now uses `resize: horizontal` CSS via a drag divider — chat panel width adjustable from 260px to 60% of window; position remembered in React state.
+### 20.2 Voice / Mic Fixes
 
-### CaseDrawer Improvements
-- Data cached per caseId (component stays mounted, never unmounts on close)
-- Map tab: coordinates + "Take me to map" inline button (no mini-map); `← Back` sticky bar always visible
-- Console canvas back button rendered in normal DOM flow (above Leaflet) so it's never hidden
+| ID | Fix |
+|----|-----|
+| V1 | Chat-box mic (`toggleChatDictation`) now has its own `SpeechRecognition` instance — never dispatches `satyam:open-voice`, never opens the copilot panel |
+| V2 | Copilot STT is selectable (Browser / Sarvam) via `copilotStt` in `EngineSettings` — fully independent of the chat voice (`voiceBackend`) |
+| V3 | Language for TTS follows the UI toggle exclusively — text-content auto-detect removed; EN toggle → always English TTS even if the reply contains Kannada words |
+| V4 | Sarvam STT branch now passes `backend: "sarvam"` explicitly to `startSttSession()` |
 
-*Last updated: 2026-06-22 · Satyam v1.6 · Datathon 2026 KSP × hack2skill*
+### 20.3 Frontend / UI Fixes
+
+| ID | Fix |
+|----|-----|
+| F1 | tldraw canvas was black — CSS variable bleed (`--bg: #050805`) fixed by explicit `background: #ffffff` + `--bg: #ffffff` override on the tldraw container |
+| F2 | tldraw draw/write/click was blocked — `BoardInner` wrapper set to `pointer-events: none` so tldraw receives all pointer events |
+| F3 | Ops screens (Predictive, Demo Sim, Live Map) showed blank without the ops backend — re-pointed to dataset endpoints (`/api/forecast/*`, `/map/hotspots`) that always work |
+| F4 | CaseDrawer Map tab "no records" — place extraction now keeps full phrases (e.g. "Cyber Crime Police Station"), uses progressive broadening fallback |
+| F5 | Board AI 429 rate-limit error — `_keyword_scene()` deterministic fallback builds a ring layout from prompt keywords when the LLM is rate-limited |
+| F6 | Landing page `.thin` keyword colour — dark mode: `var(--text)` (white); light mode: `#0a160a` (black) via `.satyam-landing.light` override |
+
+### 20.4 Backend / API Fixes
+
+| ID | Fix |
+|----|-----|
+| B1 | `[SPEAK]` tag stripped from the displayed table — only the spoken summary goes to TTS, not the full table |
+| B2 | Board AI `brain_engine` field forwarded from frontend request — chosen engine (Gemini/Groq/OpenAI) is used instead of always Gemini |
+| B3 | `_build_spoken_summary(rows, message, lang)` provides deterministic spoken summary when Gemini is unavailable or rate-limited |
+| B4 | Progressive NL→SQL relaxation (4 levels) prevents "zero rows" dead ends — each level surfaces a friendly note in the chat |
