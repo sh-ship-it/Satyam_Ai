@@ -3259,3 +3259,209 @@ Multiple sessions of work on the Response Ops module. The overall goal was to ma
 - §9 OPS row updated: "Full + Dataset-driven frontend"
 - §11 `/operations` route map updated: lists all 5 tabs
 - §11.2 `CrimeMap.tsx` description updated: all new props listed
+
+
+---
+
+### [2026-06-22] — Response Ops: 4 Separate Sidebar Routes (was single tabbed screen)
+
+#### Summary
+Split the single `/operations` screen (which had an internal tab bar for Live Map / Predictive / Dispatch / Camera) into 4 separate top-level sidebar routes. Each feature is now its own independently-accessible page visible to judges.
+
+#### New route files created
+
+| File | Route | Screen |
+|------|-------|--------|
+| `frontend/src/routes/ops-predictive.tsx` | `/ops-predictive` | Predictive Deployment |
+| `frontend/src/routes/ops-dispatch.tsx` | `/ops-dispatch` | Dispatch & Green Corridor |
+| `frontend/src/routes/ops-camera.tsx` | `/ops-camera` | Camera Review |
+
+#### `frontend/src/routes/operations.tsx` — rewritten
+- Removed the entire tab system (`useState<Tab>`, `TABS` array, `tabBar` render, conditional `PredictivePanel`/`DispatchPanel`/`ReviewPanel` renders)
+- Removed unused imports: `useState`, `Siren`, `Radar`, `Truck`, `Video`, `Map as MapIcon`, `useT`, `PredictivePanel`, `DispatchPanel`, `ReviewPanel`
+- Now renders only `<LiveOperationsMap />` full-bleed inside `<Shell>` — no internal tabs
+
+#### `frontend/src/routeTree.gen.ts` — all required locations updated
+- Imports: `OpsPredictiveRouteImport`, `OpsDispatchRouteImport`, `OpsCameraRouteImport`
+- Route constants with `id`/`path`/`getParentRoute`
+- `FileRoutesByFullPath`, `FileRoutesByTo`, `FileRoutesById` interfaces
+- `FileRouteTypes` unions (fullPaths, to, id)
+- `declare module '@tanstack/react-router'` block
+- `RootRouteChildren` interface + `rootRouteChildren` object
+
+#### `frontend/src/components/Shell.tsx` — NAV + voice routing
+- Added `Radar, Truck, Video` to lucide-react imports
+- `NAV` array: 4 ops entries — `/operations` (Siren, Live Ops), `/ops-predictive` (Radar, Predictive), `/ops-dispatch` (Truck, Dispatch), `/ops-camera` (Video, Camera)
+- `SCREEN_ROUTES` voice-nav: all 4 ops routes with English + Kannada regex patterns
+
+#### Cache fix required
+- Vite's module cache (`node_modules/.vite`) needed clearing and a `--force` restart for TanStack's SSR router to pick up the 3 new route files
+
+---
+
+### [2026-06-22] — YOLO Camera Review: Full Live Annotated Feed
+
+#### Summary
+Rewrote the YOLO subprocess pipeline to fix all camera review bugs and deliver a live annotated video feed (bounding boxes, track IDs, detection banners) visible in the browser.
+
+#### Root cause of prior failures
+The backend subprocess was launched with the **backend venv's Python** (`sys.executable`), which has no `cv2`/`ultralytics`. The process died instantly on import — causing both "no detections" and "video stops after 3s" (the 3s status poll saw the dead process and removed the video element).
+
+#### Backend `backend/app/api/routes/ops.py`
+
+- **`_resolve_python()`** — probes candidate interpreters in order (`YOLO_PYTHON` env, PATH `python`/`python3`, common Windows install paths) and returns the first that can `import cv2, ultralytics`. Result cached in `_yolo_python` module global so the (blocking) probe only runs once.
+- **`asyncio.to_thread(_resolve_python)`** — probe runs in a thread pool, never blocking the event loop (fixes H2).
+- **`_yolo_lock = asyncio.Lock()`** — wraps the entire spawn sequence, prevents double-spawn race (fixes M3).
+- **`_free_port(preferred)`** — picks a guaranteed-free port (tries preferred, falls back to OS-assigned).
+- **`_yolo_stream_port`** module global — stored and returned from both `/camera/start` and `/camera/status`.
+- **`_drain()` thread** — continuously reads subprocess stdout so the pipe buffer can't fill and freeze the child.
+- **Port-wait** — `asyncio.open_connection` polls until the MJPEG server is accepting connections before returning to client (eliminates ERR_CONNECTION_REFUSED race).
+- **JWT for subprocess** — `create_access_token()` generates a real token passed as `SATYAM_TOKEN` env var so `/detect/notify` calls authenticate (was empty string → 401).
+- **`config.self_base_url`** new setting (default `http://localhost:8000`) used for `SATYAM_URL` instead of hardcoded string.
+- **`_guard_write(principal)`** — camera start/stop require L2+ clearance (see bug fix section).
+
+#### `model/inference/live_cctv.py` — full rewrite
+
+**Detection logic added:**
+| Type | Trigger | Confidence |
+|------|---------|-----------|
+| `fight` | ≥2 people within 80px, at least one moving >6px/frame | 0.65–0.92 |
+| `crowd` | ≥4 people in frame | 0.55–0.90 |
+| `vehicle_anomaly` | tracked vehicle stationary ≥3s | 0.60–0.95 |
+| `weapon` | class name in `{gun,pistol,rifle,knife,...}` on primary model; or dedicated `model/gun.pt` if present | 0.35–0.97 |
+
+**MJPEG streaming server:**
+- `_FrameBuffer` — thread-safe `Condition`-based JPEG frame holder
+- `ThreadingHTTPServer` on port 8089 serving `multipart/x-mixed-replace; boundary=--frameboundary`
+- Each frame: `res.plot()` annotated with bounding boxes + track IDs, "Satyam CCTV | people:N" overlay, red detection banner for 2.5s after each alert
+- `--no-display` flag for headless (subprocess) mode with frame-rate throttle
+- `--mjpeg-port` flag (default 8089)
+- Per-type 15s cooldown prevents alert spam
+- Track dicts pruned every 300 frames to prevent unbounded growth
+- Video loops automatically on end-of-file
+
+**`model/inference/notify.py`** — omits auth header when token is empty (prevents "Illegal header value" crash on standalone test runs)
+
+#### Frontend `frontend/src/components/ops/ReviewPanel.tsx`
+
+- `<img src="http://localhost:{streamPort}/stream">` replaces `<video>` — shows live annotated feed with bounding boxes
+- `streamPort` state initialized from `/camera/start` response and `/camera/status` (survives page reload)
+- "Connecting…" overlay auto-clears after 2.5s grace period (browser `onLoad` unreliable for multipart streams)
+- `weapon` and `gun` added to `CRIME_LABELS` map
+
+#### `frontend/src/lib/api/responseOps.ts`
+
+- `cameraStart` return type: added `stream_port?: number`
+- `cameraStatus` return type: added `stream_port?: number`
+
+---
+
+### [2026-06-22] — ProfileMenu SSR Hydration Fix
+
+#### Summary
+Fixed a React hydration mismatch error caused by `useState` initializers reading `localStorage` during SSR render.
+
+**Root cause:** `useState(() => loadStoredAccounts())`, `useState(() => loadActiveId())`, `useState(getCachedUser)` all read `localStorage` at render time. The SSR-rendered HTML had empty state; the client had populated state → React detected a mismatch and logged the hydration error.
+
+**Fix (`frontend/src/components/ProfileMenu.tsx`):**
+- All three `useState` calls changed to empty initial values (`null`, `[]`, `""`)
+- State populated in a client-only `useEffect(() => { ... }, [])` that runs after hydration
+
+---
+
+### [2026-06-22] — Deep Security & Bug Audit + Fixes (SATYAM_DEEP_AUDIT_2026-06-22.md)
+
+#### Summary
+Full project scan. 2 critical, 5 high, 9 medium, 10 low issues found. 16 issues fixed. Full audit report written to `SATYAM_DEEP_AUDIT_2026-06-22.md`.
+
+#### Fixes applied
+
+**`backend/app/core/audit.py` — C1: Audit hash-chain race condition**
+- Added `_AUDIT_CHAIN_LOCK_KEY = 728_311_042` constant
+- `write_audit()` now calls `SELECT pg_advisory_xact_lock(:k)` before reading prev_hash
+- Serializes all audit writes across concurrent requests; lock auto-releases at txn end
+- Chain can no longer fork under concurrent load
+
+**`backend/app/main.py` — H1: Default JWT secret in production**
+- Lifespan startup check: raises `RuntimeError` when `app_env == "production"` and `jwt_secret == "change-me-in-production"`
+- Prevents accidental production deployment with forgeable tokens
+
+**`backend/app/api/routes/ops.py` — C2: No-op guard on write endpoints**
+- Added `_guard_write(principal)` — calls `require(principal, Permission.RUN_ANALYTICS)`, raises HTTP 403 on failure
+- Applied to: `act_on_suggestion`, `dispatch`, `simulate`, `simulate-all`, `stop-all`, `corridor/reset`, `demo/stop-all`, `detect/notify`, `clear-review-queue`, `reject-item`, `confirm-item`, `camera/start`, `camera/stop`
+- Read endpoints (`risk-zones`, `suggestions`, `patrols`, `signals`, `corridor/state`, `cameras`, `review-queue`, `camera/status`, `dispatch/active`, `demo/active`) remain open per product decision
+
+**`backend/app/api/routes/ops.py` — H5: confirm_item null-lng → 500**
+- Nearest-patrol filter changed from `p.lat is not None` to `p.lat is not None and p.lng is not None`
+
+**`backend/app/api/routes/ops.py` — H2, M3, M6, M9**
+- H2: `_resolve_python()` now cached + called via `await asyncio.to_thread(...)` — no event-loop block
+- M3: entire spawn sequence wrapped in `async with _yolo_lock`
+- M6: `SATYAM_URL` derived from `get_settings().self_base_url` (new config key)
+- M9: port-wait uses `asyncio.open_connection` instead of blocking `socket.create_connection`
+
+**`backend/app/api/routes/ops.py` — L7: act_on_suggestion returns 404 on missing id**
+- Captured `result.rowcount`; raises `HTTPException(status_code=404)` when 0 rows updated
+
+**`backend/app/config.py` — M6: new self_base_url setting**
+- Added `self_base_url: str = "http://localhost:8000"` — override via `SELF_BASE_URL` env var
+
+**`backend/app/services/chat_service.py` — M1: audit rollback on client disconnect**
+- Extracted `_audit_query(principal, message)` — writes audit in its own `async with sm() ... begin()` transaction
+- Audit entry is now committed before streaming starts; survives mid-stream client disconnect
+- Removed `write_audit(session, ...)` call from within the RLS streaming session
+
+**`backend/app/services/ops/sim_service.py` — M2/M4: task exception + _latest leak**
+- Added `log = logging.getLogger("satyam.ops.sim")`
+- `start()` now attaches `task.add_done_callback(_on_done)`
+- `_on_done` logs non-cancellation exceptions via `log.error`
+- `_on_done` also calls `_latest.pop(dispatch_id, None)` — prevents unbounded memory growth
+
+**`backend/app/services/ops/routing_service.py` — L5: OSRM fallback logged**
+- Added `log = logging.getLogger("satyam.ops.routing")`
+- OSRM failure now calls `log.warning("OSRM routing failed (%s) — using straight-line fallback", exc)`
+
+**`backend/app/pipeline/orchestrator.py` — M5: all errors mislabeled as "safety filter"**
+- Added `log = logging.getLogger("satyam.pipeline")`
+- `except Exception` block now checks `getattr(e, "reason", None)`:
+  - If `reason` present → genuine safety block → `guardrails.safety_fallback(reason)`
+  - If no `reason` → unexpected error → `log.exception(...)` + generic user message
+
+**`backend/app/db/rls.py` — H3: officer_id identity confusion documented**
+- Added explanatory comment in `apply_rls_context`: `app.officer_id` currently carries `users.user_id` and no RLS policy uses it; documents the risk if a future policy compares it against `officers.officer_id`
+
+**`model/inference/live_cctv.py` — L2: track dicts pruned**
+- Added `seen_tids: set[int]` collected per frame
+- Every 300 frames: evicts keys from `prev_center`, `prev_speed`, `stopped_since` not in `seen_tids`
+
+**`frontend` — L10: Prettier formatting**
+- `npx prettier --write "src/**/*.{ts,tsx}"` — all frontend files formatted
+
+#### Deferred (documented, not changed)
+- **H4** — alias-bypass PII masking: `persons_v` was intentionally dropped in v2; `_mask_rows` checks column names not provenance. Deferred — data is synthetic, real fix needed before production.
+- **M7** — WS JWT in query string: acceptable for demo
+- **M8** — public OSRM demo server: acceptable for demo
+- **L1** — MJPEG on `0.0.0.0`: kept for LAN demo visibility
+- **L4** — dead `_get_or_create_officer` function in auth.py
+- **L6/L8/L9** — minor logging / demo-mode / f-string SQL items
+
+#### Verification
+- All 10 modified backend files `py_compile` clean
+- `import app.main` — no import-time errors
+- `npx tsc --noEmit` → 0 errors
+- Frontend Prettier formatted
+
+---
+
+### [2026-06-22] — Architecture Document Updated (docs/ARCHITECTURE.md v1.5)
+
+Major update to `docs/ARCHITECTURE.md`:
+- §2: Added YOLO/YOLOv8s to model layer table
+- §3: Architecture diagram now shows the YOLO subprocess with MJPEG stream and notify flow
+- §4.3: `ops_*` tables documented separately
+- §10.1: Four dedicated sidebar routes documented (was single tabbed screen)
+- §10.5: Full YOLO subprocess architecture (interpreter resolution, free-port, pipe drain, detection logic, MJPEG server, JWT auth)
+- §13.4: `/camera/start`, `/camera/stop`, `/camera/status` (with `stream_port`) in API table
+- §14: `YOLO_PYTHON`, `YOLO_MJPEG_PORT`, `SELF_BASE_URL` env vars documented
+- §17: 10 new OPS bug fixes (OPS-1 through OPS-10) added
+- Appendix: `model/` folder documented with optional `gun.pt` weapon model note
