@@ -44,7 +44,7 @@ class Settings(BaseSettings):
     # BRAIN_ENGINE: which LLM drives chat / slots / routing (api lane).
     #   gemini  → Gemini 2.5 Flash (default, best accuracy)
     #   groq    → Groq low-latency / outage fallback
-    brain_engine: Literal["gemini", "groq"] = "gemini"
+    brain_engine: Literal["gemini", "groq", "openai"] = "gemini"
 
     # SQL_ENGINE: which LLM generates Text-to-SQL (api lane).
     #   gemini           → Gemini 2.5 Flash (default)
@@ -66,6 +66,11 @@ class Settings(BaseSettings):
     # Groq
     groq_api_key: str = ""
     groq_model: str = "llama-3.3-70b-versatile"
+
+    # OpenAI (ChatGPT)
+    openai_api_key: str = ""
+    openai_model: str = "gpt-4o"
+    openai_base_url: str = "https://api.openai.com/v1"
 
     # Sarvam (primary voice — Bulbul v3 TTS, Saaras v3 STT, Sarvam Translate MT)
     sarvam_api_key: str = ""

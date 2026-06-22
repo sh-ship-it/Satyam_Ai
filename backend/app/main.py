@@ -25,6 +25,7 @@ from app.api.routes import intelligence
 from app.api.routes import ops as ops_routes
 from app.api.routes import financial  # PS7 money-trail
 from app.api.routes import dossier as dossier_routes
+from app.api.routes import board as board_routes
 from app.config import get_settings
 from app.logging_config import configure_logging, get_logger
 
@@ -111,6 +112,7 @@ def create_app() -> FastAPI:
     app.include_router(voice.router, prefix="/voice", tags=["voice"])
     app.include_router(intelligence.router, prefix="/api", tags=["intelligence"])
     app.include_router(dossier_routes.router, prefix="/api/dossier", tags=["dossier"])
+    app.include_router(board_routes.router, prefix="/api/board", tags=["board"])
     if settings.enable_response_ops:
         app.include_router(ops_routes.router, prefix="/api/ops", tags=["response-ops"])
     return app

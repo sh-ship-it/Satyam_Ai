@@ -20,6 +20,7 @@ import {
   Truck,
   Video,
   Fingerprint,
+  Workflow,
 } from "lucide-react";
 import { type ReactNode, useState, useEffect, useRef, useCallback } from "react";
 import { ThemePicker } from "./ThemePicker";
@@ -53,6 +54,7 @@ const SCREEN_ROUTES: VoiceScreen[] = [
   { to: "/ops-dispatch", words: /(dispatch|green corridor|corridor)|ಕಾರ್ ತಳ/i },
   { to: "/ops-camera", words: /(camera|cctv|review|yolo)|ಕ್ಯಾಮೆರಾ/i },
   { to: "/dossier", words: /(dossier|person 360|360|fingerprint|admin dossier)/i },
+  { to: "/board", words: /(board|canvas|whiteboard|link chart|crime board|ಬೋರ್ಡ್)/i },
 ];
 const NAV_VERB = /(open|show|go to|goto|navigate|take me to|switch to|jump to)|ತೆರೆ|ಹೋಗು|ತೋರಿಸಿ/i;
 // Person-crime question: "what crime did X commit" / "crime rate of X" / Kannada equivalents.
@@ -825,6 +827,7 @@ export function Shell({ children }: { children: ReactNode }) {
     { to: "/ops-predictive", icon: Radar, label: t("Predictive") },
     { to: "/ops-dispatch", icon: Truck, label: t("Dispatch") },
     { to: "/ops-camera", icon: Video, label: t("Camera") },
+    { to: "/board", icon: Workflow, label: t("Board") },
     ...(isAdmin ? [{ to: "/dossier" as const, icon: Fingerprint, label: t("Person 360") }] : []),
   ] as const;
 

@@ -13,7 +13,7 @@ class ChatRequest(BaseModel):
     # Per-request engine overrides from the Settings panel.
     # When set they take precedence over the server-side env defaults for this
     # session only. None means "use the server default".
-    brain_engine: Optional[Literal["gemini", "groq", "local"]] = None
+    brain_engine: Optional[Literal["gemini", "groq", "openai", "local"]] = None
     sql_engine: Optional[Literal["gemini", "qwen3-coder-next", "local"]] = None
     voice_backend: Optional[Literal["sarvam", "google", "bhashini"]] = None
 

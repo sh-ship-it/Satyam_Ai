@@ -26,6 +26,43 @@ class DbSourceRequest(BaseModel):
 
 class DbSourceResponse(BaseModel):
     db_source: str
+    url_host: str
+
+
+class ModelProviderStatus(BaseModel):
+    default_brain_engine: str
+    gemini_configured: bool
+    openai_configured: bool
+    groq_configured: bool
+    local_available: bool
+
+
+@router.get("/models", response_model=ModelProviderStatus)
+async def model_providers(
+    principal: Principal = Depends(get_principal),
+) -> ModelProviderStatus:
+    """Return which AI providers are configured (booleans only — never the keys)."""
+    try:
+        require(principal, Permission.CHAT)
+    except AccessDenied as e:
+        raise HTTPException(status_code=403, detail=str(e))
+    from app.config import get_settings
+    s = get_settings()
+    return ModelProviderStatus(
+        default_brain_engine=s.brain_engine,
+        gemini_configured=bool(s.gemini_api_key),
+        openai_configured=bool(s.openai_api_key),
+        groq_configured=bool(s.groq_api_key),
+        local_available=(s.model_backend == "local"),
+    )
+
+
+class DbSourceRequest(BaseModel):
+    source: Literal["cloud", "local"]
+
+
+class DbSourceResponse(BaseModel):
+    db_source: str
     url_host: str  # host only — never expose credentials
 
 

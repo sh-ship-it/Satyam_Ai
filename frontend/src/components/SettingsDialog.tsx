@@ -23,7 +23,7 @@ type Tab = "profile" | "models" | "preferences" | "notifications" | "security" |
 export type EngineSettings = {
   apiModelEnabled: boolean;
   localModelEnabled: boolean;
-  brainEngine: "gemini" | "groq" | "local";
+  brainEngine: "gemini" | "groq" | "openai" | "local";
   sqlEngine: "gemini" | "qwen3-coder-next" | "local";
   voiceBackend: "sarvam" | "google" | "webspeech";
   /** Copilot (top-right) microphone STT engine — independent of the chat voice. */
@@ -63,6 +63,13 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
   const [tab, setTab] = useState<Tab>("profile");
   const [engines, setEngines] = useState<EngineSettings>(loadEngineSettings);
   const [me, setMe] = useState<SessionUser | null>(null);
+  const [providers, setProviders] = useState<import("@/lib/api/client").ModelProviderStatus | null>(null);
+
+  useEffect(() => {
+    if (open && tab === "models") {
+      api.modelProviders().then(setProviders).catch(() => {});
+    }
+  }, [open, tab]);
 
   useEffect(() => {
     if (open) {
@@ -275,25 +282,62 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                   </p>
                 </div>
 
-                {/* Brain engine */}
-                <Row label={t("Brain engine")}>
-                  <div className="flex flex-col items-end gap-0.5">
-                    <select
-                      value={engines.brainEngine}
-                      onChange={(e) =>
-                        updateEngine("brainEngine", e.target.value as EngineSettings["brainEngine"])
-                      }
-                      className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
-                    >
-                      <option value="gemini">Gemini 2.5 Flash (cloud)</option>
-                      <option value="groq">Groq llama-3.3-70b (cloud · fast)</option>
-                      <option value="local">Local LLM (on-prem · GPU)</option>
-                    </select>
-                    <span className="text-[10px] text-muted-foreground">
-                      chat · slots · routing
+                {/* AI Chat Model — pick which LLM powers the chat */}
+                <div className="space-y-2">
+                  <div>
+                    <span className="block text-xs font-bold uppercase tracking-wide">
+                      {t("AI Chat Model")}
+                    </span>
+                    <span className="block text-[10px] text-muted-foreground mt-0.5">
+                      {t("Choose the model that powers chat. Keys are set on the server (.env).")}
                     </span>
                   </div>
-                </Row>
+                  <div className="flex flex-col gap-2">
+                    {(
+                      [
+                        { id: "gemini", label: "Gemini 2.5 Flash",    hint: t("Google · multimodal · default"), envKey: "GEMINI_API_KEY",  ok: providers?.gemini_configured },
+                        { id: "openai", label: "ChatGPT (OpenAI)",    hint: t("GPT-4o · strong reasoning"),     envKey: "OPENAI_API_KEY",  ok: providers?.openai_configured },
+                        { id: "groq",   label: "Groq Llama-3.3-70B",  hint: t("Cloud · fastest"),               envKey: "GROQ_API_KEY",    ok: providers?.groq_configured },
+                      ] as const
+                    ).map((m) => (
+                      <button
+                        key={m.id}
+                        type="button"
+                        onClick={() => updateEngine("brainEngine", m.id as EngineSettings["brainEngine"])}
+                        className={
+                          "flex items-center justify-between rounded-[5px] border-2 border-foreground px-3 py-2 text-left transition " +
+                          (engines.brainEngine === m.id
+                            ? "bg-primary text-primary-foreground nb-shadow-sm"
+                            : "bg-secondary-background hover:bg-muted")
+                        }
+                      >
+                        <span>
+                          <span className="flex items-center gap-1 text-sm font-bold">
+                            {engines.brainEngine === m.id && <Check className="h-3 w-3" />}
+                            {m.label}
+                          </span>
+                          <span className="block text-[10px] opacity-70">{m.hint}</span>
+                          <span className="block text-[10px] font-mono opacity-60">
+                            {t("Uses")} {m.envKey}
+                          </span>
+                        </span>
+                        <span
+                          className={
+                            "rounded-[3px] px-1.5 py-0.5 text-[9px] font-bold uppercase " +
+                            (m.ok
+                              ? "bg-success/15 text-success"
+                              : "bg-destructive/15 text-destructive")
+                          }
+                        >
+                          {m.ok ? t("Configured") : t("No key")}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-[10px] text-muted-foreground">
+                    {t("To enable a model, add its API key to the server .env and restart. Your selection is saved on this device and used for every chat.")}
+                  </p>
+                </div>
 
                 {/* Text-to-SQL engine */}
                 <Row label={t("Text-to-SQL engine")}>

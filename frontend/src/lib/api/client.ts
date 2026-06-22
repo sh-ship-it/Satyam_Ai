@@ -208,6 +208,9 @@ export const api = {
       body: JSON.stringify({ source }),
     });
   },
+  modelProviders(): Promise<ModelProviderStatus> {
+    return request<ModelProviderStatus>("/settings/db-source/models");
+  },
 };
 
 export type TtsResult = { audio_base64: string; mime: string; provider: string };
@@ -269,6 +272,13 @@ function loadEngineSettingsForDebug(): string {
   return "sarvam";
 }
 // The backend streams grounded answers token-by-token over SSE.
+export type ModelProviderStatus = {
+  default_brain_engine: string;
+  gemini_configured: boolean;
+  openai_configured: boolean;
+  groq_configured: boolean;
+  local_available: boolean;
+};
 export type ChatEvent =
   | { type: "token"; text: string }
   | { type: "speak"; text: string }
@@ -283,7 +293,7 @@ export async function streamChat(
     message: string;
     conversation_id?: string;
     lang?: "en" | "kn";
-    brain_engine?: "gemini" | "groq" | "local";
+    brain_engine?: "gemini" | "openai" | "groq" | "local";
     sql_engine?: "gemini" | "qwen3-coder-next" | "local";
     voice_backend?: "sarvam" | "google" | "bhashini";
   },

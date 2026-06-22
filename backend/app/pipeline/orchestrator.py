@@ -180,7 +180,7 @@ async def _compose(
     question: str,
     context: str,
     lang: str = "en",
-    brain_engine: Literal["gemini", "groq"] | None = None,
+    brain_engine: Literal["gemini", "groq", "openai", "local"] | None = None,
     principal: "Principal | None" = None,
 ) -> str:
     """Grounded answer composition with Groq fallback on primary failure."""
@@ -217,7 +217,7 @@ async def run(
     session: AsyncSession,
     state: ConversationState,
     lang: str = "en",
-    brain_engine: Literal["gemini", "groq"] | None = None,
+    brain_engine: Literal["gemini", "groq", "openai", "local"] | None = None,
     sql_engine: Literal["gemini", "qwen3-coder-next"] | None = None,
 ) -> AsyncIterator[PipelineEvent]:
     # 1) guardrails

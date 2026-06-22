@@ -26,7 +26,7 @@ from app.models.base import (
 # ── Brain LLM (chat / slots / routing) ───────────────────────────────────────
 
 @lru_cache
-def get_llm(engine: Literal["gemini", "groq", "local"] | None = None) -> LLM:
+def get_llm(engine: Literal["gemini", "groq", "openai", "local"] | None = None) -> LLM:
     """Return the brain LLM.
 
     Resolution order:
@@ -43,6 +43,9 @@ def get_llm(engine: Literal["gemini", "groq", "local"] | None = None) -> LLM:
     if resolved == "groq":
         from app.models.api.groq import GroqLLM
         return GroqLLM()
+    if resolved == "openai":
+        from app.models.api.openai_llm import OpenAILLM
+        return OpenAILLM()
     # default: gemini
     from app.models.api.gemini import GeminiLLM
     return GeminiLLM()

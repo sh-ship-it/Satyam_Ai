@@ -11,6 +11,18 @@ const DICT: Record<string, string> = {
   Voice: "ಧ್ವನಿ",
   Settings: "ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
 
+  // Investigation Board + AI Model Settings
+  "Board": "ಬೋರ್ಡ್",
+  "AI Chat Model": "AI ಚಾಟ್ ಮಾದರಿ",
+  "Configured": "ಸಂರಚಿಸಲಾಗಿದೆ",
+  "No key": "ಕೀ ಇಲ್ಲ",
+  "Uses": "ಬಳಕೆ",
+  "Google · multimodal · default": "Google · ಬಹುಮಾದರಿ · ಡಿಫಾಲ್ಟ್",
+  "GPT-4o · strong reasoning": "GPT-4o · ಬಲವಾದ ತರ್ಕ",
+  "Cloud · fastest": "ಕ್ಲೌಡ್ · ವೇಗವಾದ",
+  "Choose the model that powers chat. Keys are set on the server (.env).": "ಚಾಟ್ ಅನ್ನು ನಿಯಂತ್ರಿಸುವ ಮಾದರಿ ಆಯ್ಕೆ ಮಾಡಿ. ಕೀಗಳನ್ನು ಸರ್ವರ್‌ನಲ್ಲಿ ಹೊಂದಿಸಿ.",
+  "To enable a model, add its API key to the server .env and restart. Your selection is saved on this device and used for every chat.": "ಮಾದರಿ ಸಕ್ರಿಯಗೊಳಿಸಲು, .env ಗೆ API ಕೀ ಸೇರಿಸಿ ಮತ್ತು ಮರುಪ್ರಾರಂಭಿಸಿ.",
+
   // Issue 9 & 11 additions
   "Crime overview · live": "ಅಪರಾಧ ಅವಲೋಕನ · ಲೈವ್",
   "All crimes": "ಎಲ್ಲಾ ಅಪರಾಧಗಳು",

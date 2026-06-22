@@ -22,6 +22,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForecastRouteImport } from './routes/forecast'
 import { Route as DossierRouteImport } from './routes/dossier'
 import { Route as ConsoleRouteImport } from './routes/console'
+import { Route as BoardRouteImport } from './routes/board'
 import { Route as AuditRouteImport } from './routes/audit'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -92,6 +93,11 @@ const ConsoleRoute = ConsoleRouteImport.update({
   path: '/console',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BoardRoute = BoardRouteImport.update({
+  id: '/board',
+  path: '/board',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuditRoute = AuditRouteImport.update({
   id: '/audit',
   path: '/audit',
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
+  '/board': typeof BoardRoute
   '/console': typeof ConsoleRoute
   '/dossier': typeof DossierRoute
   '/forecast': typeof ForecastRoute
@@ -136,6 +143,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
+  '/board': typeof BoardRoute
   '/console': typeof ConsoleRoute
   '/dossier': typeof DossierRoute
   '/forecast': typeof ForecastRoute
@@ -156,6 +164,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/audit': typeof AuditRoute
+  '/board': typeof BoardRoute
   '/console': typeof ConsoleRoute
   '/dossier': typeof DossierRoute
   '/forecast': typeof ForecastRoute
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/audit'
+    | '/board'
     | '/console'
     | '/dossier'
     | '/forecast'
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/audit'
+    | '/board'
     | '/console'
     | '/dossier'
     | '/forecast'
@@ -215,6 +226,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/audit'
+    | '/board'
     | '/console'
     | '/dossier'
     | '/forecast'
@@ -235,6 +247,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AuditRoute: typeof AuditRoute
+  BoardRoute: typeof BoardRoute
   ConsoleRoute: typeof ConsoleRoute
   DossierRoute: typeof DossierRoute
   ForecastRoute: typeof ForecastRoute
@@ -344,6 +357,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConsoleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/board': {
+      id: '/board'
+      path: '/board'
+      fullPath: '/board'
+      preLoaderRoute: typeof BoardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/audit': {
       id: '/audit'
       path: '/audit'
@@ -379,6 +399,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AuditRoute: AuditRoute,
+  BoardRoute: BoardRoute,
   ConsoleRoute: ConsoleRoute,
   DossierRoute: DossierRoute,
   ForecastRoute: ForecastRoute,
