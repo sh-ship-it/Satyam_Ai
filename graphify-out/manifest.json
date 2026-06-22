@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1782105045.1626952,
-    "ast_hash": "3d5910602fa6318ec3591593b8dfbc3d",
+    "mtime": 1782129168.6121025,
+    "ast_hash": "9e1c58c66b7449e1abd677c24d8dd383",
     "semantic_hash": ""
   },
   "backend/app/models/__init__.py": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1782106292.2353423,
-    "ast_hash": "f8bb6c52a89a40c3fdaab5ed902d7556",
+    "mtime": 1782131462.1813588,
+    "ast_hash": "61ac31f019384422edd5c4bafb6fb6eb",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
-    "mtime": 1781986990.8190968,
-    "ast_hash": "0e1a2e9d613c94f01dc5049bd56a57e5",
+    "mtime": 1782131061.7295015,
+    "ast_hash": "93b8661c728031e400732cdb524353ae",
     "semantic_hash": ""
   },
   "frontend/src/router.tsx": {
@@ -1407,6 +1407,206 @@
   "SATYAM_DEEP_AUDIT_2026-06-22.md": {
     "mtime": 1782106467.5360038,
     "ast_hash": "af23aeedb8ab57da81c77a1355ac6b7d",
+    "semantic_hash": ""
+  },
+  "backend/app/api/routes/dossier.py": {
+    "mtime": 1782129156.1304047,
+    "ast_hash": "4bffd38ceb5850b2f726494c7b1642bf",
+    "semantic_hash": ""
+  },
+  "backend/app/db/demo_dossier_models.py": {
+    "mtime": 1782129116.3908832,
+    "ast_hash": "8e60dc845c9bdef94bfde1a94964b760",
+    "semantic_hash": ""
+  },
+  "backend/app/schemas/dossier.py": {
+    "mtime": 1782129123.6566107,
+    "ast_hash": "a0a63252bcefe7cce5b7b3438c38c3a0",
+    "semantic_hash": ""
+  },
+  "backend/app/services/dossier_service.py": {
+    "mtime": 1782129140.5947728,
+    "ast_hash": "4b21ce40552459a7f9d611b44a858bb1",
+    "semantic_hash": ""
+  },
+  "backend/migrations/004_demo_dossier.sql": {
+    "mtime": 1782128961.232796,
+    "ast_hash": "2f2d8c5ea1bf1ff5d1b25cdc8cecd207",
+    "semantic_hash": ""
+  },
+  "backend/seed/demo_dossier.json": {
+    "mtime": 1782129561.494203,
+    "ast_hash": "60bb22ee7196ed89bbcd58121ff9aa30",
+    "semantic_hash": ""
+  },
+  "backend/seed/load_demo_dossier.py": {
+    "mtime": 1782130530.748775,
+    "ast_hash": "6779e3c888f0f17f8e4a02fb5a33ff56",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/api/dossier.ts": {
+    "mtime": 1782130870.1528237,
+    "ast_hash": "37581caf849919a7c1755041a25a482d",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/dossier.tsx": {
+    "mtime": 1782131016.6775167,
+    "ast_hash": "68071d8534df5c71a9070b1eed926789",
+    "semantic_hash": ""
+  },
+  "Satyam_Person360_Dossier_Build_Prompt.md": {
+    "mtime": 1782128589.0833907,
+    "ast_hash": "42e28264a0b01293a2dae7eac7dcf978",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/anwar-baig/front.png": {
+    "mtime": 1782131539.9972315,
+    "ast_hash": "88516a32061baceaa3ea5285dad4c66c",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/anwar-baig/left.png": {
+    "mtime": 1782131539.998231,
+    "ast_hash": "6939bdaf776781ef720cccf7ce611e3a",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/anwar-baig/right.png": {
+    "mtime": 1782131539.998231,
+    "ast_hash": "d2f4e1495abd3ba17eae8e89eac9f3bd",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/farhan-khan/front.png": {
+    "mtime": 1782131540.00995,
+    "ast_hash": "afa990c69ffa7f51b2eb549ca2b41e7a",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/farhan-khan/left.png": {
+    "mtime": 1782131540.0109491,
+    "ast_hash": "04df67684790c099a69800ae415990ba",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/farhan-khan/right.png": {
+    "mtime": 1782131540.0109491,
+    "ast_hash": "8267e27f58a0f0ac5f60dbfadbe594ad",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/imran-shariff/front.png": {
+    "mtime": 1782131539.987231,
+    "ast_hash": "0799c64a7cdb9cae5d96601f18113f66",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/imran-shariff/left.png": {
+    "mtime": 1782131539.988232,
+    "ast_hash": "1070f32948d4c0ebae2297439fbb7b5b",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/imran-shariff/right.png": {
+    "mtime": 1782131539.9892316,
+    "ast_hash": "78e06e4c1a2bc97cedc2a2baea24a831",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/lokesh-naik/front.png": {
+    "mtime": 1782131540.012949,
+    "ast_hash": "7099df6766251866f1f72aaf6708fd87",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/lokesh-naik/left.png": {
+    "mtime": 1782131540.012949,
+    "ast_hash": "8f6067b871fc0f3e35d8b05b4b4577c4",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/lokesh-naik/right.png": {
+    "mtime": 1782131540.0139494,
+    "ast_hash": "223bfd8ca3244bb755ddce8dc0756b30",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/manjunath-shetty/front.png": {
+    "mtime": 1782131540.000232,
+    "ast_hash": "a693a06e1cbfa5514c853ceef9a82344",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/manjunath-shetty/left.png": {
+    "mtime": 1782131540.0012333,
+    "ast_hash": "96232db258b191f500aa86da03199fee",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/manjunath-shetty/right.png": {
+    "mtime": 1782131540.0059507,
+    "ast_hash": "d2f7af5e531e639fa161a6db5b1f148a",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/naveen-kumar/front.png": {
+    "mtime": 1782131539.9902327,
+    "ast_hash": "ebc3d780ceeaa52d89e9145fbb6fa7fe",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/naveen-kumar/left.png": {
+    "mtime": 1782131539.9912322,
+    "ast_hash": "69911a9e50da6bd9e2e72b8d75e8b42b",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/naveen-kumar/right.png": {
+    "mtime": 1782131539.992232,
+    "ast_hash": "b9155c272eee46a4318fc6b9f0cdf72e",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/prakash-reddy/front.png": {
+    "mtime": 1782131540.0069506,
+    "ast_hash": "b616a2cff32745b1bb6779c4d63bafaa",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/prakash-reddy/left.png": {
+    "mtime": 1782131540.0079503,
+    "ast_hash": "6bfa6e92fe58363979a298923e21fea6",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/prakash-reddy/right.png": {
+    "mtime": 1782131540.0089502,
+    "ast_hash": "5f69cec011c7d272b336bc577f079a71",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/rakesh-gowda/front.png": {
+    "mtime": 1782131539.9832306,
+    "ast_hash": "eef27e3d8d839e57842121bec2d56a52",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/rakesh-gowda/left.png": {
+    "mtime": 1782131539.9842312,
+    "ast_hash": "d36444e9e10e0472f10366d27b986976",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/rakesh-gowda/right.png": {
+    "mtime": 1782131539.985231,
+    "ast_hash": "bb4c9fa5571035cb6dbd32ebbf321c4d",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/suresh-patil/front.png": {
+    "mtime": 1782131539.9932313,
+    "ast_hash": "c746a8a89d1edf3999582d53c95659e3",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/suresh-patil/left.png": {
+    "mtime": 1782131539.9942307,
+    "ast_hash": "6ee84ad9557c024499725ed0f76968ec",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/suresh-patil/right.png": {
+    "mtime": 1782131539.9952323,
+    "ast_hash": "f71ff43ae7943616099b704282be3f25",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/vijay-rao/front.png": {
+    "mtime": 1782131540.0149496,
+    "ast_hash": "569f816fae930df2bc7ce549278629d2",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/vijay-rao/left.png": {
+    "mtime": 1782131540.01595,
+    "ast_hash": "f0378144deb1af76ada7415b3e19e999",
+    "semantic_hash": ""
+  },
+  "frontend/public/demo-dossier/vijay-rao/right.png": {
+    "mtime": 1782131540.0169501,
+    "ast_hash": "1e0cad7e653d50370336800f0d434d89",
     "semantic_hash": ""
   }
 }
