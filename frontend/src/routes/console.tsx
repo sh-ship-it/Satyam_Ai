@@ -93,7 +93,33 @@ function Console() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState("");
+
+  // ── Chat panel width (drag-to-resize) ────────────────────────────────────
+  const [chatWidth, setChatWidth] = useState(420);
+  const isDraggingRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragStartWidthRef = useRef(420);
+
+  function onDividerMouseDown(e: React.MouseEvent) {
+    e.preventDefault();
+    isDraggingRef.current = true;
+    dragStartXRef.current = e.clientX;
+    dragStartWidthRef.current = chatWidth;
+
+    function onMouseMove(ev: MouseEvent) {
+      if (!isDraggingRef.current) return;
+      const delta = ev.clientX - dragStartXRef.current;
+      const next = Math.min(Math.max(dragStartWidthRef.current + delta, 260), window.innerWidth * 0.6);
+      setChatWidth(next);
+    }
+    function onMouseUp() {
+      isDraggingRef.current = false;
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    }
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+  }  const [input, setInput] = useState("");
   const [chatDictating, setChatDictating] = useState(false);
   const chatRecRef = useRef<any>(null);
   const [streamingIdx, setStreamingIdx] = useState<number | null>(null);
@@ -628,8 +654,11 @@ function Console() {
   return (
     <Shell>
       <div className="flex h-[calc(100vh-3.5rem-26px)] min-h-0">
-        {/* Conversation rail */}
-        <section className="flex w-[420px] flex-col border-r border-border bg-card">
+        {/* Conversation rail — drag the right-edge divider to resize width */}
+        <section
+          className="flex flex-col border-border bg-card overflow-hidden shrink-0"
+          style={{ width: chatWidth }}
+        >
           <div className="flex items-center justify-between border-b border-border px-4 py-3">
             <div>
               <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
@@ -797,6 +826,20 @@ function Console() {
             </div>
           </div>
         </section>
+
+        {/* Drag divider */}
+        <div
+          onMouseDown={onDividerMouseDown}
+          className="w-1 shrink-0 cursor-col-resize bg-border hover:bg-primary/50 active:bg-primary transition-colors relative group"
+          title="Drag to resize"
+        >
+          {/* Visual grip dots */}
+          <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <span className="h-1 w-1 rounded-full bg-current" />
+            <span className="h-1 w-1 rounded-full bg-current" />
+            <span className="h-1 w-1 rounded-full bg-current" />
+          </div>
+        </div>
 
         {/* Results Canvas */}
         <section className="flex flex-1 min-w-0 flex-col overflow-hidden bg-background">
@@ -1066,7 +1109,6 @@ function Console() {
           )}
         </section>
       </div>
-
       <CaseDrawer
         open={drawerCaseId != null}
         caseId={drawerCaseId ?? undefined}
