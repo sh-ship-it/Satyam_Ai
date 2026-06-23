@@ -1059,12 +1059,6 @@ function TranslationPanel({ t }: { t: (s: string) => string }) {
         </ul>
       </div>
 
-      {/* Groq key check */}
-      <div className="rounded-[5px] border-2 border-foreground bg-background p-3 text-[11px] text-muted-foreground">
-        <span className="font-bold text-foreground">{t("Requires")}:</span>{" "}
-        {t("GROQ_API_KEY set on the backend server (.env). The key never leaves the server.")}
-      </div>
-
       {/* Status area */}
       {status === "running" && (
         <div className="flex items-center gap-2 text-sm text-primary">
