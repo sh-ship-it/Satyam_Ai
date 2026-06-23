@@ -204,6 +204,7 @@ function UploadPanel({ onAdd }: { onAdd: (item: ReportItem) => void }) {
   const [picking, setPicking] = useState(false);
   const [q, setQ] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [loading, setLoading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -211,13 +212,15 @@ function UploadPanel({ onAdd }: { onAdd: (item: ReportItem) => void }) {
       setResults([]);
       return;
     }
+    setLoading(true);
     const id = setTimeout(() => {
       intelligence
         .searchPersonsAndCases(q.trim(), 12)
         .then((r) => setResults(r.filter((x) => x.type === "case")))
-        .catch(() => setResults([]));
+        .catch(() => setResults([]))
+        .finally(() => setLoading(false));
     }, 250);
-    return () => clearTimeout(id);
+    return () => { clearTimeout(id); setLoading(false); };
   }, [q, picking]);
 
   const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -236,6 +239,19 @@ function UploadPanel({ onAdd }: { onAdd: (item: ReportItem) => void }) {
     reader.readAsDataURL(f);
     e.target.value = "";
   };
+
+  function importCase(r: SearchResult) {
+    onAdd({
+      id: `case-${r.id}-${Date.now()}`,
+      type: "case",
+      title: r.label,
+      meta: r.sub,
+      data: { id: r.id, type: r.type, label: r.label, sub: r.sub } as any,
+    });
+    setQ("");
+    setResults([]);
+    setPicking(false);
+  }
 
   return (
     <div className="space-y-2">
@@ -260,7 +276,7 @@ function UploadPanel({ onAdd }: { onAdd: (item: ReportItem) => void }) {
       />
       {/* Dataset import */}
       <button
-        onClick={() => setPicking((v) => !v)}
+        onClick={() => { setPicking((v) => !v); setQ(""); setResults([]); }}
         className="w-full rounded-xl border border-border bg-background hover:bg-muted/50 transition p-2.5 text-left flex items-center gap-2"
       >
         <Database className="h-4 w-4 text-primary shrink-0" />
@@ -271,14 +287,35 @@ function UploadPanel({ onAdd }: { onAdd: (item: ReportItem) => void }) {
       </button>
       {picking && (
         <div className="rounded-xl border border-border bg-card p-2 space-y-2">
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder={t("Search FIR / crime type…")}
-            className="w-full rounded-md border border-input bg-background px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
-          />
+          <div className="relative flex items-center">
+            {loading ? (
+              <Loader2 className="pointer-events-none absolute left-2 h-3.5 w-3.5 text-muted-foreground animate-spin" />
+            ) : (
+              <Search className="pointer-events-none absolute left-2 h-3.5 w-3.5 text-muted-foreground" />
+            )}
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder={t("Search FIR / crime type…")}
+              className="w-full rounded-md border border-input bg-background pl-7 pr-7 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
+              autoFocus
+            />
+            {q && (
+              <button
+                onClick={() => { setQ(""); setResults([]); }}
+                className="absolute right-2 text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            )}
+          </div>
           <div className="max-h-48 overflow-y-auto divide-y divide-border/40">
-            {results.length === 0 && q.length >= 2 && (
+            {q.trim().length < 2 && (
+              <p className="px-2 py-3 text-[10px] text-muted-foreground text-center">
+                {t("Type 2+ characters to search FIRs")}
+              </p>
+            )}
+            {q.trim().length >= 2 && results.length === 0 && !loading && (
               <div className="px-2 py-3 text-xs text-muted-foreground text-center">
                 {t("No results")}
               </div>
@@ -286,22 +323,15 @@ function UploadPanel({ onAdd }: { onAdd: (item: ReportItem) => void }) {
             {results.map((r) => (
               <button
                 key={`${r.type}-${r.id}`}
-                onClick={() =>
-                  onAdd({
-                    id: `case-${r.id}-${Date.now()}`,
-                    type: "case",
-                    title: r.label,
-                    meta: r.sub,
-                    data: { id: r.id } as any,
-                  })
-                }
-                className="w-full flex items-center gap-2 px-2 py-1.5 hover:bg-muted/50 text-left"
+                onClick={() => importCase(r)}
+                className="w-full flex items-center gap-2 px-2 py-1.5 hover:bg-muted/50 text-left transition group"
               >
                 <Hash className="h-3.5 w-3.5 text-orange-500 shrink-0" />
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <div className="text-xs font-medium truncate">{r.label}</div>
                   <div className="text-[10px] text-muted-foreground truncate">{r.sub}</div>
                 </div>
+                <Plus className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 shrink-0" />
               </button>
             ))}
           </div>
@@ -530,7 +560,7 @@ function Reports() {
           </div>
 
           {/* Settings + actions */}
-          <div className="border-t border-border p-3 space-y-2.5 bg-muted/20">
+          <div className="border-t border-border p-3 space-y-2.5 bg-muted/20 shrink-0">
             {/* Report title */}
             <div>
               <label className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground block mb-1">
@@ -588,21 +618,22 @@ function Reports() {
               )}
             </div>
 
-            {/* Generate buttons */}
-            <div className="grid grid-cols-2 gap-2">
+            {/* Generate buttons — side by side, never overflow */}
+            <div className="flex gap-2">
               <button
                 onClick={handlePrint}
-                className="flex items-center justify-center gap-1.5 rounded-xl border border-input bg-background py-2 text-xs font-semibold hover:bg-muted transition"
+                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-input bg-background py-2 text-xs font-semibold hover:bg-muted transition min-w-0"
               >
-                <Printer className="h-3.5 w-3.5" /> {t("Print PDF")}
+                <Printer className="h-3.5 w-3.5 shrink-0" />
+                <span className="truncate">{t("Print PDF")}</span>
               </button>
               <button
                 onClick={handleGenerate}
                 disabled={generating}
-                className="flex items-center justify-center gap-1.5 rounded-xl bg-primary text-primary-foreground py-2 text-xs font-bold hover:bg-primary/90 transition disabled:opacity-60"
+                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary text-primary-foreground py-2 text-xs font-bold hover:bg-primary/90 transition disabled:opacity-60 min-w-0"
               >
-                <FileDown className="h-3.5 w-3.5" />{" "}
-                {generating ? t("Generating…") : t("Generate PDF")}
+                <FileDown className="h-3.5 w-3.5 shrink-0" />
+                <span className="truncate">{generating ? t("Generating…") : t("Generate PDF")}</span>
               </button>
             </div>
             {genMsg && <p className="text-[10px] text-center text-muted-foreground">{genMsg}</p>}
@@ -908,7 +939,7 @@ function Reports() {
                     {items.map((item, idx) => (
                       <div
                         key={item.id}
-                        className="flex items-start gap-3 rounded-xl border border-border bg-muted/20 px-4 py-3"
+                        className="group flex items-start gap-3 rounded-xl border border-border bg-muted/20 px-4 py-3 hover:border-destructive/30 transition"
                       >
                         <div
                           className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 text-white text-xs font-bold ${
@@ -930,19 +961,28 @@ function Reports() {
                             {item.type}
                           </div>
                         </div>
-                        {item.type === "person" && (
+                        <div className="flex items-center gap-2 shrink-0">
+                          {item.type === "person" && (
+                            <button
+                              onClick={() =>
+                                navigate({
+                                  to: "/profile/$personId",
+                                  params: { personId: String((item.data as any)?.id) },
+                                })
+                              }
+                              className="text-[10px] text-primary hover:underline no-print"
+                            >
+                              {t("View profile")}
+                            </button>
+                          )}
                           <button
-                            onClick={() =>
-                              navigate({
-                                to: "/profile/$personId",
-                                params: { personId: String((item.data as any)?.id) },
-                              })
-                            }
-                            className="shrink-0 text-[10px] text-primary hover:underline"
+                            onClick={() => removeItem(item.id)}
+                            title={t("Remove from report")}
+                            className="no-print rounded-lg border border-border bg-background p-1.5 text-muted-foreground opacity-0 group-hover:opacity-100 hover:border-destructive hover:bg-destructive/10 hover:text-destructive transition"
                           >
-                            {t("View profile")}
+                            <X className="h-3.5 w-3.5" />
                           </button>
-                        )}
+                        </div>
                       </div>
                     ))}
                   </div>
