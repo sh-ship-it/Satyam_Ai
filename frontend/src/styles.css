@@ -303,6 +303,9 @@ input, textarea {
  * Values come directly from tldraw's own light theme block in tldraw.css:
  *   --tl-color-background: hsl(210, 20%, 98%)  ← near-white canvas fill
  *   --tl-color-grid:       hsl(0,   0%, 43%)   ← mid-grey dots
+ *
+ * We also force ALL .tl-theme__light vars inside [data-color-scheme="light"]
+ * so draw strokes render in their correct dark colours on white (not white-on-white).
  */
 [data-color-scheme="light"] .tl-background,
 [data-color-scheme="light"] .tl-background__wrapper {
@@ -311,7 +314,29 @@ input, textarea {
 [data-color-scheme="light"] .tl-grid-dot {
   fill: hsl(0, 0%, 43%) !important;
 }
-[data-color-scheme="light"] {
+/* Force tldraw's full light theme variable set inside the board wrapper.
+ * This wins over .tl-theme__dark if tldraw incorrectly applies dark mode
+ * because our <html> element has color-scheme: dark from Tailwind. */
+[data-color-scheme="light"] .tl-container,
+[data-color-scheme="light"] .tl-theme__dark,
+[data-color-scheme="light"] .tl-theme__light {
   --tl-color-background: hsl(210, 20%, 98%) !important;
   --tl-color-grid: hsl(0, 0%, 43%) !important;
+  --tl-color-text: hsl(0, 0%, 0%) !important;
+  --tl-color-text-0: hsl(0, 0%, 11%) !important;
+  --tl-color-text-1: hsl(0, 0%, 18%) !important;
+  --tl-color-text-3: hsl(204, 4%, 45%) !important;
+  --tl-color-text-shadow: hsl(0, 0%, 100%) !important;
+  --tl-color-low: hsl(204, 16%, 94%) !important;
+  --tl-color-low-border: hsl(204, 16%, 92%) !important;
+  --tl-color-muted-0: hsl(0, 0%, 0%, 2%) !important;
+  --tl-color-muted-1: hsl(0, 0%, 0%, 10%) !important;
+  --tl-color-muted-2: hsl(0, 0%, 0%, 4.3%) !important;
+  --tl-color-hint: hsl(0, 0%, 0%, 5.5%) !important;
+  --tl-color-overlay: hsl(0, 0%, 0%, 20%) !important;
+  --tl-color-panel: hsl(0, 0%, 99%) !important;
+  --tl-color-panel-contrast: hsl(0, 0%, 100%) !important;
+  --tl-color-divider: hsl(0, 0%, 91%) !important;
+  --tl-color-tooltip: hsla(200, 14%, 4%, 1) !important;
+  color-scheme: light !important;
 }
