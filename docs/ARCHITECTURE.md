@@ -3,7 +3,7 @@
 > **Project:** Satyam — Bilingual Voice-Enabled Crime Intelligence AI
 > **Event:** Datathon 2026 · KSP × hack2skill
 > **Stack:** Python 3.11 · FastAPI · PostgreSQL 16 + pgvector · React 19 · TanStack Start
-> **Last updated:** 2026-06-23 · v2.1
+> **Last updated:** 2026-06-23 · v3.0
 
 ---
 
@@ -29,6 +29,9 @@
 18. [Deployment](#18-deployment)
 19. [Two-Phase Roadmap](#19-two-phase-roadmap)
 20. [Bug Fixes & Security Hardening](#20-bug-fixes--security-hardening)
+21. [Voice Screen Agent](#21-voice-screen-agent)
+22. [Board Brain — Smart Layout Engine](#22-board-brain--smart-layout-engine)
+23. [Kannada Translation System](#23-kannada-translation-system)
 
 ---
 
@@ -99,6 +102,7 @@ All data is **100% synthetic** — no real FIRs or PII.
 | Markdown | react-markdown + remark-gfm | AI answer rendering |
 | i18n | Custom (`src/lib/i18n.tsx`) | 200+ EN→KN keys |
 | Categorical i18n | `tData()` + `kn-data.json` | crime_type, district (41), role, etc. |
+| Graph layout | **@dagrejs/dagre** + **elkjs** | Production-grade diagram layout engines |
 | Themes | 6 professional + 8 legacy | `data-theme` on `<html>` |
 
 ### 2.4 Infrastructure
@@ -817,3 +821,223 @@ cd frontend && bun install && bun run dev
 | B2 | Board AI `brain_engine` field forwarded from frontend request — chosen engine (Gemini/Groq/OpenAI) is used instead of always Gemini |
 | B3 | `_build_spoken_summary(rows, message, lang)` provides deterministic spoken summary when Gemini is unavailable or rate-limited |
 | B4 | Progressive NL→SQL relaxation (4 levels) prevents "zero rows" dead ends — each level surfaces a friendly note in the chat |
+
+
+---
+
+## 21. Voice Screen Agent
+
+### 21.1 Overview
+
+The Voice Screen Agent upgrades the top-right copilot from a navigation-only system into a **full automation agent**. When an officer speaks a command, the agent:
+
+1. **Navigates** to the correct screen (any of the 14 Satyam routes)
+2. **Automates in-screen tasks** — sets filters, runs searches, generates reports, draws diagrams — without the officer touching the keyboard or mouse
+
+### 21.2 Architecture
+
+```
+Officer speaks → copilot STT → Shell.tsx parseVoiceCommand()
+  → POST /voice/agent  (AgentRequest: command, current_route, lang, brain_engine)
+  → screen_agent.plan()
+      ├─ LLM call (Gemini/Groq/OpenAI) with full CAPABILITY MANIFEST
+      ├─ _sanitize_actions() — validate against allow-list
+      └─ _rule_plan() fallback — deterministic, zero LLM, bilingual EN+KN
+  → AgentPlan { route, answer, speak, actions:[{screen,action,params}] }
+  → Shell navigates → dispatches satyam:run-task with structured actions
+  → Target screen's useEffect listener executes the actions
+  → copilot speaks the confirmation via Sarvam TTS
+```
+
+### 21.3 Backend Brain (`app/pipeline/screen_agent.py`)
+
+**`SCREEN_CAPABILITIES`** — a manifest of all 14 screens and every action:
+
+| Screen | Automatable actions |
+|--------|---------------------|
+| `/console` | ask, new_chat, show_on_map, set_map_mode |
+| `/network` | search_seed, set_depth, set_link_mode, filter_edge, filter_community |
+| `/reports` | add_case, set_title, set_template, clear, generate, print |
+| `/forecast` | set_crime_type, set_district, set_horizon, set_grid, set_severity, refresh, toggle_auto |
+| `/trends` | set_crime_type, set_district, set_granularity |
+| `/board` | generate_scene, save, new, export |
+| `/audit` | search, filter_action |
+| `/dossier` | search |
+| `/admin` | search |
+| `/ops-camera` | start, stop |
+| `/transcripts` | search_similar |
+
+**`plan(command, current_route, lang, brain_engine)`** — main entry point:
+1. Calls LLM with the full capability manifest as system context
+2. Validates every `(screen, action, params)` triple — unknown actions are silently dropped
+3. Falls back to `_rule_plan()` (deterministic, bilingual, works offline)
+4. Returns `AgentPlan` consumed by Shell.tsx
+
+**`_rule_plan()`** — deterministic fallback extractor:
+- Detects route by keyword scoring (longer keyword = stronger match, EN + KN)
+- Extracts: crime types, Karnataka districts, person names, numbers (1-30 → horizon)
+- Per-route action builder: forecast gets `set_crime_type` + `set_district` + `set_horizon`; network gets `search_seed` + `set_depth`; etc.
+- Works with zero LLM — demo mode, 429, offline
+
+### 21.4 Frontend Changes
+
+**`Shell.tsx`** — the main voice handler now calls `planVoiceAction()` instead of dispatching raw free-text tasks. Both the explicit-route branch AND the generic data-query branch go through the agent (agent returns `answer:true` for pure data questions → falls back to `answerInCopilot`).
+
+**`satyam:run-task` event** extended with `actions` field:
+```ts
+{
+  route: string,
+  actions: { screen: string, action: string, params: Record<string,unknown> }[],
+  query: string,
+  task: string,
+  lang: "en" | "kn",
+  rate: number,
+  speak: boolean,
+}
+```
+
+**Screens with structured action listeners:**
+
+| Screen | Actions wired |
+|--------|--------------|
+| `forecast.tsx` | set_crime_type, set_district, set_horizon, set_grid, set_severity, toggle_auto, refresh |
+| `network.tsx` | search_seed, set_depth, set_link_mode, filter_edge, filter_community |
+| `reports.tsx` | set_title, set_template, clear, generate, print, add_case (auto-search + add) |
+| `board.tsx` | generate_scene (auto-fill prompt + trigger AI), save, new, export |
+| `console.tsx` | ask (send to chat), new_chat, set_map_mode, show_on_map |
+| `audit.tsx` | search (fill filter box), filter_action |
+
+### 21.5 Security
+
+- `_sanitize_actions()` — only allow-listed `(screen, action, param_key)` triples reach the frontend. The LLM cannot inject arbitrary screen interactions.
+- The frontend never executes raw command text — only structured typed actions.
+- All requests to `/voice/agent` require `Permission.CHAT` (clearance ≥ 1).
+
+### 21.6 Example Voice Commands
+
+| Command | What happens |
+|---------|-------------|
+| "Open forecast and filter to theft in Mysuru for 30 days" | Navigates to /forecast, sets crime_type=Theft, district=Mysuru, horizon=30 |
+| "Show the network for Ravi Kumar at depth 3" | Navigates to /network, searches seed Ravi Kumar, sets depth=3 |
+| "Generate a report PDF" | On /reports, calls handleGenerate() |
+| "Draw a crime scene with two suspects and a vehicle" | On /board, fills AI prompt + triggers generate_scene |
+| "Filter to critical alerts" (while on forecast) | Stays on /forecast, calls setSeverityFilter("Critical") |
+| "How many thefts last month" | Agent returns answer:true → copilot answers the question out loud |
+
+### 21.7 New API Endpoint
+
+| Method | Path | Notes |
+|--------|------|-------|
+| `POST` | `/voice/agent` | AgentRequest → AgentPlan · Requires CHAT permission |
+
+---
+
+## 22. Board Brain — Smart Layout Engine
+
+### 22.1 Backend Board Brain (`app/services/board_brain.py`)
+
+Replaced the original `board_service.py` scene generator with a 400-line intelligent brain:
+
+| Component | What it does |
+|-----------|-------------|
+| `detect_intent()` | Classifies prompt into 8 diagram types: evidence_board, crime_network, timeline, mind_map, flowchart, org_chart, money_trail, location_map |
+| `_build_system()` | Generates an intent-specific system prompt with layout guidance |
+| `_llm_extract()` | Calls Gemini/Groq/OpenAI with richer schema |
+| `_style_node()` | Maps `entity_kind` → tldraw shape + color + size |
+| `_style_edge()` | Maps relationship `kind` → dash style + color |
+| `apply_layout()` | 6 layout engines: ring, timeline, tree, radial, grid, hierarchical |
+| `_no_overlap()` | 80-iteration iterative push — guarantees no two nodes collide |
+| `detect_conflicts()` | Regex scan for contradictions → adds ⚠ warning nodes |
+| `merge_into_snapshot()` | Reads existing tldraw store, deduplicates, merges incrementally |
+| `keyword_fallback()` | Zero-LLM deterministic scene from keywords |
+| `generate_scene()` | Orchestrates all above with Gemini→Groq→OpenAI→keyword cascade |
+
+**Entity kinds and shapes:**
+
+| kind | shape | color |
+|------|-------|-------|
+| suspect | ellipse | red |
+| victim | ellipse | green |
+| location | hexagon | amber |
+| vehicle | rectangle | blue |
+| evidence | diamond | yellow |
+| weapon | diamond | dark-red |
+| account | rectangle | teal |
+| event | rectangle | violet |
+| warning | triangle | red |
+
+**Multi-LLM fallback cascade:** Gemini → Groq → OpenAI → `keyword_fallback()`. Partial enrichment on batch failure — still useful.
+
+**Incremental merge:** `BoardGenerateRequest` accepts `existing_snapshot` (the current tldraw store). New nodes are deduplicated by id/label and offset so they don't land on top of existing shapes.
+
+### 22.2 Frontend Layout Engine (`src/lib/boardLayout.ts`)
+
+Two production-grade npm layout engines added:
+- **`@dagrejs/dagre@1.0.4`** — Sugiyama hierarchical layout (org chart, flowchart, timeline)
+- **`elkjs@0.9.3`** — Eclipse Layout Kernel (force-directed, radial, layered, box-packing)
+
+**`detectStrategy(nodes, edges)`** — auto-selects the best algorithm:
+
+| Scene contains | Algorithm |
+|---|---|
+| Events with dates | dagre left→right (timeline) |
+| Decision / start / end nodes | ELK layered (flowchart) |
+| Officers / organizations | dagre top→bottom (org chart) |
+| Accounts + transactions | ELK layered (money trail) |
+| Dense person graph | ELK force-directed |
+| People + locations | ELK radial |
+| Locations only | ELK box-packing |
+| Small graph (≤8 nodes) | simple ring |
+
+**`applyColorHarmony(nodes)`** — role-aware hex palette applied to every node (suspects=red, victims=green, locations=amber, etc.). LLM color wins if explicitly set.
+
+**Pipeline:** `layoutScene(rawNodes, rawEdges)` → colour harmony → strategy detection → dagre/elk → centred on 1600×900 canvas → returned to `applySceneToEditor`.
+
+---
+
+## 23. Kannada Translation System
+
+### 23.1 Static DICT (`src/lib/i18n.tsx`)
+
+The DICT has grown to **500+ EN→KN entries** covering every screen:
+- All navigation labels, page titles, filter labels, error messages, form fields
+- Timeline event titles (Incident occurred, FIR registered, IO assigned, etc.)
+- Case drawer tabs, dossier field labels, profile risk factors
+- Ops/board/forecast/admin/reports/settings panels
+- ProfileMenu account switcher strings
+
+### 23.2 Runtime LLM Enrichment (Settings → Translation)
+
+**`enrichDictWithLLM(onProgress)`** — Phase 1:
+- Static manifest of 271 strings from all `t("...")` calls in source
+- Sends to `POST /settings/translate` (Groq Llama-3.1-70B) in batches of 20
+- Filters: no Kannada script input, no pure numbers/symbols
+- Merges into live DICT immediately; cached in `localStorage["satyam.translation.llm-cache"]`
+
+**`enrichDataWithLLM(onProgress)`** — Phase 2:
+- `GET /settings/data-values` → fetches unique station names (200), districts (60), crime types (100), statuses (30) from DB
+- Translates with context hints ("Translate these Karnataka police station names…")
+- Cached in `localStorage["satyam.data-translations"]`
+- `tData()` reads this cache so station names display in Kannada on all screens
+
+**`POST /settings/translate`** — backend endpoint (Groq Llama-3.1-70B):
+- System prompt keeps acronyms (FIR, IPC, GPS, KSP) in English
+- Keeps proper nouns (Bengaluru, Karnataka) in Kannada script
+- Returns only Kannada responses (validated by Unicode check `[\u0C80-\u0CFF]`)
+
+**Progress UI (Settings → Translation tab):**
+- Two-phase progress bar with `done/total · pct%`
+- Phase labels ("Phase 1/2 — UI labels", "Phase 2/2 — Data values")
+- Grand total counter across phases
+- Error detail with GROQ_API_KEY hint
+- "Re-run enrichment" always visible; "Reset all cached translations" clears all 3 localStorage keys
+
+### 23.3 Screen-Level Translation Coverage
+
+All screens now have complete Kannada translations:
+- `CaseDrawer.tsx` — tabs (Similar Cases, Timeline), "Profile" link, all event types via `t(e.type)`
+- `dossier.tsx` — all field labels, section titles, photo labels (Front/Left/Right), bank table headers
+- `socio.tsx` — page title, chart card titles, correlation table headers, risk driver tags
+- `reports.tsx` — all cart/template/builder labels, executive summary text
+- `ProfileMenu.tsx` — account switcher, progress steps, sign out, photo actions
+- `network.tsx` / `audit.tsx` — all filter dropdowns data-driven from live data (no hardcoded options)
