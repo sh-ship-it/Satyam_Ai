@@ -356,13 +356,16 @@ function NetworkScreen() {
 
   // Live graph data
   const [NODES, setNODES] = useState<any[]>([]);
-  const [EDGES, setEDGES] = useState<[string, string][]>([]);
+  const [EDGES, setEDGES] = useState<{ a: string; b: string; label: string }[]>([]);
   const [seedInput, setSeedInput] = useState("");
   const [graphLoading, setGraphLoading] = useState(false);
   const [graphEmpty, setGraphEmpty] = useState(true);
   const [depth, setDepth] = useState(2);
   const [linkMode, setLinkMode] = useState<"people" | "financial" | "rings">("people");
   const [ringCtx, setRingCtx] = useState<{ district?: string; crime_type?: string } | null>(null);
+  // Dynamic filter state — derived from live graph data, never hardcoded
+  const [edgeTypeFilter, setEdgeTypeFilter] = useState("All");
+  const [communityFilter, setCommunityFilter] = useState("All");
 
   const fetchGraph = useCallback(
     async (seedName: string, queryDepth: number = depth) => {
@@ -426,12 +429,16 @@ function NetworkScreen() {
           };
         });
 
-        const mappedEdges: [string, string][] = (res.edges ?? []).map(
-          (e: any) => [String(e.source), String(e.target)] as [string, string],
-        );
+        const mappedEdges = (res.edges ?? []).map((e: any) => ({
+          a: String(e.source),
+          b: String(e.target),
+          label: (e.label ?? "co-accused").toLowerCase(),
+        }));
 
         setNODES(mappedNodes);
         setEDGES(mappedEdges);
+        setEdgeTypeFilter("All");
+        setCommunityFilter("All");
         setSelected(seedId);
         setSelectedSet(new Set(seedId ? [seedId] : []));
         setGraphEmpty(mappedNodes.length === 0);
@@ -439,6 +446,8 @@ function NetworkScreen() {
         console.error("[network] fetchGraph error:", err);
         setNODES([]);
         setEDGES([]);
+        setEdgeTypeFilter("All");
+        setCommunityFilter("All");
         setGraphEmpty(true);
       } finally {
         setGraphLoading(false);
@@ -511,6 +520,42 @@ function NetworkScreen() {
       }
     );
   }, [NODES, selected, t]);
+
+  // ---- Dynamic filter options (derived from live graph data, never hardcoded) ----
+  const edgeTypeOptions = useMemo(() => {
+    const labels = new Set<string>();
+    EDGES.forEach(({ label }) => { if (label) labels.add(label); });
+    return ["All", ...Array.from(labels).sort()];
+  }, [EDGES]);
+
+  const communityOptions = useMemo(() => {
+    const types = new Set<string>();
+    NODES.forEach((n) => { if (n.crime_type) types.add(n.crime_type); });
+    return ["All", ...Array.from(types).sort()];
+  }, [NODES]);
+
+  // ---- Filtered graph (what the SVG actually renders) ----
+  const visEdges = useMemo(() => {
+    let out = EDGES;
+    if (edgeTypeFilter !== "All") out = out.filter((e) => e.label === edgeTypeFilter);
+    if (communityFilter !== "All") {
+      // Keep only edges where at least one endpoint has the matching crime_type
+      const keep = new Set(
+        NODES.filter((n) => n.crime_type === communityFilter).map((n) => n.id),
+      );
+      out = out.filter((e) => keep.has(e.a) || keep.has(e.b));
+    }
+    return out;
+  }, [EDGES, NODES, edgeTypeFilter, communityFilter]);
+
+  const visNodes = useMemo(() => {
+    if (communityFilter === "All") return NODES;
+    const visIds = new Set<string>();
+    visEdges.forEach(({ a, b }) => { visIds.add(a); visIds.add(b); });
+    // Always keep the seed node visible
+    NODES.forEach((n) => { if (n.role === "seed") visIds.add(n.id); });
+    return NODES.filter((n) => visIds.has(n.id));
+  }, [NODES, visEdges, communityFilter]);
 
   // ---- Physics tuning state ----
   const PRESETS_KEY = "fq-network-presets";
@@ -625,9 +670,9 @@ function NetworkScreen() {
 
   // ---- Dynamic simulation state ----
   const nodesRef = useRef(NODES);
-  nodesRef.current = NODES;
+  nodesRef.current = visNodes;
   const edgesRef = useRef(EDGES);
-  edgesRef.current = EDGES;
+  edgesRef.current = visEdges;
 
   const [pos, setPos] = useState<PosMap>({});
   const posRef = useRef(pos);
@@ -688,7 +733,7 @@ function NetworkScreen() {
         }
       }
       // Edge springs
-      edgesRef.current.forEach(([a, b]) => {
+      edgesRef.current.forEach(({ a, b }) => {
         const A = p[a];
         const B = p[b];
         if (!A || !B) return;
@@ -834,7 +879,7 @@ function NetworkScreen() {
     }
     const ids = selectedSet;
     const nodes = NODES.filter((n) => ids.has(n.id));
-    const edges = EDGES.filter(([a, b]) => ids.has(a) && ids.has(b));
+    const edges = EDGES.filter(({ a, b }) => ids.has(a) && ids.has(b));
     return { nodes, edges };
   };
 
@@ -857,7 +902,7 @@ function NetworkScreen() {
         position: { x: n.x, y: n.y },
         radius: n.r,
       })),
-      edges: edges.map(([source, target]) => ({ source, target })),
+      edges: edges.map(({ a: source, b: target }) => ({ source, target })),
     };
     const blob = new Blob([JSON.stringify(snapshot, null, 2)], {
       type: "application/json",
@@ -874,7 +919,7 @@ function NetworkScreen() {
     const { nodes, edges } = getScopedData(scope);
     const nodeMap = new Map(nodes.map((n) => [n.id, n]));
     const edgeXml = edges
-      .map(([a, b]) => {
+      .map(({ a, b }) => {
         const A = nodeMap.get(a)!;
         const B = nodeMap.get(b)!;
         const isSeedA = nodes.find((n) => n.id === a)?.role === "seed";
@@ -1030,12 +1075,16 @@ function NetworkScreen() {
             </Control>
             <Control label={t("Edge type")}>
               <Select
-                options={[t("All"), t("Co-accused"), t("Phone"), t("Vehicle"), t("Location")]}
+                options={edgeTypeOptions}
+                value={edgeTypeFilter}
+                onChange={setEdgeTypeFilter}
               />
             </Control>
             <Control label={t("Community")}>
               <Select
-                options={[t("All"), "C-01 (Theft ring)", "C-02 (Cyber)", "C-03 (Narcotics)"]}
+                options={communityOptions}
+                value={communityFilter}
+                onChange={setCommunityFilter}
               />
             </Control>
             <div className="hidden xl:flex items-center gap-3 border-l border-border pl-3">
@@ -1341,12 +1390,12 @@ function NetworkScreen() {
                     </radialGradient>
                   ))}
                 </defs>
-                {EDGES.map(([a, b], i) => {
+                {visEdges.map(({ a, b }, i) => {
                   const A = pos[a];
                   const B = pos[b];
                   if (!A || !B) return null;
-                  const nodeA = NODES.find((n) => n.id === a);
-                  const nodeB = NODES.find((n) => n.id === b);
+                  const nodeA = visNodes.find((n) => n.id === a);
+                  const nodeB = visNodes.find((n) => n.id === b);
                   const isSeedA = nodeA?.role === "seed";
                   const isSeedB = nodeB?.role === "seed";
                   const isCore = isSeedA || isSeedB;
@@ -1379,7 +1428,7 @@ function NetworkScreen() {
                   );
                 })}
 
-                {NODES.map((n) => {
+                {visNodes.map((n) => {
                   const p = pos[n.id];
                   if (!p) return null;
                   const sel = n.id === selected;
@@ -1598,7 +1647,7 @@ function NetworkScreen() {
           <div className="p-4 space-y-4">
             {(() => {
               const selNode = NODES.find((n) => n.id === selected) as any;
-              const edgeCount = EDGES.filter(([a, b]) => a === selected || b === selected).length;
+              const edgeCount = visEdges.filter(({ a, b }) => a === selected || b === selected).length;
               const isSeed = selNode?.role === "seed";
               const kind = selNode?.kind || "person";
               const isCase = kind === "case";
@@ -1693,24 +1742,24 @@ function NetworkScreen() {
                       <div className="font-bold text-foreground mb-2">{t("Network summary")}</div>
                       <div className="flex justify-between text-muted-foreground">
                         <span>{t("Total nodes")}</span>
-                        <span className="font-bold text-foreground">{NODES.length}</span>
+                        <span className="font-bold text-foreground">{visNodes.length}</span>
                       </div>
                       <div className="flex justify-between text-muted-foreground">
                         <span>{t("Accused")}</span>
                         <span className="font-bold text-orange-600">
-                          {NODES.filter((n: any) => n.group === 1).length}
+                          {visNodes.filter((n: any) => n.group === 1).length}
                         </span>
                       </div>
                       <div className="flex justify-between text-muted-foreground">
                         <span>{t("Victims")}</span>
                         <span className="font-bold text-emerald-600">
-                          {NODES.filter((n: any) => n.group === 2).length}
+                          {visNodes.filter((n: any) => n.group === 2).length}
                         </span>
                       </div>
                       <div className="flex justify-between text-muted-foreground">
                         <span>{t("Cases / FIRs")}</span>
                         <span className="font-bold text-purple-600">
-                          {NODES.filter((n: any) => n.group === 3).length}
+                          {visNodes.filter((n: any) => n.group === 3).length}
                         </span>
                       </div>
                     </div>
@@ -1741,11 +1790,20 @@ function Control({ label, children }: { label: string; children: React.ReactNode
     </div>
   );
 }
-function Select({ options, value }: { options: string[]; value?: string }) {
+function Select({
+  options,
+  value,
+  onChange,
+}: {
+  options: string[];
+  value?: string;
+  onChange?: (v: string) => void;
+}) {
   return (
     <div className="relative">
       <select
-        defaultValue={value}
+        value={value}
+        onChange={(e) => onChange?.(e.target.value)}
         className="appearance-none rounded-md border border-input bg-card px-2.5 py-1.5 pr-7 text-sm text-foreground"
       >
         {options.map((o) => (
