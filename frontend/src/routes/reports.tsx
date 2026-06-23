@@ -519,7 +519,7 @@ function Reports() {
                     onClick={() => addStation(r.station, r.firs, r.cleared)}
                     className="w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-left hover:bg-muted/50 transition group"
                   >
-                    <span className="text-xs text-foreground truncate flex-1">{r.station}</span>
+                    <span className="text-xs text-foreground truncate flex-1">{tData("station", r.station, lang)}</span>
                     <span className="text-[10px] text-muted-foreground mr-2">{r.firs} FIRs</span>
                     <Plus className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 shrink-0" />
                   </button>
@@ -720,7 +720,7 @@ function Reports() {
                 <div className="bg-muted/30 rounded-xl p-4 text-sm leading-relaxed">
                   {topStation ? (
                     <p>
-                      Top performing station: <strong>{topStation.station}</strong> with{" "}
+                      Top performing station: <strong>{tData("station", topStation.station, lang)}</strong> with{" "}
                       <strong>{topStation.firs.toLocaleString()}</strong> FIRs registered,{" "}
                       <strong>{topStation.cleared}</strong> cases cleared. Report covers{" "}
                       <strong>{stations.length}</strong> stations in the scoped jurisdiction.{" "}
@@ -785,7 +785,7 @@ function Reports() {
                               <td className="px-4 py-2.5 text-muted-foreground text-[11px] tabular-nums">
                                 {i + 1}
                               </td>
-                              <td className="px-4 py-2.5 font-medium text-sm">{r.station}</td>
+                              <td className="px-4 py-2.5 font-medium text-sm">{tData("station", r.station, lang)}</td>
                               <td className="px-4 py-2.5 text-right tabular-nums font-bold">
                                 {r.firs.toLocaleString()}
                               </td>

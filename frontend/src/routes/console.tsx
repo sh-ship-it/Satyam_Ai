@@ -974,7 +974,7 @@ function Console() {
                           className="hover:bg-muted/30 cursor-pointer"
                           onClick={() => sendMessage(`${t("Show cases in")} ${r.station}`)}
                         >
-                          <td className="px-4 py-2.5 font-medium text-foreground">{r.station}</td>
+                          <td className="px-4 py-2.5 font-medium text-foreground">{tData("station", r.station, lang)}</td>
                           <td className="px-4 py-2.5 text-foreground">{r.firs}</td>
                           <td className="px-4 py-2.5 text-muted-foreground">{r.cleared}</td>
                           <td className="px-4 py-2.5">
@@ -1091,7 +1091,7 @@ function Console() {
                       {t("live")}
                     </span>
                   </div>
-                  <h3 className="text-base font-semibold text-foreground">{stations[0].station}</h3>
+                  <h3 className="text-base font-semibold text-foreground">{tData("station", stations[0].station, lang)}</h3>
                   <div className="mt-3 grid grid-cols-3 gap-2">
                     <Mini label={t("FIRs")} value={String(stations[0].firs)} />
                     <Mini label={t("Cleared")} value={String(stations[0].cleared)} />

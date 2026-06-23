@@ -107,7 +107,8 @@ def get_db_source_host() -> str:
 # ── Kannada Translation Enrichment (Groq Llama-3.1-70B) ───────────────────
 
 class TranslateRequest(BaseModel):
-    strings: list[str]  # up to 20 English UI strings per request
+    strings: list[str]  # up to 25 English UI strings per request
+    system_hint: str = ""  # optional context hint for better translations
 
 
 class TranslateResponse(BaseModel):
@@ -163,6 +164,7 @@ async def translate_to_kannada(
     lines = "\n".join(f'{i+1}. {s_}' for i, s_ in enumerate(strings))
     user_prompt = (
         f"Translate these {len(strings)} Kannada UI strings. "
+        f"{req.system_hint + chr(10) if req.system_hint else ''}"
         f"Return ONLY JSON with each original English string as key:\n\n{lines}"
     )
 
@@ -200,3 +202,54 @@ async def translate_to_kannada(
         raise HTTPException(status_code=502, detail=f"Groq API error {e.response.status_code}: {e.response.text[:200]}")
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Translation failed: {e}")
+
+
+# ── Synthetic data values translation ─────────────────────────────────────
+
+class DataValuesResponse(BaseModel):
+    station_names: list[str]
+    districts: list[str]
+    crime_types: list[str]
+    statuses: list[str]
+
+
+@router.get("/data-values", response_model=DataValuesResponse)
+async def get_data_values(
+    session=Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> DataValuesResponse:
+    """Return unique data values from the DB for LLM translation."""
+    try:
+        require(principal, Permission.CHAT)
+    except AccessDenied as e:
+        raise HTTPException(status_code=403, detail=str(e))
+
+    from sqlalchemy import text as sql_text
+    from app.db.session import AsyncSession as _AS
+
+    async def query(q: str) -> list[str]:
+        try:
+            result = await session.execute(sql_text(q))
+            return [str(r[0]) for r in result.fetchall() if r[0]]
+        except Exception:
+            return []
+
+    stations = await query(
+        "SELECT DISTINCT station_name FROM stations ORDER BY station_name LIMIT 200"
+    )
+    districts = await query(
+        "SELECT DISTINCT district FROM cases WHERE district IS NOT NULL ORDER BY district LIMIT 60"
+    )
+    crime_types = await query(
+        "SELECT DISTINCT crime_type FROM cases WHERE crime_type IS NOT NULL ORDER BY crime_type LIMIT 100"
+    )
+    statuses = await query(
+        "SELECT DISTINCT status FROM cases WHERE status IS NOT NULL ORDER BY status LIMIT 30"
+    )
+
+    return DataValuesResponse(
+        station_names=stations,
+        districts=districts,
+        crime_types=crime_types,
+        statuses=statuses,
+    )

@@ -18,7 +18,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
-import { enrichDictWithLLM } from "@/lib/i18n";
+import { enrichDictWithLLM, enrichDataWithLLM } from "@/lib/i18n";
 import { api, type SessionUser } from "@/lib/api/client";
 
 type Tab = "profile" | "models" | "preferences" | "notifications" | "security" | "data" | "translation";
@@ -1002,8 +1002,11 @@ const ENRICH_KEY = "satyam.translation.enriched";
 
 function TranslationPanel({ t }: { t: (s: string) => string }) {
   const [status, setStatus] = useState<"idle" | "running" | "done" | "error">("idle");
-  const [progress, setProgress] = useState("");
-  const [count, setCount] = useState(0);
+  const [phase, setPhase] = useState("");           // current phase label
+  const [phaseDetail, setPhaseDetail] = useState(""); // detailed step
+  const [done, setDone] = useState(0);               // items translated so far
+  const [total, setTotal] = useState(0);             // total items in current phase
+  const [totalAll, setTotalAll] = useState(0);       // grand total across phases
   const [alreadyDone, setAlreadyDone] = useState(false);
 
   useEffect(() => {
@@ -1014,30 +1017,55 @@ function TranslationPanel({ t }: { t: (s: string) => string }) {
 
   async function runEnrichment() {
     setStatus("running");
-    setProgress(t("Connecting to Groq Llama-3.1-70B…"));
-    setCount(0);
+    setDone(0); setTotal(0); setTotalAll(0);
+    setPhase("Starting…"); setPhaseDetail("");
+
     try {
-      const added = await enrichDictWithLLM((msg, n) => {
-        setProgress(msg);
-        setCount(n);
+      // Phase 1: UI strings (~271 strings, ~14 batches)
+      setPhase("Phase 1/2 — UI labels");
+      let grandTotal = 0;
+      const uiAdded = await enrichDictWithLLM((msg, n, tot) => {
+        setPhaseDetail(msg);
+        setDone(n);
+        setTotal(tot);
       });
-      setCount(added);
+      grandTotal += uiAdded;
+      setTotalAll(grandTotal);
+
+      // Phase 2: Synthetic data values (station names, districts, crime types)
+      setPhase("Phase 2/2 — Data values (stations, districts, crime types)");
+      setDone(0); setTotal(0); setPhaseDetail("Fetching from database…");
+      const dataAdded = await enrichDataWithLLM((msg, n, tot) => {
+        setPhaseDetail(msg);
+        setDone(n);
+        setTotal(tot > 0 ? tot : n + 1);
+      });
+      grandTotal += dataAdded;
+      setTotalAll(grandTotal);
+
       setStatus("done");
       setAlreadyDone(true);
       try { localStorage.setItem(ENRICH_KEY, "1"); } catch {}
     } catch (err) {
       setStatus("error");
-      setProgress(err instanceof Error ? err.message : "Unknown error");
+      setPhaseDetail(err instanceof Error ? err.message : "Unknown error");
     }
   }
 
   function resetEnrichment() {
-    try { localStorage.removeItem(ENRICH_KEY); } catch {}
+    try {
+      localStorage.removeItem(ENRICH_KEY);
+      localStorage.removeItem("satyam.translation.llm-cache");
+      localStorage.removeItem("satyam.data-translations");
+      localStorage.removeItem("satyam.translation.misses");
+    } catch {}
     setAlreadyDone(false);
     setStatus("idle");
-    setProgress("");
-    setCount(0);
+    setPhase(""); setPhaseDetail("");
+    setDone(0); setTotal(0); setTotalAll(0);
   }
+
+  const pct = total > 0 ? Math.min(100, Math.round((done / total) * 100)) : 0;
 
   return (
     <Section
@@ -1051,32 +1079,63 @@ function TranslationPanel({ t }: { t: (s: string) => string }) {
           {t("How it works")}
         </div>
         <ul className="space-y-1 text-muted-foreground list-disc list-inside">
-          <li>{t("Scans every UI string in Kannada mode")}</li>
+          <li>{t("Translates UI labels AND synthetic data values (station names, crime types, districts)")}</li>
           <li>{t("Sends untranslated strings to Groq Llama-3.1-70B in batches")}</li>
           <li>{t("Saves translations to your browser's local storage")}</li>
           <li>{t("Runs only once — uses cached result on every subsequent visit")}</li>
-          <li>{t("New screens added later can be re-enriched using the Reset button")}</li>
+          <li>{t("New screens added later: switch to Kannada, browse those screens, then click Reset + Run")}</li>
         </ul>
       </div>
 
-      {/* Status area */}
+      {/* Progress block — visible while running */}
       {status === "running" && (
-        <div className="flex items-center gap-2 text-sm text-primary">
-          <Loader2 className="h-4 w-4 animate-spin shrink-0" />
-          <span className="font-medium">{progress}</span>
+        <div className="space-y-2">
+          {/* Phase label */}
+          <div className="flex items-center gap-2 text-xs font-bold text-primary">
+            <Loader2 className="h-3.5 w-3.5 animate-spin shrink-0" />
+            {phase}
+          </div>
+          {/* Progress bar */}
+          <div className="h-2.5 w-full rounded-full bg-muted overflow-hidden border border-border">
+            <div
+              className="h-full rounded-full bg-primary transition-all duration-300"
+              style={{ width: `${pct}%` }}
+            />
+          </div>
+          {/* Detail + count */}
+          <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+            <span className="truncate max-w-[280px]">{phaseDetail}</span>
+            <span className="shrink-0 font-mono font-bold">
+              {done}/{total > 0 ? total : "?"} · {pct}%
+            </span>
+          </div>
+          {totalAll > 0 && (
+            <div className="text-[10px] text-success font-medium">
+              ✓ {totalAll} {t("translations saved so far")}
+            </div>
+          )}
         </div>
       )}
+
+      {/* Done */}
       {status === "done" && (
         <div className="rounded-[5px] border-2 border-success/40 bg-success/10 px-3 py-2 text-xs font-bold text-success flex items-center gap-2">
           <Check className="h-4 w-4 shrink-0" />
-          {t("Done")} — {count} {t("new translations added and saved to local storage")}
+          {t("Done")} — {totalAll} {t("new translations added and saved to local storage")}
         </div>
       )}
+
+      {/* Error */}
       {status === "error" && (
         <div className="rounded-[5px] border-2 border-destructive/40 bg-destructive/10 px-3 py-2 text-xs font-bold text-destructive">
-          {t("Error")}: {progress}
+          <div>{t("Error")}: {phaseDetail}</div>
+          <div className="text-[10px] mt-1 font-normal opacity-80">
+            Make sure GROQ_API_KEY is set in backend .env and the server is running.
+          </div>
         </div>
       )}
+
+      {/* Already done (idle state after previous run) */}
       {alreadyDone && status === "idle" && (
         <div className="rounded-[5px] border-2 border-success/30 bg-success/5 px-3 py-2 text-xs text-success font-medium flex items-center gap-2">
           <Check className="h-3.5 w-3.5 shrink-0" />
@@ -1084,23 +1143,23 @@ function TranslationPanel({ t }: { t: (s: string) => string }) {
         </div>
       )}
 
-      {/* Action buttons */}
-      <div className="flex gap-2">
-        {!alreadyDone && status !== "running" && (
+      {/* Action buttons — always show Run (even after done), always show Reset if done */}
+      <div className="flex gap-2 flex-wrap">
+        {status !== "running" && (
           <button
             onClick={runEnrichment}
             className="flex items-center gap-1.5 rounded-[5px] border-2 border-foreground bg-primary px-4 py-2 text-sm font-extrabold text-primary-foreground nb-shadow transition hover:translate-x-[2px] hover:translate-y-[2px] hover:nb-shadow-sm"
           >
             <Sparkles className="h-4 w-4" />
-            {t("Run Kannada enrichment")}
+            {alreadyDone ? t("Re-run enrichment") : t("Run Kannada enrichment")}
           </button>
         )}
-        {(alreadyDone || status === "done") && (
+        {(alreadyDone || status === "done") && status !== "running" && (
           <button
             onClick={resetEnrichment}
             className="flex items-center gap-1.5 rounded-[5px] border-2 border-foreground bg-secondary-background px-3 py-2 text-xs font-bold nb-shadow-sm transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
           >
-            {t("Reset — allow re-enrichment for new screens")}
+            {t("Reset all cached translations")}
           </button>
         )}
       </div>

@@ -830,7 +830,27 @@ const DICT: Record<string, string> = {
   "Kannada Translation": "ಕನ್ನಡ ಅನುವಾದ",
   "Use Groq Llama-3.1-70B to fill in missing Kannada translations": "ಕಾಣೆಯಾದ ಕನ್ನಡ ಅನುವಾದಗಳನ್ನು ತುಂಬಲು Groq Llama-3.1-70B ಬಳಸಿ",
   "How it works": "ಇದು ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ",
-  "Scans every UI string in Kannada mode": "ಕನ್ನಡ ಮೋಡ್‌ನಲ್ಲಿ ಪ್ರತಿ UI ಸ್ಟ್ರಿಂಗ್ ಸ್ಕ್ಯಾನ್ ಮಾಡುತ್ತದೆ",
+  "Translates UI labels AND synthetic data values (station names, crime types, districts)": "UI ಲೇಬಲ್‌ಗಳು ಮತ್ತು ಸಿಂಥೆಟಿಕ್ ಡೇಟಾ ಮೌಲ್ಯಗಳನ್ನು (ಠಾಣೆ ಹೆಸರುಗಳು, ಅಪರಾಧ ವಿಧಗಳು, ಜಿಲ್ಲೆಗಳು) ಅನುವಾದಿಸುತ್ತದೆ",
+  // ── ProfileMenu / Account switcher ───────────────────────────────────────
+  "Switch account": "ಖಾತೆ ಬದಲಾಯಿಸಿ",
+  "Switch account?": "ಖಾತೆ ಬದಲಾಯಿಸಬೇಕೇ?",
+  "Switch & reload": "ಬದಲಾಯಿಸಿ ಮತ್ತು ಮರುಲೋಡ್ ಮಾಡಿ",
+  "Add another account": "ಮತ್ತೊಂದು ಖಾತೆ ಸೇರಿಸಿ",
+  "Manage accounts": "ಖಾತೆಗಳನ್ನು ನಿರ್ವಹಿಸಿ",
+  "Profile & settings": "ಪ್ರೊಫೈಲ್ ಮತ್ತು ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+  "Sign out": "ಸೈನ್ ಔಟ್",
+  "Change photo": "ಫೋಟೋ ಬದಲಾಯಿಸಿ",
+  "Update profile photo": "ಪ್ರೊಫೈಲ್ ಫೋಟೋ ನವೀಕರಿಸಿ",
+  "Remove photo": "ಫೋಟೋ ತೆಗೆದುಹಾಕಿ",
+  "Loading workspace…": "ಕಾರ್ಯಸ್ಥಳ ಲೋಡ್ ಆಗುತ್ತಿದೆ…",
+  "Workspace ready": "ಕಾರ್ಯಸ್ಥಳ ಸಿದ್ಧ",
+  "Switching ends the current session and reloads cases, permissions, and dashboards for the selected workspace.":
+    "ಬದಲಾಯಿಸುವುದರಿಂದ ಪ್ರಸ್ತುತ ಸೆಶನ್ ಮುಗಿಯುತ್ತದೆ ಮತ್ತು ಆಯ್ಕೆ ಮಾಡಿದ ಕಾರ್ಯಸ್ಥಳಕ್ಕಾಗಿ ಪ್ರಕರಣಗಳು, ಅನುಮತಿಗಳು ಮತ್ತು ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗಳನ್ನು ಮರುಲೋಡ್ ಮಾಡುತ್ತದೆ.",
+  "Signing out current session": "ಪ್ರಸ್ತುತ ಸೆಶನ್ ಸೈನ್ ಔಟ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+  "Authenticating new identity": "ಹೊಸ ಗುರುತನ್ನು ದೃಢೀಕರಿಸಲಾಗುತ್ತಿದೆ",
+  "Loading workspace permissions": "ಕಾರ್ಯಸ್ಥಳ ಅನುಮತಿಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+  "Refreshing case data": "ಪ್ರಕರಣ ಡೇಟಾ ರಿಫ್ರೆಶ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
+
   "Sends untranslated strings to Groq Llama-3.1-70B in batches": "ಅನುವಾದಿಸದ ಸ್ಟ್ರಿಂಗ್‌ಗಳನ್ನು Groq Llama-3.1-70B ಗೆ ಬ್ಯಾಚ್‌ಗಳಲ್ಲಿ ಕಳುಹಿಸುತ್ತದೆ",
   "Saves translations to your browser's local storage": "ಬ್ರೌಸರ್‌ನ ಲೋಕಲ್ ಸ್ಟೋರೇಜ್‌ಗೆ ಅನುವಾದಗಳನ್ನು ಉಳಿಸುತ್ತದೆ",
   "Runs only once — uses cached result on every subsequent visit": "ಒಮ್ಮೆ ಮಾತ್ರ ಚಲಿಸುತ್ತದೆ — ನಂತರದ ಪ್ರತಿ ಭೇಟಿಯಲ್ಲಿ ಕ್ಯಾಶ್ ಫಲಿತಾಂಶ ಬಳಸುತ್ತದೆ",
@@ -843,12 +863,154 @@ const DICT: Record<string, string> = {
   "Run Kannada enrichment": "ಕನ್ನಡ ಸಮೃದ್ಧೀಕರಣ ಚಲಾಯಿಸಿ",
   "Reset — allow re-enrichment for new screens": "ರೀಸೆಟ್ — ಹೊಸ ಪರದೆಗಳಿಗೆ ಮತ್ತೆ ಸಮೃದ್ಧೀಕರಣ ಅನುಮತಿಸಿ",
   "Translations are saved to localStorage and merged with the built-in DICT on every page load. They are never sent anywhere except the backend /settings/translate endpoint.": "ಅನುವಾದಗಳನ್ನು localStorage ಗೆ ಉಳಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ಪ್ರತಿ ಪೇಜ್ ಲೋಡ್‌ನಲ್ಲಿ ಅಂತರ್ನಿರ್ಮಿತ DICT ಜೊತೆ ವಿಲೀನಗೊಳ್ಳುತ್ತವೆ.",
+
+  // ── Dossier screen ────────────────────────────────────────────────────────
+  "Search name / district…": "ಹೆಸರು / ಜಿಲ್ಲೆ ಹುಡುಕಿ…",
+  "Select a person from the list": "ಪಟ್ಟಿಯಿಂದ ಒಬ್ಬ ವ್ಯಕ್ತಿಯನ್ನು ಆಯ್ಕೆ ಮಾಡಿ",
+  "Demo data — fictional only": "ಡೆಮೋ ಡೇಟಾ — ಕಾಲ್ಪನಿಕ ಮಾತ್ರ",
+  "Admin access required": "ನಿರ್ವಾಹಕ ಪ್ರವೇಶ ಅಗತ್ಯ",
+  "DEMO — fictional": "DEMO — ಕಾಲ್ಪನಿಕ",
+  "Also known as": "ಇತರ ಹೆಸರುಗಳು",
+  "Front": "ಮುಂಭಾಗ",
+  "Left Profile": "ಎಡ ಪ್ರೊಫೈಲ್",
+  "Right Profile": "ಬಲ ಪ್ರೊಫೈಲ್",
+  "Personal & Physical": "ವೈಯಕ್ತಿಕ ಮತ್ತು ದೈಹಿಕ",
+  "Contact Details": "ಸಂಪರ್ಕ ವಿವರಗಳು",
+  "Gender": "ಲಿಂಗ",
+  "Date of Birth": "ಜನ್ಮ ದಿನಾಂಕ",
+  "Height": "ಎತ್ತರ",
+  "Build": "ದೇಹ ರಚನೆ",
+  "Complexion": "ಮೈಬಣ್ಣ",
+  "Blood Group": "ರಕ್ತ ಗುಂಪು",
+  "Nationality": "ರಾಷ್ಟ್ರೀಯತೆ",
+  "Identifying Marks": "ಗುರುತಿನ ಚಿಹ್ನೆಗಳು",
+  "Primary Phone": "ಪ್ರಾಥಮಿಕ ಫೋನ್",
+  "Secondary Phone": "ಮಾಧ್ಯಮಿಕ ಫೋನ್",
+  "Home Address": "ಮನೆ ವಿಳಾಸ",
+  "Bank Accounts": "ಬ್ಯಾಂಕ್ ಖಾತೆಗಳು",
+  "accounts": "ಖಾತೆಗಳು",
+  "Bank": "ಬ್ಯಾಂಕ್",
+  "Account No.": "ಖಾತೆ ಸಂಖ್ಯೆ",
+  "Type": "ವಿಧ",
+  "Balance": "ಬಾಕಿ",
+  "Flag": "ಫ್ಲ್ಯಾಗ್",
+  "records": "ದಾಖಲೆಗಳು",
+  "open": "ತೆರೆದ",
+  "Family Members": "ಕುಟುಂಬ ಸದಸ್ಯರು",
+  "Known Associates / Contacts": "ಪರಿಚಿತ ಆರೋಪಿಗಳು / ಸಂಪರ್ಕಗಳು",
+  "No records.": "ಯಾವುದೇ ದಾಖಲೆಗಳಿಲ್ಲ.",
+  "Print / Export PDF": "PDF ಮುದ್ರಿಸಿ / ರಫ್ತು",
+  "Sentence": "ಶಿಕ್ಷೆ",
+  "years": "ವರ್ಷಗಳು",
+  "Person 360": "ವ್ಯಕ್ತಿ 360",
+
+  // ── Map / Ops legend ──────────────────────────────────────────────────────
+  "Crime density": "ಅಪರಾಧ ಸಾಂದ್ರತೆ",
+  "Incident": "ಘಟನೆ",
+  "Corridor": "ಕಾರಿಡಾರ್",
+  "Signal": "ಸಂಕೇತ",
+  "Heatmap": "ಹೀಟ್‌ಮ್ಯಾಪ್",
+  "Routes": "ಮಾರ್ಗಗಳು",
+  "DEMO": "ಡೆಮೋ",
+  "GREEN CORRIDOR ACTIVE": "ಹಸಿರು ಕಾರಿಡಾರ್ ಸಕ್ರಿಯ",
+  "signals": "ಸಂಕೇತಗಳು",
+  "Heatmap shows real crime density from the case dataset. Patrols, scenes and green corridors appear here live once Response Ops is running.":
+    "ಹೀಟ್‌ಮ್ಯಾಪ್ ಪ್ರಕರಣ ಡೇಟಾಸೆಟ್‌ನಿಂದ ನಿಜ ಅಪರಾಧ ಸಾಂದ್ರತೆ ತೋರಿಸುತ್ತದೆ. Response Ops ಚಾಲನೆಯಾದ ನಂತರ ಗಸ್ತು, ದೃಶ್ಯಗಳು ಮತ್ತು ಹಸಿರು ಕಾರಿಡಾರ್‌ಗಳು ಲೈವ್ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತವೆ.",
+
+  "Reset all cached translations": "ಎಲ್ಲ ಸಂಗ್ರಹಿಸಿದ ಅನುವಾದಗಳನ್ನು ರೀಸೆಟ್ ಮಾಡಿ",
+  "Camera": "ಕ್ಯಾಮೆರಾ",
+  "Live Ops": "ಲೈವ್ ಕಾರ್ಯಾಚರಣೆ",
+  "Dispatch": "ರವಾನೆ",
+  "Predictive": "ಭವಿಷ್ಯಸೂಚಕ",
+  "Trends": "ಪ್ರವೃತ್ತಿಗಳು",
+  "Forecast": "ಮುನ್ಸೂಚನೆ",
+  "Socio": "ಸಾಮಾಜಿಕ",
+  "About": "ಬಗ್ಗೆ",
 };
 
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (s: string) => string };
 const I18nCtx = createContext<Ctx>({ lang: "EN", setLang: () => {}, t: (s) => s });
 
-// ── localStorage key for LLM-enriched translations ────────────────────────
+// ── Static manifest of ALL strings known to need translation ─────────────
+// Generated from `select-string -pattern 't\("([^"]+)"\)'` across all source files.
+// This is the ground truth — enrichDictWithLLM sends these to Groq so the
+// button works on first click without requiring any pre-browsing.
+const ALL_TRANSLATABLE: string[] = [
+  "Access your forensics workspace","Accused","Acquiring signal…","Action",
+  "Add a workspace account to start switching between identities.",
+  "Add an account","Add another account","Admin access required","Age",
+  "AI builds the scene — use tldraw tools to edit anything.",
+  "AI detection · human confirmation · incident filing","AI Digital Forensics","All",
+  "Apply","Ask Satyam… (EN or ಕನ್ನಡ)","Audit","Back to home","Browse offenders…",
+  "Browser","Build","Building Network Graph…","Camera","Camera Review",
+  "Camera unavailable — check browser permissions.","Cancel deletion",
+  "Cannot remove the only account","Capture","Case","Chain-of-Custody",
+  "Change photo","Citations","Clear","Cleared","Close","Cloud · fastest",
+  "Cluster","clusters","Community","Compliance",
+  "Confidential · Karnataka State Police · Synthetic data only",
+  "Confirm account deletion","Confirm data export",
+  "Connecting to Groq Llama-3.1-70B…","Connections","Console","Conversation",
+  "Conversation mode · just talk, the agent replies and listens again.",
+  "Conversations","Copied","Copy","Could not load profile.",
+  "Could not load your linked accounts. Check your connection and try again.",
+  "Couldn't load accounts","Count","Crime × Period intensity",
+  "Crime hotspots forecasting · resource allocation planning",
+  "Crime overview · live","Crime type filter…","Crime type…","Custom","Data",
+  "Date","Decision support only — not predictive policing.","Default","Delete",
+  "Delete my account data","Deletion scheduled","Depth",
+  "Describe suspects, evidence, crime scene… (Ctrl+Enter)","Dispatch",
+  "Dispatch & Green Corridor",
+  "Dispatch patrol units · priority signal corridor · live tracking",
+  "Distribution","District","District filter…","District…",
+  "Don't have an account?","Download export","e.g. Promoted to SP — district handover",
+  "Embedder — RAG semantic search","Enter name or ID…",
+  "Enter offender name or ID:","Enter suspect name…","Enter your password",
+  "Error","Export","Export my account data","Exporting…","Falling","Features",
+  "Fewer","Finalizes on","Finding similar cases…","FIRs","Forecast",
+  "Forensically Sound","Forgot password?","From","Fullscreen","Generating…",
+  "Google · multimodal · default","GPT-4o · strong reasoning","Granularity","Grid",
+  "History","in","Intensity","JSON snapshot",
+  "Last sign-in: today, 09:42 from Bengaluru (Chrome · Windows)",
+  "Legal code","Linked accounts","Listening…","Live","Live Ops","Loading",
+  "Loading accounts…","Loading audit log…","Loading profile…",
+  "Loading station data…","Loading timeline…","Loading workspace…","Loading…",
+  "low → high","Lowest latency · live captions","Manage accounts","Map","max",
+  "Models","Motives","Narrative","Network","New",
+  "No accounts linked yet","No linked cases found for this node.","No selection",
+  "Nodes, edges, metadata","Note","of","Overview","Password","Patrol","Pause",
+  "PDF, image, CSV — max ~5 MB","Period","Person","Person 360","PNG image",
+  "Predictive","Preparing…","Profile & settings","Protect your account",
+  "PS3 · MO Clustering","PS4 · SP+ access","PS5 · Offender Profile",
+  "PS8 · Predictive Intelligence","QoQ Trend","Quick add — Top Stations","Rate",
+  "Read-only · No edit controls exposed","Refresh","Remember me","Remove",
+  "Remove account","Remove account?","Remove from switcher","Remove photo",
+  "Removing…","Rendered graph snapshot","Reports",
+  "Reranker — cross-encoder scoring",
+  "Reset — allow re-enrichment for new screens",
+  "Restricted — L4 clearance required","Result","Resume","Retake","Rings",
+  "Rising","risk","Role","Runs only once — uses cached result on every subsequent visit",
+  "Save","Save current as preset…","Saved","Schedule deletion (7 days)",
+  "Scheduling…","Score","Search",
+  "Search and add person, FIR, crime type…",
+  "Search by name, email, rank or creator…","Search FIR / crime type…",
+  "Search person, FIR number, crime type…","Search police station…",
+  "Search user, query, result…","Searching…","Seasonal","Sections","Secure Login",
+  "Seed Entity Link Graph","Selection",
+  "Server rejected the request. Please retry.","Settings","Showing",
+  "Sign in to your account","Sign out","Signing in…","Sources","Speaking…",
+  "Speaking… (mic paused)","Stable","Standing by…","Station","Status","Stop",
+  "Switch account","Switch account?","Take me to map","Tap textarea to edit",
+  "Tap the mic to stop & send, or wait for silence.","Tap to stop & send",
+  "Template","Thinking…",
+  "This account will be removed from the switcher.",
+  "This browser has no speech recognition. Use Chrome or Edge.",
+  "Time","Tip: Shift-click nodes to add to selection","To","Today",
+  "Top District","Total","Transcripts","Trend","Trends","Try again",
+  "Type DELETE to confirm","Update profile photo","User","Verifying…","Victims",
+  "View SQL / sources →","Voice","Voice input","Waiting for speech…",
+  "Welcome back, Investigator.","Workspace ready","Yesterday",
+  "Your account will be permanently deleted in",
+];
 const LLM_CACHE_KEY = "satyam.translation.llm-cache";
 
 /** Load any LLM-generated translations cached in localStorage and merge them
@@ -865,44 +1027,61 @@ function loadLLMCache(): Record<string, string> {
 /** Call the backend /settings/translate endpoint which uses Groq Llama-3.1-70B
  *  to translate all DICT keys that currently fall back to English.
  *
- *  - Finds every key where DICT[key] === key (no translation yet)
- *  - Sends them in batches of 20 to the backend
- *  - Merges results back into the live dict and caches in localStorage
- *  - Returns the number of new translations added
+ *  Strategy: we use a tracking proxy — render a fake KN pass over every known
+ *  DICT key AND collect any string seen by t() that had no translation.
+ *  All untranslated strings (returned as-is) are sent to Groq in batches.
  */
 export async function enrichDictWithLLM(
-  onProgress?: (msg: string, count: number) => void,
+  onProgress?: (msg: string, count: number, total: number) => void,
 ): Promise<number> {
-  const API_BASE =
-    typeof window !== "undefined"
-      ? (window as any).__VITE_API_BASE_URL__ ?? "http://localhost:8000"
-      : "http://localhost:8000";
+  const { API_BASE, getAuthToken } = await import("@/lib/api/client");
+  const token = getAuthToken() ?? "";
 
-  const token = typeof window !== "undefined"
-    ? (localStorage.getItem("satyam.token") ?? "")
-    : "";
+  // Collect strings that have NO Kannada translation:
+  // 1. Every key in DICT that maps to itself (shouldn't happen, but covers edge cases)
+  // 2. Strings collected via the runtime miss tracker (populated during normal use)
+  const missedKey = "satyam.translation.misses";
+  let runtimeMisses: string[] = [];
+  try {
+    const raw = localStorage.getItem(missedKey);
+    if (raw) runtimeMisses = JSON.parse(raw) as string[];
+  } catch {}
 
-  // Find all keys that still fall back to themselves (untranslated)
-  const missing = Object.keys(DICT).filter((k) => DICT[k] === k);
+  // Combine: static manifest + runtime misses — everything needing translation
+  // Filter to only strings not already in DICT with a real Kannada value
+  const selfHits = Object.keys(DICT).filter((k) => DICT[k] === k);
+  const allMissing = Array.from(new Set([...ALL_TRANSLATABLE, ...selfHits, ...runtimeMisses]))
+    .filter((s) => {
+      if (!s || s.trim().length <= 1) return false;
+      // Skip if already in DICT with a real Kannada translation
+      const existing = DICT[s];
+      if (existing && existing !== s && /[\u0C80-\u0CFF]/.test(existing)) return false;
+      // Skip pure numbers / symbols
+      if (/^[\d\s.%,:/()[\]{}#@!?]+$/.test(s)) return false;
+      // Skip strings already in Kannada
+      if (/[\u0C80-\u0CFF]/.test(s)) return false;
+      return true;
+    });
 
-  // Also include keys not in DICT at all — they'd appear as raw English in KN mode
-  // We only know about DICT keys, so we just work with those for now
-  if (missing.length === 0) {
-    onProgress?.("All translations already present in DICT.", 0);
+  if (allMissing.length === 0) {
+    onProgress?.(`All ${ALL_TRANSLATABLE.length} strings are already translated — nothing to enrich.`, 0, 0);
+    try { localStorage.removeItem(missedKey); } catch {}
     return 0;
   }
 
-  onProgress?.(`Found ${missing.length} untranslated strings — sending to Groq…`, 0);
+  const total = ALL_TRANSLATABLE.length + selfHits.length + runtimeMisses.length;
+  onProgress?.(`Translating ${allMissing.length} UI strings…`, 0, allMissing.length);
 
   const BATCH = 20;
   const allNew: Record<string, string> = {};
   let added = 0;
 
-  for (let i = 0; i < missing.length; i += BATCH) {
-    const batch = missing.slice(i, i + BATCH);
+  for (let i = 0; i < allMissing.length; i += BATCH) {
+    const batch = allMissing.slice(i, i + BATCH);
     onProgress?.(
-      `Translating batch ${Math.floor(i / BATCH) + 1} / ${Math.ceil(missing.length / BATCH)}…`,
+      `UI strings: batch ${Math.floor(i / BATCH) + 1}/${Math.ceil(allMissing.length / BATCH)} · ${added} done`,
       added,
+      allMissing.length,
     );
 
     try {
@@ -922,16 +1101,16 @@ export async function enrichDictWithLLM(
 
       const data: { translations: Record<string, string> } = await res.json();
       for (const [k, v] of Object.entries(data.translations)) {
-        if (v && v !== k) {
-          // Merge into live runtime DICT
+        if (v && v !== k && /[\u0C80-\u0CFF]/.test(v)) {
+          // Valid Kannada translation — apply immediately to live DICT
           DICT[k] = v;
           allNew[k] = v;
           added++;
         }
       }
     } catch (err) {
-      // Skip failed batches — partial enrichment is still useful
       console.warn("[i18n] enrichDictWithLLM batch failed:", err);
+      // Continue with remaining batches — partial enrichment is still useful
     }
   }
 
@@ -939,10 +1118,128 @@ export async function enrichDictWithLLM(
   try {
     const existing = loadLLMCache();
     localStorage.setItem(LLM_CACHE_KEY, JSON.stringify({ ...existing, ...allNew }));
+    // Clear miss tracker — everything has been processed
+    localStorage.removeItem(missedKey);
   } catch {}
 
-  onProgress?.(`Done — ${added} new Kannada translations added.`, added);
+  onProgress?.(`UI strings done — ${added} translated.`, added, allMissing.length);
   return added;
+}
+
+/** Translate synthetic dataset values (station names, districts, crime types, statuses)
+ *  via Groq Llama-3.1-70B and cache them in localStorage for tData() to use.
+ */
+export async function enrichDataWithLLM(
+  onProgress?: (msg: string, count: number, total: number) => void,
+): Promise<number> {
+  const { API_BASE, getAuthToken } = await import("@/lib/api/client");
+  const token = getAuthToken() ?? "";
+
+  // Fetch unique data values from the DB
+  onProgress?.("Fetching unique data values from database…", 0, 1);
+  let dataValues: {
+    station_names: string[];
+    districts: string[];
+    crime_types: string[];
+    statuses: string[];
+  };
+  try {
+    const r = await fetch(`${API_BASE}/settings/data-values`, {
+      headers: { ...(token ? { authorization: `Bearer ${token}` } : {}) },
+    });
+    if (!r.ok) throw new Error(`${r.status}`);
+    dataValues = await r.json();
+  } catch (err) {
+    onProgress?.(`Could not fetch data values: ${err}. Skipping data translation.`, 0, 0);
+    return 0;
+  }
+
+  // Import setDataTranslations at runtime to avoid circular dependency
+  const { setDataTranslations } = await import("@/lib/tData");
+
+  const SYSTEM = `You are translating Karnataka State Police database values to formal Kannada (ಕನ್ನಡ).
+Rules:
+1. Keep "PS", "Police Station" abbreviations in English within names
+2. Keep district names in Kannada script (they are Karnataka place names)
+3. Station names: translate descriptive parts to Kannada, keep "PS" suffix
+4. Return ONLY valid JSON {"english": "ಕನ್ನಡ", ...}
+5. No markdown, no explanation`;
+
+  const BATCH = 20;
+  let total = 0;
+
+  // Translate each field type
+  const fieldGroups: [string, string[], string][] = [
+    ["station", dataValues.station_names,
+      "Translate these Karnataka police station names to Kannada. Keep 'PS' suffix in English."],
+    ["district", dataValues.districts,
+      "Translate these Karnataka district names to Kannada script."],
+    ["crime_type", dataValues.crime_types,
+      "Translate these crime type names to Kannada. Use official police terminology."],
+    ["status", dataValues.statuses,
+      "Translate these case status values to Kannada."],
+  ];
+
+  for (const [field, values, hint] of fieldGroups) {
+    if (!values.length) continue;
+    const fieldTotal = values.length;
+    onProgress?.(`Translating ${fieldTotal} ${field} values…`, total, total + fieldTotal);
+
+    for (let i = 0; i < values.length; i += BATCH) {
+      const batch = values.slice(i, i + BATCH);
+      onProgress?.(
+        `${field}: batch ${Math.floor(i / BATCH) + 1}/${Math.ceil(values.length / BATCH)} · ${total} done`,
+        total,
+        total + fieldTotal,
+      );
+
+      try {
+        const r = await fetch(`${API_BASE}/settings/translate`, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            ...(token ? { authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({
+            strings: batch,
+            system_hint: hint,
+          }),
+        });
+        if (!r.ok) continue;
+        const data: { translations: Record<string, string> } = await r.json();
+        const valid: Record<string, string> = {};
+        for (const [k, v] of Object.entries(data.translations)) {
+          if (v && v !== k && v.trim()) {
+            valid[k] = v;
+            total++;
+          }
+        }
+        if (Object.keys(valid).length > 0) {
+          setDataTranslations(field, valid);
+        }
+      } catch { /* continue with next batch */ }
+    }
+  }
+
+  onProgress?.(`Data values done — ${total} translated.`, total, total);
+  return total;
+}
+
+/** Track strings that t() returned unchanged (no translation found). */
+function trackMiss(s: string): void {
+  if (typeof window === "undefined" || !s || s.length <= 1) return;
+  // Skip strings that look like they shouldn't be translated
+  if (/^[\d\s.%,:/()[\]{}#@!?]+$/.test(s)) return;
+  if (/[\u0C80-\u0CFF]/.test(s)) return; // already Kannada
+  try {
+    const key = "satyam.translation.misses";
+    const existing: string[] = JSON.parse(localStorage.getItem(key) ?? "[]");
+    if (!existing.includes(s)) {
+      existing.push(s);
+      // Cap at 500 to avoid storage bloat
+      localStorage.setItem(key, JSON.stringify(existing.slice(-500)));
+    }
+  } catch {}
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
@@ -971,7 +1268,14 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const t = (s: string) => (lang === "KN" ? (DICT[s] ?? s) : s);
+  const t = (s: string) => {
+    if (lang !== "KN") return s;
+    const translation = DICT[s];
+    if (translation !== undefined) return translation;
+    // Track this as a miss so enrichDictWithLLM can find and translate it later
+    trackMiss(s);
+    return s;
+  };
 
   return <I18nCtx.Provider value={{ lang, setLang, t }}>{children}</I18nCtx.Provider>;
 }

@@ -6,7 +6,8 @@ import {
   User, Phone, MapPin, Banknote, Scale, Users, Contact,
   ChevronRight, Printer, Lock, X, ZoomIn,
 } from "lucide-react";
-import { useT } from "@/lib/i18n";
+import { useT, useI18n } from "@/lib/i18n";
+import { tData } from "@/lib/tData";
 import { dossier, type DossierListItem, type DossierDetail } from "@/lib/api/dossier";
 import { useRouterState } from "@tanstack/react-router";
 
@@ -44,12 +45,13 @@ function RiskBadge({ level }: { level: string | null }) {
 function FaceCard({ front, left, right, name }: {
   front: string | null; left: string | null; right: string | null; name: string;
 }) {
+  const t = useT();
   const [lightbox, setLightbox] = useState<string | null>(null);
   const PLACEHOLDER = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjE0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTIwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI2NkZDZlMCIvPjx0ZXh0IHg9IjYwIiB5PSI3NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzZiNzI4MCI+Tm8gcGhvdG88L3RleHQ+PC9zdmc+";
   const shots = [
-    { src: front, label: "Front" },
-    { src: left,  label: "Left Profile" },
-    { src: right, label: "Right Profile" },
+    { src: front, label: t("Front") },
+    { src: left,  label: t("Left Profile") },
+    { src: right, label: t("Right Profile") },
   ];
   return (
     <>
@@ -213,14 +215,14 @@ function DossierScreen() {
               <Search className="h-3.5 w-3.5 text-muted-foreground" />
               <input
                 value={search} onChange={e => setSearch(e.target.value)}
-                placeholder="Search name / district…"
+                placeholder={t("Search name / district…")}
                 className="flex-1 bg-transparent text-xs outline-none placeholder:text-muted-foreground"
               />
             </div>
           </div>
           <div className="flex-1 overflow-auto">
             {list.length === 0 && (
-              <div className="p-4 text-xs text-muted-foreground animate-pulse">Loading…</div>
+              <div className="p-4 text-xs text-muted-foreground animate-pulse">{t("Loading…")}</div>
             )}
             {filtered.map(p => (
               <button
@@ -252,7 +254,7 @@ function DossierScreen() {
           {/* Demo notice */}
           <div className="border-t-2 border-foreground bg-yellow-50 dark:bg-yellow-900/20 px-3 py-2">
             <p className="text-[9px] font-bold uppercase tracking-wider text-yellow-700 dark:text-yellow-400">
-              ⚠ Demo data — fictional only
+              ⚠ {t("Demo data — fictional only")}
             </p>
           </div>
         </aside>
@@ -283,7 +285,9 @@ function DossierScreen() {
           ) : !selected ? (
             <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground">
               <Fingerprint className="h-12 w-12 opacity-30" />
-              <p className="text-sm">Select a person from the list</p>
+              <p className="text-sm">
+                {t("Select a person from the list")}
+              </p>
             </div>
           ) : (
             <DossierDetailPane d={selected} onPrint={() => window.print()} />
@@ -297,6 +301,7 @@ function DossierScreen() {
 // ── Detail pane ──────────────────────────────────────────────────────────
 function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => void }) {
   const t = useT();
+  const { lang } = useI18n();
   const fmt = (v: number) =>
     new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(v);
 
@@ -315,12 +320,12 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
                 </span>
               )}
               <span className="inline-flex items-center rounded-[4px] border border-yellow-400 bg-yellow-50 px-2 py-0.5 text-[9px] font-bold text-yellow-700">
-                DEMO — fictional
+                {t("DEMO — fictional")}
               </span>
             </div>
             {d.aliases && d.aliases.length > 0 && (
               <p className="mt-0.5 text-xs text-muted-foreground">
-                Also known as: {d.aliases.join(", ")}
+                {t("Also known as")}: {d.aliases.join(", ")}
               </p>
             )}
             <p className="mt-1 text-sm text-foreground/80 max-w-xl">{d.summary}</p>
@@ -329,7 +334,7 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
             onClick={onPrint}
             className="shrink-0 inline-flex items-center gap-1.5 rounded-[6px] border-2 border-foreground bg-muted px-3 py-1.5 text-xs font-bold hover:bg-card transition"
           >
-            <Printer className="h-3.5 w-3.5" /> Print / Export PDF
+            <Printer className="h-3.5 w-3.5" /> {t("Print / Export PDF")}
           </button>
         </div>
 
@@ -341,34 +346,34 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* Personal & Physical */}
-        <Section icon={User} title="Personal & Physical">
+        <Section icon={User} title={t("Personal & Physical")}>
           <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-            <Field label="Gender" value={d.gender} />
-            <Field label="Date of Birth" value={d.dob ?? "—"} />
-            <Field label="Age" value={d.age != null ? `${d.age} years` : null} />
-            <Field label="Height" value={d.height_cm != null ? `${d.height_cm} cm` : null} />
-            <Field label="Build" value={d.build} />
-            <Field label="Complexion" value={d.complexion} />
-            <Field label="Blood Group" value={d.blood_group} />
-            <Field label="Nationality" value={d.nationality} />
+            <Field label={t("Gender")} value={d.gender} />
+            <Field label={t("Date of Birth")} value={d.dob ?? "—"} />
+            <Field label={t("Age")} value={d.age != null ? `${d.age} ${t("years")}` : null} />
+            <Field label={t("Height")} value={d.height_cm != null ? `${d.height_cm} cm` : null} />
+            <Field label={t("Build")} value={d.build} />
+            <Field label={t("Complexion")} value={d.complexion} />
+            <Field label={t("Blood Group")} value={d.blood_group} />
+            <Field label={t("Nationality")} value={d.nationality} />
           </div>
           {d.identifying_marks && (
             <div className="mt-2">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Identifying Marks</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("Identifying Marks")}</div>
               <div className="mt-0.5 rounded-[4px] border border-border bg-muted/30 px-2 py-1 text-xs font-medium">{d.identifying_marks}</div>
             </div>
           )}
         </Section>
 
         {/* Contact details */}
-        <Section icon={Phone} title="Contact Details">
+        <Section icon={Phone} title={t("Contact Details")}>
           <div className="space-y-2">
-            <Field label="Primary Phone" value={d.primary_phone} />
-            <Field label="Secondary Phone" value={d.secondary_phone} />
-            <Field label="Email" value={d.email} />
+            <Field label={t("Primary Phone")} value={d.primary_phone} />
+            <Field label={t("Secondary Phone")} value={d.secondary_phone} />
+            <Field label={t("Email")} value={d.email} />
           </div>
           <div className="mt-3">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Home Address</div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("Home Address")}</div>
             <div className="mt-0.5 text-sm">{d.home_address ?? "—"}</div>
             <div className="text-xs text-muted-foreground">{d.district} — {d.pincode}</div>
           </div>
@@ -376,18 +381,18 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
       </div>
 
       {/* Bank Accounts */}
-      <Section icon={Banknote} title={`Bank Accounts — ${d.bank_account_count} accounts · ${fmt(Number(d.total_balance_inr))} total`}>
+      <Section icon={Banknote} title={`${t("Bank Accounts")} — ${d.bank_account_count} ${t("accounts")} · ${fmt(Number(d.total_balance_inr))} ${t("total")}`}>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
               <tr className="border-b-2 border-foreground text-left">
-                <th className="pb-1.5 font-bold pr-3">Bank</th>
-                <th className="pb-1.5 font-bold pr-3">Account No.</th>
+                <th className="pb-1.5 font-bold pr-3">{t("Bank")}</th>
+                <th className="pb-1.5 font-bold pr-3">{t("Account No.")}</th>
                 <th className="pb-1.5 font-bold pr-3">IFSC</th>
-                <th className="pb-1.5 font-bold pr-3">Type</th>
-                <th className="pb-1.5 font-bold pr-3 text-right">Balance</th>
-                <th className="pb-1.5 font-bold pr-3">Status</th>
-                <th className="pb-1.5 font-bold">Flag</th>
+                <th className="pb-1.5 font-bold pr-3">{t("Type")}</th>
+                <th className="pb-1.5 font-bold pr-3 text-right">{t("Balance")}</th>
+                <th className="pb-1.5 font-bold pr-3">{t("Status")}</th>
+                <th className="pb-1.5 font-bold">{t("Flag")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -419,7 +424,7 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
       </Section>
 
       {/* Crime History */}
-      <Section icon={Scale} title={`Crime History — ${d.crimes.length} records · ${d.open_case_count} open`}>
+      <Section icon={Scale} title={`${t("Crime History")} — ${d.crimes.length} ${t("records")} · ${d.open_case_count} ${t("open")}`}>
         <div className="space-y-3">
           {d.crimes.map(c => (
             <div key={c.id} className={`rounded-[6px] border-2 p-3 ${c.status === "Open" ? "border-destructive/60 bg-destructive/5" : c.status === "Convicted" ? "border-purple-500/40 bg-purple-50/40 dark:bg-purple-900/10" : "border-foreground bg-background"}`}>
@@ -437,10 +442,10 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
               </div>
               <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-muted-foreground">
                 {c.occurred_on && <span>📅 {c.occurred_on}</span>}
-                {c.station && <span>🏛 {c.station}</span>}
+                {c.station && <span>🏛 {tData("station", c.station, lang)}</span>}
                 {c.sections && <span className="font-mono">§ {c.sections}</span>}
               </div>
-              {c.sentence && <p className="mt-1 text-[10px] font-medium text-purple-700 dark:text-purple-300">Sentence: {c.sentence}</p>}
+              {c.sentence && <p className="mt-1 text-[10px] font-medium text-purple-700 dark:text-purple-300">{t("Sentence")}: {c.sentence}</p>}
               {c.narrative && <p className="mt-1 text-[11px] text-foreground/75 leading-snug">{c.narrative}</p>}
             </div>
           ))}
@@ -449,8 +454,8 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* Family */}
-        <Section icon={Users} title="Family Members">
-          {d.family.length === 0 ? <p className="text-xs text-muted-foreground">No records.</p> : (
+        <Section icon={Users} title={t("Family Members")}>
+          {d.family.length === 0 ? <p className="text-xs text-muted-foreground">{t("No records.")}</p> : (
             <div className="space-y-2">
               {d.family.map(f => (
                 <div key={f.id} className="rounded-[6px] border border-border bg-muted/20 px-3 py-2">
@@ -471,8 +476,8 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
         </Section>
 
         {/* Contacts / Known associates */}
-        <Section icon={Contact} title="Known Associates / Contacts">
-          {d.contacts.length === 0 ? <p className="text-xs text-muted-foreground">No records.</p> : (
+        <Section icon={Contact} title={t("Known Associates / Contacts")}>
+          {d.contacts.length === 0 ? <p className="text-xs text-muted-foreground">{t("No records.")}</p> : (
             <div className="space-y-2">
               {d.contacts.map(c => (
                 <div key={c.id} className="rounded-[6px] border border-border bg-muted/20 px-3 py-2">
