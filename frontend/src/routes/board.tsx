@@ -20,11 +20,8 @@ import {
   type TLShapeId,
 } from "tldraw";
 import "tldraw/tldraw.css";
-
-type TLColorType =
-  | "red" | "blue" | "green" | "yellow" | "violet"
-  | "light-red" | "orange" | "black" | "grey"
-  | "light-blue" | "light-green" | "light-violet" | "white";
+import { layoutScene, hexToTlColor } from "@/lib/boardLayout";
+import type { SceneNode, SceneEdge } from "@/lib/api/board";
 
 export const Route = createFileRoute("/board")({
   head: () => ({ meta: [{ title: "Investigation Board · Satyam" }] }),
@@ -32,38 +29,53 @@ export const Route = createFileRoute("/board")({
 });
 
 // ── Color + geo helpers ───────────────────────────────────────────────────
-const TL_COLORS: Record<string, TLColorType> = {
-  "#ef4444": "red",    red: "red",
-  "#3b82f6": "blue",   blue: "blue",
-  "#22c55e": "green",  green: "green",
-  "#f59e0b": "yellow", yellow: "yellow",
-  "#a855f7": "violet", violet: "violet",
-  "#ff5ce0": "light-red",
-  "#f97316": "orange", orange: "orange",
-};
+// Hex → tldraw color token mapping now lives in boardLayout.ts (hexToTlColor)
+// Keep a small local alias for the geo type
+type TLColorType =
+  | "red" | "blue" | "green" | "yellow" | "violet"
+  | "light-red" | "orange" | "black" | "grey"
+  | "light-blue" | "light-green" | "light-violet" | "white";
+
 function tlColor(c?: string | null): TLColorType {
-  if (!c) return "blue";
-  return TL_COLORS[c.toLowerCase()] ?? "blue";
+  return (hexToTlColor(c ?? "") || "blue") as TLColorType;
 }
 
-// ── Map AI SceneGraph → tldraw shapes ────────────────────────────────────
-function applySceneToEditor(
+// ── geo shape name → tldraw geo type ─────────────────────────────────────
+const GEO_MAP: Record<string, string> = {
+  rectangle: "rectangle", ellipse: "ellipse", diamond: "diamond",
+  hexagon: "hexagon", cloud: "cloud", star: "star", triangle: "triangle",
+  rhombus: "rhombus", "arrow-right": "arrow-right", "arrow-down": "arrow-down",
+  "x-box": "x-box", "check-box": "check-box",
+};
+
+// ── Apply AI SceneGraph → tldraw (async: runs dagre/elk layout first) ────
+async function applySceneToEditor(
   editor: Editor,
-  nodes: { id: string; type: string; x: number; y: number; w?: number; h?: number; label?: string; color?: string }[],
-  edges: { source: string; target: string; label?: string; color?: string; style?: string }[],
+  rawNodes: SceneNode[],
+  rawEdges: SceneEdge[],
 ) {
+  // Run production layout engine + colour harmony
+  const { nodes, edges } = await layoutScene(rawNodes, rawEdges);
+
   const idMap: Record<string, TLShapeId> = {};
+
   for (const n of nodes) {
     const sid = createShapeId();
     idMap[n.id] = sid;
-    const w = n.w ?? 220, h = n.h ?? 80;
+    const w = n.w ?? 220;
+    const h = n.h ?? 100;
     const col = tlColor(n.color);
+    // Map brain shape type → tldraw geo name
+    const geo = (GEO_MAP[n.type] ?? "rectangle") as any;
+    // Decide fill: solid for most, semi for notes/warnings
+    const fill = (["note","warning","decision"].includes(n.entity_kind ?? "")
+      ? "semi" : "solid") as any;
+
     editor.createShape({
       id: sid, type: "geo", x: n.x, y: n.y,
       props: {
-        w, h, geo: "rectangle" as any, color: col,
-        fill: n.type === "note" ? "semi" : "solid" as any,
-        dash: "solid" as any, size: "s" as any,
+        w, h, geo, color: col, fill,
+        dash: "solid" as any, size: "m" as any,
         font: "sans" as any, align: "middle" as any,
         verticalAlign: "middle" as any,
         richText: toRichText(n.label ?? ""),
@@ -71,6 +83,7 @@ function applySceneToEditor(
       },
     });
   }
+
   for (const e of edges) {
     const srcId = idMap[e.source], tgtId = idMap[e.target];
     if (!srcId || !tgtId) continue;
@@ -96,7 +109,8 @@ function applySceneToEditor(
         props: { terminal: "end",   normalizedAnchor: { x: 0.5, y: 0.5 }, isExact: false, isPrecise: false } },
     ]);
   }
-  editor.zoomToFit({ animation: { duration: 400 } });
+
+  editor.zoomToFit({ animation: { duration: 500 } });
 }
 
 // ── Quick-insert shape palette (geo variants, errors, annotations) ────────
@@ -627,7 +641,7 @@ function BoardInner({
       if (scene.nodes.length === 0) {
         toast.info("AI returned an empty scene. Try a more specific prompt.");
       } else {
-        applySceneToEditor(editor, scene.nodes as any, scene.edges as any);
+        await applySceneToEditor(editor, scene.nodes as any, scene.edges as any);
         toast.success(`Added ${scene.nodes.length} shapes, ${scene.edges.length} connections.`);
         setAiPrompt(""); setAiImages([]);
       }
