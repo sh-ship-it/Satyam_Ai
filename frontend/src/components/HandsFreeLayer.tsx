@@ -191,15 +191,18 @@ export function HandsFreeLayer() {
     });
 
     const onVoiceOpen = () => pauseWakeWord();
+    const onVoiceClosed = () => resumeWakeWord();
     const onAiState = (e: Event) => {
       if ((e as CustomEvent).detail?.state === "done") resumeWakeWord();
     };
     window.addEventListener("satyam:open-voice", onVoiceOpen);
+    window.addEventListener("satyam:voice-closed", onVoiceClosed);
     window.addEventListener("satyam:ai-state", onAiState as EventListener);
 
     return () => {
       stop();
       window.removeEventListener("satyam:open-voice", onVoiceOpen);
+      window.removeEventListener("satyam:voice-closed", onVoiceClosed);
       window.removeEventListener("satyam:ai-state", onAiState as EventListener);
     };
   }, [settings.enabled, settings.wakeWord, lang]);

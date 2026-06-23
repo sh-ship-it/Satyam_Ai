@@ -351,7 +351,7 @@ The top-right copilot supports two STT engines, switchable in Settings → Model
 | **Sarvam Saaras v3** | `copilotStt: "sarvam"` | Utterance upload → best Kannada accuracy, ~1.5s wait, any browser |
 
 - `copilotStt` is stored in `localStorage` under `satyam.engine-settings` and merged with `loadEngineSettings()` spread-defaults so existing users inherit `"browser"` automatically.
-- The copilot brain is always **Gemini** and the spoken reply always uses **Sarvam Bulbul**; the STT toggle changes only microphone transcription.
+- The copilot uses **one engine for both its mic and its spoken replies**: when `copilotStt = "browser"`, the copilot listens *and* speaks with the device's built-in Web-Speech voice; when `"sarvam"`, it uses Sarvam STT + Sarvam Bulbul TTS. This override is applied via `copilotVoiceProvider()` in `Shell.tsx`, which passes a `providerOverride` to `speak()`. The global **Voice (Text-to-Speech)** setting still governs the chat-box / console read-aloud independently.
 - The chat-box mic (`toggleChatDictation` in `console.tsx`) writes only to the `input` state and never touches copilot state or dispatches `satyam:open-voice`. This is a permanent fix for the regression where the chat-box mic used to open the copilot panel.
 
 ```
@@ -1178,7 +1178,9 @@ pauseWakeWord()   — tears down the recognizer (called when copilot mic opens)
 resumeWakeWord()  — rebuilds the recognizer (called on satyam:ai-state "done")
 ```
 
-Chrome only allows **one** `SpeechRecognition` at a time. The pause/resume cycle prevents the wake-word listener and the copilot mic from fighting over the audio device.
+Chrome only allows **one** `SpeechRecognition` at a time. The pause/resume cycle prevents the wake-word listener and the copilot mic from fighting over the audio device. The wake word is enabled together with gestures by the header **Hands-free** toggle (and individually in Settings). It pauses on `satyam:open-voice` and resumes on **either** `satyam:voice-closed` (panel closed) **or** `satyam:ai-state "done"` — so a navigation-only command can never leave it stuck paused.
+
+**Single-voice guarantee:** `tts.ts` uses a monotonic `speechSession` token plus a per-clip `started` flag. A Sarvam/Google clip that has begun playing will **never** trigger the browser-speech fallback, and any superseded in-flight `speak()` aborts silently — so the user hears exactly one voice (the chosen provider), never Sarvam plus a browser/Google voice on top.
 
 ### 24.7 Face-presence Auto-lock
 

@@ -20,6 +20,10 @@ import { loadEngineSettings } from "@/components/SettingsDialog";
 export type SpeakHooks = { onStart?: () => void; onEnd?: () => void };
 
 let currentAudio: HTMLAudioElement | null = null;
+// Monotonic token: every speak() call claims the next id. A call only produces
+// sound / fallback while it is still the latest one, so overlapping callers can
+// never double up (e.g. Sarvam clip + a stale browser fallback at the same time).
+let speechSession = 0;
 
 // ── Markdown stripper for clean TTS ──────────────────────────────────────────
 /**
@@ -133,6 +137,7 @@ export function unlockAudioPlayback(): void {
 
 /** Stop any in-flight speech — fetched clip AND browser voice. */
 export function cancelSpeech(): void {
+  speechSession++; // invalidate any in-flight speak() awaiting a fetch
   if (currentAudio) {
     try {
       currentAudio.pause();
@@ -273,15 +278,19 @@ export async function speak(
   lang: "en" | "kn",
   rate = 1,
   hooks?: SpeakHooks,
+  providerOverride?: "sarvam" | "google" | "webspeech",
 ): Promise<void> {
   cancelSpeech();
+  const session = ++speechSession; // claim this turn
   const cleaned = stripMarkdown(text);
   if (!cleaned) {
     hooks?.onEnd?.();
     return;
   }
 
-  const provider = loadEngineSettings().voiceBackend; // "sarvam" | "google" | "webspeech"
+  // An explicit override (e.g. the voice copilot forcing its own engine) wins
+  // over the global Settings → Models "Voice (Text-to-Speech)" choice.
+  const provider = providerOverride ?? loadEngineSettings().voiceBackend; // "sarvam" | "google" | "webspeech"
   console.debug("[tts] speak provider=", provider, "lang=", lang);
 
   if (provider === "webspeech") {
@@ -299,12 +308,20 @@ export async function speak(
       lang,
       provider as "sarvam" | "google" | "bhashini",
     );
+    // A newer speak() superseded us while we were fetching — abort silently so
+    // we don't play over the newer utterance. The newer call owns the loop.
+    if (session !== speechSession) return;
     if (!audio_base64) throw new Error("empty audio response");
     const url = URL.createObjectURL(b64ToBlob(audio_base64, mime || "audio/wav"));
     const audio = new Audio(url);
     audio.playbackRate = Math.max(0.1, rate || 1);
     currentAudio = audio;
-    audio.onplay = () => hooks?.onStart?.();
+    let started = false; // once the Sarvam/Google clip actually plays, never
+                         // fall back to the browser voice (prevents double audio)
+    audio.onplay = () => {
+      started = true;
+      hooks?.onStart?.();
+    };
     audio.onended = () => {
       if (currentAudio === audio) currentAudio = null;
       URL.revokeObjectURL(url);
@@ -313,13 +330,17 @@ export async function speak(
     audio.onerror = () => {
       if (currentAudio === audio) currentAudio = null;
       URL.revokeObjectURL(url);
-      // Provider audio failed — degrade to browser voice, never strand the loop.
-      browserSpeak(cleaned, lang, rate, hooks);
+      // Only degrade to the browser voice if the provider clip NEVER started and
+      // we're still the active turn — otherwise just end (no second voice).
+      if (!started && session === speechSession) browserSpeak(cleaned, lang, rate, hooks);
+      else hooks?.onEnd?.();
     };
     await audio.play(); // may reject if autoplay not unlocked → caught below
   } catch {
-    // Network / CORS / autoplay block — always fall back, never stall.
-    browserSpeak(cleaned, lang, rate, hooks);
+    // Network / CORS / autoplay block — fall back only if we're still the active
+    // turn and nothing has started, so we never stack a second voice.
+    if (session === speechSession) browserSpeak(cleaned, lang, rate, hooks);
+    else hooks?.onEnd?.();
   }
 }
 

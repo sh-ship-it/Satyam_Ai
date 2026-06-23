@@ -6,6 +6,9 @@ export type Lang = "EN" | "KN";
 const DICT: Record<string, string> = {
   // ── Hands-free / multimodal layer ───────────────────────────────────────────
   "Hands-free": "ಕೈಮುಕ್ತ",
+  "Hands-free camera": "ಕೈಮುಕ್ತ ಕ್ಯಾಮೆರಾ",
+  "Hands-free: on": "ಕೈಮುಕ್ತ: ಆನ್",
+  "Hands-free: off": "ಕೈಮುಕ್ತ: ಆಫ್",
   "Hands-free control": "ಕೈಮುಕ್ತ ನಿಯಂತ್ರಣ",
   "Camera gestures, wake word, and presence-aware auto-lock. All processing stays on this device.":
     "ಕ್ಯಾಮೆರಾ ಸನ್ನೆಗಳು, ವೇಕ್ ವರ್ಡ್ ಮತ್ತು ಉಪಸ್ಥಿತಿ-ಆಧಾರಿತ ಸ್ವಯಂ-ಲಾಕ್. ಎಲ್ಲಾ ಪ್ರಕ್ರಿಯೆ ಈ ಸಾಧನದಲ್ಲೇ ನಡೆಯುತ್ತದೆ.",
@@ -31,6 +34,13 @@ const DICT: Record<string, string> = {
   "Seconds of no detected face before the session locks.":
     "ಸೆಷನ್ ಲಾಕ್ ಆಗುವ ಮೊದಲು ಮುಖ ಪತ್ತೆಯಾಗದ ಸೆಕೆಂಡುಗಳು.",
   "Reset to defaults": "ಡೀಫಾಲ್ಟ್‌ಗೆ ಮರುಹೊಂದಿಸಿ",
+  // Voice copilot engine picker
+  "Voice copilot engine (mic + voice)": "ಧ್ವನಿ ಸಹಾಯಕ ಎಂಜಿನ್ (ಮೈಕ್ + ಧ್ವನಿ)",
+  "Engine for the top-right voice copilot — used for BOTH listening and speaking. The chat-box read-aloud uses the Voice (Text-to-Speech) setting above.":
+    "ಮೇಲಿನ-ಬಲ ಧ್ವನಿ ಸಹಾಯಕದ ಎಂಜಿನ್ — ಆಲಿಸಲು ಮತ್ತು ಮಾತನಾಡಲು ಎರಡಕ್ಕೂ ಬಳಸಲಾಗುತ್ತದೆ. ಚಾಟ್-ಬಾಕ್ಸ್ ಓದುವಿಕೆ ಮೇಲಿನ ಧ್ವನಿ (ಪಠ್ಯದಿಂದ-ಧ್ವನಿ) ಸೆಟ್ಟಿಂಗ್ ಬಳಸುತ್ತದೆ.",
+  "Browser (built-in)": "ಬ್ರೌಸರ್ (ಅಂತರ್ನಿರ್ಮಿತ)",
+  "Device voice · offline · lowest latency": "ಸಾಧನ ಧ್ವನಿ · ಆಫ್‌ಲೈನ್ · ಕಡಿಮೆ ವಿಳಂಬ",
+  "Cloud · best Kannada": "ಕ್ಲೌಡ್ · ಅತ್ಯುತ್ತಮ ಕನ್ನಡ",
 
 
   // Banner / shell

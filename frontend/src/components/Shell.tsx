@@ -21,6 +21,8 @@ import {
   Video,
   Fingerprint,
   Workflow,
+  Camera,
+  CameraOff,
 } from "lucide-react";
 import { type ReactNode, useState, useEffect, useRef, useCallback } from "react";
 import { ThemePicker } from "./ThemePicker";
@@ -28,6 +30,7 @@ import { DarkModeToggle } from "./DarkModeToggle";
 import { SettingsDialog, loadEngineSettings } from "./SettingsDialog";
 import { ProfileMenu } from "./ProfileMenu";
 import { HandsFreeLayer } from "./HandsFreeLayer";
+import { loadHandsFree, saveHandsFree } from "@/config/handsFreeConfig";
 import { useI18n } from "@/lib/i18n";
 import {
   speakViaSarvam,
@@ -42,6 +45,17 @@ import { resolveLang } from "@/lib/voice/lang";
 import { startSttSession, isBackendSttSupported } from "@/lib/voice/recorder";
 import { streamChat, type ChatEvent } from "@/lib/api/client";
 import { planVoiceAction, type AgentPlan } from "@/lib/api/voiceAgent";
+
+// The voice copilot (top-right) uses ONE engine for BOTH listening and speaking.
+// When its mic engine is "browser", replies use the device's built-in Web-Speech
+// voice; when "sarvam", replies use the server voice provider. This overrides the
+// global Settings → "Voice (Text-to-Speech)" choice (which still governs the
+// chat-box / console read-aloud).
+function copilotVoiceProvider(): "sarvam" | "google" | "webspeech" {
+  const eng = loadEngineSettings();
+  if (eng.copilotStt === "browser") return "webspeech";
+  return eng.voiceBackend === "webspeech" ? "sarvam" : eng.voiceBackend;
+}
 
 type VoiceScreen = { to: string; words: RegExp };
 const SCREEN_ROUTES: VoiceScreen[] = [
@@ -142,6 +156,39 @@ export function Shell({ children }: { children: ReactNode }) {
   }, []);
   const [listening, setListening] = useState(false);
   const [micActive, setMicActive] = useState(false);
+
+  // Hands-free master switch mirrored for the header camera toggle. Stays in
+  // sync with the Settings → Hands-free tab via the "satyam:handsfree-settings"
+  // broadcast that saveHandsFree() dispatches.
+  const [handsFreeOn, setHandsFreeOn] = useState<boolean>(() => {
+    try {
+      return loadHandsFree().enabled;
+    } catch {
+      return false;
+    }
+  });
+  useEffect(() => {
+    const onHF = () => setHandsFreeOn(loadHandsFree().enabled);
+    window.addEventListener("satyam:handsfree-settings", onHF);
+    return () => window.removeEventListener("satyam:handsfree-settings", onHF);
+  }, []);
+  // Announce when the voice panel closes so the hands-free wake word can resume
+  // listening (it is paused while the copilot mic is open to avoid two Web-Speech
+  // recognizers fighting over the audio device).
+  useEffect(() => {
+    if (!listening) window.dispatchEvent(new CustomEvent("satyam:voice-closed"));
+  }, [listening]);
+  const toggleHandsFree = useCallback(() => {
+    const cur = loadHandsFree();
+    const next = cur.enabled
+      ? { ...cur, enabled: false }
+      // Turning hands-free ON from the header enables the full experience —
+      // gestures + wake word — so "Satyam" works immediately without diving
+      // into Settings. Granular off-switches still live in Settings → Hands-free.
+      : { ...cur, enabled: true, gestures: true, wakeWord: true };
+    saveHandsFree(next);
+    setHandsFreeOn(next.enabled);
+  }, []);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [finalTranscript, setFinalTranscript] = useState("");
@@ -260,7 +307,7 @@ export function Shell({ children }: { children: ReactNode }) {
       void speakViaSarvam(text, lang, rate, {
         onStart: () => setIsSpeaking(true),
         onEnd: () => setIsSpeaking(false),
-      });
+      }, copilotVoiceProvider());
     };
 
     const NAV_LABEL: Record<string, string> = {
@@ -336,7 +383,7 @@ export function Shell({ children }: { children: ReactNode }) {
           void speakViaSarvam(stripMarkdown(toSpeak), spokenLang, rate, {
             onStart: () => aiState("speaking"),
             onEnd: () => aiState("done"),
-          });
+          }, copilotVoiceProvider());
         };
         void streamChat(
           {
@@ -383,7 +430,7 @@ export function Shell({ children }: { children: ReactNode }) {
           void speakViaSarvam(stripMarkdown(text), sl, speechRate, {
             onStart: () => setIsSpeaking(true),
             onEnd: () => setIsSpeaking(false),
-          });
+          }, copilotVoiceProvider());
         };
         void planVoiceAction({
           command: question,
@@ -904,6 +951,19 @@ export function Shell({ children }: { children: ReactNode }) {
         </div>
 
         <div className="flex items-center gap-1.5">
+          <button
+            onClick={toggleHandsFree}
+            className={`flex items-center gap-1.5 rounded-[5px] border-2 border-header-foreground px-2.5 py-1.5 text-xs font-bold transition hover:translate-x-[2px] hover:translate-y-[2px] ${
+              handsFreeOn
+                ? "bg-primary text-primary-foreground"
+                : "bg-secondary-background text-foreground"
+            }`}
+            aria-label={t("Hands-free camera")}
+            title={handsFreeOn ? t("Hands-free: on") : t("Hands-free: off")}
+          >
+            {handsFreeOn ? <Camera className="h-3.5 w-3.5" /> : <CameraOff className="h-3.5 w-3.5" />}
+            <span className="hidden sm:inline">{t("Hands-free")}</span>
+          </button>
           <ThemePicker />
           <DarkModeToggle />
           <button

@@ -443,27 +443,28 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                   </div>
                 </div>
 
-                {/* Copilot mic — Speech-to-Text engine (independent of the chat voice/mic) */}
+                {/* Copilot engine — drives BOTH the copilot mic (STT) and its
+                    spoken replies (TTS). Independent of the chat-box voice. */}
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-foreground">
-                    {t("Voice copilot mic (Speech-to-Text)")}
+                    {t("Voice copilot engine (mic + voice)")}
                   </label>
                   <p className="text-xs text-muted-foreground">
                     {t(
-                      "Engine for the top-right voice copilot only. Does not affect the chat box mic or the chat voice.",
+                      "Engine for the top-right voice copilot — used for BOTH listening and speaking. The chat-box read-aloud uses the Voice (Text-to-Speech) setting above.",
                     )}
                   </p>
                   <div className="grid grid-cols-2 gap-2">
                     {[
                       {
                         id: "browser" as const,
-                        label: t("Browser"),
-                        hint: t("Lowest latency · live captions"),
+                        label: t("Browser (built-in)"),
+                        hint: t("Device voice · offline · lowest latency"),
                       },
                       {
                         id: "sarvam" as const,
                         label: "Sarvam API",
-                        hint: t("Best Kannada accuracy"),
+                        hint: t("Cloud · best Kannada"),
                       },
                     ].map((opt) => (
                       <button
