@@ -17,7 +17,10 @@ from app.api.deps import get_principal
 from app.config import get_settings
 from app.core.rbac import AccessDenied, Permission, Principal, require
 from app.models.registry import get_stt, get_translator, get_tts
+from app.pipeline import screen_agent
 from app.schemas.voice import (
+    AgentPlan,
+    AgentRequest,
     STTResponse,
     TranslateRequest,
     TranslateResponse,
@@ -113,3 +116,21 @@ async def translate(
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"MT provider error: {e}")
     return TranslateResponse(text=out, provider=s.voice_backend)
+
+
+@router.post("/agent", response_model=AgentPlan)
+async def voice_agent(
+    req: AgentRequest,
+    principal: Principal = Depends(get_principal),
+) -> AgentPlan:
+    """Voice Screen Agent: turn a spoken command into a navigation + in-screen
+    action plan. The frontend executes only allow-listed actions from the plan.
+    """
+    _guard(principal)
+    result = await screen_agent.plan(
+        command=req.command,
+        current_route=req.current_route,
+        lang=_norm_lang(req.lang),
+        brain_engine=req.brain_engine,
+    )
+    return AgentPlan(**result)

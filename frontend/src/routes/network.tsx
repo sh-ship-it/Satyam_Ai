@@ -468,11 +468,33 @@ function NetworkScreen() {
     const onTask = (e: Event) => {
       const d = (e as CustomEvent).detail;
       if (!d || d.route !== "/network") return;
+      // Structured actions from the Voice Screen Agent
+      const actions = Array.isArray(d.actions) ? d.actions : [];
+      if (actions.length > 0) {
+        for (const a of actions) {
+          if (a.screen !== "/network") continue;
+          const p = a.params || {};
+          if (a.action === "search_seed" && p.entity) {
+            setSeedInput(String(p.entity));
+            fetchGraph(String(p.entity));
+          } else if (a.action === "set_depth" && p.depth) {
+            handleDepthChange(Number(p.depth));
+          } else if (a.action === "set_link_mode" && p.mode) {
+            setLinkMode(p.mode as "people" | "financial" | "rings");
+          } else if (a.action === "filter_edge" && p.value) {
+            setEdgeTypeFilter(String(p.value));
+          } else if (a.action === "filter_community" && p.value) {
+            setCommunityFilter(String(p.value));
+          }
+        }
+        return;
+      }
+      // Legacy free-text task fallback
       setTaskMsg(d.task || d.query || null);
       if (d.task) {
         setSeedInput(d.task);
         fetchGraph(d.task);
-      } // show the name in the Seed box AND search it
+      }
     };
     window.addEventListener("satyam:run-task", onTask);
     return () => window.removeEventListener("satyam:run-task", onTask);

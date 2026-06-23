@@ -34,3 +34,26 @@ class TranslateRequest(BaseModel):
 class TranslateResponse(BaseModel):
     text: str
     provider: str
+
+
+# ── Voice Screen Agent ──────────────────────────────────────────────────────
+
+class AgentRequest(BaseModel):
+    """A spoken command + the screen the officer is currently on."""
+    command: str = Field(min_length=1, max_length=1000)
+    current_route: str | None = None
+    lang: str = "en"
+    brain_engine: str | None = None
+
+
+class ScreenAction(BaseModel):
+    screen: str
+    action: str
+    params: dict = {}
+
+
+class AgentPlan(BaseModel):
+    route: str | None = None        # screen to navigate to (None = stay/answer)
+    answer: bool = False            # True = pure data question, defer to chat brain
+    speak: str = ""                 # spoken confirmation
+    actions: list[ScreenAction] = []

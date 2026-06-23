@@ -385,12 +385,40 @@ function Reports() {
       .catch(() => {});
   }, []);
 
-  // Voice command hook
+  // Voice Screen Agent hook
   useEffect(() => {
     const onTask = (e: Event) => {
       const d = (e as CustomEvent).detail;
       if (!d || d.route !== "/reports") return;
-      handlePrint();
+      const actions = Array.isArray(d.actions) ? d.actions : [];
+      if (actions.length === 0) {
+        handlePrint();
+        return;
+      }
+      for (const a of actions) {
+        if (a.screen !== "/reports") continue;
+        const p = a.params || {};
+        if (a.action === "set_title" && p.title) setReportTitle(String(p.title));
+        else if (a.action === "set_template" && p.template) selectTemplate(p.template as Template);
+        else if (a.action === "clear") setItems([]);
+        else if (a.action === "generate") handleGenerate();
+        else if (a.action === "print") handlePrint();
+        else if (a.action === "add_case" && p.query) {
+          // Search the dataset for the FIR/crime and add the top match.
+          intelligence
+            .searchPersonsAndCases(String(p.query), 1)
+            .then((r) => {
+              const hit = r.find((x) => x.type === "case") ?? r[0];
+              if (hit) addItem({
+                id: `${hit.type}-${hit.id}-${Date.now()}`,
+                type: hit.type === "person" ? "person" : "case",
+                title: hit.label, meta: hit.sub,
+                data: { id: hit.id } as any,
+              });
+            })
+            .catch(() => {});
+        }
+      }
     };
     window.addEventListener("satyam:run-task", onTask);
     return () => window.removeEventListener("satyam:run-task", onTask);

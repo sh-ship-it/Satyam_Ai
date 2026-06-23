@@ -363,6 +363,30 @@ function ForecastScreen() {
     load();
   }, [crimeType, district, horizon, gridSize]);
 
+  // Voice Screen Agent: execute structured in-screen actions for /forecast.
+  useEffect(() => {
+    const onTask = (e: Event) => {
+      const d = (e as CustomEvent).detail;
+      if (!d || d.route !== "/forecast") return;
+      const actions = Array.isArray(d.actions) ? d.actions : [];
+      for (const a of actions) {
+        if (a.screen !== "/forecast") continue;
+        const p = a.params || {};
+        if (a.action === "set_crime_type" && p.crime_type) setCrimeType(String(p.crime_type));
+        else if (a.action === "set_district" && p.district) setDistrict(String(p.district));
+        else if (a.action === "set_horizon" && p.days) setHorizon(Number(p.days));
+        else if (a.action === "set_grid" && p.grid) {
+          const g = String(p.grid).toLowerCase();
+          setGridSize(g === "fine" ? 0.01 : g === "coarse" ? 0.05 : 0.02);
+        } else if (a.action === "set_severity" && p.level) setSeverityFilter(String(p.level));
+        else if (a.action === "toggle_auto") setAutoRefresh((v) => !v);
+        else if (a.action === "refresh") load();
+      }
+    };
+    window.addEventListener("satyam:run-task", onTask);
+    return () => window.removeEventListener("satyam:run-task", onTask);
+  }, []);
+
   useEffect(() => {
     if (autoRefreshRef.current) clearInterval(autoRefreshRef.current);
     if (autoRefresh) autoRefreshRef.current = setInterval(load, 60_000);

@@ -330,6 +330,34 @@ function Console() {
     return () => window.removeEventListener("satyam:map-focus", onMapFocus);
   }, []);
 
+  // Voice Screen Agent: execute structured actions for /console.
+  useEffect(() => {
+    const onTask = (e: Event) => {
+      const d = (e as CustomEvent).detail;
+      if (!d || d.route !== "/console") return;
+      const actions = Array.isArray(d.actions) ? d.actions : [];
+      for (const a of actions) {
+        if (a.screen !== "/console") continue;
+        const p = a.params || {};
+        if (a.action === "ask" && p.text) {
+          sendMessage(String(p.text), { speak: !!d.speak, lang: d.lang });
+        } else if (a.action === "new_chat") {
+          handleNewChat();
+        } else if (a.action === "set_map_mode" && p.mode) {
+          setCanvasTab("map");
+          setMapMode(p.mode as "heat" | "pins" | "grid");
+        } else if (a.action === "show_on_map" && p.person) {
+          window.dispatchEvent(
+            new CustomEvent("satyam:map-focus", { detail: { person: String(p.person) } }),
+          );
+        }
+      }
+    };
+    window.addEventListener("satyam:run-task", onTask);
+    return () => window.removeEventListener("satyam:run-task", onTask);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const activeConv = conversations.find((c) => c.id === activeId);
 
   function persistMessages(newMessages: ChatMessage[], convId?: string) {

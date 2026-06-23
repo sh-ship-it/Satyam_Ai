@@ -1,0 +1,502 @@
+"""screen_agent.py — Voice Screen Agent brain.
+
+This is the "strongest logic" layer that lets the top-right voice copilot
+understand a free-form spoken command and turn it into:
+
+  1. a TARGET SCREEN to navigate to (any of Satyam's routes), AND
+  2. one or more IN-SCREEN ACTIONS to automate on that screen
+     (set a filter, run a search, generate a report, switch a tab, etc.)
+
+Design goals
+------------
+- The LLM is given a COMPLETE capability manifest of every screen and every
+  action it can perform, with typed parameters. This is what makes the agent
+  "clearly understand" the officer's request.
+- The model returns a strict JSON ActionPlan validated by Pydantic.
+- A deterministic rule-based planner (`_rule_plan`) guarantees the agent still
+  works with NO LLM (demo mode / 429 / offline) — bilingual EN + KN.
+- Output is screen-agnostic: each frontend screen receives the structured
+  `actions` array via the `satyam:run-task` event and executes them.
+
+The frontend never trusts free text — it only executes actions from the
+allow-listed ACTION registry below, so this is safe by construction.
+"""
+from __future__ import annotations
+
+import json
+import logging
+import re
+from typing import Any, Literal, Optional
+
+from app.models.registry import get_llm
+
+log = logging.getLogger(__name__)
+
+# ════════════════════════════════════════════════════════════════════════════
+# CAPABILITY MANIFEST
+# Every screen + the actions the agent may perform on it. Each action lists its
+# parameters so the LLM knows exactly what to emit. The frontend has a matching
+# handler for each (screen, action) pair.
+# ════════════════════════════════════════════════════════════════════════════
+
+SCREEN_CAPABILITIES: dict[str, dict] = {
+    "/console": {
+        "name": "Console (AI chat + map)",
+        "keywords": ["console", "chat", "assistant", "conversation", "ask", "query"],
+        "kn": ["ಕನ್ಸೋಲ್", "ಸಂಭಾಷಣೆ", "ಚಾಟ್"],
+        "actions": {
+            "ask": {"desc": "Type a question into chat and send it", "params": {"text": "string"}},
+            "new_chat": {"desc": "Start a new conversation", "params": {}},
+            "show_on_map": {"desc": "Focus the map on a person's crime locations", "params": {"person": "string"}},
+            "set_map_mode": {"desc": "Switch map render mode", "params": {"mode": "heat|pins|grid"}},
+        },
+    },
+    "/network": {
+        "name": "Network (link analysis graph)",
+        "keywords": ["network", "graph", "ego", "link", "links", "connections", "associates", "ring", "rings"],
+        "kn": ["ನೆಟ್‌ವರ್ಕ್", "ಸಂಪರ್ಕ"],
+        "actions": {
+            "search_seed": {"desc": "Search the graph for a person/entity", "params": {"entity": "string"}},
+            "set_depth": {"desc": "Set hop depth of the graph (1-3)", "params": {"depth": "number"}},
+            "set_link_mode": {"desc": "Switch graph mode", "params": {"mode": "people|financial|rings"}},
+            "filter_edge": {"desc": "Filter edges by relationship type", "params": {"value": "string"}},
+            "filter_community": {"desc": "Filter to a community/crime type", "params": {"value": "string"}},
+        },
+    },
+    "/reports": {
+        "name": "Report Builder",
+        "keywords": ["report", "reports", "brief", "pdf", "document", "dossier"],
+        "kn": ["ವರದಿ"],
+        "actions": {
+            "add_case": {"desc": "Search and add a FIR/case to the report cart", "params": {"query": "string"}},
+            "set_title": {"desc": "Set the report title", "params": {"title": "string"}},
+            "set_template": {"desc": "Choose a report template", "params": {"template": "brief|court|digest|person"}},
+            "clear": {"desc": "Empty the report cart", "params": {}},
+            "generate": {"desc": "Generate the PDF report", "params": {}},
+            "print": {"desc": "Print the report", "params": {}},
+        },
+    },
+    "/forecast": {
+        "name": "Early Warning & Forecast",
+        "keywords": ["forecast", "early warning", "predict", "risk grid", "hotspot forecast", "alerts"],
+        "kn": ["ಮುನ್ಸೂಚನೆ", "ಎಚ್ಚರಿಕೆ"],
+        "actions": {
+            "set_crime_type": {"desc": "Filter forecast by crime type", "params": {"crime_type": "string"}},
+            "set_district": {"desc": "Filter forecast by district", "params": {"district": "string"}},
+            "set_horizon": {"desc": "Set forecast horizon in days", "params": {"days": "3|7|14|30"}},
+            "set_grid": {"desc": "Set grid resolution", "params": {"grid": "fine|med|coarse"}},
+            "set_severity": {"desc": "Filter alerts by risk level", "params": {"level": "All|Critical|High|Medium|Low"}},
+            "refresh": {"desc": "Reload forecast data", "params": {}},
+            "toggle_auto": {"desc": "Toggle 60s auto-refresh", "params": {}},
+        },
+    },
+    "/trends": {
+        "name": "Trends & MO Clustering",
+        "keywords": ["trends", "patterns", "time series", "seasonal", "mo cluster", "modus"],
+        "kn": ["ಪ್ರವೃತ್ತಿ", "ಮಾದರಿ"],
+        "actions": {
+            "set_crime_type": {"desc": "Filter trends by crime type", "params": {"crime_type": "string"}},
+            "set_district": {"desc": "Filter trends by district", "params": {"district": "string"}},
+            "set_granularity": {"desc": "Set time granularity", "params": {"granularity": "week|month|quarter"}},
+        },
+    },
+    "/board": {
+        "name": "Investigation Board (canvas)",
+        "keywords": ["board", "canvas", "whiteboard", "link chart", "crime board", "scene"],
+        "kn": ["ಬೋರ್ಡ್", "ಕ್ಯಾನ್ವಾಸ್"],
+        "actions": {
+            "generate_scene": {"desc": "Generate a scene diagram from a description", "params": {"prompt": "string"}},
+            "save": {"desc": "Save the current board", "params": {}},
+            "new": {"desc": "Clear the board / start new", "params": {}},
+            "export": {"desc": "Export the board as PNG", "params": {}},
+        },
+    },
+    "/audit": {
+        "name": "Audit Log",
+        "keywords": ["audit", "compliance", "chain", "logs", "log"],
+        "kn": ["ಆಡಿಟ್"],
+        "actions": {
+            "search": {"desc": "Search the audit log", "params": {"query": "string"}},
+            "filter_action": {"desc": "Filter by ALLOW/DENY", "params": {"action": "string"}},
+        },
+    },
+    "/dossier": {
+        "name": "Person 360 Dossier",
+        "keywords": ["dossier", "person 360", "360", "fingerprint", "profile of"],
+        "kn": ["ಡಾಸಿಯರ್"],
+        "actions": {
+            "search": {"desc": "Search a person by name/district", "params": {"query": "string"}},
+        },
+    },
+    "/operations": {
+        "name": "Live Operations Map",
+        "keywords": ["operations", "live ops", "live map", "response ops"],
+        "kn": ["ಕಾರ್ಯಾಚರಣೆ"],
+        "actions": {},
+    },
+    "/ops-predictive": {
+        "name": "Predictive Deployment",
+        "keywords": ["predictive deployment", "deployment", "patrol suggestion"],
+        "kn": ["ಭವಿಷ್ಯಸೂಚಕ ನಿಯೋಜನೆ"],
+        "actions": {"recompute": {"desc": "Recompute deployment suggestions", "params": {}}},
+    },
+    "/ops-dispatch": {
+        "name": "Dispatch & Green Corridor",
+        "keywords": ["dispatch", "green corridor", "corridor"],
+        "kn": [],
+        "actions": {},
+    },
+    "/ops-camera": {
+        "name": "Camera Review (YOLO)",
+        "keywords": ["camera", "cctv", "review", "yolo"],
+        "kn": ["ಕ್ಯಾಮೆರಾ"],
+        "actions": {"start": {"desc": "Start the camera feed", "params": {}}, "stop": {"desc": "Stop the camera feed", "params": {}}},
+    },
+    "/transcripts": {
+        "name": "Transcripts & History",
+        "keywords": ["transcripts", "transcript", "recordings", "history"],
+        "kn": ["ಪ್ರತಿಲೇಖನ"],
+        "actions": {"search_similar": {"desc": "Find similar cases by description", "params": {"description": "string"}}},
+    },
+    "/admin": {
+        "name": "Access Control (L4)",
+        "keywords": ["access control", "admin", "user policy", "clearance control"],
+        "kn": [],
+        "actions": {"search": {"desc": "Search users", "params": {"query": "string"}}},
+    },
+}
+
+# ════════════════════════════════════════════════════════════════════════════
+# SYSTEM PROMPT — teaches the LLM the full manifest so it understands ANY request
+# ════════════════════════════════════════════════════════════════════════════
+
+def _manifest_text() -> str:
+    """Render the capability manifest as compact text for the system prompt."""
+    lines: list[str] = []
+    for route, spec in SCREEN_CAPABILITIES.items():
+        lines.append(f"\nSCREEN {route}  «{spec['name']}»")
+        kw = ", ".join(spec["keywords"][:8])
+        lines.append(f"  triggers: {kw}")
+        if not spec["actions"]:
+            lines.append("  actions: (navigation only)")
+            continue
+        for act, meta in spec["actions"].items():
+            params = ", ".join(f"{k}:{v}" for k, v in meta["params"].items()) or "—"
+            lines.append(f"  action '{act}' — {meta['desc']} | params: {params}")
+    return "\n".join(lines)
+
+
+AGENT_SYSTEM = (
+    "You are Satyam's Voice Screen Agent for Karnataka State Police officers. "
+    "An officer speaks a command. You must understand the INTENT and produce a "
+    "JSON ActionPlan that (a) navigates to the correct screen and (b) performs "
+    "the in-screen actions they asked for.\n\n"
+    "You control this application. Here is EXACTLY what each screen can do:\n"
+    f"{_manifest_text()}\n\n"
+    "RULES:\n"
+    "1. Pick ONE target `route` that best matches the request. If the officer is "
+    "already on the right screen and only asks for an action, keep that route.\n"
+    "2. Emit an `actions` array. Each item = {\"screen\": <route>, \"action\": <name>, "
+    "\"params\": {...}}. Only use actions and params from the manifest above.\n"
+    "3. Extract real values from the command: crime types, districts, person names, "
+    "numbers, FIR ids. Put them in params. Do NOT invent values not implied.\n"
+    "4. Multiple actions are allowed (e.g. set district AND set horizon AND refresh). "
+    "Order them logically.\n"
+    "5. `speak` = a short one-sentence confirmation in the officer's language of what "
+    "you are doing. Be specific (mention the screen + action).\n"
+    "6. If it's purely a data question (not navigation/automation), set route=null, "
+    "actions=[], and answer=true so the chat brain handles it.\n"
+    "7. Keep proper nouns (names, FIR ids, districts, IPC) verbatim. Never translate them.\n"
+    "8. Respond with ONLY the JSON object. No markdown, no commentary.\n"
+)
+
+AGENT_SCHEMA: dict = {
+    "type": "object",
+    "properties": {
+        "route": {"type": "string"},
+        "answer": {"type": "boolean"},
+        "speak": {"type": "string"},
+        "actions": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "screen": {"type": "string"},
+                    "action": {"type": "string"},
+                    "params": {"type": "object"},
+                },
+                "required": ["screen", "action"],
+            },
+        },
+    },
+    "required": ["actions"],
+}
+
+# ════════════════════════════════════════════════════════════════════════════
+# DETERMINISTIC FALLBACK PLANNER (no LLM) — bilingual EN + KN
+# ════════════════════════════════════════════════════════════════════════════
+
+_NAV_VERBS = re.compile(
+    r"\b(open|show|go to|goto|navigate|take me to|switch to|jump to|bring up|launch)\b"
+    r"|ತೆರೆ|ಹೋಗು|ತೋರಿಸಿ|ಗೆ ಹೋಗಿ",
+    re.IGNORECASE,
+)
+
+# Known Karnataka districts (subset) for slot extraction
+_DISTRICTS = [
+    "Bengaluru City", "Bengaluru", "Bengaluru Rural", "Mysuru", "Mangaluru",
+    "Dakshina Kannada", "Belagavi", "Kalaburagi", "Hubballi-Dharwad", "Ballari",
+    "Udupi", "Shivamogga", "Tumakuru", "Davanagere", "Vijayapura", "Hassan",
+    "Mandya", "Chitradurga", "Kolar", "Raichur", "Bidar", "Koppal", "Haveri",
+]
+
+# Crime types → canonical
+_CRIMES = [
+    "theft", "murder", "assault", "robbery", "burglary", "fraud", "cheating",
+    "kidnapping", "riot", "cyber crime", "cybercrime", "dowry", "hurt",
+    "extortion", "narcotics", "rape", "molestation", "chain snatching",
+    "forgery", "arson", "dacoity", "harassment", "stalking",
+]
+
+
+def _detect_route(text: str, current_route: Optional[str]) -> Optional[str]:
+    """Match the command to a screen route by keyword (EN + KN)."""
+    low = text.lower()
+    best: Optional[str] = None
+    best_score = 0
+    for route, spec in SCREEN_CAPABILITIES.items():
+        score = 0
+        for kw in spec["keywords"]:
+            if kw in low:
+                score += len(kw)  # longer keyword = stronger match
+        for kw in spec.get("kn", []):
+            if kw in text:
+                score += 4
+        if score > best_score:
+            best_score, best = score, route
+    return best or current_route
+
+
+def _extract_crime(text: str) -> Optional[str]:
+    low = text.lower()
+    for c in _CRIMES:
+        if c in low:
+            return "Cyber Crime" if c in ("cyber crime", "cybercrime") else c.title()
+    return None
+
+
+def _extract_district(text: str) -> Optional[str]:
+    for d in _DISTRICTS:
+        if d.lower() in text.lower():
+            return d
+    return None
+
+
+def _extract_number(text: str, lo: int, hi: int) -> Optional[int]:
+    for m in re.findall(r"\b(\d{1,3})\b", text):
+        n = int(m)
+        if lo <= n <= hi:
+            return n
+    return None
+
+
+def _strip_to_value(text: str) -> str:
+    """Remove nav verbs + screen keywords to isolate a free-text value (name/FIR)."""
+    out = _NAV_VERBS.sub(" ", text)
+    for spec in SCREEN_CAPABILITIES.values():
+        for kw in spec["keywords"]:
+            out = re.sub(rf"\b{re.escape(kw)}\b", " ", out, flags=re.IGNORECASE)
+    out = re.sub(
+        r"\b(the|to|of|for|in|on|and|a|me|please|screen|page|tab|view|search|find|"
+        r"show|open|set|filter|by|with|this|that)\b",
+        " ", out, flags=re.IGNORECASE,
+    )
+    return re.sub(r"\s+", " ", out).strip()
+
+
+def _rule_plan(command: str, current_route: Optional[str], lang: str) -> dict:
+    """Best-effort structured plan without any LLM call."""
+    text = command.strip()
+    low = text.lower()
+    route = _detect_route(text, current_route)
+    actions: list[dict] = []
+    kn = lang == "kn"
+
+    crime = _extract_crime(text)
+    district = _extract_district(text)
+
+    if route == "/forecast":
+        if crime:
+            actions.append({"screen": route, "action": "set_crime_type", "params": {"crime_type": crime}})
+        if district:
+            actions.append({"screen": route, "action": "set_district", "params": {"district": district}})
+        days = _extract_number(text, 1, 30)
+        if days in (3, 7, 14, 30):
+            actions.append({"screen": route, "action": "set_horizon", "params": {"days": days}})
+        if any(w in low for w in ("critical", "high", "medium", "low")):
+            lvl = next(w for w in ("Critical", "High", "Medium", "Low") if w.lower() in low)
+            actions.append({"screen": route, "action": "set_severity", "params": {"level": lvl}})
+        if "refresh" in low or "reload" in low:
+            actions.append({"screen": route, "action": "refresh", "params": {}})
+
+    elif route == "/network":
+        val = _strip_to_value(text)
+        if val:
+            actions.append({"screen": route, "action": "search_seed", "params": {"entity": val}})
+        depth = _extract_number(text, 1, 3)
+        if depth:
+            actions.append({"screen": route, "action": "set_depth", "params": {"depth": depth}})
+        if "financial" in low or "money" in low:
+            actions.append({"screen": route, "action": "set_link_mode", "params": {"mode": "financial"}})
+        elif "ring" in low:
+            actions.append({"screen": route, "action": "set_link_mode", "params": {"mode": "rings"}})
+
+    elif route == "/reports":
+        if "generate" in low or "create pdf" in low or "make report" in low:
+            actions.append({"screen": route, "action": "generate", "params": {}})
+        elif "print" in low:
+            actions.append({"screen": route, "action": "print", "params": {}})
+        elif "clear" in low:
+            actions.append({"screen": route, "action": "clear", "params": {}})
+        else:
+            val = _strip_to_value(text)
+            if val:
+                actions.append({"screen": route, "action": "add_case", "params": {"query": val}})
+
+    elif route == "/trends":
+        if crime:
+            actions.append({"screen": route, "action": "set_crime_type", "params": {"crime_type": crime}})
+        if district:
+            actions.append({"screen": route, "action": "set_district", "params": {"district": district}})
+        for g in ("week", "month", "quarter"):
+            if g in low:
+                actions.append({"screen": route, "action": "set_granularity", "params": {"granularity": g}})
+                break
+
+    elif route == "/board":
+        if "generate" in low or "draw" in low or "create" in low or "scene" in low:
+            prompt = _strip_to_value(text)
+            actions.append({"screen": route, "action": "generate_scene", "params": {"prompt": prompt or text}})
+        elif "save" in low:
+            actions.append({"screen": route, "action": "save", "params": {}})
+        elif "export" in low:
+            actions.append({"screen": route, "action": "export", "params": {}})
+
+    elif route in ("/audit", "/dossier", "/admin"):
+        val = _strip_to_value(text)
+        if val:
+            actions.append({"screen": route, "action": "search", "params": {"query": val}})
+
+    elif route == "/console":
+        val = _strip_to_value(text)
+        if val and not _NAV_VERBS.search(text):
+            actions.append({"screen": route, "action": "ask", "params": {"text": text}})
+
+    # Build the spoken confirmation
+    name = SCREEN_CAPABILITIES.get(route or "", {}).get("name", route or "")
+    if route and actions:
+        speak = (f"{name} ತೆರೆದು ಕಾರ್ಯ ನಿರ್ವಹಿಸಲಾಗುತ್ತಿದೆ" if kn
+                 else f"Opening {name} and applying your request.")
+    elif route:
+        speak = (f"{name} ತೆರೆಯಲಾಗುತ್ತಿದೆ" if kn else f"Opening {name}.")
+    else:
+        # Pure data question — let the chat brain answer
+        return {"route": None, "answer": True, "speak": "", "actions": []}
+
+    return {"route": route, "answer": False, "speak": speak, "actions": actions}
+
+# ════════════════════════════════════════════════════════════════════════════
+# VALIDATION — only allow-listed (screen, action, param) survive
+# ════════════════════════════════════════════════════════════════════════════
+
+def _sanitize_actions(raw_actions: list[dict]) -> list[dict]:
+    """Drop anything not in the manifest. Guarantees the frontend only ever
+    receives safe, known (screen, action) pairs."""
+    clean: list[dict] = []
+    for a in raw_actions or []:
+        if not isinstance(a, dict):
+            continue
+        screen = a.get("screen")
+        action = a.get("action")
+        spec = SCREEN_CAPABILITIES.get(screen or "")
+        if not spec or action not in spec["actions"]:
+            continue
+        allowed_params = spec["actions"][action]["params"]
+        params_in = a.get("params") or {}
+        params_out = {k: v for k, v in params_in.items() if k in allowed_params}
+        clean.append({"screen": screen, "action": action, "params": params_out})
+    return clean
+
+
+def _parse_llm(raw: str) -> Optional[dict]:
+    """Parse the LLM JSON response; tolerate markdown fences."""
+    if not raw:
+        return None
+    cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw.strip(), flags=re.MULTILINE)
+    try:
+        return json.loads(cleaned)
+    except Exception:
+        m = re.search(r"\{.*\}", cleaned, re.DOTALL)
+        if not m:
+            return None
+        try:
+            return json.loads(m.group())
+        except Exception:
+            return None
+
+
+async def plan(
+    command: str,
+    current_route: Optional[str] = None,
+    lang: str = "en",
+    brain_engine: Optional[str] = None,
+) -> dict:
+    """Produce an ActionPlan for the spoken command.
+
+    Returns: {route, answer, speak, actions:[{screen, action, params}]}
+
+    - Tries the LLM first (richest understanding of arbitrary phrasing).
+    - Validates + sanitizes every action against the manifest.
+    - Falls back to the deterministic rule planner if the LLM fails or yields
+      nothing actionable.
+    """
+    command = (command or "").strip()
+    if not command:
+        return {"route": None, "answer": True, "speak": "", "actions": []}
+
+    user_prompt = (
+        f"Officer is currently on screen: {current_route or 'unknown'}\n"
+        f"Officer command: \"{command}\"\n"
+        f"Reply language: {'Kannada' if lang == 'kn' else 'English'}\n"
+        "Return the ActionPlan JSON now."
+    )
+
+    llm_plan: Optional[dict] = None
+    try:
+        llm = get_llm(brain_engine)
+        raw = await llm.complete(
+            user_prompt, system=AGENT_SYSTEM, temperature=0.1, json_schema=AGENT_SCHEMA
+        )
+        llm_plan = _parse_llm(raw)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("screen_agent.plan LLM failed (%s) — using rule planner", exc)
+
+    if llm_plan is not None:
+        route = llm_plan.get("route") or None
+        answer = bool(llm_plan.get("answer", False))
+        speak = str(llm_plan.get("speak", "") or "")
+        actions = _sanitize_actions(llm_plan.get("actions", []))
+        # Accept the LLM plan only if it produced something useful.
+        if route or actions or answer:
+            # If the LLM marked a route but emitted no valid actions, try to
+            # enrich with the rule planner's actions for that route.
+            if route and not actions:
+                rp = _rule_plan(command, route, lang)
+                if rp.get("actions"):
+                    actions = _sanitize_actions(rp["actions"])
+                    if not speak:
+                        speak = rp.get("speak", "")
+            return {"route": route, "answer": answer, "speak": speak, "actions": actions}
+
+    # Deterministic fallback
+    return _rule_plan(command, current_route, lang)

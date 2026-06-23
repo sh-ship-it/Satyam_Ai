@@ -106,6 +106,16 @@ function Audit() {
     const onTask = (e: Event) => {
       const d = (e as CustomEvent).detail;
       if (!d || d.route !== "/audit") return;
+      const actions = Array.isArray(d.actions) ? d.actions : [];
+      if (actions.length > 0) {
+        for (const a of actions) {
+          if (a.screen !== "/audit") continue;
+          const p = a.params || {};
+          if (a.action === "search" && p.query) setQuery(String(p.query));
+          else if (a.action === "filter_action" && p.action) setActionFilter(String(p.action));
+        }
+        return;
+      }
       if (typeof d.task === "string" && d.task.trim()) setQuery(d.task.trim());
     };
     window.addEventListener("satyam:run-task", onTask);

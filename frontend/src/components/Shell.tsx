@@ -40,6 +40,7 @@ import {
 import { resolveLang } from "@/lib/voice/lang";
 import { startSttSession, isBackendSttSupported } from "@/lib/voice/recorder";
 import { streamChat, type ChatEvent } from "@/lib/api/client";
+import { planVoiceAction, type AgentPlan } from "@/lib/api/voiceAgent";
 
 type VoiceScreen = { to: string; words: RegExp };
 const SCREEN_ROUTES: VoiceScreen[] = [
@@ -362,6 +363,69 @@ export function Shell({ children }: { children: ReactNode }) {
           });
       };
 
+      // ── Voice Screen Agent executor ──────────────────────────────────────
+      // Calls the backend brain (/voice/agent), navigates to the chosen screen,
+      // and dispatches the structured action plan via satyam:run-task. Screens
+      // execute only allow-listed actions. Falls back to answerInCopilot when
+      // the agent decides it's a pure data question.
+      const runScreenAgent = (
+        question: string,
+        resolvedLang: "en" | "kn",
+        speechRate: number,
+        speak: boolean,
+        spokenLocale: string,
+      ) => {
+        const engines = loadEngineSettings();
+        const sayConfirm = (text: string) => {
+          if (!speak || !text) return;
+          const sl: "en" | "kn" = resolveLang(spokenLocale, text);
+          void speakViaSarvam(stripMarkdown(text), sl, speechRate, {
+            onStart: () => setIsSpeaking(true),
+            onEnd: () => setIsSpeaking(false),
+          });
+        };
+        void planVoiceAction({
+          command: question,
+          current_route: pathname,
+          lang: resolvedLang,
+          brain_engine: engines.brainEngine,
+        })
+          .then((planRes: AgentPlan) => {
+            // Pure data question → let the copilot answer out loud.
+            if (planRes.answer || (!planRes.route && planRes.actions.length === 0)) {
+              answerInCopilot(question);
+              return;
+            }
+            const dispatchActions = () => {
+              window.dispatchEvent(
+                new CustomEvent("satyam:run-task", {
+                  detail: {
+                    route: planRes.route,
+                    actions: planRes.actions,
+                    query: question,
+                    task: question,
+                    lang: resolvedLang,
+                    rate: speechRate,
+                    speak,
+                  },
+                }),
+              );
+            };
+            if (planRes.route && planRes.route !== pathname) {
+              navigate({ to: planRes.route });
+              // Let the destination screen mount its run-task listener first.
+              setTimeout(dispatchActions, 550);
+            } else {
+              dispatchActions();
+            }
+            sayConfirm(planRes.speak);
+          })
+          .catch(() => {
+            // Backend agent unreachable → fall back to answering the question.
+            answerInCopilot(question);
+          });
+      };
+
       // 0) Pure language switch ("speak in Kannada").
       if (cmd.langOnly) {
         closePanel();
@@ -388,21 +452,12 @@ export function Shell({ children }: { children: ReactNode }) {
         return;
       }
       if (cmd.route && cmd.route !== "/console") {
-        navigate({ to: cmd.route });
-        window.dispatchEvent(
-          new CustomEvent("satyam:run-task", {
-            detail: {
-              route: cmd.route,
-              query: cmd.query,
-              task: cmd.task,
-              lang: resolved,
-              rate,
-              speak: !!detail.speak,
-            },
-          }),
-        );
+        // Hand off to the Voice Screen Agent (backend brain): it decides the
+        // exact screen + the in-screen actions to automate, then we navigate
+        // and dispatch the structured action plan to that screen.
+        runScreenAgent(cmd.query, resolved, rate, !!detail.speak, speechLang);
         closePanel();
-        if (conversationModeRef.current) setTimeout(() => resumeListening(), 700);
+        if (conversationModeRef.current) setTimeout(() => resumeListening(), 1200);
         return;
       }
       // 2.5) Follow-up actions after a person-crime answer ("yes / on the map / in the network").
@@ -473,10 +528,11 @@ export function Shell({ children }: { children: ReactNode }) {
         return;
       }
 
-      // 3) Data query -> the COPILOT answers out loud ITSELF (two-way
-      // conversation). It must NEVER hand the turn to the Console chat thread;
-      // the chat-box mic is the only path that posts a message into chat.
-      answerInCopilot(cmd.query);
+      // 3) No explicit screen keyword. Could be (a) an in-screen automation on
+      // the CURRENT screen ("filter to theft", "set horizon 30"), or (b) a pure
+      // data question. The Voice Screen Agent decides: it returns answer=true for
+      // data questions (→ answerInCopilot) or an action plan for automation.
+      runScreenAgent(cmd.query, resolved, rate, !!detail.speak, speechLang);
       return;
     };
 

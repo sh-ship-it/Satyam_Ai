@@ -564,6 +564,29 @@ function BoardInner({
   const [showAI, setShowAI] = useState(true);
   const [loadingList, setLoadingList] = useState(false);
 
+  // Voice Screen Agent: execute structured actions for /board.
+  useEffect(() => {
+    const onTask = (e: Event) => {
+      const d = (e as CustomEvent).detail;
+      if (!d || d.route !== "/board") return;
+      const actions = Array.isArray(d.actions) ? d.actions : [];
+      for (const a of actions) {
+        if (a.screen !== "/board") continue;
+        const p = a.params || {};
+        if (a.action === "generate_scene" && p.prompt) {
+          setShowAI(true);
+          setAiPrompt(String(p.prompt));
+          setTimeout(() => handleGenerate(), 100);
+        } else if (a.action === "save") handleSave();
+        else if (a.action === "new") handleNew();
+        else if (a.action === "export") handleExport();
+      }
+    };
+    window.addEventListener("satyam:run-task", onTask);
+    return () => window.removeEventListener("satyam:run-task", onTask);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor]);
+
   // Force light color mode on the editor so draw strokes use dark colours
   // on the white canvas. tldraw resolves stroke colours via
   // editor.getColorMode() → editor.user preferences, NOT just the
