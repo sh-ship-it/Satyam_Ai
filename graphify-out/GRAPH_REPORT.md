@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-23)
 
 ## Corpus Check
-- 295 files · ~1,766,726 words
+- 295 files · ~1,766,837 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c3ae9404`
+- Built from commit: `d8712573`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -939,7 +939,7 @@ Cohesion: 0.11
 Nodes (37): AsyncSession, BoardGenerateRequest, Principal, SceneGraph, Any, AsyncSession, BoardGenerateRequest, Principal (+29 more)
 
 ## Knowledge Gaps
-- **1200 isolated node(s):** `AuditRow`, `TLColorType`, `TL_COLORS`, `GEO_SHAPES`, `ERROR_SHAPES` (+1195 more)
+- **1200 isolated node(s):** `TLColorType`, `TL_COLORS`, `GEO_SHAPES`, `ERROR_SHAPES`, `SHAPE_SIZES` (+1195 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -956,7 +956,7 @@ _Questions this graph is uniquely positioned to answer:_
   _`Permission` has 82 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 77 inferred relationships involving `AccessDenied` (e.g. with `AdminUserList` and `Principal`) actually correct?**
   _`AccessDenied` has 77 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `AuditRow`, `TLColorType`, `TL_COLORS` to the rest of the system?**
+- **What connects `TLColorType`, `TL_COLORS`, `GEO_SHAPES` to the rest of the system?**
   _1418 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
