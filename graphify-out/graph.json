@@ -977,7 +977,7 @@
       "label": "24.11 Model / Asset Configuration",
       "file_type": "document",
       "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L1238",
+      "source_location": "L1240",
       "_origin": "ast",
       "id": "docs_architecture_24_11_model_asset_configuration",
       "community": 169,
@@ -987,7 +987,7 @@
       "label": "24.12 Hard Constraints Preserved",
       "file_type": "document",
       "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L1248",
+      "source_location": "L1250",
       "_origin": "ast",
       "id": "docs_architecture_24_12_hard_constraints_preserved",
       "community": 169,
@@ -999,9 +999,9 @@
       "source_file": "frontend/src/components/HandsFreeLayer.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "components_handsfreelayer",
       "community": 68,
-      "norm_label": "handsfreelayer.tsx"
+      "norm_label": "handsfreelayer.tsx",
+      "id": "components_handsfreelayer"
     },
     {
       "label": "HandsFreeLayer()",
@@ -1009,9 +1009,9 @@
       "source_file": "frontend/src/components/HandsFreeLayer.tsx",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "components_handsfreelayer_handsfreelayer",
       "community": 113,
-      "norm_label": "handsfreelayer()"
+      "norm_label": "handsfreelayer()",
+      "id": "components_handsfreelayer_handsfreelayer"
     },
     {
       "label": "SettingsDialog.tsx",
@@ -1019,9 +1019,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "components_settingsdialog",
       "community": 124,
-      "norm_label": "settingsdialog.tsx"
+      "norm_label": "settingsdialog.tsx",
+      "id": "components_settingsdialog"
     },
     {
       "label": "Tab",
@@ -1029,9 +1029,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L31",
       "_origin": "ast",
-      "id": "components_settingsdialog_tab",
       "community": 124,
-      "norm_label": "tab"
+      "norm_label": "tab",
+      "id": "components_settingsdialog_tab"
     },
     {
       "label": "EngineSettings",
@@ -1039,9 +1039,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L34",
       "_origin": "ast",
-      "id": "components_settingsdialog_enginesettings",
       "community": 124,
-      "norm_label": "enginesettings"
+      "norm_label": "enginesettings",
+      "id": "components_settingsdialog_enginesettings"
     },
     {
       "label": "defaultEngineSettings",
@@ -1049,9 +1049,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L48",
       "_origin": "ast",
-      "id": "components_settingsdialog_defaultenginesettings",
       "community": 124,
-      "norm_label": "defaultenginesettings"
+      "norm_label": "defaultenginesettings",
+      "id": "components_settingsdialog_defaultenginesettings"
     },
     {
       "label": "loadEngineSettings()",
@@ -1059,9 +1059,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L59",
       "_origin": "ast",
-      "id": "components_settingsdialog_loadenginesettings",
       "community": 113,
-      "norm_label": "loadenginesettings()"
+      "norm_label": "loadenginesettings()",
+      "id": "components_settingsdialog_loadenginesettings"
     },
     {
       "label": "saveEngineSettings()",
@@ -1069,9 +1069,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L68",
       "_origin": "ast",
-      "id": "components_settingsdialog_saveenginesettings",
       "community": 124,
-      "norm_label": "saveenginesettings()"
+      "norm_label": "saveenginesettings()",
+      "id": "components_settingsdialog_saveenginesettings"
     },
     {
       "label": "SettingsDialog()",
@@ -1079,9 +1079,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L74",
       "_origin": "ast",
-      "id": "components_settingsdialog_settingsdialog",
       "community": 113,
-      "norm_label": "settingsdialog()"
+      "norm_label": "settingsdialog()",
+      "id": "components_settingsdialog_settingsdialog"
     },
     {
       "label": "HandsFreePanel()",
@@ -1089,9 +1089,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L602",
       "_origin": "ast",
-      "id": "components_settingsdialog_handsfreepanel",
       "community": 124,
-      "norm_label": "handsfreepanel()"
+      "norm_label": "handsfreepanel()",
+      "id": "components_settingsdialog_handsfreepanel"
     },
     {
       "label": "HFToggle()",
@@ -1099,9 +1099,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L692",
       "_origin": "ast",
-      "id": "components_settingsdialog_hftoggle",
       "community": 124,
-      "norm_label": "hftoggle()"
+      "norm_label": "hftoggle()",
+      "id": "components_settingsdialog_hftoggle"
     },
     {
       "label": "Section()",
@@ -1109,9 +1109,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L727",
       "_origin": "ast",
-      "id": "components_settingsdialog_section",
       "community": 124,
-      "norm_label": "section()"
+      "norm_label": "section()",
+      "id": "components_settingsdialog_section"
     },
     {
       "label": "Field()",
@@ -1119,9 +1119,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L747",
       "_origin": "ast",
-      "id": "components_settingsdialog_field",
       "community": 124,
-      "norm_label": "field()"
+      "norm_label": "field()",
+      "id": "components_settingsdialog_field"
     },
     {
       "label": "Row()",
@@ -1129,9 +1129,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L771",
       "_origin": "ast",
-      "id": "components_settingsdialog_row",
       "community": 124,
-      "norm_label": "row()"
+      "norm_label": "row()",
+      "id": "components_settingsdialog_row"
     },
     {
       "label": "Select()",
@@ -1139,9 +1139,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L780",
       "_origin": "ast",
-      "id": "components_settingsdialog_select",
       "community": 124,
-      "norm_label": "select()"
+      "norm_label": "select()",
+      "id": "components_settingsdialog_select"
     },
     {
       "label": "Pill()",
@@ -1149,9 +1149,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L790",
       "_origin": "ast",
-      "id": "components_settingsdialog_pill",
       "community": 124,
-      "norm_label": "pill()"
+      "norm_label": "pill()",
+      "id": "components_settingsdialog_pill"
     },
     {
       "label": "Toggle()",
@@ -1159,9 +1159,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L813",
       "_origin": "ast",
-      "id": "components_settingsdialog_toggle",
       "community": 124,
-      "norm_label": "toggle()"
+      "norm_label": "toggle()",
+      "id": "components_settingsdialog_toggle"
     },
     {
       "label": "Status",
@@ -1169,9 +1169,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L834",
       "_origin": "ast",
-      "id": "components_settingsdialog_status",
       "community": 113,
-      "norm_label": "status"
+      "norm_label": "status",
+      "id": "components_settingsdialog_status"
     },
     {
       "label": "DbSourceRow()",
@@ -1179,9 +1179,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L840",
       "_origin": "ast",
-      "id": "components_settingsdialog_dbsourcerow",
       "community": 124,
-      "norm_label": "dbsourcerow()"
+      "norm_label": "dbsourcerow()",
+      "id": "components_settingsdialog_dbsourcerow"
     },
     {
       "label": "ModelToggle()",
@@ -1189,9 +1189,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L903",
       "_origin": "ast",
-      "id": "components_settingsdialog_modeltoggle",
       "community": 124,
-      "norm_label": "modeltoggle()"
+      "norm_label": "modeltoggle()",
+      "id": "components_settingsdialog_modeltoggle"
     },
     {
       "label": "formatRemaining()",
@@ -1199,9 +1199,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L933",
       "_origin": "ast",
-      "id": "components_settingsdialog_formatremaining",
       "community": 124,
-      "norm_label": "formatremaining()"
+      "norm_label": "formatremaining()",
+      "id": "components_settingsdialog_formatremaining"
     },
     {
       "label": "DataActions()",
@@ -1209,9 +1209,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L943",
       "_origin": "ast",
-      "id": "components_settingsdialog_dataactions",
       "community": 124,
-      "norm_label": "dataactions()"
+      "norm_label": "dataactions()",
+      "id": "components_settingsdialog_dataactions"
     },
     {
       "label": "TranslationPanel()",
@@ -1219,9 +1219,9 @@
       "source_file": "frontend/src/components/SettingsDialog.tsx",
       "source_location": "L1141",
       "_origin": "ast",
-      "id": "components_settingsdialog_translationpanel",
       "community": 124,
-      "norm_label": "translationpanel()"
+      "norm_label": "translationpanel()",
+      "id": "components_settingsdialog_translationpanel"
     },
     {
       "label": "Shell.tsx",
@@ -1229,9 +1229,9 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "components_shell",
       "community": 113,
-      "norm_label": "shell.tsx"
+      "norm_label": "shell.tsx",
+      "id": "components_shell"
     },
     {
       "label": "copilotVoiceProvider()",
@@ -1239,9 +1239,9 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L54",
       "_origin": "ast",
-      "id": "components_shell_copilotvoiceprovider",
       "community": 113,
-      "norm_label": "copilotvoiceprovider()"
+      "norm_label": "copilotvoiceprovider()",
+      "id": "components_shell_copilotvoiceprovider"
     },
     {
       "label": "VoiceScreen",
@@ -1249,9 +1249,9 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L60",
       "_origin": "ast",
-      "id": "components_shell_voicescreen",
       "community": 113,
-      "norm_label": "voicescreen"
+      "norm_label": "voicescreen",
+      "id": "components_shell_voicescreen"
     },
     {
       "label": "SCREEN_ROUTES",
@@ -1259,9 +1259,9 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L61",
       "_origin": "ast",
-      "id": "components_shell_screen_routes",
       "community": 113,
-      "norm_label": "screen_routes"
+      "norm_label": "screen_routes",
+      "id": "components_shell_screen_routes"
     },
     {
       "label": "ParsedVoice",
@@ -1269,9 +1269,9 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L87",
       "_origin": "ast",
-      "id": "components_shell_parsedvoice",
       "community": 113,
-      "norm_label": "parsedvoice"
+      "norm_label": "parsedvoice",
+      "id": "components_shell_parsedvoice"
     },
     {
       "label": "parseVoiceCommand()",
@@ -1279,9 +1279,9 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L97",
       "_origin": "ast",
-      "id": "components_shell_parsevoicecommand",
       "community": 113,
-      "norm_label": "parsevoicecommand()"
+      "norm_label": "parsevoicecommand()",
+      "id": "components_shell_parsevoicecommand"
     },
     {
       "label": "Shell()",
@@ -1289,9 +1289,9 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L138",
       "_origin": "ast",
-      "id": "components_shell_shell",
       "community": 16,
-      "norm_label": "shell()"
+      "norm_label": "shell()",
+      "id": "components_shell_shell"
     },
     {
       "label": "i18n.tsx",
@@ -1299,9 +1299,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "lib_i18n",
       "community": 210,
-      "norm_label": "i18n.tsx"
+      "norm_label": "i18n.tsx",
+      "id": "lib_i18n"
     },
     {
       "label": "Lang",
@@ -1309,9 +1309,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "lib_i18n_lang",
       "community": 210,
-      "norm_label": "lang"
+      "norm_label": "lang",
+      "id": "lib_i18n_lang"
     },
     {
       "label": "DICT",
@@ -1319,9 +1319,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "lib_i18n_dict",
       "community": 199,
-      "norm_label": "dict"
+      "norm_label": "dict",
+      "id": "lib_i18n_dict"
     },
     {
       "label": "Ctx",
@@ -1329,9 +1329,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L970",
       "_origin": "ast",
-      "id": "lib_i18n_ctx",
       "community": 210,
-      "norm_label": "ctx"
+      "norm_label": "ctx",
+      "id": "lib_i18n_ctx"
     },
     {
       "label": "I18nCtx",
@@ -1339,9 +1339,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L971",
       "_origin": "ast",
-      "id": "lib_i18n_i18nctx",
       "community": 210,
-      "norm_label": "i18nctx"
+      "norm_label": "i18nctx",
+      "id": "lib_i18n_i18nctx"
     },
     {
       "label": "ALL_TRANSLATABLE",
@@ -1349,9 +1349,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L977",
       "_origin": "ast",
-      "id": "lib_i18n_all_translatable",
       "community": 210,
-      "norm_label": "all_translatable"
+      "norm_label": "all_translatable",
+      "id": "lib_i18n_all_translatable"
     },
     {
       "label": "loadLLMCache()",
@@ -1359,9 +1359,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L1057",
       "_origin": "ast",
-      "id": "lib_i18n_loadllmcache",
       "community": 210,
-      "norm_label": "loadllmcache()"
+      "norm_label": "loadllmcache()",
+      "id": "lib_i18n_loadllmcache"
     },
     {
       "label": "enrichDictWithLLM()",
@@ -1369,9 +1369,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L1073",
       "_origin": "ast",
-      "id": "lib_i18n_enrichdictwithllm",
       "community": 210,
-      "norm_label": "enrichdictwithllm()"
+      "norm_label": "enrichdictwithllm()",
+      "id": "lib_i18n_enrichdictwithllm"
     },
     {
       "label": "enrichDataWithLLM()",
@@ -1379,9 +1379,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L1171",
       "_origin": "ast",
-      "id": "lib_i18n_enrichdatawithllm",
       "community": 115,
-      "norm_label": "enrichdatawithllm()"
+      "norm_label": "enrichdatawithllm()",
+      "id": "lib_i18n_enrichdatawithllm"
     },
     {
       "label": "trackMiss()",
@@ -1389,9 +1389,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L1268",
       "_origin": "ast",
-      "id": "lib_i18n_trackmiss",
       "community": 210,
-      "norm_label": "trackmiss()"
+      "norm_label": "trackmiss()",
+      "id": "lib_i18n_trackmiss"
     },
     {
       "label": "I18nProvider()",
@@ -1399,9 +1399,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L1284",
       "_origin": "ast",
-      "id": "lib_i18n_i18nprovider",
       "community": 210,
-      "norm_label": "i18nprovider()"
+      "norm_label": "i18nprovider()",
+      "id": "lib_i18n_i18nprovider"
     },
     {
       "label": "useI18n()",
@@ -1409,9 +1409,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L1322",
       "_origin": "ast",
-      "id": "lib_i18n_usei18n",
       "community": 115,
-      "norm_label": "usei18n()"
+      "norm_label": "usei18n()",
+      "id": "lib_i18n_usei18n"
     },
     {
       "label": "useT()",
@@ -1419,9 +1419,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L1323",
       "_origin": "ast",
-      "id": "lib_i18n_uset",
       "community": 16,
-      "norm_label": "uset()"
+      "norm_label": "uset()",
+      "id": "lib_i18n_uset"
     },
     {
       "label": "tts.ts",
@@ -1429,9 +1429,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "voice_tts",
       "community": 113,
-      "norm_label": "tts.ts"
+      "norm_label": "tts.ts",
+      "id": "voice_tts"
     },
     {
       "label": "SpeakHooks",
@@ -1439,9 +1439,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "voice_tts_speakhooks",
       "community": 113,
-      "norm_label": "speakhooks"
+      "norm_label": "speakhooks",
+      "id": "voice_tts_speakhooks"
     },
     {
       "label": "stripMarkdown()",
@@ -1449,9 +1449,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L33",
       "_origin": "ast",
-      "id": "voice_tts_stripmarkdown",
       "community": 113,
-      "norm_label": "stripmarkdown()"
+      "norm_label": "stripmarkdown()",
+      "id": "voice_tts_stripmarkdown"
     },
     {
       "label": "voicesCache",
@@ -1459,9 +1459,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L73",
       "_origin": "ast",
-      "id": "voice_tts_voicescache",
       "community": 113,
-      "norm_label": "voicescache"
+      "norm_label": "voicescache",
+      "id": "voice_tts_voicescache"
     },
     {
       "label": "warmVoices()",
@@ -1469,9 +1469,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L74",
       "_origin": "ast",
-      "id": "voice_tts_warmvoices",
       "community": 113,
-      "norm_label": "warmvoices()"
+      "norm_label": "warmvoices()",
+      "id": "voice_tts_warmvoices"
     },
     {
       "label": "pickVoice()",
@@ -1479,9 +1479,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L85",
       "_origin": "ast",
-      "id": "voice_tts_pickvoice",
       "community": 113,
-      "norm_label": "pickvoice()"
+      "norm_label": "pickvoice()",
+      "id": "voice_tts_pickvoice"
     },
     {
       "label": "unlockAudioPlayback()",
@@ -1489,9 +1489,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L110",
       "_origin": "ast",
-      "id": "voice_tts_unlockaudioplayback",
       "community": 113,
-      "norm_label": "unlockaudioplayback()"
+      "norm_label": "unlockaudioplayback()",
+      "id": "voice_tts_unlockaudioplayback"
     },
     {
       "label": "cancelSpeech()",
@@ -1499,9 +1499,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L139",
       "_origin": "ast",
-      "id": "voice_tts_cancelspeech",
       "community": 113,
-      "norm_label": "cancelspeech()"
+      "norm_label": "cancelspeech()",
+      "id": "voice_tts_cancelspeech"
     },
     {
       "label": "pauseSpeech()",
@@ -1509,9 +1509,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L160",
       "_origin": "ast",
-      "id": "voice_tts_pausespeech",
       "community": 113,
-      "norm_label": "pausespeech()"
+      "norm_label": "pausespeech()",
+      "id": "voice_tts_pausespeech"
     },
     {
       "label": "resumeSpeech()",
@@ -1519,9 +1519,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L178",
       "_origin": "ast",
-      "id": "voice_tts_resumespeech",
       "community": 113,
-      "norm_label": "resumespeech()"
+      "norm_label": "resumespeech()",
+      "id": "voice_tts_resumespeech"
     },
     {
       "label": "isSpeechActive()",
@@ -1529,9 +1529,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L192",
       "_origin": "ast",
-      "id": "voice_tts_isspeechactive",
       "community": 113,
-      "norm_label": "isspeechactive()"
+      "norm_label": "isspeechactive()",
+      "id": "voice_tts_isspeechactive"
     },
     {
       "label": "browserSpeak()",
@@ -1539,9 +1539,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L203",
       "_origin": "ast",
-      "id": "voice_tts_browserspeak",
       "community": 113,
-      "norm_label": "browserspeak()"
+      "norm_label": "browserspeak()",
+      "id": "voice_tts_browserspeak"
     },
     {
       "label": "b64ToBlob()",
@@ -1549,9 +1549,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L256",
       "_origin": "ast",
-      "id": "voice_tts_b64toblob",
       "community": 113,
-      "norm_label": "b64toblob()"
+      "norm_label": "b64toblob()",
+      "id": "voice_tts_b64toblob"
     },
     {
       "label": "speak()",
@@ -1559,9 +1559,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L276",
       "_origin": "ast",
-      "id": "voice_tts_speak",
       "community": 113,
-      "norm_label": "speak()"
+      "norm_label": "speak()",
+      "id": "voice_tts_speak"
     },
     {
       "label": "isServerVoiceEnabled()",
@@ -1569,9 +1569,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L355",
       "_origin": "ast",
-      "id": "voice_tts_isservervoiceenabled",
       "community": 113,
-      "norm_label": "isservervoiceenabled()"
+      "norm_label": "isservervoiceenabled()",
+      "id": "voice_tts_isservervoiceenabled"
     },
     {
       "label": "speakViaSarvam",
@@ -1579,9 +1579,9 @@
       "source_file": "frontend/src/lib/voice/tts.ts",
       "source_location": "L348",
       "_origin": "ast",
-      "id": "voice_tts_speakviasarvam",
       "community": 68,
-      "norm_label": "speakviasarvam"
+      "norm_label": "speakviasarvam",
+      "id": "voice_tts_speakviasarvam"
     },
     {
       "label": "security.py",
@@ -32482,9 +32482,9 @@
       "source_file": "frontend/src/components/HandsFreeLayer.tsx",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_handsfreelayer",
-      "target": "voice_tts",
-      "confidence_score": 1.0
+      "target": "voice_tts"
     },
     {
       "relation": "imports",
@@ -32990,9 +32990,9 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L55",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_shell_copilotvoiceprovider",
-      "target": "components_settingsdialog_loadenginesettings",
-      "confidence_score": 1.0
+      "target": "components_settingsdialog_loadenginesettings"
     },
     {
       "relation": "imports",
@@ -33220,9 +33220,9 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_shell",
-      "target": "components_shell_copilotvoiceprovider",
-      "confidence_score": 1.0
+      "target": "components_shell_copilotvoiceprovider"
     },
     {
       "relation": "contains",
@@ -33303,9 +33303,9 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_shell",
-      "target": "config_handsfreeconfig_loadhandsfree",
-      "confidence_score": 1.0
+      "target": "config_handsfreeconfig_loadhandsfree"
     },
     {
       "relation": "imports",
@@ -33314,9 +33314,9 @@
       "source_file": "frontend/src/components/Shell.tsx",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "components_shell",
-      "target": "config_handsfreeconfig_savehandsfree",
-      "confidence_score": 1.0
+      "target": "config_handsfreeconfig_savehandsfree"
     },
     {
       "relation": "imports_from",
@@ -91651,5 +91651,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "9199b2ecfc56040e665681f5a7fac5473ded4269"
+  "built_at_commit": "23315eef5d52b0d32a33c5e66a389ebd7acfdb5c"
 }
