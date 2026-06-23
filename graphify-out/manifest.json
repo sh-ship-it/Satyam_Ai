@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/SettingsDialog.tsx": {
-    "mtime": 1782225957.8585465,
-    "ast_hash": "8cbbf7ef18b54802595db21059e42014",
+    "mtime": 1782226218.084537,
+    "ast_hash": "b89e59a5ef8d75eabd282114afa60c2a",
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
