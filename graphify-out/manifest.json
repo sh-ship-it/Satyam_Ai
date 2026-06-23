@@ -710,8 +710,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/audit.tsx": {
-    "mtime": 1782106292.8011463,
-    "ast_hash": "f4a4129f5430c6116c92ec53a5207383",
+    "mtime": 1782203071.4445796,
+    "ast_hash": "87057cee8ce73692ba36b47f6dfe44ad",
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
@@ -1645,8 +1645,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/board.tsx": {
-    "mtime": 1782163617.101675,
-    "ast_hash": "8beab5f5593da688c37fd41b081482f9",
+    "mtime": 1782204109.9379637,
+    "ast_hash": "2a12af2ebbb5eb34f5aee502d13aa33a",
     "semantic_hash": ""
   },
   "Satyam_Investigation_Board_and_AI_Model_Settings_Build_Prompt.md": {

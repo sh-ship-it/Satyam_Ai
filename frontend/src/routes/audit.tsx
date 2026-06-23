@@ -23,7 +23,13 @@ type AuditRow = {
   query: string;
   result: string;
   src: string;
+  rawTs: number; // epoch ms for date comparison
 };
+
+/** ISO date string → "YYYY-MM-DD" */
+function toDateInput(d: Date) {
+  return d.toISOString().slice(0, 10);
+}
 
 function Audit() {
   const t = useT();
@@ -32,31 +38,60 @@ function Audit() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [chainValid, setChainValid] = useState<boolean | null>(null);
+  const [chainHead, setChainHead] = useState<string | null>(null);
   const [liveTotal, setLiveTotal] = useState<number | null>(null);
+
+  // Filter state — all derived from live data, nothing hardcoded
+  const [userFilter, setUserFilter] = useState("All");
+  const [actionFilter, setActionFilter] = useState("All");
+  const [srcFilter, setSrcFilter] = useState("All");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
   useEffect(() => {
     let active = true;
     setLoading(true);
     setLoadError(false);
     api
-      .audit({ limit: 100 })
+      .audit({ limit: 500 })
       .then((res: any) => {
         if (!active) return;
-        const mapped = (res?.entries ?? []).map((e: any) => ({
-          t: e.ts ? new Date(e.ts).toLocaleString() : "—",
-          u: e.user ?? "—",
-          role: e.role ?? "—",
-          action: e.action ?? "ALLOW",
-          query: e.query ?? "",
-          result: e.result ?? "",
-          src: e.src ?? "audit_log",
-        }));
+        const mapped: AuditRow[] = (res?.entries ?? []).map((e: any) => {
+          const rawTs = e.ts ? new Date(e.ts).getTime() : 0;
+          return {
+            t: e.ts ? new Date(e.ts).toLocaleString() : "—",
+            u: e.user ?? "—",
+            role: e.role ?? "—",
+            action: e.action ?? "ALLOW",
+            query: e.query ?? "",
+            result: e.result ?? "",
+            src: e.src ?? "audit_log",
+            rawTs,
+          };
+        });
         setRows(mapped);
         if (typeof res?.chain_valid === "boolean") setChainValid(res.chain_valid);
         if (typeof res?.total === "number") setLiveTotal(res.total);
+        if (typeof res?.chain_head === "string") setChainHead(res.chain_head);
+
+        // Auto-set date range to span the actual data
+        const timestamps = mapped.map((r) => r.rawTs).filter(Boolean);
+        if (timestamps.length > 0) {
+          setFromDate(toDateInput(new Date(Math.min(...timestamps))));
+          setToDate(toDateInput(new Date(Math.max(...timestamps))));
+        } else {
+          const today = toDateInput(new Date());
+          setFromDate(today);
+          setToDate(today);
+        }
       })
       .catch(() => {
-        if (active) setLoadError(true);
+        if (active) {
+          setLoadError(true);
+          const today = toDateInput(new Date());
+          setFromDate(today);
+          setToDate(today);
+        }
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -77,13 +112,52 @@ function Audit() {
     return () => window.removeEventListener("satyam:run-task", onTask);
   }, []);
 
+  // Derive unique option lists from live data — never hardcoded
+  const userOptions = useMemo(() => {
+    const s = new Set(rows.map((r) => r.u).filter((u) => u && u !== "—"));
+    return ["All", ...Array.from(s).sort()];
+  }, [rows]);
+
+  const actionOptions = useMemo(() => {
+    const s = new Set(rows.map((r) => r.action).filter(Boolean));
+    return ["All", ...Array.from(s).sort()];
+  }, [rows]);
+
+  const srcOptions = useMemo(() => {
+    const s = new Set(rows.map((r) => r.src).filter(Boolean));
+    return ["All", ...Array.from(s).sort()];
+  }, [rows]);
+
   const filteredRows = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return rows;
-    return rows.filter((r) =>
-      [r.t, r.u, r.role, r.action, r.query, r.result, r.src].join(" ").toLowerCase().includes(q),
-    );
-  }, [query, rows]);
+    const from = fromDate ? new Date(fromDate).getTime() : null;
+    const to = toDate ? new Date(toDate + "T23:59:59").getTime() : null;
+    return rows.filter((r) => {
+      if (userFilter !== "All" && r.u !== userFilter) return false;
+      if (actionFilter !== "All" && r.action !== actionFilter) return false;
+      if (srcFilter !== "All" && r.src !== srcFilter) return false;
+      if (from && r.rawTs && r.rawTs < from) return false;
+      if (to && r.rawTs && r.rawTs > to) return false;
+      if (q && ![r.t, r.u, r.role, r.action, r.query, r.result, r.src]
+        .join(" ").toLowerCase().includes(q)) return false;
+      return true;
+    });
+  }, [query, rows, userFilter, actionFilter, srcFilter, fromDate, toDate]);
+
+  function resetFilters() {
+    setQuery("");
+    setUserFilter("All");
+    setActionFilter("All");
+    setSrcFilter("All");
+    const timestamps = rows.map((r) => r.rawTs).filter(Boolean);
+    if (timestamps.length > 0) {
+      setFromDate(toDateInput(new Date(Math.min(...timestamps))));
+      setToDate(toDateInput(new Date(Math.max(...timestamps))));
+    }
+  }
+
+  const hasActiveFilters =
+    !!query || userFilter !== "All" || actionFilter !== "All" || srcFilter !== "All";
 
   return (
     <Shell>
@@ -143,31 +217,51 @@ function Audit() {
             </div>
           </Filter>
           <Filter label={t("User")}>
-            <Select options={[t("All users"), "r.kumar", "p.shetty", "n.iyer", "admin"]} />
+            <Select
+              options={loading ? ["All"] : userOptions}
+              value={userFilter}
+              onChange={setUserFilter}
+            />
           </Filter>
           <Filter label={t("Action")}>
-            <Select options={[t("All"), "ALLOW", "DENY"]} />
+            <Select
+              options={loading ? ["All"] : actionOptions}
+              value={actionFilter}
+              onChange={setActionFilter}
+            />
           </Filter>
           <Filter label={t("From")}>
             <input
               type="date"
-              defaultValue="2024-08-14"
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
               className="rounded-md border border-input bg-card px-2 py-1.5 text-sm text-foreground"
             />
           </Filter>
           <Filter label={t("To")}>
             <input
               type="date"
-              defaultValue="2024-08-14"
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
               className="rounded-md border border-input bg-card px-2 py-1.5 text-sm text-foreground"
             />
           </Filter>
           <Filter label={t("Source table")}>
             <Select
-              options={[t("All"), "fir_records", "persons", "cctv_evidence", "graph_index"]}
+              options={loading ? ["All"] : srcOptions}
+              value={srcFilter}
+              onChange={setSrcFilter}
             />
           </Filter>
-          <button className="ml-auto rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+          {hasActiveFilters && (
+            <button
+              onClick={resetFilters}
+              className="self-end mb-px rounded-md border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground hover:bg-muted transition"
+            >
+              {t("Reset")}
+            </button>
+          )}
+          <button className="ml-auto self-end rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
             {t("Apply")}
           </button>
         </div>
@@ -256,7 +350,7 @@ function Audit() {
               {liveTotal?.toLocaleString() ?? rows.length} {t("entries")} ·{" "}
               {t("Read-only · No edit controls exposed")}
             </span>
-            <span className="font-mono">SHA-256 head: 4f8b…a91c</span>
+            <span className="font-mono">SHA-256 head: {chainHead ? `${chainHead.slice(0,4)}…${chainHead.slice(-4)}` : "—"}</span>
           </div>
         </div>
       </div>
@@ -277,10 +371,22 @@ function Filter({ label, children }: { label: string; children: React.ReactNode 
     </div>
   );
 }
-function Select({ options }: { options: string[] }) {
+function Select({
+  options,
+  value,
+  onChange,
+}: {
+  options: string[];
+  value: string;
+  onChange: (v: string) => void;
+}) {
   return (
     <div className="relative">
-      <select className="appearance-none rounded-md border border-input bg-card px-2.5 py-1.5 pr-7 text-sm">
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="appearance-none rounded-md border border-input bg-card px-2.5 py-1.5 pr-7 text-sm text-foreground"
+      >
         {options.map((o) => (
           <option key={o}>{o}</option>
         ))}
