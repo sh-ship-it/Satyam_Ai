@@ -543,22 +543,16 @@ function BoardInner({
   const [savedBoards, setSavedBoards] = useState<{ board_id: number; title: string }[]>([]);
   const [loadingList, setLoadingList] = useState(false);
 
-  // Remove tldraw's zoom limits → truly infinite canvas
+  // Force light color mode on the editor so draw strokes use dark colours
+  // on the white canvas. tldraw resolves stroke colours via
+  // editor.getColorMode() → editor.user preferences, NOT just the
+  // colorScheme prop. If the user's OS/localStorage says "dark", strokes
+  // render white-on-white. We pin it to 'light' for the board.
   useEffect(() => {
-    editor.updateInstanceState({ isReadonly: false });
-    // tldraw v5: set zoom constraints to effectively unlimited
     try {
-      (editor as any).setCamera(editor.getCamera(), {
-        constraints: {
-          initialZoom: "fit-min",
-          baseZoom: "fit-min",
-          bounds: undefined,
-          padding: { x: 0, y: 0 },
-          origin: { x: 0.5, y: 0.5 },
-          behavior: "free",
-        },
-      });
-    } catch { /* ignore if API differs */ }
+      editor.user.updateUserPreferences({ colorScheme: "light" });
+    } catch { /* API may differ across patch versions */ }
+    editor.updateInstanceState({ isReadonly: false });
   }, [editor]);
 
   async function handleSave() {
