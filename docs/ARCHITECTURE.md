@@ -311,7 +311,7 @@ Three settings in `EngineSettings` (stored in `localStorage`):
 - `brainEngine` — `gemini | groq | openai | local` — powers the chat brain
 - `sqlEngine` — `gemini | qwen3-coder-next | local` — powers Text-to-SQL
 - `boardEngine` — `gemini | groq | openai` — powers the Board AI scene generator
-- `copilotStt` — `browser | sarvam` — copilot microphone transcription engine (default: `browser`)
+- `copilotStt` — `browser | sarvam` — voice copilot engine, drives **both** its mic (STT) and spoken replies (TTS) (default: `browser`)
 - `voiceBackend` — `sarvam | google | webspeech` — TTS engine for voice replies
 
 The Settings → Models tab shows each provider as a card with configured/unconfigured badge fetched from `GET /settings/db-source/models` (returns booleans only — never API keys). The copilot STT picker is a two-button selector independent of `voiceBackend`.
@@ -586,7 +586,7 @@ The `BoardInner` overlay wrapper is `pointer-events: none` — only the toolbar 
 
 | Component | Purpose |
 |-----------|---------|
-| `Shell.tsx` | Nav rail (18 routes) + voice router + language toggle + `isAdmin` gate + `HandsFreeLayer` mount |
+| `Shell.tsx` | Nav rail (18 routes) + voice router + language toggle + `isAdmin` gate + header Hands-free camera toggle + `HandsFreeLayer` mount |
 | `CrimeMap.tsx` | Leaflet map with `darkTiles`, `lockBounds`, `fitSignal`, `liveMarker`, `corridorPath` |
 | `CaseDrawer.tsx` | Persistent (never unmounts), per-caseId cache, Map tab with embedded map + "Take me to map" |
 | `SettingsDialog.tsx` | 3-provider AI Chat Model cards, Board AI engine dropdown, copilot STT toggle, **Hands-free** tab |
@@ -1234,6 +1234,8 @@ Added to `SettingsDialog.tsx` as a new **"Hands-free"** tab (icon: `Hand`):
 | Auto-lock after | slider 5–120s | 20s | Absence threshold for lock |
 
 Settings are persisted in `localStorage["satyam.handsfree"]` and broadcast via `"satyam:handsfree-settings"` event so all live controllers update without a page reload.
+
+**Header quick toggle:** the top bar also has a **Hands-free camera button** (`Camera`/`CameraOff` icon, next to the Theme picker) wired to `toggleHandsFree()` in `Shell.tsx`. Clicking it flips the master switch and — when turning **on** — also enables `gestures` and `wakeWord` so the full experience (cursor + "Satyam" wake word) works immediately without opening Settings. It stays in two-way sync with the Settings tab via the `satyam:handsfree-settings` broadcast.
 
 ### 24.11 Model / Asset Configuration
 
