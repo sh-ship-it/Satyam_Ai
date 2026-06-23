@@ -120,8 +120,8 @@
     "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1782158823.8770702,
-    "ast_hash": "e92d36ab8e43c7032d06f172aebded60",
+    "mtime": 1782239067.3336198,
+    "ast_hash": "7bb28f6c64c6bd67baaa11731992a949",
     "semantic_hash": ""
   },
   "backend/app/models/__init__.py": {
@@ -360,8 +360,8 @@
     "semantic_hash": ""
   },
   "frontend/package.json": {
-    "mtime": 1782210765.2021964,
-    "ast_hash": "acc33e8ccb38eadfcb871f1444de3c4a",
+    "mtime": 1782238635.173167,
+    "ast_hash": "a12bbd755acb94e4c1c2bc6f693c4484",
     "semantic_hash": ""
   },
   "frontend/src/assets/police.mp4.asset.json": {
@@ -400,13 +400,13 @@
     "semantic_hash": ""
   },
   "frontend/src/components/SettingsDialog.tsx": {
-    "mtime": 1782233057.274792,
-    "ast_hash": "9c13433faae35a8a45f4a3e9ad9a822f",
+    "mtime": 1782239835.903561,
+    "ast_hash": "9595946b6a683af188161c46a8c92064",
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1782235933.565281,
-    "ast_hash": "52d997f8c5712d917f3359fcb85f38ac",
+    "mtime": 1782239693.5365763,
+    "ast_hash": "0e521d2010435a3969e9a43ac4de1f5c",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1782234026.6431239,
-    "ast_hash": "cf4e6ce9e5c79800be3972d3c53957d7",
+    "mtime": 1782239964.9070878,
+    "ast_hash": "f3457e3dddc5e9d91cba86f7e647a4ad",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
-    "mtime": 1782236262.976277,
-    "ast_hash": "193fd6a0bb8df42f3fb0059b63114611",
+    "mtime": 1782239485.7816317,
+    "ast_hash": "fc1cc98c900917667774e2ee0442a171",
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
@@ -845,8 +845,8 @@
     "semantic_hash": ""
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1782237059.811881,
-    "ast_hash": "56f425cf3f7295c8301b88eaf01d1491",
+    "mtime": 1782241156.9862566,
+    "ast_hash": "4cf0627df7a6f7819f54cd331ed95822",
     "semantic_hash": ""
   },
   "frontend/src/routes/README.md": {
@@ -1645,8 +1645,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/board.tsx": {
-    "mtime": 1782236183.7704976,
-    "ast_hash": "b84914fcbde25171ecb8e413e8cce457",
+    "mtime": 1782239364.7503266,
+    "ast_hash": "16b7878756059e761c5e967f1ae5e268",
     "semantic_hash": ""
   },
   "Satyam_Investigation_Board_and_AI_Model_Settings_Build_Prompt.md": {
@@ -1702,6 +1702,76 @@
   "frontend/src/lib/api/voiceAgent.ts": {
     "mtime": 1782235819.1491852,
     "ast_hash": "2264118b4c9ea86160b7d1a1392341bd",
+    "semantic_hash": ""
+  },
+  "backend/app/api/routes/security.py": {
+    "mtime": 1782239053.0615437,
+    "ast_hash": "f10eed9e98b969f81f8831ac7ee66a38",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/HandsFreeLayer.tsx": {
+    "mtime": 1782239673.4462688,
+    "ast_hash": "a6d0aaae0771875896b84bb553e00dfb",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/LockOverlay.tsx": {
+    "mtime": 1782239211.8316638,
+    "ast_hash": "bee4b5e74fad7086d9dce105e9135a57",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/WarRoomMode.tsx": {
+    "mtime": 1782239034.7294858,
+    "ast_hash": "ceb5875ce97d2f96bd440b034dbe6da8",
+    "semantic_hash": ""
+  },
+  "frontend/src/config/handsFreeConfig.ts": {
+    "mtime": 1782241021.869217,
+    "ast_hash": "0d3d28a49f2bb6afed355f37e08826a2",
+    "semantic_hash": ""
+  },
+  "frontend/src/input/FacePresenceController.tsx": {
+    "mtime": 1782239016.9591498,
+    "ast_hash": "8b5b9116c4076a77bf42037207f2eebe",
+    "semantic_hash": ""
+  },
+  "frontend/src/input/GestureController.tsx": {
+    "mtime": 1782241114.8074527,
+    "ast_hash": "631c8c500fe04a00d6c5bba69205a550",
+    "semantic_hash": ""
+  },
+  "frontend/src/input/gestureActions.ts": {
+    "mtime": 1782239278.6570961,
+    "ast_hash": "98d2dcd2e768d7a22b746cd782078c47",
+    "semantic_hash": ""
+  },
+  "frontend/src/input/gestureClassifier.ts": {
+    "mtime": 1782240712.3381708,
+    "ast_hash": "2bafe536da57ccdaf38671c73e3be134",
+    "semantic_hash": ""
+  },
+  "frontend/src/input/sharedCamera.ts": {
+    "mtime": 1782238703.7264824,
+    "ast_hash": "08b23f5e5b4e69c6281613b8f9b3ef8c",
+    "semantic_hash": ""
+  },
+  "frontend/src/input/types.ts": {
+    "mtime": 1782240687.0332577,
+    "ast_hash": "426a5d92abf45a3174184bee9962c427",
+    "semantic_hash": ""
+  },
+  "frontend/src/input/visionLoader.ts": {
+    "mtime": 1782238722.1320856,
+    "ast_hash": "689132cdbaab6a3fbe5c7b2b91e094b8",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/api/security.ts": {
+    "mtime": 1782238978.853813,
+    "ast_hash": "9d88a5fa90e22f4394dfa9901ff523eb",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/voice/wakeWord.ts": {
+    "mtime": 1782239011.7934842,
+    "ast_hash": "c9a6bde51d256d5d74606e764c01afae",
     "semantic_hash": ""
   }
 }
