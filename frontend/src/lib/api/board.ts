@@ -75,6 +75,7 @@ export const boardApi = {
     images?: BoardImage[];
     lang?: string;
     brain_engine?: string;
+    existing_snapshot?: Record<string, unknown> | null;
   }): Promise<SceneGraph> => {
     const raw = await apiFetch<unknown>("/api/board/generate", {
       method: "POST",
@@ -83,6 +84,7 @@ export const boardApi = {
         images: args.images ?? [],
         lang: args.lang ?? "en",
         brain_engine: args.brain_engine,
+        existing_snapshot: args.existing_snapshot ?? null,
       }),
     });
     return SceneGraphZ.parse(raw);

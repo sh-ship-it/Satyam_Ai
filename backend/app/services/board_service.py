@@ -1,249 +1,39 @@
 """Investigation Board service.
 
-Responsibilities:
-  - generate_scene  : call Gemini (text or multimodal) to produce a SceneGraph
-  - save_board      : upsert a Board row; return board_id
-  - load_board      : fetch a board by id with ownership check
-  - list_boards     : list boards owned by the current principal
+generate_scene is now delegated to board_brain.py which provides:
+  - Intent detection (8 diagram types)
+  - 8 layout engines (ring, timeline, tree, radial, grid, …)
+  - 8+ node entity types with correct shapes/colours
+  - 5 edge relationship styles
+  - Conflict/contradiction detection
+  - Multi-engine fallback cascade (Gemini → Groq → OpenAI → keyword)
+  - Incremental merge support
 
-ISOLATION: this module is fully decoupled from the synthetic dataset tables.
-No dataset-specific table is imported or queried here.
+All CRUD (save/load/list) remains here.
 """
 from __future__ import annotations
 
-import base64
-import json
 import logging
-from typing import Any
 
-import httpx
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.config import get_settings
 from app.core.rbac import Principal
 from app.db.board_models import Board
-from app.models.registry import get_llm
-from app.schemas.board import BoardGenerateRequest, SceneEdge, SceneGraph, SceneNode
+from app.schemas.board import BoardGenerateRequest, SceneGraph
+
+# Import the new brain — generate_scene lives there now
+from app.services.board_brain import generate_scene as _brain_generate_scene
 
 log = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------------------
-# System prompt
-# ---------------------------------------------------------------------------
-SYSTEM = (
-    "You are an investigation-board planner for Karnataka State Police. "
-    "Return ONLY JSON matching the schema: a scene graph of nodes and edges. "
-    "Lay nodes out on a 1600x1000 canvas with no overlaps. "
-    "Use red solid edges for strong/suspected links and dashed for inferred. "
-    "Respond in the user's language."
-)
 
-# ---------------------------------------------------------------------------
-# JSON schema sent to Gemini as responseSchema constraint
-# ---------------------------------------------------------------------------
-SCENE_SCHEMA: dict = {
-    "type": "object",
-    "properties": {
-        "nodes": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id":          {"type": "string"},
-                    "type":        {"type": "string"},
-                    "x":           {"type": "number"},
-                    "y":           {"type": "number"},
-                    "w":           {"type": "number"},
-                    "h":           {"type": "number"},
-                    "label":       {"type": "string"},
-                    "image_ref":   {"type": "string"},
-                    "color":       {"type": "string"},
-                    "entity_kind": {"type": "string"},
-                    "entity_id":   {"type": "string"},
-                },
-                "required": ["id", "type", "x", "y"],
-            },
-        },
-        "edges": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "source": {"type": "string"},
-                    "target": {"type": "string"},
-                    "label":  {"type": "string"},
-                    "color":  {"type": "string"},
-                    "style":  {"type": "string"},
-                    "kind":   {"type": "string"},
-                },
-                "required": ["source", "target"],
-            },
-        },
-    },
-    "required": ["nodes", "edges"],
-}
-
-
-# ---------------------------------------------------------------------------
-# Scene generation
-# ---------------------------------------------------------------------------
-
-def _parse(raw: str) -> SceneGraph:
-    """Parse a JSON string into SceneGraph. Never raises — returns empty on failure."""
-    try:
-        data = json.loads(raw)
-        nodes = [SceneNode(**n) for n in data.get("nodes", [])]
-        edges = [SceneEdge(**e) for e in data.get("edges", [])]
-        return SceneGraph(nodes=nodes, edges=edges)
-    except Exception as exc:  # noqa: BLE001
-        log.warning("board_service._parse failed: %s", exc)
-        return SceneGraph()
-
-
-async def _multimodal_generate(prompt: str, images: list[Any], lang: str) -> str:
-    """Self-contained httpx POST to Gemini multimodal endpoint."""
-    s = get_settings()
-    key = s.gemini_api_key
-    if not key:
-        return json.dumps({"nodes": [], "edges": []})
-
-    model = s.gemini_model
-    url = (
-        f"https://generativelanguage.googleapis.com/v1beta"
-        f"/models/{model}:generateContent?key={key}"
-    )
-
-    parts: list[dict] = [{"text": prompt}]
-    for img in images:
-        # img.data_url is "data:<mime>;base64,<data>"
-        try:
-            header, b64data = img.data_url.split(",", 1)
-            mime = header.split(":")[1].split(";")[0]
-        except Exception:  # noqa: BLE001
-            mime = "image/jpeg"
-            b64data = img.data_url
-        # Validate base64 is decodable
-        try:
-            base64.b64decode(b64data, validate=True)
-        except Exception:  # noqa: BLE001
-            continue
-        parts.append({"inlineData": {"mimeType": mime, "data": b64data}})
-
-    body = {
-        "systemInstruction": {"parts": [{"text": SYSTEM}]},
-        "contents": [{"role": "user", "parts": parts}],
-        "generationConfig": {
-            "temperature": 0.2,
-            "responseMimeType": "application/json",
-            "responseSchema": SCENE_SCHEMA,
-        },
-        "safetySettings": [
-            {"category": c, "threshold": "BLOCK_ONLY_HIGH"}
-            for c in (
-                "HARM_CATEGORY_HARASSMENT",
-                "HARM_CATEGORY_HATE_SPEECH",
-                "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                "HARM_CATEGORY_DANGEROUS_CONTENT",
-            )
-        ],
-    }
-
-    async with httpx.AsyncClient(timeout=45) as client:
-        r = await client.post(url, json=body)
-        r.raise_for_status()
-        data = r.json()
-
-    candidates = data.get("candidates", [])
-    if not candidates:
-        return json.dumps({"nodes": [], "edges": []})
-    parts_out = candidates[0].get("content", {}).get("parts", [])
-    return "".join(p.get("text", "") for p in parts_out)
-
-
-def _keyword_scene(prompt: str) -> SceneGraph:
-    """Deterministic fallback scene built from keywords in the user's prompt.
-
-    Runs entirely without an LLM — guaranteed to return something even when
-    the API is rate-limited or unavailable. Extracts noun-phrases and creates
-    entity nodes with labelled edges between them so the board is never blank.
-    """
-    import re
-    words = re.findall(r'[A-Za-z0-9\u0C00-\u0CFF]+', prompt)
-    # De-duplicate while preserving order; skip short stopwords
-    STOP = {'a','an','the','and','or','in','on','of','for','to','by','with','is','was','has','have','been','be','as','at','from','this','that','these','those','about','into','over','under','through'}
-    seen: set[str] = set()
-    labels: list[str] = []
-    for w in words:
-        lw = w.lower()
-        if lw not in STOP and len(lw) > 2 and lw not in seen:
-            seen.add(lw)
-            labels.append(w.title())
-        if len(labels) >= 8:
-            break
-
-    if not labels:
-        labels = ["Subject A", "Subject B", "Case"]
-
-    # Layout in a rough circle so nodes don't overlap
-    import math
-    n = len(labels)
-    cx, cy, radius = 800, 500, 300
-    nodes: list[SceneNode] = []
-    for i, label in enumerate(labels):
-        angle = (2 * math.pi * i / n) - math.pi / 2
-        nodes.append(SceneNode(
-            id=f"kw-{i}",
-            type="entity",
-            x=round(cx + radius * math.cos(angle) - 110),
-            y=round(cy + radius * math.sin(angle) - 70),
-            w=220, h=140,
-            label=label,
-            color="#3b82f6",
-            entity_kind="person" if i % 3 != 2 else "case",
-        ))
-
-    # Connect consecutive nodes and first → last for a ring
-    edges: list[SceneEdge] = []
-    for i in range(n):
-        j = (i + 1) % n
-        edges.append(SceneEdge(
-            source=f"kw-{i}", target=f"kw-{j}",
-            label="linked to", color="#ef4444", style="solid", kind="inferred",
-        ))
-
-    return SceneGraph(nodes=nodes, edges=edges)
-
-
-async def generate_scene(req: BoardGenerateRequest) -> SceneGraph:
-    """Generate a SceneGraph from a text prompt (+ optional images).
-
-    Uses the requested brain_engine (gemini/groq/openai). Falls back to a
-    keyword-based deterministic scene if the LLM call fails (e.g. 429 rate
-    limit) so the board always gets something useful.
-    """
-    s = get_settings()
-    engine = req.brain_engine or "gemini"
-
-    try:
-        if req.images and s.gemini_api_key and engine == "gemini":
-            raw = await _multimodal_generate(req.prompt, req.images, req.lang)
-        else:
-            llm = get_llm(engine)
-            raw = await llm.complete(
-                req.prompt,
-                system=SYSTEM,
-                temperature=0.2,
-                json_schema=SCENE_SCHEMA,
-            )
-        scene = _parse(raw)
-        # If LLM returned an empty scene, fall through to keyword fallback
-        if scene.nodes:
-            return scene
-    except Exception as exc:  # noqa: BLE001
-        log.warning("board_service.generate_scene LLM call failed (%s) — using keyword fallback", exc)
-
-    return _keyword_scene(req.prompt)
+async def generate_scene(
+    req: BoardGenerateRequest,
+    existing_snapshot: dict | None = None,
+) -> SceneGraph:
+    """Delegate to board_brain.generate_scene."""
+    return await _brain_generate_scene(req, existing_snapshot=existing_snapshot)
 
 
 # ---------------------------------------------------------------------------

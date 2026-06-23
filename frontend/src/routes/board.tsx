@@ -616,9 +616,13 @@ function BoardInner({
     setAiLoading(true);
     try {
       const { boardEngine, brainEngine } = loadEngineSettings();
+      // Pass the current canvas snapshot so the brain can merge incrementally
+      const existingSnapshot = editor.getSnapshot() as unknown as Record<string, unknown>;
       const scene = await boardApi.generate({
-        prompt: aiPrompt, images: aiImages,
+        prompt: aiPrompt,
+        images: aiImages,
         brain_engine: boardEngine || brainEngine || "gemini",
+        existing_snapshot: existingSnapshot,
       });
       if (scene.nodes.length === 0) {
         toast.info("AI returned an empty scene. Try a more specific prompt.");

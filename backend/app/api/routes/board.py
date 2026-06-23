@@ -45,7 +45,7 @@ async def board_generate(
         user_id=principal.officer_id,
         query_text=req.prompt[:500],
     )
-    return await svc.generate_scene(req)
+    return await svc.generate_scene(req, existing_snapshot=req.existing_snapshot)
 
 
 # ---------------------------------------------------------------------------
