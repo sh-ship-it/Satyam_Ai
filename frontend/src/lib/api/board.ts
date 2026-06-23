@@ -63,6 +63,7 @@ export type BoardListItem = {
   district: string | null;
   thumbnail: string | null;
   updated_at: string | null;
+  orphaned?: boolean;   // true = saved before owner-id fix; can be claimed
 };
 
 export type BoardDetail = BoardListItem & { state_json: Record<string, unknown> };
@@ -96,4 +97,8 @@ export const boardApi = {
   list: () => apiFetch<BoardListItem[]>("/api/board/list"),
 
   load: (id: number) => apiFetch<BoardDetail>(`/api/board/${id}`),
+
+  claim: (id: number) => apiFetch<{ ok: boolean; board_id: number }>(
+    `/api/board/${id}/claim`, { method: "POST" }
+  ),
 };

@@ -394,7 +394,7 @@ function TopBar({
   aiImages: BoardImage[]; setAiImages: (imgs: BoardImage[]) => void;
   aiLoading: boolean; onGenerate: () => void;
   showAI: boolean; setShowAI: (v: boolean) => void;
-  savedBoards: { board_id: number; title: string }[];
+  savedBoards: { board_id: number; title: string; orphaned?: boolean }[];
   loadBoard: (id: number) => void;
   onOpenList: () => void;
   loadingList: boolean;
@@ -474,7 +474,12 @@ function TopBar({
                         onClick={() => { loadBoard(b.board_id); setShowDropdown(false); }}
                         className="flex w-full items-center gap-2 border-b border-border px-3 py-2.5 text-left text-xs hover:bg-muted transition">
                         <Workflow className="h-4 w-4 text-primary shrink-0" />
-                        <span className="truncate font-semibold">{b.title}</span>
+                        <span className="truncate font-semibold flex-1">{b.title}</span>
+                        {b.orphaned && (
+                          <span className="shrink-0 rounded-[3px] bg-orange-500/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-orange-600">
+                            Recover
+                          </span>
+                        )}
                       </button>
                     ))}
                   </div>
@@ -543,10 +548,13 @@ function TopBar({
 // ── Inner component (editor context) ─────────────────────────────────────
 function BoardInner({
   boardTitle, setBoardTitle, boardId, setBoardId, saving, setSaving,
+  savedBoards, setSavedBoards,
 }: {
   boardTitle: string; setBoardTitle: (v: string) => void;
   boardId: number | null; setBoardId: (id: number | null) => void;
   saving: boolean; setSaving: (v: boolean) => void;
+  savedBoards: { board_id: number; title: string; orphaned?: boolean }[];
+  setSavedBoards: (list: { board_id: number; title: string; orphaned?: boolean }[]) => void;
 }) {
   const editor = useEditor();
   const t = useT();
@@ -554,7 +562,6 @@ function BoardInner({
   const [aiImages, setAiImages] = useState<BoardImage[]>([]);
   const [aiLoading, setAiLoading] = useState(false);
   const [showAI, setShowAI] = useState(true);
-  const [savedBoards, setSavedBoards] = useState<{ board_id: number; title: string }[]>([]);
   const [loadingList, setLoadingList] = useState(false);
 
   // Force light color mode on the editor so draw strokes use dark colours
@@ -579,30 +586,46 @@ function BoardInner({
       });
       setBoardId(res.board_id);
       toast.success(`"${boardTitle}" saved.`);
-      // refresh list
+      // Always refresh list so the just-saved board appears in Open dropdown
       const list = await boardApi.list();
-      setSavedBoards(list as { board_id: number; title: string }[]);
-    } catch { toast.error("Could not save board."); }
-    finally { setSaving(false); }
+      setSavedBoards(list as { board_id: number; title: string; orphaned?: boolean }[]);
+    } catch (err) {
+      console.error("[board] save failed:", err);
+      toast.error("Could not save board.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function handleOpenList() {
     setLoadingList(true);
     try {
       const list = await boardApi.list();
-      setSavedBoards(list as { board_id: number; title: string }[]);
-    } catch { toast.error("Could not load boards."); }
-    finally { setLoadingList(false); }
+      setSavedBoards(list as { board_id: number; title: string; orphaned?: boolean }[]);
+    } catch (err) {
+      console.error("[board] list failed:", err);
+      toast.error("Could not load boards — check you are signed in.");
+    } finally {
+      setLoadingList(false);
+    }
   }
 
   async function loadBoard(id: number) {
     try {
+      // Auto-claim orphaned boards when the user loads them
+      const item = savedBoards.find(b => b.board_id === id);
+      if (item?.orphaned) {
+        await boardApi.claim(id).catch(() => {/* non-fatal */});
+      }
       const b = await boardApi.load(id);
       const snap = (b.state_json as any).snapshot;
       if (snap) editor.loadSnapshot(snap);
       setBoardId(b.board_id);
       setBoardTitle(b.title);
       editor.zoomToFit({ animation: { duration: 400 } });
+      // Refresh list so orphaned flag disappears
+      const list = await boardApi.list();
+      setSavedBoards(list);
     } catch { toast.error("Could not open board."); }
   }
 
@@ -678,6 +701,15 @@ function BoardScreen() {
   const [boardTitle, setBoardTitle] = useState("Untitled board");
   const [boardId, setBoardId] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
+  // savedBoards lives HERE (not in BoardInner) so it survives any tldraw remount
+  const [savedBoards, setSavedBoards] = useState<{ board_id: number; title: string; orphaned?: boolean }[]>([]);
+
+  // Pre-load the list once so Open dropdown is always populated
+  useEffect(() => {
+    boardApi.list()
+      .then(list => setSavedBoards(list as { board_id: number; title: string; orphaned?: boolean }[]))
+      .catch(() => {});
+  }, []);
 
   return (
     <Shell>
@@ -705,7 +737,7 @@ function BoardScreen() {
         }}
       >
         <Tldraw
-          persistenceKey={`satyam-board-${boardId ?? "new"}`}
+          persistenceKey="satyam-investigation-board"
           colorScheme="light"
           options={{ maxPages: 1 }}
           cameraOptions={{ zoomSteps: [0.001, 0.01, 0.05, 0.1, 0.25, 0.5, 1, 2, 4, 8, 16, 32, 64] }}
@@ -714,6 +746,7 @@ function BoardScreen() {
             boardTitle={boardTitle} setBoardTitle={setBoardTitle}
             boardId={boardId} setBoardId={setBoardId}
             saving={saving} setSaving={setSaving}
+            savedBoards={savedBoards} setSavedBoards={setSavedBoards}
           />
         </Tldraw>
       </div>

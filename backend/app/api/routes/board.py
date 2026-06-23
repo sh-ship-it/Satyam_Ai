@@ -94,3 +94,24 @@ async def board_load(
     if result is None:
         raise HTTPException(status_code=404, detail=f"Board {board_id} not found.")
     return result
+
+
+# ---------------------------------------------------------------------------
+# Claim (recover orphaned board)
+# ---------------------------------------------------------------------------
+
+@router.post("/{board_id}/claim")
+async def board_claim(
+    board_id: int,
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    """Claim an orphaned board (owner_user_id IS NULL) for the current user.
+
+    Safe to call multiple times — idempotent if you already own the board.
+    """
+    _guard_chat(principal)
+    ok = await svc.claim_board(session, principal, board_id)
+    if not ok:
+        raise HTTPException(status_code=409, detail="Board not found or owned by another user.")
+    return {"ok": True, "board_id": board_id}
