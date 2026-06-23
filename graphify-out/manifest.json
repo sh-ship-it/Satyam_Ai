@@ -725,8 +725,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
-    "mtime": 1782127185.6342437,
-    "ast_hash": "5bac667872b139e4bab4885d0029562f",
+    "mtime": 1782196871.0493536,
+    "ast_hash": "a429348f4c71f0926258dccc08a57d49",
     "semantic_hash": ""
   },
   "frontend/src/routes/reports.tsx": {
@@ -845,8 +845,8 @@
     "semantic_hash": ""
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1782145491.117787,
-    "ast_hash": "54552d40d126d89a759b7e7b9b0973e6",
+    "mtime": 1782164608.8115158,
+    "ast_hash": "014b05df9928092036bb67a29afca625",
     "semantic_hash": ""
   },
   "frontend/src/routes/README.md": {
