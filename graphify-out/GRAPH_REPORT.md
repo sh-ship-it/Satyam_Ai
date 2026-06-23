@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-23)
 
 ## Corpus Check
-- 295 files · ~1,764,800 words
+- 295 files · ~1,764,962 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `7ec77441`
+- Built from commit: `22e1ede9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -994,7 +994,7 @@ Cohesion: 0.18
 Nodes (11): Addendum — v1.6 Changes (2026-06-22), CaseDrawer Improvements, Chat Width Resize, Frontend New Files, Intelligence Upgrades, Investigation Board Features, New API Endpoints, New Backend Files (+3 more)
 
 ## Knowledge Gaps
-- **1204 isolated node(s):** `SimParams`, `SIM_DEFAULTS`, `SIM_PRESETS`, `SLIDER_META`, `GROUP_COLOR` (+1199 more)
+- **1204 isolated node(s):** `ItemType`, `ReportItem`, `Template`, `TEMPLATES`, `SimParams` (+1199 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -1002,14 +1002,14 @@ Nodes (11): Addendum — v1.6 Changes (2026-06-22), CaseDrawer Improvements, Cha
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 173` to `Community 205`?**
-  _High betweenness centrality (0.113) - this node is a cross-community bridge._
-- **Why does `get_settings()` connect `Community 177` to `Community 3`, `Community 135`, `Community 148`, `Community 149`, `Community 26`, `Community 37`, `Community 165`, `Community 42`, `Community 173`, `Community 175`, `Community 51`, `Community 192`, `Community 197`, `Community 212`, `Community 217`, `Community 93`, `Community 221`, `Community 110`, `Community 117`?**
-  _High betweenness centrality (0.037) - this node is a cross-community bridge._
+  _High betweenness centrality (0.108) - this node is a cross-community bridge._
+- **Why does `Principal` connect `Community 93` to `Community 169`, `Community 173`, `Community 46`, `Community 213`, `Community 121`, `Community 122`?**
+  _High betweenness centrality (0.035) - this node is a cross-community bridge._
 - **Are the 87 inferred relationships involving `Principal` (e.g. with `AsyncSession` and `Principal`) actually correct?**
   _`Principal` has 87 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 8 inferred relationships involving `useT()` (e.g. with `AdminAccessControl()` and `PolicyEditor()`) actually correct?**
   _`useT()` has 8 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `SimParams`, `SIM_DEFAULTS`, `SIM_PRESETS` to the rest of the system?**
+- **What connects `ItemType`, `ReportItem`, `Template` to the rest of the system?**
   _1422 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._

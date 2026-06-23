@@ -730,8 +730,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/reports.tsx": {
-    "mtime": 1782106293.1766284,
-    "ast_hash": "559d6a2d047cd444d7b0389b581b41fc",
+    "mtime": 1782202149.2812996,
+    "ast_hash": "ed51ed1a3a6d49e6425ce244e0ad230b",
     "semantic_hash": ""
   },
   "frontend/src/routes/transcripts.tsx": {
