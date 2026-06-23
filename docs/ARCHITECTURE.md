@@ -3,7 +3,7 @@
 > **Project:** Satyam — Bilingual Voice-Enabled Crime Intelligence AI
 > **Event:** Datathon 2026 · KSP × hack2skill
 > **Stack:** Python 3.11 · FastAPI · PostgreSQL 16 + pgvector · React 19 · TanStack Start
-> **Last updated:** 2026-06-23 · v3.0
+> **Last updated:** 2026-06-24 · v4.0
 
 ---
 
@@ -32,6 +32,7 @@
 21. [Voice Screen Agent](#21-voice-screen-agent)
 22. [Board Brain — Smart Layout Engine](#22-board-brain--smart-layout-engine)
 23. [Kannada Translation System](#23-kannada-translation-system)
+24. [Hands-free Multimodal Layer](#24-hands-free-multimodal-layer)
 
 ---
 
@@ -103,6 +104,7 @@ All data is **100% synthetic** — no real FIRs or PII.
 | i18n | Custom (`src/lib/i18n.tsx`) | 200+ EN→KN keys |
 | Categorical i18n | `tData()` + `kn-data.json` | crime_type, district (41), role, etc. |
 | Graph layout | **@dagrejs/dagre** + **elkjs** | Production-grade diagram layout engines |
+| Gesture / vision | **@mediapipe/tasks-vision 0.10.18** | HandLandmarker + FaceDetector; GPU-accelerated WASM, CDN or offline |
 | Themes | 6 professional + 8 legacy | `data-theme` on `<html>` |
 
 ### 2.4 Infrastructure
@@ -584,10 +586,15 @@ The `BoardInner` overlay wrapper is `pointer-events: none` — only the toolbar 
 
 | Component | Purpose |
 |-----------|---------|
-| `Shell.tsx` | Nav rail (18 routes) + voice router + language toggle + `isAdmin` gate |
+| `Shell.tsx` | Nav rail (18 routes) + voice router + language toggle + `isAdmin` gate + `HandsFreeLayer` mount |
 | `CrimeMap.tsx` | Leaflet map with `darkTiles`, `lockBounds`, `fitSignal`, `liveMarker`, `corridorPath` |
 | `CaseDrawer.tsx` | Persistent (never unmounts), per-caseId cache, Map tab with embedded map + "Take me to map" |
-| `SettingsDialog.tsx` | 3-provider AI Chat Model cards, Board AI engine dropdown, copilot STT toggle (Browser / Sarvam) |
+| `SettingsDialog.tsx` | 3-provider AI Chat Model cards, Board AI engine dropdown, copilot STT toggle, **Hands-free** tab |
+| `HandsFreeLayer.tsx` | Single integration point: mounts gesture/face controllers, executes intents, manages War-room + wake-word |
+| `GestureController.tsx` | rAF detection loop: cursor mapping, swipe, vote+hold, pinch-click, intent dispatch |
+| `FacePresenceController.tsx` | Face detection poll: auto-lock on absence, audit entry, re-arm on resume |
+| `LockOverlay.tsx` | Full-screen PII blur gate; bilingual; dispatches `satyam:session-unlock` on resume |
+| `WarRoomMode.tsx` | Presentation banner + vignette ring; pointer-events isolated |
 | `board.tsx` | tldraw design canvas — `pointer-events-none` overlay, `applySceneToEditor`, AI chatbox |
 | `dossier.tsx` | Person 360 — background pre-fetch, FaceCard with lightbox, crime timeline |
 | `admin.tsx` | Access Control — policy editor modal, anti-lockout warning |
@@ -1041,3 +1048,205 @@ All screens now have complete Kannada translations:
 - `reports.tsx` — all cart/template/builder labels, executive summary text
 - `ProfileMenu.tsx` — account switcher, progress steps, sign out, photo actions
 - `network.tsx` / `audit.tsx` — all filter dropdowns data-driven from live data (no hardcoded options)
+
+---
+
+## 24. Hands-free Multimodal Layer
+
+### 24.1 Overview
+
+The hands-free layer adds **camera-based gesture control**, an **always-on wake word**, and a **face-presence security auto-lock** as a second input modality that runs entirely in the browser alongside the existing voice copilot. It is:
+
+- **Frontend-only and event-driven** — it dispatches to the same `satyam:open-voice` / `satyam:run-task` / navigation event bus the voice agent already uses. Zero new backend ML models, zero changes to the SQL guard, RLS, or audit hash-chain.
+- **Opt-in and off by default** — a master switch in Settings → Hands-free controls everything. The camera is never acquired unless the officer enables it.
+- **Privacy-safe** — all vision processing runs in WASM inside the browser tab. No image or video data leaves the device. The only backend call is a `POST /security/event` that appends a single audit entry to the tamper-evident log.
+- **Production-quality library** — uses **`@mediapipe/tasks-vision 0.10.18`** (Google's current MediaPipe Tasks API, GPU-accelerated) instead of the legacy `@mediapipe/hands` package.
+
+### 24.2 Architecture
+
+```
+Officer's webcam
+  → sharedCamera.ts  (single refcounted getUserMedia stream)
+  → visionLoader.ts  (singleton HandLandmarker + FaceDetector, WASM/GPU, CDN)
+       │
+       ├─ GestureController.tsx  (rAF loop ~30fps)
+       │     gestureClassifier.ts  ← geometry classifier (stateless, ported from reference)
+       │     → majority-vote (5 frames) + hold (400ms) + swipe (motion samples)
+       │     → cursor dot (index-tip → viewport, mirrored X, lerp smoothing)
+       │     → pinch → real DOM click/dblclick at elementFromPoint()
+       │     → all other gestures → computeGestureIntent(gesture, {route, lang, presentation})
+       │         → window.dispatchEvent("satyam:gesture", { intent, gesture })
+       │
+       └─ FacePresenceController.tsx  (setInterval 400ms)
+             → detectForVideo → face present? update lastSeenAt
+             → absent > absenceSeconds → "satyam:session-lock"
+                                       → POST /security/event → write_audit()
+             → face reappears while locked → "satyam:session-present" (hint only, no auto-unlock)
+             → "satyam:session-unlock" from LockOverlay Resume → re-arm
+
+HandsFreeLayer.tsx  (mounted once in Shell, under Router + I18n)
+  → listens "satyam:gesture" → runIntent(intent)
+  → listens "satyam:handsfree-settings" → re-reads settings live
+  → manages War-room mode boolean
+  → manages wake-word lifecycle (pause while copilot mic open, resume after)
+  → bilingual toast + optional TTS confirmation on every fired gesture
+
+wakeWord.ts  (pure module, no React)
+  → SpeechRecognition continuous, interimResults=true
+  → fires onWake() ≤ once/2.5s on "satyam" / "hey satyam" / "ಸತ್ಯಂ"
+  → auto-restarts on onend (Chrome kills continuous recognition after ~30-60s of silence)
+  → permanently stops on not-allowed/service-not-allowed
+  → pauseWakeWord() / resumeWakeWord() for copilot mic contention avoidance
+
+LockOverlay.tsx  →  full-screen backdrop-blur; blocks all UI; bilingual; Resume dispatches "satyam:session-unlock"
+WarRoomBanner.tsx  →  fixed top-center pill + vignette ring when presentation mode is on
+```
+
+### 24.3 Gesture Classifier (`input/gestureClassifier.ts`)
+
+Stateless pure function `classifyGesture(landmarks: Landmark[]): GestureName`. All geometry is **normalized** (scaled by palm width = `dist(indexMcp, pinkyMcp)`) so thresholds are camera-distance-invariant.
+
+| Priority | Gesture | Rule |
+|----------|---------|------|
+| 1 | `pinch` | `dist(thumbTip, indexTip) / palm < 0.38` |
+| 2 | `thumb_up` | fingers curled (≤1 extended), thumbDeltaY < -palm×0.45, tip above indexMcp |
+| 3 | `thumb_down` | fingers curled, thumbDeltaY > palm×0.45, tip below indexMcp |
+| 4 | `open_palm` | all 5 digits extended |
+| 5 | `three` | 3 extended fingers (any variant, incl. "love you" sign) |
+| 5.5 | `two_finger` | index + middle extended **and joined** (`dist(indexTip, middleTip)/palm < 0.5`) — air-mouse cursor pose |
+| 6 | `peace` | index + middle only, **spread apart** |
+| 7 | `point` | index only (cursor mode, no action fired) |
+| 8 | `fist` | nothing extended |
+| — | `swipe_left/right` | motion-based: palm-center samples over 700ms window, speed > 0.35, |dy| < 0.18 |
+| — | `null` | ambiguous pose |
+
+**Cursor anchor:** when the classified pose is `point`, the cursor follows the **index tip** (landmark 8); when it is `two_finger` (index + middle **joined**), the cursor follows the **midpoint of tips 8 & 12** — a steadier "air-mouse" anchor. Both poses are cursor-only and fire no action. Camera preview is mirrored → X is flipped: `viewportX = (1 - fx) * innerWidth`. Dead-band padding `PAD=0.18` ensures the full screen is reachable.
+
+**Dwell click (two-finger air-mouse):** while holding the joined two-finger pose, if the cursor stays within `DWELL_MOVE_TOL` (45px) of its anchor for `DWELL_MS` (1.5s), a real left click fires at the cursor target. A conic-gradient **progress ring** around the cursor fills to show the countdown. It fires once per dwell and re-arms only after the cursor moves away — so it never needs the spread/peace sign and never conflicts with the navigate-to-Console gesture. Disabled in War-room/presentation mode (like pinch-click).
+
+**Swipe** is detected by the controller from `palmCenter()` motion samples, not the classifier. Rejected if a thumb_up/down pose appears in the sample window (avoids scroll/swipe confusion).
+
+### 24.4 Gesture → Intent Mapping (GestureActions)
+
+`computeGestureIntent(gesture, ctx)` is **context-aware**: the same gesture can mean different things depending on the current screen and mode.
+
+#### Normal mode
+
+| Gesture | On map screens (`/console`, `/operations`, `/ops-*`) | On `/board` | Everywhere else |
+|---------|------------------------------------------------------|-------------|-----------------|
+| `swipe_right` | `map_pan dir:right` | `board_pan dir:right` | `nav_cycle dir:+1` (next screen) |
+| `swipe_left` | `map_pan dir:left` | `board_pan dir:left` | `nav_cycle dir:-1` (prev screen) |
+| `thumb_up` | `map_zoom delta:+1` | `board_zoom delta:+1` | `scroll dy:-0.85` |
+| `thumb_down` | `map_zoom delta:-1` | `board_zoom delta:-1` | `scroll dy:+0.85` |
+| `open_palm` | `arm_voice` (open copilot mic) | ← same | ← same |
+| `fist` | `history_back` | ← same | ← same |
+| `peace` ✌ | `navigate /console` | ← same | ← same |
+| `three` 🤟 | `toggle_warroom` | ← same | ← same |
+| `point` | cursor only (no intent) | ← same | ← same |
+| `pinch` | DOM click at cursor target | ← same | ← same |
+
+#### War-room / Presentation mode
+
+| Gesture | Action |
+|---------|--------|
+| `swipe_right`, `open_palm`, `thumb_up` | `nav_cycle dir:+1` (next slide/screen) |
+| `swipe_left` | `nav_cycle dir:-1` (previous) |
+| `three` | `read_screen` (speaks the h1/h2/h3 headings aloud) |
+| `thumb_down`, `fist` | `toggle_warroom` (exit presentation) |
+
+### 24.5 In-screen Gesture Targets
+
+| Screen | Event listened | Effect |
+|--------|---------------|--------|
+| `console.tsx` (Leaflet map) | `satyam:hands-map` | `map.panBy` 25% viewport / `map.setZoom +1/-1` |
+| `board.tsx` (tldraw) | `satyam:hands-board` | `editor.setCamera` pan step / `editor.zoomIn/zoomOut` |
+
+The Leaflet instance is captured via `L.Map.addInitHook` (installed once with a `window.__satyamMapInitHook` guard) since `CrimeMap` is an internal component that doesn't expose its map ref.
+
+### 24.6 Wake Word (`lib/voice/wakeWord.ts`)
+
+```
+startWakeWord({ lang, onWake }) → stop()
+  → SpeechRecognition continuous + interimResults
+  → onresult: scan every transcript for /(\bsatyam\b|\bhey satyam\b)/i or "ಸತ್ಯಂ"
+  → debounce 2.5s → call onWake() → window.dispatchEvent("satyam:open-voice")
+  → onend: auto-restart after 300ms (resilience against Chrome's ~30-60s timeout)
+  → onerror not-allowed → permanently stop (no retry)
+  → onerror no-speech/network/aborted → recover via next onend restart
+
+pauseWakeWord()   — tears down the recognizer (called when copilot mic opens)
+resumeWakeWord()  — rebuilds the recognizer (called on satyam:ai-state "done")
+```
+
+Chrome only allows **one** `SpeechRecognition` at a time. The pause/resume cycle prevents the wake-word listener and the copilot mic from fighting over the audio device.
+
+### 24.7 Face-presence Auto-lock
+
+The auto-lock is the only feature with a backend write. When the FacePresenceController detects the officer has been absent for ≥ `absenceSeconds` (configurable 5–120s, default 20s):
+
+1. `"satyam:session-lock"` event → `LockOverlay` covers the app with `backdrop-blur-xl`
+2. `logSecurityEvent("auto_lock", "No officer detected for Ns")` → `POST /security/event`
+3. Backend allow-lists 5 event types: `auto_lock`, `auto_unlock`, `presence_lost`, `presence_restored`, `manual_lock`
+4. `write_audit(session, action="security.auto_lock", user_id=..., reason=...)` appends to the hash chain
+5. Officer returns → face detected → `"satyam:session-present"` (hint only — no auto-resume)
+6. Officer clicks **Resume session** → `"satyam:session-unlock"` → overlay dismissed, controller re-armed
+
+This makes face-presence events **part of the tamper-evident audit trail**, giving the session-lock a documented, verifiable security record.
+
+### 24.8 New Backend Endpoint
+
+| Method | Path | Auth | Notes |
+|--------|------|------|-------|
+| `POST` | `/security/event` | Any authenticated user | Body: `{ event_type, detail }`. Allow-list: `auto_lock`, `auto_unlock`, `presence_lost`, `presence_restored`, `manual_lock`. Writes to hash-chained audit log. |
+
+### 24.9 New Frontend Files
+
+| File | Purpose |
+|------|---------|
+| `src/input/types.ts` | Shared types: `Landmark`, `GestureName`, `GestureContext`, `HandsFreeSettings` |
+| `src/config/handsFreeConfig.ts` | All thresholds, CDN URLs, settings load/save, `saveHandsFree()` dispatches `satyam:handsfree-settings` |
+| `src/input/sharedCamera.ts` | Single refcounted `getUserMedia` stream + `attachVideo()` helper |
+| `src/input/visionLoader.ts` | Singleton `HandLandmarker` + `FaceDetector` loaders; `closeVision()` cleanup |
+| `src/input/gestureClassifier.ts` | Stateless geometry classifier + `palmCenter()` helper |
+| `src/input/gestureActions.ts` | Route-aware intent mapper; `SCREEN_CYCLE`, `cycleIndex()` |
+| `src/input/GestureController.tsx` | rAF detection loop, cursor, swipe, hold+latch, DOM click |
+| `src/input/FacePresenceController.tsx` | Interval-based presence poll, auto-lock, event dispatch |
+| `src/lib/voice/wakeWord.ts` | Always-on resilient wake-word listener; pause/resume API |
+| `src/lib/api/security.ts` | Fire-and-forget `logSecurityEvent()` client |
+| `src/components/LockOverlay.tsx` | Full-screen lock gate, bilingual, Resume button |
+| `src/components/WarRoomMode.tsx` | Presentation banner + vignette; `WAR_ROOM_EVENT` constant |
+| `src/components/HandsFreeLayer.tsx` | Single Shell-mounted integration component |
+
+### 24.10 Settings — Hands-free Tab
+
+Added to `SettingsDialog.tsx` as a new **"Hands-free"** tab (icon: `Hand`):
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| Enable hands-free | toggle | off | Master switch |
+| Hand-gesture control | toggle | on | Point/pinch cursor, swipe navigate |
+| Show gesture cursor | toggle | on | Glowing dot at index finger tip |
+| Wake word ("Satyam") | toggle | off | Say "Satyam" → arm copilot mic |
+| Presence auto-lock | toggle | off | Auto-lock on officer absence |
+| Speak gesture confirmations | toggle | off | Read action aloud via Sarvam TTS |
+| Auto-lock after | slider 5–120s | 20s | Absence threshold for lock |
+
+Settings are persisted in `localStorage["satyam.handsfree"]` and broadcast via `"satyam:handsfree-settings"` event so all live controllers update without a page reload.
+
+### 24.11 Model / Asset Configuration
+
+By default MediaPipe models load from Google CDN. Override via env vars for offline / air-gapped deployment:
+
+| Env var | Default |
+|---------|---------|
+| `VITE_MP_WASM_BASE` | `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18/wasm` |
+| `VITE_MP_HAND_MODEL` | `https://storage.googleapis.com/mediapipe-models/hand_landmarker/…` |
+| `VITE_MP_FACE_MODEL` | `https://storage.googleapis.com/mediapipe-models/face_detector/…` |
+
+### 24.12 Hard Constraints Preserved
+
+- SQL guard, RLS, and audit hash-chain logic are **untouched**.
+- No new hosted embedding models — BGE-M3 remains the sole embedder.
+- No video/image data leaves the device — all WASM runs in-browser.
+- No individual prediction or profiling from face data — only binary presence/absence.
+- All synthetic data rules from `AGENTS.md` remain in force.

@@ -358,6 +358,65 @@ function Console() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // ── Hands-free map control ─────────────────────────────────────────────────
+  // The Console map is rendered by <CrimeMap/>, which encapsulates a raw Leaflet
+  // `L.Map` (created with `L.map(...)`) and never exposes it as a prop or ref.
+  // Since we may only edit this file, we capture the live map instance with
+  // Leaflet's public `L.Map.addInitHook` — it runs for every Map construction
+  // (including CrimeMap's) with `this` bound to the new map. We stash the latest
+  // instance on a window global + ref so the gesture handler below can drive it.
+  // The hook is installed once and clears itself when a map is unloaded.
+  const mapRef = useRef<any>(null);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const L = (await import("leaflet")).default;
+      if (cancelled) return;
+      const w = window as any;
+      if (!w.__satyamMapInitHook) {
+        w.__satyamMapInitHook = true;
+        L.Map.addInitHook(function (this: any) {
+          w.__satyamLeafletMap = this;
+          this.on("unload", () => {
+            if (w.__satyamLeafletMap === this) w.__satyamLeafletMap = null;
+          });
+        });
+      }
+      // Adopt a map that may have been created before this hook installed.
+      if (w.__satyamLeafletMap) mapRef.current = w.__satyamLeafletMap;
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Hands-free gesture control: the Shell dispatches "satyam:hands-map" while the
+  // officer is on /console. detail is one of:
+  //   { action: "pan",  dir: "left" | "right" } → pan ~25% of the viewport width
+  //   { action: "zoom", delta: 1 | -1 }         → zoom in (+1) / out (-1) one level
+  useEffect(() => {
+    const onHandsMap = (e: Event) => {
+      const map = (window as any).__satyamLeafletMap ?? mapRef.current;
+      if (!map) return; // map not ready yet — no-op
+      mapRef.current = map;
+      const d = (e as CustomEvent).detail || {};
+      try {
+        if (d.action === "pan") {
+          const size = map.getSize();
+          const dx = d.dir === "right" ? size.x * 0.25 : -size.x * 0.25;
+          map.panBy([dx, 0], { animate: true });
+        } else if (d.action === "zoom") {
+          const delta = Number(d.delta) || 0;
+          if (delta) map.setZoom(map.getZoom() + delta);
+        }
+      } catch (err) {
+        console.error("[hands-map] failed:", err);
+      }
+    };
+    window.addEventListener("satyam:hands-map", onHandsMap);
+    return () => window.removeEventListener("satyam:hands-map", onHandsMap);
+  }, []);
+
   const activeConv = conversations.find((c) => c.id === activeId);
 
   function persistMessages(newMessages: ChatMessage[], convId?: string) {

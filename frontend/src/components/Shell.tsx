@@ -27,6 +27,7 @@ import { ThemePicker } from "./ThemePicker";
 import { DarkModeToggle } from "./DarkModeToggle";
 import { SettingsDialog, loadEngineSettings } from "./SettingsDialog";
 import { ProfileMenu } from "./ProfileMenu";
+import { HandsFreeLayer } from "./HandsFreeLayer";
 import { useI18n } from "@/lib/i18n";
 import {
   speakViaSarvam,
@@ -1359,6 +1360,10 @@ export function Shell({ children }: { children: ReactNode }) {
 
         <main className="flex-1 min-w-0 overflow-auto">{children}</main>
       </div>
+
+      {/* Hands-free multimodal layer: gesture control, face-presence auto-lock,
+          wake word, and War-room mode. Self-gates on the user's settings. */}
+      <HandsFreeLayer />
     </div>
   );
 }

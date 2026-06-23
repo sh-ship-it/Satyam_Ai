@@ -16,12 +16,19 @@ import {
   Languages,
   Loader2,
   Sparkles,
+  Hand,
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { enrichDictWithLLM, enrichDataWithLLM } from "@/lib/i18n";
 import { api, type SessionUser } from "@/lib/api/client";
+import {
+  loadHandsFree,
+  saveHandsFree,
+  defaultHandsFree,
+} from "@/config/handsFreeConfig";
+import type { HandsFreeSettings } from "@/input/types";
 
-type Tab = "profile" | "models" | "preferences" | "notifications" | "security" | "data" | "translation";
+type Tab = "profile" | "models" | "preferences" | "notifications" | "security" | "data" | "handsfree" | "translation";
 
 // Per-session engine overrides — persisted in localStorage and sent with each chat request.
 export type EngineSettings = {
@@ -111,6 +118,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
     { id: "notifications", label: t("Notifications"), icon: Bell },
     { id: "security", label: t("Security"), icon: Lock },
     { id: "data", label: t("Data & Privacy"), icon: Database },
+    { id: "handsfree", label: t("Hands-free"), icon: Hand },
     { id: "translation", label: t("Translation"), icon: Languages },
   ];
 
@@ -560,6 +568,10 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
               </Section>
             )}
 
+            {tab === "handsfree" && (
+              <HandsFreePanel t={t} />
+            )}
+
             {tab === "translation" && (
               <TranslationPanel t={t} />
             )}
@@ -582,6 +594,131 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function HandsFreePanel({ t }: { t: (s: string) => string }) {
+  const [s, setS] = useState<HandsFreeSettings>(() => loadHandsFree());
+
+  const update = <K extends keyof HandsFreeSettings>(key: K, val: HandsFreeSettings[K]) => {
+    setS((prev) => {
+      const next = { ...prev, [key]: val };
+      saveHandsFree(next); // persists + dispatches "satyam:handsfree-settings"
+      return next;
+    });
+  };
+
+  const reset = () => {
+    setS(defaultHandsFree);
+    saveHandsFree(defaultHandsFree);
+  };
+
+  return (
+    <Section
+      title={t("Hands-free control")}
+      subtitle={t("Camera gestures, wake word, and presence-aware auto-lock. All processing stays on this device.")}
+    >
+      <HFToggle
+        label={t("Enable hands-free")}
+        hint={t("Master switch. Turns the webcam on for gesture and presence features.")}
+        on={s.enabled}
+        onChange={(v) => update("enabled", v)}
+      />
+
+      <div className={s.enabled ? "space-y-3" : "space-y-3 opacity-40 pointer-events-none"}>
+        <HFToggle
+          label={t("Hand-gesture control")}
+          hint={t("Point to move the cursor, pinch to click, swipe to navigate, ✋ to talk, ✊ to go back.")}
+          on={s.gestures}
+          onChange={(v) => update("gestures", v)}
+        />
+        <HFToggle
+          label={t("Show gesture cursor")}
+          hint={t("Display a glowing dot that follows your index finger.")}
+          on={s.showCursor}
+          onChange={(v) => update("showCursor", v)}
+        />
+        <HFToggle
+          label={t("Wake word (“Satyam”)")}
+          hint={t("Say “Satyam” to open the voice copilot without touching the mic.")}
+          on={s.wakeWord}
+          onChange={(v) => update("wakeWord", v)}
+        />
+        <HFToggle
+          label={t("Presence auto-lock")}
+          hint={t("Blur sensitive data and lock the session when no officer is at the camera. Writes an audit entry.")}
+          on={s.presenceLock}
+          onChange={(v) => update("presenceLock", v)}
+        />
+        <HFToggle
+          label={t("Speak gesture confirmations")}
+          hint={t("Read each gesture action aloud, in addition to the on-screen toast.")}
+          on={s.speakFeedback}
+          onChange={(v) => update("speakFeedback", v)}
+        />
+
+        <div className="rounded-[5px] border-2 border-foreground bg-background px-3 py-2.5 nb-shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-bold">{t("Auto-lock after")}</span>
+            <span className="text-sm font-extrabold tabular-nums">{s.absenceSeconds}s</span>
+          </div>
+          <input
+            type="range"
+            min={5}
+            max={120}
+            step={5}
+            value={s.absenceSeconds}
+            onChange={(e) => update("absenceSeconds", parseInt(e.target.value, 10))}
+            className="mt-2 w-full h-1.5 accent-primary cursor-pointer"
+          />
+          <p className="mt-1 text-xs text-foreground/60">
+            {t("Seconds of no detected face before the session locks.")}
+          </p>
+        </div>
+      </div>
+
+      <button
+        onClick={reset}
+        className="rounded-[5px] border-2 border-foreground bg-secondary-background px-3 py-1.5 text-xs font-bold nb-shadow-sm transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
+      >
+        {t("Reset to defaults")}
+      </button>
+    </Section>
+  );
+}
+
+function HFToggle({
+  label,
+  hint,
+  on,
+  onChange,
+}: {
+  label: string;
+  hint?: string;
+  on: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-4 rounded-[5px] border-2 border-foreground bg-background px-3 py-2.5 nb-shadow-sm">
+      <div className="min-w-0">
+        <div className="text-sm font-bold">{label}</div>
+        {hint && <p className="mt-0.5 text-xs text-foreground/60">{hint}</p>}
+      </div>
+      <button
+        role="switch"
+        aria-checked={on}
+        onClick={() => onChange(!on)}
+        className={`mt-0.5 relative h-6 w-11 shrink-0 rounded-full border-2 border-foreground transition ${
+          on ? "bg-primary" : "bg-secondary-background"
+        }`}
+      >
+        <span
+          className={`absolute top-0.5 h-4 w-4 rounded-full border-2 border-foreground bg-card transition-all ${
+            on ? "left-[22px]" : "left-0.5"
+          }`}
+        />
+      </button>
     </div>
   );
 }

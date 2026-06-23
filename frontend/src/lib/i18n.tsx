@@ -4,6 +4,35 @@ export type Lang = "EN" | "KN";
 
 // English source string -> Kannada translation
 const DICT: Record<string, string> = {
+  // ── Hands-free / multimodal layer ───────────────────────────────────────────
+  "Hands-free": "ಕೈಮುಕ್ತ",
+  "Hands-free control": "ಕೈಮುಕ್ತ ನಿಯಂತ್ರಣ",
+  "Camera gestures, wake word, and presence-aware auto-lock. All processing stays on this device.":
+    "ಕ್ಯಾಮೆರಾ ಸನ್ನೆಗಳು, ವೇಕ್ ವರ್ಡ್ ಮತ್ತು ಉಪಸ್ಥಿತಿ-ಆಧಾರಿತ ಸ್ವಯಂ-ಲಾಕ್. ಎಲ್ಲಾ ಪ್ರಕ್ರಿಯೆ ಈ ಸಾಧನದಲ್ಲೇ ನಡೆಯುತ್ತದೆ.",
+  "Enable hands-free": "ಕೈಮುಕ್ತ ಸಕ್ರಿಯಗೊಳಿಸಿ",
+  "Master switch. Turns the webcam on for gesture and presence features.":
+    "ಮುಖ್ಯ ಸ್ವಿಚ್. ಸನ್ನೆ ಮತ್ತು ಉಪಸ್ಥಿತಿ ವೈಶಿಷ್ಟ್ಯಗಳಿಗಾಗಿ ವೆಬ್‌ಕ್ಯಾಮ್ ಆನ್ ಮಾಡುತ್ತದೆ.",
+  "Hand-gesture control": "ಕೈ ಸನ್ನೆ ನಿಯಂತ್ರಣ",
+  "Point to move the cursor, pinch to click, swipe to navigate, ✋ to talk, ✊ to go back.":
+    "ಕರ್ಸರ್ ಸರಿಸಲು ತೋರಿಸಿ, ಕ್ಲಿಕ್ ಮಾಡಲು ಪಿಂಚ್, ನ್ಯಾವಿಗೇಟ್ ಮಾಡಲು ಸ್ವೈಪ್, ಮಾತನಾಡಲು ✋, ಹಿಂದಕ್ಕೆ ✊.",
+  "Show gesture cursor": "ಸನ್ನೆ ಕರ್ಸರ್ ತೋರಿಸಿ",
+  "Display a glowing dot that follows your index finger.":
+    "ನಿಮ್ಮ ತೋರುಬೆರಳನ್ನು ಅನುಸರಿಸುವ ಹೊಳೆಯುವ ಚುಕ್ಕೆ ತೋರಿಸಿ.",
+  "Wake word (“Satyam”)": "ವೇಕ್ ವರ್ಡ್ (“ಸತ್ಯಂ”)",
+  "Say “Satyam” to open the voice copilot without touching the mic.":
+    "ಮೈಕ್ ಮುಟ್ಟದೆ ಧ್ವನಿ ಸಹಾಯಕವನ್ನು ತೆರೆಯಲು “ಸತ್ಯಂ” ಎಂದು ಹೇಳಿ.",
+  "Presence auto-lock": "ಉಪಸ್ಥಿತಿ ಸ್ವಯಂ-ಲಾಕ್",
+  "Blur sensitive data and lock the session when no officer is at the camera. Writes an audit entry.":
+    "ಕ್ಯಾಮೆರಾ ಮುಂದೆ ಯಾವುದೇ ಅಧಿಕಾರಿ ಇಲ್ಲದಿದ್ದಾಗ ಸೂಕ್ಷ್ಮ ಡೇಟಾ ಮಸುಕುಗೊಳಿಸಿ ಸೆಷನ್ ಲಾಕ್ ಮಾಡುತ್ತದೆ. ಆಡಿಟ್ ನಮೂದು ಬರೆಯುತ್ತದೆ.",
+  "Speak gesture confirmations": "ಸನ್ನೆ ದೃಢೀಕರಣ ಧ್ವನಿಯಲ್ಲಿ ಹೇಳಿ",
+  "Read each gesture action aloud, in addition to the on-screen toast.":
+    "ಪರದೆಯ ಸೂಚನೆಯ ಜೊತೆಗೆ ಪ್ರತಿ ಸನ್ನೆ ಕ್ರಿಯೆಯನ್ನು ಧ್ವನಿಯಲ್ಲಿ ಓದಿ.",
+  "Auto-lock after": "ಇಷ್ಟು ಸಮಯದ ನಂತರ ಸ್ವಯಂ-ಲಾಕ್",
+  "Seconds of no detected face before the session locks.":
+    "ಸೆಷನ್ ಲಾಕ್ ಆಗುವ ಮೊದಲು ಮುಖ ಪತ್ತೆಯಾಗದ ಸೆಕೆಂಡುಗಳು.",
+  "Reset to defaults": "ಡೀಫಾಲ್ಟ್‌ಗೆ ಮರುಹೊಂದಿಸಿ",
+
+
   // Banner / shell
   "Synthetic / demo data — not real case records": "ಕೃತಕ / ಡೆಮೋ ಡೇಟಾ — ನಿಜವಾದ ಪ್ರಕರಣ ದಾಖಲೆಗಳಲ್ಲ",
   "KSP Workspace": "ಕೆ.ಎಸ್.ಪಿ ಕಾರ್ಯಸ್ಥಳ",

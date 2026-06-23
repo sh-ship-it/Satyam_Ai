@@ -587,6 +587,41 @@ function BoardInner({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor]);
 
+  // Hands-free board control: the Shell dispatches "satyam:hands-board"
+  // while the officer is on /board and uses camera gestures. We translate
+  // those gestures into pan (horizontal camera moves) and zoom (in/out
+  // around the viewport centre) on the SAME tldraw editor instance.
+  useEffect(() => {
+    const onHands = (e: Event) => {
+      if (!editor) return;
+      const d = (e as CustomEvent).detail as
+        | { action: "pan"; dir: "left" | "right" }
+        | { action: "zoom"; delta: 1 | -1 }
+        | undefined;
+      if (!d) return;
+      try {
+        if (d.action === "pan") {
+          // Pan horizontally by a quarter of the viewport width. Camera x
+          // is in page space, so divide the screen step by the zoom level.
+          const cam = editor.getCamera();
+          const bounds = editor.getViewportScreenBounds();
+          const step = (bounds.w * 0.25) / cam.z;
+          editor.setCamera(
+            { x: cam.x + (d.dir === "right" ? -step : step), y: cam.y, z: cam.z },
+            { animation: { duration: 200 } },
+          );
+        } else if (d.action === "zoom") {
+          if (d.delta > 0) editor.zoomIn();
+          else editor.zoomOut();
+        }
+      } catch (err) {
+        console.error("[board] hands-free control failed:", err);
+      }
+    };
+    window.addEventListener("satyam:hands-board", onHands);
+    return () => window.removeEventListener("satyam:hands-board", onHands);
+  }, [editor]);
+
   // Force light color mode on the editor so draw strokes use dark colours
   // on the white canvas. tldraw resolves stroke colours via
   // editor.getColorMode() → editor.user preferences, NOT just the
