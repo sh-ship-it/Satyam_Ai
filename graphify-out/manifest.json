@@ -1610,8 +1610,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/board.py": {
-    "mtime": 1782209708.9049473,
-    "ast_hash": "3b352125b9703bcfd3df4aa677b432f8",
+    "mtime": 1782212664.098034,
+    "ast_hash": "5ac8cbf6d3a753397bfc1f0f04a47abe",
     "semantic_hash": ""
   },
   "backend/app/db/board_models.py": {
@@ -1630,8 +1630,8 @@
     "semantic_hash": ""
   },
   "backend/app/services/board_service.py": {
-    "mtime": 1782209675.9057045,
-    "ast_hash": "fbbaf173b367324c2b363b23bfa88dd5",
+    "mtime": 1782213526.943081,
+    "ast_hash": "4853d1b01898ed189fc72e1ee4b1272e",
     "semantic_hash": ""
   },
   "backend/migrations/005_boards.sql": {
@@ -1640,13 +1640,13 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/board.ts": {
-    "mtime": 1782209726.969958,
-    "ast_hash": "c71bd06ef104057fafb7a4525ed07aa3",
+    "mtime": 1782212689.2357104,
+    "ast_hash": "8e1a413aea45a1d132a05b278cce7ce9",
     "semantic_hash": ""
   },
   "frontend/src/routes/board.tsx": {
-    "mtime": 1782210912.1419106,
-    "ast_hash": "c98c1ff00c5300e50fbcc6f09703d309",
+    "mtime": 1782213816.34324,
+    "ast_hash": "428edcaad32dac3cd0e6bf95c5aa7e10",
     "semantic_hash": ""
   },
   "Satyam_Investigation_Board_and_AI_Model_Settings_Build_Prompt.md": {

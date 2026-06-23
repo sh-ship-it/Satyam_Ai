@@ -46,13 +46,12 @@ async def save_board(
     req,  # BoardSaveRequest (avoid circular import; validated in route)
 ) -> int:
     """Insert or update a board. Returns board_id as int."""
-    try:
-        owner_id = int(principal.id)
-    except (ValueError, TypeError):
-        owner_id = None
+    # principal.officer_id = user_id (int) set at login from db_user.user_id
+    # principal.id = username string — never cast it to int
+    owner_id: int | None = principal.officer_id  # already int | None
 
     if req.board_id:
-        # Update existing
+        # Update existing — also update owner if it was NULL (first save race)
         await session.execute(
             update(Board)
             .where(Board.board_id == req.board_id)
@@ -60,6 +59,7 @@ async def save_board(
                 title=req.title,
                 state_json=req.state_json,
                 thumbnail=req.thumbnail,
+                owner_user_id=owner_id,
             )
         )
         return req.board_id
@@ -82,10 +82,7 @@ async def load_board(
     board_id: int,
 ) -> dict | None:
     """Fetch a board by id. Returns None if not found or not owned by principal."""
-    try:
-        owner_id = int(principal.id)
-    except (ValueError, TypeError):
-        owner_id = None
+    owner_id: int | None = principal.officer_id
 
     result = await session.execute(
         select(Board).where(Board.board_id == board_id)
@@ -111,15 +108,27 @@ async def list_boards(
     session: AsyncSession,
     principal: Principal,
 ) -> list[dict]:
-    """List boards owned by principal, ordered by updated_at desc."""
-    try:
-        owner_id = int(principal.id)
-    except (ValueError, TypeError):
-        return []
+    """List boards owned by principal.
+
+    Also includes orphaned boards (owner_user_id IS NULL) so the user can
+    recover boards saved before the owner-id bug was fixed.
+    """
+    owner_id: int | None = principal.officer_id
+    from sqlalchemy import or_
+
+    # Match owned boards OR orphaned boards (NULL owner = pre-fix saves)
+    if owner_id is not None:
+        where_clause = or_(
+            Board.owner_user_id == owner_id,
+            Board.owner_user_id.is_(None),
+        )
+    else:
+        # No owner_id in token — show only null-owner boards as recovery
+        where_clause = Board.owner_user_id.is_(None)
 
     result = await session.execute(
         select(Board)
-        .where(Board.owner_user_id == owner_id)
+        .where(where_clause)
         .order_by(Board.updated_at.desc())
     )
     boards = result.scalars().all()
@@ -130,6 +139,39 @@ async def list_boards(
             "district":   b.district,
             "thumbnail":  b.thumbnail,
             "updated_at": b.updated_at.isoformat() if b.updated_at else None,
+            "orphaned":   b.owner_user_id is None,
         }
         for b in boards
     ]
+
+
+async def claim_board(
+    session: AsyncSession,
+    principal: Principal,
+    board_id: int,
+) -> bool:
+    """Assign an orphaned (owner_user_id IS NULL) board to the current user.
+
+    Returns True if claimed, False if the board doesn't exist or already owned
+    by someone else.
+    """
+    owner_id: int | None = principal.officer_id
+    if owner_id is None:
+        return False
+
+    result = await session.execute(
+        select(Board).where(Board.board_id == board_id)
+    )
+    board = result.scalar_one_or_none()
+    if board is None:
+        return False
+    # Only claim if genuinely orphaned
+    if board.owner_user_id is not None and board.owner_user_id != owner_id:
+        return False  # owned by someone else — refuse
+
+    await session.execute(
+        update(Board)
+        .where(Board.board_id == board_id)
+        .values(owner_user_id=owner_id)
+    )
+    return True
