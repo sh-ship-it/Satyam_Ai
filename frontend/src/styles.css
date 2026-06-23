@@ -290,3 +290,28 @@ body {
 input, textarea {
   cursor: text;
 }
+
+/*
+ * Board canvas — tldraw dot-grid fix.
+ *
+ * Our dark app theme sets background-color on html/body via --color-background
+ * (oklch(18% ...) in dark mode). This leaks into tldraw's .tl-background and
+ * .tl-grid-dot through the CSS cascade, making the canvas black and hiding the
+ * grid dots. We pin tldraw's own colour vars to their light-theme values with
+ * high specificity so the dots always appear, regardless of app theme.
+ *
+ * Values come directly from tldraw's own light theme block in tldraw.css:
+ *   --tl-color-background: hsl(210, 20%, 98%)  ← near-white canvas fill
+ *   --tl-color-grid:       hsl(0,   0%, 43%)   ← mid-grey dots
+ */
+[data-color-scheme="light"] .tl-background,
+[data-color-scheme="light"] .tl-background__wrapper {
+  background-color: hsl(210, 20%, 98%) !important;
+}
+[data-color-scheme="light"] .tl-grid-dot {
+  fill: hsl(0, 0%, 43%) !important;
+}
+[data-color-scheme="light"] {
+  --tl-color-background: hsl(210, 20%, 98%) !important;
+  --tl-color-grid: hsl(0, 0%, 43%) !important;
+}

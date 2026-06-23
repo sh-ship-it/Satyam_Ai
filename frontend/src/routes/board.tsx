@@ -671,12 +671,24 @@ function BoardScreen() {
     <Shell>
       <div
         className="relative h-[calc(100vh-3.5rem)] min-h-0"
+        data-color-scheme="light"
         style={{
-          background: "#ffffff",
+          /*
+           * Force tldraw's own canvas CSS vars to their light-theme values.
+           * Our dark app theme would otherwise bleed --tl-color-background
+           * through the cascade, turning the canvas black and hiding the grid.
+           *
+           * --tl-color-background: the canvas fill (near-white in light mode)
+           * --tl-color-grid:       the dot fill (mid-grey, visible on white)
+           *
+           * These exact values come from tldraw's own light theme in tldraw.css.
+           */
+          ["--tl-color-background" as string]: "hsl(210, 20%, 98%)",
+          ["--tl-color-grid" as string]: "hsl(0, 0%, 43%)",
+          /* Also neutralise our app's --bg so it can't bleed into tldraw internals */
+          ["--bg" as string]: "hsl(210, 20%, 98%)",
           isolation: "isolate",
-          ["--bg" as string]: "#ffffff",
-          ["--bg2" as string]: "#f4f4f4",
-          ["--text" as string]: "#0a0a0a",
+          colorScheme: "light",
         }}
       >
         <Tldraw
