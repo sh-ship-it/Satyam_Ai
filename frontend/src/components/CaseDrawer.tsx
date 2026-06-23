@@ -115,7 +115,7 @@ export function CaseDrawer({
               }
               className="rounded-md border border-border px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted flex items-center gap-1"
             >
-              <Network className="h-3 w-3" /> Network
+              <Network className="h-3 w-3" /> {t("Network")}
             </button>
             <button
               onClick={onClose}
@@ -137,7 +137,7 @@ export function CaseDrawer({
                   : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
-              {tb === "similar" ? "Similar Cases" : tb === "timeline" ? "Timeline" : t(tb)}
+              {tb === "similar" ? t("Similar Cases") : tb === "timeline" ? t("Timeline") : t(tb)}
             </button>
           ))}
         </div>
@@ -245,7 +245,7 @@ export function CaseDrawer({
                         }
                         className="text-[10px] text-primary hover:underline"
                       >
-                        Profile
+                        {t("Profile")}
                       </button>
                     )}
                   </div>
@@ -260,7 +260,7 @@ export function CaseDrawer({
           {tab === "timeline" && (
             <div className="space-y-2">
               {timelineLoading && (
-                <div className="text-sm text-muted-foreground">Loading timeline…</div>
+                <div className="text-sm text-muted-foreground">{t("Loading timeline…")}</div>
               )}
               {timeline.map((e, i) => (
                 <div key={i} className="flex items-start gap-3">
@@ -270,14 +270,14 @@ export function CaseDrawer({
                   <div className="flex-1 border-l-2 border-border pl-3 pb-3">
                     <div className="flex items-center gap-2">
                       <Clock className="h-3 w-3 text-muted-foreground shrink-0" />
-                      <span className="text-xs font-medium">{e.title}</span>
+                      <span className="text-xs font-medium">{t(e.title)}</span>
                     </div>
-                    <div className="text-[10px] text-muted-foreground mt-0.5">{e.type}</div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">{t(e.type)}</div>
                   </div>
                 </div>
               ))}
               {!timelineLoading && timeline.length === 0 && (
-                <div className="text-sm text-muted-foreground">No timeline events found.</div>
+                <div className="text-sm text-muted-foreground">{t("No timeline events found.")}</div>
               )}
             </div>
           )}
@@ -285,7 +285,7 @@ export function CaseDrawer({
           {tab === "similar" && (
             <div className="space-y-3">
               {similarLoading && (
-                <div className="text-sm text-muted-foreground">Finding similar cases…</div>
+                <div className="text-sm text-muted-foreground">{t("Finding similar cases…")}</div>
               )}
               {similar.map((m) => (
                 <div
@@ -297,17 +297,17 @@ export function CaseDrawer({
                       <span className="text-xs font-bold">
                         {m.fir_number || `Case #${m.case_id}`}
                       </span>
-                      <span className="ml-2 text-xs text-muted-foreground">{m.crime_type}</span>
+                      <span className="ml-2 text-xs text-muted-foreground">{tData("crime_type", m.crime_type, lang)}</span>
                     </div>
                     <span className="text-xs font-bold text-primary">
-                      {m.similarity_percent}% match
+                      {m.similarity_percent}% {t("match")}
                     </span>
                   </div>
-                  <div className="text-[10px] text-muted-foreground mb-1.5">{m.district}</div>
+                  <div className="text-[10px] text-muted-foreground mb-1.5">{tData("district", m.district, lang)}</div>
                   <div className="flex flex-wrap gap-1">
                     {m.why_similar.map((w) => (
                       <span key={w} className="rounded-[3px] bg-muted px-1.5 py-0.5 text-[10px]">
-                        {w}
+                        {t(w)}
                       </span>
                     ))}
                   </div>
@@ -316,7 +316,7 @@ export function CaseDrawer({
               {!similarLoading && similar.length === 0 && (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Sparkles className="h-4 w-4" />
-                  No similar cases found.
+                  {t("No similar cases found.")}
                 </div>
               )}
             </div>

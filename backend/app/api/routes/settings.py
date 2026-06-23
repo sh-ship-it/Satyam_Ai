@@ -102,3 +102,101 @@ def get_db_source_host() -> str:
         return url.split("@")[-1].split("/")[0]
     except Exception:
         return "unknown"
+
+
+# ── Kannada Translation Enrichment (Groq Llama-3.1-70B) ───────────────────
+
+class TranslateRequest(BaseModel):
+    strings: list[str]  # up to 20 English UI strings per request
+
+
+class TranslateResponse(BaseModel):
+    translations: dict[str, str]  # EN string → Kannada translation
+
+
+TRANSLATE_SYSTEM = """You are a professional translator for a Karnataka State Police software system.
+Translate each English UI string to formal Kannada (ಕನ್ನಡ) used in official government documents.
+
+STRICT RULES:
+1. Keep these EXACTLY in English (do NOT translate): FIR, IPC, GPS, CCTV, API, PDF, SQL, AI, ML, UI, KSP, BGE, RTX, SHA, URL, SSO, OIDC, TOTP, MFA, OTP
+2. Keep proper nouns in English: Bengaluru, Karnataka, Mysuru, Mangaluru, KSP, Satyam, Groq, Gemini, Sarvam, Bhashini
+3. Keep technical identifiers in English: L1, L2, L3, L4, SP, DGP, IGP, DIG, DySP, CI, PI, PSI, SI, ASI, HC, PC
+4. Use formal/official Kannada — not colloquial
+5. Return ONLY valid JSON — no markdown, no explanation
+6. Format: {"english string": "ಕನ್ನಡ ಅನುವಾದ", ...}"""
+
+
+@router.post("/translate", response_model=TranslateResponse)
+async def translate_to_kannada(
+    req: TranslateRequest,
+    principal: Principal = Depends(get_principal),
+) -> TranslateResponse:
+    """Translate up to 20 English UI strings to Kannada using Groq Llama-3.1-70B.
+
+    Called from Settings → Translation panel. Runs once per device — the
+    frontend caches results in localStorage so no repeated API calls.
+    """
+    try:
+        require(principal, Permission.CHAT)
+    except AccessDenied as e:
+        raise HTTPException(status_code=403, detail=str(e))
+
+    if not req.strings:
+        return TranslateResponse(translations={})
+
+    # Cap at 25 strings per request to avoid token limits
+    strings = req.strings[:25]
+
+    from app.config import get_settings
+    import httpx
+    import json as _json
+
+    s = get_settings()
+    groq_key = s.groq_api_key
+    if not groq_key:
+        raise HTTPException(
+            status_code=503,
+            detail="GROQ_API_KEY not configured on the server. Add it to .env and restart.",
+        )
+
+    # Build prompt: list the strings numbered
+    lines = "\n".join(f'{i+1}. {s_}' for i, s_ in enumerate(strings))
+    user_prompt = (
+        f"Translate these {len(strings)} Kannada UI strings. "
+        f"Return ONLY JSON with each original English string as key:\n\n{lines}"
+    )
+
+    body = {
+        "model": "llama-3.1-70b-versatile",
+        "messages": [
+            {"role": "system", "content": TRANSLATE_SYSTEM},
+            {"role": "user", "content": user_prompt},
+        ],
+        "temperature": 0.1,
+        "response_format": {"type": "json_object"},
+        "max_tokens": 2048,
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            r = await client.post(
+                "https://api.groq.com/openai/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {groq_key}",
+                    "Content-Type": "application/json",
+                },
+                json=body,
+            )
+            r.raise_for_status()
+        data = r.json()
+        raw = data["choices"][0]["message"]["content"]
+        translations: dict[str, str] = _json.loads(raw)
+        # Validate: only return strings that actually differ from the English input
+        clean = {k: v for k, v in translations.items() if isinstance(v, str) and v.strip() and v != k}
+        return TranslateResponse(translations=clean)
+    except _json.JSONDecodeError as e:
+        raise HTTPException(status_code=502, detail=f"Groq returned invalid JSON: {e}")
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(status_code=502, detail=f"Groq API error {e.response.status_code}: {e.response.text[:200]}")
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Translation failed: {e}")

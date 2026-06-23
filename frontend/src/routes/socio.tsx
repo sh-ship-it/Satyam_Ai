@@ -42,7 +42,9 @@ function SocioDashboard() {
       })
       .catch((e) =>
         setError(
-          e?.status === 403 ? "SP+ rank required to view this data." : "Could not load socio data.",
+          e?.status === 403
+            ? t("SP+ rank required to view this data.")
+            : t("Could not load socio data."),
         ),
       )
       .finally(() => setLoading(false));
@@ -52,12 +54,12 @@ function SocioDashboard() {
     <Shell>
       <div className="flex flex-col h-full overflow-auto">
         <div className="border-b-2 border-foreground bg-header px-6 py-4 text-header-foreground">
-          <div className="text-[11px] uppercase tracking-wider opacity-60">PS4 · SP+ access</div>
-          <h1 className="text-xl font-extrabold tracking-tight">Socio-Economic Dashboard</h1>
+          <div className="text-[11px] uppercase tracking-wider opacity-60">{t("PS4 · SP+ access")}</div>
+          <h1 className="text-xl font-extrabold tracking-tight">{t("Socio-Economic Dashboard")}</h1>
         </div>
 
         <div className="flex-1 p-6 space-y-6">
-          {loading && <div className="text-muted-foreground text-sm">Loading…</div>}
+          {loading && <div className="text-muted-foreground text-sm">{t("Loading…")}</div>}
           {error && (
             <div className="rounded-[5px] border-2 border-destructive bg-destructive/10 p-3 text-sm text-destructive">
               {error}
@@ -77,17 +79,16 @@ function SocioDashboard() {
                 {(["Accused", "Victim"] as const).map((r) => (
                   <button
                     key={r}
-                    onClick={() => setRole(r)}
-                    className={`rounded-[5px] border-2 border-foreground px-4 py-1.5 text-xs font-bold transition ${role === r ? "bg-primary text-primary-foreground nb-shadow-sm" : "bg-secondary-background"}`}
+                    onClick={() => setRole(r)}                    className={`rounded-[5px] border-2 border-foreground px-4 py-1.5 text-xs font-bold transition ${role === r ? "bg-primary text-primary-foreground nb-shadow-sm" : "bg-secondary-background"}`}
                   >
-                    {r}
+                    {t(r)}
                   </button>
                 ))}
               </div>
 
               {/* Age + Gender side by side */}
               <div className="grid md:grid-cols-2 gap-4">
-                <ChartCard title="Age Distribution" icon={<Users className="h-4 w-4" />}>
+                <ChartCard title={t("Age Distribution")} icon={<Users className="h-4 w-4" />}>
                   {demo.age_buckets.map((b) => {
                     const max = Math.max(...demo.age_buckets.map((x) => x.count));
                     return (
@@ -104,7 +105,7 @@ function SocioDashboard() {
                     );
                   })}
                 </ChartCard>
-                <ChartCard title="Gender Distribution" icon={<Users className="h-4 w-4" />}>
+                <ChartCard title={t("Gender Distribution")} icon={<Users className="h-4 w-4" />}>
                   {demo.gender.map((g) => {
                     const total = demo.gender.reduce((s, x) => s + x.count, 0);
                     return (
@@ -133,14 +134,14 @@ function SocioDashboard() {
           {corr && (
             <section>
               <h2 className="mb-2 text-sm font-extrabold uppercase tracking-wide">
-                Correlation Matrix
+                {t("Correlation Matrix")}
               </h2>
               <p className="mb-3 text-xs text-muted-foreground italic">{corr.notice}</p>
               <div className="overflow-hidden rounded-[5px] border-2 border-foreground nb-shadow-sm">
                 <table className="w-full text-xs">
                   <thead className="bg-muted/50 text-[11px] uppercase text-muted-foreground">
                     <tr>
-                      {["District", "Crime Rate", "Literacy %", "Urban %", "Income Index"].map(
+                      {[t("District"), t("Crime Rate"), t("Literacy %"), t("Urban %"), t("Income Index")].map(
                         (h) => (
                           <th key={h} className="px-3 py-2.5 text-left font-medium">
                             {h}
@@ -177,7 +178,7 @@ function SocioDashboard() {
           {risk && (
             <section>
               <h2 className="mb-3 text-sm font-extrabold uppercase tracking-wide">
-                Social Risk Index
+                {t("Social Risk Index")}
               </h2>
               <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
                 {risk.areas.map((a) => (
@@ -201,7 +202,7 @@ function SocioDashboard() {
                           key={d}
                           className="rounded-[3px] bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground"
                         >
-                          {d}
+                          {t(d)}
                         </span>
                       ))}
                     </div>

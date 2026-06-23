@@ -639,10 +639,311 @@ const DICT: Record<string, string> = {
   "MO Clusters": "ಎಂಒ ಕ್ಲಸ್ಟರ್‌ಗಳು",
   Cluster: "ಕ್ಲಸ್ಟರ್",
   Cases: "ಪ್ರಕರಣಗಳು",
+
+  // ── Admin screen ────────────────────────────────────────────────────────
+  "Rank": "ಶ್ರೇಣಿ",
+  "admin": "ನಿರ್ವಾಹಕ",
+  "Disabled": "ನಿಷ್ಕ್ರಿಯ",
+  "Edit": "ಸಂಪಾದಿಸಿ",
+  "Cancel": "ರದ್ದುಮಾಡಿ",
+  "Name": "ಹೆಸರು",
+  "No results": "ಯಾವುದೇ ಫಲಿತಾಂಶ ಇಲ್ಲ",
+  "Save changes": "ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ",
+  "Profile": "ಪ್ರೊಫೈಲ್",
+  "Preferences": "ಆದ್ಯತೆಗಳು",
+  "Notifications": "ಅಧಿಸೂಚನೆಗಳು",
+  "Security": "ಭದ್ರತೆ",
+  "Data & Privacy": "ಡೇಟಾ ಮತ್ತು ಗೌಪ್ಯತೆ",
+  "Models & Backend": "ಮಾದರಿಗಳು ಮತ್ತು ಬ್ಯಾಕೆಂಡ್",
+  "Live-switch engines without redeploying": "ಮರು-ನಿಯೋಜನೆ ಇಲ್ಲದೆ ಎಂಜಿನ್ ಬದಲಿಸಿ",
+  "Model backend": "ಮಾದರಿ ಬ್ಯಾಕೆಂಡ್",
+  "API model (cloud)": "API ಮಾದರಿ (ಕ್ಲೌಡ್)",
+  "Local model (on-prem)": "ಸ್ಥಳೀಯ ಮಾದರಿ (ಆನ್-ಪ್ರೆಮ್)",
+  "Text-to-SQL engine": "ಟೆಕ್ಸ್ಟ್-ಟು-SQL ಎಂಜಿನ್",
+  "Your investigator details": "ನಿಮ್ಮ ತನಿಖಾಧಿಕಾರಿ ವಿವರಗಳು",
+  "Badge ID": "ಬ್ಯಾಡ್ಜ್ ಐಡಿ",
+  "Email": "ಇಮೇಲ್",
+  "Language": "ಭಾಷೆ",
+  "Default landing": "ಡಿಫಾಲ್ಟ್ ಲ್ಯಾಂಡಿಂಗ್",
+  "Density": "ಸಾಂದ್ರತೆ",
+  "Comfortable": "ಆರಾಮದಾಯಕ",
+  "Compact": "ಸಂಕ್ಷಿಪ್ತ",
+  "Time format": "ಸಮಯ ಸ್ವರೂಪ",
+  "New FIR assignments": "ಹೊಸ FIR ನಿಯೋಜನೆಗಳು",
+  "Case status updates": "ಪ್ರಕರಣ ಸ್ಥಿತಿ ನವೀಕರಣಗಳು",
+  "Hotspot alerts": "ಹಾಟ್‌ಸ್ಪಾಟ್ ಎಚ್ಚರಿಕೆಗಳು",
+  "Weekly summary email": "ಸಾಪ್ತಾಹಿಕ ಸಾರಾಂಶ ಇಮೇಲ್",
+  "Sound on new message": "ಹೊಸ ಸಂದೇಶದ ಮೇಲೆ ಧ್ವನಿ",
+  "Choose what alerts you receive": "ನೀವು ಸ್ವೀಕರಿಸುವ ಎಚ್ಚರಿಕೆಗಳನ್ನು ಆಯ್ಕೆ ಮಾಡಿ",
+  "Current password": "ಪ್ರಸ್ತುತ ಪಾಸ್‌ವರ್ಡ್",
+  "New password": "ಹೊಸ ಪಾಸ್‌ವರ್ಡ್",
+  "Two-factor authentication (TOTP)": "ಎರಡು-ಅಂಶ ದೃಢೀಕರಣ (TOTP)",
+  "Require MFA on every sign-in": "ಪ್ರತಿ ಸೈನ್ ಇನ್‌ನಲ್ಲಿ MFA ಅಗತ್ಯ",
+  "Allow analytics on query patterns": "ಪ್ರಶ್ನೆ ಮಾದರಿಗಳ ವಿಶ್ಲೇಷಣೆ ಅನುಮತಿಸಿ",
+  "Share anonymized usage with KSP IT": "ಅನಾಮಧೇಯ ಬಳಕೆಯನ್ನು KSP IT ಜೊತೆ ಹಂಚಿ",
+  "Manage workspace data": "ಕಾರ್ಯಸ್ಥಳ ಡೇಟಾ ನಿರ್ವಹಿಸಿ",
+  "Workspace appearance & language": "ಕಾರ್ಯಸ್ಥಳ ಗೋಚರತೆ ಮತ್ತು ಭಾಷೆ",
+
+  // ── Board screen ─────────────────────────────────────────────────────────
+  "Insert": "ಸೇರಿಸಿ",
+  "Insert shapes / errors / media": "ಆಕಾರ / ದೋಷ / ಮಾಧ್ಯಮ ಸೇರಿಸಿ",
+  "Saved boards": "ಉಳಿಸಿದ ಬೋರ್ಡ್‌ಗಳು",
+  "No saved boards yet.": "ಇನ್ನೂ ಯಾವುದೇ ಉಳಿಸಿದ ಬೋರ್ಡ್‌ಗಳಿಲ್ಲ.",
+  "Load saved canvas": "ಉಳಿಸಿದ ಕ್ಯಾನ್ವಾಸ್ ಲೋಡ್ ಮಾಡಿ",
+  "AI Scene Generator": "AI ದೃಶ್ಯ ಜನರೇಟರ್",
+  "Describe suspects, evidence, crime scene… (Ctrl+Enter)": "ಶಂಕಿತರನ್ನು, ಸಾಕ್ಷ್ಯ, ಅಪರಾಧ ಸ್ಥಳ ವಿವರಿಸಿ… (Ctrl+Enter)",
+  "Photo": "ಫೋಟೋ",
+  "Generate": "ರಚಿಸಿ",
+  "Generating…": "ರಚಿಸಲಾಗುತ್ತಿದೆ…",
+  "AI builds the scene — use tldraw tools to edit anything.": "AI ದೃಶ್ಯ ನಿರ್ಮಿಸುತ್ತದೆ — ಏನನ್ನಾದರೂ ಸಂಪಾದಿಸಲು tldraw ಉಪಕರಣಗಳನ್ನು ಬಳಸಿ.",
+  "Open": "ತೆರೆಯಿರಿ",
+  "Export PNG": "PNG ರಫ್ತು",
+  "Clear board?": "ಬೋರ್ಡ್ ತೆರವು ಮಾಡಬೇಕೇ?",
+  "Recover": "ಮರುಪಡೆಯಿರಿ",
+  "Nothing to export — add some shapes first.": "ರಫ್ತು ಮಾಡಲು ಏನೂ ಇಲ್ಲ — ಮೊದಲು ಕೆಲವು ಆಕಾರಗಳನ್ನು ಸೇರಿಸಿ.",
+  "Could not save board.": "ಬೋರ್ಡ್ ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+  "Could not open board.": "ಬೋರ್ಡ್ ತೆರೆಯಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+  "Could not load boards — check you are signed in.": "ಬೋರ್ಡ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ — ನೀವು ಸೈನ್ ಇನ್ ಆಗಿದ್ದೀರಾ ಎಂದು ಪರಿಶೀಲಿಸಿ.",
+  "Rate limit hit — switch to Groq in Settings → Models → Board AI, then try again.": "ದರ ಮಿತಿ ತಲುಪಿದೆ — Settings → Models → Board AI ನಲ್ಲಿ Groq ಗೆ ಬದಲಿಸಿ, ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "Shapes": "ಆಕಾರಗಳು",
+  "Errors": "ದೋಷಗಳು",
+  "Import": "ಆಮದು",
+  "Size": "ಗಾತ್ರ",
+  "Import PNG / JPG": "PNG / JPG ಆಮದು",
+  "Paste images onto canvas": "ಕ್ಯಾನ್ವಾಸ್ ಮೇಲೆ ಚಿತ್ರಗಳನ್ನು ಅಂಟಿಸಿ",
+  "Import Audio Clip": "ಆಡಿಯೋ ಕ್ಲಿಪ್ ಆಮದು",
+  "MP3, WAV, M4A → evidence card": "MP3, WAV, M4A → ಸಾಕ್ಷ್ಯ ಕಾರ್ಡ್",
+
+  // ── Ops / Predictive Deployment ──────────────────────────────────────────
+  "Predictive Deployment": "ಭವಿಷ್ಯಸೂಚಕ ನಿಯೋಜನೆ",
+  "Rule-based forecast · real case data · no synthetic incidents": "ನಿಯಮ-ಆಧಾರಿತ ಮುನ್ಸೂಚನೆ · ನಿಜ ಪ್ರಕರಣ ಡೇಟಾ · ಕೃತಕ ಘಟನೆಗಳಿಲ್ಲ",
+  "Predicted Risk Surface": "ಭವಿಷ್ಯಸೂಚಕ ಅಪಾಯ ಮೇಲ್ಮೈ",
+  "forecast cells": "ಮುನ್ಸೂಚನೆ ಕೋಶಗಳು",
+  "Deployment suggestions": "ನಿಯೋಜನೆ ಸಲಹೆಗಳು",
+  "Recompute": "ಮರು-ಲೆಕ್ಕ ಹಾಕಿ",
+  "No active forecast alerts.": "ಯಾವುದೇ ಸಕ್ರಿಯ ಮುನ್ಸೂಚನೆ ಎಚ್ಚರಿಕೆಗಳಿಲ್ಲ.",
+  "Simulate deployment": "ನಿಯೋಜನೆ ಅನುಕರಿಸಿ",
+  "Stop simulation": "ಅನುಕರಣೆ ನಿಲ್ಲಿಸಿ",
+  "Unit on station": "ಘಟಕ ಠಾಣೆಯಲ್ಲಿದೆ",
+  "Patrol deploying": "ಗಸ್ತು ನಿಯೋಜಿಸಲಾಗುತ್ತಿದೆ",
+  "Unit on station — Reset": "ಘಟಕ ಠಾಣೆಯಲ್ಲಿದೆ — ರೀಸೆಟ್",
+  "Demo Mode ON": "ಡೆಮೋ ಮೋಡ್ ಚಾಲು",
+  "Demo Mode OFF": "ಡೆಮೋ ಮೋಡ್ ಆಫ್",
+  "Simulate All": "ಎಲ್ಲ ಅನುಕರಿಸಿ",
+  "Stop All": "ಎಲ್ಲ ನಿಲ್ಲಿಸಿ",
+  "Active Dispatches": "ಸಕ್ರಿಯ ರವಾನೆಗಳು",
+  "Turn on Demo Mode, then hit Simulate All.": "ಡೆಮೋ ಮೋಡ್ ಆನ್ ಮಾಡಿ, ನಂತರ Simulate All ಒತ್ತಿ.",
+  "en route": "ಮಾರ್ಗದಲ್ಲಿ",
+  "min": "ನಿ",
+  "Green Corridor": "ಹಸಿರು ಕಾರಿಡಾರ್",
+  "ACTIVE": "ಸಕ್ರಿಯ",
+  "IDLE": "ನಿಷ್ಕ್ರಿಯ",
+  "Signals prioritized for responding units.": "ಪ್ರತಿಕ್ರಿಯಿಸುವ ಘಟಕಗಳಿಗಾಗಿ ಸಂಕೇತಗಳಿಗೆ ಆದ್ಯತೆ ನೀಡಲಾಗಿದೆ.",
+  "signals green": "ಸಂಕೇತಗಳು ಹಸಿರು",
+  "Live Event Feed": "ಲೈವ್ ಘಟನೆ ಫೀಡ್",
+  "No events yet.": "ಇನ್ನೂ ಯಾವುದೇ ಘಟನೆಗಳಿಲ್ಲ.",
+
+  // ── Audit screen extra ────────────────────────────────────────────────────
+  "Reset": "ರೀಸೆಟ್",
+
+  // ── Reports extra ─────────────────────────────────────────────────────────
+  "Remove from report": "ವರದಿಯಿಂದ ತೆಗೆಯಿರಿ",
+  "Type 2+ characters to search FIRs": "FIR ಹುಡುಕಲು 2+ ಅಕ್ಷರಗಳನ್ನು ಟೈಪ್ ಮಾಡಿ",
+
+  // ── General UI ────────────────────────────────────────────────────────────
+  "Back": "ಹಿಂದೆ",
+  "Done": "ಮುಗಿಯಿತು",
+  "Confirm": "ದೃಢೀಕರಿಸಿ",
+  "Yes": "ಹೌದು",
+  "No": "ಇಲ್ಲ",
+  "Unknown": "ತಿಳಿದಿಲ್ಲ",
+  "Retry": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+
+  // ── CaseDrawer ────────────────────────────────────────────────────────────
+  "Similar Cases": "ಹೋಲುವ ಪ್ರಕರಣಗಳು",
+  "Timeline": "ಸಮಯರೇಖೆ",
+  "Loading timeline…": "ಸಮಯರೇಖೆ ಲೋಡ್ ಆಗುತ್ತಿದೆ…",
+  "No timeline events found.": "ಯಾವುದೇ ಸಮಯರೇಖೆ ಘಟನೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ.",
+  "Finding similar cases…": "ಹೋಲುವ ಪ್ರಕರಣಗಳನ್ನು ಹುಡುಕಲಾಗುತ್ತಿದೆ…",
+  "No similar cases found.": "ಯಾವುದೇ ಹೋಲುವ ಪ್ರಕರಣಗಳು ಕಂಡುಬಂದಿಲ್ಲ.",
+  "match": "ಹೊಂದಾಣಿಕೆ",
+  // Timeline event titles
+  "Incident occurred": "ಘಟನೆ ಸಂಭವಿಸಿದೆ",
+  "FIR registered": "ಎಫ್‌ಐಆರ್ ನೋಂದಾಯಿಸಲಾಗಿದೆ",
+  "Charge sheet filed": "ಆರೋಪಪಟ್ಟಿ ಸಲ್ಲಿಸಲಾಗಿದೆ",
+  "Conviction recorded": "ಶಿಕ್ಷೆ ದಾಖಲಾಗಿದೆ",
+  // Timeline event type keys (raw from API)
+  "incident": "ಘಟನೆ",
+  "fir_registered": "ಎಫ್‌ಐಆರ್ ನೋಂದಾಯಿತ",
+  "io_assigned": "ತನಿಖಾಧಿಕಾರಿ ನಿಯೋಜಿತ",
+  "charge_sheeted": "ಆರೋಪಪಟ್ಟಿ ಸಲ್ಲಿಸಿದ",
+  "convicted": "ಶಿಕ್ಷೆಗೊಳಗಾದ",
+  "acquitted": "ಖುಲಾಸೆಗೊಂಡ",
+  "closed": "ಮುಕ್ತಾಯ",
+  // why_similar tags from API
+  "Same crime type": "ಒಂದೇ ಅಪರಾಧ ಪ್ರಕಾರ",
+  "Same district": "ಒಂದೇ ಜಿಲ್ಲೆ",
+  "Same legal sections": "ಒಂದೇ ಕಾನೂನು ವಿಭಾಗಗಳು",
+  "Same station": "ಒಂದೇ ಠಾಣೆ",
+  "Same time of day": "ದಿನದ ಒಂದೇ ಸಮಯ",
+
+  // ── Profile screen ────────────────────────────────────────────────────────
+  "Browse offenders…": "ಅಪರಾಧಿಗಳನ್ನು ಬ್ರೌಸ್ ಮಾಡಿ…",
+  "Frequency": "ಆವರ್ತನ",
+  "Recency": "ಇತ್ತೀಚಿನತೆ",
+  "Severity": "ತೀವ್ರತೆ",
+  "Group offending": "ಗುಂಪು ಅಪರಾಧ",
+  "Outcomes": "ಫಲಿತಾಂಶಗಳು",
+  "0 accused cases": "0 ಆರೋಪಿ ಪ್ರಕರಣಗಳು",
+  "Recent case activity": "ಇತ್ತೀಚಿನ ಪ್ರಕರಣ ಚಟುವಟಿಕೆ",
+  "0 heinous cases": "0 ಘೋರ ಪ್ರಕರಣಗಳು",
+  "Connected to 0 associates": "0 ಸಹಚರರಿಗೆ ಸಂಪರ್ಕಿತ",
+  "Charge-sheeted cases": "ಆರೋಪಪಟ್ಟಿ ಸಲ್ಲಿಸಿದ ಪ್ರಕರಣಗಳು",
+  "Decision support only — not predictive policing.": "ನಿರ್ಧಾರ ಬೆಂಬಲ ಮಾತ್ರ — ಭವಿಷ್ಯಸೂಚಕ ಪೊಲೀಸಿಂಗ್ ಅಲ್ಲ.",
+  "Associates": "ಸಹಚರರು",
+  "PS5 · Offender Profile": "PS5 · ಅಪರಾಧಿ ಪ್ರೊಫೈಲ್",
+  "Offender Intelligence": "ಅಪರಾಧಿ ಗುಪ್ತಚರ",
+
+  // ── Socio dashboard ───────────────────────────────────────────────────────
+  "PS4 · SP+ access": "PS4 · SP+ ಪ್ರವೇಶ",
+  "Socio-Economic Dashboard": "ಸಾಮಾಜಿಕ-ಆರ್ಥಿಕ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+  "SP+ rank required to view this data.": "ಈ ಡೇಟಾ ವೀಕ್ಷಿಸಲು SP+ ಶ್ರೇಣಿ ಅಗತ್ಯ.",
+  "Could not load socio data.": "ಸಾಮಾಜಿಕ ಡೇಟಾ ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+  "Age Distribution": "ವಯಸ್ಸಿನ ವಿತರಣೆ",
+  "Gender Distribution": "ಲಿಂಗ ವಿತರಣೆ",
+  "Correlation Matrix": "ಸಹಸಂಬಂಧ ಮ್ಯಾಟ್ರಿಕ್ಸ್",
+  "Social Risk Index": "ಸಾಮಾಜಿಕ ಅಪಾಯ ಸೂಚ್ಯಂಕ",
+  "Crime Rate": "ಅಪರಾಧ ದರ",
+  "Literacy %": "ಸಾಕ್ಷರತೆ %",
+  "Urban %": "ನಗರ %",
+  "Income Index": "ಆದಾಯ ಸೂಚ್ಯಂಕ",
+  // Socio risk drivers (from API)
+  "High crime rate": "ಅಧಿಕ ಅಪರಾಧ ದರ",
+  "Low literacy": "ಕಡಿಮೆ ಸಾಕ್ಷರತೆ",
+  "High urbanization": "ಅಧಿಕ ನಗರೀಕರಣ",
+  "Low income": "ಕಡಿಮೆ ಆದಾಯ",
+  "Repeat offending": "ಪುನರಾವರ್ತಿತ ಅಪರಾಧ",
+  "Young offender concentration": "ಯುವ ಅಪರಾಧಿ ಸಾಂದ್ರತೆ",
+
+  // ── Translation settings tab ─────────────────────────────────────────────
+  "Translation": "ಅನುವಾದ",
+  "Kannada Translation": "ಕನ್ನಡ ಅನುವಾದ",
+  "Use Groq Llama-3.1-70B to fill in missing Kannada translations": "ಕಾಣೆಯಾದ ಕನ್ನಡ ಅನುವಾದಗಳನ್ನು ತುಂಬಲು Groq Llama-3.1-70B ಬಳಸಿ",
+  "How it works": "ಇದು ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ",
+  "Scans every UI string in Kannada mode": "ಕನ್ನಡ ಮೋಡ್‌ನಲ್ಲಿ ಪ್ರತಿ UI ಸ್ಟ್ರಿಂಗ್ ಸ್ಕ್ಯಾನ್ ಮಾಡುತ್ತದೆ",
+  "Sends untranslated strings to Groq Llama-3.1-70B in batches": "ಅನುವಾದಿಸದ ಸ್ಟ್ರಿಂಗ್‌ಗಳನ್ನು Groq Llama-3.1-70B ಗೆ ಬ್ಯಾಚ್‌ಗಳಲ್ಲಿ ಕಳುಹಿಸುತ್ತದೆ",
+  "Saves translations to your browser's local storage": "ಬ್ರೌಸರ್‌ನ ಲೋಕಲ್ ಸ್ಟೋರೇಜ್‌ಗೆ ಅನುವಾದಗಳನ್ನು ಉಳಿಸುತ್ತದೆ",
+  "Runs only once — uses cached result on every subsequent visit": "ಒಮ್ಮೆ ಮಾತ್ರ ಚಲಿಸುತ್ತದೆ — ನಂತರದ ಪ್ರತಿ ಭೇಟಿಯಲ್ಲಿ ಕ್ಯಾಶ್ ಫಲಿತಾಂಶ ಬಳಸುತ್ತದೆ",
+  "New screens added later can be re-enriched using the Reset button": "ನಂತರ ಸೇರಿಸಿದ ಹೊಸ ಪರದೆಗಳನ್ನು Reset ಬಟನ್ ಬಳಸಿ ಮತ್ತೆ ಸಮೃದ್ಧಗೊಳಿಸಬಹುದು",
+  "Requires": "ಅಗತ್ಯ",
+  "GROQ_API_KEY set on the backend server (.env). The key never leaves the server.": "GROQ_API_KEY ಬ್ಯಾಕೆಂಡ್ ಸರ್ವರ್‌ನಲ್ಲಿ (.env) ಹೊಂದಿಸಿ. ಕೀ ಎಂದಿಗೂ ಸರ್ವರ್ ಬಿಡುವುದಿಲ್ಲ.",
+  "Connecting to Groq Llama-3.1-70B…": "Groq Llama-3.1-70B ಗೆ ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ…",
+  "new translations added and saved to local storage": "ಹೊಸ ಅನುವಾದಗಳನ್ನು ಸೇರಿಸಿ ಲೋಕಲ್ ಸ್ಟೋರೇಜ್‌ಗೆ ಉಳಿಸಲಾಗಿದೆ",
+  "Enrichment already applied. All translations loaded from local storage.": "ಸಮೃದ್ಧೀಕರಣ ಈಗಾಗಲೇ ಅನ್ವಯಿಸಲಾಗಿದೆ. ಎಲ್ಲ ಅನುವಾದಗಳನ್ನು ಲೋಕಲ್ ಸ್ಟೋರೇಜ್‌ನಿಂದ ಲೋಡ್ ಮಾಡಲಾಗಿದೆ.",
+  "Run Kannada enrichment": "ಕನ್ನಡ ಸಮೃದ್ಧೀಕರಣ ಚಲಾಯಿಸಿ",
+  "Reset — allow re-enrichment for new screens": "ರೀಸೆಟ್ — ಹೊಸ ಪರದೆಗಳಿಗೆ ಮತ್ತೆ ಸಮೃದ್ಧೀಕರಣ ಅನುಮತಿಸಿ",
+  "Translations are saved to localStorage and merged with the built-in DICT on every page load. They are never sent anywhere except the backend /settings/translate endpoint.": "ಅನುವಾದಗಳನ್ನು localStorage ಗೆ ಉಳಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ಪ್ರತಿ ಪೇಜ್ ಲೋಡ್‌ನಲ್ಲಿ ಅಂತರ್ನಿರ್ಮಿತ DICT ಜೊತೆ ವಿಲೀನಗೊಳ್ಳುತ್ತವೆ.",
 };
 
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (s: string) => string };
 const I18nCtx = createContext<Ctx>({ lang: "EN", setLang: () => {}, t: (s) => s });
+
+// ── localStorage key for LLM-enriched translations ────────────────────────
+const LLM_CACHE_KEY = "satyam.translation.llm-cache";
+
+/** Load any LLM-generated translations cached in localStorage and merge them
+ *  into the runtime dict. Called once on provider mount. */
+function loadLLMCache(): Record<string, string> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = localStorage.getItem(LLM_CACHE_KEY);
+    if (raw) return JSON.parse(raw) as Record<string, string>;
+  } catch {}
+  return {};
+}
+
+/** Call the backend /settings/translate endpoint which uses Groq Llama-3.1-70B
+ *  to translate all DICT keys that currently fall back to English.
+ *
+ *  - Finds every key where DICT[key] === key (no translation yet)
+ *  - Sends them in batches of 20 to the backend
+ *  - Merges results back into the live dict and caches in localStorage
+ *  - Returns the number of new translations added
+ */
+export async function enrichDictWithLLM(
+  onProgress?: (msg: string, count: number) => void,
+): Promise<number> {
+  const API_BASE =
+    typeof window !== "undefined"
+      ? (window as any).__VITE_API_BASE_URL__ ?? "http://localhost:8000"
+      : "http://localhost:8000";
+
+  const token = typeof window !== "undefined"
+    ? (localStorage.getItem("satyam.token") ?? "")
+    : "";
+
+  // Find all keys that still fall back to themselves (untranslated)
+  const missing = Object.keys(DICT).filter((k) => DICT[k] === k);
+
+  // Also include keys not in DICT at all — they'd appear as raw English in KN mode
+  // We only know about DICT keys, so we just work with those for now
+  if (missing.length === 0) {
+    onProgress?.("All translations already present in DICT.", 0);
+    return 0;
+  }
+
+  onProgress?.(`Found ${missing.length} untranslated strings — sending to Groq…`, 0);
+
+  const BATCH = 20;
+  const allNew: Record<string, string> = {};
+  let added = 0;
+
+  for (let i = 0; i < missing.length; i += BATCH) {
+    const batch = missing.slice(i, i + BATCH);
+    onProgress?.(
+      `Translating batch ${Math.floor(i / BATCH) + 1} / ${Math.ceil(missing.length / BATCH)}…`,
+      added,
+    );
+
+    try {
+      const res = await fetch(`${API_BASE}/settings/translate`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          ...(token ? { authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ strings: batch }),
+      });
+
+      if (!res.ok) {
+        const detail = await res.text();
+        throw new Error(`Backend returned ${res.status}: ${detail}`);
+      }
+
+      const data: { translations: Record<string, string> } = await res.json();
+      for (const [k, v] of Object.entries(data.translations)) {
+        if (v && v !== k) {
+          // Merge into live runtime DICT
+          DICT[k] = v;
+          allNew[k] = v;
+          added++;
+        }
+      }
+    } catch (err) {
+      // Skip failed batches — partial enrichment is still useful
+      console.warn("[i18n] enrichDictWithLLM batch failed:", err);
+    }
+  }
+
+  // Persist to localStorage so subsequent page loads use these translations
+  try {
+    const existing = loadLLMCache();
+    localStorage.setItem(LLM_CACHE_KEY, JSON.stringify({ ...existing, ...allNew }));
+  } catch {}
+
+  onProgress?.(`Done — ${added} new Kannada translations added.`, added);
+  return added;
+}
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("EN");
@@ -652,6 +953,12 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       const saved = localStorage.getItem("fq-lang") as Lang | null;
       if (saved === "EN" || saved === "KN") setLangState(saved);
     } catch {}
+
+    // Merge any previously-enriched LLM translations into the live DICT
+    const cached = loadLLMCache();
+    for (const [k, v] of Object.entries(cached)) {
+      if (v && v !== k) DICT[k] = v;
+    }
   }, []);
 
   const setLang = (l: Lang) => {

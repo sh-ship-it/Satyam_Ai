@@ -53,6 +53,7 @@ const RISK_RING: Record<string, string> = {
 
 // ── Offender browse dropdown ──────────────────────────────────────────────────
 function OffenderPicker({ value, onPick }: { value: number; onPick: (id: number) => void }) {
+  const t = useT();
   const [list, setList] = useState<OffenderListItem[]>([]);
   useEffect(() => {
     const p = new URLSearchParams({ limit: "200", min_offenses: "1" });
@@ -67,7 +68,7 @@ function OffenderPicker({ value, onPick }: { value: number; onPick: (id: number)
       onChange={(e) => e.target.value && onPick(Number(e.target.value))}
       className="h-9 rounded-lg border border-input bg-card px-2 text-xs max-w-[200px] focus:outline-none focus:ring-1 focus:ring-primary"
     >
-      <option value="">Browse offenders…</option>
+      <option value="">{t("Browse offenders…")}</option>
       {list.map((o) => (
         <option key={o.person_id} value={o.person_id}>
           {o.display_name} · {o.offense_count} cases{o.district ? ` · ${o.district}` : ""}
@@ -565,7 +566,7 @@ function ProfileScreen() {
                     <div className="space-y-3">
                       {profile.risk.breakdown.map((f) => (
                         <div key={f.factor} className="flex items-center gap-3">
-                          <span className="w-32 text-xs text-muted-foreground">{f.factor}</span>
+                          <span className="w-32 text-xs text-muted-foreground">{t(f.factor)}</span>
                           <div className="flex-1 h-2.5 rounded-full bg-muted overflow-hidden">
                             <div
                               className="h-full bg-primary rounded-full transition-all"
@@ -576,7 +577,7 @@ function ProfileScreen() {
                             {f.score}
                           </span>
                           <span className="w-40 text-[11px] text-muted-foreground truncate">
-                            {f.reason}
+                            {t(f.reason)}
                           </span>
                         </div>
                       ))}

@@ -13,11 +13,15 @@ import {
   Cpu,
   CloudCog,
   HardDrive,
+  Languages,
+  Loader2,
+  Sparkles,
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
+import { enrichDictWithLLM } from "@/lib/i18n";
 import { api, type SessionUser } from "@/lib/api/client";
 
-type Tab = "profile" | "models" | "preferences" | "notifications" | "security" | "data";
+type Tab = "profile" | "models" | "preferences" | "notifications" | "security" | "data" | "translation";
 
 // Per-session engine overrides — persisted in localStorage and sent with each chat request.
 export type EngineSettings = {
@@ -107,6 +111,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
     { id: "notifications", label: t("Notifications"), icon: Bell },
     { id: "security", label: t("Security"), icon: Lock },
     { id: "data", label: t("Data & Privacy"), icon: Database },
+    { id: "translation", label: t("Translation"), icon: Languages },
   ];
 
   return (
@@ -554,6 +559,10 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                 <DataActions t={t} />
               </Section>
             )}
+
+            {tab === "translation" && (
+              <TranslationPanel t={t} />
+            )}
           </div>
         </div>
 
@@ -985,5 +994,126 @@ function DataActions({ t }: { t: (s: string) => string }) {
         </div>
       )}
     </>
+  );
+}
+
+// ── Translation Panel ─────────────────────────────────────────────────────
+const ENRICH_KEY = "satyam.translation.enriched";
+
+function TranslationPanel({ t }: { t: (s: string) => string }) {
+  const [status, setStatus] = useState<"idle" | "running" | "done" | "error">("idle");
+  const [progress, setProgress] = useState("");
+  const [count, setCount] = useState(0);
+  const [alreadyDone, setAlreadyDone] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (localStorage.getItem(ENRICH_KEY) === "1") setAlreadyDone(true);
+    } catch {}
+  }, []);
+
+  async function runEnrichment() {
+    setStatus("running");
+    setProgress(t("Connecting to Groq Llama-3.1-70B…"));
+    setCount(0);
+    try {
+      const added = await enrichDictWithLLM((msg, n) => {
+        setProgress(msg);
+        setCount(n);
+      });
+      setCount(added);
+      setStatus("done");
+      setAlreadyDone(true);
+      try { localStorage.setItem(ENRICH_KEY, "1"); } catch {}
+    } catch (err) {
+      setStatus("error");
+      setProgress(err instanceof Error ? err.message : "Unknown error");
+    }
+  }
+
+  function resetEnrichment() {
+    try { localStorage.removeItem(ENRICH_KEY); } catch {}
+    setAlreadyDone(false);
+    setStatus("idle");
+    setProgress("");
+    setCount(0);
+  }
+
+  return (
+    <Section
+      title={t("Kannada Translation")}
+      subtitle={t("Use Groq Llama-3.1-70B to fill in missing Kannada translations")}
+    >
+      {/* What this does */}
+      <div className="rounded-[5px] border-2 border-foreground bg-primary/5 p-3 text-xs space-y-1.5">
+        <div className="font-bold flex items-center gap-1.5">
+          <Languages className="h-4 w-4 text-primary" />
+          {t("How it works")}
+        </div>
+        <ul className="space-y-1 text-muted-foreground list-disc list-inside">
+          <li>{t("Scans every UI string in Kannada mode")}</li>
+          <li>{t("Sends untranslated strings to Groq Llama-3.1-70B in batches")}</li>
+          <li>{t("Saves translations to your browser's local storage")}</li>
+          <li>{t("Runs only once — uses cached result on every subsequent visit")}</li>
+          <li>{t("New screens added later can be re-enriched using the Reset button")}</li>
+        </ul>
+      </div>
+
+      {/* Groq key check */}
+      <div className="rounded-[5px] border-2 border-foreground bg-background p-3 text-[11px] text-muted-foreground">
+        <span className="font-bold text-foreground">{t("Requires")}:</span>{" "}
+        {t("GROQ_API_KEY set on the backend server (.env). The key never leaves the server.")}
+      </div>
+
+      {/* Status area */}
+      {status === "running" && (
+        <div className="flex items-center gap-2 text-sm text-primary">
+          <Loader2 className="h-4 w-4 animate-spin shrink-0" />
+          <span className="font-medium">{progress}</span>
+        </div>
+      )}
+      {status === "done" && (
+        <div className="rounded-[5px] border-2 border-success/40 bg-success/10 px-3 py-2 text-xs font-bold text-success flex items-center gap-2">
+          <Check className="h-4 w-4 shrink-0" />
+          {t("Done")} — {count} {t("new translations added and saved to local storage")}
+        </div>
+      )}
+      {status === "error" && (
+        <div className="rounded-[5px] border-2 border-destructive/40 bg-destructive/10 px-3 py-2 text-xs font-bold text-destructive">
+          {t("Error")}: {progress}
+        </div>
+      )}
+      {alreadyDone && status === "idle" && (
+        <div className="rounded-[5px] border-2 border-success/30 bg-success/5 px-3 py-2 text-xs text-success font-medium flex items-center gap-2">
+          <Check className="h-3.5 w-3.5 shrink-0" />
+          {t("Enrichment already applied. All translations loaded from local storage.")}
+        </div>
+      )}
+
+      {/* Action buttons */}
+      <div className="flex gap-2">
+        {!alreadyDone && status !== "running" && (
+          <button
+            onClick={runEnrichment}
+            className="flex items-center gap-1.5 rounded-[5px] border-2 border-foreground bg-primary px-4 py-2 text-sm font-extrabold text-primary-foreground nb-shadow transition hover:translate-x-[2px] hover:translate-y-[2px] hover:nb-shadow-sm"
+          >
+            <Sparkles className="h-4 w-4" />
+            {t("Run Kannada enrichment")}
+          </button>
+        )}
+        {(alreadyDone || status === "done") && (
+          <button
+            onClick={resetEnrichment}
+            className="flex items-center gap-1.5 rounded-[5px] border-2 border-foreground bg-secondary-background px-3 py-2 text-xs font-bold nb-shadow-sm transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+          >
+            {t("Reset — allow re-enrichment for new screens")}
+          </button>
+        )}
+      </div>
+
+      <p className="text-[10px] text-muted-foreground">
+        {t("Translations are saved to localStorage and merged with the built-in DICT on every page load. They are never sent anywhere except the backend /settings/translate endpoint.")}
+      </p>
+    </Section>
   );
 }
