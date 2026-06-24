@@ -527,7 +527,7 @@ function LandingPage() {
               </div>
             </div>
           </div>
-          <a className="btn-pill" href="#sl-contact">Contact us <span className="dot">↗</span></a>
+          <Link className="btn-pill" to="/about">About <span className="dot">↗</span></Link>
         </div>
       </header>
 
@@ -545,7 +545,7 @@ function LandingPage() {
             <h1 className="reveal d1">Defending<br />Karnataka <span className="thin">on</span><br /><span className="thin">the</span> <span className="accent">Data.</span></h1>
             <p className="hero-sub reveal d2">Satyam turns scattered case records, statements and signals into one bilingual, explainable intelligence picture for the Karnataka State Police.</p>
             <div className="hero-cta reveal d3">
-              <Link className="btn-pill" to="/login">Request a demo <span className="dot">↗</span></Link>
+              <Link className="btn-pill" to="/login">Login <span className="dot">↗</span></Link>
               <a className="btn-ghost" href="#sl-features"><span className="play">▶</span> Watch Demo</a>
             </div>
           </div>

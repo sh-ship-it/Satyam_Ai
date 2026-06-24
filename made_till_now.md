@@ -3622,3 +3622,33 @@ Full project scan produced 2 critical, 5 high, 9 medium, 10 low issues. All fixa
   - Print/Export PDF button, client-side admin guard (non-admins see lock screen), "DEMO — fictional" pill
 - `Shell.tsx` — `Fingerprint` icon, `/dossier` nav entry visible only to L4+ (isAdmin state from JWT)
 - `frontend/public/demo-dossier/<slug>/front|left|right.png` — placeholder SVG images (replace with AI-generated photos)
+
+---
+
+### [2026-06-24] — Kannada Translation System Upgrades & About Section Reconstruction
+
+#### Kannada Translation Completeness
+- **File modified:** [kn-data.json](file:///d:/college/Projects/Satyam/frontend/src/locales/kn-data.json)
+  - Added Kannada translations for the remaining 23 database-level crime types (both in uppercase and sentence-case/title-case), including `AFFRAY`, `ATTEMPT TO MURDER`, `CULPABLE HOMICIDE NOT AMOUNTING TO MUDER`, `NDPS (DRUGS)`, etc.
+  - Added Kannada translations for missing districts in the dossier dataset (`Bengaluru Urban`, `Mysuru`, `Belagavi`, `Hubballi-Dharwad`).
+- **File modified:** [i18n.tsx](file:///d:/college/Projects/Satyam/frontend/src/lib/i18n.tsx)
+  - Registered all missing static translation keys and values in the `DICT` map to support the Trends, Network, Dispatch, Camera, and Dossier pages.
+- **File modified:** [dossier.tsx](file:///d:/college/Projects/Satyam/frontend/src/routes/dossier.tsx)
+  - Integrated `useI18n()` to retrieve the current language.
+  - Wrapped dynamic district names, risk levels, gender labels, bank account statuses, and crime history lists in `t` and `tData` translation helpers to update to Kannada script in real time.
+- **File modified:** [DispatchPanel.tsx](file:///d:/college/Projects/Satyam/frontend/src/components/ops/DispatchPanel.tsx)
+  - Wrapped patrol simulation incident descriptions, origin and destination names, and timeline stages (`Accepted`, `En route`, `On scene`, `Cleared`) in `t()`.
+- **File modified:** [ReviewPanel.tsx](file:///d:/college/Projects/Satyam/frontend/src/components/ops/ReviewPanel.tsx)
+  - Wrapped dynamic WebSocket candidate types and review queue items in `t()` to ensure real-time alert translations.
+
+#### Landing Page & About Screen Reconstruction
+- **File modified:** [index.tsx](file:///d:/college/Projects/Satyam/frontend/src/routes/index.tsx)
+  - Replaced "Request a demo" in the hero CTA block with "Login".
+  - Replaced "Contact us" in the top-right corner header with "About", linking it directly to the `/about` route using the TanStack `<Link>` router component.
+- **File modified:** [about.tsx](file:///d:/college/Projects/Satyam/frontend/src/routes/about.tsx)
+  - Redesigned the `/about` page to feature a high-fidelity system blueprint illustrating the client, application, data, and model tiers with neo-brutalist panels.
+  - Integrated detailed data-flow diagrams representing the **Grounded Text-to-SQL Pipeline** (memory merging, sqlglot guard, and Postgres RLS) and the **Bilingual STT/TTS Voice Pipeline** (ingest, speech command router, [SPEAK] summary, and neural speech).
+  - Expanded the technology stack catalog into 8 specialized categories to document every package, database utility, AI/ML model, security standard, and infrastructure tool used across the project (Frontend Core, UI & Visualization, Backend & Server, Database & Cache, AI Models & Engines, Voice & Language, Security & Integrity, and DevOps & Infra).
+
+#### Verification & Build
+- Ran full production builds and verified that both client and server compilations succeed without any errors or warnings.

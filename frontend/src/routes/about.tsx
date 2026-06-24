@@ -15,6 +15,11 @@ import {
   Brain,
   Lock,
   Wrench,
+  Server,
+  Languages,
+  Cpu,
+  ShieldCheck,
+  Layers,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -131,51 +136,103 @@ function AboutPage() {
 
   const stack = [
     {
-      cat: "Frontend",
+      cat: "Frontend Core",
       Icon: Code2,
       items: [
         "React 19",
-        "TanStack Start",
+        "TanStack Start (SSR)",
         "TanStack Router",
         "Vite 7",
         "TypeScript",
-        "Tailwind CSS v4",
+        "Bun Runtime",
       ],
     },
     {
       cat: "UI & Visualization",
       Icon: Palette,
-      items: ["shadcn/ui", "Lucide Icons", "Leaflet + heatmap", "Neo-brutalist system"],
-    },
-    {
-      cat: "Backend & Data",
-      Icon: Database,
       items: [
-        "PostgreSQL 16 + pgvector",
-        "Row-Level Security",
-        "Server Functions (RPC)",
-        "FastAPI (Python)",
+        "Tailwind CSS v4",
+        "React Flow (Canvas)",
+        "Leaflet Maps",
+        "Leaflet.heat (Hotspots)",
+        "Lucide Icons",
+        "Neo-Brutalist System",
       ],
     },
     {
-      cat: "AI & Intelligence",
-      Icon: Brain,
+      cat: "Backend & Server",
+      Icon: Server,
       items: [
-        "Gemini 2.5 Flash (API lane)",
-        "Bhashini + Groq (fallback)",
-        "Web Speech (STT + TTS)",
-        "Multilingual EN / KN",
+        "Python 3.11+",
+        "FastAPI (Async)",
+        "Uvicorn (ASGI)",
+        "SQLAlchemy ORM",
+        "asyncpg (Driver)",
+        "Pydantic v2 Schemas",
+        "httpx (Async Client)",
+        "structlog",
       ],
     },
     {
-      cat: "Security & Auth",
-      Icon: Lock,
-      items: ["OIDC + JWT", "Role-based access", "Tamper-evident logs", "SHA-256 hashing"],
+      cat: "Database & Cache",
+      Icon: Layers,
+      items: [
+        "PostgreSQL 16/17",
+        "pgvector (halfvec/vector)",
+        "Redis Session Cache",
+        "Redis PubSub Locks",
+        "SQLGlot Parser Guard",
+        "Postgres Advisory Locks",
+      ],
     },
     {
-      cat: "DevOps",
+      cat: "AI Models & Engines",
+      Icon: Cpu,
+      items: [
+        "Gemini 2.5 Flash",
+        "OpenAI ChatGPT",
+        "Groq Llama-3.3-70B",
+        "Ollama Cloud (Qwen)",
+        "Local BGE-M3 (FP16)",
+        "bge-reranker-v2-m3",
+        "YOLOv8s Weapon Detect",
+        "sentence-transformers",
+        "FlagEmbedding",
+      ],
+    },
+    {
+      cat: "Voice & Language",
+      Icon: Languages,
+      items: [
+        "Sarvam Bulbul v3 (TTS)",
+        "Sarvam Saaras v3 (STT)",
+        "Sarvam Mayura v1 (MT)",
+        "Bhashini API (Govt)",
+        "Browser Web Speech API",
+      ],
+    },
+    {
+      cat: "Security & Integrity",
+      Icon: ShieldCheck,
+      items: [
+        "SHA-256 Hash-Chaining",
+        "Tamper-Evident Audit",
+        "4-Tier PII Masking (L1-L4)",
+        "Row-Level Security (RLS)",
+        "PyJWT Auth Tokens",
+        "KSP Rank RBAC/ABAC",
+      ],
+    },
+    {
+      cat: "DevOps & Infra",
       Icon: Wrench,
-      items: ["Bun runtime", "ESLint + Prettier", "CI build verification", "Zoho Catalyst deploy"],
+      items: [
+        "Docker & Compose",
+        "Zoho Catalyst Deploy",
+        "OpenCV Image Processing",
+        "ESLint & Prettier",
+        "CI Build Verification",
+      ],
     },
   ];
 
@@ -320,6 +377,214 @@ function AboutPage() {
             ))}
           </div>
         </NB>
+      </section>
+
+      {/* System Architecture & Pipelines */}
+      <section className="mx-auto max-w-7xl px-6 pb-14">
+        <div>
+          <div className="inline-block rounded-[5px] border-2 border-foreground bg-secondary-background px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider nb-shadow-sm">
+            Architecture
+          </div>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+            System Architecture & Data Flows
+          </h2>
+          <p className="mt-2 max-w-xl text-sm text-foreground/70">
+            A comprehensive blueprint of the Satyam bilingual voice-enabled forensics platform.
+          </p>
+        </div>
+
+        {/* System Diagram Grid */}
+        <div className="mt-8 grid gap-8 lg:grid-cols-12 items-stretch">
+          {/* System Diagram */}
+          <NB className="lg:col-span-7 p-6 flex flex-col justify-between">
+            <h3 className="text-lg font-extrabold mb-6 flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-full bg-primary" />
+              Bilingual Forensic System Blueprint
+            </h3>
+
+            {/* Visual Diagram Representation */}
+            <div className="flex flex-col gap-6 items-center">
+              {/* Browser Box */}
+              <div className="w-full max-w-md rounded-[8px] border-2 border-foreground bg-card p-4 nb-shadow-sm text-center relative group hover:scale-[1.01] transition-all">
+                <div className="absolute -top-3 left-4 rounded-[4px] border-2 border-foreground bg-accent px-2 py-0.5 text-[8px] font-extrabold text-accent-foreground uppercase">
+                  Client Tier
+                </div>
+                <h4 className="font-extrabold text-sm mb-2 text-primary">Officer's Browser Workspace</h4>
+                <div className="grid grid-cols-3 gap-1.5 text-[9px] font-bold uppercase tracking-wider">
+                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">Console</div>
+                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">Network</div>
+                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">Board</div>
+                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">Forecast</div>
+                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">Dossier</div>
+                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">Admin</div>
+                </div>
+              </div>
+
+              {/* Connecting Arrow */}
+              <div className="flex flex-col items-center py-1">
+                <div className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground bg-background border border-foreground/10 px-2.5 py-1 rounded-full nb-shadow-sm">
+                  HTTPS / REST / SSE / WebSockets
+                </div>
+                <svg className="h-8 w-6 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </div>
+
+              {/* Backend Box */}
+              <div className="w-full max-w-md rounded-[8px] border-2 border-foreground bg-card p-4 nb-shadow-sm text-center relative group hover:scale-[1.01] transition-all">
+                <div className="absolute -top-3 left-4 rounded-[4px] border-2 border-foreground bg-primary px-2 py-0.5 text-[8px] font-extrabold text-primary-foreground uppercase">
+                  Application Tier
+                </div>
+                <h4 className="font-extrabold text-sm mb-2 text-[#6dff52]">FastAPI Async Backend</h4>
+                <p className="text-[10px] text-muted-foreground mb-3 font-semibold">
+                  Intents Router • Progressive NL→SQL • SSE Spoken Summary • RLS Enforcement
+                </p>
+                <div className="flex gap-2 justify-center text-[8px] font-extrabold uppercase">
+                  <span className="px-2 py-1 bg-muted/40 border border-foreground/15 rounded">/chat (SSE)</span>
+                  <span className="px-2 py-1 bg-muted/40 border border-foreground/15 rounded">/cases</span>
+                  <span className="px-2 py-1 bg-muted/40 border border-foreground/15 rounded">/network</span>
+                  <span className="px-2 py-1 bg-muted/40 border border-foreground/15 rounded">/ops</span>
+                </div>
+              </div>
+
+              {/* Split Arrows */}
+              <div className="w-full max-w-md flex justify-between px-16 -my-2">
+                <div className="flex flex-col items-center">
+                  <svg className="h-8 w-6 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </div>
+                <div className="flex flex-col items-center">
+                  <svg className="h-8 w-6 text-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Bottom Row Boxes */}
+              <div className="w-full grid grid-cols-2 gap-4">
+                {/* Secure Storage */}
+                <div className="rounded-[8px] border-2 border-foreground bg-card p-3 nb-shadow-sm text-center relative group hover:scale-[1.01] transition-all">
+                  <div className="absolute -top-3 left-4 rounded-[4px] border-2 border-foreground bg-secondary-background px-1.5 py-0.5 text-[8px] font-extrabold uppercase">
+                    Data Tier
+                  </div>
+                  <h5 className="font-extrabold text-[11px] mb-1.5 text-[#ff9a3a] uppercase tracking-wide">Secure Storage</h5>
+                  <ul className="text-[10px] text-muted-foreground font-semibold space-y-1.5 text-left list-disc list-inside">
+                    <li>PostgreSQL 16 + pgvector</li>
+                    <li>Row-Level Security (RLS)</li>
+                    <li>Hash-Chained Audit Log</li>
+                    <li>Redis Conversation State</li>
+                  </ul>
+                </div>
+
+                {/* AI / Model Layer */}
+                <div className="rounded-[8px] border-2 border-foreground bg-card p-3 nb-shadow-sm text-center relative group hover:scale-[1.01] transition-all">
+                  <div className="absolute -top-3 left-4 rounded-[4px] border-2 border-foreground bg-secondary-background px-1.5 py-0.5 text-[8px] font-extrabold uppercase">
+                    Model Tier
+                  </div>
+                  <h5 className="font-extrabold text-[11px] mb-1.5 text-accent uppercase tracking-wide">AI & Model Engines</h5>
+                  <ul className="text-[10px] text-muted-foreground font-semibold space-y-1.5 text-left list-disc list-inside">
+                    <li>Gemini 2.5 & Groq Llama</li>
+                    <li>Sarvam Bulbul & Saaras</li>
+                    <li>Local BGE-M3 Embedder</li>
+                    <li>Subprocess YOLOv8s</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </NB>
+
+          {/* Core Data Pipelines */}
+          <div className="lg:col-span-5 flex flex-col gap-5">
+            {/* Text-to-SQL Pipeline */}
+            <NB className="p-5 flex-1 relative overflow-hidden">
+              <div className="absolute -right-2 -top-2 select-none text-5xl font-black leading-none text-foreground/[0.04] uppercase">
+                SQL
+              </div>
+              <h4 className="text-sm font-extrabold text-primary flex items-center gap-1.5 mb-3 uppercase tracking-wide">
+                <Database className="h-4 w-4" />
+                Grounded Text-to-SQL Pipeline
+              </h4>
+              <p className="text-xs text-muted-foreground mb-4 leading-relaxed font-semibold">
+                How plain-text English/Kannada questions are translated into secure database queries.
+              </p>
+              <div className="space-y-3 font-mono text-[9px]">
+                <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
+                  <span className="font-extrabold text-primary">01</span>
+                  <div className="min-w-0">
+                    <span className="font-extrabold text-foreground">Natural Language Query</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">"Show me vehicle thefts in Mysuru this year"</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
+                  <span className="font-extrabold text-primary">02</span>
+                  <div className="min-w-0">
+                    <span className="font-extrabold text-foreground">Conversational memory + Broadening</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">Merges last 6 turns. If 0 rows return, relax filters (relax=0..3).</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
+                  <span className="font-extrabold text-primary">03</span>
+                  <div className="min-w-0">
+                    <span className="font-extrabold text-foreground">sqlglot Security Guard</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">Validates single SELECT, restricts to 6-table allow-list, forces auto-LIMIT.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
+                  <span className="font-extrabold text-primary">04</span>
+                  <div className="min-w-0">
+                    <span className="font-extrabold text-foreground">Row-Level Security (RLS)</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">Restricts rows at the PG engine level via GUC session claims.</p>
+                  </div>
+                </div>
+              </div>
+            </NB>
+
+            {/* Bilingual Voice Pipeline */}
+            <NB className="p-5 flex-1 relative overflow-hidden">
+              <div className="absolute -right-2 -top-2 select-none text-5xl font-black leading-none text-foreground/[0.04] uppercase">
+                Voice
+              </div>
+              <h4 className="text-sm font-extrabold text-accent flex items-center gap-1.5 mb-3 uppercase tracking-wide">
+                <Brain className="h-4 w-4" />
+                Bilingual STT/TTS Pipeline
+              </h4>
+              <p className="text-xs text-muted-foreground mb-4 leading-relaxed font-semibold">
+                Bilingual voice processing with automatic language detection and spoken summaries.
+              </p>
+              <div className="space-y-3 font-mono text-[9px]">
+                <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
+                  <span className="font-extrabold text-accent">01</span>
+                  <div className="min-w-0">
+                    <span className="font-extrabold text-foreground">Speech Ingest & Transcription</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">Capture mic, transcribe via Browser Web Speech or Sarvam Saaras v3.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
+                  <span className="font-extrabold text-accent">02</span>
+                  <div className="min-w-0">
+                    <span className="font-extrabold text-foreground">Voice Screen Command Router</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">Extracts navigation intents (e.g., "open network") or directs query to chat.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
+                  <span className="font-extrabold text-accent">03</span>
+                  <div className="min-w-0">
+                    <span className="font-extrabold text-foreground">Spoken Summary Generation</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">LLM outputs a 2-3 sentence [SPEAK] block, or backend builds it from rows.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
+                  <span className="font-extrabold text-accent">04</span>
+                  <div className="min-w-0">
+                    <span className="font-extrabold text-foreground">SSE Stream & Neural Speech</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">Streams speak event separate from UI table. Plays via Bulbul v3 TTS.</p>
+                  </div>
+                </div>
+              </div>
+            </NB>
+          </div>
+        </div>
       </section>
 
       {/* Tech stack */}
