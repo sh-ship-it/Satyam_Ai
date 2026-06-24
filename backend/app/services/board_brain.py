@@ -307,10 +307,12 @@ async def _gemini_multimodal(
 
     url = (
         f"https://generativelanguage.googleapis.com/v1beta"
-        f"/models/{s.gemini_model}:generateContent?key={key}"
+        f"/models/{s.gemini_model}:generateContent"
     )
+    # Key in a header, never in the URL (keeps it out of logs / error messages).
+    headers = {"x-goog-api-key": key, "Content-Type": "application/json"}
     async with httpx.AsyncClient(timeout=45) as client:
-        r = await client.post(url, json=body)
+        r = await client.post(url, headers=headers, json=body)
         r.raise_for_status()
     data = r.json()
     candidates = data.get("candidates", [])

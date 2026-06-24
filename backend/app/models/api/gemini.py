@@ -68,9 +68,16 @@ class GeminiLLM:
         self._log.debug("[brain] GeminiLLM model=%s", self._model)
         if self._demo:
             return f"[demo:gemini] {prompt[:240]}"
-        url = f"{_BASE}/models/{self._model}:generateContent?key={self._key}"
+        # Send the API key in a header (x-goog-api-key), NEVER in the URL query
+        # string — otherwise the key leaks into request logs, error messages,
+        # and any proxy/access logs that record URLs.
+        url = f"{_BASE}/models/{self._model}:generateContent"
+        headers = {"x-goog-api-key": self._key, "Content-Type": "application/json"}
         async with httpx.AsyncClient(timeout=30) as client:
-            r = await client.post(url, json=self._payload(prompt, system, temperature, json_schema))
+            r = await client.post(
+                url, headers=headers,
+                json=self._payload(prompt, system, temperature, json_schema),
+            )
             r.raise_for_status()
             data = r.json()
         if not data.get("candidates"):

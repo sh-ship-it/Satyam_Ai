@@ -3,8 +3,8 @@
 TextToSpeech  → https://texttospeech.googleapis.com/v1/text:synthesize  → MP3 bytes
 SpeechToText  → https://speech.googleapis.com/v1/speech:recognize       → transcript
 
-Both use simple ?key=API_KEY auth (no OAuth/service-account needed), which is
-the lightest way to wire Cloud TTS for a single-tenant app. Falls back to a
+Both authenticate with an API key sent in the `x-goog-api-key` header (never in
+the URL, so the key can't leak into logs). Falls back to a
 demo stub when GOOGLE_TTS_API_KEY is unset so the pipeline never hard-crashes.
 """
 from __future__ import annotations
@@ -46,7 +46,9 @@ class GoogleTTS:
             "audioConfig": {"audioEncoding": "MP3"},
         }
         async with httpx.AsyncClient(timeout=_TIMEOUT) as client:
-            r = await client.post(f"{_TTS_URL}?key={self._key}", json=payload)
+            r = await client.post(
+                _TTS_URL, headers={"x-goog-api-key": self._key}, json=payload
+            )
             r.raise_for_status()
             b64 = r.json().get("audioContent", "")
         return base64.b64decode(b64) if b64 else b""
@@ -71,7 +73,9 @@ class GoogleSTT:
             "audio": {"content": base64.b64encode(audio).decode("ascii")},
         }
         async with httpx.AsyncClient(timeout=_TIMEOUT) as client:
-            r = await client.post(f"{_STT_URL}?key={self._key}", json=payload)
+            r = await client.post(
+                _STT_URL, headers={"x-goog-api-key": self._key}, json=payload
+            )
             r.raise_for_status()
             data = r.json()
         results = data.get("results") or []

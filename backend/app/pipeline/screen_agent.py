@@ -347,16 +347,33 @@ _VAGUE_TOKENS = {
     "any", "a", "an", "some", "random", "sample", "example", "person", "persons",
     "people", "name", "names", "entity", "suspect", "victim", "accused", "someone",
     "somebody", "anyone", "anybody", "anything", "thing", "the", "of", "whatever",
-    "one", "individual", "guy", "here", "there", "search",
+    "one", "individual", "guy", "here", "there", "search", "from", "database", "db",
+    "for", "find", "show", "me", "named", "called", "in",
 }
+
+# Strong placeholder keywords — if a value contains ANY of these it is a request
+# for a sample, not a real value. Real person/place/FIR values never contain
+# these words, so this is high-precision.
+_STRONG_VAGUE = re.compile(
+    r"\b(any|anyone|anybody|someone|somebody|some|random|sample|example|whatever|"
+    r"a\s+person|a\s+suspect|a\s+victim|a\s+name)\b",
+    re.IGNORECASE,
+)
 
 
 def _is_vague(val: Optional[str]) -> bool:
-    """True when a param value carries no real data — empty, or made up entirely
-    of placeholder/instruction words like 'any person name'."""
+    """True when a param value carries no real data — empty, contains a strong
+    placeholder keyword ('any', 'random', 'sample', 'some'…), or is made up
+    entirely of filler/instruction words like 'a person's name'."""
     if not val or not val.strip():
         return True
-    words = re.findall(r"[a-z]+", val.lower())
+    low = val.lower()
+    # Strong keyword anywhere → it's a "give me a sample" request, not real data.
+    if _STRONG_VAGUE.search(low):
+        return True
+    # Strip possessive 's so "person's" → "person", then check token-by-token.
+    low = low.replace("'s", " ").replace("\u2019s", " ")
+    words = [w for w in re.findall(r"[a-z]+", low) if len(w) > 1 or w == "a"]
     if not words:
         return True
     return all(w in _VAGUE_TOKENS for w in words)
@@ -588,24 +605,77 @@ def _parse_llm(raw: str) -> Optional[dict]:
             return None
 
 
+def _is_demo_echo(raw: str) -> bool:
+    """The LLM adapters return a "[demo:...]" placeholder when no API key is
+    configured (demo mode). That is NOT a real plan — treat it as a miss so we
+    fall through to the next engine / the rule planner."""
+    return not raw or raw.lstrip().startswith("[demo:")
+
+
+async def _try_llm(engine: Optional[str], user_prompt: str) -> Optional[dict]:
+    """Run ONE LLM engine and return a parsed plan dict, or None on any problem
+    (demo echo, parse failure, network/429 error)."""
+    try:
+        llm = get_llm(engine)
+        raw = await llm.complete(
+            user_prompt, system=AGENT_SYSTEM, temperature=0.1, json_schema=AGENT_SCHEMA
+        )
+        if _is_demo_echo(raw):
+            log.warning("screen_agent: engine '%s' returned a demo echo (no API key?)", engine)
+            return None
+        return _parse_llm(raw)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("screen_agent: engine '%s' failed (%s)", engine, exc)
+        return None
+
+
+def _finalize_llm(llm_plan: dict, command: str, lang: str) -> Optional[dict]:
+    """Validate + shape a parsed LLM plan into the final ActionPlan, or None if
+    the plan has nothing useful in it."""
+    route = llm_plan.get("route") or None
+    answer = bool(llm_plan.get("answer", False))
+    speak = str(llm_plan.get("speak", "") or "")
+    actions = _sanitize_actions(llm_plan.get("actions", []))
+    if not (route or actions or answer):
+        return None
+    # If the LLM picked a route but emitted no valid actions, enrich with the
+    # rule planner's actions for that route.
+    if route and not actions:
+        rp = _rule_plan(command, route, lang)
+        if rp.get("actions"):
+            actions = _sanitize_actions(rp["actions"])
+            if not speak:
+                speak = rp.get("speak", "")
+    return {"route": route, "answer": answer, "speak": speak, "actions": _normalize_samples(actions)}
+
+
 async def plan(
     command: str,
     current_route: Optional[str] = None,
     lang: str = "en",
     brain_engine: Optional[str] = None,
+    planner: Optional[str] = None,
 ) -> dict:
     """Produce an ActionPlan for the spoken command.
 
     Returns: {route, answer, speak, actions:[{screen, action, params}]}
 
-    - Tries the LLM first (richest understanding of arbitrary phrasing).
-    - Validates + sanitizes every action against the manifest.
-    - Falls back to the deterministic rule planner if the LLM fails or yields
-      nothing actionable.
+    `planner`:
+      - "rule" → skip the LLM entirely, use the deterministic keyword planner.
+      - "llm" / None (default) → use the LLM brain with a Gemini→Groq fallback
+        cascade, then the rule planner as a last resort.
+
+    The LLM path is resilient: it tries the chosen brain engine first, then Groq
+    (so a missing/rate-limited Gemini key never silently degrades the copilot),
+    and only falls back to the keyword planner if every LLM attempt fails.
     """
     command = (command or "").strip()
     if not command:
         return {"route": None, "answer": True, "speak": "", "actions": []}
+
+    # Explicit "rule" mode — deterministic only, no LLM call.
+    if (planner or "").lower() == "rule":
+        return _rule_plan(command, current_route, lang)
 
     user_prompt = (
         f"Officer is currently on screen: {current_route or 'unknown'}\n"
@@ -614,32 +684,21 @@ async def plan(
         "Return the ActionPlan JSON now."
     )
 
-    llm_plan: Optional[dict] = None
-    try:
-        llm = get_llm(brain_engine)
-        raw = await llm.complete(
-            user_prompt, system=AGENT_SYSTEM, temperature=0.1, json_schema=AGENT_SCHEMA
-        )
-        llm_plan = _parse_llm(raw)
-    except Exception as exc:  # noqa: BLE001
-        log.warning("screen_agent.plan LLM failed (%s) — using rule planner", exc)
+    # Engine cascade: chosen brain first, then Groq as an automatic fallback so
+    # the real brain still fires when the primary is missing a key or 429s.
+    primary = brain_engine or "gemini"
+    engines: list[str] = [primary]
+    if primary != "groq":
+        engines.append("groq")
 
-    if llm_plan is not None:
-        route = llm_plan.get("route") or None
-        answer = bool(llm_plan.get("answer", False))
-        speak = str(llm_plan.get("speak", "") or "")
-        actions = _sanitize_actions(llm_plan.get("actions", []))
-        # Accept the LLM plan only if it produced something useful.
-        if route or actions or answer:
-            # If the LLM marked a route but emitted no valid actions, try to
-            # enrich with the rule planner's actions for that route.
-            if route and not actions:
-                rp = _rule_plan(command, route, lang)
-                if rp.get("actions"):
-                    actions = _sanitize_actions(rp["actions"])
-                    if not speak:
-                        speak = rp.get("speak", "")
-            return {"route": route, "answer": answer, "speak": speak, "actions": _normalize_samples(actions)}
+    for eng in engines:
+        parsed = await _try_llm(eng, user_prompt)
+        if parsed is None:
+            continue
+        result = _finalize_llm(parsed, command, lang)
+        if result is not None:
+            return result
 
-    # Deterministic fallback
+    # Every LLM attempt failed/echoed — deterministic fallback.
+    log.warning("screen_agent: all LLM engines unavailable — using rule planner")
     return _rule_plan(command, current_route, lang)

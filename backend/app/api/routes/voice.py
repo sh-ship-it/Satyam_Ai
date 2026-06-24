@@ -137,6 +137,7 @@ async def voice_agent(
         current_route=req.current_route,
         lang=_norm_lang(req.lang),
         brain_engine=req.brain_engine,
+        planner=req.planner,
     )
     result["actions"] = await screen_agent.resolve_samples(result.get("actions", []), session)
     return AgentPlan(**result)

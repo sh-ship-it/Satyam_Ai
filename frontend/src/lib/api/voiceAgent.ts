@@ -23,6 +23,7 @@ export async function planVoiceAction(args: {
   current_route?: string | null;
   lang?: "en" | "kn";
   brain_engine?: string;
+  planner?: "llm" | "rule";
 }): Promise<AgentPlan> {
   const token = getAuthToken();
   const res = await fetch(`${API_BASE}/voice/agent`, {
@@ -36,6 +37,7 @@ export async function planVoiceAction(args: {
       current_route: args.current_route ?? null,
       lang: args.lang ?? "en",
       brain_engine: args.brain_engine,
+      planner: args.planner,
     }),
   });
   if (!res.ok) throw new Error(`voice/agent failed: ${res.status}`);

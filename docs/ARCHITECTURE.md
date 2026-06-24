@@ -312,6 +312,7 @@ Three settings in `EngineSettings` (stored in `localStorage`):
 - `sqlEngine` — `gemini | qwen3-coder-next | local` — powers Text-to-SQL
 - `boardEngine` — `gemini | groq | openai` — powers the Board AI scene generator
 - `copilotStt` — `browser | sarvam` — voice copilot engine, drives **both** its mic (STT) and spoken replies (TTS) (default: `browser`)
+- `copilotPlanner` — `llm | rule` — copilot screen-agent planner: `llm` uses the brain (Gemini→Groq cascade), `rule` uses the deterministic keyword planner (default: `llm`)
 - `voiceBackend` — `sarvam | google | webspeech` — TTS engine for voice replies
 
 The Settings → Models tab shows each provider as a card with configured/unconfigured badge fetched from `GET /settings/db-source/models` (returns booleans only — never API keys). The copilot STT picker is a two-button selector independent of `voiceBackend`.
@@ -799,6 +800,8 @@ cd frontend && bun install && bun run dev
 | H3 | `pg_advisory_xact_lock` serialises all audit-chain appends — hash chain can no longer fork under concurrent load |
 | H4 | `write_audit()` committed in its own transaction — survives mid-stream client disconnect |
 | H5 | `_guard_write(principal)` on all side-effecting ops endpoints (`dispatch`, `confirm_item`, `detect/notify`, `camera/start/stop`) — requires `Permission.RUN_ANALYTICS` (L2+) |
+| H6 | **API keys never in URLs.** Gemini (chat + board brain) and Google voice now send the key in the `x-goog-api-key` header, not `?key=` — so it can't leak into request logs, error messages, or proxy access logs. (Groq/OpenAI/Sarvam already use `Authorization`/header auth.) |
+| H7 | **AI never reveals secrets.** Both `build_answer_system()` (rule 9) and the static `ANSWER_SYSTEM` carry an absolute guardrail: never reveal/encode/hint at API keys, tokens, passwords, JWT secrets, DB URLs, or env vars — regardless of phrasing, role-play, or claimed authority; refuse with "That information is confidential." |
 
 ### 20.2 Voice / Mic Fixes
 
@@ -880,6 +883,14 @@ Officer speaks → copilot STT → Shell.tsx parseVoiceCommand()
 3. Falls back to `_rule_plan()` (deterministic, bilingual, works offline)
 4. Returns `AgentPlan` consumed by Shell.tsx
 
+**`plan(command, current_route, lang, brain_engine, planner)`** — main entry point:
+1. If `planner="rule"`: skip the LLM entirely and use `_rule_plan()` (deterministic, offline).
+2. Otherwise (`planner="llm"`, default): run an **engine cascade** — the chosen brain (`brain_engine`, default Gemini) first, then **Groq as an automatic fallback**. `_try_llm()` treats a `"[demo:...]"` echo (no API key) or any error/429 as a miss and moves to the next engine. This means a missing or rate-limited Gemini key never silently degrades the copilot — Groq picks it up.
+3. Each parsed plan is validated + shaped by `_finalize_llm()` (sanitize against the manifest, enrich a bare route with rule-planner actions, normalize sample sentinels).
+4. Only if **every** LLM engine fails does it fall back to `_rule_plan()`.
+
+The planner is user-switchable in Settings → Models → **Copilot screen agent**: *LLM screen plan* (Gemini→Groq) vs *Rule screen plan* (deterministic). The chosen value rides on `AgentRequest.planner`.
+
 **`_rule_plan()`** — deterministic fallback extractor:
 - Detects route by keyword scoring (longer keyword = stronger match, EN + KN)
 - Extracts: crime types, Karnataka districts, person names, numbers (1-30 → horizon)
@@ -952,7 +963,7 @@ A real copilot must turn "seed **any** person", "filter to **some** district", "
 | `__SAMPLE_STATION__` | `stations.station_name` | random |
 
 Flow:
-1. **Detection** — both the LLM prompt (rule 8) and the deterministic planner's `_normalize_samples()` convert vague/placeholder param values (`_is_vague()` — value made only of words like *any, a, some, random, sample, person, name*) into the sentinel that fits the `(screen, action, param)` slot (`_sentinel_for()`).
+1. **Detection** — both the LLM prompt (rule 8) and the deterministic planner's `_normalize_samples()` convert vague/placeholder param values into the sentinel that fits the `(screen, action, param)` slot (`_sentinel_for()`). `_is_vague()` is high-precision: it fires on any **strong placeholder keyword** (any/random/sample/some/example…) anywhere in the value, strips possessives (so "any person**'s** name" is caught), and also treats values made entirely of filler words as vague — while real names ("Indrvati Satya", "Bengaluru City") pass through untouched.
 2. **Resolution** — the `/voice/agent` route calls `resolve_samples(actions, session)` with the caller's **RLS-scoped** session, replacing each sentinel with a real value (`_SAMPLE_SQL`). Values are cached per request; unresolved sentinels are *dropped* so the frontend never receives a placeholder as data.
 3. **Result** — "take me to network and seed any person" now seeds an actual hub offender from the officer's jurisdiction, producing a populated link graph. This works uniformly across all 14 screens because it keys off param type, not screen.
 

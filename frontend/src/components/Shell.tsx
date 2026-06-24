@@ -437,6 +437,7 @@ export function Shell({ children }: { children: ReactNode }) {
           current_route: pathname,
           lang: resolvedLang,
           brain_engine: engines.brainEngine,
+          planner: engines.copilotPlanner,
         })
           .then((planRes: AgentPlan) => {
             // The TOP-RIGHT COPILOT answers data/conversational questions ITSELF

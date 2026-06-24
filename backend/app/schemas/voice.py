@@ -44,6 +44,9 @@ class AgentRequest(BaseModel):
     current_route: str | None = None
     lang: str = "en"
     brain_engine: str | None = None
+    # "llm" (default) = use the LLM brain (Gemini→Groq cascade) then rule fallback;
+    # "rule" = deterministic keyword planner only (no LLM call).
+    planner: Literal["llm", "rule"] | None = None
 
 
 class ScreenAction(BaseModel):

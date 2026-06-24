@@ -41,6 +41,14 @@ const DICT: Record<string, string> = {
   "Browser (built-in)": "ಬ್ರೌಸರ್ (ಅಂತರ್ನಿರ್ಮಿತ)",
   "Device voice · offline · lowest latency": "ಸಾಧನ ಧ್ವನಿ · ಆಫ್‌ಲೈನ್ · ಕಡಿಮೆ ವಿಳಂಬ",
   "Cloud · best Kannada": "ಕ್ಲೌಡ್ · ಅತ್ಯುತ್ತಮ ಕನ್ನಡ",
+  // Copilot screen-agent planner
+  "Copilot screen agent (planner)": "ಸಹಾಯಕ ಪರದೆ ಏಜೆಂಟ್ (ಯೋಜಕ)",
+  "How the copilot understands navigation/automation commands. LLM = real brain (Gemini→Groq), best understanding. Rule = fast deterministic keyword matching, works offline.":
+    "ಸಹಾಯಕವು ನ್ಯಾವಿಗೇಷನ್/ಆಟೊಮೇಷನ್ ಆದೇಶಗಳನ್ನು ಹೇಗೆ ಅರ್ಥಮಾಡಿಕೊಳ್ಳುತ್ತದೆ. LLM = ನಿಜವಾದ ಮೆದುಳು (Gemini→Groq), ಅತ್ಯುತ್ತಮ ತಿಳಿವಳಿಕೆ. Rule = ವೇಗದ ನಿರ್ದಿಷ್ಟ ಕೀವರ್ಡ್ ಹೊಂದಾಣಿಕೆ, ಆಫ್‌ಲೈನ್ ಕೆಲಸ ಮಾಡುತ್ತದೆ.",
+  "LLM screen plan": "LLM ಪರದೆ ಯೋಜನೆ",
+  "Rule screen plan": "ನಿಯಮ ಪರದೆ ಯೋಜನೆ",
+  "Gemini → Groq · understands anything": "Gemini → Groq · ಯಾವುದನ್ನೂ ಅರ್ಥಮಾಡಿಕೊಳ್ಳುತ್ತದೆ",
+  "Deterministic · offline · keyword based": "ನಿರ್ದಿಷ್ಟ · ಆಫ್‌ಲೈನ್ · ಕೀವರ್ಡ್ ಆಧಾರಿತ",
 
 
   // Banner / shell

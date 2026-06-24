@@ -40,6 +40,8 @@ export type EngineSettings = {
   voiceBackend: "sarvam" | "google" | "webspeech";
   /** Copilot (top-right) microphone STT engine — independent of the chat voice. */
   copilotStt: "browser" | "sarvam";
+  /** Screen-agent planner for the copilot: LLM brain (Gemini→Groq) or deterministic rules. */
+  copilotPlanner: "llm" | "rule";
   dbSource: "cloud" | "local";
 };
 
@@ -53,6 +55,7 @@ const defaultEngineSettings: EngineSettings = {
   boardEngine: "gemini",
   voiceBackend: "sarvam",
   copilotStt: "browser" as const, // lowest-latency live captions; switch to Sarvam for best Kannada
+  copilotPlanner: "llm" as const, // LLM brain by default; "rule" = deterministic offline planner
   dbSource: "cloud",
 };
 
@@ -480,6 +483,52 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                       >
                         <span className="flex items-center gap-1">
                           {engines.copilotStt === opt.id && <Check className="h-3 w-3" />}
+                          {opt.label}
+                        </span>
+                        <span className="mt-0.5 block font-normal text-[10px] opacity-70">
+                          {opt.hint}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Copilot screen-agent planner — LLM brain vs deterministic rules */}
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-foreground">
+                    {t("Copilot screen agent (planner)")}
+                  </label>
+                  <p className="text-xs text-muted-foreground">
+                    {t(
+                      "How the copilot understands navigation/automation commands. LLM = real brain (Gemini→Groq), best understanding. Rule = fast deterministic keyword matching, works offline.",
+                    )}
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      {
+                        id: "llm" as const,
+                        label: t("LLM screen plan"),
+                        hint: t("Gemini → Groq · understands anything"),
+                      },
+                      {
+                        id: "rule" as const,
+                        label: t("Rule screen plan"),
+                        hint: t("Deterministic · offline · keyword based"),
+                      },
+                    ].map((opt) => (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => updateEngine("copilotPlanner", opt.id)}
+                        className={
+                          "rounded-[5px] border-2 border-foreground px-3 py-2 text-left text-xs font-bold transition hover:translate-x-[2px] hover:translate-y-[2px] " +
+                          (engines.copilotPlanner === opt.id
+                            ? "bg-primary text-primary-foreground nb-shadow-sm"
+                            : "bg-secondary-background text-foreground")
+                        }
+                      >
+                        <span className="flex items-center gap-1">
+                          {engines.copilotPlanner === opt.id && <Check className="h-3 w-3" />}
                           {opt.label}
                         </span>
                         <span className="mt-0.5 block font-normal text-[10px] opacity-70">
