@@ -45,7 +45,8 @@ class StationRow(BaseModel):
 
 class StationBreakdownResponse(BaseModel):
     rows: list[StationRow] = []
-    total: int = 0
+    total: int = 0          # number of rows returned (≤ limit)
+    grand_total: int = 0    # real DB-wide case count matching the filters (ignores LIMIT)
 
 
 class OffenderTrailRequest(BaseModel):

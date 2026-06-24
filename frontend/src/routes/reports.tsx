@@ -360,6 +360,7 @@ function Reports() {
 
   // Live data
   const [stations, setStations] = useState<StationRow[]>([]);
+  const [grandTotal, setGrandTotal] = useState<number>(0); // real DB-wide case count
   const [stationsLoading, setStationsLoading] = useState(true);
   const [topOffenders, setTopOffenders] = useState<OffenderListItem[]>([]);
   const [trendDeltas, setTrendDeltas] = useState<{
@@ -372,7 +373,10 @@ function Reports() {
     setStationsLoading(true);
     api
       .stationBreakdown({ limit: 10 } as any)
-      .then((r) => setStations(r.rows || []))
+      .then((r) => {
+        setStations(r.rows || []);
+        setGrandTotal(r.grand_total ?? 0);
+      })
       .catch(() => {})
       .finally(() => setStationsLoading(false));
     intelligence
@@ -483,7 +487,7 @@ function Reports() {
     }
   }
 
-  const totalFirs = stations.reduce((s, r) => s + r.firs, 0);
+  const totalFirs = grandTotal || stations.reduce((s, r) => s + r.firs, 0);
   const totalCleared = stations.reduce((s, r) => s + r.cleared, 0);
   const clearRate = totalFirs ? Math.round((totalCleared / totalFirs) * 100) : 0;
   const topStation = stations[0];

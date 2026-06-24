@@ -145,6 +145,7 @@ function Console() {
   const [district, setDistrict] = useState("");
   const [hotspots, setHotspots] = useState<Hotspot[]>([]);
   const [stations, setStations] = useState<StationRow[]>([]);
+  const [grandTotal, setGrandTotal] = useState<number>(0); // real DB-wide case count
   const [canvasLoading, setCanvasLoading] = useState(false);
   const [canvasErr, setCanvasErr] = useState<string | null>(null);
   const [mapFocus, setMapFocus] = useState<Hotspot[] | null>(null);
@@ -159,7 +160,7 @@ function Console() {
       try {
         if (!getAuthToken()) {
           try {
-            await api.login("demo", "demo");
+            await api.login("demo", "");
           } catch {
             /* backend down — handled below */
           }
@@ -208,7 +209,7 @@ function Console() {
       // /console without going through the login page.
       if (!getAuthToken()) {
         try {
-          await api.login("demo", "demo");
+          await api.login("demo", "");
         } catch {
           /* backend unreachable — requests will fail below with a clear message */
         }
@@ -228,6 +229,8 @@ function Console() {
           })),
         );
         setStations(brk.rows || []);
+        // Use the real DB-wide count, not the sum of the top-N rows
+        setGrandTotal(brk.grand_total ?? brk.rows?.reduce((s: number, r: StationRow) => s + r.firs, 0) ?? 0);
       } catch (err: any) {
         if (!cancelled) {
           const status: number | undefined = err?.status;
@@ -242,6 +245,7 @@ function Console() {
           setCanvasErr(msg);
           setHotspots([]);
           setStations([]);
+          setGrandTotal(0);
         }
       } finally {
         if (!cancelled) setCanvasLoading(false);
@@ -252,7 +256,9 @@ function Console() {
     };
   }, [crimeType, district]);
 
-  const totalFirs = stations.reduce((s, r) => s + r.firs, 0);
+  // Use grand_total from the backend (real DB-wide count) for the headline stat.
+  // Fall back to summing rows only when grand_total isn't available (old backend).
+  const totalFirs = grandTotal || stations.reduce((s, r) => s + r.firs, 0);
   const totalCleared = stations.reduce((s, r) => s + r.cleared, 0);
   const clearedPct = totalFirs ? Math.round((totalCleared / totalFirs) * 100) : 0;
   const avgPerDay = totalFirs ? (totalFirs / 30).toFixed(1) : "—";
@@ -1006,8 +1012,8 @@ function Console() {
               <div className="grid grid-cols-3 gap-4 p-6">
                 <Stat
                   label={t("Total FIRs")}
-                  value={String(totalFirs)}
-                  delta={`${stations.length} ${t("stations")}`}
+                  value={totalFirs.toLocaleString()}
+                  delta={`${t("top")} ${stations.length} ${t("stations")}`}
                   trend="flat"
                 />
                 <Stat label={t("Avg / day")} value={avgPerDay} delta="" trend="flat" />

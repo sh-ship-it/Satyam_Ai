@@ -48,6 +48,10 @@ async def station_breakdown(
 ) -> StationBreakdownResponse:
     where, params = _filters(req)
 
+    # ── Real grand total (all matching cases, no LIMIT) ─────────────────────
+    count_sql = text(f"SELECT count(*) FROM cases WHERE {where}")
+    grand_total = int((await session.execute(count_sql, params)).scalar() or 0)
+
     agg_sql = text(
         f"""
         SELECT station_name                                      AS station,
@@ -107,4 +111,4 @@ async def station_breakdown(
         )
         for r in rows
     ]
-    return StationBreakdownResponse(rows=out, total=len(out))
+    return StationBreakdownResponse(rows=out, total=len(out), grand_total=grand_total)

@@ -692,7 +692,6 @@ async def get_trends(
         FROM cases WHERE {w}
         GROUP BY 1, crime_type, district
         ORDER BY 1 DESC, cnt DESC
-        LIMIT 120
     """)
     rows = (await session.execute(sql, params)).mappings().all()
     series = [TrendPoint(period=r["period"], crime_type=r["crime_type"] or "Unknown",

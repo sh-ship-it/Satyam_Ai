@@ -729,7 +729,7 @@ function TrendsScreen() {
       intelligence.getSeasonal(crimeType || undefined, district || undefined),
     ])
       .then(([tr, mo, sea]) => {
-        setSeries(tr.series.slice(0, 48));
+        setSeries(tr.series);
         setDeltas(tr.deltas);
         setClusters(mo.clusters);
         setPeaks(sea.seasonal_peaks);

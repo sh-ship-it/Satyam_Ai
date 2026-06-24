@@ -110,7 +110,12 @@ export type StationRow = {
   top_legal_code: string | null;
   trend: number[];
 };
-export type StationBreakdownResponse = { rows: StationRow[]; total: number };
+export type StationBreakdownResponse = {
+  rows: StationRow[];
+  total: number;        // number of rows returned (≤ limit)
+  grand_total: number;  // real DB-wide case count matching the filters
+};
+
 
 export const api = {
   // --- auth ---
