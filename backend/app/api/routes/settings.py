@@ -13,7 +13,7 @@ from typing import Literal
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from app.api.deps import get_principal
+from app.api.deps import get_principal, get_scoped_session
 from app.core.rbac import AccessDenied, Permission, Principal, require
 from app.db.session import set_db_source, get_db_source
 
@@ -55,15 +55,6 @@ async def model_providers(
         groq_configured=bool(s.groq_api_key),
         local_available=(s.model_backend == "local"),
     )
-
-
-class DbSourceRequest(BaseModel):
-    source: Literal["cloud", "local"]
-
-
-class DbSourceResponse(BaseModel):
-    db_source: str
-    url_host: str  # host only — never expose credentials
 
 
 @router.post("", response_model=DbSourceResponse)
