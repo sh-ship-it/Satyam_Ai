@@ -3645,6 +3645,7 @@ Full project scan produced 2 critical, 5 high, 9 medium, 10 low issues. All fixa
 - **File modified:** [index.tsx](file:///d:/college/Projects/Satyam/frontend/src/routes/index.tsx)
   - Replaced "Request a demo" in the hero CTA block with "Login".
   - Replaced "Contact us" in the top-right corner header with "About", linking it directly to the `/about` route using the TanStack `<Link>` router component.
+  - Updated the landing page's meta description, capabilities catalog, and AI functions grid to explicitly feature eye-gaze tracking and hands-free hand gesture controls alongside the voice copilot.
 - **File modified:** [about.tsx](file:///d:/college/Projects/Satyam/frontend/src/routes/about.tsx)
   - Redesigned the `/about` page to feature a high-fidelity system blueprint illustrating the client, application, data, and model tiers with neo-brutalist panels.
   - Integrated detailed data-flow diagrams representing the **Grounded Text-to-SQL Pipeline** (memory merging, sqlglot guard, and Postgres RLS) and the **Bilingual STT/TTS Voice Pipeline** (ingest, speech command router, [SPEAK] summary, and neural speech).
