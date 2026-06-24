@@ -1132,7 +1132,7 @@ export async function enrichDictWithLLM(
     );
 
     try {
-      const res = await fetch(`${API_BASE}/settings/translate`, {
+      const res = await fetch(`${API_BASE}/settings/db-source/translate`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -1191,7 +1191,7 @@ export async function enrichDataWithLLM(
     statuses: string[];
   };
   try {
-    const r = await fetch(`${API_BASE}/settings/data-values`, {
+    const r = await fetch(`${API_BASE}/settings/db-source/data-values`, {
       headers: { ...(token ? { authorization: `Bearer ${token}` } : {}) },
     });
     if (!r.ok) throw new Error(`${r.status}`);
@@ -1241,7 +1241,7 @@ Rules:
       );
 
       try {
-        const r = await fetch(`${API_BASE}/settings/translate`, {
+        const r = await fetch(`${API_BASE}/settings/db-source/translate`, {
           method: "POST",
           headers: {
             "content-type": "application/json",

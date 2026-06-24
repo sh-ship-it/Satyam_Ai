@@ -17,7 +17,7 @@ import {
 import { useT, useI18n } from "@/lib/i18n";
 import { tData } from "@/lib/tData";
 import { SimilarCaseSearch } from "@/components/SimilarCaseSearch";
-import { streamChat, type ChatEvent, api, type StationRow, getAuthToken } from "@/lib/api/client";
+import { streamChat, type ChatEvent, api, type StationRow, getAuthToken, API_BASE } from "@/lib/api/client";
 import { CrimeMap, type Hotspot } from "@/components/CrimeMap";
 import { intelligence } from "@/lib/api/intelligence";
 import { speakViaSarvam, isServerVoiceEnabled } from "@/lib/voice/tts";
@@ -141,34 +141,46 @@ function Console() {
   // ── Results Canvas state ──────────────────────────────────────────────────
   const [canvasTab, setCanvasTab] = useState<"data" | "map">("data");
   const [mapMode, setMapMode] = useState<"heat" | "pins" | "grid">("heat");
-  const [mapView, setMapView] = useState<"crime" | "offender">("crime");
   const [crimeType, setCrimeType] = useState("");
   const [district, setDistrict] = useState("");
   const [hotspots, setHotspots] = useState<Hotspot[]>([]);
   const [stations, setStations] = useState<StationRow[]>([]);
   const [canvasLoading, setCanvasLoading] = useState(false);
   const [canvasErr, setCanvasErr] = useState<string | null>(null);
-  const [trail, setTrail] = useState<Hotspot[] | undefined>(undefined);
-  const [trailKey, setTrailKey] = useState(0);
   const [mapFocus, setMapFocus] = useState<Hotspot[] | null>(null);
 
-  const connectDots = async (seed: string) => {
-    try {
-      const res = await api.offenderTrail({ entity_name: seed });
-      setTrail(
-        res.points.map((p) => ({
-          lat: p.lat,
-          lng: p.lng,
-          weight: 1,
-          label: p.fir_number ?? p.crime_type ?? "CrimePoint",
-        })),
-      );
-      setTrailKey((k) => k + 1);
-      setCanvasTab("map");
-    } catch {
-      // ignore
-    }
-  };
+  // Live filter options — crime types & districts pulled from the DB (RLS-scoped),
+  // never hardcoded, so the dropdowns always reflect the actual dataset.
+  const [crimeOptions, setCrimeOptions] = useState<string[]>([]);
+  const [districtOptions, setDistrictOptions] = useState<string[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        if (!getAuthToken()) {
+          try {
+            await api.login("demo", "DGP");
+          } catch {
+            /* backend down — handled below */
+          }
+        }
+        const token = getAuthToken();
+        const r = await fetch(`${API_BASE}/settings/db-source/data-values`, {
+          headers: { ...(token ? { authorization: `Bearer ${token}` } : {}) },
+        });
+        if (!r.ok) return;
+        const d = await r.json();
+        if (cancelled) return;
+        setCrimeOptions(Array.isArray(d.crime_types) ? d.crime_types : []);
+        setDistrictOptions(Array.isArray(d.districts) ? d.districts : []);
+      } catch {
+        /* leave options empty — the "All …" option still works */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Open the Map tab if a voice "show map" intent navigated here
   useEffect(() => {
@@ -186,7 +198,7 @@ function Console() {
     setCanvasLoading(true);
     setCanvasErr(null);
     const body: Record<string, unknown> = {
-      mode: mapView === "offender" ? "by_offender" : "by_crime",
+      mode: "by_crime",
     };
     if (crimeType) body.crime_type = crimeType;
     if (district) body.district = district;
@@ -238,7 +250,7 @@ function Console() {
     return () => {
       cancelled = true;
     };
-  }, [mapView, crimeType, district]);
+  }, [crimeType, district]);
 
   const totalFirs = stations.reduce((s, r) => s + r.firs, 0);
   const totalCleared = stations.reduce((s, r) => s + r.cleared, 0);
@@ -483,21 +495,6 @@ function Console() {
     const speechLang = (opts?.lang || "").toLowerCase().startsWith("kn") ? "kn-IN" : "en-IN";
     if (isVoiceTurn) {
       window.dispatchEvent(new CustomEvent("satyam:ai-state", { detail: { state: "thinking" } }));
-    }
-
-    const m = trimmed.toLowerCase();
-    if (m.includes("connect the dots") || m.includes("ಚುಕ್ಕಿಗಳನ್ನು ಸಂಪರ್ಕ")) {
-      const who = (trimmed.match(/(?:for|of|about|against|by)\s+(.+)$/i)?.[1] || "").trim();
-      await connectDots(who);
-      if (isVoiceTurn) {
-        speak(
-          speechLang === "kn-IN"
-            ? `${who || "ಅಪರಾಧಿ"} ಗಾಗಿ ಚುಕ್ಕಿಗಳನ್ನು ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ`
-            : `Connecting the dots for ${who || "the offender"}.`,
-          { speak: true, lang: speechLang, rate: opts?.rate },
-        );
-      }
-      return;
     }
 
     const userMsg: ChatMessage = { role: "user", text: trimmed };
@@ -980,9 +977,9 @@ function Console() {
               className="rounded-md border border-input bg-card px-2 py-1 text-xs"
             >
               <option value="">{t("All crime types")}</option>
-              {["Theft", "Burglary", "Assault", "Cyber Crime", "Narcotics", "Murder"].map((c) => (
+              {crimeOptions.map((c) => (
                 <option key={c} value={c}>
-                  {t(c)}
+                  {tData("crime_type", c, lang)}
                 </option>
               ))}
             </select>
@@ -992,16 +989,9 @@ function Console() {
               className="rounded-md border border-input bg-card px-2 py-1 text-xs"
             >
               <option value="">{t("All districts")}</option>
-              {[
-                "Bengaluru City",
-                "Bengaluru Dist",
-                "Mysuru City",
-                "Mangaluru City",
-                "Hubballi Dharwad City",
-                "Belagavi City",
-              ].map((d) => (
+              {districtOptions.map((d) => (
                 <option key={d} value={d}>
-                  {d}
+                  {tData("district", d, lang)}
                 </option>
               ))}
             </select>
@@ -1103,22 +1093,6 @@ function Console() {
                 >
                   ← {t("Back")}
                 </button>
-                {/* Layer + view controls */}
-                <div className="flex rounded-md border border-border bg-card p-0.5">
-                  {(["crime", "offender"] as const).map((v) => (
-                    <button
-                      key={v}
-                      onClick={() => setMapView(v)}
-                      className={`rounded px-2.5 py-1 text-xs font-medium transition ${
-                        mapView === v
-                          ? "bg-primary text-primary-foreground"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      {v === "crime" ? t("By crime type") : t("By offender")}
-                    </button>
-                  ))}
-                </div>
                 <div className="flex items-center gap-1 rounded-md border border-border bg-card p-1">
                   <Layers className="ml-1 h-3.5 w-3.5 text-muted-foreground" />
                   {(["heat", "pins", "grid"] as const).map((l) => (
@@ -1135,15 +1109,6 @@ function Console() {
                     </button>
                   ))}
                 </div>
-                <button
-                  onClick={() => {
-                    const seed = prompt(t("Enter offender name or ID:"), "");
-                    if (seed) connectDots(seed);
-                  }}
-                  className="rounded-md border border-border bg-card px-2.5 py-1 text-xs font-semibold text-foreground hover:bg-muted"
-                >
-                  {t("Connect the dots")}
-                </button>
               </div>
 
               {/* Map fills the remaining space */}
@@ -1151,8 +1116,6 @@ function Console() {
               <CrimeMap
                 points={hotspots}
                 mode={mapMode}
-                trail={trail}
-                animateKey={trailKey}
                 focus={mapFocus}
               />
 
