@@ -524,7 +524,7 @@ function ForecastScreen() {
                 onClick={() => setGridSize(v)}
                 className={`rounded-md px-2 py-0.5 text-[10px] font-bold transition ${gridSize === v ? "bg-primary text-primary-foreground" : "hover:bg-muted text-muted-foreground"}`}
               >
-                {lbl}
+                {t(lbl)}
               </button>
             ))}
           </div>
@@ -533,7 +533,7 @@ function ForecastScreen() {
               onClick={() => setAutoRefresh((v) => !v)}
               className={`rounded-lg px-2.5 py-1.5 text-[10px] font-bold border transition ${autoRefresh ? "border-primary bg-primary/10 text-primary" : "border-input bg-background text-muted-foreground hover:bg-muted"}`}
             >
-              {autoRefresh ? "⏱ Auto" : "⏱ Manual"}
+              {autoRefresh ? t("⏱ Auto") : t("⏱ Manual")}
             </button>
             <button
               onClick={load}

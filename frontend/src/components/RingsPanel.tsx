@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { intelligence, type RingsResponse, type RingSummary } from "@/lib/api/intelligence";
 import { useNavigate } from "@tanstack/react-router";
 import { AlertTriangle, Users, Shield, Clock, ChevronRight } from "lucide-react";
+import { useI18n, useT } from "@/lib/i18n";
+import { tData } from "@/lib/tData";
 
 function sevColor(score: number): string {
   if (score >= 75) return "bg-destructive text-destructive-foreground";
@@ -18,6 +20,8 @@ function sevBorder(score: number): string {
 }
 
 export function RingsPanel({ crimeType, district }: { crimeType?: string; district?: string }) {
+  const t = useT();
+  const { lang } = useI18n();
   const [data, setData] = useState<RingsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +38,7 @@ export function RingsPanel({ crimeType, district }: { crimeType?: string; distri
         if (alive) setData(r);
       })
       .catch(() => {
-        if (alive) setError("Could not load ring detection results. Clearance L2+ required.");
+        if (alive) setError(t("Could not load ring detection results. Clearance L2+ required."));
       })
       .finally(() => {
         if (alive) setLoading(false);
@@ -48,7 +52,7 @@ export function RingsPanel({ crimeType, district }: { crimeType?: string; distri
     return (
       <div className="flex items-center justify-center gap-3 h-full p-8 text-muted-foreground text-sm">
         <div className="h-4 w-4 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-        Detecting organised-crime rings…
+        {t("Detecting organised-crime rings…")}
       </div>
     );
 
@@ -64,9 +68,9 @@ export function RingsPanel({ crimeType, district }: { crimeType?: string; distri
       <div className="flex flex-col items-center justify-center gap-3 h-full p-8 text-center">
         <Shield className="h-10 w-10 text-muted-foreground/40" />
         <div>
-          <p className="text-sm font-semibold text-foreground">No rings detected</p>
+          <p className="text-sm font-semibold text-foreground">{t("No rings detected")}</p>
           <p className="text-xs text-muted-foreground mt-1">
-            No co-accused groups (≥3 shared cases) detected for the current filter.
+            {t("No co-accused groups (≥3 shared cases) detected for the current filter.")}
           </p>
         </div>
       </div>
@@ -78,10 +82,10 @@ export function RingsPanel({ crimeType, district }: { crimeType?: string; distri
       <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground pb-2 border-b border-border">
         <Shield className="h-3.5 w-3.5" />
         <span className="font-semibold text-foreground">
-          {data.rings.length} ring{data.rings.length !== 1 ? "s" : ""} detected
+          {data.rings.length === 1 ? t("1 ring detected") : `${data.rings.length} ${t("rings detected")}`}
         </span>
-        <span>— groups of co-accused appearing together across multiple FIRs</span>
-        <span className="ml-auto italic">Investigative leads only — not proof of guilt</span>
+        <span>{t("— groups of co-accused appearing together across multiple FIRs")}</span>
+        <span className="ml-auto italic">{t("Investigative leads only — not proof of guilt")}</span>
       </div>
 
       {data.rings.map((ring: RingSummary) => (
@@ -105,12 +109,16 @@ export function RingsPanel({ crimeType, district }: { crimeType?: string; distri
           <div className="p-4">
             {/* Header */}
             <div className="flex items-center justify-between gap-3 mb-2">
-              <h3 className="font-bold text-sm text-foreground">{ring.label}</h3>
+              <h3 className="font-bold text-sm text-foreground">
+                {ring.label.startsWith("Ring #")
+                  ? ring.label.replace("Ring #", t("Ring #"))
+                  : ring.label}
+              </h3>
               <div className="flex items-center gap-2">
                 <span
                   className={`rounded-lg px-2.5 py-1 text-[10px] font-bold ${sevColor(ring.severity_score)}`}
                 >
-                  Severity {ring.severity_score}
+                  {t("Severity")} {ring.severity_score}
                 </span>
               </div>
             </div>
@@ -118,13 +126,13 @@ export function RingsPanel({ crimeType, district }: { crimeType?: string; distri
             {/* Stats row */}
             <div className="flex flex-wrap gap-4 text-xs text-muted-foreground mb-3">
               <span className="flex items-center gap-1">
-                <Users className="h-3.5 w-3.5" /> {ring.member_count} members
+                <Users className="h-3.5 w-3.5" /> {ring.member_count} {t(ring.member_count === 1 ? "member" : "members")}
               </span>
               <span className="flex items-center gap-1">
-                <Shield className="h-3.5 w-3.5" /> {ring.case_count} shared cases
+                <Shield className="h-3.5 w-3.5" /> {ring.case_count} {t(ring.case_count === 1 ? "shared case" : "shared cases")}
               </span>
               <span className="flex items-center gap-1">
-                <Clock className="h-3.5 w-3.5" /> recency {ring.recency_score}
+                <Clock className="h-3.5 w-3.5" /> {t("recency")} {ring.recency_score}
               </span>
             </div>
 
@@ -136,7 +144,7 @@ export function RingsPanel({ crimeType, district }: { crimeType?: string; distri
                     key={c}
                     className="rounded-full bg-primary/10 text-primary px-2 py-0.5 text-[10px] font-medium"
                   >
-                    {c}
+                    {tData("crime_type", c, lang)}
                   </span>
                 ))}
               </div>
@@ -150,7 +158,7 @@ export function RingsPanel({ crimeType, district }: { crimeType?: string; distri
                     key={d}
                     className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground"
                   >
-                    {d}
+                    {tData("district", d, lang)}
                   </span>
                 ))}
               </div>
@@ -162,7 +170,7 @@ export function RingsPanel({ crimeType, district }: { crimeType?: string; distri
                 onClick={() => setExpanded((prev) => (prev === ring.ring_id ? null : ring.ring_id))}
                 className="text-[11px] text-primary hover:underline flex items-center gap-1 mb-2"
               >
-                {expanded === ring.ring_id ? "Hide" : "Why flagged"} ({ring.why_flagged.length})
+                {expanded === ring.ring_id ? t("Hide") : t("Why flagged")} ({ring.why_flagged.length})
                 <ChevronRight
                   className={`h-3 w-3 transition-transform ${expanded === ring.ring_id ? "rotate-90" : ""}`}
                 />
@@ -190,7 +198,7 @@ export function RingsPanel({ crimeType, district }: { crimeType?: string; distri
                 className="flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 text-primary px-3 py-1.5 text-xs font-semibold hover:bg-primary/20 transition"
               >
                 <Users className="h-3.5 w-3.5" />
-                View kingpin profile →
+                {t("View kingpin profile →")}
               </button>
             )}
           </div>

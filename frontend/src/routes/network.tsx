@@ -19,7 +19,8 @@ import {
   Loader2,
   TrendingUp,
 } from "lucide-react";
-import { useT } from "@/lib/i18n";
+import { useT, useI18n } from "@/lib/i18n";
+import { tData, tAuto } from "@/lib/tData";
 import { api } from "@/lib/api/client";
 import { intelligence, type SearchResult, type OffenderListItem } from "@/lib/api/intelligence";
 import { createPortal } from "react-dom";
@@ -349,6 +350,7 @@ function SeedSearch({
 
 function NetworkScreen() {
   const t = useT();
+  const { lang } = useI18n();
   const [selected, setSelected] = useState("");
   const [selectedSet, setSelectedSet] = useState<Set<string>>(() => new Set());
   const [drawerCaseId, setDrawerCaseId] = useState<number | null>(null);
@@ -1699,7 +1701,7 @@ function NetworkScreen() {
                               : "bg-purple-500/15 text-purple-700 dark:text-purple-400"
                       }`}
                     >
-                      {groupLabel}
+                      {t(groupLabel)}
                     </span>
                     {isSeed && (
                       <span className="rounded-full bg-primary/10 text-primary px-2 py-0.5 text-[10px] font-bold">
@@ -1710,13 +1712,13 @@ function NetworkScreen() {
 
                   <div className="grid grid-cols-2 gap-2">
                     <Stat label={t("Connections")} value={String(edgeCount)} />
-                    <Stat label={t("Node type")} value={isCase ? "FIR/Case" : "Person"} />
+                    <Stat label={t("Node type")} value={isCase ? t("FIR/Case") : t("Person")} />
                     <Stat
                       label={t("Role")}
-                      value={roleLabel}
+                      value={t(roleLabel)}
                       tone={selNode?.group === 1 ? "red" : undefined}
                     />
-                    {crimeType && <Stat label={t("Crime type")} value={crimeType} />}
+                    {crimeType && <Stat label={t("Crime type")} value={tData("crime_type", crimeType, lang)} />}
                   </div>
 
                   {/* Linked cases */}
@@ -1821,6 +1823,8 @@ function Select({
   value?: string;
   onChange?: (v: string) => void;
 }) {
+  const t = useT();
+  const { lang } = useI18n();
   return (
     <div className="relative">
       <select
@@ -1828,9 +1832,27 @@ function Select({
         onChange={(e) => onChange?.(e.target.value)}
         className="appearance-none rounded-md border border-input bg-card px-2.5 py-1.5 pr-7 text-sm text-foreground"
       >
-        {options.map((o) => (
-          <option key={o}>{o}</option>
-        ))}
+        {options.map((o) => {
+          let display = o;
+          if (o === "All") {
+            display = t("All");
+          } else {
+            display = tAuto(o, lang);
+            if (display === o) {
+              display = tAuto(o.toUpperCase(), lang);
+            }
+            if (display === o) {
+              const cap = o.charAt(0).toUpperCase() + o.slice(1);
+              const trans = t(cap);
+              if (trans !== cap) display = trans;
+            }
+          }
+          return (
+            <option key={o} value={o}>
+              {display}
+            </option>
+          );
+        })}
       </select>
       <ChevronDown className="pointer-events-none absolute right-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
     </div>

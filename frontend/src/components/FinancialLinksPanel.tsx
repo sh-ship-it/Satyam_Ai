@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { AlertTriangle, DollarSign, TrendingUp, Shield } from "lucide-react";
 import { financial, type MoneyTrailResponse, type MoneyNode } from "@/lib/api/financial";
+import { useI18n, useT } from "@/lib/i18n";
+import { tData } from "@/lib/tData";
 
 const FLAG_COLOR: Record<string, string> = {
   high_value: "#dc2626",
@@ -25,6 +27,8 @@ function inr(n: number): string {
 }
 
 export function FinancialLinksPanel({ seed }: { seed: string }) {
+  const t = useT();
+  const { lang } = useI18n();
   const [data, setData] = useState<MoneyTrailResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,7 +56,7 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
         if (alive) setData(r);
       })
       .catch(() => {
-        if (alive) setError("Could not load financial links for this seed.");
+        if (alive) setError(t("Could not load financial links for this seed."));
       })
       .finally(() => {
         if (alive) setLoading(false);
@@ -94,7 +98,7 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
       <div className="flex flex-col items-center justify-center gap-3 h-full p-8 text-center">
         <DollarSign className="h-10 w-10 text-muted-foreground/40" />
         <p className="text-sm text-muted-foreground">
-          Enter a seed person above to view their financial links.
+          {t("Enter a seed person above to view their financial links.")}
         </p>
       </div>
     );
@@ -103,7 +107,7 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
     return (
       <div className="flex items-center justify-center gap-3 h-full p-8 text-muted-foreground text-sm">
         <div className="h-4 w-4 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-        Loading financial links…
+        {t("Loading financial links…")}
       </div>
     );
 
@@ -119,7 +123,7 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
       <div className="flex flex-col items-center justify-center gap-3 h-full p-8 text-center">
         <Shield className="h-10 w-10 text-muted-foreground/40" />
         <p className="text-sm text-muted-foreground">
-          No financial accounts or transactions linked to this seed.
+          {t("No financial accounts or transactions linked to this seed.")}
         </p>
       </div>
     );
@@ -134,16 +138,16 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
       {/* Summary bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: "Accounts", val: data.nodes.length, icon: DollarSign, color: "text-primary" },
-          { label: "Flows", val: data.edges.length, icon: TrendingUp, color: "text-foreground" },
+          { label: t("Accounts"), val: data.nodes.length, icon: DollarSign, color: "text-primary" },
+          { label: t("Flows"), val: data.edges.length, icon: TrendingUp, color: "text-foreground" },
           {
-            label: "Flagged",
+            label: t("Flagged"),
             val: data.flagged_count,
             icon: AlertTriangle,
             color: "text-destructive",
           },
           {
-            label: "Total",
+            label: t("Total"),
             val: inr(data.total_amount),
             icon: DollarSign,
             color: "text-emerald-600 dark:text-emerald-400",
@@ -176,7 +180,7 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
               }}
             >
               <span className="h-1.5 w-1.5 rounded-full" style={{ background: FLAG_COLOR[flag] }} />
-              {FLAG_LABEL[flag] || flag} ({count})
+              {t(FLAG_LABEL[flag] || flag)} ({count})
             </span>
           ))}
         </div>
@@ -191,16 +195,16 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
             onChange={(e) => setSuspiciousOnly(e.target.checked)}
             className="rounded accent-destructive"
           />
-          <span className="text-muted-foreground">Suspicious only</span>
+          <span className="text-muted-foreground">{t("Suspicious only")}</span>
         </label>
         <label className="flex items-center gap-1.5">
-          <span className="text-muted-foreground">Min amount</span>
+          <span className="text-muted-foreground">{t("Min amount")}</span>
           <select
             value={minAmount}
             onChange={(e) => setMinAmount(Number(e.target.value))}
             className="rounded-lg border border-input bg-background px-2 py-1 text-xs"
           >
-            <option value={0}>Any</option>
+            <option value={0}>{t("Any")}</option>
             <option value={10000}>₹10K+</option>
             <option value={100000}>₹1L+</option>
             <option value={1000000}>₹10L+</option>
@@ -287,7 +291,7 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
             <div className="p-4 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
-                  Account Details
+                  {t("Account Details")}
                 </div>
                 <button
                   onClick={() => setSelectedNode(null)}
@@ -297,15 +301,15 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
                 </button>
               </div>
               {[
-                ["Label", selectedNode.label],
-                ["Bank", selectedNode.bank_name || "—"],
-                ["Type", selectedNode.account_type || "—"],
-                ["District", selectedNode.district || "—"],
-                ["KYC Risk", selectedNode.kyc_risk_level || "—"],
-                ["Owner", selectedNode.person_label || "—"],
-                ["In", inr(selectedNode.total_in)],
-                ["Out", inr(selectedNode.total_out)],
-                ["Degree", String(selectedNode.degree)],
+                [t("Label"), selectedNode.label],
+                [t("Bank"), selectedNode.bank_name || "—"],
+                [t("Type"), selectedNode.account_type || "—"],
+                [t("District"), tData("district", selectedNode.district, lang) || "—"],
+                [t("KYC Risk"), tData("kyc_risk_level", selectedNode.kyc_risk_level, lang) || "—"],
+                [t("Owner"), selectedNode.person_label || "—"],
+                [t("In"), inr(selectedNode.total_in)],
+                [t("Out"), inr(selectedNode.total_out)],
+                [t("Degree"), String(selectedNode.degree)],
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between text-xs gap-2">
                   <span className="text-muted-foreground shrink-0">{k}</span>
@@ -314,21 +318,21 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
               ))}
               {selectedNode.is_seed && (
                 <div className="rounded-lg bg-primary/10 text-primary px-2 py-1 text-[10px] font-bold text-center">
-                  SEED ACCOUNT
+                  {t("SEED ACCOUNT")}
                 </div>
               )}
             </div>
           ) : (
             <div className="flex-1 overflow-auto">
               <div className="px-3 py-2 border-b border-border text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
-                Top Flows (click node to inspect)
+                {t("Top Flows (click node to inspect)")}
               </div>
               <table className="w-full text-xs">
                 <thead className="text-muted-foreground border-b border-border">
                   <tr>
-                    <th className="px-2 py-1.5 text-left">From</th>
-                    <th className="px-2 py-1.5 text-left">Amount</th>
-                    <th className="px-2 py-1.5 text-left">Flag</th>
+                    <th className="px-2 py-1.5 text-left">{t("From")}</th>
+                    <th className="px-2 py-1.5 text-left">{t("Amount")}</th>
+                    <th className="px-2 py-1.5 text-left">{t("Flag")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -351,7 +355,7 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
                                 color: FLAG_COLOR[e.pattern_flag] || "#64748b",
                               }}
                             >
-                              {FLAG_LABEL[e.pattern_flag] || e.pattern_flag}
+                              {t(FLAG_LABEL[e.pattern_flag] || e.pattern_flag)}
                             </span>
                           ) : (
                             "—"
@@ -366,7 +370,7 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
         </div>
       </div>
 
-      <p className="text-[11px] text-muted-foreground border-t border-border pt-2">{data.notice}</p>
+      <p className="text-[11px] text-muted-foreground border-t border-border pt-2">{t(data.notice)}</p>
     </div>
   );
 }
