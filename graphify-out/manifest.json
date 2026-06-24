@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1782300047.8916378,
-    "ast_hash": "578cce7220fc4516a7e4dc6da846080e",
+    "mtime": 1782300706.6881123,
+    "ast_hash": "14c2d846d363a729897e37d62b64aab1",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -1090,8 +1090,8 @@
     "semantic_hash": ""
   },
   "frontend/src/locales/kn-data.json": {
-    "mtime": 1782299995.7679462,
-    "ast_hash": "19464a815ef7266e1cee492d6f9647db",
+    "mtime": 1782300696.2794304,
+    "ast_hash": "770e41753cab76cd9bf0f8ab977f2bef",
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/rule_sql.py": {
@@ -1280,8 +1280,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ops/DispatchPanel.tsx": {
-    "mtime": 1782106291.9408047,
-    "ast_hash": "4f1e3592cf6f1ef13a871f4db13916e1",
+    "mtime": 1782300737.9232807,
+    "ast_hash": "9f0b7ab36456c38a7d1e0dd1b966dd83",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE2_DISPATCH_SIM.md": {
@@ -1310,8 +1310,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ops/ReviewPanel.tsx": {
-    "mtime": 1782106292.0283127,
-    "ast_hash": "ab635725ee74330797d11feaa4da408d",
+    "mtime": 1782300744.395401,
+    "ast_hash": "8615a454a6916cbe6f4e5325ab6c7942",
     "semantic_hash": ""
   },
   "SATYAM_OPS_PHASE4_CAMERA_REVIEW.md": {
@@ -1450,8 +1450,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/dossier.tsx": {
-    "mtime": 1782229150.3510933,
-    "ast_hash": "f74f6b8b999dacf9735819bce8af3ab4",
+    "mtime": 1782300728.748418,
+    "ast_hash": "e99478b05be0d57e1f751408a5bfe47c",
     "semantic_hash": ""
   },
   "Satyam_Person360_Dossier_Build_Prompt.md": {
