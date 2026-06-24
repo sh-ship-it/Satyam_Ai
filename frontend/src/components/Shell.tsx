@@ -439,8 +439,26 @@ export function Shell({ children }: { children: ReactNode }) {
           brain_engine: engines.brainEngine,
         })
           .then((planRes: AgentPlan) => {
-            // Pure data question → let the copilot answer out loud.
-            if (planRes.answer || (!planRes.route && planRes.actions.length === 0)) {
+            // The TOP-RIGHT COPILOT answers data/conversational questions ITSELF
+            // and speaks the reply — it must NEVER post a turn into the Console
+            // chat thread (the chat box has its own mic for that). So strip any
+            // console "ask" actions from the plan; if nothing actionable is left,
+            // the copilot answers out loud instead of routing to chat.
+            const actions = (planRes.actions || []).filter(
+              (a) => !(a.screen === "/console" && a.action === "ask"),
+            );
+            const strippedConsoleAsk =
+              (planRes.actions || []).length > 0 && actions.length === 0;
+
+            // Pure data question, or the plan was only a console "ask", or it
+            // targets the Console with nothing left to automate → answer in the
+            // copilot (voice only), never in the chat.
+            if (
+              planRes.answer ||
+              strippedConsoleAsk ||
+              (planRes.route === "/console" && actions.length === 0) ||
+              (!planRes.route && actions.length === 0)
+            ) {
               answerInCopilot(question);
               return;
             }
@@ -449,7 +467,7 @@ export function Shell({ children }: { children: ReactNode }) {
                 new CustomEvent("satyam:run-task", {
                   detail: {
                     route: planRes.route,
-                    actions: planRes.actions,
+                    actions,
                     query: question,
                     task: question,
                     lang: resolvedLang,

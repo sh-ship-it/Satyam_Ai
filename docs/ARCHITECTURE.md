@@ -890,6 +890,8 @@ Officer speaks → copilot STT → Shell.tsx parseVoiceCommand()
 
 **`Shell.tsx`** — the main voice handler now calls `planVoiceAction()` instead of dispatching raw free-text tasks. Both the explicit-route branch AND the generic data-query branch go through the agent (agent returns `answer:true` for pure data questions → falls back to `answerInCopilot`).
 
+**Copilot never writes to the Console chat.** The top-right copilot answers data/conversational questions *itself* (voice only, via `answerInCopilot` on a separate `copilotConvId`). `runScreenAgent` strips any `{screen:"/console", action:"ask"}` from the plan and, if nothing actionable remains (or the plan only targets `/console`), answers in the copilot instead of dispatching `satyam:run-task` to the chat. Posting turns into the Console chat thread is exclusively the chat-box mic's job.
+
 **`satyam:run-task` event** extended with `actions` field:
 ```ts
 {
