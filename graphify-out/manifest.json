@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1782284351.7543771,
-    "ast_hash": "8dce078350243aa0c205b63305216c4e",
+    "mtime": 1782300047.8916378,
+    "ast_hash": "578cce7220fc4516a7e4dc6da846080e",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -725,8 +725,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
-    "mtime": 1782236096.6654942,
-    "ast_hash": "f877f16d15fcf9ff895f82b042a4555a",
+    "mtime": 1782300090.1292427,
+    "ast_hash": "6dfed5953024bd1a8dce3f5c28cfa5d9",
     "semantic_hash": ""
   },
   "frontend/src/routes/reports.tsx": {
@@ -1050,8 +1050,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/forecast.tsx": {
-    "mtime": 1782236082.2666032,
-    "ast_hash": "e58c63c70b15f3c981ade41124f7259a",
+    "mtime": 1782300098.7862346,
+    "ast_hash": "92789847b48a610e64e1208ed7abd110",
     "semantic_hash": ""
   },
   "frontend/src/routes/profile.$personId.tsx": {
@@ -1090,8 +1090,8 @@
     "semantic_hash": ""
   },
   "frontend/src/locales/kn-data.json": {
-    "mtime": 1781672776.4495676,
-    "ast_hash": "046f8abce4725d3b544b3fabeb6d2851",
+    "mtime": 1782299995.7679462,
+    "ast_hash": "19464a815ef7266e1cee492d6f9647db",
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/rule_sql.py": {
@@ -1120,8 +1120,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/FinancialLinksPanel.tsx": {
-    "mtime": 1782106291.7977784,
-    "ast_hash": "5f863cb495524bad8ec7695ddb1e6819",
+    "mtime": 1782300079.4951007,
+    "ast_hash": "6bc3482f5899dc1077a1c0cd4795e54f",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/financial.ts": {
@@ -1135,8 +1135,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/RingsPanel.tsx": {
-    "mtime": 1782106292.0923092,
-    "ast_hash": "290067b3941387499e5bdf0c8b1e9a38",
+    "mtime": 1782300058.7554152,
+    "ast_hash": "384467375f4248d3123e9de8d0927825",
     "semantic_hash": ""
   },
   "frontend/src/components/SimilarCaseSearch.tsx": {
