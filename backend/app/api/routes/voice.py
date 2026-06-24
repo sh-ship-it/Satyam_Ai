@@ -13,7 +13,7 @@ import base64
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 
-from app.api.deps import get_principal
+from app.api.deps import get_principal, get_scoped_session
 from app.config import get_settings
 from app.core.rbac import AccessDenied, Permission, Principal, require
 from app.models.registry import get_stt, get_translator, get_tts
@@ -122,9 +122,14 @@ async def translate(
 async def voice_agent(
     req: AgentRequest,
     principal: Principal = Depends(get_principal),
+    session=Depends(get_scoped_session),
 ) -> AgentPlan:
     """Voice Screen Agent: turn a spoken command into a navigation + in-screen
     action plan. The frontend executes only allow-listed actions from the plan.
+
+    Sample sentinels in the plan (e.g. "__SAMPLE_PERSON__" for "seed any person")
+    are resolved here to REAL values from the officer's RLS-scoped database, so a
+    field never receives a placeholder/instruction phrase as data.
     """
     _guard(principal)
     result = await screen_agent.plan(
@@ -133,4 +138,5 @@ async def voice_agent(
         lang=_norm_lang(req.lang),
         brain_engine=req.brain_engine,
     )
+    result["actions"] = await screen_agent.resolve_samples(result.get("actions", []), session)
     return AgentPlan(**result)

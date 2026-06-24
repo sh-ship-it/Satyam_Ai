@@ -937,7 +937,24 @@ Officer speaks → copilot STT → Shell.tsx parseVoiceCommand()
 
 | Method | Path | Notes |
 |--------|------|-------|
-| `POST` | `/voice/agent` | AgentRequest → AgentPlan · Requires CHAT permission |
+| `POST` | `/voice/agent` | AgentRequest → AgentPlan · Requires CHAT permission · resolves sample sentinels via the RLS-scoped session |
+
+### 21.8 Sample-Value Resolution (real data, never placeholders)
+
+A real copilot must turn "seed **any** person", "filter to **some** district", "pull **a random** FIR" into *actual* database values — not drop the literal instruction words into the field. The agent does this on every screen via typed **sentinels**:
+
+| Sentinel | Resolved from (RLS-scoped) | Selection |
+|----------|----------------------------|-----------|
+| `__SAMPLE_PERSON__` | `persons ⋈ case_persons ⋈ cases` | most-connected person (richest graph) |
+| `__SAMPLE_DISTRICT__` | `cases.district` | most frequent in scope |
+| `__SAMPLE_CRIME__` | `cases.crime_type` | most frequent in scope |
+| `__SAMPLE_FIR__` | `cases.fir_number` | random in scope |
+| `__SAMPLE_STATION__` | `stations.station_name` | random |
+
+Flow:
+1. **Detection** — both the LLM prompt (rule 8) and the deterministic planner's `_normalize_samples()` convert vague/placeholder param values (`_is_vague()` — value made only of words like *any, a, some, random, sample, person, name*) into the sentinel that fits the `(screen, action, param)` slot (`_sentinel_for()`).
+2. **Resolution** — the `/voice/agent` route calls `resolve_samples(actions, session)` with the caller's **RLS-scoped** session, replacing each sentinel with a real value (`_SAMPLE_SQL`). Values are cached per request; unresolved sentinels are *dropped* so the frontend never receives a placeholder as data.
+3. **Result** — "take me to network and seed any person" now seeds an actual hub offender from the officer's jurisdiction, producing a populated link graph. This works uniformly across all 14 screens because it keys off param type, not screen.
 
 ---
 

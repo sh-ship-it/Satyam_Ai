@@ -207,7 +207,18 @@ AGENT_SYSTEM = (
     "6. If it's purely a data question (not navigation/automation), set route=null, "
     "actions=[], and answer=true so the chat brain handles it.\n"
     "7. Keep proper nouns (names, FIR ids, districts, IPC) verbatim. Never translate them.\n"
-    "8. Respond with ONLY the JSON object. No markdown, no commentary.\n"
+    "8. NEVER copy instruction or placeholder words into a param. If the officer asks for "
+    "ANY / A RANDOM / SOME / A SAMPLE / AN EXAMPLE value of an entity WITHOUT naming a "
+    "specific one, set that param to the EXACT sentinel token below — the system replaces "
+    "it with a real value from the database:\n"
+    "   • a person / suspect / accused / seed entity  → \"__SAMPLE_PERSON__\"\n"
+    "   • a district                                  → \"__SAMPLE_DISTRICT__\"\n"
+    "   • a crime type                                → \"__SAMPLE_CRIME__\"\n"
+    "   • a FIR / case                                → \"__SAMPLE_FIR__\"\n"
+    "   • a police station                            → \"__SAMPLE_STATION__\"\n"
+    "   Example: \"seed any person in the network\" → "
+    "{\"screen\":\"/network\",\"action\":\"search_seed\",\"params\":{\"entity\":\"__SAMPLE_PERSON__\"}}\n"
+    "9. Respond with ONLY the JSON object. No markdown, no commentary.\n"
 )
 
 AGENT_SCHEMA: dict = {
@@ -314,6 +325,138 @@ def _strip_to_value(text: str) -> str:
     return re.sub(r"\s+", " ", out).strip()
 
 
+# ════════════════════════════════════════════════════════════════════════════
+# SAMPLE-VALUE RESOLUTION
+# When the officer asks for "any / a random / some / sample" entity instead of
+# naming a specific one (e.g. "seed any person", "filter to some district"),
+# the planner must NOT copy those instruction words into the field. Instead it
+# emits a typed SENTINEL, which `resolve_samples()` later replaces with a REAL
+# value pulled from the (RLS-scoped) database. This makes the copilot behave
+# like a real assistant on every screen, not a literal text-inserter.
+# ════════════════════════════════════════════════════════════════════════════
+
+SAMPLE_PERSON = "__SAMPLE_PERSON__"
+SAMPLE_DISTRICT = "__SAMPLE_DISTRICT__"
+SAMPLE_CRIME = "__SAMPLE_CRIME__"
+SAMPLE_FIR = "__SAMPLE_FIR__"
+SAMPLE_STATION = "__SAMPLE_STATION__"
+_ALL_SENTINELS = {SAMPLE_PERSON, SAMPLE_DISTRICT, SAMPLE_CRIME, SAMPLE_FIR, SAMPLE_STATION}
+
+# Words that signal "no specific value given" — a placeholder, not real data.
+_VAGUE_TOKENS = {
+    "any", "a", "an", "some", "random", "sample", "example", "person", "persons",
+    "people", "name", "names", "entity", "suspect", "victim", "accused", "someone",
+    "somebody", "anyone", "anybody", "anything", "thing", "the", "of", "whatever",
+    "one", "individual", "guy", "here", "there", "search",
+}
+
+
+def _is_vague(val: Optional[str]) -> bool:
+    """True when a param value carries no real data — empty, or made up entirely
+    of placeholder/instruction words like 'any person name'."""
+    if not val or not val.strip():
+        return True
+    words = re.findall(r"[a-z]+", val.lower())
+    if not words:
+        return True
+    return all(w in _VAGUE_TOKENS for w in words)
+
+
+def _sentinel_for(screen: Optional[str], action: Optional[str], key: str) -> Optional[str]:
+    """Which sample sentinel fits a given (screen, action, param) slot."""
+    if key == "district":
+        return SAMPLE_DISTRICT
+    if key == "crime_type":
+        return SAMPLE_CRIME
+    if key in ("entity", "person"):
+        return SAMPLE_PERSON
+    if screen == "/dossier" and action == "search" and key == "query":
+        return SAMPLE_PERSON
+    if screen == "/reports" and action == "add_case" and key == "query":
+        return SAMPLE_FIR
+    return None
+
+
+def _normalize_samples(actions: list[dict]) -> list[dict]:
+    """Replace vague placeholder param values with the right sample sentinel so
+    they can be resolved to real DB values. Leaves concrete values untouched."""
+    for a in actions or []:
+        screen = a.get("screen")
+        action = a.get("action")
+        params = a.get("params") or {}
+        for k, v in list(params.items()):
+            if not isinstance(v, str):
+                continue
+            if v in _ALL_SENTINELS:
+                continue  # LLM already emitted a sentinel — keep it
+            if _is_vague(v):
+                sent = _sentinel_for(screen, action, k)
+                if sent:
+                    params[k] = sent
+        a["params"] = params
+    return actions
+
+
+# SQL used to fetch a real, well-connected sample for each sentinel. Person and
+# district/crime prefer the most-connected/most-frequent value so the resulting
+# screen is interesting (a hub person yields a rich network graph). All queries
+# run on the RLS-scoped session, so samples stay within the officer's scope.
+_SAMPLE_SQL = {
+    SAMPLE_PERSON: (
+        "SELECT p.name FROM persons p "
+        "JOIN case_persons cp ON cp.person_id = p.person_id "
+        "JOIN cases c ON c.case_id = cp.case_id "
+        "WHERE p.name IS NOT NULL "
+        "GROUP BY p.person_id, p.name ORDER BY COUNT(*) DESC LIMIT 1"
+    ),
+    SAMPLE_DISTRICT: (
+        "SELECT district FROM cases WHERE district IS NOT NULL "
+        "GROUP BY district ORDER BY COUNT(*) DESC LIMIT 1"
+    ),
+    SAMPLE_CRIME: (
+        "SELECT crime_type FROM cases WHERE crime_type IS NOT NULL "
+        "GROUP BY crime_type ORDER BY COUNT(*) DESC LIMIT 1"
+    ),
+    SAMPLE_FIR: "SELECT fir_number FROM cases WHERE fir_number IS NOT NULL ORDER BY random() LIMIT 1",
+    SAMPLE_STATION: "SELECT station_name FROM stations ORDER BY random() LIMIT 1",
+}
+
+
+async def _fetch_sample(sentinel: str, session) -> Optional[str]:
+    """Resolve one sentinel to a real value from the DB (RLS-scoped)."""
+    from sqlalchemy import text as _sql_text
+    sql = _SAMPLE_SQL.get(sentinel)
+    if not sql:
+        return None
+    try:
+        row = (await session.execute(_sql_text(sql))).first()
+        return str(row[0]) if row and row[0] is not None else None
+    except Exception as exc:  # noqa: BLE001
+        log.warning("screen_agent sample resolve failed for %s: %s", sentinel, exc)
+        return None
+
+
+async def resolve_samples(actions: list[dict], session) -> list[dict]:
+    """Replace any sample sentinels in the action params with real DB values.
+    Called by the /voice/agent route with the caller's RLS-scoped session.
+    If a value cannot be resolved, the placeholder param is dropped so the
+    frontend never receives an instruction phrase as data."""
+    cache: dict[str, Optional[str]] = {}
+    for a in actions or []:
+        params = a.get("params") or {}
+        for k, v in list(params.items()):
+            if isinstance(v, str) and v in _ALL_SENTINELS:
+                if v not in cache:
+                    cache[v] = await _fetch_sample(v, session)
+                resolved = cache[v]
+                if resolved:
+                    params[k] = resolved
+                else:
+                    params.pop(k, None)  # avoid leaking a sentinel/placeholder
+        a["params"] = params
+    return actions
+
+
 def _rule_plan(command: str, current_route: Optional[str], lang: str) -> dict:
     """Best-effort structured plan without any LLM call."""
     text = command.strip()
@@ -403,7 +546,7 @@ def _rule_plan(command: str, current_route: Optional[str], lang: str) -> dict:
         # Pure data question — let the chat brain answer
         return {"route": None, "answer": True, "speak": "", "actions": []}
 
-    return {"route": route, "answer": False, "speak": speak, "actions": actions}
+    return {"route": route, "answer": False, "speak": speak, "actions": _normalize_samples(actions)}
 
 # ════════════════════════════════════════════════════════════════════════════
 # VALIDATION — only allow-listed (screen, action, param) survive
@@ -496,7 +639,7 @@ async def plan(
                     actions = _sanitize_actions(rp["actions"])
                     if not speak:
                         speak = rp.get("speak", "")
-            return {"route": route, "answer": answer, "speak": speak, "actions": actions}
+            return {"route": route, "answer": answer, "speak": speak, "actions": _normalize_samples(actions)}
 
     # Deterministic fallback
     return _rule_plan(command, current_route, lang)
