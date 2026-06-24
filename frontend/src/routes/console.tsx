@@ -159,7 +159,7 @@ function Console() {
       try {
         if (!getAuthToken()) {
           try {
-            await api.login("demo", "DGP");
+            await api.login("demo", "demo");
           } catch {
             /* backend down — handled below */
           }
@@ -203,12 +203,12 @@ function Console() {
     if (crimeType) body.crime_type = crimeType;
     if (district) body.district = district;
     (async () => {
-      // Auto-login with a default demo rank if no token is stored yet.
+      // Auto-login with the demo account if no token is stored yet.
       // This ensures the canvas loads even when the user navigated directly to
       // /console without going through the login page.
       if (!getAuthToken()) {
         try {
-          await api.login("demo", "DGP");
+          await api.login("demo", "demo");
         } catch {
           /* backend unreachable — requests will fail below with a clear message */
         }

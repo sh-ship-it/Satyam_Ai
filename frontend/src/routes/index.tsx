@@ -5,7 +5,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Satyam — Crime Intelligence, On the Data" },
-      { name: "description", content: "Satyam turns scattered case records, statements and signals into one bilingual, explainable intelligence picture for the Karnataka State Police." },
+      { name: "description", content: "Satyam turns scattered case records, statements and signals into one bilingual, voice-driven, explainable intelligence picture for the Karnataka State Police — with a hands-free copilot, AI investigation board, and a tamper-evident audit trail." },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -554,7 +554,7 @@ function LandingPage() {
         <section id="sl-tagline" className="center">
           <div className="wrap">
             <h2 className="reveal">Tailored crime <span className="accent">⊗</span> intelligence solutions</h2>
-            <p className="lead reveal d1" style={{textAlign:'center'}}>From first FIR to courtroom-ready reasoning — detection, networks, money-trails and forecasting, all in one place.</p>
+            <p className="lead reveal d1" style={{textAlign:'center'}}>From first FIR to courtroom-ready reasoning — grounded Q&amp;A, networks, money-trails, forecasting, and a hands-free voice &amp; gesture copilot, all in one place.</p>
           </div>
         </section>
 
@@ -563,11 +563,11 @@ function LandingPage() {
             <span className="eyebrow reveal">Capabilities</span>
             <h2 className="reveal d1">We provide intelligence for<br />your toughest cases</h2>
             <div className="grid">
-              <div className="card span7 reveal"><div className="glow" /><div className="ico">◈</div><h3>Investigation Console</h3><p>Ask in Kannada or English. Satyam retrieves the right records, cites every source, and explains its reasoning step by step.</p></div>
-              <div className="card span5 reveal d1"><div className="glow" /><div className="ico">◉</div><h3>Network Analysis</h3><p>Surface hidden links between people, places and cases as an interactive graph.</p></div>
-              <div className="card span4 reveal"><div className="glow" /><div className="ico">₹</div><h3>Financial Money-Trail</h3><p>Follow funds across accounts and transactions to expose the flow.</p></div>
-              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">◆</div><h3>Forecasting</h3><p>Anticipate hotspots and risk windows from historical patterns.</p></div>
-              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">◉</div><h3>Voice Copilot</h3><p>Hands-free, bilingual field assistance with natural speech.</p></div>
+              <div className="card span7 reveal"><div className="glow" /><div className="ico">◈</div><h3>Investigation Console</h3><p>Ask in Kannada or English. Satyam runs grounded Text-to-SQL and RAG over case narratives, cites every source, and streams a spoken summary back to you.</p></div>
+              <div className="card span5 reveal d1"><div className="glow" /><div className="ico">◉</div><h3>Network &amp; Rings</h3><p>Surface hidden links between people, places and cases, expand ego-networks, and auto-detect criminal rings on an interactive graph.</p></div>
+              <div className="card span4 reveal"><div className="glow" /><div className="ico">₹</div><h3>Financial Money-Trail</h3><p>Trace funds across accounts and transactions with a flagged BFS money-trail — never via raw LLM SQL.</p></div>
+              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">◆</div><h3>Forecast &amp; Trends</h3><p>Anticipate hotspots and risk windows, and cluster modus-operandi patterns from historical data.</p></div>
+              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">◉</div><h3>Voice &amp; Gesture Copilot</h3><p>Hands-free, bilingual control — speak a command or use webcam gestures to navigate and run any screen.</p></div>
             </div>
           </div>
         </section>
@@ -580,7 +580,7 @@ function LandingPage() {
             <div className="grid">
               <div className="card span4 reveal"><div className="stat">100%</div><div className="stat-label">Synthetic, privacy-safe data</div></div>
               <div className="card span4 reveal d1"><div className="stat">2×</div><div className="stat-label">Bilingual — Kannada &amp; English</div></div>
-              <div className="card span4 reveal d2"><div className="stat">8+</div><div className="stat-label">Intelligence modules, one console</div></div>
+              <div className="card span4 reveal d2"><div className="stat">14</div><div className="stat-label">Screens in one voice-driven workspace</div></div>
             </div>
           </div>
         </section>
@@ -588,17 +588,17 @@ function LandingPage() {
         <section id="sl-features">
           <div className="wrap">
             <div style={{textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center'}}>
-              <span className="tag-chip reveal">Core Capabilities</span>
-              <h2 className="reveal d1" style={{marginTop:18}}>Everything you need to<br />close cases faster</h2>
-              <p className="lead reveal d2" style={{textAlign:'center',maxWidth:620}}>From first ingest to final exhibit, Satyam unifies triage, link analysis, mapping, and reporting in one investigator-grade workspace.</p>
+              <span className="tag-chip reveal">AI Functions</span>
+              <h2 className="reveal d1" style={{marginTop:18}}>State-of-the-art AI,<br />built for the beat</h2>
+              <p className="lead reveal d2" style={{textAlign:'center',maxWidth:620}}>A bilingual voice agent, hands-free gesture control, an AI investigation canvas, and grounded reasoning — all behind row-level security and a tamper-evident audit trail.</p>
             </div>
             <div className="grid">
-              <div className="card span4 reveal"><div className="glow" /><div className="ico">⚇</div><h3>AI Evidence Triage</h3><p>Automatically classify, deduplicate, and prioritize artifacts from disk images, mobile dumps, and cloud exports.</p></div>
-              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">◉</div><h3>Link &amp; Network Analysis</h3><p>Surface hidden relationships between people, accounts, devices, and transactions on an interactive graph.</p></div>
-              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">◎</div><h3>Geospatial Intelligence</h3><p>Plot suspect movements, cell-site data, and incident hotspots on a tactical investigation map.</p></div>
-              <div className="card span4 reveal"><div className="glow" /><div className="ico">⛨</div><h3>Chain-of-Custody</h3><p>Tamper-evident audit trails, role-based access, and cryptographic hashes on every artifact.</p></div>
-              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">⛿</div><h3>Multi-Investigator Console</h3><p>Co-investigate in real time with case drawers, task assignment, and structured peer review.</p></div>
-              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">▤</div><h3>Court-Ready Reports</h3><p>Generate signed, exhibit-numbered reports with timelines, citations, and full provenance — in minutes.</p></div>
+              <div className="card span4 reveal"><div className="glow" /><div className="ico">◉</div><h3>Voice Screen Agent</h3><p>Speak in English or Kannada — the copilot navigates to the right screen and runs the task for you: set filters, search a network, generate a report. It answers data questions aloud, grounded in your records.</p></div>
+              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">⚇</div><h3>Hands-free Gesture Control</h3><p>Drive the cursor, click and navigate with webcam hand gestures. Say “Satyam” to wake the copilot, and the session auto-locks &amp; blurs PII the moment you step away.</p></div>
+              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">◈</div><h3>AI Investigation Board</h3><p>Describe a crime scene in plain language and the AI lays out suspects, victims, locations and links on an infinite canvas — auto-arranged with production-grade graph layouts.</p></div>
+              <div className="card span4 reveal"><div className="glow" /><div className="ico">◎</div><h3>Grounded Text-to-SQL</h3><p>Natural-language questions become safe, read-only SQL — validated by a sqlglot guard, scoped by Row-Level Security, and pointed only at masked views, never raw PII.</p></div>
+              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">⛨</div><h3>Tamper-Evident Audit</h3><p>Every query is written to a SHA-256 hash-chained audit log, with four-tier PII masking and L1–L4 clearance enforced at every layer.</p></div>
+              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">▤</div><h3>Court-Ready Reports</h3><p>Build cited intelligence briefs from cases and FIRs, then export print-ready PDFs — with on-demand Kannada translation across the whole workspace.</p></div>
             </div>
           </div>
         </section>

@@ -548,10 +548,17 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                     value={engines.dbSource}
                     onChange={(v) => {
                       updateEngine("dbSource", v);
-                      // Notify backend so the active connection switches immediately
-                      api.setDbSource(v).catch(() => {
-                        /* backend may be down — setting persists for next request */
-                      });
+                      // Notify backend so the active connection switches immediately,
+                      // then clear the cached token (cloud vs local have different users)
+                      // and reload so all pages re-fetch from the new database.
+                      api.setDbSource(v)
+                        .then(() => {
+                          api.logout();          // clear token — new DB, new session
+                          window.location.reload();
+                        })
+                        .catch(() => {
+                          /* backend may be down — setting persists for next request */
+                        });
                     }}
                   />
                 </div>
