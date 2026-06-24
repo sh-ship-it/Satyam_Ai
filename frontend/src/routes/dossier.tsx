@@ -33,10 +33,11 @@ const WANTED_BG: Record<string, string> = {
 };
 
 function RiskBadge({ level }: { level: string | null }) {
+  const { lang } = useI18n();
   if (!level) return null;
   return (
     <span className={`inline-flex items-center gap-1 rounded-[4px] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${RISK_BG[level] ?? "bg-muted"}`}>
-      <ShieldAlert className="h-3 w-3" /> {level}
+      <ShieldAlert className="h-3 w-3" /> {tData("risk_label", level, lang)}
     </span>
   );
 }
@@ -131,6 +132,7 @@ function Field({ label, value }: { label: string; value?: string | number | null
 // ── Main screen ──────────────────────────────────────────────────────────
 function DossierScreen() {
   const t = useT();
+  const { lang } = useI18n();
   const { location } = useRouterState();
 
   // Detect clearance from JWT stored in localStorage
@@ -240,10 +242,10 @@ function DossierScreen() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-xs font-bold text-foreground">{p.full_name}</div>
-                  <div className="truncate text-[10px] text-muted-foreground">{p.district}</div>
+                  <div className="truncate text-[10px] text-muted-foreground">{tData("district", p.district, lang)}</div>
                   {p.risk_level && (
                     <span className={`mt-0.5 inline-block rounded-[3px] px-1.5 py-0.5 text-[9px] font-bold ${RISK_BG[p.risk_level] ?? "bg-muted"}`}>
-                      {p.risk_level}
+                      {tData("risk_label", p.risk_level, lang)}
                     </span>
                   )}
                 </div>
@@ -348,7 +350,7 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
         {/* Personal & Physical */}
         <Section icon={User} title={t("Personal & Physical")}>
           <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-            <Field label={t("Gender")} value={d.gender} />
+            <Field label={t("Gender")} value={tData("gender", d.gender, lang)} />
             <Field label={t("Date of Birth")} value={d.dob ?? "—"} />
             <Field label={t("Age")} value={d.age != null ? `${d.age} ${t("years")}` : null} />
             <Field label={t("Height")} value={d.height_cm != null ? `${d.height_cm} cm` : null} />
@@ -375,7 +377,7 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
           <div className="mt-3">
             <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("Home Address")}</div>
             <div className="mt-0.5 text-sm">{d.home_address ?? "—"}</div>
-            <div className="text-xs text-muted-foreground">{d.district} — {d.pincode}</div>
+            <div className="text-xs text-muted-foreground">{tData("district", d.district, lang)} — {d.pincode}</div>
           </div>
         </Section>
       </div>
@@ -401,11 +403,11 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
                   <td className="py-1.5 pr-3 font-medium">{b.bank_name}</td>
                   <td className="py-1.5 pr-3 font-mono">{b.account_no}</td>
                   <td className="py-1.5 pr-3 text-muted-foreground">{b.ifsc ?? "—"}</td>
-                  <td className="py-1.5 pr-3">{b.account_type ?? "—"}</td>
+                  <td className="py-1.5 pr-3">{t(b.account_type ?? "") || "—"}</td>
                   <td className="py-1.5 pr-3 text-right font-mono">{b.balance_inr != null ? fmt(Number(b.balance_inr)) : "—"}</td>
                   <td className="py-1.5 pr-3">
                     <span className={`rounded-[3px] px-1.5 py-0.5 text-[9px] font-bold ${b.status === "Frozen" ? "bg-destructive/20 text-destructive" : b.status === "Dormant" ? "bg-muted text-muted-foreground" : "bg-green-100 text-green-800"}`}>
-                      {b.status}
+                      {t(b.status ?? "")}
                     </span>
                   </td>
                   <td className="py-1.5">
@@ -431,12 +433,12 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
               <div className="flex items-center justify-between gap-2 mb-1">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-mono text-xs font-bold">{c.case_ref}</span>
-                  <span className="font-semibold text-xs">{c.crime_type}</span>
-                  {c.role && <span className="rounded-[3px] border border-border bg-muted px-1.5 py-0.5 text-[9px]">{c.role}</span>}
+                  <span className="font-semibold text-xs">{tData("crime_type", c.crime_type, lang)}</span>
+                  {c.role && <span className="rounded-[3px] border border-border bg-muted px-1.5 py-0.5 text-[9px]">{tData("role", c.role, lang)}</span>}
                 </div>
                 {c.status && (
                   <span className={`shrink-0 rounded-[4px] px-2 py-0.5 text-[9px] font-bold ${c.status === "Open" ? "bg-destructive text-destructive-foreground" : c.status === "Convicted" ? "bg-purple-600 text-white" : c.status === "Chargesheeted" ? "bg-orange-400 text-foreground" : "bg-muted text-muted-foreground"}`}>
-                    {c.status}
+                    {tData("status", c.status, lang)}
                   </span>
                 )}
               </div>

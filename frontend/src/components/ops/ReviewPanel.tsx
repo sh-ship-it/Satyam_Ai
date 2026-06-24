@@ -130,8 +130,9 @@ export function ReviewPanel() {
       try {
         const msg = JSON.parse(e.data);
         if (msg.type === "INCIDENT_CANDIDATE") {
-          const label =
-            CRIME_LABELS[msg.candidateType ?? "vehicle_anomaly"] ?? msg.candidateType ?? "Incident";
+          const label = t(
+            CRIME_LABELS[msg.candidateType ?? "vehicle_anomaly"] ?? msg.candidateType ?? "Incident"
+          );
           const conf = Math.round((msg.confidence ?? 0) * 100);
           setDetections((prev) =>
             [
@@ -392,7 +393,7 @@ export function ReviewPanel() {
           {queueItems.map((it) => {
             const conf = Math.round(it.confidence * 100);
             const isHigh = it.confidence >= 0.8;
-            const label = CRIME_LABELS[it.candidate_type] ?? it.candidate_type;
+            const label = t(CRIME_LABELS[it.candidate_type] ?? it.candidate_type);
             return (
               <div
                 key={it.id}

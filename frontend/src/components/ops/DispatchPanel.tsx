@@ -23,6 +23,7 @@ function phaseIndex(p: string): number {
 
 function PhaseTimeline({ phase }: { phase: string }) {
   const active = phaseIndex(phase);
+  const t = useT();
   return (
     <div className="flex items-center gap-1">
       {PHASES.map((p, i) => (
@@ -42,7 +43,7 @@ function PhaseTimeline({ phase }: { phase: string }) {
                 i === active ? "text-foreground" : "text-muted-foreground/60"
               }`}
             >
-              {p.label}
+              {t(p.label)}
             </span>
           </div>
           {i < PHASES.length - 1 && (
@@ -515,9 +516,9 @@ export function DispatchPanel() {
                       {d.id}
                     </span>
                   </div>
-                  <div className="mt-0.5 font-semibold">{d.incident}</div>
+                  <div className="mt-0.5 font-semibold">{t(d.incident)}</div>
                   <div className="mt-0.5 flex items-center gap-1 text-[10px] text-muted-foreground">
-                    <MapPin className="h-3 w-3" /> {d.originName} → {d.sceneName}
+                    <MapPin className="h-3 w-3" /> {t(d.originName)} → {t(d.sceneName)}
                   </div>
                   {running ? (
                     <div className="mt-2">
