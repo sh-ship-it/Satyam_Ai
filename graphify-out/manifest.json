@@ -705,8 +705,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/about.tsx": {
-    "mtime": 1782106292.7881403,
-    "ast_hash": "e653efaa2f26627367d9de352e1e029c",
+    "mtime": 1782301657.4711385,
+    "ast_hash": "a26f2183d2175ad3b4d3987e1299c0a6",
     "semantic_hash": ""
   },
   "frontend/src/routes/audit.tsx": {
@@ -720,8 +720,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
-    "mtime": 1782294348.6649308,
-    "ast_hash": "8dd79462ff49d5ebc2d5ca43c61c88af",
+    "mtime": 1782301447.0465465,
+    "ast_hash": "22260c16446950a6569eeb2635bab413",
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
@@ -880,8 +880,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1782145417.6403158,
-    "ast_hash": "5d18afc18416aca14d72b58bdb117ca1",
+    "mtime": 1782301668.5703154,
+    "ast_hash": "05fb367d6977e5bf7a8e48a25a7f43fe",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {

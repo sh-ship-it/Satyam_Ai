@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-24)
 
 ## Corpus Check
-- 332 files · ~1,802,745 words
+- 332 files · ~1,804,180 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d05d5242`
+- Built from commit: `28aade02`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -1042,7 +1042,7 @@ Cohesion: 0.40
 Nodes (5): TrendDeltas, main(), TrendPoint, get_trends(), TrendsResponse
 
 ## Knowledge Gaps
-- **1258 isolated node(s):** `PHASES`, `Corridor`, `LL`, `SimSignal`, `DemoDispatch` (+1253 more)
+- **1258 isolated node(s):** `PipelineStep`, `[2026-06-15] — Initial Setup`, `Summary`, `Backend Changes`, `Environment Files` (+1253 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **26 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -1050,9 +1050,9 @@ Nodes (5): TrendDeltas, main(), TrendPoint, get_trends(), TrendsResponse
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 223` to `Community 210`?**
-  _High betweenness centrality (0.159) - this node is a cross-community bridge._
-- **Why does `Principal` connect `Community 177` to `Community 224`, `Community 161`, `Community 3`, `Community 101`, `Community 231`, `Community 232`, `Community 42`, `Community 235`, `Community 236`, `Community 173`, `Community 238`, `Community 46`, `Community 51`, `Community 215`, `Community 122`, `Community 221`, `Community 223`?**
-  _High betweenness centrality (0.088) - this node is a cross-community bridge._
+  _High betweenness centrality (0.178) - this node is a cross-community bridge._
+- **Why does `cn()` connect `Community 13` to `Community 4`, `Community 134`, `Community 7`, `Community 20`, `Community 21`, `Community 22`, `Community 24`, `Community 28`, `Community 31`, `Community 160`, `Community 36`, `Community 170`, `Community 43`, `Community 45`, `Community 54`, `Community 68`, `Community 220`, `Community 94`, `Community 228`, `Community 112`, `Community 126`?**
+  _High betweenness centrality (0.084) - this node is a cross-community bridge._
 - **Are the 112 inferred relationships involving `Principal` (e.g. with `AdminUserList` and `AsyncSession`) actually correct?**
   _`Principal` has 112 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 80 inferred relationships involving `Permission` (e.g. with `AdminUserList` and `Principal`) actually correct?**
@@ -1061,5 +1061,5 @@ _Questions this graph is uniquely positioned to answer:_
   _`AccessDenied` has 75 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 12 inferred relationships involving `useT()` (e.g. with `AdminAccessControl()` and `PolicyEditor()`) actually correct?**
   _`useT()` has 12 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `PHASES`, `Corridor`, `LL` to the rest of the system?**
+- **What connects `PipelineStep`, `[2026-06-15] — Initial Setup`, `Summary` to the rest of the system?**
   _1512 weakly-connected nodes found - possible documentation gaps or missing edges._
