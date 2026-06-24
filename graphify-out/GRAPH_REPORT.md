@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-24)
 
 ## Corpus Check
-- 313 files · ~1,795,072 words
+- 313 files · ~1,795,261 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3bd2b6a6`
+- Built from commit: `475842e5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -1031,16 +1031,16 @@ Nodes (3): 22.1 Backend Board Brain (`app/services/board_brain.py`), 22.2 Fronte
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 199` to `Community 210`?**
-  _High betweenness centrality (0.181) - this node is a cross-community bridge._
-- **Why does `cn()` connect `Community 13` to `Community 4`, `Community 134`, `Community 7`, `Community 20`, `Community 21`, `Community 22`, `Community 24`, `Community 28`, `Community 31`, `Community 160`, `Community 36`, `Community 170`, `Community 43`, `Community 45`, `Community 54`, `Community 68`, `Community 94`, `Community 103`, `Community 112`, `Community 126`?**
-  _High betweenness centrality (0.086) - this node is a cross-community bridge._
+  _High betweenness centrality (0.186) - this node is a cross-community bridge._
+- **Why does `get_settings()` connect `Community 33` to `Community 225`, `Community 3`, `Community 197`, `Community 199`, `Community 200`, `Community 201`, `Community 205`, `Community 175`, `Community 51`, `Community 212`, `Community 117`, `Community 149`, `Community 215`, `Community 221`, `Community 219`, `Community 220`, `Community 93`, `Community 158`?**
+  _High betweenness centrality (0.091) - this node is a cross-community bridge._
 - **Are the 130 inferred relationships involving `Principal` (e.g. with `AdminUserList` and `AsyncSession`) actually correct?**
   _`Principal` has 130 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 80 inferred relationships involving `Permission` (e.g. with `AdminUserList` and `Principal`) actually correct?**
   _`Permission` has 80 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 75 inferred relationships involving `AccessDenied` (e.g. with `AdminUserList` and `Principal`) actually correct?**
   _`AccessDenied` has 75 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Runtime settings endpoint.  Allows the frontend Settings panel to flip the act`, `Return which AI providers are configured (booleans only — never the keys).`, `Return host:port only — never expose credentials in the response.` to the rest of the system?**
+- **What connects `Table of Contents`, `1. Project Overview`, `2.1 Backend` to the rest of the system?**
   _1489 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
