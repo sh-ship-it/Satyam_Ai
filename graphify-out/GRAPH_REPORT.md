@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-24)
 
 ## Corpus Check
-- 313 files · ~1,796,358 words
+- 313 files · ~1,797,403 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `57b9be00`
+- Built from commit: `bba20245`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -245,16 +245,16 @@
 10. `get_settings()` - 44 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `switch_db_source()` --calls--> `set_db_source()`  [INFERRED]
-  backend/app/api/routes/settings.py → backend/app/db/session.py
-- `current_db_source()` --calls--> `get_db_source()`  [INFERRED]
-  backend/app/api/routes/settings.py → backend/app/db/session.py
 - `PolicyEditor()` --calls--> `useT()`  [INFERRED]
   frontend/src/routes/admin.tsx → frontend/src/lib/i18n.tsx
 - `DossierScreen()` --calls--> `useT()`  [INFERRED]
   frontend/src/routes/dossier.tsx → frontend/src/lib/i18n.tsx
 - `Legend()` --calls--> `useT()`  [INFERRED]
   frontend/src/routes/network.tsx → frontend/src/lib/i18n.tsx
+- `NetworkScreen()` --calls--> `useT()`  [INFERRED]
+  frontend/src/routes/network.tsx → frontend/src/lib/i18n.tsx
+- `switch_db_source()` --calls--> `set_db_source()`  [INFERRED]
+  backend/app/api/routes/settings.py → backend/app/db/session.py
 
 ## Import Cycles
 - 1-file cycle: `backend/app/main.py -> backend/app/main.py`
@@ -1026,7 +1026,7 @@ Cohesion: 0.50
 Nodes (3): TabsContent, TabsList, TabsTrigger
 
 ## Knowledge Gaps
-- **1243 isolated node(s):** `Table of Contents`, `1. Project Overview`, `2.1 Backend`, `2.2 AI / Model Services`, `2.3 Frontend` (+1238 more)
+- **1243 isolated node(s):** `Lang`, `Ctx`, `I18nCtx`, `ALL_TRANSLATABLE`, `ChatMessage` (+1238 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **25 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -1034,16 +1034,16 @@ Nodes (3): TabsContent, TabsList, TabsTrigger
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 199` to `Community 210`?**
-  _High betweenness centrality (0.162) - this node is a cross-community bridge._
+  _High betweenness centrality (0.165) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 177` to `Community 224`, `Community 161`, `Community 3`, `Community 101`, `Community 199`, `Community 203`, `Community 204`, `Community 205`, `Community 46`, `Community 51`, `Community 211`, `Community 215`, `Community 121`, `Community 122`, `Community 221`, `Community 158`?**
-  _High betweenness centrality (0.091) - this node is a cross-community bridge._
+  _High betweenness centrality (0.093) - this node is a cross-community bridge._
 - **Are the 130 inferred relationships involving `Principal` (e.g. with `AdminUserList` and `AsyncSession`) actually correct?**
   _`Principal` has 130 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 80 inferred relationships involving `Permission` (e.g. with `AdminUserList` and `Principal`) actually correct?**
   _`Permission` has 80 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 75 inferred relationships involving `AccessDenied` (e.g. with `AdminUserList` and `Principal`) actually correct?**
   _`AccessDenied` has 75 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Voice pipeline endpoints: TTS / STT / MT.  Provider-agnostic: delegates to the`, `Collapse any locale string to the two supported voice languages.`, `Voice Screen Agent: turn a spoken command into a navigation + in-screen     act` to the rest of the system?**
+- **What connects `Lang`, `Ctx`, `I18nCtx` to the rest of the system?**
   _1495 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
