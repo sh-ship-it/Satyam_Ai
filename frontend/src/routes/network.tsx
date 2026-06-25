@@ -97,6 +97,7 @@ function SeedSearch({
   loading: boolean;
   t: (s: string) => string;
 }) {
+  const { lang } = useI18n();
   const [open, setOpen] = useState(false);
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -113,7 +114,7 @@ function SeedSearch({
       .listOffenders(p)
       .then((r) => setPopular(r.offenders.slice(0, 8)))
       .catch(() => {});
-  }, []);
+  }, [lang]);
 
   // Live search while typing (Google-style: fires from the first character)
   useEffect(() => {
@@ -139,7 +140,7 @@ function SeedSearch({
     return () => {
       if (debounce.current) clearTimeout(debounce.current);
     };
-  }, [value]);
+  }, [value, lang]);
 
   // Close on outside click
   useEffect(() => {

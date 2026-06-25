@@ -1285,6 +1285,9 @@ const DICT: Record<string, string> = {
   "Circular Flow": "ವೃತ್ತಾಕಾರದ ಹರಿವು",
   "Synthetic financial leads - investigative use only, not proof of guilt.": "ಸಂಶ್ಲೇಷಿತ ಹಣಕಾಸು ಪಾತ್ರಗಳು - ತನಿಖಾ ಬಳಕೆಗೆ ಮಾತ್ರ, ಇದು ಅಪರಾಧದ ಪುರಾವೆಯಲ್ಲ.",
   "Fullscreen": "ಪೂರ್ಣ ಪರದೆ",
+  "cases": "ಪ್ರಕರಣಗಳು",
+  "Cases": "ಪ್ರಕರಣಗಳು",
+  "match": "ಹೊಂದಾಣಿಕೆ",
 
   "⏱ Auto": "⏱ ಸ್ವಯಂ",
   "⏱ Manual": "⏱ ಮ್ಯಾನುಯಲ್",
