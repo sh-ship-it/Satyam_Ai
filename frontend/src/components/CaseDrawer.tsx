@@ -2,7 +2,7 @@ import { X, Lock, Clock, Sparkles, Network, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
-import { tData } from "@/lib/tData";
+import { tData, translateWhySimilar } from "@/lib/tData";
 import { api } from "@/lib/api/client";
 import { intelligence, type SimilarCaseMatch, type TimelineEvent } from "@/lib/api/intelligence";
 
@@ -307,7 +307,7 @@ export function CaseDrawer({
                   <div className="flex flex-wrap gap-1">
                     {m.why_similar.map((w) => (
                       <span key={w} className="rounded-[3px] bg-muted px-1.5 py-0.5 text-[10px]">
-                        {t(w)}
+                        {translateWhySimilar(w, lang)}
                       </span>
                     ))}
                   </div>

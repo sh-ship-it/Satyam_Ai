@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { intelligence, type SimilarCasesResponse } from "@/lib/api/intelligence";
 import { Search, Loader2, AlertTriangle } from "lucide-react";
-import { useT } from "@/lib/i18n";
+import { useT, useI18n } from "@/lib/i18n";
+import { tData, translateWhySimilar } from "@/lib/tData";
 
 interface Props {
   onOpenCase?: (caseId: number) => void;
@@ -9,6 +10,7 @@ interface Props {
 
 export function SimilarCaseSearch({ onOpenCase }: Props) {
   const t = useT();
+  const { lang } = useI18n();
   const [q, setQ] = useState("");
   const [res, setRes] = useState<SimilarCasesResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -21,7 +23,7 @@ export function SimilarCaseSearch({ onOpenCase }: Props) {
     try {
       setRes(await intelligence.searchSimilarCases(q.trim(), 8));
     } catch {
-      setError("Search failed. Check clearance and that the API is running.");
+      setError(t("Search failed. Check clearance and that the API is running."));
     } finally {
       setLoading(false);
     }
@@ -75,7 +77,7 @@ export function SimilarCaseSearch({ onOpenCase }: Props) {
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm font-semibold text-foreground font-mono">
-                  {m.fir_number ?? `Case #${m.case_id}`}
+                  {m.fir_number ?? `${t("Case")} #${m.case_id}`}
                 </span>
                 <span
                   className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
@@ -86,11 +88,11 @@ export function SimilarCaseSearch({ onOpenCase }: Props) {
                         : "bg-muted text-muted-foreground"
                   }`}
                 >
-                  {m.similarity_percent}% match
+                  {m.similarity_percent}% {t("match")}
                 </span>
               </div>
               <div className="text-xs text-muted-foreground mb-1.5">
-                {m.crime_type} · {m.district}
+                {tData("crime_type", m.crime_type, lang)} · {tData("district", m.district, lang)}
               </div>
               {m.why_similar.length > 0 && (
                 <div className="flex flex-wrap gap-1">
@@ -99,7 +101,7 @@ export function SimilarCaseSearch({ onOpenCase }: Props) {
                       key={i}
                       className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground"
                     >
-                      {w}
+                      {translateWhySimilar(w, lang)}
                     </span>
                   ))}
                 </div>

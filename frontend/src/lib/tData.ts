@@ -335,3 +335,21 @@ export function tAuto(value: string | null | undefined, lang: string): string {
   }
   return value;
 }
+
+export function translateWhySimilar(why: string, lang: string): string {
+  if (lang !== "KN" && lang !== "kn") return why;
+
+  if (why.startsWith("Same crime type: ")) {
+    const val = why.substring("Same crime type: ".length);
+    return `ಅದೇ ಅಪರಾಧ ಪ್ರಕಾರ: ${tData("crime_type", val, lang)}`;
+  }
+  if (why.startsWith("Same district: ")) {
+    const val = why.substring("Same district: ".length);
+    return `ಅದೇ ಜಿಲ್ಲೆ: ${tData("district", val, lang)}`;
+  }
+  if (why.startsWith("Same legal sections: ")) {
+    const val = why.substring("Same legal sections: ".length);
+    return `ಅದೇ ಕಾನೂನು ಸೆಕ್ಷನ್‌ಗಳು: ${val}`;
+  }
+  return why;
+}

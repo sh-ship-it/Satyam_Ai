@@ -1652,6 +1652,7 @@ const ALL_TRANSLATABLE: string[] = [
   "Search above to add persons, FIRs, or use quick add",
   "Search and add person, FIR, crime type…",
   "Search by name, email, rank or creator…",
+  "Search failed. Check clearance and that the API is running.",
   "Search for a person or case",
   "Search name / district…",
   "Search person, FIR number, crime type…",
