@@ -351,7 +351,7 @@ function ForecastScreen() {
         let finalCells = h.cells;
         let finalBacktest = b;
 
-        if (lang === "KN" || lang === "kn") {
+        if (lang === "KN") {
           try {
             const stringsToTranslate: string[] = [];
             a.alerts.forEach((alert) => {

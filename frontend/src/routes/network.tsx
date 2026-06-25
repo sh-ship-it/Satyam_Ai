@@ -386,7 +386,7 @@ function NetworkScreen() {
         }
 
         // Translate node labels dynamically at runtime if language is Kannada
-        if (lang === "KN" || lang === "kn") {
+        if (lang === "KN") {
           try {
             const { translateOnTheFly } = await import("@/lib/api/intelligence");
             const stringsToTranslate: string[] = [];
