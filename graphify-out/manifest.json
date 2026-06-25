@@ -725,8 +725,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
-    "mtime": 1782376129.343291,
-    "ast_hash": "6e82344c08b4a356133ca22afdf053b3",
+    "mtime": 1782387105.2006607,
+    "ast_hash": "3169c7b28df448df2f0c581654fe7f2a",
     "semantic_hash": ""
   },
   "frontend/src/routes/reports.tsx": {
@@ -1050,8 +1050,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/forecast.tsx": {
-    "mtime": 1782376751.7004578,
-    "ast_hash": "884cce39daf7c29bf4aeb2ff09660789",
+    "mtime": 1782387100.8362412,
+    "ast_hash": "759300d1ec4c2d97e2b48603f969e542",
     "semantic_hash": ""
   },
   "frontend/src/routes/profile.$personId.tsx": {
