@@ -87,52 +87,52 @@ function AboutPage() {
   const pipeline: PipelineStep[] = [
     {
       n: "01",
-      t: t("Ingest"),
-      Icon: Upload,
+      t: t("Query Ingest & STT"),
+      Icon: MessageSquare,
       tone: "primary",
-      d: t("Upload disk images, mobile dumps, cloud exports, and case files into a single evidence vault."),
+      d: t("Capture typed queries or spoken voice in English or Kannada, utilizing Browser Web Speech or Sarvam Saaras v3 for high-fidelity transcription."),
     },
     {
       n: "02",
-      t: t("Hash & Custody"),
-      Icon: Fingerprint,
+      t: t("Intent Routing & Slots"),
+      Icon: Sparkles,
       tone: "accent",
-      d: t("SHA-256 fingerprint every artifact; sign a chain-of-custody entry with timestamp and investigator identity."),
+      d: t("Classify the query's intent (e.g. SQL, RAG, Network, or Map) and extract contextual parameters from the conversation history."),
     },
     {
       n: "03",
-      t: t("AI Triage"),
-      Icon: Sparkles,
+      t: t("Grounded Processing"),
+      Icon: Database,
       tone: "primary",
-      d: t("Classify, deduplicate, and rank artifacts by investigative relevance using on-demand AI models."),
+      d: t("Run grounded retrieval: Text-to-SQL with progressive relaxation, pgvector semantic search (BGE-M3) over case narratives, or graph traversal."),
     },
     {
       n: "04",
-      t: t("Entity Extraction"),
-      Icon: Users,
+      t: t("SQL Guard & Safety"),
+      Icon: ShieldCheck,
       tone: "accent",
-      d: t("Pull people, accounts, devices, locations, transactions, and communication threads from raw data."),
+      d: t("Run the generated SQL through sqlglot to enforce a read-only, single SELECT statement restricted to a strict 6-table allow-list."),
     },
     {
       n: "05",
-      t: t("Link & Geo Analysis"),
-      Icon: Network,
+      t: t("Access Control (RLS)"),
+      Icon: Lock,
       tone: "primary",
-      d: t("Build interactive network graphs and plot movements on a tactical heatmap with a time-slider."),
+      d: t("Apply Row-Level Security at the Postgres engine level. Mask PII (L1-L4 clearance) and restrict rows based on the officer's KSP rank and station scope."),
     },
     {
       n: "06",
-      t: t("Investigator Review"),
-      Icon: MessageSquare,
+      t: t("Spoken Summary Synthesis"),
+      Icon: Brain,
       tone: "accent",
-      d: t("Voice + chat console, multi-user task boards, structured peer review, and redaction workflows."),
+      d: t("Synthesize a cited answer in the requested language, and extract a concise 2-3 sentence spoken summary enclosed in a custom [SPEAK] block."),
     },
     {
       n: "07",
-      t: t("Court-Ready Report"),
-      Icon: FileText,
+      t: t("SSE Stream & Hash Audit"),
+      Icon: Fingerprint,
       tone: "primary",
-      d: t("Generate signed, exhibit-numbered PDFs with full provenance, timeline, and citations."),
+      d: t("Stream the answer token-by-token over SSE, speak the summary via Sarvam Bulbul TTS, and record a SHA-256 hash-chained tamper-evident audit log."),
     },
   ];
 
@@ -276,7 +276,7 @@ function AboutPage() {
               {t("Working Pipeline")}
             </h2>
             <p className="mt-2 max-w-xl text-sm text-foreground/70">
-              {t("End-to-end flow from raw evidence to court-ready exhibit. Click any step to expand details.")}
+              {t("End-to-end flow from natural-language query to a secure, cited, and audited response. Click any step to expand details.")}
             </p>
           </div>
 

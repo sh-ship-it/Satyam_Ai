@@ -70,6 +70,23 @@ const DICT: Record<string, string> = {
   "Switch to Light Mode": "ಲೈಟ್ ಮೋಡ್‌ಗೆ ಬದಲಾಯಿಸಿ",
   "Switch to Dark Mode": "ಡಾರ್ಕ್ ಮೋಡ್‌ಗೆ ಬದಲಾಯಿಸಿ",
 
+  // ── About Page Working Pipeline keys ────────────────────────────────────────
+  "Query Ingest & STT": "ಪ್ರಶ್ನೆ ಸ್ವೀಕಾರ ಮತ್ತು STT",
+  "Capture typed queries or spoken voice in English or Kannada, utilizing Browser Web Speech or Sarvam Saaras v3 for high-fidelity transcription.": "ಬ್ರೌಸರ್ ವೆಬ್ ಸ್ಪೀಚ್ ಅಥವಾ ಸರ್ವಮ್ ಸಾರಸ್ v3 ಬಳಸಿ ಇಂಗ್ಲಿಷ್ ಅಥವಾ ಕನ್ನಡದಲ್ಲಿ ಟೈಪ್ ಮಾಡಿದ ಅಥವಾ ಮಾತನಾಡಿದ ಪ್ರಶ್ನೆಗಳನ್ನು ಸೆರೆಹಿಡಿಯಿರಿ.",
+  "Intent Routing & Slots": "ಉದ್ದೇಶ ರೂಟಿಂಗ್ ಮತ್ತು ಸ್ಲಾಟ್‌ಗಳು",
+  "Classify the query's intent (e.g. SQL, RAG, Network, or Map) and extract contextual parameters from the conversation history.": "ಪ್ರಶ್ನೆಯ ಉದ್ದೇಶವನ್ನು (ಉದಾ. SQL, RAG, ನೆಟ್‌ವರ್ಕ್, ಅಥವಾ ನಕ್ಷೆ) ವರ್ಗೀಕರಿಸಿ ಮತ್ತು ಸಂಭಾಷಣೆಯ ಇತಿಹಾಸದಿಂದ ಸಂದರ್ಭೋಚಿತ ನಿಯತಾಂಕಗಳನ್ನು ಹೊರತೆಗೆಯಿರಿ.",
+  "Grounded Processing": "ಆಧಾರಿತ ಪ್ರಕ್ರಿಯೆ",
+  "Run grounded retrieval: Text-to-SQL with progressive relaxation, pgvector semantic search (BGE-M3) over case narratives, or graph traversal.": "ಆಧಾರಿತ ಮರುಪಡೆಯುವಿಕೆಯನ್ನು ಚಲಾಯಿಸಿ: ಪ್ರೋಗ್ರಸ್ಸೀವ್ ರಿಲ್ಯಾಕ್ಸೇಷನ್‌ನೊಂದಿಗೆ ಟೆಕ್ಸ್ಟ್-ಟು-SQL, ಪ್ರಕರಣದ ನಿರೂಪಣೆಗಳ ಮೇಲೆ pgvector ಸೆಮ್ಯಾಂಟಿಕ್ ಹುಡುಕಾಟ (BGE-M3), ಅಥವಾ ಗ್ರಾಫ್ ಟ್ರಾವರ್ಸಲ್.",
+  "SQL Guard & Safety": "SQL ಗಾರ್ಡ್ ಮತ್ತು ಸುರಕ್ಷತೆ",
+  "Run the generated SQL through sqlglot to enforce a read-only, single SELECT statement restricted to a strict 6-table allow-list.": "ರಚಿಸಲಾದ SQL ಅನ್ನು sqlglot ಮೂಲಕ ಚಲಾಯಿಸಿ, ಕಟ್ಟುನಿಟ್ಟಾದ 6-ಕೋಷ್ಟಕಗಳ ಅನುಮತಿ ಪಟ್ಟಿಗೆ ಸೀಮಿತವಾದ ಏಕ SELECT ಹೇಳಿಕೆಯನ್ನು ಜಾರಿಗೊಳಿಸಿ.",
+  "Access Control (RLS)": "ಪ್ರವೇಶ ನಿಯಂತ್ರಣ (RLS)",
+  "Apply Row-Level Security at the Postgres engine level. Mask PII (L1-L4 clearance) and restrict rows based on the officer's KSP rank and station scope.": "ಪೋಸ್ಟ್‌ಗ್ರೆಸ್ ಎಂಜಿನ್ ಮಟ್ಟದಲ್ಲಿ ಸಾಲು-ಮಟ್ಟದ ಭದ್ರತೆಯನ್ನು ಅನ್ವಯಿಸಿ. ಅಧಿಕಾರಿಯ ಕೆಎಸ್‌ಪಿ ಶ್ರೇಣಿ ಮತ್ತು ಠಾಣೆಯ ವ್ಯಾಪ್ತಿಯ ಆಧಾರದ ಮೇಲೆ PII (L1-L4 ಕ್ಲಿಯರೆನ್ಸ್) ಅನ್ನು ಮಾಸ್ಕ್ ಮಾಡಿ ಮತ್ತು ಸಾಲುಗಳನ್ನು ನಿರ್ಬಂಧಿಸಿ.",
+  "Spoken Summary Synthesis": "ಮಾತನಾಡುವ ಸಾರಾಂಶದ ಸಂಶ್ಲೇಷಣೆ",
+  "Synthesize a cited answer in the requested language, and extract a concise 2-3 sentence spoken summary enclosed in a custom [SPEAK] block.": "ಕೋರಿದ ಭಾಷೆಯಲ್ಲಿ ಉಲ್ಲೇಖಿತ ಉತ್ತರವನ್ನು ಸಂಶ್ಲೇಷಿಸಿ, ಮತ್ತು ಕಸ್ಟಮ್ [SPEAK] ಬ್ಲಾಕ್‌ನಲ್ಲಿ ಅಡಕವಾಗಿರುವ ಸಂಕ್ಷಿಪ್ತ 2-3 ವಾಕ್ಯಗಳ ಮಾತನಾಡುವ ಸಾರಾಂಶವನ್ನು ಹೊರತೆಗೆಯಿರಿ.",
+  "SSE Stream & Hash Audit": "SSE ಸ್ಟ್ರೀಮ್ ಮತ್ತು ಹ್ಯಾಶ್ ಆಡಿಟ್",
+  "Stream the answer token-by-token over SSE, speak the summary via Sarvam Bulbul TTS, and record a SHA-256 hash-chained tamper-evident audit log.": "SSE ಮೂಲಕ ಉತ್ತರವನ್ನು ಟೋಕನ್-ಬೈ-ಟೋಕನ್ ಸ್ಟ್ರೀಮ್ ಮಾಡಿ, ಸರ್ವಮ್ ಬುಲ್‌ಬುಲ್ TTS ಮೂಲಕ ಸಾರಾಂಶವನ್ನು ಪ್ಲೇ ಮಾಡಿ, ಮತ್ತು SHA-256 ಹ್ಯಾಶ್-ಸರಣಿಯ ತಿರುಚುವಿಕೆ-ನಿರೋಧಕ ಆಡಿಟ್ ಲಾಗ್ ಅನ್ನು ರೆಕಾರ್ಡ್ ಮಾಡಿ.",
+  "End-to-end flow from natural-language query to a secure, cited, and audited response. Click any step to expand details.": "ನೈಸರ್ಗಿಕ ಭಾಷೆಯ ಪ್ರಶ್ನೆಯಿಂದ ಸುರಕ್ಷಿತ, ಉಲ್ಲೇಖಿತ ಮತ್ತು ಆಡಿಟ್ ಮಾಡಲಾದ ಉತ್ತರಕ್ಕೆ ಕೊನೆಯಿಂದ ಕೊನೆಯವರೆಗಿನ ಹರಿವು. ವಿವರಗಳನ್ನು ವಿಸ್ತರಿಸಲು ಯಾವುದೇ ಹಂತವನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ.",
+
   // ── About Page Blueprint keys ────────────────────────────────────────
   "Architecture": "ಆರ್ಕಿಟೆಕ್ಚರ್",
   "Under the hood": "ತಂತ್ರಜ್ಞಾನದ ಹಿನ್ನೆಲೆ",
