@@ -46,7 +46,7 @@ export function RingsPanel({ crimeType, district }: { crimeType?: string; distri
     return () => {
       alive = false;
     };
-  }, [crimeType, district]);
+  }, [crimeType, district, lang]);
 
   if (loading)
     return (

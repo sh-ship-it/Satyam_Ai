@@ -52,8 +52,40 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
         suspicious_only: suspiciousOnly,
         min_amount: minAmount,
       })
-      .then((r) => {
-        if (alive) setData(r);
+      .then(async (r) => {
+        if (!alive) return;
+
+        // Translate nodes dynamically at runtime if language is Kannada
+        if (lang === "KN" || lang === "kn") {
+          try {
+            const { translateOnTheFly } = await import("@/lib/api/intelligence");
+            const stringsToTranslate: string[] = [];
+            r.nodes.forEach((n) => {
+              if (n.label) stringsToTranslate.push(n.label);
+              if (n.person_label) stringsToTranslate.push(n.person_label);
+              if (n.bank_name) stringsToTranslate.push(n.bank_name);
+              if (n.account_type) stringsToTranslate.push(n.account_type);
+            });
+            const translations = await translateOnTheFly(stringsToTranslate);
+            const accountTypeKN: Record<string, string> = {
+              "Savings": "ಉಳಿತಾಯ",
+              "Current": "ಚಾಲ್ತಿ",
+              "Loan": "ಸಾಲ",
+              "Credit Card": "ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್",
+            };
+            r.nodes = r.nodes.map((n) => ({
+              ...n,
+              label: translations[n.label] ?? n.label,
+              person_label: n.person_label ? (translations[n.person_label] ?? n.person_label) : null,
+              bank_name: n.bank_name ? (translations[n.bank_name] ?? n.bank_name) : null,
+              account_type: n.account_type ? (translations[n.account_type] ?? accountTypeKN[n.account_type] ?? n.account_type) : null,
+            }));
+          } catch (e) {
+            console.warn("[financial links] dynamic translation failed:", e);
+          }
+        }
+
+        setData(r);
       })
       .catch(() => {
         if (alive) setError(t("Could not load financial links for this seed."));
@@ -64,7 +96,7 @@ export function FinancialLinksPanel({ seed }: { seed: string }) {
     return () => {
       alive = false;
     };
-  }, [seed, suspiciousOnly, minAmount]);
+  }, [seed, suspiciousOnly, minAmount, lang]);
 
   // Circular layout for nodes.
   const layout = useMemo(() => {

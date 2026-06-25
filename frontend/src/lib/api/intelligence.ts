@@ -273,7 +273,7 @@ export const intelligence = {
   getSocialRiskIndex: () => apiFetch<SocialRiskIndexResponse>("/api/socio/risk-index"),
 };
 
-async function translateOnTheFly(strings: string[]): Promise<Record<string, string>> {
+export async function translateOnTheFly(strings: string[]): Promise<Record<string, string>> {
   if (typeof window === "undefined" || strings.length === 0) return {};
   const lang = typeof localStorage !== "undefined" ? localStorage.getItem("fq-lang") : "EN";
   if (lang !== "KN") return {};

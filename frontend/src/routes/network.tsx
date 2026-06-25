@@ -384,6 +384,26 @@ function NetworkScreen() {
           return;
         }
 
+        // Translate node labels dynamically at runtime if language is Kannada
+        if (lang === "KN" || lang === "kn") {
+          try {
+            const { translateOnTheFly } = await import("@/lib/api/intelligence");
+            const stringsToTranslate: string[] = [];
+            res.nodes.forEach((n: any) => {
+              if (n.label) stringsToTranslate.push(n.label);
+              if (n.name) stringsToTranslate.push(n.name);
+            });
+            const translations = await translateOnTheFly(stringsToTranslate);
+            res.nodes = res.nodes.map((n: any) => ({
+              ...n,
+              label: translations[n.label] ?? translations[n.name] ?? n.label ?? n.name,
+              name: translations[n.name] ?? translations[n.label] ?? n.name ?? n.label,
+            }));
+          } catch (e) {
+            console.warn("[network] dynamic translation failed:", e);
+          }
+        }
+
         const seedId = String(res.seed_id ?? res.root ?? "");
 
         // Map API nodes — backend returns `kind` not `entity_type`
@@ -455,7 +475,7 @@ function NetworkScreen() {
         setGraphLoading(false);
       }
     },
-    [depth],
+    [depth, lang],
   );
 
   const handleDepthChange = (newDepth: number) => {
@@ -464,6 +484,13 @@ function NetworkScreen() {
       fetchGraph(seedInput.trim(), newDepth);
     }
   };
+
+  // Re-fetch and translate graph reactively when language changes
+  useEffect(() => {
+    if (seedInput.trim()) {
+      fetchGraph(seedInput.trim());
+    }
+  }, [lang]);
 
   // Voice command "open network for suspect …" lands here.
   useEffect(() => {
@@ -1705,7 +1732,7 @@ function NetworkScreen() {
                     </span>
                     {isSeed && (
                       <span className="rounded-full bg-primary/10 text-primary px-2 py-0.5 text-[10px] font-bold">
-                        SEED
+                        {t("SEED")}
                       </span>
                     )}
                   </div>
