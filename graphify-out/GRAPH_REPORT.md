@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-25)
 
 ## Corpus Check
-- 335 files · ~1,812,496 words
+- 335 files · ~1,812,580 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8f36c8af`
+- Built from commit: `7abfde45`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -237,10 +237,10 @@
 10. `Principal` - 39 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Legend()` --calls--> `useT()`  [INFERRED]
-  frontend/src/routes/network.tsx → frontend/src/lib/i18n.tsx
 - `PolicyEditor()` --calls--> `useT()`  [INFERRED]
   frontend/src/routes/admin.tsx → frontend/src/lib/i18n.tsx
+- `Legend()` --calls--> `useT()`  [INFERRED]
+  frontend/src/routes/network.tsx → frontend/src/lib/i18n.tsx
 - `switch_db_source()` --calls--> `set_db_source()`  [INFERRED]
   backend/app/api/routes/settings.py → backend/app/db/session.py
 - `current_db_source()` --calls--> `get_db_source()`  [INFERRED]
@@ -974,7 +974,7 @@ Cohesion: 0.40
 Nodes (5): TrendDeltas, main(), TrendPoint, get_trends(), TrendsResponse
 
 ## Knowledge Gaps
-- **1268 isolated node(s):** `OffenderListResponse`, `RingNode`, `RingEdge`, `GraphResponse`, `CaseTimelineResponse` (+1263 more)
+- **1268 isolated node(s):** `Lang`, `Ctx`, `I18nCtx`, `ALL_TRANSLATABLE`, `OffenderListResponse` (+1263 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **28 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -993,5 +993,5 @@ _Questions this graph is uniquely positioned to answer:_
   _`AccessDenied` has 75 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 12 inferred relationships involving `useT()` (e.g. with `AdminAccessControl()` and `PolicyEditor()`) actually correct?**
   _`useT()` has 12 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `OffenderListResponse`, `RingNode`, `RingEdge` to the rest of the system?**
+- **What connects `Lang`, `Ctx`, `I18nCtx` to the rest of the system?**
   _1524 weakly-connected nodes found - possible documentation gaps or missing edges._

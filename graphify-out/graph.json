@@ -4,14 +4,144 @@
   "graph": {},
   "nodes": [
     {
+      "label": "i18n.tsx",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "lib_i18n",
+      "community": 173,
+      "norm_label": "i18n.tsx"
+    },
+    {
+      "label": "Lang",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "lib_i18n_lang",
+      "community": 173,
+      "norm_label": "lang"
+    },
+    {
+      "label": "DICT",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "lib_i18n_dict",
+      "community": 223,
+      "norm_label": "dict"
+    },
+    {
+      "label": "Ctx",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L1125",
+      "_origin": "ast",
+      "id": "lib_i18n_ctx",
+      "community": 173,
+      "norm_label": "ctx"
+    },
+    {
+      "label": "I18nCtx",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L1126",
+      "_origin": "ast",
+      "id": "lib_i18n_i18nctx",
+      "community": 173,
+      "norm_label": "i18nctx"
+    },
+    {
+      "label": "ALL_TRANSLATABLE",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L1132",
+      "_origin": "ast",
+      "id": "lib_i18n_all_translatable",
+      "community": 173,
+      "norm_label": "all_translatable"
+    },
+    {
+      "label": "loadLLMCache()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L1907",
+      "_origin": "ast",
+      "id": "lib_i18n_loadllmcache",
+      "community": 173,
+      "norm_label": "loadllmcache()"
+    },
+    {
+      "label": "enrichDictWithLLM()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L1923",
+      "_origin": "ast",
+      "id": "lib_i18n_enrichdictwithllm",
+      "community": 173,
+      "norm_label": "enrichdictwithllm()"
+    },
+    {
+      "label": "enrichDataWithLLM()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L2029",
+      "_origin": "ast",
+      "id": "lib_i18n_enrichdatawithllm",
+      "community": 115,
+      "norm_label": "enrichdatawithllm()"
+    },
+    {
+      "label": "trackMiss()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L2126",
+      "_origin": "ast",
+      "id": "lib_i18n_trackmiss",
+      "community": 173,
+      "norm_label": "trackmiss()"
+    },
+    {
+      "label": "I18nProvider()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L2142",
+      "_origin": "ast",
+      "id": "lib_i18n_i18nprovider",
+      "community": 173,
+      "norm_label": "i18nprovider()"
+    },
+    {
+      "label": "useI18n()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L2210",
+      "_origin": "ast",
+      "id": "lib_i18n_usei18n",
+      "community": 16,
+      "norm_label": "usei18n()"
+    },
+    {
+      "label": "useT()",
+      "file_type": "code",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L2211",
+      "_origin": "ast",
+      "id": "lib_i18n_uset",
+      "community": 218,
+      "norm_label": "uset()"
+    },
+    {
       "label": "intelligence.ts",
       "file_type": "code",
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "api_intelligence",
       "community": 115,
-      "norm_label": "intelligence.ts"
+      "norm_label": "intelligence.ts",
+      "id": "api_intelligence"
     },
     {
       "label": "apiFetch()",
@@ -19,9 +149,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "api_intelligence_apifetch",
       "community": 210,
-      "norm_label": "apifetch()"
+      "norm_label": "apifetch()",
+      "id": "api_intelligence_apifetch"
     },
     {
       "label": "SearchResult",
@@ -29,9 +159,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "api_intelligence_searchresult",
       "community": 124,
-      "norm_label": "searchresult"
+      "norm_label": "searchresult",
+      "id": "api_intelligence_searchresult"
     },
     {
       "label": "OffenderListItem",
@@ -39,9 +169,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L37",
       "_origin": "ast",
-      "id": "api_intelligence_offenderlistitem",
       "community": 115,
-      "norm_label": "offenderlistitem"
+      "norm_label": "offenderlistitem",
+      "id": "api_intelligence_offenderlistitem"
     },
     {
       "label": "OffenderListResponse",
@@ -49,9 +179,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L45",
       "_origin": "ast",
-      "id": "api_intelligence_offenderlistresponse",
       "community": 115,
-      "norm_label": "offenderlistresponse"
+      "norm_label": "offenderlistresponse",
+      "id": "api_intelligence_offenderlistresponse"
     },
     {
       "label": "RingNode",
@@ -59,9 +189,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L47",
       "_origin": "ast",
-      "id": "api_intelligence_ringnode",
       "community": 115,
-      "norm_label": "ringnode"
+      "norm_label": "ringnode",
+      "id": "api_intelligence_ringnode"
     },
     {
       "label": "RingEdge",
@@ -69,9 +199,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L57",
       "_origin": "ast",
-      "id": "api_intelligence_ringedge",
       "community": 115,
-      "norm_label": "ringedge"
+      "norm_label": "ringedge",
+      "id": "api_intelligence_ringedge"
     },
     {
       "label": "GraphResponse",
@@ -79,9 +209,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L64",
       "_origin": "ast",
-      "id": "api_intelligence_graphresponse",
       "community": 115,
-      "norm_label": "graphresponse"
+      "norm_label": "graphresponse",
+      "id": "api_intelligence_graphresponse"
     },
     {
       "label": "RingSummary",
@@ -89,9 +219,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L65",
       "_origin": "ast",
-      "id": "api_intelligence_ringsummary",
       "community": 16,
-      "norm_label": "ringsummary"
+      "norm_label": "ringsummary",
+      "id": "api_intelligence_ringsummary"
     },
     {
       "label": "RingsResponse",
@@ -99,9 +229,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L77",
       "_origin": "ast",
-      "id": "api_intelligence_ringsresponse",
       "community": 16,
-      "norm_label": "ringsresponse"
+      "norm_label": "ringsresponse",
+      "id": "api_intelligence_ringsresponse"
     },
     {
       "label": "SimilarCaseMatch",
@@ -109,9 +239,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L79",
       "_origin": "ast",
-      "id": "api_intelligence_similarcasematch",
       "community": 115,
-      "norm_label": "similarcasematch"
+      "norm_label": "similarcasematch",
+      "id": "api_intelligence_similarcasematch"
     },
     {
       "label": "SimilarCasesResponse",
@@ -119,9 +249,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L87",
       "_origin": "ast",
-      "id": "api_intelligence_similarcasesresponse",
       "community": 115,
-      "norm_label": "similarcasesresponse"
+      "norm_label": "similarcasesresponse",
+      "id": "api_intelligence_similarcasesresponse"
     },
     {
       "label": "TimelineEvent",
@@ -129,9 +259,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L89",
       "_origin": "ast",
-      "id": "api_intelligence_timelineevent",
       "community": 115,
-      "norm_label": "timelineevent"
+      "norm_label": "timelineevent",
+      "id": "api_intelligence_timelineevent"
     },
     {
       "label": "CaseTimelineResponse",
@@ -139,9 +269,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L95",
       "_origin": "ast",
-      "id": "api_intelligence_casetimelineresponse",
       "community": 115,
-      "norm_label": "casetimelineresponse"
+      "norm_label": "casetimelineresponse",
+      "id": "api_intelligence_casetimelineresponse"
     },
     {
       "label": "PersonTimelineEvent",
@@ -149,9 +279,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L96",
       "_origin": "ast",
-      "id": "api_intelligence_persontimelineevent",
       "community": 115,
-      "norm_label": "persontimelineevent"
+      "norm_label": "persontimelineevent",
+      "id": "api_intelligence_persontimelineevent"
     },
     {
       "label": "PersonTimelineResponse",
@@ -159,9 +289,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L103",
       "_origin": "ast",
-      "id": "api_intelligence_persontimelineresponse",
       "community": 115,
-      "norm_label": "persontimelineresponse"
+      "norm_label": "persontimelineresponse",
+      "id": "api_intelligence_persontimelineresponse"
     },
     {
       "label": "RiskFactor",
@@ -169,9 +299,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L105",
       "_origin": "ast",
-      "id": "api_intelligence_riskfactor",
       "community": 115,
-      "norm_label": "riskfactor"
+      "norm_label": "riskfactor",
+      "id": "api_intelligence_riskfactor"
     },
     {
       "label": "RiskProfile",
@@ -179,9 +309,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L106",
       "_origin": "ast",
-      "id": "api_intelligence_riskprofile",
       "community": 115,
-      "norm_label": "riskprofile"
+      "norm_label": "riskprofile",
+      "id": "api_intelligence_riskprofile"
     },
     {
       "label": "MOFingerprint",
@@ -189,9 +319,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L107",
       "_origin": "ast",
-      "id": "api_intelligence_mofingerprint",
       "community": 115,
-      "norm_label": "mofingerprint"
+      "norm_label": "mofingerprint",
+      "id": "api_intelligence_mofingerprint"
     },
     {
       "label": "RingMembership",
@@ -199,9 +329,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L113",
       "_origin": "ast",
-      "id": "api_intelligence_ringmembership",
       "community": 115,
-      "norm_label": "ringmembership"
+      "norm_label": "ringmembership",
+      "id": "api_intelligence_ringmembership"
     },
     {
       "label": "KnownAssociate",
@@ -209,9 +339,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L114",
       "_origin": "ast",
-      "id": "api_intelligence_knownassociate",
       "community": 115,
-      "norm_label": "knownassociate"
+      "norm_label": "knownassociate",
+      "id": "api_intelligence_knownassociate"
     },
     {
       "label": "OffenderProfileResponse",
@@ -219,9 +349,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L115",
       "_origin": "ast",
-      "id": "api_intelligence_offenderprofileresponse",
       "community": 115,
-      "norm_label": "offenderprofileresponse"
+      "norm_label": "offenderprofileresponse",
+      "id": "api_intelligence_offenderprofileresponse"
     },
     {
       "label": "ForecastCell",
@@ -229,9 +359,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L124",
       "_origin": "ast",
-      "id": "api_intelligence_forecastcell",
       "community": 201,
-      "norm_label": "forecastcell"
+      "norm_label": "forecastcell",
+      "id": "api_intelligence_forecastcell"
     },
     {
       "label": "ForecastHotspotsResponse",
@@ -239,9 +369,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L133",
       "_origin": "ast",
-      "id": "api_intelligence_forecasthotspotsresponse",
       "community": 115,
-      "norm_label": "forecasthotspotsresponse"
+      "norm_label": "forecasthotspotsresponse",
+      "id": "api_intelligence_forecasthotspotsresponse"
     },
     {
       "label": "ForecastAlert",
@@ -249,9 +379,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L138",
       "_origin": "ast",
-      "id": "api_intelligence_forecastalert",
       "community": 190,
-      "norm_label": "forecastalert"
+      "norm_label": "forecastalert",
+      "id": "api_intelligence_forecastalert"
     },
     {
       "label": "ForecastAlertsResponse",
@@ -259,9 +389,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L148",
       "_origin": "ast",
-      "id": "api_intelligence_forecastalertsresponse",
       "community": 115,
-      "norm_label": "forecastalertsresponse"
+      "norm_label": "forecastalertsresponse",
+      "id": "api_intelligence_forecastalertsresponse"
     },
     {
       "label": "BacktestResponse",
@@ -269,9 +399,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L149",
       "_origin": "ast",
-      "id": "api_intelligence_backtestresponse",
       "community": 201,
-      "norm_label": "backtestresponse"
+      "norm_label": "backtestresponse",
+      "id": "api_intelligence_backtestresponse"
     },
     {
       "label": "TrendPoint",
@@ -279,9 +409,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L156",
       "_origin": "ast",
-      "id": "api_intelligence_trendpoint",
       "community": 115,
-      "norm_label": "trendpoint"
+      "norm_label": "trendpoint",
+      "id": "api_intelligence_trendpoint"
     },
     {
       "label": "TrendsResponse",
@@ -289,9 +419,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L157",
       "_origin": "ast",
-      "id": "api_intelligence_trendsresponse",
       "community": 115,
-      "norm_label": "trendsresponse"
+      "norm_label": "trendsresponse",
+      "id": "api_intelligence_trendsresponse"
     },
     {
       "label": "SeasonalPeak",
@@ -299,9 +429,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L161",
       "_origin": "ast",
-      "id": "api_intelligence_seasonalpeak",
       "community": 115,
-      "norm_label": "seasonalpeak"
+      "norm_label": "seasonalpeak",
+      "id": "api_intelligence_seasonalpeak"
     },
     {
       "label": "SeasonalResponse",
@@ -309,9 +439,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L162",
       "_origin": "ast",
-      "id": "api_intelligence_seasonalresponse",
       "community": 115,
-      "norm_label": "seasonalresponse"
+      "norm_label": "seasonalresponse",
+      "id": "api_intelligence_seasonalresponse"
     },
     {
       "label": "MOCluster",
@@ -319,9 +449,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L167",
       "_origin": "ast",
-      "id": "api_intelligence_mocluster",
       "community": 115,
-      "norm_label": "mocluster"
+      "norm_label": "mocluster",
+      "id": "api_intelligence_mocluster"
     },
     {
       "label": "MOClustersResponse",
@@ -329,9 +459,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L176",
       "_origin": "ast",
-      "id": "api_intelligence_moclustersresponse",
       "community": 115,
-      "norm_label": "moclustersresponse"
+      "norm_label": "moclustersresponse",
+      "id": "api_intelligence_moclustersresponse"
     },
     {
       "label": "AgeBucket",
@@ -339,9 +469,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L178",
       "_origin": "ast",
-      "id": "api_intelligence_agebucket",
       "community": 115,
-      "norm_label": "agebucket"
+      "norm_label": "agebucket",
+      "id": "api_intelligence_agebucket"
     },
     {
       "label": "GenderCount",
@@ -349,9 +479,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L179",
       "_origin": "ast",
-      "id": "api_intelligence_gendercount",
       "community": 115,
-      "norm_label": "gendercount"
+      "norm_label": "gendercount",
+      "id": "api_intelligence_gendercount"
     },
     {
       "label": "DistrictCount",
@@ -359,9 +489,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L180",
       "_origin": "ast",
-      "id": "api_intelligence_districtcount",
       "community": 115,
-      "norm_label": "districtcount"
+      "norm_label": "districtcount",
+      "id": "api_intelligence_districtcount"
     },
     {
       "label": "SocioDemographicsResponse",
@@ -369,9 +499,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L181",
       "_origin": "ast",
-      "id": "api_intelligence_sociodemographicsresponse",
       "community": 115,
-      "norm_label": "sociodemographicsresponse"
+      "norm_label": "sociodemographicsresponse",
+      "id": "api_intelligence_sociodemographicsresponse"
     },
     {
       "label": "CorrelationPoint",
@@ -379,9 +509,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L187",
       "_origin": "ast",
-      "id": "api_intelligence_correlationpoint",
       "community": 115,
-      "norm_label": "correlationpoint"
+      "norm_label": "correlationpoint",
+      "id": "api_intelligence_correlationpoint"
     },
     {
       "label": "SocioCorrelationResponse",
@@ -389,9 +519,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L194",
       "_origin": "ast",
-      "id": "api_intelligence_sociocorrelationresponse",
       "community": 115,
-      "norm_label": "sociocorrelationresponse"
+      "norm_label": "sociocorrelationresponse",
+      "id": "api_intelligence_sociocorrelationresponse"
     },
     {
       "label": "RiskArea",
@@ -399,9 +529,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L199",
       "_origin": "ast",
-      "id": "api_intelligence_riskarea",
       "community": 115,
-      "norm_label": "riskarea"
+      "norm_label": "riskarea",
+      "id": "api_intelligence_riskarea"
     },
     {
       "label": "SocialRiskIndexResponse",
@@ -409,9 +539,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L200",
       "_origin": "ast",
-      "id": "api_intelligence_socialriskindexresponse",
       "community": 115,
-      "norm_label": "socialriskindexresponse"
+      "norm_label": "socialriskindexresponse",
+      "id": "api_intelligence_socialriskindexresponse"
     },
     {
       "label": "PersonLocation",
@@ -419,9 +549,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L202",
       "_origin": "ast",
-      "id": "api_intelligence_personlocation",
       "community": 115,
-      "norm_label": "personlocation"
+      "norm_label": "personlocation",
+      "id": "api_intelligence_personlocation"
     },
     {
       "label": "intelligence",
@@ -429,9 +559,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L206",
       "_origin": "ast",
-      "id": "api_intelligence_intelligence",
       "community": 115,
-      "norm_label": "intelligence"
+      "norm_label": "intelligence",
+      "id": "api_intelligence_intelligence"
     },
     {
       "label": "translateOnTheFly()",
@@ -439,9 +569,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L276",
       "_origin": "ast",
-      "id": "api_intelligence_translateonthefly",
       "community": 115,
-      "norm_label": "translateonthefly()"
+      "norm_label": "translateonthefly()",
+      "id": "api_intelligence_translateonthefly"
     },
     {
       "label": "translateSearchResults()",
@@ -449,9 +579,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L305",
       "_origin": "ast",
-      "id": "api_intelligence_translatesearchresults",
       "community": 115,
-      "norm_label": "translatesearchresults()"
+      "norm_label": "translatesearchresults()",
+      "id": "api_intelligence_translatesearchresults"
     },
     {
       "label": "translateOffenders()",
@@ -459,9 +589,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L347",
       "_origin": "ast",
-      "id": "api_intelligence_translateoffenders",
       "community": 115,
-      "norm_label": "translateoffenders()"
+      "norm_label": "translateoffenders()",
+      "id": "api_intelligence_translateoffenders"
     },
     {
       "label": "network.tsx",
@@ -469,9 +599,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_network",
       "community": 16,
-      "norm_label": "network.tsx"
+      "norm_label": "network.tsx",
+      "id": "routes_network"
     },
     {
       "label": "SimParams",
@@ -479,9 +609,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L28",
       "_origin": "ast",
-      "id": "routes_network_simparams",
       "community": 16,
-      "norm_label": "simparams"
+      "norm_label": "simparams",
+      "id": "routes_network_simparams"
     },
     {
       "label": "SIM_DEFAULTS",
@@ -489,9 +619,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L29",
       "_origin": "ast",
-      "id": "routes_network_sim_defaults",
       "community": 16,
-      "norm_label": "sim_defaults"
+      "norm_label": "sim_defaults",
+      "id": "routes_network_sim_defaults"
     },
     {
       "label": "SIM_PRESETS",
@@ -499,9 +629,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L30",
       "_origin": "ast",
-      "id": "routes_network_sim_presets",
       "community": 16,
-      "norm_label": "sim_presets"
+      "norm_label": "sim_presets",
+      "id": "routes_network_sim_presets"
     },
     {
       "label": "SLIDER_META",
@@ -509,9 +639,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "routes_network_slider_meta",
       "community": 16,
-      "norm_label": "slider_meta"
+      "norm_label": "slider_meta",
+      "id": "routes_network_slider_meta"
     },
     {
       "label": "Route",
@@ -519,9 +649,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "routes_network_route",
       "community": 8,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_network_route"
     },
     {
       "label": "GROUP_COLOR",
@@ -529,9 +659,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L55",
       "_origin": "ast",
-      "id": "routes_network_group_color",
       "community": 16,
-      "norm_label": "group_color"
+      "norm_label": "group_color",
+      "id": "routes_network_group_color"
     },
     {
       "label": "GROUP_SHAPE",
@@ -539,9 +669,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L61",
       "_origin": "ast",
-      "id": "routes_network_group_shape",
       "community": 16,
-      "norm_label": "group_shape"
+      "norm_label": "group_shape",
+      "id": "routes_network_group_shape"
     },
     {
       "label": "GROUP_COLOR_LIGHT",
@@ -549,9 +679,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L64",
       "_origin": "ast",
-      "id": "routes_network_group_color_light",
       "community": 16,
-      "norm_label": "group_color_light"
+      "norm_label": "group_color_light",
+      "id": "routes_network_group_color_light"
     },
     {
       "label": "groupIcon()",
@@ -559,9 +689,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L77",
       "_origin": "ast",
-      "id": "routes_network_groupicon",
       "community": 16,
-      "norm_label": "groupicon()"
+      "norm_label": "groupicon()",
+      "id": "routes_network_groupicon"
     },
     {
       "label": "PosMap",
@@ -569,9 +699,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L81",
       "_origin": "ast",
-      "id": "routes_network_posmap",
       "community": 16,
-      "norm_label": "posmap"
+      "norm_label": "posmap",
+      "id": "routes_network_posmap"
     },
     {
       "label": "SeedSearch()",
@@ -579,9 +709,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L87",
       "_origin": "ast",
-      "id": "routes_network_seedsearch",
       "community": 16,
-      "norm_label": "seedsearch()"
+      "norm_label": "seedsearch()",
+      "id": "routes_network_seedsearch"
     },
     {
       "label": "NetworkScreen()",
@@ -589,9 +719,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L351",
       "_origin": "ast",
-      "id": "routes_network_networkscreen",
       "community": 16,
-      "norm_label": "networkscreen()"
+      "norm_label": "networkscreen()",
+      "id": "routes_network_networkscreen"
     },
     {
       "label": "Control()",
@@ -599,9 +729,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1807",
       "_origin": "ast",
-      "id": "routes_network_control",
       "community": 16,
-      "norm_label": "control()"
+      "norm_label": "control()",
+      "id": "routes_network_control"
     },
     {
       "label": "Select()",
@@ -609,9 +739,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1817",
       "_origin": "ast",
-      "id": "routes_network_select",
       "community": 16,
-      "norm_label": "select()"
+      "norm_label": "select()",
+      "id": "routes_network_select"
     },
     {
       "label": "Stat()",
@@ -619,9 +749,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1861",
       "_origin": "ast",
-      "id": "routes_network_stat",
       "community": 16,
-      "norm_label": "stat()"
+      "norm_label": "stat()",
+      "id": "routes_network_stat"
     },
     {
       "label": "Legend()",
@@ -629,9 +759,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1873",
       "_origin": "ast",
-      "id": "routes_network_legend",
       "community": 16,
-      "norm_label": "legend()"
+      "norm_label": "legend()",
+      "id": "routes_network_legend"
     },
     {
       "label": "Slider()",
@@ -639,9 +769,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L1895",
       "_origin": "ast",
-      "id": "routes_network_slider",
       "community": 16,
-      "norm_label": "slider()"
+      "norm_label": "slider()",
+      "id": "routes_network_slider"
     },
     {
       "label": "CaseDrawer.tsx",
@@ -702,136 +832,6 @@
       "community": 115,
       "norm_label": "similarcasesearch()",
       "id": "components_similarcasesearch_similarcasesearch"
-    },
-    {
-      "label": "i18n.tsx",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 173,
-      "norm_label": "i18n.tsx",
-      "id": "lib_i18n"
-    },
-    {
-      "label": "Lang",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L3",
-      "_origin": "ast",
-      "community": 173,
-      "norm_label": "lang",
-      "id": "lib_i18n_lang"
-    },
-    {
-      "label": "DICT",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L6",
-      "_origin": "ast",
-      "community": 223,
-      "norm_label": "dict",
-      "id": "lib_i18n_dict"
-    },
-    {
-      "label": "Ctx",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L1112",
-      "_origin": "ast",
-      "community": 173,
-      "norm_label": "ctx",
-      "id": "lib_i18n_ctx"
-    },
-    {
-      "label": "I18nCtx",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L1113",
-      "_origin": "ast",
-      "community": 173,
-      "norm_label": "i18nctx",
-      "id": "lib_i18n_i18nctx"
-    },
-    {
-      "label": "ALL_TRANSLATABLE",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L1119",
-      "_origin": "ast",
-      "community": 173,
-      "norm_label": "all_translatable",
-      "id": "lib_i18n_all_translatable"
-    },
-    {
-      "label": "loadLLMCache()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L1894",
-      "_origin": "ast",
-      "community": 173,
-      "norm_label": "loadllmcache()",
-      "id": "lib_i18n_loadllmcache"
-    },
-    {
-      "label": "enrichDictWithLLM()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L1910",
-      "_origin": "ast",
-      "community": 173,
-      "norm_label": "enrichdictwithllm()",
-      "id": "lib_i18n_enrichdictwithllm"
-    },
-    {
-      "label": "enrichDataWithLLM()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2016",
-      "_origin": "ast",
-      "community": 115,
-      "norm_label": "enrichdatawithllm()",
-      "id": "lib_i18n_enrichdatawithllm"
-    },
-    {
-      "label": "trackMiss()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2113",
-      "_origin": "ast",
-      "community": 173,
-      "norm_label": "trackmiss()",
-      "id": "lib_i18n_trackmiss"
-    },
-    {
-      "label": "I18nProvider()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2129",
-      "_origin": "ast",
-      "community": 173,
-      "norm_label": "i18nprovider()",
-      "id": "lib_i18n_i18nprovider"
-    },
-    {
-      "label": "useI18n()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2197",
-      "_origin": "ast",
-      "community": 16,
-      "norm_label": "usei18n()",
-      "id": "lib_i18n_usei18n"
-    },
-    {
-      "label": "useT()",
-      "file_type": "code",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2198",
-      "_origin": "ast",
-      "community": 218,
-      "norm_label": "uset()",
-      "id": "lib_i18n_uset"
     },
     {
       "label": "tData.ts",
@@ -32009,6 +32009,1731 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/AccountManager.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_accountmanager",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_createaccountdialog",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/FinancialLinksPanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_financiallinkspanel",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/HandsFreeLayer.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_handsfreelayer",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ProfileMenu.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_profilemenu",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/RingsPanel.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ringspanel",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_shell",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_similarcasesearch",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/admin.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "frontend_src_routes_admin_tsx_routes_admin",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/ops-dispatch.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "frontend_src_routes_ops_dispatch_tsx_routes_ops_dispatch",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L938",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_all_translatable"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L232",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_ctx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_dict"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L1132",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_enrichdatawithllm"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L873",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_enrichdictwithllm"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L233",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_i18nctx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L235",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_i18nprovider"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_lang"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L856",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_loadllmcache"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L1229",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_trackmiss"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L258",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L259",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_demosimpanel",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/ReviewPanel.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_reviewpanel",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/board.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_board",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_dossier",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/forecast.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_forecast",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/login.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_login",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_network",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/ops-camera.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_ops_camera",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/ops-predictive.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_ops_predictive",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_profile_personid",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_reports",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/__root.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_root",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/socio.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_socio",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/transcripts.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_transcripts",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/trends.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_trends",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/pipeline/slots.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "pipeline_slots_memorystore",
+      "target": "lib_i18n_dict"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L940",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n_enrichdictwithllm",
+      "target": "lib_i18n_loadllmcache"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "lib_i18n_enrichdictwithllm"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "lib_i18n_enrichdatawithllm"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L1158",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_i18n_enrichdatawithllm",
+      "target": "lib_tdata"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/lib/i18n.tsx",
+      "source_location": "L1218",
+      "weight": 1.0,
+      "source": "lib_i18n_enrichdatawithllm",
+      "target": "lib_tdata_setdatatranslations"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/__root.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_root",
+      "target": "lib_i18n_i18nprovider"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/AccountManager.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_accountmanager",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/AccountManager.tsx",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "components_accountmanager_accountmanager",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "components_casedrawer_casedrawer",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/FinancialLinksPanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_financiallinkspanel",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/FinancialLinksPanel.tsx",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "components_financiallinkspanel_financiallinkspanel",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/HandsFreeLayer.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_handsfreelayer",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/HandsFreeLayer.tsx",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "components_handsfreelayer_handsfreelayer",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ProfileMenu.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_profilemenu",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/ProfileMenu.tsx",
+      "source_location": "L101",
+      "weight": 1.0,
+      "source": "components_profilemenu_profilemenu",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/RingsPanel.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ringspanel",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/RingsPanel.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "components_ringspanel_ringspanel",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_settingsdialog",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/SettingsDialog.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "components_settingsdialog_settingsdialog",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_shell",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "components_shell_shell",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_similarcasesearch",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "components_similarcasesearch_similarcasesearch",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "routes_console_console",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_dossier",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L304",
+      "weight": 1.0,
+      "source": "routes_dossier_dossierdetailpane",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L135",
+      "weight": 1.0,
+      "source": "routes_dossier_dossierscreen",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_dossier_riskbadge",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/forecast.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_forecast",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/forecast.tsx",
+      "source_location": "L158",
+      "weight": 1.0,
+      "source": "routes_forecast_forecastscreen",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_network",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L353",
+      "weight": 1.0,
+      "source": "routes_network_networkscreen",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L1827",
+      "weight": 1.0,
+      "source": "routes_network_select",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_profile_personid",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "routes_profile_personid_profilescreen",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_reports",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L133",
+      "weight": 1.0,
+      "source": "routes_reports_reports",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/socio.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_socio",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/socio.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "routes_socio_sociodashboard",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/trends.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_trends",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/trends.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "routes_trends_trendsscreen",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "components_casedrawer_casedrawer",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_createaccountdialog",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "components_createaccountdialog_createaccountdialog",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/FinancialLinksPanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_financiallinkspanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/FinancialLinksPanel.tsx",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "components_financiallinkspanel_financiallinkspanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/RingsPanel.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ringspanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/RingsPanel.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "components_ringspanel_ringspanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_similarcasesearch",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "components_similarcasesearch_similarcasesearch",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/admin.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "frontend_src_routes_admin_tsx_routes_admin",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/ops-dispatch.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "frontend_src_routes_ops_dispatch_tsx_routes_ops_dispatch",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_demosimpanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "ops_demosimpanel_demosimpanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_dispatchpanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L181",
+      "weight": 1.0,
+      "source": "ops_dispatchpanel_dispatchpanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "ops_dispatchpanel_phasetimeline",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_liveoperationsmap",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "ops_liveoperationsmap_liveoperationsmap",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "ops_predictivepanel_predictivepanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/ReviewPanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_reviewpanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/ops/ReviewPanel.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "ops_reviewpanel_reviewpanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/admin.tsx",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "routes_admin_adminaccesscontrol",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/admin.tsx",
+      "source_location": "L277",
+      "weight": 1.0,
+      "source": "routes_admin_policyeditor",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/audit.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_audit",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/audit.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "routes_audit_audit",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/board.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_board",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/board.tsx",
+      "source_location": "L249",
+      "weight": 1.0,
+      "source": "routes_board_boardinner",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/board.tsx",
+      "source_location": "L115",
+      "weight": 1.0,
+      "source": "routes_board_boardscreen",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/board.tsx",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "routes_board_shapepalette",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/board.tsx",
+      "source_location": "L388",
+      "weight": 1.0,
+      "source": "routes_board_topbar",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L585",
+      "weight": 1.0,
+      "source": "routes_console_aimsg",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "routes_console_console",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_dossier",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L299",
+      "weight": 1.0,
+      "source": "routes_dossier_dossierdetailpane",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L131",
+      "weight": 1.0,
+      "source": "routes_dossier_dossierscreen",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/dossier.tsx",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "routes_dossier_facecard",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/forecast.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_forecast",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/forecast.tsx",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "routes_forecast_forecastscreen",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/login.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_login",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/login.tsx",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "routes_login_login",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_network",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L849",
+      "weight": 1.0,
+      "source": "routes_network_legend",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "routes_network_networkscreen",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L1826",
+      "weight": 1.0,
+      "source": "routes_network_select",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/operations.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_operations",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/ops-camera.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_ops_camera",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/ops-camera.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "routes_ops_camera_camerascreen",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/ops-dispatch.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "routes_ops_dispatch_dispatchscreen",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/ops-predictive.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_ops_predictive",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/ops-predictive.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "routes_ops_predictive_predictivescreen",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_profile_personid",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "routes_profile_personid_offenderpicker",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "routes_profile_personid_personsearch",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "routes_profile_personid_profilescreen",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_reports",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "routes_reports_additembar",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "routes_reports_reports",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/reports.tsx",
+      "source_location": "L132",
+      "weight": 1.0,
+      "source": "routes_reports_uploadpanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/socio.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_socio",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/socio.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "routes_socio_sociodashboard",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/transcripts.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_transcripts",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/transcripts.tsx",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "routes_transcripts_conversationstab",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/transcripts.tsx",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "routes_transcripts_transcripts",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/transcripts.tsx",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "routes_transcripts_voicetranscriptstab",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/trends.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_trends",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/routes/trends.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "routes_trends_trendsscreen",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L5",
       "weight": 1.0,
@@ -32444,9 +34169,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L347",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_intelligence",
-      "target": "api_intelligence_translateoffenders",
-      "confidence_score": 1.0
+      "target": "api_intelligence_translateoffenders"
     },
     {
       "relation": "contains",
@@ -32454,9 +34179,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L276",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_intelligence",
-      "target": "api_intelligence_translateonthefly",
-      "confidence_score": 1.0
+      "target": "api_intelligence_translateonthefly"
     },
     {
       "relation": "contains",
@@ -32464,9 +34189,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L305",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_intelligence",
-      "target": "api_intelligence_translatesearchresults",
-      "confidence_score": 1.0
+      "target": "api_intelligence_translatesearchresults"
     },
     {
       "relation": "contains",
@@ -32583,9 +34308,9 @@
       "source_file": "frontend/src/routes/network.tsx",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_network",
-      "target": "api_intelligence",
-      "confidence_score": 1.0
+      "target": "api_intelligence"
     },
     {
       "relation": "imports_from",
@@ -33089,9 +34814,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L360",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_intelligence_translateoffenders",
-      "target": "api_intelligence_translateonthefly",
-      "confidence_score": 1.0
+      "target": "api_intelligence_translateonthefly"
     },
     {
       "relation": "calls",
@@ -33100,9 +34825,9 @@
       "source_file": "frontend/src/lib/api/intelligence.ts",
       "source_location": "L323",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "api_intelligence_translatesearchresults",
-      "target": "api_intelligence_translateonthefly",
-      "confidence_score": 1.0
+      "target": "api_intelligence_translateonthefly"
     },
     {
       "relation": "imports",
@@ -33191,39 +34916,6 @@
       "confidence_score": 1.0,
       "source": "routes_network",
       "target": "components_shell_shell"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L22",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_network",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L22",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_network",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L22",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_network",
-      "target": "lib_i18n_uset"
     },
     {
       "relation": "imports",
@@ -33440,61 +35132,6 @@
       "target": "routes_network_route"
     },
     {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L353",
-      "weight": 1.0,
-      "source": "routes_network_networkscreen",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L41",
-      "weight": 1.0,
-      "source": "routes_network_networkscreen",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L1827",
-      "weight": 1.0,
-      "source": "routes_network_select",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L1826",
-      "weight": 1.0,
-      "source": "routes_network_select",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L849",
-      "weight": 1.0,
-      "source": "routes_network_legend",
-      "target": "lib_i18n_uset"
-    },
-    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -33535,39 +35172,6 @@
       "confidence_score": 1.0,
       "source": "components_casedrawer",
       "target": "components_casedrawer_field"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "lib_i18n_uset"
     },
     {
       "relation": "imports_from",
@@ -33652,28 +35256,6 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L12",
-      "weight": 1.0,
-      "source": "components_casedrawer_casedrawer",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "source": "components_casedrawer_casedrawer",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
       "source_location": "L95",
       "weight": 1.0,
       "source": "components_casedrawer_casedrawer",
@@ -33748,39 +35330,6 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_similarcasesearch",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_similarcasesearch",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_similarcasesearch",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
       "source_location": "L5",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -33821,28 +35370,6 @@
       "target": "components_similarcasesearch"
     },
     {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "source": "components_similarcasesearch_similarcasesearch",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/SimilarCaseSearch.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "source": "components_similarcasesearch_similarcasesearch",
-      "target": "lib_i18n_uset"
-    },
-    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -33852,1533 +35379,6 @@
       "confidence_score": 1.0,
       "source": "routes_console",
       "target": "components_similarcasesearch_similarcasesearch"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/AccountManager.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_accountmanager",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_createaccountdialog",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/FinancialLinksPanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_financiallinkspanel",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/HandsFreeLayer.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_handsfreelayer",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ProfileMenu.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_profilemenu",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/RingsPanel.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_ringspanel",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_shell",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/admin.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_admin_tsx_routes_admin",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/ops-dispatch.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_ops_dispatch_tsx_routes_ops_dispatch",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L938",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_all_translatable"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L232",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_ctx"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_dict"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L1132",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_enrichdatawithllm"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L873",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_enrichdictwithllm"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L233",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_i18nctx"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L235",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_i18nprovider"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_lang"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L856",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_loadllmcache"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L1229",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_trackmiss"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L258",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L259",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_demosimpanel",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/ReviewPanel.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_reviewpanel",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/board.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_board",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_dossier",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/forecast.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_forecast",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/login.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_login",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/ops-camera.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_ops_camera",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/ops-predictive.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_ops_predictive",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_profile_personid",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_reports",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/__root.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_root",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/socio.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_socio",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/transcripts.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_transcripts",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/trends.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_trends",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/pipeline/slots.py",
-      "source_location": "L30",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "pipeline_slots_memorystore",
-      "target": "lib_i18n_dict"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L940",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n_enrichdictwithllm",
-      "target": "lib_i18n_loadllmcache"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "lib_i18n_enrichdictwithllm"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "lib_i18n_enrichdatawithllm"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L1158",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "lib_i18n_enrichdatawithllm",
-      "target": "lib_tdata"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L1218",
-      "weight": 1.0,
-      "source": "lib_i18n_enrichdatawithllm",
-      "target": "lib_tdata_setdatatranslations"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/__root.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_root",
-      "target": "lib_i18n_i18nprovider"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/AccountManager.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_accountmanager",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/AccountManager.tsx",
-      "source_location": "L68",
-      "weight": 1.0,
-      "source": "components_accountmanager_accountmanager",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/FinancialLinksPanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_financiallinkspanel",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/FinancialLinksPanel.tsx",
-      "source_location": "L31",
-      "weight": 1.0,
-      "source": "components_financiallinkspanel_financiallinkspanel",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/HandsFreeLayer.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_handsfreelayer",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/HandsFreeLayer.tsx",
-      "source_location": "L45",
-      "weight": 1.0,
-      "source": "components_handsfreelayer_handsfreelayer",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ProfileMenu.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_profilemenu",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/ProfileMenu.tsx",
-      "source_location": "L101",
-      "weight": 1.0,
-      "source": "components_profilemenu_profilemenu",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/RingsPanel.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_ringspanel",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/RingsPanel.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "source": "components_ringspanel_ringspanel",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_settingsdialog",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/SettingsDialog.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "source": "components_settingsdialog_settingsdialog",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_shell",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L95",
-      "weight": 1.0,
-      "source": "components_shell_shell",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L70",
-      "weight": 1.0,
-      "source": "routes_console_console",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_dossier",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L304",
-      "weight": 1.0,
-      "source": "routes_dossier_dossierdetailpane",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L135",
-      "weight": 1.0,
-      "source": "routes_dossier_dossierscreen",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L36",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_dossier_riskbadge",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/forecast.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_forecast",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/forecast.tsx",
-      "source_location": "L158",
-      "weight": 1.0,
-      "source": "routes_forecast_forecastscreen",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_profile_personid",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "source": "routes_profile_personid_profilescreen",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_reports",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L133",
-      "weight": 1.0,
-      "source": "routes_reports_reports",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/socio.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_socio",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/socio.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "source": "routes_socio_sociodashboard",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/trends.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_trends",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/trends.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "source": "routes_trends_trendsscreen",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_createaccountdialog",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/CreateAccountDialog.tsx",
-      "source_location": "L28",
-      "weight": 1.0,
-      "source": "components_createaccountdialog_createaccountdialog",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/FinancialLinksPanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_financiallinkspanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/FinancialLinksPanel.tsx",
-      "source_location": "L30",
-      "weight": 1.0,
-      "source": "components_financiallinkspanel_financiallinkspanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/RingsPanel.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_ringspanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/RingsPanel.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "source": "components_ringspanel_ringspanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/admin.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_admin_tsx_routes_admin",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/ops-dispatch.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "frontend_src_routes_ops_dispatch_tsx_routes_ops_dispatch",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_demosimpanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/ops/DemoSimPanel.tsx",
-      "source_location": "L86",
-      "weight": 1.0,
-      "source": "ops_demosimpanel_demosimpanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_dispatchpanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L181",
-      "weight": 1.0,
-      "source": "ops_dispatchpanel_dispatchpanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/ops/DispatchPanel.tsx",
-      "source_location": "L26",
-      "weight": 1.0,
-      "source": "ops_dispatchpanel_phasetimeline",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_liveoperationsmap",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/ops/LiveOperationsMap.tsx",
-      "source_location": "L40",
-      "weight": 1.0,
-      "source": "ops_liveoperationsmap_liveoperationsmap",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L39",
-      "weight": 1.0,
-      "source": "ops_predictivepanel_predictivepanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/ReviewPanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_reviewpanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/ops/ReviewPanel.tsx",
-      "source_location": "L32",
-      "weight": 1.0,
-      "source": "ops_reviewpanel_reviewpanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/admin.tsx",
-      "source_location": "L53",
-      "weight": 1.0,
-      "source": "routes_admin_adminaccesscontrol",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/admin.tsx",
-      "source_location": "L277",
-      "weight": 1.0,
-      "source": "routes_admin_policyeditor",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/audit.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_audit",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/audit.tsx",
-      "source_location": "L32",
-      "weight": 1.0,
-      "source": "routes_audit_audit",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/board.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_board",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/board.tsx",
-      "source_location": "L249",
-      "weight": 1.0,
-      "source": "routes_board_boardinner",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/board.tsx",
-      "source_location": "L115",
-      "weight": 1.0,
-      "source": "routes_board_boardscreen",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/board.tsx",
-      "source_location": "L139",
-      "weight": 1.0,
-      "source": "routes_board_shapepalette",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/board.tsx",
-      "source_location": "L388",
-      "weight": 1.0,
-      "source": "routes_board_topbar",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L585",
-      "weight": 1.0,
-      "source": "routes_console_aimsg",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L88",
-      "weight": 1.0,
-      "source": "routes_console_console",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_dossier",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L299",
-      "weight": 1.0,
-      "source": "routes_dossier_dossierdetailpane",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L131",
-      "weight": 1.0,
-      "source": "routes_dossier_dossierscreen",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/dossier.tsx",
-      "source_location": "L48",
-      "weight": 1.0,
-      "source": "routes_dossier_facecard",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/forecast.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_forecast",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/forecast.tsx",
-      "source_location": "L148",
-      "weight": 1.0,
-      "source": "routes_forecast_forecastscreen",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/login.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_login",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/login.tsx",
-      "source_location": "L31",
-      "weight": 1.0,
-      "source": "routes_login_login",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/operations.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_operations",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/ops-camera.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_ops_camera",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/ops-camera.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "source": "routes_ops_camera_camerascreen",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/ops-dispatch.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "source": "routes_ops_dispatch_dispatchscreen",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/ops-predictive.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_ops_predictive",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/ops-predictive.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "source": "routes_ops_predictive_predictivescreen",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_profile_personid",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L56",
-      "weight": 1.0,
-      "source": "routes_profile_personid_offenderpicker",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L40",
-      "weight": 1.0,
-      "source": "routes_profile_personid_personsearch",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "source": "routes_profile_personid_profilescreen",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_reports",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L63",
-      "weight": 1.0,
-      "source": "routes_reports_additembar",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "source": "routes_reports_reports",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/reports.tsx",
-      "source_location": "L132",
-      "weight": 1.0,
-      "source": "routes_reports_uploadpanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/socio.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_socio",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/socio.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "source": "routes_socio_sociodashboard",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/transcripts.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_transcripts",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/transcripts.tsx",
-      "source_location": "L60",
-      "weight": 1.0,
-      "source": "routes_transcripts_conversationstab",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/transcripts.tsx",
-      "source_location": "L38",
-      "weight": 1.0,
-      "source": "routes_transcripts_transcripts",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/transcripts.tsx",
-      "source_location": "L149",
-      "weight": 1.0,
-      "source": "routes_transcripts_voicetranscriptstab",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/trends.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_trends",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/routes/trends.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "source": "routes_trends_trendsscreen",
-      "target": "lib_i18n_uset"
     },
     {
       "relation": "contains",
@@ -90617,5 +90617,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8f36c8afef42df4ff0f82456e2c1d7bcde9030b2"
+  "built_at_commit": "7abfde45dcd6a9ac625a994937ae14dde43e8973"
 }

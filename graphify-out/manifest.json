@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1782372685.6496358,
-    "ast_hash": "c75ba0d52f5280eee017ab9f35021b8f",
+    "mtime": 1782373121.0902965,
+    "ast_hash": "84f0c58f520411f108c409b1e41f51a2",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
