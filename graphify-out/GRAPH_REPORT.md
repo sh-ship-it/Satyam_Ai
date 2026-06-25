@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-25)
 
 ## Corpus Check
-- 341 files · ~1,818,829 words
+- 341 files · ~1,819,289 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `03d7ff1b`
+- Built from commit: `d64bb2d1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -981,7 +981,7 @@ Cohesion: 0.16
 Nodes (12): LocalLLM, Local LLM via an OpenAI-compatible server (vLLM / Ollama). DEMO stub.  Point OPE, get_llm(), get_reranker(), get_sql_llm(), get_translator(), Factory that resolves the configured backend to concrete model instances.  Cache, Sarvam Translate (primary) → Bhashini NMT (fallback).     Falls back to Bhashini (+4 more)
 
 ## Knowledge Gaps
-- **1268 isolated node(s):** `Lang`, `Ctx`, `I18nCtx`, `ALL_TRANSLATABLE`, `PipelineStep` (+1263 more)
+- **1268 isolated node(s):** `FLAG_COLOR`, `FLAG_LABEL`, `OffenderListResponse`, `RingNode`, `RingEdge` (+1263 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **25 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -989,7 +989,7 @@ Nodes (12): LocalLLM, Local LLM via an OpenAI-compatible server (vLLM / Ollama).
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 223` to `Community 173`?**
-  _High betweenness centrality (0.169) - this node is a cross-community bridge._
+  _High betweenness centrality (0.170) - this node is a cross-community bridge._
 - **Why does `cn()` connect `Community 13` to `Community 4`, `Community 134`, `Community 7`, `Community 20`, `Community 21`, `Community 22`, `Community 24`, `Community 28`, `Community 31`, `Community 160`, `Community 36`, `Community 170`, `Community 43`, `Community 45`, `Community 54`, `Community 68`, `Community 220`, `Community 94`, `Community 228`, `Community 112`, `Community 126`?**
   _High betweenness centrality (0.081) - this node is a cross-community bridge._
 - **Are the 110 inferred relationships involving `Principal` (e.g. with `AdminUserList` and `AsyncSession`) actually correct?**
@@ -1000,5 +1000,5 @@ _Questions this graph is uniquely positioned to answer:_
   _`AccessDenied` has 75 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 12 inferred relationships involving `useT()` (e.g. with `AdminAccessControl()` and `PolicyEditor()`) actually correct?**
   _`useT()` has 12 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Lang`, `Ctx`, `I18nCtx` to the rest of the system?**
+- **What connects `FLAG_COLOR`, `FLAG_LABEL`, `OffenderListResponse` to the rest of the system?**
   _1524 weakly-connected nodes found - possible documentation gaps or missing edges._

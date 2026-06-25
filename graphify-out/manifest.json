@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1782374744.9473963,
-    "ast_hash": "9fa38ff791e952c61d21d16d885f7a5d",
+    "mtime": 1782375872.194022,
+    "ast_hash": "8eab66c2f432c080b70d448ced279595",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -725,8 +725,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
-    "mtime": 1782372670.3501506,
-    "ast_hash": "3bddd2e6aaaea1d9b3b057de83cc6a36",
+    "mtime": 1782375845.511496,
+    "ast_hash": "e70be384313fcf2f1cfb83ef9ebd3fe8",
     "semantic_hash": ""
   },
   "frontend/src/routes/reports.tsx": {
@@ -1045,8 +1045,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/intelligence.ts": {
-    "mtime": 1782372661.771027,
-    "ast_hash": "fb5bd7f6928ea9fd882d51c440b8e737",
+    "mtime": 1782375836.094459,
+    "ast_hash": "2e893725117844cea7abaeb344982a4c",
     "semantic_hash": ""
   },
   "frontend/src/routes/forecast.tsx": {
@@ -1120,8 +1120,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/FinancialLinksPanel.tsx": {
-    "mtime": 1782300079.4951007,
-    "ast_hash": "6bc3482f5899dc1077a1c0cd4795e54f",
+    "mtime": 1782375858.0728672,
+    "ast_hash": "f7e94739126ef36b8731bd3846d10035",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/financial.ts": {
@@ -1135,8 +1135,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/RingsPanel.tsx": {
-    "mtime": 1782300058.7554152,
-    "ast_hash": "384467375f4248d3123e9de8d0927825",
+    "mtime": 1782375865.0485692,
+    "ast_hash": "cafb68def21f9df5b0a1cad10cc76e6e",
     "semantic_hash": ""
   },
   "frontend/src/components/SimilarCaseSearch.tsx": {
