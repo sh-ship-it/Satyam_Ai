@@ -390,8 +390,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/LandingShell.tsx": {
-    "mtime": 1782106291.8087802,
-    "ast_hash": "38f1deb46e2cad1738943614ddc65135",
+    "mtime": 1782373469.5161345,
+    "ast_hash": "a045254eb329b701d7d497c69bc6c5af",
     "semantic_hash": ""
   },
   "frontend/src/components/ProfileMenu.tsx": {
@@ -410,8 +410,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
-    "mtime": 1782106292.269342,
-    "ast_hash": "3363f40f208b536d9be9ab6fa243879f",
+    "mtime": 1782373939.6629646,
+    "ast_hash": "bbb88beca4254fed63bd644b38a82fe7",
     "semantic_hash": ""
   },
   "frontend/src/components/ui/accordion.tsx": {
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1782373121.0902965,
-    "ast_hash": "84f0c58f520411f108c409b1e41f51a2",
+    "mtime": 1782374150.213558,
+    "ast_hash": "0f950f266dcdd2b28f21be3f374c4bb5",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -705,8 +705,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/about.tsx": {
-    "mtime": 1782301657.4711385,
-    "ast_hash": "a26f2183d2175ad3b4d3987e1299c0a6",
+    "mtime": 1782374142.703223,
+    "ast_hash": "30f08feaa503a76471bdd7c8770b2e16",
     "semantic_hash": ""
   },
   "frontend/src/routes/audit.tsx": {
@@ -720,8 +720,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
-    "mtime": 1782301888.5267198,
-    "ast_hash": "cec92d2fe237d12d7e86e99b48181ff4",
+    "mtime": 1782373538.5576298,
+    "ast_hash": "63cd3435d1df9ac74b74adf853a55303",
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
@@ -1882,6 +1882,36 @@
   "scratch/replace_all_translatable.js": {
     "mtime": 1782371258.3760395,
     "ast_hash": "9eaea6eb0c5283e1b989df58c72df653",
+    "semantic_hash": ""
+  },
+  "scratch/add_about_keys.py": {
+    "mtime": 1782373565.0230556,
+    "ast_hash": "05ec1b9e5d006159d8fde63857da3038",
+    "semantic_hash": ""
+  },
+  "scratch/add_missing_keys.py": {
+    "mtime": 1782373914.1461914,
+    "ast_hash": "ea8e08ef2a56a79f02f454c38a20cbde",
+    "semantic_hash": ""
+  },
+  "scratch/add_stack_translations.py": {
+    "mtime": 1782374084.0254924,
+    "ast_hash": "b238a16020bd5c0640c388d1388e935f",
+    "semantic_hash": ""
+  },
+  "scratch/landing_translations.json": {
+    "mtime": 1782373433.7468207,
+    "ast_hash": "f15313776d4fde9b8da966acf08f2bc6",
+    "semantic_hash": ""
+  },
+  "scratch/merge_translations.py": {
+    "mtime": 1782373445.1623888,
+    "ast_hash": "578a81cc8e08ffe111d32506fcda6bf3",
+    "semantic_hash": ""
+  },
+  "scratch/translate_pages.py": {
+    "mtime": 1782373303.8159454,
+    "ast_hash": "e62ea598839db63fa4e564b1120ef455",
     "semantic_hash": ""
   }
 }
