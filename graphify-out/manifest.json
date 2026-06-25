@@ -375,8 +375,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CaseDrawer.tsx": {
-    "mtime": 1782367484.53463,
-    "ast_hash": "7947d54aee3321672b985df6cd5a2c66",
+    "mtime": 1782370714.0511625,
+    "ast_hash": "8e3a26e49a32241b1e584572583753b1",
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
@@ -1085,8 +1085,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/tData.ts": {
-    "mtime": 1782228481.7330096,
-    "ast_hash": "83b0d9e2f7a8cce9306922c2fad350ea",
+    "mtime": 1782370675.991037,
+    "ast_hash": "fd0d6e327c0591fe9027135e609d83d7",
     "semantic_hash": ""
   },
   "frontend/src/locales/kn-data.json": {
