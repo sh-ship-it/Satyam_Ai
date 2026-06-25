@@ -29,6 +29,188 @@ from app.pipeline.tools.text_to_sql import UnsafeSQL, answer_with_sql
 log = logging.getLogger("satyam.pipeline")
 
 
+_KANNADA_HEADERS = {
+    "fir": "ಎಫ್ಐಆರ್",
+    "fir_number": "ಎಫ್ಐಆರ್",
+    "year": "ವರ್ಷ",
+    "crime_type": "ಅಪರಾಧದ ಪ್ರಕಾರ",
+    "status": "ಸ್ಥಿತಿ",
+    "station": "ಪೊಲೀಸ್ ಠಾಣೆ",
+    "station_name": "ಪೊಲೀಸ್ ಠಾಣೆ",
+    "district": "ಜಿಲ್ಲೆ",
+    "report_date": "ವರದಿ ದಿನಾಂಕ",
+    "legal_code": "ಕಾನೂನು ಕೋಡ್",
+    "sections": "ಕಲಂಗಳು",
+    "count": "ಪ್ರಕರಣಗಳ ಸಂಖ್ಯೆ",
+}
+
+_KANNADA_CRIME_TYPES = {
+    "THEFT": "ಕಳ್ಳತನ",
+    "Theft": "ಕಳ್ಳತನ",
+    "MURDER": "ಕೊಲೆ",
+    "Murder": "ಕೊಲೆ",
+    "ASSAULT": "ಹಲ್ಲೆ",
+    "Assault": "ಹಲ್ಲೆ",
+    "ROBBERY": "ದರೋಡೆ",
+    "Robbery": "ದರೋಡೆ",
+    "BURGLARY": "ಮನೆಗಳ್ಳತನ",
+    "Burglary": "ಮನೆಗಳ್ಳತನ",
+    "FRAUD": "ವಂಚನೆ",
+    "Fraud": "ವಂಚನೆ",
+    "CHEATING": "ಮೋಸ",
+    "Cheating": "ಮೋಸ",
+    "KIDNAPPING": "ಅಪಹರಣ",
+    "Kidnapping": "ಅಪಹರಣ",
+    "RIOT": "ಗಲಭೆ",
+    "Riot": "ಗಲಭೆ",
+    "CYBER CRIME": "ಸೈಬರ್ ಅಪರಾಧ",
+    "Cyber Crime": "ಸೈಬರ್ ಅಪರಾಧ",
+    "DOWRY": "ವರದಕ್ಷಿಣೆ",
+    "Dowry": "ವರದಕ್ಷಿಣೆ",
+    "HURT": "ಗಾಯ",
+    "Hurt": "ಗಾಯ",
+    "EXTORTION": "ಸುಲಿಗೆ",
+    "Extortion": "ಸುಲಿಗೆ",
+    "NARCOTICS": "ಮಾದಕ ದ್ರವ್ಯ",
+    "Narcotics": "ಮಾದಕ ದ್ರವ್ಯ",
+    "RAPE": "ಅತ್ಯಾಚಾರ",
+    "Rape": "ಅತ್ಯಾಚಾರ",
+    "POCSO": "ಪೋಕ್ಸೋ",
+}
+
+_KANNADA_STATUSES = {
+    "Open": "ತೆರೆದಿದೆ",
+    "Closed": "ಮುಚ್ಚಲಾಗಿದೆ",
+    "Under Investigation": "ತನಿಖೆ ನಡೆಯುತ್ತಿದೆ",
+    "Charge-sheeted": "ಆರೋಪಪಟ್ಟಿ ಸಲ್ಲಿಸಲಾಗಿದೆ",
+    "Convicted": "ಶಿಕ್ಷೆಯಾಗಿದೆ",
+    "Acquitted": "ಖುಲಾಸೆ",
+    "Pending": "ಬಾಕಿ",
+    "Pending Trial": "ವಿಚಾರಣೆ ಬಾಕಿ",
+    "Charge Sheeted": "ಆರೋಪಪಟ್ಟಿ ಸಲ್ಲಿಸಲಾಗಿದೆ",
+    "Undetected": "ಪತ್ತೆಯಾಗದ",
+    "Referred": "ಉಲ್ಲೇಖಿಸಲಾಗಿದೆ",
+    "Discharged": "ಬಿಡುಗಡೆ",
+    "Dismissed": "ವಜಾ",
+    "FR Filed": "ಅಂತಿಮ ವರದಿ ಸಲ್ಲಿಸಲಾಗಿದೆ",
+    "Suo Motu": "ಸ್ವಯಂ ಪ್ರೇರಣೆ",
+    "Dis/Acq": "ವಜಾ/ಖುಲಾಸೆ",
+    "BoundOver": "ಬೌಂಡ್‌ಓವರ್‌",
+    "Traced": "ಪತ್ತೆಯಾಗಿದೆ",
+}
+
+_KANNADA_DISTRICTS = {
+    "Bagalkot": "ಬಾಗಲಕೋಟೆ",
+    "Ballari": "ಬಳ್ಳಾರಿ",
+    "Belagavi City": "ಬೆಳಗಾವಿ ನಗರ",
+    "Belagavi Dist": "ಬೆಳಗಾವಿ ಜಿಲ್ಲೆ",
+    "Bengaluru City": "ಬೆಂಗಳೂರು ನಗರ",
+    "Bengaluru Dist": "ಬೆಂಗಳೂರು ಜಿಲ್ಲೆ",
+    "Bidar": "ಬೀದರ್",
+    "Chamarajanagar": "ಚಾಮರಾಜನಗರ",
+    "Chickballapura": "ಚಿಕ್ಕಬಳ್ಳಾಪುರ",
+    "Chikkamagaluru": "ಚಿಕ್ಕಮಗಳೂರು",
+    "Chitradurga": "ಚಿತ್ರದುರ್ಗ",
+    "Dakshina Kannada": "ದಕ್ಷಿಣ ಕನ್ನಡ",
+    "Davanagere": "ದಾವಣಗೆರೆ",
+    "Dharwad": "ಧಾರವಾಡ",
+    "Gadag": "ಗದಗ",
+    "Hassan": "ಹಾಸನ",
+    "Haveri": "ಹಾವೇರಿ",
+    "Hubballi Dharwad City": "ಹುಬ್ಬಳ್ಳಿ ಧಾರವಾಡ ನಗರ",
+    "Kalaburagi": "ಕಲಬುರಗಿ",
+    "Kalaburagi City": "ಕಲಬುರಗಿ ನಗರ",
+    "Karnataka Railways": "ಕರ್ನಾಟಕ ರೈಲ್ವೆ",
+    "Kodagu": "ಕೊಡಗು",
+    "Kolar": "ಕೋಲಾರ",
+    "Koppal": "ಕೊಪ್ಪಳ",
+    "Mandya": "ಮಂಡ್ಯ",
+    "Mangaluru City": "ಮಂಗಳೂರು ನಗರ",
+    "Mysuru City": "ಮೈಸೂರು ನಗರ",
+    "Mysuru Dist": "ಮೈಸೂರು ಜಿಲ್ಲೆ",
+    "Raichur": "ರಾಯಚೂರು",
+    "Ramanagara": "ರಾಮನಗರ",
+    "Shivamogga": "ಶಿವಮೊಗ್ಗ",
+    "Tumakuru": "ತುಮಕೂರು",
+    "Udupi": "ಉಡುಪಿ",
+    "Uttara Kannada": "ಉತ್ತರ ಕನ್ನಡ",
+    "Vijayanagara": "ವಿಜಯನಗರ",
+    "Vijayapur": "ವಿಜಯಪುರ",
+    "Yadgir": "ಯಾದಗಿರಿ",
+    "CID": "ಸಿಐಡಿ",
+    "Coastal Security Police": "ಕರಾವಳಿ ಭದ್ರತಾ ಪೊಲೀಸ್",
+    "ISD Bengaluru": "ಐಎಸ್‌ಡಿ ಬೆಂಗಳೂರು",
+    "K.G.F": "ಕೆ.ಜಿ.ಎಫ್",
+    "Bengaluru Urban": "ಬೆಂಗಳೂರು ನಗರ",
+    "Mysuru": "ಮೈಸೂರು",
+    "Belagavi": "ಬೆಳಗಾವಿ",
+    "Hubballi-Dharwad": "ಹುಬ್ಬಳ್ಳಿ-ಧಾರವಾಡ",
+}
+
+_KANNADA_STATIONS = {
+    "Cubbon Park PS": "ಕಬ್ಬನ್ ಪಾರ್ಕ್ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Kadugondana Halli PS": "ಕಡುಗೊಂಡನಹಳ್ಳಿ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Sadashivanagar Traffic PS": "ಸದಾಶಿವನಗರ ಸಂಚಾರ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Malleshwaram Traffic PS": "ಮಲ್ಲೇಶ್ವರಂ ಸಂಚಾರ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Wilsongarden PS": "ವಿಲ್ಸನ್ ಗಾರ್ಡನ್ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Vijayanagar PS": "ವಿಜಯನಗರ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Yeshwanthpur PS": "ಯಶವಂತಪುರ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Hesaraghatta Road PS": "ಹೆಸರಘಟ್ಟ ರಸ್ತೆ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Devaraja PS": "ದೇವರಾಜ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Nazarbad PS": "ನಜರ್‌ಬಾದ್ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Lashkar Mohalla PS": "ಲಷ್ಕರ್ ಮೊಹಲ್ಲಾ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Mangaluru East PS": "ಮಂಗಳೂರು ಪೂರ್ವ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Pandeshwar PS": "ಪಾಂಡೇಶ್ವರ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Mangaluru North PS": "ಮಂಗಳೂರು ಉತ್ತರ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Urwa PS": "ಉರ್ವಾ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Bogarves PS": "ಬೋಗಾರ್ವೆಸ್ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Kalaburagi City PS": "ಕಲಬುರಗಿ ನಗರ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Aland Road PS": "ಆಳಂದ್ ರಸ್ತೆ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Kalaburagi Rural PS": "ಕಲಬುರಗಿ ಗ್ರಾಮಾಂತರ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Udupi Town PS": "ಉಡುಪಿ ಟೌನ್ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Kundapur PS": "ಕುಂದಾಪುರ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Sandur PS": "ಸಂದೂರು ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Ballari Urban PS": "ಬಳ್ಳಾರಿ ನಗರ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Kudligi PS": "ಕೂಡ್ಲಿಗಿ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Hospet Forest Range PS": "ಹೊಸಪೇಟೆ ಅರಣ್ಯ ವಲಯ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Hubballi Town PS": "ಹುಬ್ಬಳ್ಳಿ ಟೌನ್ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Dharwad PS": "ಧಾರವಾಡ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Hubballi Rural PS": "ಹುಬ್ಬಳ್ಳಿ ಗ್ರಾಮಾಂತರ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Shivamogga Forest Range PS": "ಶಿವಮೊಗ್ಗ ಅರಣ್ಯ ವಲಯ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Sagar Forest PS": "ಸಾಗರ ಅರಣ್ಯ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Thirthahalli PS": "ತೀರ್ಥಹಳ್ಳಿ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Tumakuru CEN PS": "ತುಮಕೂರು ಸಿಇಎನ್ ಪೊಲೀಸ್ ಠಾಣೆ",
+    "Tumakuru North PS": "ತುಮಕೂರು ಉತ್ತರ ಪೊಲೀಸ್ ಠಾಣೆ",
+}
+
+
+def _translate_station(name: str) -> str:
+    if name in _KANNADA_STATIONS:
+        return _KANNADA_STATIONS[name]
+
+    suffixes = {
+        " Traffic PS": " ಸಂಚಾರ ಪೊಲೀಸ್ ಠಾಣೆ",
+        " Forest Range PS": " ಅರಣ್ಯ ವಲಯ ಪೊಲೀಸ್ ಠಾಣೆ",
+        " Forest PS": " ಅರಣ್ಯ ಪೊಲೀಸ್ ಠಾಣೆ",
+        " CEN PS": " ಸಿಇಎನ್ ಪೊಲೀಸ್ ಠಾಣೆ",
+        " City PS": " ನಗರ ಪೊಲೀಸ್ ಠಾಣೆ",
+        " Rural PS": " ಗ್ರಾಮಾಂತರ ಪೊಲೀಸ್ ಠಾಣೆ",
+        " Town PS": " ಟೌನ್ ಪೊಲೀಸ್ ಠಾಣೆ",
+        " North PS": " ಉತ್ತರ ಪೊಲೀಸ್ ಠಾಣೆ",
+        " South PS": " ದಕ್ಷಿಣ ಪೊಲೀಸ್ ಠಾಣೆ",
+        " East PS": " ಪೂರ್ವ ಪೊಲೀಸ್ ಠಾಣೆ",
+        " West PS": " ಪಶ್ಚಿಮ ಪೊಲೀಸ್ ಠಾಣೆ",
+        " PS": " ಪೊಲೀಸ್ ಠಾಣೆ",
+    }
+    for eng, kn in suffixes.items():
+        if name.endswith(eng):
+            base = name[:-len(eng)].strip()
+            translated_base = _KANNADA_DISTRICTS.get(base, base)
+            return f"{translated_base}{kn}"
+
+    return name
+
+
 @dataclass
 class PipelineEvent:
     type: str
@@ -74,7 +256,11 @@ def _build_spoken_summary(rows: list[dict], message: str, lang: str = "en") -> s
                 break
 
     if is_kn:
-        lead = f"{location + ' ನಲ್ಲಿ ' if location else ''}{total} ಪ್ರಕರಣ{'ಗಳು' if total != 1 else ''} ದಾಖಲಾಗಿವೆ."
+        if location.endswith(" PS") or "Police Station" in location:
+            translated_loc = _translate_station(location)
+        else:
+            translated_loc = _KANNADA_DISTRICTS.get(location, location)
+        lead = f"{translated_loc + ' ನಲ್ಲಿ ' if translated_loc else ''}{total} ಪ್ರಕರಣ{'ಗಳು' if total != 1 else ''} ದಾಖಲಾಗಿವೆ."
     else:
         lead = f"Found {total} case{'s' if total != 1 else ''}"
         lead += f" at {location}." if location else "."
@@ -88,7 +274,9 @@ def _build_spoken_summary(rows: list[dict], message: str, lang: str = "en") -> s
     crime_sentence = ""
     if top_crimes:
         if is_kn:
-            crime_sentence = f"ಅತಿ ಹೆಚ್ಚಿನ ಪ್ರಕರಣಗಳು {top_crimes[0][0]} ವರ್ಗದಲ್ಲಿವೆ."
+            raw_crime = top_crimes[0][0]
+            translated_crime = _KANNADA_CRIME_TYPES.get(raw_crime, _KANNADA_CRIME_TYPES.get(raw_crime.upper(), raw_crime))
+            crime_sentence = f"ಅತಿ ಹೆಚ್ಚಿನ ಪ್ರಕರಣಗಳು {translated_crime} ವರ್ಗದಲ್ಲಿವೆ."
         else:
             parts = [f"{name} with {cnt}" for name, cnt in top_crimes]
             crime_sentence = f"The most common crime type is {parts[0]} record{'s' if top_crimes[0][1] != 1 else ''}"
@@ -107,7 +295,8 @@ def _build_spoken_summary(rows: list[dict], message: str, lang: str = "en") -> s
         if top_n > 1:
             pct = round(top_n / total * 100)
             if is_kn:
-                status_sentence = f"ಇವುಗಳಲ್ಲಿ {top_n} ಪ್ರಕರಣಗಳು {top_status} ಸ್ಥಿತಿಯಲ್ಲಿವೆ."
+                translated_status = _KANNADA_STATUSES.get(top_status, top_status)
+                status_sentence = f"ಇವುಗಳಲ್ಲಿ {top_n} ಪ್ರಕರಣಗಳು {translated_status} ಸ್ಥಿತಿಯಲ್ಲಿವೆ."
             else:
                 status_sentence = f"{top_n} of these ({pct}%) are {top_status}."
 
@@ -129,16 +318,27 @@ def _extract_speak(answer: str) -> tuple[str, str]:
     return spoken, display
 
 
-def _render_grounded(question: str, context: str) -> str:
+
+
+
+def _render_grounded(question: str, context: str, lang: str = "en") -> str:
     """D5.3 FIX: deterministic, no-LLM answer used in demo/keyless mode."""
     try:
         data = json.loads(context)
     except Exception:
         data = None
 
+    is_kn = lang == "kn"
+
     # Help / report / note payloads.
     if isinstance(data, dict):
         if "help" in data:
+            if is_kn:
+                return (
+                    "ನಾನು ಅಪರಾಧ ಡೇಟಾಬೇಸ್‌ನಲ್ಲಿನ ಪ್ರಶ್ನೆಗಳಿಗೆ ಉತ್ತರಿಸಬಲ್ಲೆ. ಉದಾಹರಣೆಗೆ: "
+                    "\"ಬೆಂಗಳೂರು ನಗರದಲ್ಲಿನ ಪ್ರಮುಖ ಅಪರಾಧ ಪ್ರಕಾರಗಳು\", \"ಈ ವರ್ಷ ಎಷ್ಟು ಕಳ್ಳತನ ಪ್ರಕರಣಗಳು ದಾಖಲಾಗಿವೆ\", "
+                    "ಅಥವಾ \"ಮೈಸೂರಿನ ಇತ್ತೀಚಿನ ಪ್ರಕರಣಗಳ ಪಟ್ಟಿ\"."
+                )
             return (
                 "I can answer questions over the crime database. Try: "
                 '"top crime types in Bengaluru City", "how many theft cases this year", '
@@ -147,33 +347,188 @@ def _render_grounded(question: str, context: str) -> str:
         if "note" in data:
             return str(data["note"])
         if "nodes" in data:
+            if is_kn:
+                return (
+                    f"ನೆಟ್‌ವರ್ಕ್ ರಚಿಸಲಾಗಿದೆ: {len(data.get('nodes', []))} ನೋಡ್‌ಗಳು, "
+                    f"{len(data.get('edges', []))} ಲಿಂಕ್‌ಗಳು. ಪರಿಶೋಧಿಸಲು ನೆಟ್‌ವರ್ಕ್ ಫಲಕವನ್ನು ತೆರೆಯಿರಿ."
+                )
             return (
                 f"Network built: {len(data.get('nodes', []))} nodes, "
                 f"{len(data.get('edges', []))} links. Open the Network panel to explore."
             )
+        if is_kn:
+            return "ಯಾವುದೇ ಹೊಂದಾಣಿಕೆಯ ದಾಖಲೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ."
         return "Found no matching records."
 
     rows = data if isinstance(data, list) else []
     if not rows:
+        if is_kn:
+            return "ಯಾವುದೇ ಹೊಂದಾಣಿಕೆಯ ದಾಖಲೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ. ಬೇರೆ ಜಿಲ್ಲೆ, ಅಪರಾಧದ ಪ್ರಕಾರ ಅಥವಾ ವರ್ಷವನ್ನು प्रयत्नಿಸಿ."
         return "Found no matching records. Try a different district, crime type, or year."
 
     # Single aggregate value (e.g. COUNT or top-N).
     if len(rows) == 1 and len(rows[0]) == 1:
         (k, v), = rows[0].items()
+        if is_kn:
+            translated_k = _KANNADA_HEADERS.get(k.lower(), k.replace('_', ' '))
+            return f"**{v}** {translated_k}."
         return f"**{v}** {k.replace('_', ' ')}."
 
     # Build a Markdown table from the columns that are actually present.
     cols = list(rows[0].keys())
-    header = "| " + " | ".join(c.replace("_", " ").title() for c in cols) + " |"
+    if is_kn:
+        header_cols = [_KANNADA_HEADERS.get(c.lower(), c.replace("_", " ").title()) for c in cols]
+    else:
+        header_cols = [c.replace("_", " ").title() for c in cols]
+    header = "| " + " | ".join(header_cols) + " |"
     sep = "| " + " | ".join("---" for _ in cols) + " |"
     body = []
     for r in rows[:10]:
-        body.append("| " + " | ".join("" if r.get(c) is None else str(r.get(c)) for c in cols) + " |")
-    more = (
-        "" if len(rows) <= 10
-        else f"\n\nShowing 10 of {len(rows)} — ask to narrow by date, status, or crime type."
+        row_cells = []
+        for c in cols:
+            val = r.get(c)
+            if val is None:
+                cell_str = ""
+            else:
+                val_str = str(val)
+                if is_kn:
+                    if c.lower() == "crime_type":
+                        val_str = _KANNADA_CRIME_TYPES.get(val_str, _KANNADA_CRIME_TYPES.get(val_str.upper(), val_str))
+                    elif c.lower() == "status":
+                        val_str = _KANNADA_STATUSES.get(val_str, val_str)
+                    elif c.lower() == "district":
+                        val_str = _KANNADA_DISTRICTS.get(val_str, val_str)
+                    elif c.lower() in ("station", "station_name"):
+                        val_str = _translate_station(val_str)
+                cell_str = val_str
+            row_cells.append(cell_str)
+        body.append("| " + " | ".join(row_cells) + " |")
+
+    if is_kn:
+        more = (
+            "" if len(rows) <= 10
+            else f"\n\n{len(rows)} ರಲ್ಲಿ 10 ಅನ್ನು ತೋರಿಸಲಾಗುತ್ತಿದೆ — ದಿನಾಂಕ, ಸ್ಥಿತಿ ಅಥವಾ ಅಪರಾಧದ ಪ್ರಕಾರದ ಮೂಲಕ ಫಿಲ್ಟರ್ ಮಾಡಲು ಕೇಳಿ."
+        )
+        intro = f"ದಾಖಲೆಗಳಲ್ಲಿ {len(rows)} ಹೊಂದಾಣಿಕೆಯ ಪ್ರಕರಣಗಳು ಕಂಡುಬಂದಿವೆ."
+    else:
+        more = (
+            "" if len(rows) <= 10
+            else f"\n\nShowing 10 of {len(rows)} — ask to narrow by date, status, or crime type."
+        )
+        intro = f"Found {len(rows)} matching record(s)."
+
+    return f"{intro}\n\n{header}\n{sep}\n" + "\n".join(body) + more
+
+
+import re as _re2
+
+def _post_translate_kn(text: str) -> str:
+    """Deterministic post-processor: replaces English table-cell values with Kannada.
+
+    Called after the LLM generates the answer when lang=='kn'.  It operates on
+    pipe-separated Markdown table rows and also on inline text blocks so that
+    THEFT, Under Investigation, Cubbon Park PS, etc. are always shown in Kannada
+    regardless of whether the LLM followed the translation directive.
+    """
+    # Build combined ordered replacement list.
+    # Order matters: longer strings before shorter ones to avoid partial matches.
+    replacements: list[tuple[str, str]] = []
+
+    # Table headers
+    replacements += [
+        ("| Crime Type |", "| ಅಪರಾಧದ ಪ್ರಕಾರ |"),
+        ("| Status |", "| ಸ್ಥಿತಿ |"),
+        ("| Station |", "| ಠಾಣೆ |"),
+        ("| District |", "| ಜಿಲ್ಲೆ |"),
+        ("| Year |", "| ವರ್ಷ |"),
+        ("| Report Date |", "| ವರದಿ ದಿನಾಂಕ |"),
+        ("| Legal Code |", "| ಕಾನೂನು ಕೋಡ್ |"),
+        ("| Sections |", "| ಕಲಂಗಳು |"),
+        ("| Count |", "| ಸಂಖ್ಯೆ |"),
+    ]
+
+    # Statuses — multi-word first
+    for eng, kn in sorted(_KANNADA_STATUSES.items(), key=lambda x: -len(x[0])):
+        replacements.append((eng, kn))
+
+    # Crime types — multi-word first (use uppercase canonical form only to avoid double-hit)
+    for eng, kn in sorted(_KANNADA_CRIME_TYPES.items(), key=lambda x: -len(x[0])):
+        replacements.append((eng, kn))
+
+    # Station names — longest first
+    for eng, kn in sorted(_KANNADA_STATIONS.items(), key=lambda x: -len(x[0])):
+        replacements.append((eng, kn))
+
+    # Districts — longest first
+    for eng, kn in sorted(_KANNADA_DISTRICTS.items(), key=lambda x: -len(x[0])):
+        replacements.append((eng, kn))
+
+    # Intro/summary boilerplate
+    intro_replacements = [
+        ("Found no matching records", "ಯಾವುದೇ ಹೊಂದಾಣಿಕೆಯ ದಾಖಲೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ"),
+        ("Showing 10 of", "10 ತೋರಿಸಲಾಗುತ್ತಿದೆ"),
+        ("ask to narrow by date, status, or crime type",
+         "ದಿನಾಂಕ, ಸ್ಥಿತಿ ಅಥವಾ ಅಪರಾಧದ ಪ್ರಕಾರದ ಮೂಲಕ ಸಂಕುಚಿಸಲು ಕೇಳಿ"),
+    ]
+
+    # Apply all replacements (case-sensitive whole-word where applicable)
+    seen: set[str] = set()
+    for eng, kn in replacements + intro_replacements:
+        if eng in seen:
+            continue
+        seen.add(eng)
+        # Use word-boundary aware replacement for short tokens to avoid
+        # replacing 'Hurt' inside 'Unhurt' etc.
+        if len(eng) <= 10:
+            text = _re2.sub(r'\b' + _re2.escape(eng) + r'\b', kn, text)
+        else:
+            text = text.replace(eng, kn)
+
+    # Generic suffix fallback for any remaining "Xyz PS" patterns not in the dict
+    def _replace_station(m: _re2.Match) -> str:
+        return _translate_station(m.group(0))
+
+    text = _re2.sub(r'[A-Za-z][A-Za-z\s]+ PS\b', _replace_station, text)
+
+    return text
+
+
+async def _translate_to_kannada(
+    english_answer: str,
+    brain_engine: Literal["gemini", "groq", "openai", "local"] | None = None,
+) -> str:
+    """Second-pass: translates a fully-formed English answer into Kannada.
+
+    Preserves Markdown formatting (tables, bold, bullets) and keeps FIR numbers
+    (e.g. 0001/2025), IPC/BNS section codes, and numeric years verbatim.
+    """
+    system = (
+        "You are a precise Kannada translator for Karnataka Police intelligence reports. "
+        "Translate the provided text COMPLETELY into Kannada (ಕನ್ನಡ script). "
+        "Rules:\n"
+        "1. Preserve all Markdown formatting exactly: | pipe tables |, **bold**, *italic*, bullet lists, headings.\n"
+        "2. Keep FIR numbers (e.g. 0001/2025), IPC/BNS/CrPC section codes (e.g. IPC 379, BNS 303), and standalone years (e.g. 2025) in their original form.\n"
+        "3. Translate ALL English words — table headers, cell values, sentences, summaries, crime types, statuses, station names, district names — into Kannada.\n"
+        "4. Transliterate proper nouns (person names, place names) into Kannada script if a standard translation does not exist.\n"
+        "5. Output ONLY the translated text. Do not add any preamble, explanation, or commentary."
     )
-    return f"Found {len(rows)} matching record(s).\n\n{header}\n{sep}\n" + "\n".join(body) + more
+    translate_prompt = (
+        "Translate the following police intelligence report completely into Kannada. "
+        "Preserve all markdown table formatting and FIR/IPC codes exactly as-is:\n\n"
+        + english_answer
+    )
+    try:
+        return await get_llm(brain_engine).complete(
+            translate_prompt, system=system, temperature=0.1
+        )
+    except Exception:
+        try:
+            return await get_fallback_llm().complete(
+                translate_prompt, system=system, temperature=0.1
+            )
+        except Exception:
+            # Fall back to the deterministic post-processor only
+            return _post_translate_kn(english_answer)
 
 
 async def _compose(
@@ -183,31 +538,39 @@ async def _compose(
     brain_engine: Literal["gemini", "groq", "openai", "local"] | None = None,
     principal: "Principal | None" = None,
 ) -> str:
-    """Grounded answer composition with Groq fallback on primary failure."""
+    """Grounded answer composition with Groq fallback on primary failure.
+
+    For Kannada (lang=='kn'): generates the answer in English first (more reliable
+    table/markdown output), then runs a dedicated translation pass to convert the
+    complete answer to Kannada. The deterministic _post_translate_kn is applied
+    last as a safety net for any values the LLM missed.
+    """
     system = build_answer_system(principal)
 
     # D5.3 FIX: in demo/keyless mode skip the echo stub entirely.
     if get_settings().demo_mode:
-        return _render_grounded(question, context)
+        return _render_grounded(question, context, lang)
 
-    lang_directive = (
-        "\n\nRespond in Kannada (ಕನ್ನಡ). Keep IPC section numbers, FIR identifiers, "
-        "station names, and dates in their original form."
-        if lang == "kn"
-        else ""
-    )
-    prompt = f"Question: {question}\n\nGrounded data:\n{context}{lang_directive}"
+    prompt = f"Question: {question}\n\nGrounded data:\n{context}"
     try:
-        return await get_llm(brain_engine).complete(
+        english_answer = await get_llm(brain_engine).complete(
             prompt, system=system, temperature=0.2
         )
     except Exception:
         try:
-            return await get_fallback_llm().complete(
+            english_answer = await get_fallback_llm().complete(
                 prompt, system=system, temperature=0.2
             )
         except Exception:
-            return "I found the records below, but couldn't generate a summary just now."
+            english_answer = "I found the records below, but couldn't generate a summary just now."
+
+    if lang != "kn":
+        return english_answer
+
+    # Two-pass for Kannada: translate the complete answer, then run the
+    # deterministic post-processor as a safety net.
+    kannada_answer = await _translate_to_kannada(english_answer, brain_engine=brain_engine)
+    return _post_translate_kn(kannada_answer)
 
 
 async def run(
@@ -302,13 +665,19 @@ async def run(
             # knowledge + the officer's identity from the system prompt.
             system = build_answer_system(principal)
             if get_settings().demo_mode:
-                answer = (
-                    f"Hello! I'm Satyam, the KSP crime-intelligence assistant. "
-                    f"Ask me about crime statistics, FIRs, hotspots, or suspect networks."
-                )
+                if lang == "kn":
+                    answer = (
+                        "ನಮಸ್ಕಾರ! ನಾನು ಸತ್ಯಂ, ಕೆಎಸ್‌ಪಿ ಅಪರಾಧ-ಗುಪ್ತಚರ ಸಹಾಯಕ. "
+                        "ಅಪರಾಧ ಅಂಕಿಅಂಶಗಳು, ಎಫ್‌ಐಆರ್‌ಗಳು, ಹಾಟ್‌ಸ್ಪಾಟ್‌ಗಳು ಅಥವಾ ಶಂಕಿತ ನೆಟ್‌ವರ್ಕ್‌ಗಳ ಬಗ್ಗೆ ನನ್ನನ್ನು ಕೇಳಿ."
+                    )
+                else:
+                    answer = (
+                        f"Hello! I'm Satyam, the KSP crime-intelligence assistant. "
+                        f"Ask me about crime statistics, FIRs, hotspots, or suspect networks."
+                    )
             else:
                 lang_directive = (
-                    " Respond in Kannada (ಕನ್ನಡ)." if lang == "kn" else ""
+                    " Respond entirely in Kannada (ಕನ್ನಡ)." if lang == "kn" else ""
                 )
                 try:
                     answer = await get_llm(brain_engine).complete(
@@ -320,10 +689,16 @@ async def run(
                             message + lang_directive, system=system, temperature=0.3
                         )
                     except Exception:
-                        answer = (
-                            "I'm Satyam, the KSP crime-intelligence assistant. "
-                            "Ask me about crime statistics, FIRs, hotspots, or networks."
-                        )
+                        if lang == "kn":
+                            answer = (
+                                "ನಾನು ಸತ್ಯಂ, ಕೆಎಸ್‌ಪಿ ಅಪರಾಧ-ಗುಪ್ತಚರ ಸಹಾಯಕ. "
+                                "ಅಪರಾಧ ಅಂಕಿಅಂಶಗಳು, ಎಫ್‌ಐಆರ್‌ಗಳು, ಹಾಟ್‌ಸ್ಪಾಟ್‌ಗಳು ಅಥವಾ ನೆಟ್‌ವರ್ಕ್‌ಗಳ ಬಗ್ಗೆ ನನ್ನನ್ನು ಕೇಳಿ."
+                            )
+                        else:
+                            answer = (
+                                "I'm Satyam, the KSP crime-intelligence assistant. "
+                                "Ask me about crime statistics, FIRs, hotspots, or networks."
+                            )
             for chunk in answer.split(" "):
                 yield PipelineEvent("token", {"text": chunk + " "})
             state.add_turn("assistant", answer)
@@ -332,6 +707,11 @@ async def run(
 
         # 3) compose grounded answer (token stream)
         answer = await _compose(message, context, lang, brain_engine=brain_engine, principal=principal)
+
+        # Deterministic post-translation: guarantee Kannada cell values regardless of
+        # whether the LLM followed its translation directive.
+        if lang == "kn":
+            answer = _post_translate_kn(answer)
 
         # Prepend a recovery note when the query was auto-broadened, so the
         # officer understands why these results (not an empty dead-end) appear.
