@@ -1,7 +1,7 @@
-# Graph Report - Satyam  (2026-06-24)
+# Graph Report - Satyam  (2026-06-25)
 
 ## Corpus Check
-- 332 files · ~1,804,180 words
+- 332 files · ~1,804,171 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `28aade02`
+- Built from commit: `1f3b92b5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -1050,9 +1050,9 @@ Nodes (5): TrendDeltas, main(), TrendPoint, get_trends(), TrendsResponse
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 223` to `Community 210`?**
-  _High betweenness centrality (0.178) - this node is a cross-community bridge._
+  _High betweenness centrality (0.180) - this node is a cross-community bridge._
 - **Why does `cn()` connect `Community 13` to `Community 4`, `Community 134`, `Community 7`, `Community 20`, `Community 21`, `Community 22`, `Community 24`, `Community 28`, `Community 31`, `Community 160`, `Community 36`, `Community 170`, `Community 43`, `Community 45`, `Community 54`, `Community 68`, `Community 220`, `Community 94`, `Community 228`, `Community 112`, `Community 126`?**
-  _High betweenness centrality (0.084) - this node is a cross-community bridge._
+  _High betweenness centrality (0.085) - this node is a cross-community bridge._
 - **Are the 112 inferred relationships involving `Principal` (e.g. with `AdminUserList` and `AsyncSession`) actually correct?**
   _`Principal` has 112 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 80 inferred relationships involving `Permission` (e.g. with `AdminUserList` and `Principal`) actually correct?**

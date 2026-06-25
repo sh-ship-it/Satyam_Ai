@@ -4,14 +4,44 @@
   "graph": {},
   "nodes": [
     {
+      "label": "CaseDrawer.tsx",
+      "file_type": "code",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "components_casedrawer",
+      "community": 115,
+      "norm_label": "casedrawer.tsx"
+    },
+    {
+      "label": "CaseDrawer()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "components_casedrawer_casedrawer",
+      "community": 115,
+      "norm_label": "casedrawer()"
+    },
+    {
+      "label": "Field()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L370",
+      "_origin": "ast",
+      "id": "components_casedrawer_field",
+      "community": 115,
+      "norm_label": "field()"
+    },
+    {
       "label": "about.tsx",
       "file_type": "code",
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_about",
       "community": 9,
-      "norm_label": "about.tsx"
+      "norm_label": "about.tsx",
+      "id": "routes_about"
     },
     {
       "label": "Route",
@@ -19,9 +49,9 @@
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L28",
       "_origin": "ast",
-      "id": "routes_about_route",
       "community": 9,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_about_route"
     },
     {
       "label": "PipelineStep",
@@ -29,9 +59,9 @@
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L76",
       "_origin": "ast",
-      "id": "routes_about_pipelinestep",
       "community": 9,
-      "norm_label": "pipelinestep"
+      "norm_label": "pipelinestep",
+      "id": "routes_about_pipelinestep"
     },
     {
       "label": "AboutPage()",
@@ -39,9 +69,9 @@
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L84",
       "_origin": "ast",
-      "id": "routes_about_aboutpage",
       "community": 9,
-      "norm_label": "aboutpage()"
+      "norm_label": "aboutpage()",
+      "id": "routes_about_aboutpage"
     },
     {
       "label": "index.tsx",
@@ -49,9 +79,9 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_index",
       "community": 9,
-      "norm_label": "index.tsx"
+      "norm_label": "index.tsx",
+      "id": "routes_index"
     },
     {
       "label": "Route",
@@ -59,9 +89,9 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L4",
       "_origin": "ast",
-      "id": "routes_index_route",
       "community": 9,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_index_route"
     },
     {
       "label": "hsl2rgb()",
@@ -69,9 +99,9 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L177",
       "_origin": "ast",
-      "id": "routes_index_hsl2rgb",
       "community": 9,
-      "norm_label": "hsl2rgb()"
+      "norm_label": "hsl2rgb()",
+      "id": "routes_index_hsl2rgb"
     },
     {
       "label": "setAccentHue()",
@@ -79,9 +109,9 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L190",
       "_origin": "ast",
-      "id": "routes_index_setaccenthue",
       "community": 9,
-      "norm_label": "setaccenthue()"
+      "norm_label": "setaccenthue()",
+      "id": "routes_index_setaccenthue"
     },
     {
       "label": "applyMode()",
@@ -89,9 +119,9 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L200",
       "_origin": "ast",
-      "id": "routes_index_applymode",
       "community": 9,
-      "norm_label": "applymode()"
+      "norm_label": "applymode()",
+      "id": "routes_index_applymode"
     },
     {
       "label": "LandingPage()",
@@ -99,9 +129,9 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L210",
       "_origin": "ast",
-      "id": "routes_index_landingpage",
       "community": 9,
-      "norm_label": "landingpage()"
+      "norm_label": "landingpage()",
+      "id": "routes_index_landingpage"
     },
     {
       "label": "made_till_now.md",
@@ -109,9 +139,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "made_till_now",
       "community": 27,
-      "norm_label": "made_till_now.md"
+      "norm_label": "made_till_now.md",
+      "id": "made_till_now"
     },
     {
       "label": "Satyam \u2014 Project Change Log (`made_till_now.md`)",
@@ -119,9 +149,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "made_till_now_satyam_project_change_log_made_till_now_md",
       "community": 27,
-      "norm_label": "satyam \u2014 project change log (`made_till_now.md`)"
+      "norm_label": "satyam \u2014 project change log (`made_till_now.md`)",
+      "id": "made_till_now_satyam_project_change_log_made_till_now_md"
     },
     {
       "label": "Log of Changes",
@@ -129,9 +159,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "made_till_now_log_of_changes",
       "community": 27,
-      "norm_label": "log of changes"
+      "norm_label": "log of changes",
+      "id": "made_till_now_log_of_changes"
     },
     {
       "label": "[2026-06-15] \u2014 Initial Setup",
@@ -139,9 +169,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_initial_setup",
       "community": 27,
-      "norm_label": "[2026-06-15] \u2014 initial setup"
+      "norm_label": "[2026-06-15] \u2014 initial setup",
+      "id": "made_till_now_2026_06_15_initial_setup"
     },
     {
       "label": "[2026-06-15] \u2014 Architecture Update: Multi-Engine Support (Sarvam, Ollama Cloud, BRAIN_ENGINE, SQL_ENGINE, VOICE_BACKEND)",
@@ -149,9 +179,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend",
       "community": 62,
-      "norm_label": "[2026-06-15] \u2014 architecture update: multi-engine support (sarvam, ollama cloud, brain_engine, sql_engine, voice_backend)"
+      "norm_label": "[2026-06-15] \u2014 architecture update: multi-engine support (sarvam, ollama cloud, brain_engine, sql_engine, voice_backend)",
+      "id": "made_till_now_2026_06_15_architecture_update_multi_engine_support_sarvam_ollama_cloud_brain_engine_sql_engine_voice_backend"
     },
     {
       "label": "Summary",
@@ -159,9 +189,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "made_till_now_summary",
       "community": 62,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary"
     },
     {
       "label": "Backend Changes",
@@ -169,9 +199,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L27",
       "_origin": "ast",
-      "id": "made_till_now_backend_changes",
       "community": 62,
-      "norm_label": "backend changes"
+      "norm_label": "backend changes",
+      "id": "made_till_now_backend_changes"
     },
     {
       "label": "Environment Files",
@@ -179,9 +209,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L82",
       "_origin": "ast",
-      "id": "made_till_now_environment_files",
       "community": 62,
-      "norm_label": "environment files"
+      "norm_label": "environment files",
+      "id": "made_till_now_environment_files"
     },
     {
       "label": "Frontend Changes",
@@ -189,9 +219,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L93",
       "_origin": "ast",
-      "id": "made_till_now_frontend_changes",
       "community": 62,
-      "norm_label": "frontend changes"
+      "norm_label": "frontend changes",
+      "id": "made_till_now_frontend_changes"
     },
     {
       "label": "Architectural Decisions Recorded",
@@ -199,9 +229,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L113",
       "_origin": "ast",
-      "id": "made_till_now_architectural_decisions_recorded",
       "community": 62,
-      "norm_label": "architectural decisions recorded"
+      "norm_label": "architectural decisions recorded",
+      "id": "made_till_now_architectural_decisions_recorded"
     },
     {
       "label": "[2026-06-15] \u2014 Architecture Doc Revision: Saaras v3, GPU specs for BGE-M3 + Reranker, Demo-track clarification",
@@ -209,9 +239,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L122",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_for_bge_m3_reranker_demo_track_clarification",
       "community": 182,
-      "norm_label": "[2026-06-15] \u2014 architecture doc revision: saaras v3, gpu specs for bge-m3 + reranker, demo-track clarification"
+      "norm_label": "[2026-06-15] \u2014 architecture doc revision: saaras v3, gpu specs for bge-m3 + reranker, demo-track clarification",
+      "id": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_for_bge_m3_reranker_demo_track_clarification"
     },
     {
       "label": "Summary",
@@ -219,9 +249,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L124",
       "_origin": "ast",
-      "id": "made_till_now_summary_124",
       "community": 182,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_124"
     },
     {
       "label": "Changes",
@@ -229,9 +259,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L129",
       "_origin": "ast",
-      "id": "made_till_now_changes",
       "community": 182,
-      "norm_label": "changes"
+      "norm_label": "changes",
+      "id": "made_till_now_changes"
     },
     {
       "label": "Architecture decisions recorded (from updated doc)",
@@ -239,9 +269,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L149",
       "_origin": "ast",
-      "id": "made_till_now_architecture_decisions_recorded_from_updated_doc",
       "community": 182,
-      "norm_label": "architecture decisions recorded (from updated doc)"
+      "norm_label": "architecture decisions recorded (from updated doc)",
+      "id": "made_till_now_architecture_decisions_recorded_from_updated_doc"
     },
     {
       "label": "[2026-06-15] \u2014 Security Update: Robust .env Ignore Rules",
@@ -249,9 +279,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L157",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_security_update_robust_env_ignore_rules",
       "community": 191,
-      "norm_label": "[2026-06-15] \u2014 security update: robust .env ignore rules"
+      "norm_label": "[2026-06-15] \u2014 security update: robust .env ignore rules",
+      "id": "made_till_now_2026_06_15_security_update_robust_env_ignore_rules"
     },
     {
       "label": "Summary",
@@ -259,9 +289,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L159",
       "_origin": "ast",
-      "id": "made_till_now_summary_159",
       "community": 191,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_159"
     },
     {
       "label": "Changes",
@@ -269,9 +299,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L162",
       "_origin": "ast",
-      "id": "made_till_now_changes_162",
       "community": 191,
-      "norm_label": "changes"
+      "norm_label": "changes",
+      "id": "made_till_now_changes_162"
     },
     {
       "label": "[2026-06-15] \u2014 Local Database Setup: PostgreSQL 17 + pgvector 0.8.2 + Full Schema",
@@ -279,9 +309,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L170",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema",
       "community": 67,
-      "norm_label": "[2026-06-15] \u2014 local database setup: postgresql 17 + pgvector 0.8.2 + full schema"
+      "norm_label": "[2026-06-15] \u2014 local database setup: postgresql 17 + pgvector 0.8.2 + full schema",
+      "id": "made_till_now_2026_06_15_local_database_setup_postgresql_17_pgvector_0_8_2_full_schema"
     },
     {
       "label": "Summary",
@@ -289,9 +319,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L172",
       "_origin": "ast",
-      "id": "made_till_now_summary_172",
       "community": 67,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_172"
     },
     {
       "label": "1. PostgreSQL status confirmed",
@@ -299,9 +329,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L182",
       "_origin": "ast",
-      "id": "made_till_now_1_postgresql_status_confirmed",
       "community": 67,
-      "norm_label": "1. postgresql status confirmed"
+      "norm_label": "1. postgresql status confirmed",
+      "id": "made_till_now_1_postgresql_status_confirmed"
     },
     {
       "label": "2. pgvector 0.8.2 \u2014 build from source (Windows, MSVC)",
@@ -309,9 +339,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L190",
       "_origin": "ast",
-      "id": "made_till_now_2_pgvector_0_8_2_build_from_source_windows_msvc",
       "community": 67,
-      "norm_label": "2. pgvector 0.8.2 \u2014 build from source (windows, msvc)"
+      "norm_label": "2. pgvector 0.8.2 \u2014 build from source (windows, msvc)",
+      "id": "made_till_now_2_pgvector_0_8_2_build_from_source_windows_msvc"
     },
     {
       "label": "3. Database creation",
@@ -319,9 +349,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L217",
       "_origin": "ast",
-      "id": "made_till_now_3_database_creation",
       "community": 67,
-      "norm_label": "3. database creation"
+      "norm_label": "3. database creation",
+      "id": "made_till_now_3_database_creation"
     },
     {
       "label": "4. Schema applied \u2014 `backend/migrations/001_init.sql`",
@@ -329,9 +359,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L227",
       "_origin": "ast",
-      "id": "made_till_now_4_schema_applied_backend_migrations_001_init_sql",
       "community": 67,
-      "norm_label": "4. schema applied \u2014 `backend/migrations/001_init.sql`"
+      "norm_label": "4. schema applied \u2014 `backend/migrations/001_init.sql`",
+      "id": "made_till_now_4_schema_applied_backend_migrations_001_init_sql"
     },
     {
       "label": "5. Connectivity verified via Python (`asyncpg`)",
@@ -339,9 +369,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L260",
       "_origin": "ast",
-      "id": "made_till_now_5_connectivity_verified_via_python_asyncpg",
       "community": 67,
-      "norm_label": "5. connectivity verified via python (`asyncpg`)"
+      "norm_label": "5. connectivity verified via python (`asyncpg`)",
+      "id": "made_till_now_5_connectivity_verified_via_python_asyncpg"
     },
     {
       "label": "6. Backend `.env` \u2014 no changes needed",
@@ -349,9 +379,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L273",
       "_origin": "ast",
-      "id": "made_till_now_6_backend_env_no_changes_needed",
       "community": 67,
-      "norm_label": "6. backend `.env` \u2014 no changes needed"
+      "norm_label": "6. backend `.env` \u2014 no changes needed",
+      "id": "made_till_now_6_backend_env_no_changes_needed"
     },
     {
       "label": "Next steps (deferred)",
@@ -359,9 +389,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L283",
       "_origin": "ast",
-      "id": "made_till_now_next_steps_deferred",
       "community": 67,
-      "norm_label": "next steps (deferred)"
+      "norm_label": "next steps (deferred)",
+      "id": "made_till_now_next_steps_deferred"
     },
     {
       "label": "[2026-06-15] \u2014 Neon Cloud Database Connected",
@@ -369,9 +399,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L291",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_neon_cloud_database_connected",
       "community": 96,
-      "norm_label": "[2026-06-15] \u2014 neon cloud database connected"
+      "norm_label": "[2026-06-15] \u2014 neon cloud database connected",
+      "id": "made_till_now_2026_06_15_neon_cloud_database_connected"
     },
     {
       "label": "Summary",
@@ -379,9 +409,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L293",
       "_origin": "ast",
-      "id": "made_till_now_summary_293",
       "community": 96,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_293"
     },
     {
       "label": "What was confirmed",
@@ -389,9 +419,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L298",
       "_origin": "ast",
-      "id": "made_till_now_what_was_confirmed",
       "community": 96,
-      "norm_label": "what was confirmed"
+      "norm_label": "what was confirmed",
+      "id": "made_till_now_what_was_confirmed"
     },
     {
       "label": "Files changed",
@@ -399,9 +429,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L307",
       "_origin": "ast",
-      "id": "made_till_now_files_changed",
       "community": 96,
-      "norm_label": "files changed"
+      "norm_label": "files changed",
+      "id": "made_till_now_files_changed"
     },
     {
       "label": "How to switch tracks",
@@ -409,9 +439,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L326",
       "_origin": "ast",
-      "id": "made_till_now_how_to_switch_tracks",
       "community": 96,
-      "norm_label": "how to switch tracks"
+      "norm_label": "how to switch tracks",
+      "id": "made_till_now_how_to_switch_tracks"
     },
     {
       "label": "Security note",
@@ -419,9 +449,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L332",
       "_origin": "ast",
-      "id": "made_till_now_security_note",
       "community": 96,
-      "norm_label": "security note"
+      "norm_label": "security note",
+      "id": "made_till_now_security_note"
     },
     {
       "label": "[2026-06-15] \u2014 Gitignore Update: Ignore Synthetic Dataset CSVs",
@@ -429,9 +459,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L339",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_gitignore_update_ignore_synthetic_dataset_csvs",
       "community": 183,
-      "norm_label": "[2026-06-15] \u2014 gitignore update: ignore synthetic dataset csvs"
+      "norm_label": "[2026-06-15] \u2014 gitignore update: ignore synthetic dataset csvs",
+      "id": "made_till_now_2026_06_15_gitignore_update_ignore_synthetic_dataset_csvs"
     },
     {
       "label": "Summary",
@@ -439,9 +469,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L341",
       "_origin": "ast",
-      "id": "made_till_now_summary_341",
       "community": 183,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_341"
     },
     {
       "label": "Changes",
@@ -449,9 +479,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L344",
       "_origin": "ast",
-      "id": "made_till_now_changes_344",
       "community": 183,
-      "norm_label": "changes"
+      "norm_label": "changes",
+      "id": "made_till_now_changes_344"
     },
     {
       "label": "[2026-06-15] \u2014 Full DB Rebuild + KSP RBAC + 100k Dataset Loaded",
@@ -459,9 +489,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L356",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded",
       "community": 50,
-      "norm_label": "[2026-06-15] \u2014 full db rebuild + ksp rbac + 100k dataset loaded"
+      "norm_label": "[2026-06-15] \u2014 full db rebuild + ksp rbac + 100k dataset loaded",
+      "id": "made_till_now_2026_06_15_full_db_rebuild_ksp_rbac_100k_dataset_loaded"
     },
     {
       "label": "Summary",
@@ -469,9 +499,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L358",
       "_origin": "ast",
-      "id": "made_till_now_summary_358",
       "community": 50,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_358"
     },
     {
       "label": "Files moved / created",
@@ -479,9 +509,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L363",
       "_origin": "ast",
-      "id": "made_till_now_files_moved_created",
       "community": 50,
-      "norm_label": "files moved / created"
+      "norm_label": "files moved / created",
+      "id": "made_till_now_files_moved_created"
     },
     {
       "label": "Database changes",
@@ -489,9 +519,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L375",
       "_origin": "ast",
-      "id": "made_till_now_database_changes",
       "community": 50,
-      "norm_label": "database changes"
+      "norm_label": "database changes",
+      "id": "made_till_now_database_changes"
     },
     {
       "label": "Backend code changes",
@@ -499,9 +529,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L404",
       "_origin": "ast",
-      "id": "made_till_now_backend_code_changes",
       "community": 50,
-      "norm_label": "backend code changes"
+      "norm_label": "backend code changes",
+      "id": "made_till_now_backend_code_changes"
     },
     {
       "label": "RLS verification (live test)",
@@ -509,9 +539,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L452",
       "_origin": "ast",
-      "id": "made_till_now_rls_verification_live_test",
       "community": 50,
-      "norm_label": "rls verification (live test)"
+      "norm_label": "rls verification (live test)",
+      "id": "made_till_now_rls_verification_live_test"
     },
     {
       "label": "Next steps",
@@ -519,9 +549,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L457",
       "_origin": "ast",
-      "id": "made_till_now_next_steps",
       "community": 50,
-      "norm_label": "next steps"
+      "norm_label": "next steps",
+      "id": "made_till_now_next_steps"
     },
     {
       "label": "[2026-06-15] \u2014 Architecture Doc Revision: Saaras v3, GPU Specs, Demo Clarification",
@@ -529,9 +559,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L464",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_demo_clarification",
       "community": 189,
-      "norm_label": "[2026-06-15] \u2014 architecture doc revision: saaras v3, gpu specs, demo clarification"
+      "norm_label": "[2026-06-15] \u2014 architecture doc revision: saaras v3, gpu specs, demo clarification",
+      "id": "made_till_now_2026_06_15_architecture_doc_revision_saaras_v3_gpu_specs_demo_clarification"
     },
     {
       "label": "Summary",
@@ -539,9 +569,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L466",
       "_origin": "ast",
-      "id": "made_till_now_summary_466",
       "community": 189,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_466"
     },
     {
       "label": "Code changes",
@@ -549,9 +579,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L470",
       "_origin": "ast",
-      "id": "made_till_now_code_changes",
       "community": 189,
-      "norm_label": "code changes"
+      "norm_label": "code changes",
+      "id": "made_till_now_code_changes"
     },
     {
       "label": "[2026-06-15] \u2014 Neon Cloud Database Connected",
@@ -559,9 +589,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L477",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_neon_cloud_database_connected_477",
       "community": 27,
-      "norm_label": "[2026-06-15] \u2014 neon cloud database connected"
+      "norm_label": "[2026-06-15] \u2014 neon cloud database connected",
+      "id": "made_till_now_2026_06_15_neon_cloud_database_connected_477"
     },
     {
       "label": "Summary",
@@ -569,9 +599,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L479",
       "_origin": "ast",
-      "id": "made_till_now_summary_479",
       "community": 27,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_479"
     },
     {
       "label": "[2026-06-15] \u2014 Full DB Rebuild: Schema v2 + KSP RBAC + 100k Dataset",
@@ -579,9 +609,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L490",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset",
       "community": 95,
-      "norm_label": "[2026-06-15] \u2014 full db rebuild: schema v2 + ksp rbac + 100k dataset"
+      "norm_label": "[2026-06-15] \u2014 full db rebuild: schema v2 + ksp rbac + 100k dataset",
+      "id": "made_till_now_2026_06_15_full_db_rebuild_schema_v2_ksp_rbac_100k_dataset"
     },
     {
       "label": "Summary",
@@ -589,9 +619,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L492",
       "_origin": "ast",
-      "id": "made_till_now_summary_492",
       "community": 95,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_492"
     },
     {
       "label": "Files",
@@ -599,9 +629,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L495",
       "_origin": "ast",
-      "id": "made_till_now_files",
       "community": 95,
-      "norm_label": "files"
+      "norm_label": "files",
+      "id": "made_till_now_files"
     },
     {
       "label": "Data loaded (Neon + local)",
@@ -609,9 +639,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L504",
       "_origin": "ast",
-      "id": "made_till_now_data_loaded_neon_local",
       "community": 95,
-      "norm_label": "data loaded (neon + local)"
+      "norm_label": "data loaded (neon + local)",
+      "id": "made_till_now_data_loaded_neon_local"
     },
     {
       "label": "Key backend rewrites",
@@ -619,9 +649,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L507",
       "_origin": "ast",
-      "id": "made_till_now_key_backend_rewrites",
       "community": 95,
-      "norm_label": "key backend rewrites"
+      "norm_label": "key backend rewrites",
+      "id": "made_till_now_key_backend_rewrites"
     },
     {
       "label": "RLS verified live",
@@ -629,9 +659,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L525",
       "_origin": "ast",
-      "id": "made_till_now_rls_verified_live",
       "community": 95,
-      "norm_label": "rls verified live"
+      "norm_label": "rls verified live",
+      "id": "made_till_now_rls_verified_live"
     },
     {
       "label": "[2026-06-15] \u2014 DATABASE.md Rewritten",
@@ -639,9 +669,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L530",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_database_md_rewritten",
       "community": 27,
-      "norm_label": "[2026-06-15] \u2014 database.md rewritten"
+      "norm_label": "[2026-06-15] \u2014 database.md rewritten",
+      "id": "made_till_now_2026_06_15_database_md_rewritten"
     },
     {
       "label": "[2026-06-15] \u2014 Bug Fix Sprint: 17 Bugs Fixed (SATYAM_BUG_FIXES.md \u2014 Rounds 1\u20134)",
@@ -649,9 +679,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L538",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4",
       "community": 44,
-      "norm_label": "[2026-06-15] \u2014 bug fix sprint: 17 bugs fixed (satyam_bug_fixes.md \u2014 rounds 1\u20134)"
+      "norm_label": "[2026-06-15] \u2014 bug fix sprint: 17 bugs fixed (satyam_bug_fixes.md \u2014 rounds 1\u20134)",
+      "id": "made_till_now_2026_06_15_bug_fix_sprint_17_bugs_fixed_satyam_bug_fixes_md_rounds_1_4"
     },
     {
       "label": "Critical / High (crash or security)",
@@ -659,9 +689,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L542",
       "_origin": "ast",
-      "id": "made_till_now_critical_high_crash_or_security",
       "community": 44,
-      "norm_label": "critical / high (crash or security)"
+      "norm_label": "critical / high (crash or security)",
+      "id": "made_till_now_critical_high_crash_or_security"
     },
     {
       "label": "Medium",
@@ -669,9 +699,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L552",
       "_origin": "ast",
-      "id": "made_till_now_medium",
       "community": 44,
-      "norm_label": "medium"
+      "norm_label": "medium",
+      "id": "made_till_now_medium"
     },
     {
       "label": "Low",
@@ -679,9 +709,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L567",
       "_origin": "ast",
-      "id": "made_till_now_low",
       "community": 44,
-      "norm_label": "low"
+      "norm_label": "low",
+      "id": "made_till_now_low"
     },
     {
       "label": "Deleted",
@@ -689,9 +719,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L575",
       "_origin": "ast",
-      "id": "made_till_now_deleted",
       "community": 44,
-      "norm_label": "deleted"
+      "norm_label": "deleted",
+      "id": "made_till_now_deleted"
     },
     {
       "label": "Docstring / stale comment",
@@ -699,9 +729,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L578",
       "_origin": "ast",
-      "id": "made_till_now_docstring_stale_comment",
       "community": 44,
-      "norm_label": "docstring / stale comment"
+      "norm_label": "docstring / stale comment",
+      "id": "made_till_now_docstring_stale_comment"
     },
     {
       "label": "Test results after all fixes",
@@ -709,9 +739,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L581",
       "_origin": "ast",
-      "id": "made_till_now_test_results_after_all_fixes",
       "community": 44,
-      "norm_label": "test results after all fixes"
+      "norm_label": "test results after all fixes",
+      "id": "made_till_now_test_results_after_all_fixes"
     },
     {
       "label": "Confirmed false positives (not touched)",
@@ -719,9 +749,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L588",
       "_origin": "ast",
-      "id": "made_till_now_confirmed_false_positives_not_touched",
       "community": 44,
-      "norm_label": "confirmed false positives (not touched)"
+      "norm_label": "confirmed false positives (not touched)",
+      "id": "made_till_now_confirmed_false_positives_not_touched"
     },
     {
       "label": "[2026-06-15] \u2014 Settings Panel: Database Source Dropdown",
@@ -729,9 +759,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L593",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_settings_panel_database_source_dropdown",
       "community": 100,
-      "norm_label": "[2026-06-15] \u2014 settings panel: database source dropdown"
+      "norm_label": "[2026-06-15] \u2014 settings panel: database source dropdown",
+      "id": "made_till_now_2026_06_15_settings_panel_database_source_dropdown"
     },
     {
       "label": "Summary",
@@ -739,9 +769,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L595",
       "_origin": "ast",
-      "id": "made_till_now_summary_595",
       "community": 100,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_595"
     },
     {
       "label": "Frontend \u2014 `frontend/src/components/SettingsDialog.tsx`",
@@ -749,9 +779,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L599",
       "_origin": "ast",
-      "id": "made_till_now_frontend_frontend_src_components_settingsdialog_tsx",
       "community": 100,
-      "norm_label": "frontend \u2014 `frontend/src/components/settingsdialog.tsx`"
+      "norm_label": "frontend \u2014 `frontend/src/components/settingsdialog.tsx`",
+      "id": "made_till_now_frontend_frontend_src_components_settingsdialog_tsx"
     },
     {
       "label": "Frontend \u2014 `frontend/src/lib/api/client.ts`",
@@ -759,9 +789,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L608",
       "_origin": "ast",
-      "id": "made_till_now_frontend_frontend_src_lib_api_client_ts",
       "community": 100,
-      "norm_label": "frontend \u2014 `frontend/src/lib/api/client.ts`"
+      "norm_label": "frontend \u2014 `frontend/src/lib/api/client.ts`",
+      "id": "made_till_now_frontend_frontend_src_lib_api_client_ts"
     },
     {
       "label": "Backend \u2014 `backend/app/db/session.py` (rewritten)",
@@ -769,9 +799,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L611",
       "_origin": "ast",
-      "id": "made_till_now_backend_backend_app_db_session_py_rewritten",
       "community": 100,
-      "norm_label": "backend \u2014 `backend/app/db/session.py` (rewritten)"
+      "norm_label": "backend \u2014 `backend/app/db/session.py` (rewritten)",
+      "id": "made_till_now_backend_backend_app_db_session_py_rewritten"
     },
     {
       "label": "Backend \u2014 `backend/app/api/routes/settings.py` *(new file)*",
@@ -779,9 +809,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L617",
       "_origin": "ast",
-      "id": "made_till_now_backend_backend_app_api_routes_settings_py_new_file",
       "community": 100,
-      "norm_label": "backend \u2014 `backend/app/api/routes/settings.py` *(new file)*"
+      "norm_label": "backend \u2014 `backend/app/api/routes/settings.py` *(new file)*",
+      "id": "made_till_now_backend_backend_app_api_routes_settings_py_new_file"
     },
     {
       "label": "Backend \u2014 `backend/app/config.py`",
@@ -789,9 +819,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L622",
       "_origin": "ast",
-      "id": "made_till_now_backend_backend_app_config_py",
       "community": 100,
-      "norm_label": "backend \u2014 `backend/app/config.py`"
+      "norm_label": "backend \u2014 `backend/app/config.py`",
+      "id": "made_till_now_backend_backend_app_config_py"
     },
     {
       "label": "Backend \u2014 `backend/app/main.py`",
@@ -799,9 +829,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L625",
       "_origin": "ast",
-      "id": "made_till_now_backend_backend_app_main_py",
       "community": 100,
-      "norm_label": "backend \u2014 `backend/app/main.py`"
+      "norm_label": "backend \u2014 `backend/app/main.py`",
+      "id": "made_till_now_backend_backend_app_main_py"
     },
     {
       "label": "`backend/.env` + `backend/.env.example`",
@@ -809,9 +839,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L628",
       "_origin": "ast",
-      "id": "made_till_now_backend_env_backend_env_example",
       "community": 100,
-      "norm_label": "`backend/.env` + `backend/.env.example`"
+      "norm_label": "`backend/.env` + `backend/.env.example`",
+      "id": "made_till_now_backend_env_backend_env_example"
     },
     {
       "label": "[2026-06-15] \u2014 Local Model Inference: BGE-M3 + bge-reranker-v2-m3 Wired Up",
@@ -819,9 +849,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L633",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_local_model_inference_bge_m3_bge_reranker_v2_m3_wired_up",
       "community": 98,
-      "norm_label": "[2026-06-15] \u2014 local model inference: bge-m3 + bge-reranker-v2-m3 wired up"
+      "norm_label": "[2026-06-15] \u2014 local model inference: bge-m3 + bge-reranker-v2-m3 wired up",
+      "id": "made_till_now_2026_06_15_local_model_inference_bge_m3_bge_reranker_v2_m3_wired_up"
     },
     {
       "label": "Summary",
@@ -829,9 +859,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L635",
       "_origin": "ast",
-      "id": "made_till_now_summary_635",
       "community": 98,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_635"
     },
     {
       "label": "Environment verified",
@@ -839,9 +869,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L640",
       "_origin": "ast",
-      "id": "made_till_now_environment_verified",
       "community": 98,
-      "norm_label": "environment verified"
+      "norm_label": "environment verified",
+      "id": "made_till_now_environment_verified"
     },
     {
       "label": "`backend/app/config.py`",
@@ -849,9 +879,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L646",
       "_origin": "ast",
-      "id": "made_till_now_backend_app_config_py",
       "community": 98,
-      "norm_label": "`backend/app/config.py`"
+      "norm_label": "`backend/app/config.py`",
+      "id": "made_till_now_backend_app_config_py"
     },
     {
       "label": "`backend/app/models/local/embedder_bge.py` (rewritten)",
@@ -859,9 +889,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L653",
       "_origin": "ast",
-      "id": "made_till_now_backend_app_models_local_embedder_bge_py_rewritten",
       "community": 98,
-      "norm_label": "`backend/app/models/local/embedder_bge.py` (rewritten)"
+      "norm_label": "`backend/app/models/local/embedder_bge.py` (rewritten)",
+      "id": "made_till_now_backend_app_models_local_embedder_bge_py_rewritten"
     },
     {
       "label": "`backend/app/models/local/reranker_bge.py` (rewritten)",
@@ -869,9 +899,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L659",
       "_origin": "ast",
-      "id": "made_till_now_backend_app_models_local_reranker_bge_py_rewritten",
       "community": 98,
-      "norm_label": "`backend/app/models/local/reranker_bge.py` (rewritten)"
+      "norm_label": "`backend/app/models/local/reranker_bge.py` (rewritten)",
+      "id": "made_till_now_backend_app_models_local_reranker_bge_py_rewritten"
     },
     {
       "label": "`backend/app/main.py`",
@@ -879,9 +909,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L665",
       "_origin": "ast",
-      "id": "made_till_now_backend_app_main_py",
       "community": 98,
-      "norm_label": "`backend/app/main.py`"
+      "norm_label": "`backend/app/main.py`",
+      "id": "made_till_now_backend_app_main_py"
     },
     {
       "label": "`backend/requirements.txt`",
@@ -889,9 +919,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L668",
       "_origin": "ast",
-      "id": "made_till_now_backend_requirements_txt",
       "community": 98,
-      "norm_label": "`backend/requirements.txt`"
+      "norm_label": "`backend/requirements.txt`",
+      "id": "made_till_now_backend_requirements_txt"
     },
     {
       "label": "`backend/.env` + `backend/.env.example`",
@@ -899,9 +929,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L671",
       "_origin": "ast",
-      "id": "made_till_now_backend_env_backend_env_example_671",
       "community": 98,
-      "norm_label": "`backend/.env` + `backend/.env.example`"
+      "norm_label": "`backend/.env` + `backend/.env.example`",
+      "id": "made_till_now_backend_env_backend_env_example_671"
     },
     {
       "label": "Known issue \u2014 FlagEmbedding 1.4 Windows crash",
@@ -909,9 +939,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L674",
       "_origin": "ast",
-      "id": "made_till_now_known_issue_flagembedding_1_4_windows_crash",
       "community": 98,
-      "norm_label": "known issue \u2014 flagembedding 1.4 windows crash"
+      "norm_label": "known issue \u2014 flagembedding 1.4 windows crash",
+      "id": "made_till_now_known_issue_flagembedding_1_4_windows_crash"
     },
     {
       "label": "[2026-06-15] \u2014 ML Dependency Crash: Full Root-Cause + Fix (`SATYAM_NUMPY_CRASH_FIX.md`)",
@@ -919,9 +949,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L687",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_15_ml_dependency_crash_full_root_cause_fix_satyam_numpy_crash_fix_md",
       "community": 119,
-      "norm_label": "[2026-06-15] \u2014 ml dependency crash: full root-cause + fix (`satyam_numpy_crash_fix.md`)"
+      "norm_label": "[2026-06-15] \u2014 ml dependency crash: full root-cause + fix (`satyam_numpy_crash_fix.md`)",
+      "id": "made_till_now_2026_06_15_ml_dependency_crash_full_root_cause_fix_satyam_numpy_crash_fix_md"
     },
     {
       "label": "Summary",
@@ -929,9 +959,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L689",
       "_origin": "ast",
-      "id": "made_till_now_summary_689",
       "community": 119,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_689"
     },
     {
       "label": "Root Cause (three separate but compounding issues)",
@@ -939,9 +969,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L694",
       "_origin": "ast",
-      "id": "made_till_now_root_cause_three_separate_but_compounding_issues",
       "community": 119,
-      "norm_label": "root cause (three separate but compounding issues)"
+      "norm_label": "root cause (three separate but compounding issues)",
+      "id": "made_till_now_root_cause_three_separate_but_compounding_issues"
     },
     {
       "label": "Changes Made",
@@ -949,9 +979,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L718",
       "_origin": "ast",
-      "id": "made_till_now_changes_made",
       "community": 119,
-      "norm_label": "changes made"
+      "norm_label": "changes made",
+      "id": "made_till_now_changes_made"
     },
     {
       "label": "Verification Results",
@@ -959,9 +989,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L748",
       "_origin": "ast",
-      "id": "made_till_now_verification_results",
       "community": 119,
-      "norm_label": "verification results"
+      "norm_label": "verification results",
+      "id": "made_till_now_verification_results"
     },
     {
       "label": "Committed & Pushed",
@@ -969,9 +999,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L773",
       "_origin": "ast",
-      "id": "made_till_now_committed_pushed",
       "community": 119,
-      "norm_label": "committed & pushed"
+      "norm_label": "committed & pushed",
+      "id": "made_till_now_committed_pushed"
     },
     {
       "label": "Next Steps",
@@ -979,9 +1009,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L779",
       "_origin": "ast",
-      "id": "made_till_now_next_steps_779",
       "community": 119,
-      "norm_label": "next steps"
+      "norm_label": "next steps",
+      "id": "made_till_now_next_steps_779"
     },
     {
       "label": "[2026-06-16] \u2014 E2E Frontend\u2194Backend Wiring (SATYAM_E2E_WIRING_FIX issues 0\u20136 + 9)",
@@ -989,9 +1019,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L786",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_e2e_frontend_backend_wiring_satyam_e2e_wiring_fix_issues_0_6_9",
       "community": 105,
-      "norm_label": "[2026-06-16] \u2014 e2e frontend\u2194backend wiring (satyam_e2e_wiring_fix issues 0\u20136 + 9)"
+      "norm_label": "[2026-06-16] \u2014 e2e frontend\u2194backend wiring (satyam_e2e_wiring_fix issues 0\u20136 + 9)",
+      "id": "made_till_now_2026_06_16_e2e_frontend_backend_wiring_satyam_e2e_wiring_fix_issues_0_6_9"
     },
     {
       "label": "Summary",
@@ -999,9 +1029,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L788",
       "_origin": "ast",
-      "id": "made_till_now_summary_788",
       "community": 105,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_788"
     },
     {
       "label": "Issue 0 \u2014 Demo jurisdiction fix (`backend/app/api/routes/auth.py`)",
@@ -1009,9 +1039,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L793",
       "_origin": "ast",
-      "id": "made_till_now_issue_0_demo_jurisdiction_fix_backend_app_api_routes_auth_py",
       "community": 105,
-      "norm_label": "issue 0 \u2014 demo jurisdiction fix (`backend/app/api/routes/auth.py`)"
+      "norm_label": "issue 0 \u2014 demo jurisdiction fix (`backend/app/api/routes/auth.py`)",
+      "id": "made_till_now_issue_0_demo_jurisdiction_fix_backend_app_api_routes_auth_py"
     },
     {
       "label": "Issue 1 \u2014 CrimeMap live hotspots (`frontend/src/components/CrimeMap.tsx`)",
@@ -1019,9 +1049,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L799",
       "_origin": "ast",
-      "id": "made_till_now_issue_1_crimemap_live_hotspots_frontend_src_components_crimemap_tsx",
       "community": 105,
-      "norm_label": "issue 1 \u2014 crimemap live hotspots (`frontend/src/components/crimemap.tsx`)"
+      "norm_label": "issue 1 \u2014 crimemap live hotspots (`frontend/src/components/crimemap.tsx`)",
+      "id": "made_till_now_issue_1_crimemap_live_hotspots_frontend_src_components_crimemap_tsx"
     },
     {
       "label": "Issue 2 \u2014 Network screen live ego graph (`frontend/src/routes/network.tsx`)",
@@ -1029,9 +1059,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L807",
       "_origin": "ast",
-      "id": "made_till_now_issue_2_network_screen_live_ego_graph_frontend_src_routes_network_tsx",
       "community": 105,
-      "norm_label": "issue 2 \u2014 network screen live ego graph (`frontend/src/routes/network.tsx`)"
+      "norm_label": "issue 2 \u2014 network screen live ego graph (`frontend/src/routes/network.tsx`)",
+      "id": "made_till_now_issue_2_network_screen_live_ego_graph_frontend_src_routes_network_tsx"
     },
     {
       "label": "Issue 3 \u2014 Console results canvas live data (`frontend/src/routes/console.tsx`)",
@@ -1039,9 +1069,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L816",
       "_origin": "ast",
-      "id": "made_till_now_issue_3_console_results_canvas_live_data_frontend_src_routes_console_tsx",
       "community": 105,
-      "norm_label": "issue 3 \u2014 console results canvas live data (`frontend/src/routes/console.tsx`)"
+      "norm_label": "issue 3 \u2014 console results canvas live data (`frontend/src/routes/console.tsx`)",
+      "id": "made_till_now_issue_3_console_results_canvas_live_data_frontend_src_routes_console_tsx"
     },
     {
       "label": "Issue 4 \u2014 CaseDrawer live data (`frontend/src/components/CaseDrawer.tsx`)",
@@ -1049,9 +1079,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L828",
       "_origin": "ast",
-      "id": "made_till_now_issue_4_casedrawer_live_data_frontend_src_components_casedrawer_tsx",
       "community": 105,
-      "norm_label": "issue 4 \u2014 casedrawer live data (`frontend/src/components/casedrawer.tsx`)"
+      "norm_label": "issue 4 \u2014 casedrawer live data (`frontend/src/components/casedrawer.tsx`)",
+      "id": "made_till_now_issue_4_casedrawer_live_data_frontend_src_components_casedrawer_tsx"
     },
     {
       "label": "Issue 5 \u2014 Reports live data (`frontend/src/routes/reports.tsx`)",
@@ -1059,9 +1089,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L836",
       "_origin": "ast",
-      "id": "made_till_now_issue_5_reports_live_data_frontend_src_routes_reports_tsx",
       "community": 105,
-      "norm_label": "issue 5 \u2014 reports live data (`frontend/src/routes/reports.tsx`)"
+      "norm_label": "issue 5 \u2014 reports live data (`frontend/src/routes/reports.tsx`)",
+      "id": "made_till_now_issue_5_reports_live_data_frontend_src_routes_reports_tsx"
     },
     {
       "label": "Issue 6 \u2014 Audit live entry count (`frontend/src/routes/audit.tsx` + `backend/app/api/routes/audit.py`)",
@@ -1069,9 +1099,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L846",
       "_origin": "ast",
-      "id": "made_till_now_issue_6_audit_live_entry_count_frontend_src_routes_audit_tsx_backend_app_api_routes_audit_py",
       "community": 105,
-      "norm_label": "issue 6 \u2014 audit live entry count (`frontend/src/routes/audit.tsx` + `backend/app/api/routes/audit.py`)"
+      "norm_label": "issue 6 \u2014 audit live entry count (`frontend/src/routes/audit.tsx` + `backend/app/api/routes/audit.py`)",
+      "id": "made_till_now_issue_6_audit_live_entry_count_frontend_src_routes_audit_tsx_backend_app_api_routes_audit_py"
     },
     {
       "label": "Issue 9 \u2014 Map integrated into Console canvas, map.tsx live wiring",
@@ -1079,9 +1109,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L854",
       "_origin": "ast",
-      "id": "made_till_now_issue_9_map_integrated_into_console_canvas_map_tsx_live_wiring",
       "community": 105,
-      "norm_label": "issue 9 \u2014 map integrated into console canvas, map.tsx live wiring"
+      "norm_label": "issue 9 \u2014 map integrated into console canvas, map.tsx live wiring",
+      "id": "made_till_now_issue_9_map_integrated_into_console_canvas_map_tsx_live_wiring"
     },
     {
       "label": "New Backend Endpoints Added",
@@ -1089,9 +1119,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L864",
       "_origin": "ast",
-      "id": "made_till_now_new_backend_endpoints_added",
       "community": 105,
-      "norm_label": "new backend endpoints added"
+      "norm_label": "new backend endpoints added",
+      "id": "made_till_now_new_backend_endpoints_added"
     },
     {
       "label": "New Files",
@@ -1099,9 +1129,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L868",
       "_origin": "ast",
-      "id": "made_till_now_new_files",
       "community": 105,
-      "norm_label": "new files"
+      "norm_label": "new files",
+      "id": "made_till_now_new_files"
     },
     {
       "label": "Modified Files",
@@ -1109,9 +1139,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L875",
       "_origin": "ast",
-      "id": "made_till_now_modified_files",
       "community": 105,
-      "norm_label": "modified files"
+      "norm_label": "modified files",
+      "id": "made_till_now_modified_files"
     },
     {
       "label": "[2026-06-16] \u2014 E2E Formatting & Global Language Toggle (Issues 10 & 11)",
@@ -1119,9 +1149,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L891",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_e2e_formatting_global_language_toggle_issues_10_11",
       "community": 27,
-      "norm_label": "[2026-06-16] \u2014 e2e formatting & global language toggle (issues 10 & 11)"
+      "norm_label": "[2026-06-16] \u2014 e2e formatting & global language toggle (issues 10 & 11)",
+      "id": "made_till_now_2026_06_16_e2e_formatting_global_language_toggle_issues_10_11"
     },
     {
       "label": "Summary",
@@ -1129,9 +1159,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L893",
       "_origin": "ast",
-      "id": "made_till_now_summary_893",
       "community": 27,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_893"
     },
     {
       "label": "Backend Changes",
@@ -1139,9 +1169,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L896",
       "_origin": "ast",
-      "id": "made_till_now_backend_changes_896",
       "community": 27,
-      "norm_label": "backend changes"
+      "norm_label": "backend changes",
+      "id": "made_till_now_backend_changes_896"
     },
     {
       "label": "Frontend Changes",
@@ -1149,9 +1179,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L900",
       "_origin": "ast",
-      "id": "made_till_now_frontend_changes_900",
       "community": 27,
-      "norm_label": "frontend changes"
+      "norm_label": "frontend changes",
+      "id": "made_till_now_frontend_changes_900"
     },
     {
       "label": "Verification",
@@ -1159,9 +1189,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L912",
       "_origin": "ast",
-      "id": "made_till_now_verification",
       "community": 27,
-      "norm_label": "verification"
+      "norm_label": "verification",
+      "id": "made_till_now_verification"
     },
     {
       "label": "[2026-06-16] \u2014 Secure Auth, Live Audit, Map Trails, Victim Network & Hardcoded Values Cleanup (SATYAM_AUTH_AUDIT_MAP_NETWORK_FIX issues 1\u20135)",
@@ -1169,9 +1199,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L918",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_secure_auth_live_audit_map_trails_victim_network_hardcoded_values_cleanup_satyam_auth_audit_map_network_fix_issues_1_5",
       "community": 157,
-      "norm_label": "[2026-06-16] \u2014 secure auth, live audit, map trails, victim network & hardcoded values cleanup (satyam_auth_audit_map_network_fix issues 1\u20135)"
+      "norm_label": "[2026-06-16] \u2014 secure auth, live audit, map trails, victim network & hardcoded values cleanup (satyam_auth_audit_map_network_fix issues 1\u20135)",
+      "id": "made_till_now_2026_06_16_secure_auth_live_audit_map_trails_victim_network_hardcoded_values_cleanup_satyam_auth_audit_map_network_fix_issues_1_5"
     },
     {
       "label": "Summary",
@@ -1179,9 +1209,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L920",
       "_origin": "ast",
-      "id": "made_till_now_summary_920",
       "community": 157,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_920"
     },
     {
       "label": "Frontend Changes",
@@ -1189,9 +1219,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L923",
       "_origin": "ast",
-      "id": "made_till_now_frontend_changes_923",
       "community": 157,
-      "norm_label": "frontend changes"
+      "norm_label": "frontend changes",
+      "id": "made_till_now_frontend_changes_923"
     },
     {
       "label": "Verification",
@@ -1199,9 +1229,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L945",
       "_origin": "ast",
-      "id": "made_till_now_verification_945",
       "community": 157,
-      "norm_label": "verification"
+      "norm_label": "verification",
+      "id": "made_till_now_verification_945"
     },
     {
       "label": "[2026-06-16] \u2014 Physics Preset Dropdown Positioning & Viewport Overflow Fix",
@@ -1209,9 +1239,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L951",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_physics_preset_dropdown_positioning_viewport_overflow_fix",
       "community": 230,
-      "norm_label": "[2026-06-16] \u2014 physics preset dropdown positioning & viewport overflow fix"
+      "norm_label": "[2026-06-16] \u2014 physics preset dropdown positioning & viewport overflow fix",
+      "id": "made_till_now_2026_06_16_physics_preset_dropdown_positioning_viewport_overflow_fix"
     },
     {
       "label": "Summary",
@@ -1219,9 +1249,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L953",
       "_origin": "ast",
-      "id": "made_till_now_summary_953",
       "community": 230,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_953"
     },
     {
       "label": "Changes",
@@ -1229,9 +1259,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L956",
       "_origin": "ast",
-      "id": "made_till_now_changes_956",
       "community": 230,
-      "norm_label": "changes"
+      "norm_label": "changes",
+      "id": "made_till_now_changes_956"
     },
     {
       "label": "[2026-06-16] \u2014 Physics Parameter Configuration Refactoring",
@@ -1239,9 +1269,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L967",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_physics_parameter_configuration_refactoring",
       "community": 27,
-      "norm_label": "[2026-06-16] \u2014 physics parameter configuration refactoring"
+      "norm_label": "[2026-06-16] \u2014 physics parameter configuration refactoring",
+      "id": "made_till_now_2026_06_16_physics_parameter_configuration_refactoring"
     },
     {
       "label": "Summary",
@@ -1249,9 +1279,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L969",
       "_origin": "ast",
-      "id": "made_till_now_summary_969",
       "community": 27,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_969"
     },
     {
       "label": "Changes",
@@ -1259,9 +1289,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L972",
       "_origin": "ast",
-      "id": "made_till_now_changes_972",
       "community": 27,
-      "norm_label": "changes"
+      "norm_label": "changes",
+      "id": "made_till_now_changes_972"
     },
     {
       "label": "[2026-06-16] \u2014 Voice v2: Two-Language Lock + Hands-Free Conversation Agent (SATYAM_VOICE_CONVERSATION_FEATURE.md)",
@@ -1269,9 +1299,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L987",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_voice_v2_two_language_lock_hands_free_conversation_agent_satyam_voice_conversation_feature_md",
       "community": 107,
-      "norm_label": "[2026-06-16] \u2014 voice v2: two-language lock + hands-free conversation agent (satyam_voice_conversation_feature.md)"
+      "norm_label": "[2026-06-16] \u2014 voice v2: two-language lock + hands-free conversation agent (satyam_voice_conversation_feature.md)",
+      "id": "made_till_now_2026_06_16_voice_v2_two_language_lock_hands_free_conversation_agent_satyam_voice_conversation_feature_md"
     },
     {
       "label": "Summary",
@@ -1279,9 +1309,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L989",
       "_origin": "ast",
-      "id": "made_till_now_summary_989",
       "community": 107,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_989"
     },
     {
       "label": "Bug Fixes",
@@ -1289,9 +1319,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L996",
       "_origin": "ast",
-      "id": "made_till_now_bug_fixes",
       "community": 107,
-      "norm_label": "bug fixes"
+      "norm_label": "bug fixes",
+      "id": "made_till_now_bug_fixes"
     },
     {
       "label": "Architecture: Turn-Taking State Machine",
@@ -1299,9 +1329,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1006",
       "_origin": "ast",
-      "id": "made_till_now_architecture_turn_taking_state_machine",
       "community": 107,
-      "norm_label": "architecture: turn-taking state machine"
+      "norm_label": "architecture: turn-taking state machine",
+      "id": "made_till_now_architecture_turn_taking_state_machine"
     },
     {
       "label": "Changes",
@@ -1309,9 +1339,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1018",
       "_origin": "ast",
-      "id": "made_till_now_changes_1018",
       "community": 107,
-      "norm_label": "changes"
+      "norm_label": "changes",
+      "id": "made_till_now_changes_1018"
     },
     {
       "label": "Verification",
@@ -1319,9 +1349,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1054",
       "_origin": "ast",
-      "id": "made_till_now_verification_1054",
       "community": 107,
-      "norm_label": "verification"
+      "norm_label": "verification",
+      "id": "made_till_now_verification_1054"
     },
     {
       "label": "[2026-06-16] \u2014 Voice Pipeline Fix: Route TTS/STT through Sarvam + Google Provider (SATYAM_VOICE_PIPELINE_SARVAM_FIX.md)",
@@ -1329,9 +1359,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1059",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_voice_pipeline_fix_route_tts_stt_through_sarvam_google_provider_satyam_voice_pipeline_sarvam_fix_md",
       "community": 106,
-      "norm_label": "[2026-06-16] \u2014 voice pipeline fix: route tts/stt through sarvam + google provider (satyam_voice_pipeline_sarvam_fix.md)"
+      "norm_label": "[2026-06-16] \u2014 voice pipeline fix: route tts/stt through sarvam + google provider (satyam_voice_pipeline_sarvam_fix.md)",
+      "id": "made_till_now_2026_06_16_voice_pipeline_fix_route_tts_stt_through_sarvam_google_provider_satyam_voice_pipeline_sarvam_fix_md"
     },
     {
       "label": "Summary",
@@ -1339,9 +1369,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1061",
       "_origin": "ast",
-      "id": "made_till_now_summary_1061",
       "community": 106,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1061"
     },
     {
       "label": "Root Cause (per spec diagnosis)",
@@ -1349,9 +1379,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1073",
       "_origin": "ast",
-      "id": "made_till_now_root_cause_per_spec_diagnosis",
       "community": 106,
-      "norm_label": "root cause (per spec diagnosis)"
+      "norm_label": "root cause (per spec diagnosis)",
+      "id": "made_till_now_root_cause_per_spec_diagnosis"
     },
     {
       "label": "New Files",
@@ -1359,9 +1389,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1080",
       "_origin": "ast",
-      "id": "made_till_now_new_files_1080",
       "community": 106,
-      "norm_label": "new files"
+      "norm_label": "new files",
+      "id": "made_till_now_new_files_1080"
     },
     {
       "label": "Modified Files",
@@ -1369,9 +1399,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1091",
       "_origin": "ast",
-      "id": "made_till_now_modified_files_1091",
       "community": 106,
-      "norm_label": "modified files"
+      "norm_label": "modified files",
+      "id": "made_till_now_modified_files_1091"
     },
     {
       "label": "Architecture: Provider-Agnostic Bridge",
@@ -1379,9 +1409,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1108",
       "_origin": "ast",
-      "id": "made_till_now_architecture_provider_agnostic_bridge",
       "community": 106,
-      "norm_label": "architecture: provider-agnostic bridge"
+      "norm_label": "architecture: provider-agnostic bridge",
+      "id": "made_till_now_architecture_provider_agnostic_bridge"
     },
     {
       "label": "Verification",
@@ -1389,9 +1419,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1125",
       "_origin": "ast",
-      "id": "made_till_now_verification_1125",
       "community": 106,
-      "norm_label": "verification"
+      "norm_label": "verification",
+      "id": "made_till_now_verification_1125"
     },
     {
       "label": "[2026-06-16] \u2014 Voice Output + Input Bug Fix (SATYAM_VOICE_OUTPUT_INPUT_FIX.md)",
@@ -1399,9 +1429,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1136",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_voice_output_input_bug_fix_satyam_voice_output_input_fix_md",
       "community": 99,
-      "norm_label": "[2026-06-16] \u2014 voice output + input bug fix (satyam_voice_output_input_fix.md)"
+      "norm_label": "[2026-06-16] \u2014 voice output + input bug fix (satyam_voice_output_input_fix.md)",
+      "id": "made_till_now_2026_06_16_voice_output_input_bug_fix_satyam_voice_output_input_fix_md"
     },
     {
       "label": "Summary",
@@ -1409,9 +1439,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1138",
       "_origin": "ast",
-      "id": "made_till_now_summary_1138",
       "community": 99,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1138"
     },
     {
       "label": "Bugs Fixed",
@@ -1419,9 +1449,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1145",
       "_origin": "ast",
-      "id": "made_till_now_bugs_fixed",
       "community": 99,
-      "norm_label": "bugs fixed"
+      "norm_label": "bugs fixed",
+      "id": "made_till_now_bugs_fixed"
     },
     {
       "label": "Files Changed",
@@ -1429,9 +1459,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1160",
       "_origin": "ast",
-      "id": "made_till_now_files_changed_1160",
       "community": 99,
-      "norm_label": "files changed"
+      "norm_label": "files changed",
+      "id": "made_till_now_files_changed_1160"
     },
     {
       "label": "Verification",
@@ -1439,9 +1469,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1188",
       "_origin": "ast",
-      "id": "made_till_now_verification_1188",
       "community": 99,
-      "norm_label": "verification"
+      "norm_label": "verification",
+      "id": "made_till_now_verification_1188"
     },
     {
       "label": "[2026-06-16] \u2014 Settings Wiring Verification + Language Auto-Detection + Voice/Text Fixes",
@@ -1449,9 +1479,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1195",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_settings_wiring_verification_language_auto_detection_voice_text_fixes",
       "community": 41,
-      "norm_label": "[2026-06-16] \u2014 settings wiring verification + language auto-detection + voice/text fixes"
+      "norm_label": "[2026-06-16] \u2014 settings wiring verification + language auto-detection + voice/text fixes",
+      "id": "made_till_now_2026_06_16_settings_wiring_verification_language_auto_detection_voice_text_fixes"
     },
     {
       "label": "Summary",
@@ -1459,9 +1489,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1197",
       "_origin": "ast",
-      "id": "made_till_now_summary_1197",
       "community": 41,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1197"
     },
     {
       "label": "TASK 1 \u2014 Settings wiring (verified, one bug fixed)",
@@ -1469,9 +1499,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1202",
       "_origin": "ast",
-      "id": "made_till_now_task_1_settings_wiring_verified_one_bug_fixed",
       "community": 41,
-      "norm_label": "task 1 \u2014 settings wiring (verified, one bug fixed)"
+      "norm_label": "task 1 \u2014 settings wiring (verified, one bug fixed)",
+      "id": "made_till_now_task_1_settings_wiring_verified_one_bug_fixed"
     },
     {
       "label": "TASK 2 \u2014 Language auto-detection",
@@ -1479,9 +1509,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1229",
       "_origin": "ast",
-      "id": "made_till_now_task_2_language_auto_detection",
       "community": 41,
-      "norm_label": "task 2 \u2014 language auto-detection"
+      "norm_label": "task 2 \u2014 language auto-detection",
+      "id": "made_till_now_task_2_language_auto_detection"
     },
     {
       "label": "TASK 3 \u2014 Voice + text wiring gaps fixed",
@@ -1489,9 +1519,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1255",
       "_origin": "ast",
-      "id": "made_till_now_task_3_voice_text_wiring_gaps_fixed",
       "community": 41,
-      "norm_label": "task 3 \u2014 voice + text wiring gaps fixed"
+      "norm_label": "task 3 \u2014 voice + text wiring gaps fixed",
+      "id": "made_till_now_task_3_voice_text_wiring_gaps_fixed"
     },
     {
       "label": "Files Changed",
@@ -1499,9 +1529,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1263",
       "_origin": "ast",
-      "id": "made_till_now_files_changed_1263",
       "community": 41,
-      "norm_label": "files changed"
+      "norm_label": "files changed",
+      "id": "made_till_now_files_changed_1263"
     },
     {
       "label": "Verification",
@@ -1509,9 +1539,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1279",
       "_origin": "ast",
-      "id": "made_till_now_verification_1279",
       "community": 41,
-      "norm_label": "verification"
+      "norm_label": "verification",
+      "id": "made_till_now_verification_1279"
     },
     {
       "label": "[2026-06-16] \u2014 MediaRecorder \u2192 /voice/stt Wiring + Genuine Input Language Auto-Detect (SATYAM_MEDIARECORDER_STT_AUTODETECT_FIX.md)",
@@ -1519,9 +1549,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1288",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_mediarecorder_voice_stt_wiring_genuine_input_language_auto_detect_satyam_mediarecorder_stt_autodetect_fix_md",
       "community": 120,
-      "norm_label": "[2026-06-16] \u2014 mediarecorder \u2192 /voice/stt wiring + genuine input language auto-detect (satyam_mediarecorder_stt_autodetect_fix.md)"
+      "norm_label": "[2026-06-16] \u2014 mediarecorder \u2192 /voice/stt wiring + genuine input language auto-detect (satyam_mediarecorder_stt_autodetect_fix.md)",
+      "id": "made_till_now_2026_06_16_mediarecorder_voice_stt_wiring_genuine_input_language_auto_detect_satyam_mediarecorder_stt_autodetect_fix_md"
     },
     {
       "label": "Summary",
@@ -1529,9 +1559,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1290",
       "_origin": "ast",
-      "id": "made_till_now_summary_1290",
       "community": 120,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1290"
     },
     {
       "label": "Files Changed",
@@ -1539,9 +1569,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1295",
       "_origin": "ast",
-      "id": "made_till_now_files_changed_1295",
       "community": 120,
-      "norm_label": "files changed"
+      "norm_label": "files changed",
+      "id": "made_till_now_files_changed_1295"
     },
     {
       "label": "Architecture: End-to-End Flow",
@@ -1549,9 +1579,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1306",
       "_origin": "ast",
-      "id": "made_till_now_architecture_end_to_end_flow",
       "community": 120,
-      "norm_label": "architecture: end-to-end flow"
+      "norm_label": "architecture: end-to-end flow",
+      "id": "made_till_now_architecture_end_to_end_flow"
     },
     {
       "label": "Key Design Decisions",
@@ -1559,9 +1589,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1326",
       "_origin": "ast",
-      "id": "made_till_now_key_design_decisions",
       "community": 120,
-      "norm_label": "key design decisions"
+      "norm_label": "key design decisions",
+      "id": "made_till_now_key_design_decisions"
     },
     {
       "label": "Verification",
@@ -1569,9 +1599,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1335",
       "_origin": "ast",
-      "id": "made_till_now_verification_1335",
       "community": 120,
-      "norm_label": "verification"
+      "norm_label": "verification",
+      "id": "made_till_now_verification_1335"
     },
     {
       "label": "[2026-06-16] \u2014 Root-Cause Fix: Voice Input Dead + Chat 422 on Google Voice",
@@ -1579,9 +1609,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1343",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_root_cause_fix_voice_input_dead_chat_422_on_google_voice",
       "community": 123,
-      "norm_label": "[2026-06-16] \u2014 root-cause fix: voice input dead + chat 422 on google voice"
+      "norm_label": "[2026-06-16] \u2014 root-cause fix: voice input dead + chat 422 on google voice",
+      "id": "made_till_now_2026_06_16_root_cause_fix_voice_input_dead_chat_422_on_google_voice"
     },
     {
       "label": "Diagnosis (evidence-based)",
@@ -1589,9 +1619,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1345",
       "_origin": "ast",
-      "id": "made_till_now_diagnosis_evidence_based",
       "community": 123,
-      "norm_label": "diagnosis (evidence-based)"
+      "norm_label": "diagnosis (evidence-based)",
+      "id": "made_till_now_diagnosis_evidence_based"
     },
     {
       "label": "Root Cause 1 (voice input dead) \u2014 `frontend/src/lib/voice/recorder.ts`",
@@ -1599,9 +1629,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1354",
       "_origin": "ast",
-      "id": "made_till_now_root_cause_1_voice_input_dead_frontend_src_lib_voice_recorder_ts",
       "community": 123,
-      "norm_label": "root cause 1 (voice input dead) \u2014 `frontend/src/lib/voice/recorder.ts`"
+      "norm_label": "root cause 1 (voice input dead) \u2014 `frontend/src/lib/voice/recorder.ts`",
+      "id": "made_till_now_root_cause_1_voice_input_dead_frontend_src_lib_voice_recorder_ts"
     },
     {
       "label": "Root Cause 2 (chat 422 when Google voice selected) \u2014 `backend/app/schemas/chat.py`",
@@ -1609,9 +1639,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1362",
       "_origin": "ast",
-      "id": "made_till_now_root_cause_2_chat_422_when_google_voice_selected_backend_app_schemas_chat_py",
       "community": 123,
-      "norm_label": "root cause 2 (chat 422 when google voice selected) \u2014 `backend/app/schemas/chat.py`"
+      "norm_label": "root cause 2 (chat 422 when google voice selected) \u2014 `backend/app/schemas/chat.py`",
+      "id": "made_till_now_root_cause_2_chat_422_when_google_voice_selected_backend_app_schemas_chat_py"
     },
     {
       "label": "Files Changed",
@@ -1619,9 +1649,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1367",
       "_origin": "ast",
-      "id": "made_till_now_files_changed_1367",
       "community": 123,
-      "norm_label": "files changed"
+      "norm_label": "files changed",
+      "id": "made_till_now_files_changed_1367"
     },
     {
       "label": "Verification",
@@ -1629,9 +1659,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1373",
       "_origin": "ast",
-      "id": "made_till_now_verification_1373",
       "community": 123,
-      "norm_label": "verification"
+      "norm_label": "verification",
+      "id": "made_till_now_verification_1373"
     },
     {
       "label": "[2026-06-16] \u2014 Voice VAD Sensitivity, API Testing Utility & Graphify Analysis",
@@ -1639,9 +1669,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1380",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_voice_vad_sensitivity_api_testing_utility_graphify_analysis",
       "community": 162,
-      "norm_label": "[2026-06-16] \u2014 voice vad sensitivity, api testing utility & graphify analysis"
+      "norm_label": "[2026-06-16] \u2014 voice vad sensitivity, api testing utility & graphify analysis",
+      "id": "made_till_now_2026_06_16_voice_vad_sensitivity_api_testing_utility_graphify_analysis"
     },
     {
       "label": "Summary",
@@ -1649,9 +1679,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1382",
       "_origin": "ast",
-      "id": "made_till_now_summary_1382",
       "community": 162,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1382"
     },
     {
       "label": "Changes",
@@ -1659,9 +1689,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1385",
       "_origin": "ast",
-      "id": "made_till_now_changes_1385",
       "community": 162,
-      "norm_label": "changes"
+      "norm_label": "changes",
+      "id": "made_till_now_changes_1385"
     },
     {
       "label": "Verification",
@@ -1669,9 +1699,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1396",
       "_origin": "ast",
-      "id": "made_till_now_verification_1396",
       "community": 162,
-      "norm_label": "verification"
+      "norm_label": "verification",
+      "id": "made_till_now_verification_1396"
     },
     {
       "label": "[2026-06-16] \u2014 Voice Input: Replace Web Audio with Browser SpeechRecognition Only",
@@ -1679,9 +1709,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1405",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_voice_input_replace_web_audio_with_browser_speechrecognition_only",
       "community": 186,
-      "norm_label": "[2026-06-16] \u2014 voice input: replace web audio with browser speechrecognition only"
+      "norm_label": "[2026-06-16] \u2014 voice input: replace web audio with browser speechrecognition only",
+      "id": "made_till_now_2026_06_16_voice_input_replace_web_audio_with_browser_speechrecognition_only"
     },
     {
       "label": "Summary",
@@ -1689,9 +1719,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1407",
       "_origin": "ast",
-      "id": "made_till_now_summary_1407",
       "community": 186,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1407"
     },
     {
       "label": "Files Changed",
@@ -1699,9 +1729,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1410",
       "_origin": "ast",
-      "id": "made_till_now_files_changed_1410",
       "community": 186,
-      "norm_label": "files changed"
+      "norm_label": "files changed",
+      "id": "made_till_now_files_changed_1410"
     },
     {
       "label": "[2026-06-16] \u2014 Settings: Show Downloaded Local Models (BGE-M3 + bge-reranker-v2-m3)",
@@ -1709,9 +1739,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1416",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_settings_show_downloaded_local_models_bge_m3_bge_reranker_v2_m3",
       "community": 234,
-      "norm_label": "[2026-06-16] \u2014 settings: show downloaded local models (bge-m3 + bge-reranker-v2-m3)"
+      "norm_label": "[2026-06-16] \u2014 settings: show downloaded local models (bge-m3 + bge-reranker-v2-m3)",
+      "id": "made_till_now_2026_06_16_settings_show_downloaded_local_models_bge_m3_bge_reranker_v2_m3"
     },
     {
       "label": "Summary",
@@ -1719,9 +1749,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1418",
       "_origin": "ast",
-      "id": "made_till_now_summary_1418",
       "community": 234,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1418"
     },
     {
       "label": "Files Changed",
@@ -1729,9 +1759,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1421",
       "_origin": "ast",
-      "id": "made_till_now_files_changed_1421",
       "community": 234,
-      "norm_label": "files changed"
+      "norm_label": "files changed",
+      "id": "made_till_now_files_changed_1421"
     },
     {
       "label": "[2026-06-16] \u2014 Settings Dialog Layout Fix (Overflow)",
@@ -1739,9 +1769,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1435",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_settings_dialog_layout_fix_overflow",
       "community": 27,
-      "norm_label": "[2026-06-16] \u2014 settings dialog layout fix (overflow)"
+      "norm_label": "[2026-06-16] \u2014 settings dialog layout fix (overflow)",
+      "id": "made_till_now_2026_06_16_settings_dialog_layout_fix_overflow"
     },
     {
       "label": "Summary",
@@ -1749,9 +1779,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1437",
       "_origin": "ast",
-      "id": "made_till_now_summary_1437",
       "community": 27,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1437"
     },
     {
       "label": "Files Changed",
@@ -1759,9 +1789,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1440",
       "_origin": "ast",
-      "id": "made_till_now_files_changed_1440",
       "community": 27,
-      "norm_label": "files changed"
+      "norm_label": "files changed",
+      "id": "made_till_now_files_changed_1440"
     },
     {
       "label": "[2026-06-16] \u2014 Voice Input Self-Healing: No-Frames Watchdog + Auto-Submit + Fallback",
@@ -1769,9 +1799,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1449",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_voice_input_self_healing_no_frames_watchdog_auto_submit_fallback",
       "community": 239,
-      "norm_label": "[2026-06-16] \u2014 voice input self-healing: no-frames watchdog + auto-submit + fallback"
+      "norm_label": "[2026-06-16] \u2014 voice input self-healing: no-frames watchdog + auto-submit + fallback",
+      "id": "made_till_now_2026_06_16_voice_input_self_healing_no_frames_watchdog_auto_submit_fallback"
     },
     {
       "label": "Summary",
@@ -1779,9 +1809,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1451",
       "_origin": "ast",
-      "id": "made_till_now_summary_1451",
       "community": 239,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1451"
     },
     {
       "label": "Files Changed",
@@ -1789,9 +1819,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1454",
       "_origin": "ast",
-      "id": "made_till_now_files_changed_1454",
       "community": 239,
-      "norm_label": "files changed"
+      "norm_label": "files changed",
+      "id": "made_till_now_files_changed_1454"
     },
     {
       "label": "[2026-06-16] \u2014 Network Screen: Fix `BUILTIN_PRESETS` Crash + i18n Duplicate Key + vite.config",
@@ -1799,9 +1829,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1460",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_network_screen_fix_builtin_presets_crash_i18n_duplicate_key_vite_config",
       "community": 27,
-      "norm_label": "[2026-06-16] \u2014 network screen: fix `builtin_presets` crash + i18n duplicate key + vite.config"
+      "norm_label": "[2026-06-16] \u2014 network screen: fix `builtin_presets` crash + i18n duplicate key + vite.config",
+      "id": "made_till_now_2026_06_16_network_screen_fix_builtin_presets_crash_i18n_duplicate_key_vite_config"
     },
     {
       "label": "Summary",
@@ -1809,9 +1839,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1462",
       "_origin": "ast",
-      "id": "made_till_now_summary_1462",
       "community": 27,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1462"
     },
     {
       "label": "[2026-06-16] \u2014 Model Routing Health Check + Startup Log + Gemini Per-Call Debug",
@@ -1819,9 +1849,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1473",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_model_routing_health_check_startup_log_gemini_per_call_debug",
       "community": 128,
-      "norm_label": "[2026-06-16] \u2014 model routing health check + startup log + gemini per-call debug"
+      "norm_label": "[2026-06-16] \u2014 model routing health check + startup log + gemini per-call debug",
+      "id": "made_till_now_2026_06_16_model_routing_health_check_startup_log_gemini_per_call_debug"
     },
     {
       "label": "Summary",
@@ -1829,9 +1859,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1475",
       "_origin": "ast",
-      "id": "made_till_now_summary_1475",
       "community": 128,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1475"
     },
     {
       "label": "Verified output of `curl http://localhost:8000/health/models`",
@@ -1839,9 +1869,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1478",
       "_origin": "ast",
-      "id": "made_till_now_verified_output_of_curl_http_localhost_8000_health_models",
       "community": 128,
-      "norm_label": "verified output of `curl http://localhost:8000/health/models`"
+      "norm_label": "verified output of `curl http://localhost:8000/health/models`",
+      "id": "made_till_now_verified_output_of_curl_http_localhost_8000_health_models"
     },
     {
       "label": "Startup log (printed once at every boot)",
@@ -1849,9 +1879,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1501",
       "_origin": "ast",
-      "id": "made_till_now_startup_log_printed_once_at_every_boot",
       "community": 128,
-      "norm_label": "startup log (printed once at every boot)"
+      "norm_label": "startup log (printed once at every boot)",
+      "id": "made_till_now_startup_log_printed_once_at_every_boot"
     },
     {
       "label": "Files Changed",
@@ -1859,9 +1889,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1506",
       "_origin": "ast",
-      "id": "made_till_now_files_changed_1506",
       "community": 128,
-      "norm_label": "files changed"
+      "norm_label": "files changed",
+      "id": "made_till_now_files_changed_1506"
     },
     {
       "label": "[2026-06-16] \u2014 Voice Input: MediaRecorder \u2192 Pure SpeechRecognition + UI Redesign",
@@ -1869,9 +1899,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1515",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_voice_input_mediarecorder_pure_speechrecognition_ui_redesign",
       "community": 27,
-      "norm_label": "[2026-06-16] \u2014 voice input: mediarecorder \u2192 pure speechrecognition + ui redesign"
+      "norm_label": "[2026-06-16] \u2014 voice input: mediarecorder \u2192 pure speechrecognition + ui redesign",
+      "id": "made_till_now_2026_06_16_voice_input_mediarecorder_pure_speechrecognition_ui_redesign"
     },
     {
       "label": "Summary",
@@ -1879,9 +1909,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1517",
       "_origin": "ast",
-      "id": "made_till_now_summary_1517",
       "community": 27,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1517"
     },
     {
       "label": "Root Cause of \"not hearing me\"",
@@ -1889,9 +1919,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1520",
       "_origin": "ast",
-      "id": "made_till_now_root_cause_of_not_hearing_me",
       "community": 27,
-      "norm_label": "root cause of \"not hearing me\""
+      "norm_label": "root cause of \"not hearing me\"",
+      "id": "made_till_now_root_cause_of_not_hearing_me"
     },
     {
       "label": "Files Changed",
@@ -1899,9 +1929,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1523",
       "_origin": "ast",
-      "id": "made_till_now_files_changed_1523",
       "community": 27,
-      "norm_label": "files changed"
+      "norm_label": "files changed",
+      "id": "made_till_now_files_changed_1523"
     },
     {
       "label": "[2026-06-16] \u2014 Voice Panel UI Redesign (neobrutalist)",
@@ -1909,9 +1939,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1536",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_voice_panel_ui_redesign_neobrutalist",
       "community": 27,
-      "norm_label": "[2026-06-16] \u2014 voice panel ui redesign (neobrutalist)"
+      "norm_label": "[2026-06-16] \u2014 voice panel ui redesign (neobrutalist)",
+      "id": "made_till_now_2026_06_16_voice_panel_ui_redesign_neobrutalist"
     },
     {
       "label": "Summary",
@@ -1919,9 +1949,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1538",
       "_origin": "ast",
-      "id": "made_till_now_summary_1538",
       "community": 27,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1538"
     },
     {
       "label": "New Layout",
@@ -1929,9 +1959,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1541",
       "_origin": "ast",
-      "id": "made_till_now_new_layout",
       "community": 27,
-      "norm_label": "new layout"
+      "norm_label": "new layout",
+      "id": "made_till_now_new_layout"
     },
     {
       "label": "[2026-06-16] \u2014 Bug Fix: \"Found no matching records\" for \"top crimes\" queries",
@@ -1939,9 +1969,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1554",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_bug_fix_found_no_matching_records_for_top_crimes_queries",
       "community": 130,
-      "norm_label": "[2026-06-16] \u2014 bug fix: \"found no matching records\" for \"top crimes\" queries"
+      "norm_label": "[2026-06-16] \u2014 bug fix: \"found no matching records\" for \"top crimes\" queries",
+      "id": "made_till_now_2026_06_16_bug_fix_found_no_matching_records_for_top_crimes_queries"
     },
     {
       "label": "Summary",
@@ -1949,9 +1979,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1556",
       "_origin": "ast",
-      "id": "made_till_now_summary_1556",
       "community": 130,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1556"
     },
     {
       "label": "Root Cause 1 \u2014 Router mis-classification",
@@ -1959,9 +1989,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1559",
       "_origin": "ast",
-      "id": "made_till_now_root_cause_1_router_mis_classification",
       "community": 130,
-      "norm_label": "root cause 1 \u2014 router mis-classification"
+      "norm_label": "root cause 1 \u2014 router mis-classification",
+      "id": "made_till_now_root_cause_1_router_mis_classification"
     },
     {
       "label": "Root Cause 2 \u2014 Gemini 429 with no SQL fallback",
@@ -1969,9 +1999,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1564",
       "_origin": "ast",
-      "id": "made_till_now_root_cause_2_gemini_429_with_no_sql_fallback",
       "community": 130,
-      "norm_label": "root cause 2 \u2014 gemini 429 with no sql fallback"
+      "norm_label": "root cause 2 \u2014 gemini 429 with no sql fallback",
+      "id": "made_till_now_root_cause_2_gemini_429_with_no_sql_fallback"
     },
     {
       "label": "Files Changed",
@@ -1979,9 +2009,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1567",
       "_origin": "ast",
-      "id": "made_till_now_files_changed_1567",
       "community": 130,
-      "norm_label": "files changed"
+      "norm_label": "files changed",
+      "id": "made_till_now_files_changed_1567"
     },
     {
       "label": "Verified",
@@ -1989,9 +2019,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1576",
       "_origin": "ast",
-      "id": "made_till_now_verified",
       "community": 130,
-      "norm_label": "verified"
+      "norm_label": "verified",
+      "id": "made_till_now_verified"
     },
     {
       "label": "Known Limitation",
@@ -1999,9 +2029,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1582",
       "_origin": "ast",
-      "id": "made_till_now_known_limitation",
       "community": 130,
-      "norm_label": "known limitation"
+      "norm_label": "known limitation",
+      "id": "made_till_now_known_limitation"
     },
     {
       "label": "[2026-06-16] \u2014 Intelligence Feature Architecture (PS2/PS5/PS6/PS8/PS3/PS4) \u2014 Full E2E Implementation",
@@ -2009,9 +2039,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1587",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_intelligence_feature_architecture_ps2_ps5_ps6_ps8_ps3_ps4_full_e2e_implementation",
       "community": 118,
-      "norm_label": "[2026-06-16] \u2014 intelligence feature architecture (ps2/ps5/ps6/ps8/ps3/ps4) \u2014 full e2e implementation"
+      "norm_label": "[2026-06-16] \u2014 intelligence feature architecture (ps2/ps5/ps6/ps8/ps3/ps4) \u2014 full e2e implementation",
+      "id": "made_till_now_2026_06_16_intelligence_feature_architecture_ps2_ps5_ps6_ps8_ps3_ps4_full_e2e_implementation"
     },
     {
       "label": "Summary",
@@ -2019,9 +2049,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1589",
       "_origin": "ast",
-      "id": "made_till_now_summary_1589",
       "community": 118,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1589"
     },
     {
       "label": "New Backend Files",
@@ -2029,9 +2059,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1594",
       "_origin": "ast",
-      "id": "made_till_now_new_backend_files",
       "community": 118,
-      "norm_label": "new backend files"
+      "norm_label": "new backend files",
+      "id": "made_till_now_new_backend_files"
     },
     {
       "label": "Modified Backend Files",
@@ -2039,9 +2069,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1602",
       "_origin": "ast",
-      "id": "made_till_now_modified_backend_files",
       "community": 118,
-      "norm_label": "modified backend files"
+      "norm_label": "modified backend files",
+      "id": "made_till_now_modified_backend_files"
     },
     {
       "label": "New Frontend Files",
@@ -2049,9 +2079,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1605",
       "_origin": "ast",
-      "id": "made_till_now_new_frontend_files",
       "community": 118,
-      "norm_label": "new frontend files"
+      "norm_label": "new frontend files",
+      "id": "made_till_now_new_frontend_files"
     },
     {
       "label": "Modified Frontend Files",
@@ -2059,9 +2089,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1615",
       "_origin": "ast",
-      "id": "made_till_now_modified_frontend_files",
       "community": 118,
-      "norm_label": "modified frontend files"
+      "norm_label": "modified frontend files",
+      "id": "made_till_now_modified_frontend_files"
     },
     {
       "label": "All 16 Endpoints Verified \u2705",
@@ -2069,9 +2099,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1621",
       "_origin": "ast",
-      "id": "made_till_now_all_16_endpoints_verified",
       "community": 118,
-      "norm_label": "all 16 endpoints verified \u2705"
+      "norm_label": "all 16 endpoints verified \u2705",
+      "id": "made_till_now_all_16_endpoints_verified"
     },
     {
       "label": "RBAC",
@@ -2079,9 +2109,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1643",
       "_origin": "ast",
-      "id": "made_till_now_rbac",
       "community": 118,
-      "norm_label": "rbac"
+      "norm_label": "rbac",
+      "id": "made_till_now_rbac"
     },
     {
       "label": "Frontend compile: 0 errors",
@@ -2089,9 +2119,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1649",
       "_origin": "ast",
-      "id": "made_till_now_frontend_compile_0_errors",
       "community": 118,
-      "norm_label": "frontend compile: 0 errors"
+      "norm_label": "frontend compile: 0 errors",
+      "id": "made_till_now_frontend_compile_0_errors"
     },
     {
       "label": "[2026-06-16] \u2014 Forecast Screen: UI Redesign + Dynamic Data (All Hardcoded Values Removed)",
@@ -2099,9 +2129,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1653",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_16_forecast_screen_ui_redesign_dynamic_data_all_hardcoded_values_removed",
       "community": 156,
-      "norm_label": "[2026-06-16] \u2014 forecast screen: ui redesign + dynamic data (all hardcoded values removed)"
+      "norm_label": "[2026-06-16] \u2014 forecast screen: ui redesign + dynamic data (all hardcoded values removed)",
+      "id": "made_till_now_2026_06_16_forecast_screen_ui_redesign_dynamic_data_all_hardcoded_values_removed"
     },
     {
       "label": "Summary",
@@ -2109,9 +2139,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1655",
       "_origin": "ast",
-      "id": "made_till_now_summary_1655",
       "community": 156,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1655"
     },
     {
       "label": "Root Cause (Empty Alerts)",
@@ -2119,9 +2149,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1660",
       "_origin": "ast",
-      "id": "made_till_now_root_cause_empty_alerts",
       "community": 156,
-      "norm_label": "root cause (empty alerts)"
+      "norm_label": "root cause (empty alerts)",
+      "id": "made_till_now_root_cause_empty_alerts"
     },
     {
       "label": "Backend Changes \u2014 `backend/app/services/intelligence_service.py`",
@@ -2129,9 +2159,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1665",
       "_origin": "ast",
-      "id": "made_till_now_backend_changes_backend_app_services_intelligence_service_py",
       "community": 156,
-      "norm_label": "backend changes \u2014 `backend/app/services/intelligence_service.py`"
+      "norm_label": "backend changes \u2014 `backend/app/services/intelligence_service.py`",
+      "id": "made_till_now_backend_changes_backend_app_services_intelligence_service_py"
     },
     {
       "label": "Frontend Changes",
@@ -2139,9 +2169,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1690",
       "_origin": "ast",
-      "id": "made_till_now_frontend_changes_1690",
       "community": 156,
-      "norm_label": "frontend changes"
+      "norm_label": "frontend changes",
+      "id": "made_till_now_frontend_changes_1690"
     },
     {
       "label": "Verified",
@@ -2149,9 +2179,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1713",
       "_origin": "ast",
-      "id": "made_till_now_verified_1713",
       "community": 156,
-      "norm_label": "verified"
+      "norm_label": "verified",
+      "id": "made_till_now_verified_1713"
     },
     {
       "label": "[2026-06-17] \u2014 Dataset Schema Extension: PS4 Socio-Economic + PS7 Financial Tables",
@@ -2159,9 +2189,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1721",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_17_dataset_schema_extension_ps4_socio_economic_ps7_financial_tables",
       "community": 166,
-      "norm_label": "[2026-06-17] \u2014 dataset schema extension: ps4 socio-economic + ps7 financial tables"
+      "norm_label": "[2026-06-17] \u2014 dataset schema extension: ps4 socio-economic + ps7 financial tables",
+      "id": "made_till_now_2026_06_17_dataset_schema_extension_ps4_socio_economic_ps7_financial_tables"
     },
     {
       "label": "Summary",
@@ -2169,9 +2199,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1723",
       "_origin": "ast",
-      "id": "made_till_now_summary_1723",
       "community": 166,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1723"
     },
     {
       "label": "Files Changed",
@@ -2179,9 +2209,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1733",
       "_origin": "ast",
-      "id": "made_till_now_files_changed_1733",
       "community": 166,
-      "norm_label": "files changed"
+      "norm_label": "files changed",
+      "id": "made_till_now_files_changed_1733"
     },
     {
       "label": "Verification Results",
@@ -2189,9 +2219,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1768",
       "_origin": "ast",
-      "id": "made_till_now_verification_results_1768",
       "community": 166,
-      "norm_label": "verification results"
+      "norm_label": "verification results",
+      "id": "made_till_now_verification_results_1768"
     },
     {
       "label": "After loading, expected row counts",
@@ -2199,9 +2229,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1780",
       "_origin": "ast",
-      "id": "made_till_now_after_loading_expected_row_counts",
       "community": 166,
-      "norm_label": "after loading, expected row counts"
+      "norm_label": "after loading, expected row counts",
+      "id": "made_till_now_after_loading_expected_row_counts"
     },
     {
       "label": "Ethics notes preserved in code",
@@ -2209,9 +2239,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1787",
       "_origin": "ast",
-      "id": "made_till_now_ethics_notes_preserved_in_code",
       "community": 166,
-      "norm_label": "ethics notes preserved in code"
+      "norm_label": "ethics notes preserved in code",
+      "id": "made_till_now_ethics_notes_preserved_in_code"
     },
     {
       "label": "[2026-06-17] \u2014 PS4/PS7 Tables: Local + Neon Migration + Data Load",
@@ -2219,9 +2249,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1794",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_17_ps4_ps7_tables_local_neon_migration_data_load",
       "community": 167,
-      "norm_label": "[2026-06-17] \u2014 ps4/ps7 tables: local + neon migration + data load"
+      "norm_label": "[2026-06-17] \u2014 ps4/ps7 tables: local + neon migration + data load",
+      "id": "made_till_now_2026_06_17_ps4_ps7_tables_local_neon_migration_data_load"
     },
     {
       "label": "Summary",
@@ -2229,9 +2259,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1796",
       "_origin": "ast",
-      "id": "made_till_now_summary_1796",
       "community": 167,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1796"
     },
     {
       "label": "New file: `backend/migrations/003_add_ps4_ps7_tables.sql`",
@@ -2239,9 +2269,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1801",
       "_origin": "ast",
-      "id": "made_till_now_new_file_backend_migrations_003_add_ps4_ps7_tables_sql",
       "community": 167,
-      "norm_label": "new file: `backend/migrations/003_add_ps4_ps7_tables.sql`"
+      "norm_label": "new file: `backend/migrations/003_add_ps4_ps7_tables.sql`",
+      "id": "made_till_now_new_file_backend_migrations_003_add_ps4_ps7_tables_sql"
     },
     {
       "label": "New file: `backend/seed/load_new_tables.py`",
@@ -2249,9 +2279,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1804",
       "_origin": "ast",
-      "id": "made_till_now_new_file_backend_seed_load_new_tables_py",
       "community": 167,
-      "norm_label": "new file: `backend/seed/load_new_tables.py`"
+      "norm_label": "new file: `backend/seed/load_new_tables.py`",
+      "id": "made_till_now_new_file_backend_seed_load_new_tables_py"
     },
     {
       "label": "Migration Results",
@@ -2259,9 +2289,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1813",
       "_origin": "ast",
-      "id": "made_till_now_migration_results",
       "community": 167,
-      "norm_label": "migration results"
+      "norm_label": "migration results",
+      "id": "made_till_now_migration_results"
     },
     {
       "label": "Neon storage note",
@@ -2269,9 +2299,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1824",
       "_origin": "ast",
-      "id": "made_till_now_neon_storage_note",
       "community": 167,
-      "norm_label": "neon storage note"
+      "norm_label": "neon storage note",
+      "id": "made_till_now_neon_storage_note"
     },
     {
       "label": "[2026-06-17] \u2014 Neon Cloud: Reseed with 60% Dataset to Free Storage Space",
@@ -2279,9 +2309,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1833",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_17_neon_cloud_reseed_with_60_dataset_to_free_storage_space",
       "community": 159,
-      "norm_label": "[2026-06-17] \u2014 neon cloud: reseed with 60% dataset to free storage space"
+      "norm_label": "[2026-06-17] \u2014 neon cloud: reseed with 60% dataset to free storage space",
+      "id": "made_till_now_2026_06_17_neon_cloud_reseed_with_60_dataset_to_free_storage_space"
     },
     {
       "label": "Problem",
@@ -2289,9 +2319,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1835",
       "_origin": "ast",
-      "id": "made_till_now_problem",
       "community": 159,
-      "norm_label": "problem"
+      "norm_label": "problem",
+      "id": "made_till_now_problem"
     },
     {
       "label": "Solution",
@@ -2299,9 +2329,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1838",
       "_origin": "ast",
-      "id": "made_till_now_solution",
       "community": 159,
-      "norm_label": "solution"
+      "norm_label": "solution",
+      "id": "made_till_now_solution"
     },
     {
       "label": "Final Neon row counts after reseed",
@@ -2309,9 +2339,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1841",
       "_origin": "ast",
-      "id": "made_till_now_final_neon_row_counts_after_reseed",
       "community": 159,
-      "norm_label": "final neon row counts after reseed"
+      "norm_label": "final neon row counts after reseed",
+      "id": "made_till_now_final_neon_row_counts_after_reseed"
     },
     {
       "label": "Storage",
@@ -2319,9 +2349,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1855",
       "_origin": "ast",
-      "id": "made_till_now_storage",
       "community": 159,
-      "norm_label": "storage"
+      "norm_label": "storage",
+      "id": "made_till_now_storage"
     },
     {
       "label": "FK verification",
@@ -2329,9 +2359,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1859",
       "_origin": "ast",
-      "id": "made_till_now_fk_verification",
       "community": 159,
-      "norm_label": "fk verification"
+      "norm_label": "fk verification",
+      "id": "made_till_now_fk_verification"
     },
     {
       "label": "New file",
@@ -2339,9 +2369,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1864",
       "_origin": "ast",
-      "id": "made_till_now_new_file",
       "community": 159,
-      "norm_label": "new file"
+      "norm_label": "new file",
+      "id": "made_till_now_new_file"
     },
     {
       "label": "Local PostgreSQL 17",
@@ -2349,9 +2379,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1867",
       "_origin": "ast",
-      "id": "made_till_now_local_postgresql_17",
       "community": 159,
-      "norm_label": "local postgresql 17"
+      "norm_label": "local postgresql 17",
+      "id": "made_till_now_local_postgresql_17"
     },
     {
       "label": "[2026-06-17] \u2014 Landing Page: Full-Screen Background Video + Hero UI Improvements",
@@ -2359,9 +2389,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1872",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_17_landing_page_full_screen_background_video_hero_ui_improvements",
       "community": 171,
-      "norm_label": "[2026-06-17] \u2014 landing page: full-screen background video + hero ui improvements"
+      "norm_label": "[2026-06-17] \u2014 landing page: full-screen background video + hero ui improvements",
+      "id": "made_till_now_2026_06_17_landing_page_full_screen_background_video_hero_ui_improvements"
     },
     {
       "label": "Summary",
@@ -2369,9 +2399,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1874",
       "_origin": "ast",
-      "id": "made_till_now_summary_1874",
       "community": 171,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1874"
     },
     {
       "label": "File Changed: `frontend/src/routes/index.tsx`",
@@ -2379,9 +2409,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1879",
       "_origin": "ast",
-      "id": "made_till_now_file_changed_frontend_src_routes_index_tsx",
       "community": 171,
-      "norm_label": "file changed: `frontend/src/routes/index.tsx`"
+      "norm_label": "file changed: `frontend/src/routes/index.tsx`",
+      "id": "made_till_now_file_changed_frontend_src_routes_index_tsx"
     },
     {
       "label": "[2026-06-17] \u2014 Transcripts Screen: Dynamic Data + Demo Seeds + UX Improvements",
@@ -2389,9 +2419,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1907",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_17_transcripts_screen_dynamic_data_demo_seeds_ux_improvements",
       "community": 27,
-      "norm_label": "[2026-06-17] \u2014 transcripts screen: dynamic data + demo seeds + ux improvements"
+      "norm_label": "[2026-06-17] \u2014 transcripts screen: dynamic data + demo seeds + ux improvements",
+      "id": "made_till_now_2026_06_17_transcripts_screen_dynamic_data_demo_seeds_ux_improvements"
     },
     {
       "label": "Summary",
@@ -2399,9 +2429,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1909",
       "_origin": "ast",
-      "id": "made_till_now_summary_1909",
       "community": 27,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1909"
     },
     {
       "label": "File Changed: `frontend/src/routes/transcripts.tsx` \u2014 full rewrite",
@@ -2409,9 +2439,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1912",
       "_origin": "ast",
-      "id": "made_till_now_file_changed_frontend_src_routes_transcripts_tsx_full_rewrite",
       "community": 27,
-      "norm_label": "file changed: `frontend/src/routes/transcripts.tsx` \u2014 full rewrite"
+      "norm_label": "file changed: `frontend/src/routes/transcripts.tsx` \u2014 full rewrite",
+      "id": "made_till_now_file_changed_frontend_src_routes_transcripts_tsx_full_rewrite"
     },
     {
       "label": "[2026-06-17] \u2014 Router Fix: Forecast + Trends Added to Shell Nav Rail",
@@ -2419,9 +2449,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1928",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_17_router_fix_forecast_trends_added_to_shell_nav_rail",
       "community": 27,
-      "norm_label": "[2026-06-17] \u2014 router fix: forecast + trends added to shell nav rail"
+      "norm_label": "[2026-06-17] \u2014 router fix: forecast + trends added to shell nav rail",
+      "id": "made_till_now_2026_06_17_router_fix_forecast_trends_added_to_shell_nav_rail"
     },
     {
       "label": "Summary",
@@ -2429,9 +2459,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1930",
       "_origin": "ast",
-      "id": "made_till_now_summary_1930",
       "community": 27,
-      "norm_label": "summary"
+      "norm_label": "summary",
+      "id": "made_till_now_summary_1930"
     },
     {
       "label": "File Changed: `frontend/src/components/Shell.tsx`",
@@ -2439,9 +2469,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1933",
       "_origin": "ast",
-      "id": "made_till_now_file_changed_frontend_src_components_shell_tsx",
       "community": 27,
-      "norm_label": "file changed: `frontend/src/components/shell.tsx`"
+      "norm_label": "file changed: `frontend/src/components/shell.tsx`",
+      "id": "made_till_now_file_changed_frontend_src_components_shell_tsx"
     },
     {
       "label": "[2026-06-17] \u2014 Critical Bug Fix: Gemini 2.5 Flash Markdown Fences Breaking SQL Pipeline",
@@ -2449,9 +2479,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1938",
       "_origin": "ast",
-      "id": "made_till_now_2026_06_17_critical_bug_fix_gemini_2_5_flash_markdown_fences_breaking_sql_pipeline",
       "community": 27,
-      "norm_label": "[2026-06-17] \u2014 critical bug fix: gemini 2.5 flash markdown fences breaking sql pipeline"
+      "norm_label": "[2026-06-17] \u2014 critical bug fix: gemini 2.5 flash markdown fences breaking sql pipeline",
+      "id": "made_till_now_2026_06_17_critical_bug_fix_gemini_2_5_flash_markdown_fences_breaking_sql_pipeline"
     },
     {
       "label": "Root Cause",
@@ -2459,9 +2489,9 @@
       "source_file": "made_till_now.md",
       "source_location": "L1940",
       "_origin": "ast",
-      "id": "made_till_now_root_cause",
       "community": 27,
-      "norm_label": "root cause"
+      "norm_label": "root cause",
+      "id": "made_till_now_root_cause"
     },
     {
       "label": "DispatchPanel.tsx",
@@ -9272,36 +9302,6 @@
       "community": 16,
       "norm_label": "tauto()",
       "id": "lib_tdata_tauto"
-    },
-    {
-      "label": "CaseDrawer.tsx",
-      "file_type": "code",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 115,
-      "norm_label": "casedrawer.tsx",
-      "id": "components_casedrawer"
-    },
-    {
-      "label": "CaseDrawer()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L9",
-      "_origin": "ast",
-      "community": 115,
-      "norm_label": "casedrawer()",
-      "id": "components_casedrawer_casedrawer"
-    },
-    {
-      "label": "Field()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L379",
-      "_origin": "ast",
-      "community": 115,
-      "norm_label": "field()",
-      "id": "components_casedrawer_field"
     },
     {
       "label": "profile.$personId.tsx",
@@ -31779,6 +31779,279 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "api_client"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "api_intelligence"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "api_intelligence_intelligence"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "api_intelligence_similarcasematch"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "api_intelligence_timelineevent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "components_casedrawer_casedrawer"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L150",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "components_casedrawer_field"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "lib_tdata"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_casedrawer",
+      "target": "lib_tdata_tdata"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "components_casedrawer"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/forecast.tsx",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_forecast",
+      "target": "components_casedrawer"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_profile_personid",
+      "target": "components_casedrawer"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/trends.tsx",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_trends",
+      "target": "components_casedrawer"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "components_casedrawer_casedrawer",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "components_casedrawer_casedrawer",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/CaseDrawer.tsx",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "components_casedrawer_casedrawer",
+      "target": "lib_tdata_tdata"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/console.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_console",
+      "target": "components_casedrawer_casedrawer"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/forecast.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_forecast",
+      "target": "components_casedrawer_casedrawer"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/network.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_network",
+      "target": "components_casedrawer_casedrawer"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/profile.$personId.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_profile_personid",
+      "target": "components_casedrawer_casedrawer"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/trends.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_trends",
+      "target": "components_casedrawer_casedrawer"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L21",
       "weight": 1.0,
@@ -34962,17 +35235,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L3",
       "weight": 1.0,
@@ -35488,28 +35750,6 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L12",
-      "weight": 1.0,
-      "source": "components_casedrawer_casedrawer",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/FinancialLinksPanel.tsx",
       "source_location": "L4",
       "weight": 1.0,
@@ -35846,28 +36086,6 @@
       "weight": 1.0,
       "source": "routes_trends_trendsscreen",
       "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "source": "components_casedrawer_casedrawer",
-      "target": "lib_i18n_uset"
     },
     {
       "relation": "imports",
@@ -37024,28 +37242,6 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/forecast.tsx",
-      "source_location": "L30",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_forecast",
-      "target": "components_casedrawer"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/forecast.tsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_forecast",
-      "target": "components_casedrawer_casedrawer"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L18",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -37346,17 +37542,6 @@
       "confidence_score": 1.0,
       "source": "routes_network",
       "target": "api_intelligence_searchresult"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/network.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_network",
-      "target": "components_casedrawer_casedrawer"
     },
     {
       "relation": "imports_from",
@@ -40975,17 +41160,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L4",
       "weight": 1.0,
@@ -41491,17 +41665,6 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/CreateAccountDialog.tsx",
       "source_location": "L4",
       "weight": 1.0,
@@ -41750,28 +41913,6 @@
       "confidence_score": 1.0,
       "source": "routes_console",
       "target": "api_intelligence_intelligence"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "components_casedrawer"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/console.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_console",
-      "target": "components_casedrawer_casedrawer"
     },
     {
       "relation": "imports_from",
@@ -42429,28 +42570,6 @@
       "confidence_score": 1.0,
       "source": "routes_trends",
       "target": "api_intelligence_trendsresponse"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/trends.tsx",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_trends",
-      "target": "components_casedrawer"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/trends.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_trends",
-      "target": "components_casedrawer_casedrawer"
     },
     {
       "relation": "imports_from",
@@ -49971,17 +50090,6 @@
       "target": "routes_audit_route"
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "lib_tdata"
-    },
-    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/lib/tData.ts",
@@ -50100,28 +50208,6 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "lib_tdata_tdata"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L95",
-      "weight": 1.0,
-      "source": "components_casedrawer_casedrawer",
-      "target": "lib_tdata_tdata"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/profile.$personId.tsx",
       "source_location": "L6",
       "weight": 1.0,
@@ -50150,92 +50236,6 @@
       "confidence_score": 1.0,
       "source": "routes_socio",
       "target": "lib_tdata_tdata"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "api_intelligence"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "api_intelligence_intelligence"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "api_intelligence_similarcasematch"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "api_intelligence_timelineevent"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "components_casedrawer_casedrawer"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/CaseDrawer.tsx",
-      "source_location": "L150",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_casedrawer",
-      "target": "components_casedrawer_field"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L33",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_profile_personid",
-      "target": "components_casedrawer"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/profile.$personId.tsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_profile_personid",
-      "target": "components_casedrawer_casedrawer"
     },
     {
       "relation": "imports_from",
@@ -89986,5 +89986,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "28aade024575e61130c1c73ddfeeeb5c88f52049"
+  "built_at_commit": "1f3b92b5f2dfbd6af910523cc4068f4aaa01df55"
 }
