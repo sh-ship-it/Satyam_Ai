@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Palette, Check, Moon, Sun } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 type Theme = {
   id: string;
@@ -161,6 +162,7 @@ interface ThemePickerProps {
 }
 
 export function ThemePicker({ buttonClass }: ThemePickerProps) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string>("default");
   const [dark, setDark] = useState(false);
@@ -213,21 +215,21 @@ export function ThemePicker({ buttonClass }: ThemePickerProps) {
           buttonClass ||
           "flex items-center gap-1.5 rounded-[5px] border-2 border-header-foreground bg-secondary-background px-2.5 py-1.5 text-xs font-bold text-foreground hover:translate-x-[2px] hover:translate-y-[2px] transition"
         }
-        aria-label="Theme"
+        aria-label={t("Theme")}
       >
         <Palette className="h-3.5 w-3.5" />
         <span
           className="h-3.5 w-3.5 rounded-full border-2 border-foreground"
           style={{ background: activeTheme.swatch }}
         />
-        <span>Theme</span>
+        <span>{t("Theme")}</span>
       </button>
 
       {open && (
         <div className="absolute right-0 top-full mt-2 w-72 rounded-[5px] border-2 border-foreground bg-main nb-shadow z-50 overflow-hidden">
           <div className="flex items-center gap-2 border-b-2 border-foreground bg-main px-3 py-2.5 text-main-foreground">
             <Palette className="h-4 w-4" />
-            <span className="text-sm font-extrabold">Color Themes</span>
+            <span className="text-sm font-extrabold">{t("Color Themes")}</span>
           </div>
 
           <div className="bg-secondary-background max-h-[420px] overflow-y-auto">
@@ -239,7 +241,7 @@ export function ThemePicker({ buttonClass }: ThemePickerProps) {
             {/* Divider */}
             <div className="flex items-center gap-2 border-y border-foreground/20 bg-muted/40 px-3 py-1.5">
               <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                Professional
+                {t("Professional")}
               </span>
             </div>
 
@@ -254,7 +256,7 @@ export function ThemePicker({ buttonClass }: ThemePickerProps) {
               className="flex w-full items-center gap-2 border-t-2 border-foreground bg-secondary-background px-3 py-2.5 text-sm font-bold text-foreground hover:bg-main/10 transition"
             >
               {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              Switch to {dark ? "Light" : "Dark"} Mode
+              {dark ? t("Switch to Light Mode") : t("Switch to Dark Mode")}
             </button>
           </div>
         </div>

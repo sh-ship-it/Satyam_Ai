@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Shield, Palette } from "lucide-react";
+import { Shield, Palette, Languages } from "lucide-react";
 import { ThemePicker } from "./ThemePicker";
+import { useI18n } from "@/lib/i18n";
 
 export function NB({
   className = "",
@@ -34,6 +35,7 @@ export function GridBg() {
 }
 
 export function Header() {
+  const { lang, setLang, t } = useI18n();
   return (
     <header className="sticky top-0 z-30 border-b-2 border-foreground bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -45,29 +47,40 @@ export function Header() {
             <div className="text-lg font-extrabold tracking-tight">Satyam</div>
             <div className="mt-0.5 flex items-center gap-2">
               <div className="inline-block rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-0.5 text-[10px] font-bold">
-                AI Digital Forensics
+                {t("AI Digital Forensics")}
               </div>
-              <span className="text-[10px] font-bold text-foreground/70">build by Teen Titans</span>
+              <span className="text-[10px] font-bold text-foreground/70">{t("build by Teen Titans")}</span>
             </div>
           </div>
         </Link>
 
         <nav className="hidden items-center gap-7 text-sm font-bold md:flex">
           <Link to="/about" className="hover:underline underline-offset-4">
-            About
+            {t("About")}
           </Link>
           <a href="#features" className="hover:underline underline-offset-4">
-            Features
+            {t("Features")}
           </a>
           <ThemePicker buttonClass="flex items-center gap-2 text-sm font-bold text-foreground hover:underline underline-offset-4 bg-transparent border-0 p-0 cursor-pointer" />
           <Link to="/login" className="hover:underline underline-offset-4">
-            Login
+            {t("Login")}
           </Link>
+          <button
+            onClick={() => setLang(lang === "EN" ? "KN" : "EN")}
+            className="flex items-center gap-1.5 rounded-[5px] border-2 border-foreground bg-secondary-background px-2.5 py-1.5 text-xs font-bold text-foreground hover:translate-x-[2px] hover:translate-y-[2px] transition"
+          >
+            <Languages className="h-3.5 w-3.5" />
+            <span className={lang === "EN" ? "text-foreground" : "opacity-40"}>EN</span>
+            <span className="opacity-30">|</span>
+            <span className={`font-kn ${lang === "KN" ? "text-foreground" : "opacity-40"}`}>
+              ಕನ್ನಡ
+            </span>
+          </button>
           <Link
             to="/console"
             className="rounded-[5px] border-2 border-foreground bg-primary px-4 py-2 text-primary-foreground nb-shadow transition hover:translate-x-[3px] hover:translate-y-[3px]"
           >
-            Open Console
+            {t("Open Console")}
           </Link>
         </nav>
       </div>
@@ -76,9 +89,10 @@ export function Header() {
 }
 
 function FooterCol({ title, links }: { title: string; links: string[] }) {
+  const { t } = useI18n();
   return (
     <div>
-      <h4 className="text-base font-extrabold">{title}</h4>
+      <h4 className="text-base font-extrabold">{t(title)}</h4>
       <ul className="mt-4 space-y-3 text-sm">
         {links.map((l) => (
           <li key={l}>
@@ -86,7 +100,7 @@ function FooterCol({ title, links }: { title: string; links: string[] }) {
               href="#"
               className="text-background/75 hover:text-background hover:underline underline-offset-4"
             >
-              {l}
+              {t(l)}
             </a>
           </li>
         ))}
@@ -96,6 +110,7 @@ function FooterCol({ title, links }: { title: string; links: string[] }) {
 }
 
 export function Footer() {
+  const { t } = useI18n();
   const product = ["Console", "Network Graph", "Map", "Reports"];
   const support = ["Help Center", "Contact Us", "Privacy Policy", "Terms of Service"];
   return (
@@ -109,13 +124,12 @@ export function Footer() {
             <div>
               <div className="text-lg font-extrabold">Satyam</div>
               <div className="mt-0.5 inline-block rounded-[5px] border-2 border-background bg-foreground px-2 py-0.5 text-[10px] font-bold text-background">
-                AI Digital Forensics
+                {t("AI Digital Forensics")}
               </div>
             </div>
           </div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-background/70">
-            An investigator-grade platform unifying evidence triage, link analysis, geospatial
-            intelligence, and court-ready reporting.
+            {t("An investigator-grade platform unifying evidence triage, link analysis, geospatial intelligence, and court-ready reporting.")}
           </p>
         </div>
 
@@ -124,8 +138,8 @@ export function Footer() {
       </div>
       <div className="border-t-2 border-background/20">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-6 py-5 text-xs text-background/60">
-          <span>© 2026 Satyam. All rights reserved.</span>
-          <span>build by Teen Titans</span>
+          <span>{t("© 2026 Satyam. All rights reserved.")}</span>
+          <span>{t("build by Teen Titans")}</span>
         </div>
       </div>
     </footer>

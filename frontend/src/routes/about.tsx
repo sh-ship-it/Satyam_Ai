@@ -22,7 +22,7 @@ import {
   Layers,
 } from "lucide-react";
 import { useState } from "react";
-
+import { useI18n } from "@/lib/i18n";
 import { GridBg, NB, Header, Footer } from "@/components/LandingShell";
 
 export const Route = createFileRoute("/about")({
@@ -82,61 +82,63 @@ type PipelineStep = {
 };
 
 function AboutPage() {
+  const { t, lang } = useI18n();
+
   const pipeline: PipelineStep[] = [
     {
       n: "01",
-      t: "Ingest",
+      t: t("Ingest"),
       Icon: Upload,
       tone: "primary",
-      d: "Upload disk images, mobile dumps, cloud exports, and case files into a single evidence vault.",
+      d: t("Upload disk images, mobile dumps, cloud exports, and case files into a single evidence vault."),
     },
     {
       n: "02",
-      t: "Hash & Custody",
+      t: t("Hash & Custody"),
       Icon: Fingerprint,
       tone: "accent",
-      d: "SHA-256 fingerprint every artifact; sign a chain-of-custody entry with timestamp and investigator identity.",
+      d: t("SHA-256 fingerprint every artifact; sign a chain-of-custody entry with timestamp and investigator identity."),
     },
     {
       n: "03",
-      t: "AI Triage",
+      t: t("AI Triage"),
       Icon: Sparkles,
       tone: "primary",
-      d: "Classify, deduplicate, and rank artifacts by investigative relevance using on-demand AI models.",
+      d: t("Classify, deduplicate, and rank artifacts by investigative relevance using on-demand AI models."),
     },
     {
       n: "04",
-      t: "Entity Extraction",
+      t: t("Entity Extraction"),
       Icon: Users,
       tone: "accent",
-      d: "Pull people, accounts, devices, locations, transactions, and communication threads from raw data.",
+      d: t("Pull people, accounts, devices, locations, transactions, and communication threads from raw data."),
     },
     {
       n: "05",
-      t: "Link & Geo Analysis",
+      t: t("Link & Geo Analysis"),
       Icon: Network,
       tone: "primary",
-      d: "Build interactive network graphs and plot movements on a tactical heatmap with a time-slider.",
+      d: t("Build interactive network graphs and plot movements on a tactical heatmap with a time-slider."),
     },
     {
       n: "06",
-      t: "Investigator Review",
+      t: t("Investigator Review"),
       Icon: MessageSquare,
       tone: "accent",
-      d: "Voice + chat console, multi-user task boards, structured peer review, and redaction workflows.",
+      d: t("Voice + chat console, multi-user task boards, structured peer review, and redaction workflows."),
     },
     {
       n: "07",
-      t: "Court-Ready Report",
+      t: t("Court-Ready Report"),
       Icon: FileText,
       tone: "primary",
-      d: "Generate signed, exhibit-numbered PDFs with full provenance, timeline, and citations.",
+      d: t("Generate signed, exhibit-numbered PDFs with full provenance, timeline, and citations."),
     },
   ];
 
   const stack = [
     {
-      cat: "Frontend Core",
+      cat: t("Frontend Core"),
       Icon: Code2,
       items: [
         "React 19",
@@ -148,7 +150,7 @@ function AboutPage() {
       ],
     },
     {
-      cat: "UI & Visualization",
+      cat: t("UI & Visualization"),
       Icon: Palette,
       items: [
         "Tailwind CSS v4",
@@ -160,7 +162,7 @@ function AboutPage() {
       ],
     },
     {
-      cat: "Backend & Server",
+      cat: t("Backend & Server"),
       Icon: Server,
       items: [
         "Python 3.11+",
@@ -174,7 +176,7 @@ function AboutPage() {
       ],
     },
     {
-      cat: "Database & Cache",
+      cat: t("Database & Cache"),
       Icon: Layers,
       items: [
         "PostgreSQL 16/17",
@@ -186,7 +188,7 @@ function AboutPage() {
       ],
     },
     {
-      cat: "AI Models & Engines",
+      cat: t("AI Models & Engines"),
       Icon: Cpu,
       items: [
         "Gemini 2.5 Flash",
@@ -201,7 +203,7 @@ function AboutPage() {
       ],
     },
     {
-      cat: "Voice & Language",
+      cat: t("Voice & Language"),
       Icon: Languages,
       items: [
         "Sarvam Bulbul v3 (TTS)",
@@ -212,7 +214,7 @@ function AboutPage() {
       ],
     },
     {
-      cat: "Security & Integrity",
+      cat: t("Security & Integrity"),
       Icon: ShieldCheck,
       items: [
         "SHA-256 Hash-Chaining",
@@ -224,7 +226,7 @@ function AboutPage() {
       ],
     },
     {
-      cat: "DevOps & Infra",
+      cat: t("DevOps & Infra"),
       Icon: Wrench,
       items: [
         "Docker & Compose",
@@ -248,19 +250,17 @@ function AboutPage() {
         <div className="mx-auto max-w-3xl text-center">
           <div className="inline-flex items-center gap-2 rounded-[5px] border-2 border-foreground bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground nb-shadow-sm">
             <Sparkles className="h-3.5 w-3.5" strokeWidth={2.5} />
-            About Satyam
+            {t("About Satyam")}
           </div>
           <h1 className="mt-6 text-5xl font-extrabold leading-[1.05] tracking-tight md:text-6xl">
-            Built for investigators,
+            {t("Built for investigators,")}
             <br />
             <span className="mt-2 inline-block rounded-[5px] border-2 border-foreground bg-primary px-2 text-primary-foreground nb-shadow">
-              engineered for evidence
+              {t("engineered for evidence")}
             </span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-foreground/75">
-            Satyam unifies AI triage, link analysis, geospatial intelligence, and tamper-evident
-            reporting on a modern edge-native stack — multilingual, voice-enabled, and built to keep
-            investigators in control of their case.
+            {t("Satyam unifies AI triage, link analysis, geospatial intelligence, and tamper-evident reporting on a modern edge-native stack — multilingual, voice-enabled, and built to keep investigators in control of their case.")}
           </p>
         </div>
       </section>
@@ -270,22 +270,22 @@ function AboutPage() {
         <div className="flex flex-col items-start gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <div className="inline-block rounded-[5px] border-2 border-foreground bg-secondary-background px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider nb-shadow-sm">
-              Workflow
+              {t("Workflow")}
             </div>
             <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
-              Working Pipeline
+              {t("Working Pipeline")}
             </h2>
             <p className="mt-2 max-w-xl text-sm text-foreground/70">
-              End-to-end flow from raw evidence to court-ready exhibit. Click any step to expand
-              details.
+              {t("End-to-end flow from raw evidence to court-ready exhibit. Click any step to expand details.")}
             </p>
           </div>
+
           <div className="flex items-center gap-2 text-xs font-bold text-foreground/70">
             <span className="h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-foreground" />
-            7 stages
+            {t("7 stages")}
             <span className="mx-2 h-3 w-px bg-foreground/30" />
             <span className="h-2.5 w-2.5 rounded-full bg-accent ring-2 ring-foreground" />
-            Auditable end-to-end
+            {t("Auditable end-to-end")}
           </div>
         </div>
 
@@ -318,7 +318,7 @@ function AboutPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="rounded-[4px] border-2 border-foreground bg-background px-1.5 py-0.5 text-[10px] font-extrabold">
-                        STEP {step.n}
+                        {t("STEP")} {step.n}
                       </span>
                       {i < pipeline.length - 1 && (
                         <span className="hidden items-center gap-1 text-[10px] font-bold text-foreground/55 md:inline-flex">
@@ -339,7 +339,7 @@ function AboutPage() {
                   className="mt-4 flex w-full items-center justify-between rounded-[5px] border-2 border-foreground bg-background px-3 py-2 text-xs font-bold nb-shadow-sm transition hover:translate-x-[2px] hover:translate-y-[2px]"
                   aria-expanded={isOpen}
                 >
-                  {isOpen ? "Hide details" : "View details"}
+                  {isOpen ? t("Hide details") : t("View details")}
                   <ChevronDown
                     className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
                     strokeWidth={2.5}
@@ -383,13 +383,13 @@ function AboutPage() {
       <section className="mx-auto max-w-7xl px-6 pb-14">
         <div>
           <div className="inline-block rounded-[5px] border-2 border-foreground bg-secondary-background px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider nb-shadow-sm">
-            Architecture
+            {t("Architecture")}
           </div>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
-            System Architecture & Data Flows
+            {t("System Architecture & Data Flows")}
           </h2>
           <p className="mt-2 max-w-xl text-sm text-foreground/70">
-            A comprehensive blueprint of the Satyam bilingual voice-enabled forensics platform.
+            {t("A comprehensive blueprint of the Satyam bilingual voice-enabled forensics platform.")}
           </p>
         </div>
 
@@ -399,7 +399,7 @@ function AboutPage() {
           <NB className="lg:col-span-7 p-6 flex flex-col justify-between">
             <h3 className="text-lg font-extrabold mb-6 flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-primary" />
-              Bilingual Forensic System Blueprint
+              {t("Bilingual Forensic System Blueprint")}
             </h3>
 
             {/* Visual Diagram Representation */}
@@ -407,16 +407,16 @@ function AboutPage() {
               {/* Browser Box */}
               <div className="w-full max-w-md rounded-[8px] border-2 border-foreground bg-card p-4 nb-shadow-sm text-center relative group hover:scale-[1.01] transition-all">
                 <div className="absolute -top-3 left-4 rounded-[4px] border-2 border-foreground bg-accent px-2 py-0.5 text-[8px] font-extrabold text-accent-foreground uppercase">
-                  Client Tier
+                  {t("Client Tier")}
                 </div>
-                <h4 className="font-extrabold text-sm mb-2 text-primary">Officer's Browser Workspace</h4>
+                <h4 className="font-extrabold text-sm mb-2 text-primary">{t("Officer's Browser Workspace")}</h4>
                 <div className="grid grid-cols-3 gap-1.5 text-[9px] font-bold uppercase tracking-wider">
-                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">Console</div>
-                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">Network</div>
-                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">Board</div>
-                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">Forecast</div>
-                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">Dossier</div>
-                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">Admin</div>
+                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">{t("Console")}</div>
+                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">{t("Network")}</div>
+                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">{t("Board")}</div>
+                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">{t("Forecast")}</div>
+                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">{t("Dossier")}</div>
+                  <div className="p-1 rounded bg-muted/30 border border-foreground/15">{t("Admin")}</div>
                 </div>
               </div>
 
@@ -433,11 +433,11 @@ function AboutPage() {
               {/* Backend Box */}
               <div className="w-full max-w-md rounded-[8px] border-2 border-foreground bg-card p-4 nb-shadow-sm text-center relative group hover:scale-[1.01] transition-all">
                 <div className="absolute -top-3 left-4 rounded-[4px] border-2 border-foreground bg-primary px-2 py-0.5 text-[8px] font-extrabold text-primary-foreground uppercase">
-                  Application Tier
+                  {t("Application Tier")}
                 </div>
-                <h4 className="font-extrabold text-sm mb-2 text-[#6dff52]">FastAPI Async Backend</h4>
+                <h4 className="font-extrabold text-sm mb-2 text-[#6dff52]">{t("FastAPI Async Backend")}</h4>
                 <p className="text-[10px] text-muted-foreground mb-3 font-semibold">
-                  Intents Router • Progressive NL→SQL • SSE Spoken Summary • RLS Enforcement
+                  {t("Intents Router • Progressive NL→SQL • SSE Spoken Summary • RLS Enforcement")}
                 </p>
                 <div className="flex gap-2 justify-center text-[8px] font-extrabold uppercase">
                   <span className="px-2 py-1 bg-muted/40 border border-foreground/15 rounded">/chat (SSE)</span>
@@ -466,28 +466,28 @@ function AboutPage() {
                 {/* Secure Storage */}
                 <div className="rounded-[8px] border-2 border-foreground bg-card p-3 nb-shadow-sm text-center relative group hover:scale-[1.01] transition-all">
                   <div className="absolute -top-3 left-4 rounded-[4px] border-2 border-foreground bg-secondary-background px-1.5 py-0.5 text-[8px] font-extrabold uppercase">
-                    Data Tier
+                    {t("Data Tier")}
                   </div>
-                  <h5 className="font-extrabold text-[11px] mb-1.5 text-[#ff9a3a] uppercase tracking-wide">Secure Storage</h5>
+                  <h5 className="font-extrabold text-[11px] mb-1.5 text-[#ff9a3a] uppercase tracking-wide">{t("Secure Storage")}</h5>
                   <ul className="text-[10px] text-muted-foreground font-semibold space-y-1.5 text-left list-disc list-inside">
-                    <li>PostgreSQL 16 + pgvector</li>
-                    <li>Row-Level Security (RLS)</li>
-                    <li>Hash-Chained Audit Log</li>
-                    <li>Redis Conversation State</li>
+                    <li>{t("PostgreSQL 16 + pgvector")}</li>
+                    <li>{t("Row-Level Security (RLS)")}</li>
+                    <li>{t("Hash-Chained Audit Log")}</li>
+                    <li>{t("Redis Conversation State")}</li>
                   </ul>
                 </div>
 
                 {/* AI / Model Layer */}
                 <div className="rounded-[8px] border-2 border-foreground bg-card p-3 nb-shadow-sm text-center relative group hover:scale-[1.01] transition-all">
                   <div className="absolute -top-3 left-4 rounded-[4px] border-2 border-foreground bg-secondary-background px-1.5 py-0.5 text-[8px] font-extrabold uppercase">
-                    Model Tier
+                    {t("Model Tier")}
                   </div>
-                  <h5 className="font-extrabold text-[11px] mb-1.5 text-accent uppercase tracking-wide">AI & Model Engines</h5>
+                  <h5 className="font-extrabold text-[11px] mb-1.5 text-accent uppercase tracking-wide">{t("AI & Model Engines")}</h5>
                   <ul className="text-[10px] text-muted-foreground font-semibold space-y-1.5 text-left list-disc list-inside">
-                    <li>Gemini 2.5 & Groq Llama</li>
-                    <li>Sarvam Bulbul & Saaras</li>
-                    <li>Local BGE-M3 Embedder</li>
-                    <li>Subprocess YOLOv8s</li>
+                    <li>{t("Gemini 2.5 & Groq Llama")}</li>
+                    <li>{t("Sarvam Bulbul & Saaras")}</li>
+                    <li>{t("Local BGE-M3 Embedder")}</li>
+                    <li>{t("Subprocess YOLOv8s")}</li>
                   </ul>
                 </div>
               </div>
@@ -503,38 +503,38 @@ function AboutPage() {
               </div>
               <h4 className="text-sm font-extrabold text-primary flex items-center gap-1.5 mb-3 uppercase tracking-wide">
                 <Database className="h-4 w-4" />
-                Grounded Text-to-SQL Pipeline
+                {t("Grounded Text-to-SQL Pipeline")}
               </h4>
               <p className="text-xs text-muted-foreground mb-4 leading-relaxed font-semibold">
-                How plain-text English/Kannada questions are translated into secure database queries.
+                {t("How plain-text English/Kannada questions are translated into secure database queries.")}
               </p>
               <div className="space-y-3 font-mono text-[9px]">
                 <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
                   <span className="font-extrabold text-primary">01</span>
                   <div className="min-w-0">
-                    <span className="font-extrabold text-foreground">Natural Language Query</span>
-                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">"Show me vehicle thefts in Mysuru this year"</p>
+                    <span className="font-extrabold text-foreground">{t("Natural Language Query")}</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">"{t("Show me vehicle thefts in Mysuru this year")}"</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
                   <span className="font-extrabold text-primary">02</span>
                   <div className="min-w-0">
-                    <span className="font-extrabold text-foreground">Conversational memory + Broadening</span>
-                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">Merges last 6 turns. If 0 rows return, relax filters (relax=0..3).</p>
+                    <span className="font-extrabold text-foreground">{t("Conversational memory + Broadening")}</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">{t("Merges last 6 turns. If 0 rows return, relax filters (relax=0..3).")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
                   <span className="font-extrabold text-primary">03</span>
                   <div className="min-w-0">
-                    <span className="font-extrabold text-foreground">sqlglot Security Guard</span>
-                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">Validates single SELECT, restricts to 6-table allow-list, forces auto-LIMIT.</p>
+                    <span className="font-extrabold text-foreground">{t("sqlglot Security Guard")}</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">{t("Validates single SELECT, restricts to 6-table allow-list, forces auto-LIMIT.")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
                   <span className="font-extrabold text-primary">04</span>
                   <div className="min-w-0">
-                    <span className="font-extrabold text-foreground">Row-Level Security (RLS)</span>
-                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">Restricts rows at the PG engine level via GUC session claims.</p>
+                    <span className="font-extrabold text-foreground">{t("Row-Level Security (RLS)")}</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">{t("Restricts rows at the PG engine level via GUC session claims.")}</p>
                   </div>
                 </div>
               </div>
@@ -547,38 +547,38 @@ function AboutPage() {
               </div>
               <h4 className="text-sm font-extrabold text-accent flex items-center gap-1.5 mb-3 uppercase tracking-wide">
                 <Brain className="h-4 w-4" />
-                Bilingual STT/TTS Pipeline
+                {t("Bilingual STT/TTS Pipeline")}
               </h4>
               <p className="text-xs text-muted-foreground mb-4 leading-relaxed font-semibold">
-                Bilingual voice processing with automatic language detection and spoken summaries.
+                {t("Bilingual voice processing with automatic language detection and spoken summaries.")}
               </p>
               <div className="space-y-3 font-mono text-[9px]">
                 <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
                   <span className="font-extrabold text-accent">01</span>
                   <div className="min-w-0">
-                    <span className="font-extrabold text-foreground">Speech Ingest & Transcription</span>
-                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">Capture mic, transcribe via Browser Web Speech or Sarvam Saaras v3.</p>
+                    <span className="font-extrabold text-foreground">{t("Speech Ingest & Transcription")}</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">{t("Capture mic, transcribe via Browser Web Speech or Sarvam Saaras v3.")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
                   <span className="font-extrabold text-accent">02</span>
                   <div className="min-w-0">
-                    <span className="font-extrabold text-foreground">Voice Screen Command Router</span>
-                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">Extracts navigation intents (e.g., "open network") or directs query to chat.</p>
+                    <span className="font-extrabold text-foreground">{t("Voice Screen Command Router")}</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">{t("Extracts navigation intents (e.g., \"open network\") or directs query to chat.")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
                   <span className="font-extrabold text-accent">03</span>
                   <div className="min-w-0">
-                    <span className="font-extrabold text-foreground">Spoken Summary Generation</span>
-                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">LLM outputs a 2-3 sentence [SPEAK] block, or backend builds it from rows.</p>
+                    <span className="font-extrabold text-foreground">{t("Spoken Summary Generation")}</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">{t("LLM outputs a 2-3 sentence [SPEAK] block, or backend builds it from rows.")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2 p-1.5 rounded border border-foreground/10 bg-muted/10">
                   <span className="font-extrabold text-accent">04</span>
                   <div className="min-w-0">
-                    <span className="font-extrabold text-foreground">SSE Stream & Neural Speech</span>
-                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">Streams speak event separate from UI table. Plays via Bulbul v3 TTS.</p>
+                    <span className="font-extrabold text-foreground">{t("SSE Stream & Neural Speech")}</span>
+                    <p className="text-[8px] text-muted-foreground font-sans mt-0.5">{t("Streams speak event separate from UI table. Plays via Bulbul v3 TTS.")}</p>
                   </div>
                 </div>
               </div>
@@ -591,13 +591,13 @@ function AboutPage() {
       <section className="mx-auto max-w-7xl px-6 pb-20">
         <div>
           <div className="inline-block rounded-[5px] border-2 border-foreground bg-secondary-background px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider nb-shadow-sm">
-            Under the hood
+            {t("Under the hood")}
           </div>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
-            Technology Stack
+            {t("Technology Stack")}
           </h2>
           <p className="mt-2 max-w-xl text-sm text-foreground/70">
-            The complete toolset powering the Satyam platform.
+            {t("The complete toolset powering the Satyam platform.")}
           </p>
         </div>
 
@@ -624,7 +624,7 @@ function AboutPage() {
                       key={it}
                       className="rounded-[5px] border-2 border-foreground bg-background px-2.5 py-1 text-xs font-bold nb-shadow-sm"
                     >
-                      {it}
+                      {t(it)}
                     </li>
                   ))}
                 </ul>

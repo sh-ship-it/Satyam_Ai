@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -208,6 +209,7 @@ function applyMode(root: HTMLElement, light: boolean) {
 // ── Main component ────────────────────────────────────────────────────────────
 
 function LandingPage() {
+  const { lang, setLang, t } = useI18n();
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -505,11 +507,11 @@ function LandingPage() {
       <header>
         <div className="sl-logo">
           <svg className="mark" viewBox="0 0 40 30" fill="none"><path d="M4 4 L16 15 L4 26" stroke="#6dff52" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/><path d="M22 4 L10 15 L22 26" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity=".85"/></svg>
-          <span style={{fontFamily:'var(--lf)',fontWeight:700,letterSpacing:'.06em',lineHeight:'1.05'}}><b>SAT</b><span>YAM</span><span className="logo-sub">build by Teen Titans</span></span>
+          <span style={{fontFamily:'var(--lf)',fontWeight:700,letterSpacing:'.06em',lineHeight:'1.05'}}><b>SAT</b><span>YAM</span><span className="logo-sub">{t("build by Teen Titans")}</span></span>
         </div>
         <div className="header-right">
-          <a className="nav-link" href="#sl-features">Features</a>
-          <Link className="nav-link" to="/login">Login</Link>
+          <a className="nav-link" href="#sl-features">{t("Features")}</a>
+          <Link className="nav-link" to="/login">{t("Login")}</Link>
           <button className="mode-btn" id="sl-modeBtn" aria-label="Toggle light or dark"><span className="ic-moon">🌙</span><span className="ic-sun">☀️</span></button>
           <div className="theme-switch">
             <button className="theme-btn" id="sl-themeBtn" aria-label="Change theme"><span className="theme-ring" /></button>
@@ -527,60 +529,101 @@ function LandingPage() {
               </div>
             </div>
           </div>
-          <Link className="btn-pill" to="/about">About <span className="dot">↗</span></Link>
+          <button
+            onClick={() => setLang(lang === "EN" ? "KN" : "EN")}
+            className="btn-ghost"
+            style={{ display: "inline-flex", alignItems: "center", gap: "8px", height: "40px", padding: "0 16px" }}
+          >
+            <span style={{ opacity: lang === "EN" ? 1 : 0.4 }}>EN</span>
+            <span style={{ opacity: 0.3 }}>|</span>
+            <span style={{ opacity: lang === "KN" ? 1 : 0.4 }}>ಕನ್ನಡ</span>
+          </button>
+          <Link className="btn-pill" to="/about">{t("About")} <span className="dot">↗</span></Link>
         </div>
       </header>
 
       <nav className="floating">
-        <a href="#sl-hero" className="active" data-nav><span className="led" />Home</a>
-        <a href="#sl-capabilities" data-nav>Capabilities <span className="plus">+</span></a>
-        <a href="#sl-platform" data-nav>Platform</a>
-        <Link to="/about" data-nav>About us</Link>
+        <a href="#sl-hero" className="active" data-nav><span className="led" />{t("Home")}</a>
+        <a href="#sl-capabilities" data-nav>{t("Capabilities")} <span className="plus">+</span></a>
+        <a href="#sl-platform" data-nav>{t("Platform")}</a>
+        <Link to="/about" data-nav>{t("About us")}</Link>
       </nav>
 
       <main>
         <section id="sl-hero">
           <div className="wrap">
-            <span className="eyebrow reveal">Crime Intelligence</span>
-            <h1 className="reveal d1">Defending<br />Karnataka <span className="thin">on</span><br /><span className="thin">the</span> <span className="accent">Data.</span></h1>
-            <p className="hero-sub reveal d2">Satyam turns scattered case records, statements and signals into one bilingual, explainable intelligence picture for the Karnataka State Police.</p>
+            <span className="eyebrow reveal">{t("Crime Intelligence")}</span>
+            {lang === "KN" ? (
+              <h1 className="reveal d1">
+                ಡೇಟಾದ <span className="thin">ಆಧಾರದ ಮೇಲೆ</span>
+                <br />
+                ಕರ್ನಾಟಕವನ್ನು <span className="accent">ರಕ್ಷಿಸುವುದು.</span>
+              </h1>
+            ) : (
+              <h1 className="reveal d1">
+                Defending
+                <br />
+                Karnataka <span className="thin">on</span>
+                <br />
+                <span className="thin">the</span> <span className="accent">Data.</span>
+              </h1>
+            )}
+            <p className="hero-sub reveal d2">{t("Satyam turns scattered case records, statements and signals into one bilingual, voice-driven, explainable intelligence picture for the Karnataka State Police.")}</p>
             <div className="hero-cta reveal d3">
-              <Link className="btn-pill" to="/login">Login <span className="dot">↗</span></Link>
-              <a className="btn-ghost" href="#sl-features"><span className="play">▶</span> Watch Demo</a>
+              <Link className="btn-pill" to="/login">{t("Login")} <span className="dot">↗</span></Link>
+              <a className="btn-ghost" href="#sl-features"><span className="play">▶</span> {t("Watch Demo")}</a>
             </div>
           </div>
         </section>
 
         <section id="sl-tagline" className="center">
           <div className="wrap">
-            <h2 className="reveal">Tailored crime <span className="accent">⊗</span> intelligence solutions</h2>
-            <p className="lead reveal d1" style={{textAlign:'center'}}>From first FIR to courtroom-ready reasoning — grounded Q&amp;A, networks, money-trails, forecasting, and a hands-free voice &amp; gesture copilot, all in one place.</p>
+            <h2 className="reveal">
+              {lang === "KN" ? (
+                <>ಸೂಕ್ತ ಅಪರಾಧ <span className="accent">⊗</span> ಗುಪ್ತಚರ ಪರಿಹಾರಗಳು</>
+              ) : (
+                <>Tailored crime <span className="accent">⊗</span> intelligence solutions</>
+              )}
+            </h2>
+            <p className="lead reveal d1" style={{textAlign:'center'}}>{t("From first FIR to courtroom-ready reasoning — grounded Q&A, networks, money-trails, forecasting, and a hands-free voice & gesture copilot, all in one place.")}</p>
           </div>
         </section>
 
         <section id="sl-capabilities">
           <div className="wrap">
-            <span className="eyebrow reveal">Capabilities</span>
-            <h2 className="reveal d1">We provide intelligence for<br />your toughest cases</h2>
+            <span className="eyebrow reveal">{t("Capabilities")}</span>
+            <h2 className="reveal d1">
+              {lang === "KN" ? (
+                <>ನಿಮ್ಮ ಕಠಿಣ ಪ್ರಕರಣಗಳಿಗೆ<br />ನಾವು ಗುಪ್ತಚರವನ್ನು ಒದಗಿಸುತ್ತೇವೆ</>
+              ) : (
+                <>We provide intelligence for<br />your toughest cases</>
+              )}
+            </h2>
             <div className="grid">
-              <div className="card span7 reveal"><div className="glow" /><div className="ico">◈</div><h3>Investigation Console</h3><p>Ask in Kannada or English. Satyam runs grounded Text-to-SQL and RAG over case narratives, cites every source, and streams a spoken summary back to you.</p></div>
-              <div className="card span5 reveal d1"><div className="glow" /><div className="ico">◉</div><h3>Network &amp; Rings</h3><p>Surface hidden links between people, places and cases, expand ego-networks, and auto-detect criminal rings on an interactive graph.</p></div>
-              <div className="card span4 reveal"><div className="glow" /><div className="ico">₹</div><h3>Financial Money-Trail</h3><p>Trace funds across accounts and transactions with a flagged BFS money-trail — never via raw LLM SQL.</p></div>
-              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">◆</div><h3>Forecast &amp; Trends</h3><p>Anticipate hotspots and risk windows, and cluster modus-operandi patterns from historical data.</p></div>
-              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">◉</div><h3>Voice, Eye &amp; Gesture Copilot</h3><p>Hands-free, bilingual control — speak a command, calibrate eye-gaze tracking, or use webcam hand gestures to navigate and run any screen.</p></div>
+              <div className="card span7 reveal"><div className="glow" /><div className="ico">◈</div><h3>{t("Investigation Console")}</h3><p>{t("Ask in Kannada or English. Satyam runs grounded Text-to-SQL and RAG over case narratives, cites every source, and streams a spoken summary back to you.")}</p></div>
+              <div className="card span5 reveal d1"><div className="glow" /><div className="ico">◉</div><h3>{t("Network & Rings")}</h3><p>{t("Surface hidden links between people, places and cases, expand ego-networks, and auto-detect criminal rings on an interactive graph.")}</p></div>
+              <div className="card span4 reveal"><div className="glow" /><div className="ico">₹</div><h3>{t("Financial Money-Trail")}</h3><p>{t("Trace funds across accounts and transactions with a flagged BFS money-trail — never via raw LLM SQL.")}</p></div>
+              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">◆</div><h3>{t("Forecast & Trends")}</h3><p>{t("Anticipate hotspots and risk windows, and cluster modus-operandi patterns from historical data.")}</p></div>
+              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">◉</div><h3>{t("Voice, Eye & Gesture Copilot")}</h3><p>{t("Hands-free, bilingual control — speak a command, calibrate eye-gaze tracking, or use webcam hand gestures to navigate and run any screen.")}</p></div>
             </div>
           </div>
         </section>
 
         <section id="sl-platform">
           <div className="wrap">
-            <span className="eyebrow reveal">Platform</span>
-            <h2 className="reveal d1">Built to stay ahead<br />of the curve</h2>
-            <p className="lead reveal d1">Private by design, fully auditable, and powered by state-of-the-art retrieval and reasoning — on synthetic data, with role-based access at every layer.</p>
+            <span className="eyebrow reveal">{t("Platform")}</span>
+            <h2 className="reveal d1">
+              {lang === "KN" ? (
+                <>ಪ್ರಗತಿಯಲ್ಲಿ ಮುಂಚೂಣಿಯಲ್ಲಿರಲು<br />ನಿರ್ಮಿಸಲಾಗಿದೆ</>
+              ) : (
+                <>Built to stay ahead<br />of the curve</>
+              )}
+            </h2>
+            <p className="lead reveal d1">{t("Private by design, fully auditable, and powered by state-of-the-art retrieval and reasoning — on synthetic data, with role-based access at every layer.")}</p>
             <div className="grid">
-              <div className="card span4 reveal"><div className="stat">100%</div><div className="stat-label">Synthetic, privacy-safe data</div></div>
-              <div className="card span4 reveal d1"><div className="stat">2×</div><div className="stat-label">Bilingual — Kannada &amp; English</div></div>
-              <div className="card span4 reveal d2"><div className="stat">14</div><div className="stat-label">Screens in one voice-driven workspace</div></div>
+              <div className="card span4 reveal"><div className="stat">100%</div><div className="stat-label">{t("Synthetic, privacy-safe data")}</div></div>
+              <div className="card span4 reveal d1"><div className="stat">2×</div><div className="stat-label">{t("Bilingual — Kannada & English")}</div></div>
+              <div className="card span4 reveal d2"><div className="stat">14</div><div className="stat-label">{t("Screens in one voice-driven workspace")}</div></div>
             </div>
           </div>
         </section>
@@ -588,17 +631,23 @@ function LandingPage() {
         <section id="sl-features">
           <div className="wrap">
             <div style={{textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center'}}>
-              <span className="tag-chip reveal">AI Functions</span>
-              <h2 className="reveal d1" style={{marginTop:18}}>State-of-the-art AI,<br />built for the beat</h2>
-              <p className="lead reveal d2" style={{textAlign:'center',maxWidth:620}}>A bilingual voice agent, eye-gaze tracking, hands-free hand gesture control, an AI investigation canvas, and grounded reasoning — all behind row-level security and a tamper-evident audit trail.</p>
+              <span className="tag-chip reveal">{t("AI Functions")}</span>
+              <h2 className="reveal d1" style={{marginTop:18}}>
+                {lang === "KN" ? (
+                  <>ಅತ್ಯಾಧುನಿಕ AI,<br />ಬೀಟ್‌ಗಾಗಿ ನಿರ್ಮಿಸಲಾಗಿದೆ</>
+                ) : (
+                  <>State-of-the-art AI,<br />built for the beat</>
+                )}
+              </h2>
+              <p className="lead reveal d2" style={{textAlign:'center',maxWidth:620}}>{t("A bilingual voice agent, eye-gaze tracking, hands-free hand gesture control, an AI investigation canvas, and grounded reasoning — all behind row-level security and a tamper-evident audit trail.")}</p>
             </div>
             <div className="grid">
-              <div className="card span4 reveal"><div className="glow" /><div className="ico">◉</div><h3>Voice Screen Agent</h3><p>Speak in English or Kannada — the copilot navigates to the right screen and runs the task for you: set filters, search a network, generate a report. It answers data questions aloud, grounded in your records.</p></div>
-              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">⚇</div><h3>Eye &amp; Gesture Control</h3><p>Drive the cursor and hover elements using eye-gaze tracking, and click or scroll with webcam hand gestures. Say “Satyam” to wake the copilot, and the session auto-locks &amp; blurs PII the moment you step away.</p></div>
-              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">◈</div><h3>AI Investigation Board</h3><p>Describe a crime scene in plain language and the AI lays out suspects, victims, locations and links on an infinite canvas — auto-arranged with production-grade graph layouts.</p></div>
-              <div className="card span4 reveal"><div className="glow" /><div className="ico">◎</div><h3>Grounded Text-to-SQL</h3><p>Natural-language questions become safe, read-only SQL — validated by a sqlglot guard, scoped by Row-Level Security, and pointed only at masked views, never raw PII.</p></div>
-              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">⛨</div><h3>Tamper-Evident Audit</h3><p>Every query is written to a SHA-256 hash-chained audit log, with four-tier PII masking and L1–L4 clearance enforced at every layer.</p></div>
-              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">▤</div><h3>Court-Ready Reports</h3><p>Build cited intelligence briefs from cases and FIRs, then export print-ready PDFs — with on-demand Kannada translation across the whole workspace.</p></div>
+              <div className="card span4 reveal"><div className="glow" /><div className="ico">◉</div><h3>{t("Voice Screen Agent")}</h3><p>{t("Speak in English or Kannada — the copilot navigates to the right screen and runs the task for you: set filters, search a network, generate a report. It answers data questions aloud, grounded in your records.")}</p></div>
+              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">⚇</div><h3>{t("Eye & Gesture Control")}</h3><p>{t("Drive the cursor and hover elements using eye-gaze tracking, and click or scroll with webcam hand gestures. Say “Satyam” to wake the copilot, and the session auto-locks & blurs PII the moment you step away.")}</p></div>
+              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">◈</div><h3>{t("AI Investigation Board")}</h3><p>{t("Describe a crime scene in plain language and the AI lays out suspects, victims, locations and links on an infinite canvas — auto-arranged with production-grade graph layouts.")}</p></div>
+              <div className="card span4 reveal"><div className="glow" /><div className="ico">◎</div><h3>{t("Grounded Text-to-SQL")}</h3><p>{t("Natural-language questions become safe, read-only SQL — validated by a sqlglot guard, scoped by Row-Level Security, and pointed only at masked views, never raw PII.")}</p></div>
+              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">⛨</div><h3>{t("Tamper-Evident Audit")}</h3><p>{t("Every query is written to a SHA-256 hash-chained audit log, with four-tier PII masking and L1–L4 clearance enforced at every layer.")}</p></div>
+              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">▤</div><h3>{t("Court-Ready Reports")}</h3><p>{t("Build cited intelligence briefs from cases and FIRs, then export print-ready PDFs — with on-demand Kannada translation across the whole workspace.")}</p></div>
             </div>
           </div>
         </section>
@@ -606,10 +655,16 @@ function LandingPage() {
         <section id="sl-contact" className="center">
           <div className="wrap">
             <span className="tag-chip reveal">2026 · KSP × SATYAM</span>
-            <h2 className="reveal d1" style={{marginTop:20,fontSize:'clamp(44px,7vw,96px)'}}>Contact us<br />Today <span className="accent">✎</span></h2>
-            <p className="lead reveal d2" style={{textAlign:'center'}}>Whenever you have queries, require a walkthrough, or need prompt support — we are just a click away.</p>
+            <h2 className="reveal d1" style={{marginTop:20,fontSize:'clamp(44px,7vw,96px)'}}>
+              {lang === "KN" ? (
+                <>ಇಂದು ನಮ್ಮನ್ನು<br />ಸಂಪರ್ಕಿಸಿ <span className="accent">✎</span></>
+              ) : (
+                <>Contact us<br />Today <span className="accent">✎</span></>
+              )}
+            </h2>
+            <p className="lead reveal d2" style={{textAlign:'center'}}>{t("Whenever you have queries, require a walkthrough, or need prompt support — we are just a click away.")}</p>
             <div className="reveal d3" style={{marginTop:30}}>
-              <Link className="btn-pill" to="/console">Open Console <span className="dot">↗</span></Link>
+              <Link className="btn-pill" to="/console">{t("Open Console")} <span className="dot">↗</span></Link>
             </div>
           </div>
         </section>
@@ -617,20 +672,26 @@ function LandingPage() {
 
       <footer id="sl-about">
         <div className="foot-grid">
-          <div className="foot-brand">SATYAM —<br /><span className="muted">tailored crime <span style={{color:'var(--green-bright)'}}>⊗</span> intelligence</span></div>
-          <div className="fcol"><h4>Capabilities</h4>
-            <Link to="/console">Investigation Console</Link>
-            <Link to="/network">Network Analysis</Link>
-            <Link to="/forecast">Forecasting</Link>
-            <Link to="/operations">Response Ops</Link>
+          <div className="foot-brand">
+            {lang === "KN" ? (
+              <>ಸತ್ಯಂ —<br /><span className="muted">ಸೂಕ್ತ  ಅಪರಾಧ <span style={{color:'var(--green-bright)'}}>⊗</span> ಗುಪ್ತಚರ</span></>
+            ) : (
+              <>SATYAM —<br /><span className="muted">tailored crime <span style={{color:'var(--green-bright)'}}>⊗</span> intelligence</span></>
+            )}
           </div>
-          <div className="fcol"><h4>Explore</h4>
-            <Link to="/about">About us</Link>
-            <a href="#sl-contact">Contact</a>
+          <div className="fcol"><h4>{t("Capabilities")}</h4>
+            <Link to="/console">{t("Investigation Console")}</Link>
+            <Link to="/network">{t("Network Analysis")}</Link>
+            <Link to="/forecast">{t("Forecasting")}</Link>
+            <Link to="/operations">{t("Response Ops")}</Link>
           </div>
-          <div className="fcol"><h4>Connect</h4><a href="#">LinkedIn</a><a href="#">hack2skill</a></div>
+          <div className="fcol"><h4>{t("Explore")}</h4>
+            <Link to="/about">{t("About us")}</Link>
+            <a href="#sl-contact">{t("Contact")}</a>
+          </div>
+          <div className="fcol"><h4>{t("Connect")}</h4><a href="#">LinkedIn</a><a href="#">hack2skill</a></div>
         </div>
-        <div className="foot-bottom"><span>© 2026 Satyam. All rights reserved.</span><span>build by Teen Titans</span></div>
+        <div className="foot-bottom"><span>{t("© 2026 Satyam. All rights reserved.")}</span><span>{t("build by Teen Titans")}</span></div>
       </footer>
     </div>
   );
