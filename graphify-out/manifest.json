@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1782300706.6881123,
-    "ast_hash": "14c2d846d363a729897e37d62b64aab1",
+    "mtime": 1782371295.4771655,
+    "ast_hash": "96816419abebdf2d04e04e4727e6bfdd",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -1085,8 +1085,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/tData.ts": {
-    "mtime": 1782370675.991037,
-    "ast_hash": "fd0d6e327c0591fe9027135e609d83d7",
+    "mtime": 1782371276.1474845,
+    "ast_hash": "dd5db8133cc002d2fe9c283de421c5b9",
     "semantic_hash": ""
   },
   "frontend/src/locales/kn-data.json": {
@@ -1867,6 +1867,21 @@
   "backend/scratch/verify_grand_total.py": {
     "mtime": 1782298214.4485376,
     "ast_hash": "a895ca390a1c3246a15a48a94c1369cc",
+    "semantic_hash": ""
+  },
+  "scratch/extract_strings.js": {
+    "mtime": 1782371247.3087423,
+    "ast_hash": "3a8f8d4eae0e5c031b8a2dfc96fc5dab",
+    "semantic_hash": ""
+  },
+  "scratch/extracted_strings.json": {
+    "mtime": 1782371251.9520588,
+    "ast_hash": "b574c9b5d29875e2b13ad05656b61a9e",
+    "semantic_hash": ""
+  },
+  "scratch/replace_all_translatable.js": {
+    "mtime": 1782371258.3760395,
+    "ast_hash": "9eaea6eb0c5283e1b989df58c72df653",
     "semantic_hash": ""
   }
 }
