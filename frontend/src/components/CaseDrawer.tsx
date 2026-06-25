@@ -1,4 +1,4 @@
-import { X, Lock, FileDown, Plus, Clock, Sparkles, Network, MapPin } from "lucide-react";
+import { X, Lock, Clock, Sparkles, Network, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
@@ -361,15 +361,6 @@ export function CaseDrawer({
               )}
             </div>
           )}
-        </div>
-
-        <div className="flex gap-2 border-t border-border bg-muted/40 px-5 py-3">
-          <button className="flex-1 inline-flex items-center justify-center gap-2 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition">
-            <Plus className="h-4 w-4" /> {t("Add to report")}
-          </button>
-          <button className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm font-medium text-foreground hover:bg-muted transition">
-            <FileDown className="h-4 w-4" /> {t("Export")}
-          </button>
         </div>
       </aside>
     </div>
