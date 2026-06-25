@@ -4,146 +4,6 @@
   "graph": {},
   "nodes": [
     {
-      "label": "LandingShell.tsx",
-      "file_type": "code",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "components_landingshell",
-      "community": 9,
-      "norm_label": "landingshell.tsx"
-    },
-    {
-      "label": "NB()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L6",
-      "_origin": "ast",
-      "id": "components_landingshell_nb",
-      "community": 9,
-      "norm_label": "nb()"
-    },
-    {
-      "label": "GridBg()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L22",
-      "_origin": "ast",
-      "id": "components_landingshell_gridbg",
-      "community": 9,
-      "norm_label": "gridbg()"
-    },
-    {
-      "label": "Header()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L37",
-      "_origin": "ast",
-      "id": "components_landingshell_header",
-      "community": 9,
-      "norm_label": "header()"
-    },
-    {
-      "label": "FooterCol()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L91",
-      "_origin": "ast",
-      "id": "components_landingshell_footercol",
-      "community": 9,
-      "norm_label": "footercol()"
-    },
-    {
-      "label": "Footer()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L112",
-      "_origin": "ast",
-      "id": "components_landingshell_footer",
-      "community": 9,
-      "norm_label": "footer()"
-    },
-    {
-      "label": "ThemePicker.tsx",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "components_themepicker",
-      "community": 9,
-      "norm_label": "themepicker.tsx"
-    },
-    {
-      "label": "Theme",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "components_themepicker_theme",
-      "community": 9,
-      "norm_label": "theme"
-    },
-    {
-      "label": "THEMES",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L16",
-      "_origin": "ast",
-      "id": "components_themepicker_themes",
-      "community": 9,
-      "norm_label": "themes"
-    },
-    {
-      "label": "DATA_THEME_IDS",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L136",
-      "_origin": "ast",
-      "id": "components_themepicker_data_theme_ids",
-      "community": 9,
-      "norm_label": "data_theme_ids"
-    },
-    {
-      "label": "applyTheme()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L138",
-      "_origin": "ast",
-      "id": "components_themepicker_applytheme",
-      "community": 9,
-      "norm_label": "applytheme()"
-    },
-    {
-      "label": "ThemePickerProps",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L160",
-      "_origin": "ast",
-      "id": "components_themepicker_themepickerprops",
-      "community": 9,
-      "norm_label": "themepickerprops"
-    },
-    {
-      "label": "ThemePicker()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L164",
-      "_origin": "ast",
-      "id": "components_themepicker_themepicker",
-      "community": 9,
-      "norm_label": "themepicker()"
-    },
-    {
-      "label": "ThemeRow()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L268",
-      "_origin": "ast",
-      "id": "components_themepicker_themerow",
-      "community": 9,
-      "norm_label": "themerow()"
-    },
-    {
       "label": "i18n.tsx",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
@@ -177,7 +37,7 @@
       "label": "Ctx",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L1334",
+      "source_location": "L1351",
       "_origin": "ast",
       "id": "lib_i18n_ctx",
       "community": 173,
@@ -187,7 +47,7 @@
       "label": "I18nCtx",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L1335",
+      "source_location": "L1352",
       "_origin": "ast",
       "id": "lib_i18n_i18nctx",
       "community": 173,
@@ -197,7 +57,7 @@
       "label": "ALL_TRANSLATABLE",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L1341",
+      "source_location": "L1358",
       "_origin": "ast",
       "id": "lib_i18n_all_translatable",
       "community": 173,
@@ -207,7 +67,7 @@
       "label": "loadLLMCache()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2116",
+      "source_location": "L2133",
       "_origin": "ast",
       "id": "lib_i18n_loadllmcache",
       "community": 173,
@@ -217,7 +77,7 @@
       "label": "enrichDictWithLLM()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2132",
+      "source_location": "L2149",
       "_origin": "ast",
       "id": "lib_i18n_enrichdictwithllm",
       "community": 173,
@@ -227,7 +87,7 @@
       "label": "enrichDataWithLLM()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2238",
+      "source_location": "L2255",
       "_origin": "ast",
       "id": "lib_i18n_enrichdatawithllm",
       "community": 201,
@@ -237,7 +97,7 @@
       "label": "trackMiss()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2335",
+      "source_location": "L2352",
       "_origin": "ast",
       "id": "lib_i18n_trackmiss",
       "community": 173,
@@ -247,7 +107,7 @@
       "label": "I18nProvider()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2351",
+      "source_location": "L2368",
       "_origin": "ast",
       "id": "lib_i18n_i18nprovider",
       "community": 173,
@@ -257,7 +117,7 @@
       "label": "useI18n()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2419",
+      "source_location": "L2436",
       "_origin": "ast",
       "id": "lib_i18n_usei18n",
       "community": 9,
@@ -267,7 +127,7 @@
       "label": "useT()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2420",
+      "source_location": "L2437",
       "_origin": "ast",
       "id": "lib_i18n_uset",
       "community": 218,
@@ -314,14 +174,154 @@
       "norm_label": "aboutpage()"
     },
     {
+      "label": "LandingShell.tsx",
+      "file_type": "code",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "landingshell.tsx",
+      "id": "components_landingshell"
+    },
+    {
+      "label": "NB()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L6",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "nb()",
+      "id": "components_landingshell_nb"
+    },
+    {
+      "label": "GridBg()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L22",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "gridbg()",
+      "id": "components_landingshell_gridbg"
+    },
+    {
+      "label": "Header()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L37",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "header()",
+      "id": "components_landingshell_header"
+    },
+    {
+      "label": "FooterCol()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L91",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "footercol()",
+      "id": "components_landingshell_footercol"
+    },
+    {
+      "label": "Footer()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L112",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "footer()",
+      "id": "components_landingshell_footer"
+    },
+    {
+      "label": "ThemePicker.tsx",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "themepicker.tsx",
+      "id": "components_themepicker"
+    },
+    {
+      "label": "Theme",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "theme",
+      "id": "components_themepicker_theme"
+    },
+    {
+      "label": "THEMES",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L16",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "themes",
+      "id": "components_themepicker_themes"
+    },
+    {
+      "label": "DATA_THEME_IDS",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L136",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "data_theme_ids",
+      "id": "components_themepicker_data_theme_ids"
+    },
+    {
+      "label": "applyTheme()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L138",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "applytheme()",
+      "id": "components_themepicker_applytheme"
+    },
+    {
+      "label": "ThemePickerProps",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L160",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "themepickerprops",
+      "id": "components_themepicker_themepickerprops"
+    },
+    {
+      "label": "ThemePicker()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L164",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "themepicker()",
+      "id": "components_themepicker_themepicker"
+    },
+    {
+      "label": "ThemeRow()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L268",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "themerow()",
+      "id": "components_themepicker_themerow"
+    },
+    {
       "label": "index.tsx",
       "file_type": "code",
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_index",
       "community": 9,
-      "norm_label": "index.tsx"
+      "norm_label": "index.tsx",
+      "id": "routes_index"
     },
     {
       "label": "Route",
@@ -329,9 +329,9 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "routes_index_route",
       "community": 8,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_index_route"
     },
     {
       "label": "hsl2rgb()",
@@ -339,9 +339,9 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L178",
       "_origin": "ast",
-      "id": "routes_index_hsl2rgb",
       "community": 9,
-      "norm_label": "hsl2rgb()"
+      "norm_label": "hsl2rgb()",
+      "id": "routes_index_hsl2rgb"
     },
     {
       "label": "setAccentHue()",
@@ -349,9 +349,9 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L191",
       "_origin": "ast",
-      "id": "routes_index_setaccenthue",
       "community": 9,
-      "norm_label": "setaccenthue()"
+      "norm_label": "setaccenthue()",
+      "id": "routes_index_setaccenthue"
     },
     {
       "label": "applyMode()",
@@ -359,9 +359,9 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L201",
       "_origin": "ast",
-      "id": "routes_index_applymode",
       "community": 9,
-      "norm_label": "applymode()"
+      "norm_label": "applymode()",
+      "id": "routes_index_applymode"
     },
     {
       "label": "LandingPage()",
@@ -369,9 +369,9 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L211",
       "_origin": "ast",
-      "id": "routes_index_landingpage",
       "community": 9,
-      "norm_label": "landingpage()"
+      "norm_label": "landingpage()",
+      "id": "routes_index_landingpage"
     },
     {
       "label": "add_about_keys.py",
@@ -379,9 +379,9 @@
       "source_file": "scratch/add_about_keys.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scratch_add_about_keys",
       "community": 181,
-      "norm_label": "add_about_keys.py"
+      "norm_label": "add_about_keys.py",
+      "id": "scratch_add_about_keys"
     },
     {
       "label": "add_missing_keys.py",
@@ -389,9 +389,9 @@
       "source_file": "scratch/add_missing_keys.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scratch_add_missing_keys",
       "community": 187,
-      "norm_label": "add_missing_keys.py"
+      "norm_label": "add_missing_keys.py",
+      "id": "scratch_add_missing_keys"
     },
     {
       "label": "add_stack_translations.py",
@@ -399,9 +399,9 @@
       "source_file": "scratch/add_stack_translations.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scratch_add_stack_translations",
       "community": 199,
-      "norm_label": "add_stack_translations.py"
+      "norm_label": "add_stack_translations.py",
+      "id": "scratch_add_stack_translations"
     },
     {
       "label": "merge_translations.py",
@@ -409,9 +409,9 @@
       "source_file": "scratch/merge_translations.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scratch_merge_translations",
       "community": 202,
-      "norm_label": "merge_translations.py"
+      "norm_label": "merge_translations.py",
+      "id": "scratch_merge_translations"
     },
     {
       "label": "translate_pages.py",
@@ -419,9 +419,9 @@
       "source_file": "scratch/translate_pages.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "scratch_translate_pages",
       "community": 212,
-      "norm_label": "translate_pages.py"
+      "norm_label": "translate_pages.py",
+      "id": "scratch_translate_pages"
     },
     {
       "label": "intelligence.ts",
@@ -32056,368 +32056,6 @@
   ],
   "links": [
     {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L93",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_landingshell_footer"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L76",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_landingshell_footercol"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_landingshell_gridbg"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_landingshell_header"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_landingshell_nb"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_themepicker"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_themepicker_themepicker"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "components_landingshell",
-      "target": "lib_i18n",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "components_landingshell",
-      "target": "lib_i18n_usei18n",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/about.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_about",
-      "target": "components_landingshell"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "components_landingshell"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/about.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_about",
-      "target": "components_landingshell_nb"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "components_landingshell_nb"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/about.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_about",
-      "target": "components_landingshell_gridbg"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "components_landingshell_gridbg"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L38",
-      "weight": 1.0,
-      "source": "components_landingshell_header",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/about.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_about",
-      "target": "components_landingshell_header"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "components_landingshell_header"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L92",
-      "weight": 1.0,
-      "source": "components_landingshell_footercol",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L113",
-      "weight": 1.0,
-      "source": "components_landingshell_footer",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/about.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_about",
-      "target": "components_landingshell_footer"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "components_landingshell_footer"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L22",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_shell",
-      "target": "components_themepicker"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L26",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_themepicker",
-      "target": "components_themepicker_applytheme"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L38",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_themepicker",
-      "target": "components_themepicker_data_theme_ids"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_themepicker",
-      "target": "components_themepicker_theme"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L32",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_themepicker",
-      "target": "components_themepicker_themepicker"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L32",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_themepicker",
-      "target": "components_themepicker_themepickerprops"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L166",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_themepicker",
-      "target": "components_themepicker_themerow"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_themepicker",
-      "target": "components_themepicker_themes"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "components_themepicker",
-      "target": "lib_i18n",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "components_themepicker",
-      "target": "lib_i18n_usei18n",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/Shell.tsx",
-      "source_location": "L22",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_shell",
-      "target": "components_themepicker_themepicker"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/ThemePicker.tsx",
-      "source_location": "L165",
-      "weight": 1.0,
-      "source": "components_themepicker_themepicker",
-      "target": "lib_i18n_usei18n"
-    },
-    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -32476,6 +32114,17 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_landingshell",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/ProfileMenu.tsx",
       "source_location": "L3",
       "weight": 1.0,
@@ -32525,6 +32174,17 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "components_similarcasesearch",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_themepicker",
       "target": "lib_i18n"
     },
     {
@@ -32731,9 +32391,9 @@
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_about",
-      "target": "lib_i18n",
-      "confidence_score": 1.0
+      "target": "lib_i18n"
     },
     {
       "relation": "imports_from",
@@ -33068,6 +32728,50 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_landingshell",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "components_landingshell_footer",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "components_landingshell_footercol",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "components_landingshell_header",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/ProfileMenu.tsx",
       "source_location": "L3",
       "weight": 1.0,
@@ -33178,12 +32882,34 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_themepicker",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L165",
+      "weight": 1.0,
+      "source": "components_themepicker_themepicker",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_about",
-      "target": "lib_i18n_usei18n",
-      "confidence_score": 1.0
+      "target": "lib_i18n_usei18n"
     },
     {
       "relation": "calls",
@@ -33291,9 +33017,9 @@
       "source_file": "frontend/src/routes/index.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_index",
-      "target": "lib_i18n_usei18n",
-      "confidence_score": 1.0
+      "target": "lib_i18n_usei18n"
     },
     {
       "relation": "calls",
@@ -34198,6 +33924,61 @@
       "target": "lib_i18n_uset"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/about.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_about",
+      "target": "components_landingshell"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/about.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_about",
+      "target": "components_landingshell_footer"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/about.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_about",
+      "target": "components_landingshell_gridbg"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/about.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_about",
+      "target": "components_landingshell_header"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/about.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_about",
+      "target": "components_landingshell_nb"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/about.tsx",
@@ -34259,6 +34040,225 @@
       "confidence_score": 1.0,
       "source": "src_routetree_gen_fileroutesbypath",
       "target": "routes_about_route"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L93",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_landingshell",
+      "target": "components_landingshell_footer"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L76",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_landingshell",
+      "target": "components_landingshell_footercol"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_landingshell",
+      "target": "components_landingshell_gridbg"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_landingshell",
+      "target": "components_landingshell_header"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_landingshell",
+      "target": "components_landingshell_nb"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_landingshell",
+      "target": "components_themepicker"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_landingshell",
+      "target": "components_themepicker_themepicker"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell_nb"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell_gridbg"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell_header"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell_footer"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_shell",
+      "target": "components_themepicker"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_themepicker",
+      "target": "components_themepicker_applytheme"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L38",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_themepicker",
+      "target": "components_themepicker_data_theme_ids"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_themepicker",
+      "target": "components_themepicker_theme"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_themepicker",
+      "target": "components_themepicker_themepicker"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_themepicker",
+      "target": "components_themepicker_themepickerprops"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L166",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_themepicker",
+      "target": "components_themepicker_themerow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ThemePicker.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_themepicker",
+      "target": "components_themepicker_themes"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/Shell.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_shell",
+      "target": "components_themepicker_themepicker"
     },
     {
       "relation": "imports_from",
@@ -90810,5 +90810,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "476c91b31a64bd653b56abf6ba00a21955ca1219"
+  "built_at_commit": "03d7ff1b4c9bfbab973797be1812dc5dceedd981"
 }

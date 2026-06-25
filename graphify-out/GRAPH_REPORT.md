@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-06-25)
 
 ## Corpus Check
-- 341 files · ~1,818,403 words
+- 341 files · ~1,818,829 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `476c91b3`
+- Built from commit: `03d7ff1b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -981,7 +981,7 @@ Cohesion: 0.16
 Nodes (12): LocalLLM, Local LLM via an OpenAI-compatible server (vLLM / Ollama). DEMO stub.  Point OPE, get_llm(), get_reranker(), get_sql_llm(), get_translator(), Factory that resolves the configured backend to concrete model instances.  Cache, Sarvam Translate (primary) → Bhashini NMT (fallback).     Falls back to Bhashini (+4 more)
 
 ## Knowledge Gaps
-- **1268 isolated node(s):** `Theme`, `THEMES`, `DATA_THEME_IDS`, `ThemePickerProps`, `Lang` (+1263 more)
+- **1268 isolated node(s):** `Lang`, `Ctx`, `I18nCtx`, `ALL_TRANSLATABLE`, `PipelineStep` (+1263 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **25 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -1000,5 +1000,5 @@ _Questions this graph is uniquely positioned to answer:_
   _`AccessDenied` has 75 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 12 inferred relationships involving `useT()` (e.g. with `AdminAccessControl()` and `PolicyEditor()`) actually correct?**
   _`useT()` has 12 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Theme`, `THEMES`, `DATA_THEME_IDS` to the rest of the system?**
+- **What connects `Lang`, `Ctx`, `I18nCtx` to the rest of the system?**
   _1524 weakly-connected nodes found - possible documentation gaps or missing edges._
