@@ -318,7 +318,20 @@ const DICT: Record<string, string> = {
     "ಈ ಕ್ಷಣ ಬ್ಯಾಕೆಂಡ್ ತಲುಪಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. API ಚಾಲನೆಯಾದ ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
 
   // Login
-  "Sign in · Satyam": "ಸೈನ್ ಇನ್ · ಫೋರೆನ್ಸಿಕ್‌ಯು",
+  "Welcome back, Investigator.": "ಸ್ವಾಗತ, ತನಿಖಾಧಿಕಾರಿಗಳೇ.",
+  "Access your secure forensics workspace and continue transforming evidence into court-ready intelligence.":
+    "ನಿಮ್ಮ ಸುರಕ್ಷಿತ ಫೋರೆನ್ಸಿಕ್ ಕಾರ್ಯಸ್ಥಳವನ್ನು ಪ್ರವೇಶಿಸಿ ಮತ್ತು ಸಾಕ್ಷ್ಯಗಳನ್ನು ನ್ಯಾಯಾಲಯಕ್ಕೆ ಸಿದ್ಧಪಡಿಸುವ ಬುದ್ಧಿವಂತಿಕೆಯಾಗಿ ಪರಿವರ್ತಿಸುವುದನ್ನು ಮುಂದುವರಿಸಿ.",
+  "Chain-of-Custody": "ಹಸ್ತಾಂತರ ಸರಪಳಿ",
+  "Forensically Sound": "ಫೋರೆನ್ಸಿಕ್ ಮಾನ್ಯತೆ ಪಡೆದ",
+  "Secure Login": "ಸುರಕ್ಷಿತ ಲಾಗಿನ್",
+  "Sign in to your account": "ನಿಮ್ಮ ಖಾತೆಗೆ ಸೈನ್ ಇನ್ ಮಾಡಿ",
+  "Access your forensics workspace": "ನಿಮ್ಮ ಫೋರೆನ್ಸಿಕ್ ಕಾರ್ಯಸ್ಥಳವನ್ನು ಪ್ರವೇಶಿಸಿ",
+  "Remember me": "ನನ್ನನ್ನು ನೆನಪಿನಲ್ಲಿಡಿ",
+  "Forgot password?": "ಪಾಸ್‌ವರ್ಡ್ ಮರೆತಿದ್ದೀರಾ?",
+  "Enter your password": "ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ನಮೂದಿಸಿ",
+  "Don't have an account?": "ಖಾತೆ ಹೊಂದಿಲ್ಲವೇ?",
+  "Back to home": "ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ",
+  "Sign in · Satyam": "ಸೈನ್ ಇನ್ · ಸತ್ಯಂ",
   "Crime Intelligence Workspace · KSP": "ಅಪರಾಧ ಗುಪ್ತಚರ ಕಾರ್ಯಸ್ಥಳ · ಕೆಎಸ್‌ಪಿ",
   "Sign in with SSO (OIDC)": "SSO (OIDC) ಮೂಲಕ ಸೈನ್ ಇನ್ ಮಾಡಿ",
   or: "ಅಥವಾ",
