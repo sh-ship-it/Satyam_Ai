@@ -243,7 +243,7 @@ function SeedSearch({
                       {p.display_name}
                     </div>
                     <div className="text-[10px] text-muted-foreground truncate">
-                      {p.offense_count} cases · {p.top_crime_type || "—"}
+                      {p.offense_count} {t("cases")} · {p.top_crime_type || "—"}
                       {p.district ? ` · ${p.district}` : ""}
                     </div>
                   </div>
@@ -306,7 +306,7 @@ function SeedSearch({
                           </div>
                           {(r.case_count ?? 0) > 0 && (
                             <span className="text-[10px] font-bold bg-destructive/10 text-destructive px-1.5 py-0.5 rounded-full shrink-0">
-                              {r.case_count} cases
+                              {r.case_count} {t("cases")}
                             </span>
                           )}
                         </button>

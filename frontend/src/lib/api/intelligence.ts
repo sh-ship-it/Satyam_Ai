@@ -233,16 +233,21 @@ export const intelligence = {
     apiFetch<OffenderProfileResponse>(`/api/persons/${personId}/profile`),
 
   // Search — unified person + case autocomplete
-  searchPersonsAndCases: (q: string, limit = 12) =>
-    apiFetch<SearchResult[]>(`/api/cases/search?q=${encodeURIComponent(q)}&limit=${limit}`),
+  searchPersonsAndCases: async (q: string, limit = 12) => {
+    const res = await apiFetch<SearchResult[]>(`/api/cases/search?q=${encodeURIComponent(q)}&limit=${limit}`);
+    return translateSearchResults(res);
+  },
 
   // Voice "show on map" — geocoded crime locations for a person name
   personLocations: (q: string) =>
     apiFetch<PersonLocation[]>(`/api/cases/persons/locations?q=${encodeURIComponent(q)}`),
 
   // C4 — Browse all offenders (for the profile dropdown)
-  listOffenders: (params?: URLSearchParams) =>
-    apiFetch<OffenderListResponse>(`/api/offenders${params ? "?" + params : ""}`),
+  listOffenders: async (params?: URLSearchParams) => {
+    const res = await apiFetch<OffenderListResponse>(`/api/offenders${params ? "?" + params : ""}`);
+    res.offenders = await translateOffenders(res.offenders);
+    return res;
+  },
 
   // PS8 — Forecasting
   getForecastHotspots: (params?: URLSearchParams) =>
@@ -267,3 +272,107 @@ export const intelligence = {
   getSocioCorrelation: () => apiFetch<SocioCorrelationResponse>("/api/socio/correlation"),
   getSocialRiskIndex: () => apiFetch<SocialRiskIndexResponse>("/api/socio/risk-index"),
 };
+
+async function translateOnTheFly(strings: string[]): Promise<Record<string, string>> {
+  if (typeof window === "undefined" || strings.length === 0) return {};
+  const lang = typeof localStorage !== "undefined" ? localStorage.getItem("fq-lang") : "EN";
+  if (lang !== "KN") return {};
+
+  const toTranslate = Array.from(new Set(strings)).filter((s) => {
+    if (!s || s.trim().length <= 1) return false;
+    if (/[\u0C80-\u0CFF]/.test(s)) return false;
+    if (/^[\d\s.%,:/()[\]{}#@!?·]+$/.test(s)) return false;
+    return true;
+  });
+
+  if (toTranslate.length === 0) return {};
+
+  try {
+    const res = await apiFetch<{ translations: Record<string, string> }>("/settings/db-source/translate", {
+      method: "POST",
+      body: JSON.stringify({
+        strings: toTranslate,
+        system_hint: "Translate these police/crime database values, district names, and person names to formal Kannada (ಕನ್ನಡ) script. Keep numbers/codes/FIR formats as is."
+      }),
+    });
+    return res.translations;
+  } catch (err) {
+    console.warn("[intelligence api] translateOnTheFly failed:", err);
+    return {};
+  }
+}
+
+async function translateSearchResults(results: SearchResult[]): Promise<SearchResult[]> {
+  if (typeof window === "undefined") return results;
+  const lang = localStorage.getItem("fq-lang");
+  if (lang !== "KN") return results;
+
+  const strings: string[] = [];
+  results.forEach((r) => {
+    if (r.label) strings.push(r.label);
+    if (r.sub) {
+      const parts = r.sub.split(" · ");
+      parts.forEach((p) => {
+        if (!/\d+\s+cases/.test(p)) {
+          strings.push(p);
+        }
+      });
+    }
+  });
+
+  const translations = await translateOnTheFly(strings);
+
+  return results.map((r) => {
+    const label = translations[r.label] ?? r.label;
+    let sub = r.sub;
+    if (r.sub) {
+      const parts = r.sub.split(" · ");
+      const translatedParts = parts.map((p) => {
+        if (/\d+\s+cases/.test(p)) {
+          const count = p.split(" ")[0];
+          return `${count} ಪ್ರಕರಣಗಳು`;
+        }
+        return translations[p] ?? p;
+      });
+      sub = translatedParts.join(" · ");
+    }
+    return {
+      ...r,
+      label,
+      sub,
+    };
+  });
+}
+
+async function translateOffenders(offenders: OffenderListItem[]): Promise<OffenderListItem[]> {
+  if (typeof window === "undefined") return offenders;
+  const lang = localStorage.getItem("fq-lang");
+  if (lang !== "KN") return offenders;
+
+  const strings: string[] = [];
+  offenders.forEach((o) => {
+    if (o.display_name) strings.push(o.display_name);
+    if (o.district) strings.push(o.district);
+    if (o.top_crime_type) strings.push(o.top_crime_type);
+    if (o.risk_label) strings.push(o.risk_label);
+  });
+
+  const translations = await translateOnTheFly(strings);
+
+  const riskKN: Record<string, string> = {
+    "Critical": "ನಿರ್ಣಾಯಕ",
+    "High": "ಹೆಚ್ಚು",
+    "Medium": "ಮಧ್ಯಮ",
+    "Low": "ಕಡಿಮೆ"
+  };
+
+  return offenders.map((o) => {
+    return {
+      ...o,
+      display_name: translations[o.display_name] ?? o.display_name,
+      district: o.district ? (translations[o.district] ?? o.district) : null,
+      top_crime_type: o.top_crime_type ? (translations[o.top_crime_type] ?? o.top_crime_type) : null,
+      risk_label: translations[o.risk_label] ?? riskKN[o.risk_label] ?? o.risk_label,
+    };
+  });
+}
