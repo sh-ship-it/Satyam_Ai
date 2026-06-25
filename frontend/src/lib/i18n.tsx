@@ -902,6 +902,10 @@ const DICT: Record<string, string> = {
   "Model Validation (Backtest)": "ಮಾಡೆಲ್ ಮೌಲ್ಯೀಕರಣ (ಬ್ಯಾಕ್‌ಟೆಸ್ಟ್)",
   Score: "ಸ್ಕೋರ್",
   "Backtest Window": "ಬ್ಯಾಕ್‌ಟೆಸ್ಟ್ ವಿಂಡೋ",
+  "Historical validation period": "ಐತಿಹಾಸಿಕ ಮೌಲ್ಯೀಕರಣ ಅವಧಿ",
+  "data_rolling_30d": "30 ದಿನಗಳ ರೋಲಿಂಗ್ ಡೇಟಾ",
+  "Data Rolling 30d": "30 ದಿನಗಳ ರೋಲಿಂಗ್ ಡೇಟಾ",
+  "data rolling 30d": "30 ದಿನಗಳ ರೋಲಿಂಗ್ ಡೇಟಾ",
   "What This Means": "ಇದರ ಅರ್ಥ",
   "Decision support only — not predictive policing. Risk scores are based on historical reported incidents, not arrests or individual characteristics. Patrol decisions require human judgment.":
     "ನಿರ್ಧಾರ ಬೆಂಬಲ ಮಾತ್ರ — ಭವಿಷ್ಯಸೂಚಕ ಪೊಲೀಸಿಂಗ್ ಅಲ್ಲ. ಅಪಾಯ ಸ್ಕೋರ್‌ಗಳು ಐತಿಹಾಸಿಕ ವರದಿ ಘಟನೆಗಳ ಆಧಾರದ ಮೇಲಿವೆ, ಬಂಧನ ಅಥವಾ ವ್ಯಕ್ತಿಗತ ಗುಣಲಕ್ಷಣಗಳ ಆಧಾರದ ಮೇಲಲ್ಲ. ಗಸ್ತು ನಿರ್ಧಾರಗಳಿಗೆ ಮಾನವ ತೀರ್ಪು ಅಗತ್ಯ.",

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Radar, Cpu, Activity, Database, Zap } from "lucide-react";
 import type { ForecastCell, BacktestResponse } from "@/lib/api/intelligence";
+import { tData } from "@/lib/tData";
 
 // Risk-tier colours for the dark sensor viewport (fixed on purpose so a hot zone
 // always reads as hot, independent of the active corporate theme).
@@ -52,12 +53,14 @@ export function ModelInferenceTheater({
   loading,
   asOf,
   t,
+  lang,
 }: {
   cells: ForecastCell[];
   backtest: BacktestResponse | null;
   loading: boolean;
   asOf: string | null;
   t: (s: string) => string;
+  lang: string;
 }) {
   // Top cells, geo-projected into a normalised 0..1 field
   // (grid fallback when the cells have no spatial spread).
@@ -255,13 +258,13 @@ export function ModelInferenceTheater({
           >
             <div className="flex items-center justify-between gap-2">
               <span className="text-[11px] font-bold text-white truncate">
-                {nodes[hover].crime_type}
+                {tData("crime_type", nodes[hover].crime_type, lang)}
               </span>
               <span
                 className="rounded px-1.5 py-0.5 text-[9px] font-extrabold"
                 style={{ backgroundColor: RISK_HEX[nodes[hover].level], color: "#0a0a0a" }}
               >
-                {nodes[hover].risk_level}
+                {tData("risk_label", nodes[hover].risk_level, lang)}
               </span>
             </div>
             <div className="mt-1 flex items-center gap-1.5">

@@ -23,6 +23,7 @@ import { useT, useI18n } from "@/lib/i18n";
 import { tData } from "@/lib/tData";
 import {
   intelligence,
+  translateOnTheFly,
   type ForecastAlert,
   type ForecastCell,
   type BacktestResponse,
@@ -345,11 +346,64 @@ function ForecastScreen() {
       intelligence.getForecastHotspots(p),
       intelligence.getForecastBacktest(),
     ])
-      .then(([a, h, b]) => {
-        setAlerts(a.alerts);
+      .then(async ([a, h, b]) => {
+        let finalAlerts = a.alerts;
+        let finalCells = h.cells;
+        let finalBacktest = b;
+
+        if (lang === "KN" || lang === "kn") {
+          try {
+            const stringsToTranslate: string[] = [];
+            a.alerts.forEach((alert) => {
+              if (alert.why) stringsToTranslate.push(alert.why);
+              if (alert.recommended_action) stringsToTranslate.push(alert.recommended_action);
+              if (alert.fairness_note) stringsToTranslate.push(alert.fairness_note);
+            });
+            h.cells.forEach((cell) => {
+              if (cell.why) {
+                cell.why.forEach((w) => {
+                  if (w) stringsToTranslate.push(w);
+                });
+              }
+            });
+            if (b) {
+              if (b.explanation) stringsToTranslate.push(b.explanation);
+              if (b.window) {
+                stringsToTranslate.push(b.window);
+                stringsToTranslate.push(b.window.replace(/_/g, " "));
+              }
+            }
+
+            const translations = await translateOnTheFly(stringsToTranslate);
+
+            finalAlerts = a.alerts.map((alert) => ({
+              ...alert,
+              why: translations[alert.why] ?? alert.why,
+              recommended_action: translations[alert.recommended_action] ?? alert.recommended_action,
+              fairness_note: translations[alert.fairness_note] ?? alert.fairness_note,
+            }));
+
+            finalCells = h.cells.map((cell) => ({
+              ...cell,
+              why: cell.why ? cell.why.map((w) => translations[w] ?? w) : [],
+            }));
+
+            if (b) {
+              finalBacktest = {
+                ...b,
+                explanation: translations[b.explanation] ?? b.explanation,
+                window: translations[b.window] ?? translations[b.window.replace(/_/g, " ")] ?? b.window,
+              };
+            }
+          } catch (e) {
+            console.warn("[forecast] dynamic translation failed:", e);
+          }
+        }
+
+        setAlerts(finalAlerts);
         setAlertsAsOf(a.as_of_date);
-        setCells(h.cells.slice(0, 40));
-        setBacktest(b);
+        setCells(finalCells.slice(0, 40));
+        setBacktest(finalBacktest);
       })
       .catch(() =>
         setError(
@@ -361,7 +415,7 @@ function ForecastScreen() {
 
   useEffect(() => {
     load();
-  }, [crimeType, district, horizon, gridSize]);
+  }, [crimeType, district, horizon, gridSize, lang]);
 
   // Voice Screen Agent: execute structured in-screen actions for /forecast.
   useEffect(() => {
@@ -561,6 +615,7 @@ function ForecastScreen() {
               loading={loading}
               asOf={alertsAsOf}
               t={t}
+              lang={lang}
             />
           </div>
 
@@ -835,7 +890,7 @@ function ForecastScreen() {
                         {t("Backtest Window")}
                       </div>
                       <div className="text-sm font-bold capitalize text-foreground">
-                        {backtest.window.replace(/_/g, " ")}
+                        {t(backtest.window.replace(/_/g, " "))}
                       </div>
                       <div className="text-xs text-muted-foreground mt-1">
                         {t("Historical validation period")}

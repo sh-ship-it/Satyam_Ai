@@ -160,13 +160,12 @@ async def translate_to_kannada(
     )
 
     body = {
-        "model": "llama-3.1-70b-versatile",
+        "model": s.groq_model or "llama-3.3-70b-versatile",
         "messages": [
             {"role": "system", "content": TRANSLATE_SYSTEM},
             {"role": "user", "content": user_prompt},
         ],
         "temperature": 0.1,
-        "response_format": {"type": "json_object"},
         "max_tokens": 2048,
     }
 
@@ -183,7 +182,11 @@ async def translate_to_kannada(
             r.raise_for_status()
         data = r.json()
         raw = data["choices"][0]["message"]["content"]
-        translations: dict[str, str] = _json.loads(raw)
+        # Strip markdown fences if the model wraps JSON in ```json ... ```
+        stripped = raw.strip()
+        if stripped.startswith("```"):
+            stripped = stripped.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
+        translations: dict[str, str] = _json.loads(stripped)
         # Validate: only return strings that actually differ from the English input
         clean = {k: v for k, v in translations.items() if isinstance(v, str) and v.strip() and v != k}
         return TranslateResponse(translations=clean)

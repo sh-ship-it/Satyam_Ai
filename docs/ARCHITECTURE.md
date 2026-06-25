@@ -1042,22 +1042,26 @@ The DICT has grown to **500+ EN→KN entries** covering every screen:
 - Case drawer tabs, dossier field labels, profile risk factors
 - Ops/board/forecast/admin/reports/settings panels
 - ProfileMenu account switcher strings
+- **Forecast Page Rolling Window static labels** — static overrides for `"Historical validation period"`, `"Data Rolling 30d"`, etc., mapping to `"30 ದಿನಗಳ ರೋಲಿಂಗ್ ಡೇಟಾ"`
 
 ### 23.2 Runtime LLM Enrichment (Settings → Translation)
 
 **`enrichDictWithLLM(onProgress)`** — Phase 1:
 - Static manifest of 271 strings from all `t("...")` calls in source
-- Sends to `POST /settings/translate` (Groq Llama-3.1-70B) in batches of 20
+- Sends to `POST /settings/db-source/translate` (Groq Llama-3.3-70B / configured engine) in batches of 20
 - Filters: no Kannada script input, no pure numbers/symbols
 - Merges into live DICT immediately; cached in `localStorage["satyam.translation.llm-cache"]`
 
 **`enrichDataWithLLM(onProgress)`** — Phase 2:
-- `GET /settings/data-values` → fetches unique station names (200), districts (60), crime types (100), statuses (30) from DB
+- `GET /settings/db-source/data-values` → fetches unique station names (200), districts (60), crime types (100), statuses (30) from DB
 - Translates with context hints ("Translate these Karnataka police station names…")
 - Cached in `localStorage["satyam.data-translations"]`
 - `tData()` reads this cache so station names display in Kannada on all screens
 
-**`POST /settings/translate`** — backend endpoint (Groq Llama-3.1-70B):
+**`POST /settings/db-source/translate`** — backend endpoint (Groq Llama-3.3-70B / configured model):
+- **Model Resolution**: Uses `s.groq_model` (falls back to `"llama-3.3-70b-versatile"`) to avoid decommissioned `llama-3.1-70b-versatile`.
+- **JSON Compatibility**: Disabled `"response_format": {"type": "json_object"}` to resolve 400 Bad Request errors on Groq endpoints.
+- **Robust JSON Parsing**: Uses a pre-parsing cleaning step to strip Markdown code blocks/fences (e.g. ` ```json ` ... ` ``` `) from LLM responses before calling Python's `json.loads()`.
 - System prompt keeps acronyms (FIR, IPC, GPS, KSP) in English
 - Keeps proper nouns (Bengaluru, Karnataka) in Kannada script
 - Returns only Kannada responses (validated by Unicode check `[\u0C80-\u0CFF]`)
@@ -1078,6 +1082,23 @@ All screens now have complete Kannada translations:
 - `reports.tsx` — all cart/template/builder labels, executive summary text
 - `ProfileMenu.tsx` — account switcher, progress steps, sign out, photo actions
 - `network.tsx` / `audit.tsx` — all filter dropdowns data-driven from live data (no hardcoded options)
+
+### 23.4 Runtime Dynamic Translation (On-The-Fly)
+
+To translate dynamic backend outputs and rule-based ML models without resorting to pre-configured static dictionary files, the system employs **On-The-Fly (OTF) Translation**:
+
+- **Forecast / Early Warning Page (`/forecast`)**: When the user switches to Kannada, all dynamic rule-based ML strings are translated at runtime:
+  - Alert descriptions (`alert.why` e.g., *"Activity up 400% vs prior 30-day period..."*)
+  - Recommended patrol operations (`alert.recommended_action`)
+  - Decision-support/fairness sub-notes (`alert.fairness_note`)
+  - Grid cell risk explanation arrays (`cell.why`)
+  - Backtest model validation explanations (`backtest.explanation`)
+- **API Helper (`translateOnTheFly`)**: Batches English strings from the frontend and sends them as a `POST` request to `/settings/db-source/translate`.
+  - Dedupes the batch list.
+  - Filters out strings that contain only numbers, percentages, or symbols, ensuring numeric metrics (e.g. `400%`, `41%`) remain dynamic and computed by the database.
+  - Skips strings that are already written in Kannada script to save token bandwidth.
+- **Reactivity**: The `load()` function inside the forecast route dependencies includes the `lang` state. Switching language instantly triggers dynamic translation, updating the local UI state reactively.
+- **Interactive Tooltips**: Tooltips on the Forecast threat map use `tData("crime_type", ...)` and `tData("risk_label", ...)` to ensure interactive elements follow the language toggle without latency.
 
 ---
 
