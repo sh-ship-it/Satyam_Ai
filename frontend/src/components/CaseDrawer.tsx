@@ -173,7 +173,7 @@ export function CaseDrawer({
                   value={tData("status", data.status, lang)}
                   status="warning"
                 />
-                <Field label={t("Station")} value={data.station_name ?? "—"} />
+                <Field label={t("Station")} value={tData("station", data.station_name, lang) ?? "—"} />
                 <Field label={t("District")} value={tData("district", data.district, lang)} />
                 <Field label={t("Legal code")} value={data.legal_code} />
               </div>
