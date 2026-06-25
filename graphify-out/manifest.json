@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1782376143.4078379,
-    "ast_hash": "806ecd7e074085fa5c6e419678f8d896",
+    "mtime": 1782376739.4620495,
+    "ast_hash": "1f0f9d5180e87967afe5757484d0411f",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -845,8 +845,8 @@
     "semantic_hash": ""
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1782283806.7534726,
-    "ast_hash": "5e35bda8848bea08817d8d3a3c03d673",
+    "mtime": 1782386756.075484,
+    "ast_hash": "e327647efced00fc7439d00e0931e0f0",
     "semantic_hash": ""
   },
   "frontend/src/routes/README.md": {
@@ -940,8 +940,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/settings.py": {
-    "mtime": 1782372577.6659954,
-    "ast_hash": "1c41ab8cf78d7c370f1899a5d62ef5a3",
+    "mtime": 1782381045.7768333,
+    "ast_hash": "8fc85272297e22c3120d5efa1252ec08",
     "semantic_hash": ""
   },
   "backend/verify_st.py": {
@@ -1050,8 +1050,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/forecast.tsx": {
-    "mtime": 1782300098.7862346,
-    "ast_hash": "92789847b48a610e64e1208ed7abd110",
+    "mtime": 1782376751.7004578,
+    "ast_hash": "884cce39daf7c29bf4aeb2ff09660789",
     "semantic_hash": ""
   },
   "frontend/src/routes/profile.$personId.tsx": {
@@ -1165,8 +1165,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ModelInferenceTheater.tsx": {
-    "mtime": 1782106291.8512866,
-    "ast_hash": "22806205f8c3b515c187ac5484eda91f",
+    "mtime": 1782376762.8916616,
+    "ast_hash": "b4b7e0ee6c302617ebffcc2ca989bd76",
     "semantic_hash": ""
   },
   "SATYAM_SCREENS_OVERHAUL_AND_FIXES.md": {
@@ -1912,6 +1912,11 @@
   "scratch/translate_pages.py": {
     "mtime": 1782373303.8159454,
     "ast_hash": "e62ea598839db63fa4e564b1120ef455",
+    "semantic_hash": ""
+  },
+  "backend/warmup_test.py": {
+    "mtime": 1782382536.0200882,
+    "ast_hash": "557179a6cd60797e8d4d28ae6c14f311",
     "semantic_hash": ""
   }
 }
