@@ -25,6 +25,7 @@ export function setDataTranslations(field: string, entries: Record<string, strin
     const cache = getRuntimeCache();
     cache[field] = { ...(cache[field] ?? {}), ...entries };
     localStorage.setItem(DATA_CACHE_KEY, JSON.stringify(cache));
+    window.dispatchEvent(new CustomEvent("satyam-translations-updated"));
   } catch {}
 }
 
