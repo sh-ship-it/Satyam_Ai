@@ -1014,19 +1014,9 @@
     "ast_hash": "533119ca207c2c5ea1611d3fa550bdf9",
     "semantic_hash": ""
   },
-  "VOICE_FIX_CODE.md": {
-    "mtime": 1781611235.5760326,
-    "ast_hash": "94efcdcb4e7c557fe19ef975f7eaca1a",
-    "semantic_hash": ""
-  },
   "frontend/public/mic-test.html": {
     "mtime": 1781632807.4810565,
     "ast_hash": "2e8e4ba6635970b745477a8137075f4d",
-    "semantic_hash": ""
-  },
-  "SATYAM_FEATURE_ARCHITECTURE_AND_BUILD_PLAN.md": {
-    "mtime": 1781635198.8349085,
-    "ast_hash": "183784fc11b1877dd41019128f5b466d",
     "semantic_hash": ""
   },
   "backend/app/api/routes/intelligence.py": {
@@ -1099,11 +1089,6 @@
     "ast_hash": "5a1ce09a44390da2ee6711971aeb3442",
     "semantic_hash": ""
   },
-  "SATYAM_DEEP_BUG_SCAN.md": {
-    "mtime": 1781719642.9976614,
-    "ast_hash": "08cf71b3bd452d2307fd2cdc9dd7c4ea",
-    "semantic_hash": ""
-  },
   "backend/app/api/routes/financial.py": {
     "mtime": 1781722583.174495,
     "ast_hash": "764608c4473a73ec376764503cda343d",
@@ -1129,11 +1114,6 @@
     "ast_hash": "b7176a66ad672fd0ebf335171a63ac83",
     "semantic_hash": ""
   },
-  "SATYAM_MISSING_FEATURES_BUILD_SPEC.md": {
-    "mtime": 1781722400.236207,
-    "ast_hash": "523525b401e28cdf0d3b9f12dd2c2614",
-    "semantic_hash": ""
-  },
   "frontend/src/components/RingsPanel.tsx": {
     "mtime": 1782375865.0485692,
     "ast_hash": "cafb68def21f9df5b0a1cad10cc76e6e",
@@ -1154,11 +1134,6 @@
     "ast_hash": "fafb4bb3eea17434241b46572e9be54e",
     "semantic_hash": ""
   },
-  "SATYAM_FIX_VERIFICATION_AND_GAPS.md": {
-    "mtime": 1781725801.9151275,
-    "ast_hash": "1934c78df75b3aca9544a06447898d30",
-    "semantic_hash": ""
-  },
   "backend/migrations/003_users_extend.sql": {
     "mtime": 1781756573.8782127,
     "ast_hash": "5f325e855369187bd9dd54c6b1a9689a",
@@ -1169,44 +1144,9 @@
     "ast_hash": "b4b7e0ee6c302617ebffcc2ca989bd76",
     "semantic_hash": ""
   },
-  "SATYAM_SCREENS_OVERHAUL_AND_FIXES.md": {
-    "mtime": 1781787425.8036082,
-    "ast_hash": "a92808648af31f1f506e3a5346f7e5a6",
-    "semantic_hash": ""
-  },
-  "SATYAM_FORECAST_TRENDS_UI_REDESIGN.md": {
-    "mtime": 1781790015.7058551,
-    "ast_hash": "4470ef3f4c414977fe69a971858c1232",
-    "semantic_hash": ""
-  },
-  "SATYAM_MODEL_LIVE_INFERENCE_REDESIGN.md": {
-    "mtime": 1781791836.2792063,
-    "ast_hash": "09d0c5573f3e380a453f0b7beabd9083",
-    "semantic_hash": ""
-  },
-  "SATYAM_INCIDENT_TREND_REDESIGN.md": {
-    "mtime": 1781801360.7751262,
-    "ast_hash": "cb52de75877788a98eaf1df1fc6899de",
-    "semantic_hash": ""
-  },
-  "SATYAM_COPILOT_STT_TOGGLE.md": {
-    "mtime": 1781812534.0291045,
-    "ast_hash": "78e29fda96c486af5cfc1642185dcc2e",
-    "semantic_hash": ""
-  },
   "backend/seed/geocode_cases.py": {
     "mtime": 1781848064.1210964,
     "ast_hash": "ed976337211f2e9556d4f96c761c5c7b",
-    "semantic_hash": ""
-  },
-  "SATYAM_NETWORK_SEARCH_AND_VOICE_ACTIONS.md": {
-    "mtime": 1781848086.4741325,
-    "ast_hash": "96836d9005704ba422e8ff92a088fdec",
-    "semantic_hash": ""
-  },
-  "SATYAM_COPILOT_SELF_ANSWER.md": {
-    "mtime": 1781852225.6708374,
-    "ast_hash": "0eab710a4dd155ad4ab8d03536cfaf51",
     "semantic_hash": ""
   },
   "backend/app/api/routes/ops.py": {
@@ -1234,11 +1174,6 @@
     "ast_hash": "4bbfdc0bf4784a8ec06efaba3fd7f571",
     "semantic_hash": ""
   },
-  "SATYAM_OPS_PHASE0_SCAFFOLD.md": {
-    "mtime": 1781899360.0346365,
-    "ast_hash": "77ced6c099e05fec428557bad8d0bba7",
-    "semantic_hash": ""
-  },
   "backend/app/schemas/ops.py": {
     "mtime": 1781942907.8143134,
     "ast_hash": "77ff6eca1c78772a491fbf3fc60039da",
@@ -1257,11 +1192,6 @@
   "frontend/src/components/ops/PredictivePanel.tsx": {
     "mtime": 1782106291.997803,
     "ast_hash": "a137f5b4755bd171268cb449d0d301ba",
-    "semantic_hash": ""
-  },
-  "SATYAM_OPS_PHASE1_PREDICTIVE.md": {
-    "mtime": 1781899368.8711703,
-    "ast_hash": "a8c391ebe5a907b51ea51dc2e2723e0a",
     "semantic_hash": ""
   },
   "backend/app/services/ops/routing_service.py": {
@@ -1284,19 +1214,9 @@
     "ast_hash": "9f0b7ab36456c38a7d1e0dd1b966dd83",
     "semantic_hash": ""
   },
-  "SATYAM_OPS_PHASE2_DISPATCH_SIM.md": {
-    "mtime": 1781899382.0038986,
-    "ast_hash": "a3b76b3fe8bdbc17f3eac9ffeaa6ff67",
-    "semantic_hash": ""
-  },
   "backend/app/services/ops/corridor_service.py": {
     "mtime": 1781955989.9363973,
     "ast_hash": "7c86d901f6f0bbbc5c9aed0e97670683",
-    "semantic_hash": ""
-  },
-  "SATYAM_OPS_PHASE3_GREEN_CORRIDOR.md": {
-    "mtime": 1781899387.000479,
-    "ast_hash": "bca7f3906f7b3b6085c6464f9e6ee301",
     "semantic_hash": ""
   },
   "ai_camera/detect_video.py": {
@@ -1314,19 +1234,9 @@
     "ast_hash": "8615a454a6916cbe6f4e5325ab6c7942",
     "semantic_hash": ""
   },
-  "SATYAM_OPS_PHASE4_CAMERA_REVIEW.md": {
-    "mtime": 1781899390.9718466,
-    "ast_hash": "609e96a7b4a1854a051dfbedadae483b",
-    "semantic_hash": ""
-  },
   "ai_camera/requirements.txt": {
     "mtime": 1781942955.3913388,
     "ast_hash": "159a2c68ffd071145340f8ad7cb1e3c8",
-    "semantic_hash": ""
-  },
-  "SATYAM_OPS_BUGFIX_PACK.md": {
-    "mtime": 1781945389.3724456,
-    "ast_hash": "91221027760ea8439b623db0586b6bb2",
     "semantic_hash": ""
   },
   "frontend/src/components/ops/DemoSimPanel.tsx": {
@@ -1344,11 +1254,6 @@
     "ast_hash": "acfecefe206efc585f886b341b6282fe",
     "semantic_hash": ""
   },
-  "SATYAM_OPS_PARITY_PACK.md": {
-    "mtime": 1781951954.7239022,
-    "ast_hash": "9874930dcbba4bed845b33000def19bc",
-    "semantic_hash": ""
-  },
   "model/requirements.txt": {
     "mtime": 1781952189.9255142,
     "ast_hash": "159a2c68ffd071145340f8ad7cb1e3c8",
@@ -1357,21 +1262,6 @@
   "frontend/src/components/ops/LiveOperationsMap.tsx": {
     "mtime": 1782106291.9808023,
     "ast_hash": "0307bc2a9eadda03e67cc86ed00639ff",
-    "semantic_hash": ""
-  },
-  "SATYAM_OPS_SCREENSHOT_PARITY_PACK.md": {
-    "mtime": 1781955821.0934238,
-    "ast_hash": "ff57ff03ef8755f77976992816a0ce36",
-    "semantic_hash": ""
-  },
-  "SATYAM_DISPATCH_GREEN_CORRIDOR_SIM.md": {
-    "mtime": 1781968100.4310677,
-    "ast_hash": "2db879f0a7a49b93fd87b5f486255ad5",
-    "semantic_hash": ""
-  },
-  "SATYAM_OPS_DATASET_FIX.md": {
-    "mtime": 1781977868.9660127,
-    "ast_hash": "a8c2f019ce65b708aa65cc0138fb9b3a",
     "semantic_hash": ""
   },
   "frontend/public/total fight.mp4": {
@@ -1402,11 +1292,6 @@
   "scratch/test_resolve.py": {
     "mtime": 1781992091.2776775,
     "ast_hash": "d70a21100ca012850071ec8cfe1e048f",
-    "semantic_hash": ""
-  },
-  "SATYAM_DEEP_AUDIT_2026-06-22.md": {
-    "mtime": 1782106467.5360038,
-    "ast_hash": "af23aeedb8ab57da81c77a1355ac6b7d",
     "semantic_hash": ""
   },
   "backend/app/api/routes/dossier.py": {
@@ -1452,11 +1337,6 @@
   "frontend/src/routes/dossier.tsx": {
     "mtime": 1782300728.748418,
     "ast_hash": "e99478b05be0d57e1f751408a5bfe47c",
-    "semantic_hash": ""
-  },
-  "Satyam_Person360_Dossier_Build_Prompt.md": {
-    "mtime": 1782128589.0833907,
-    "ast_hash": "42e28264a0b01293a2dae7eac7dcf978",
     "semantic_hash": ""
   },
   "frontend/public/demo-dossier/anwar-baig/front.png": {
@@ -1649,16 +1529,6 @@
     "ast_hash": "16b7878756059e761c5e967f1ae5e268",
     "semantic_hash": ""
   },
-  "Satyam_Investigation_Board_and_AI_Model_Settings_Build_Prompt.md": {
-    "mtime": 1782136971.0236778,
-    "ast_hash": "56adc86eaf2bd2dbace36b47b75b6675",
-    "semantic_hash": ""
-  },
-  "PARTICLE_PHYSICS_V2.md": {
-    "mtime": 1782152300.4711125,
-    "ast_hash": "eb667e77a528cb7e73a93b6c222dc6c4",
-    "semantic_hash": ""
-  },
   "backend/app/api/routes/admin.py": {
     "mtime": 1782158809.26292,
     "ast_hash": "6811adafab6de14430ea4c742b34d8b2",
@@ -1677,11 +1547,6 @@
   "frontend/src/routes/admin.tsx": {
     "mtime": 1782159229.269078,
     "ast_hash": "8d4d786b935717fbae5126c8fc2c82a1",
-    "semantic_hash": ""
-  },
-  "Satyam_Admin_Access_Control_Build_Prompt.md": {
-    "mtime": 1782158454.9337225,
-    "ast_hash": "11752077a21444c5748169f272dda2c1",
     "semantic_hash": ""
   },
   "backend/app/services/board_brain.py": {
