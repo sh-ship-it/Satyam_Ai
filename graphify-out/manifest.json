@@ -1783,5 +1783,25 @@
     "mtime": 1782382536.0200882,
     "ast_hash": "557179a6cd60797e8d4d28ae6c14f311",
     "semantic_hash": ""
+  },
+  "backend/scratch/benchmark_perf.py": {
+    "mtime": 1782460512.649469,
+    "ast_hash": "799105590a2ce4a68fd21ac2856b640f",
+    "semantic_hash": ""
+  },
+  "backend/scratch/benchmark_results.json": {
+    "mtime": 1782460616.1029992,
+    "ast_hash": "dcf327019b7d8097c251276870f987d2",
+    "semantic_hash": ""
+  },
+  "backend/scratch/test_print.py": {
+    "mtime": 1782460130.7704127,
+    "ast_hash": "b327b9cf9ef2a5e313f04dafca54aed1",
+    "semantic_hash": ""
+  },
+  "docs/PROTOTYPE_PERFORMANCE_REPORT.md": {
+    "mtime": 1782460643.815604,
+    "ast_hash": "56765df5fbd07bc250c48820068b7fdb",
+    "semantic_hash": ""
   }
 }
