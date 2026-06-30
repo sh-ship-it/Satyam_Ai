@@ -40,4 +40,4 @@ backend/seed/generated/
 
 # Model weights (large files — download via huggingface-cli, never commit)
 backend/models/
-
+catalyst-deploy
