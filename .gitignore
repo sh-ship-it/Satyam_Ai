@@ -39,5 +39,5 @@ backend/seed/satyam_synthetic_dataset/
 backend/seed/generated/
 
 # Model weights (large files — download via huggingface-cli, never commit)
-backend/models/
+models/
 catalyst-deploy

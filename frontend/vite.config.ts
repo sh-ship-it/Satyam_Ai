@@ -13,9 +13,6 @@ export default defineConfig({
     port: Number(process.env.PORT ?? 3000),
     host: true,
   },
-  ssr: {
-    noExternal: true,
-  },
   plugins: [
     tsConfigPaths(),
     tailwindcss(),

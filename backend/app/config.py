@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     jwt_expire_minutes: int = 480
 
     # CORS (comma-separated)
-    cors_origins: str = "http://localhost:3000"
+    cors_origins: str = "http://localhost:3000,https://satyam-50043446981.development.catalystappsail.in"
 
     # Base URL the backend reaches itself on — used by spawned subprocesses
     # (e.g. the YOLO detector) to call back into /api/ops/detect/notify.
@@ -101,6 +101,13 @@ class Settings(BaseSettings):
     model_device: Literal["cuda", "cpu"] = "cuda"
     # Load models in FP16 (halves VRAM; cosine quality unchanged)
     model_fp16: bool = True
+
+    # ── Remote model service (HF Spaces / RunPod / any hosted endpoint) ───────
+    # When set, the backend calls this URL for /embed and /rerank instead of
+    # loading the multi-GB sentence-transformers weights locally.
+    # Leave blank to use local inference (existing behaviour).
+    model_service_url: str = ""
+    model_service_api_key: str = ""
 
     @property
     def cors_origin_list(self) -> list[str]:

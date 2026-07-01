@@ -1,0 +1,12 @@
+# Satyam Model Service — Dependencies
+# Deploy on HF Spaces (Docker SDK, free CPU-Basic, 16 GB RAM)
+
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.0
+numpy>=1.26
+sentence-transformers>=3.0
+
+# CPU-only PyTorch (keeps image small, no CUDA bloat)
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.2

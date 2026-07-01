@@ -1,7 +1,12 @@
 """BGE-M3 embedder (sole embedder for the whole system).
 
-Real local inference via **sentence-transformers** (NOT FlagEmbedding).
-Model: BAAI/bge-m3, dim 1024. Loads from local disk; GPU FP16 or CPU.
+Supports two modes:
+  1. **Remote** — if MODEL_SERVICE_URL is set, sends texts to the hosted
+     model-service over HTTP (zero local GPU/RAM needed).
+  2. **Local** — loads BAAI/bge-m3 weights via sentence-transformers and
+     runs inference on the local CPU/GPU.
+
+Model: BAAI/bge-m3, dim 1024. GPU FP16 or CPU.
 Path / device / precision come from Settings (single source of truth).
 
 Why sentence-transformers and not FlagEmbedding:
@@ -20,6 +25,8 @@ import numpy as np
 
 from app.config import get_settings
 
+
+# ── Local model loader (unchanged from original) ─────────────────────────────
 
 @lru_cache(maxsize=1)
 def _load_model(path: str, use_fp16: bool, device: str):
@@ -45,8 +52,32 @@ class BgeM3Embedder:
         self._path = s.embedding_model_path
         self._device = s.model_device
         self._use_fp16 = s.model_fp16
+        # Remote model service config
+        self._service_url = s.model_service_url.rstrip("/") if s.model_service_url else ""
+        self._service_key = s.model_service_api_key
 
-    # ── sync heavy work, run inside asyncio.to_thread ────────────────────────
+    # ── remote HTTP call ─────────────────────────────────────────────────────
+
+    async def _embed_remote(self, texts: list[str]) -> list[list[float]]:
+        """Call the hosted model service at MODEL_SERVICE_URL/embed."""
+        import httpx
+
+        async with httpx.AsyncClient(timeout=120.0) as client:
+            resp = await client.post(
+                f"{self._service_url}/embed",
+                json={"texts": texts},
+                headers={"X-API-Key": self._service_key},
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            vecs = data["embeddings"]
+            dim = data.get("dim", self.dim)
+            assert dim == self.dim, (
+                f"Remote embedder returned {dim}-d vectors; expected {self.dim}."
+            )
+            return vecs
+
+    # ── local inference ──────────────────────────────────────────────────────
 
     def _encode(self, texts: list[str]) -> list[list[float]]:
         model = _load_model(self._path, self._use_fp16, self._device)
@@ -71,4 +102,7 @@ class BgeM3Embedder:
         """Return one L2-normalised 1024-float vector per input text."""
         if not texts:
             return []
+        # Prefer remote service when configured
+        if self._service_url:
+            return await self._embed_remote(texts)
         return await asyncio.to_thread(self._encode, texts)
