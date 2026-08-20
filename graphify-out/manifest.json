@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "backend/app/config.py": {
-    "mtime": 1787253411.0280068,
-    "ast_hash": "81fba9fe8039e95669b6430b1aa38b2b",
+    "mtime": 1787257314.5820477,
+    "ast_hash": "bf029e9ccb3372ea48a0bb075dc0fe7f",
     "semantic_hash": ""
   },
   "backend/app/core/__init__.py": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "backend/app/db/session.py": {
-    "mtime": 1787251695.2029126,
-    "ast_hash": "423587e590cba736cc72153212b00952",
+    "mtime": 1787257324.1955836,
+    "ast_hash": "a8cc4cf7708be76b75fb8e8c1cd2459f",
     "semantic_hash": ""
   },
   "backend/app/logging_config.py": {
@@ -230,8 +230,8 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/rag.py": {
-    "mtime": 1787248408.5773442,
-    "ast_hash": "186b8399010e67cc1f9b503e8bf8f07b",
+    "mtime": 1787257358.9284718,
+    "ast_hash": "23e3f68ba90ff79707f5db03f8b3d963",
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/sql_guard.py": {
@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/SettingsDialog.tsx": {
-    "mtime": 1782297358.2275298,
-    "ast_hash": "fa0fb7dc098c97e357b2ef55ee08c0f6",
+    "mtime": 1787256775.579394,
+    "ast_hash": "b1fa043110ae027601eeda5e2a75d2e6",
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
@@ -650,8 +650,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/client.ts": {
-    "mtime": 1782297924.8514268,
-    "ast_hash": "a6a180bf439e21a8d1651d672ac3c25c",
+    "mtime": 1787256764.4424381,
+    "ast_hash": "fde0ca4df64eb1a1b6e70c418ae3f7a2",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/example.functions.ts": {
@@ -925,8 +925,8 @@
     "semantic_hash": ""
   },
   "backend/seed/embed_narratives.py": {
-    "mtime": 1787249742.9766722,
-    "ast_hash": "c0a5b815e15b7608da1d21c95412d6d9",
+    "mtime": 1787257436.9983456,
+    "ast_hash": "9f1e800d70feda63125bdbe0ec9c1d64",
     "semantic_hash": ""
   },
   "backend/seed/load_seed.py": {
@@ -1855,8 +1855,8 @@
     "semantic_hash": ""
   },
   "backend/migrations/010_narrative_vector_index.sql": {
-    "mtime": 1787246037.0172226,
-    "ast_hash": "666f01fbc133411f85c9b78b4b195bde",
+    "mtime": 1787259120.186788,
+    "ast_hash": "c96c6054dc459146fd72487077b7c9d0",
     "semantic_hash": ""
   },
   "backend/migrations/010_rollback.sql": {
