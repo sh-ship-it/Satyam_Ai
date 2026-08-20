@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/deps.py": {
-    "mtime": 1781520845.5056248,
-    "ast_hash": "515277d8b2007bfb43738ebe966ae2a0",
+    "mtime": 1787254832.0156581,
+    "ast_hash": "db4a19bb8858432a8c105f7eb8e03703",
     "semantic_hash": ""
   },
   "backend/app/api/routes/__init__.py": {
@@ -40,8 +40,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/chat.py": {
-    "mtime": 1781502849.1215708,
-    "ast_hash": "d75bccea5c4541d68423ed687579edaa",
+    "mtime": 1787254850.3847075,
+    "ast_hash": "8430d2789663e34d8cc35150015ef565",
     "semantic_hash": ""
   },
   "backend/app/api/routes/health.py": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "backend/app/config.py": {
-    "mtime": 1787251681.5343256,
-    "ast_hash": "28846e406cf2cd6d2991819f0cdcd229",
+    "mtime": 1787253411.0280068,
+    "ast_hash": "81fba9fe8039e95669b6430b1aa38b2b",
     "semantic_hash": ""
   },
   "backend/app/core/__init__.py": {
@@ -200,8 +200,8 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/orchestrator.py": {
-    "mtime": 1787245397.0955617,
-    "ast_hash": "4a9adb6960ba50c8642a7e30f039131e",
+    "mtime": 1787255338.506916,
+    "ast_hash": "8e2c62a0d6d5c225555f65050be9923c",
     "semantic_hash": ""
   },
   "backend/app/pipeline/prompts.py": {
@@ -210,8 +210,8 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/router.py": {
-    "mtime": 1781670726.5864053,
-    "ast_hash": "bcd53aa0537b1d3ae55e920c46bc7e45",
+    "mtime": 1787253540.1748176,
+    "ast_hash": "dc83119b7d013ffa2430dab787a620b6",
     "semantic_hash": ""
   },
   "backend/app/pipeline/slots.py": {
@@ -1862,6 +1862,11 @@
   "backend/migrations/010_rollback.sql": {
     "mtime": 1787246037.065552,
     "ast_hash": "70c7a70d4da8723c9515ef19ac683bca",
+    "semantic_hash": ""
+  },
+  "backend/tests/test_router.py": {
+    "mtime": 1787253556.0952244,
+    "ast_hash": "30ae73bb40073ad1b6ef13e2678e366f",
     "semantic_hash": ""
   }
 }
