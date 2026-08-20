@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "backend/app/config.py": {
-    "mtime": 1782897972.231582,
-    "ast_hash": "72e8286b37f871b4e66e1ce1cafea49c",
+    "mtime": 1787251681.5343256,
+    "ast_hash": "28846e406cf2cd6d2991819f0cdcd229",
     "semantic_hash": ""
   },
   "backend/app/core/__init__.py": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "backend/app/db/session.py": {
-    "mtime": 1781528487.8527029,
-    "ast_hash": "6c5118b66b6e794e3109eb61eceacf31",
+    "mtime": 1787251695.2029126,
+    "ast_hash": "423587e590cba736cc72153212b00952",
     "semantic_hash": ""
   },
   "backend/app/logging_config.py": {
@@ -230,8 +230,8 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/rag.py": {
-    "mtime": 1787244581.3057897,
-    "ast_hash": "fef18d26b125d1b313c5795e22485ef3",
+    "mtime": 1787248408.5773442,
+    "ast_hash": "186b8399010e67cc1f9b503e8bf8f07b",
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/sql_guard.py": {
@@ -815,8 +815,8 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1781282331.265822,
-    "ast_hash": "6a0bef2dd8be40ba853319a4e27590fd",
+    "mtime": 1787252682.4964323,
+    "ast_hash": "04bfa8e05d0b7427877684f8d62538a6",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
@@ -825,8 +825,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1781284241.5702906,
-    "ast_hash": "f6a2fd5a7f11640b15498e10363fb10b",
+    "mtime": 1787252569.0115302,
+    "ast_hash": "56915f9dbc39655e5428a003f608718b",
     "semantic_hash": ""
   },
   "backend/README.md": {
@@ -925,8 +925,8 @@
     "semantic_hash": ""
   },
   "backend/seed/embed_narratives.py": {
-    "mtime": 1781545506.076216,
-    "ast_hash": "137cdddeca6502747223cd2d96526ed1",
+    "mtime": 1787249742.9766722,
+    "ast_hash": "c0a5b815e15b7608da1d21c95412d6d9",
     "semantic_hash": ""
   },
   "backend/seed/load_seed.py": {
@@ -1645,8 +1645,8 @@
     "semantic_hash": ""
   },
   "backend/migrations/008_local_app_grants.sql": {
-    "mtime": 1782297410.8803773,
-    "ast_hash": "8930e093dc71a0791ec9a8b887081632",
+    "mtime": 1787252694.2384377,
+    "ast_hash": "ede7f804a12c902399b926dbd5c6cb00",
     "semantic_hash": ""
   },
   "backend/scratch/apply_all_migrations.py": {
@@ -1850,8 +1850,18 @@
     "semantic_hash": ""
   },
   "backend/tests/test_rag_retrieval.py": {
-    "mtime": 1787244716.0901523,
-    "ast_hash": "b16c57b63ac798dca4b51a86b0ecee0d",
+    "mtime": 1787248701.5040863,
+    "ast_hash": "cd69e9760edc62c18add0a278d539bdc",
+    "semantic_hash": ""
+  },
+  "backend/migrations/010_narrative_vector_index.sql": {
+    "mtime": 1787246037.0172226,
+    "ast_hash": "666f01fbc133411f85c9b78b4b195bde",
+    "semantic_hash": ""
+  },
+  "backend/migrations/010_rollback.sql": {
+    "mtime": 1787246037.065552,
+    "ast_hash": "70c7a70d4da8723c9515ef19ac683bca",
     "semantic_hash": ""
   }
 }
