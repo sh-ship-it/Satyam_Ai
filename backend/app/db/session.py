@@ -48,6 +48,19 @@ def active_url() -> str:
     return s.database_url
 
 
+def active_vector_type() -> str:
+    """Return the pgvector column type of the ACTIVE source: vector | halfvec.
+
+    The two databases differ on purpose — local stores fp32 `vector`, cloud
+    stores fp16 `halfvec` because a 512 MB Neon project cannot hold fp32 vectors
+    plus an HNSW index. Since the source is switchable at runtime, the cast has
+    to be resolved per request; a query vector cast to the wrong type makes the
+    `<=>` operator fail to find a match and the whole vector arm goes dark.
+    """
+    s = get_settings()
+    return s.vector_type if _db_source == "local" else s.cloud_vector_type
+
+
 def _get_engine(source: Literal["cloud", "local"]) -> AsyncEngine:
     if source not in _engines:
         s = get_settings()

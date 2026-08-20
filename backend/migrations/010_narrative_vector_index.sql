@@ -1,46 +1,67 @@
 -- ===========================================================================
 -- 010_narrative_vector_index.sql
 --
--- Restores the approximate-nearest-neighbour index on narratives.embedding.
+-- Ensures the approximate-nearest-neighbour index on narratives.embedding.
 --
--- Additive and idempotent. Contains no DROP, no ALTER of an existing object,
--- and touches no data. Safe to run repeatedly.
+-- Additive and idempotent. No DROP, no ALTER of an existing object, no data
+-- touched. Safe to run repeatedly.
 --
 -- WHY THIS EXISTS
 -- ---------------
--- 001_init.sql created this index (as idx_narratives_embedding, on the v1
--- schema). 002_schema_v2.sql drops and recreates the narratives table and never
--- recreates it, so on any database built from 002 onwards the index is absent
--- and every vector search degrades to an exact KNN scan of the whole table.
+-- 001_init.sql created this index on the v1 schema. 002_schema_v2.sql drops and
+-- recreates the narratives table and never recreates it, so on any database
+-- built from 002 onwards the index is absent.
 --
--- seed/embed_narratives.py also creates this index, with this same name, once
--- it finishes populating embeddings. That duplication is deliberate: the job
--- covers the normal path, and this migration ensures a database restored from
--- migrations alone ends up in the same shape. IF NOT EXISTS makes running both
--- harmless.
+-- The index is NOT an optimisation, it is required. apply_rls_context sets
+-- statement_timeout to 5 s, and without an ANN index `ORDER BY embedding <=> $1`
+-- is an exact KNN scan over every embedded row, which exceeds that budget and
+-- makes the whole vector arm report itself unavailable.
+--
+-- seed/embed_narratives.py also creates this index, with this same name, after
+-- it finishes populating embeddings. IF NOT EXISTS makes running both harmless.
+--
+-- OPERATOR CLASS IS DETECTED, NOT ASSUMED
+-- ---------------------------------------
+-- The two deployments store different types on purpose: local Postgres uses
+-- fp32 `vector(1024)`, while the Neon free tier uses fp16 `halfvec(1024)`
+-- because fp32 vectors plus this index do not fit in a 512 MB project. An hnsw
+-- index must use the operator class matching the column type, so a hardcoded
+-- `vector_cosine_ops` fails outright on a halfvec column. The column type is
+-- therefore read from the catalogue and the operator class chosen from it.
 --
 -- OPERATIONAL NOTE ON ORDERING
 -- ----------------------------
 -- Prefer to populate embeddings FIRST and let the job build the index at the
--- end. Building the index while it is empty means every one of the ~72k UPDATE
--- statements has to maintain it, which is markedly slower than a single bulk
--- build afterwards. Applying this migration to an already-embedded database, or
--- after the job has run, costs nothing.
---
--- The index is useful only once embeddings exist. On a database where every
--- narratives.embedding is NULL this builds an empty index, which is valid but
--- does nothing until seed/embed_narratives.py has been run.
---
--- HNSW is chosen over ivfflat because it needs no training pass and keeps
--- strong recall on a small or empty table, whereas ivfflat with lists=100
--- degrades badly until many thousands of rows exist.
---
--- VECTOR TYPE
--- -----------
--- This assumes VECTOR_TYPE=vector, i.e. the column is vector(1024). If the
--- deployment switches to halfvec(1024) (the Neon free-tier layout referenced in
--- DATABASE.md), the operator class must become halfvec_cosine_ops instead.
+-- end: building it while empty forces every UPDATE to maintain it, which is far
+-- slower than one bulk build. Running this against an already-indexed database
+-- costs nothing.
 -- ===========================================================================
 
-CREATE INDEX IF NOT EXISTS idx_nar_embedding
-    ON narratives USING hnsw (embedding vector_cosine_ops);
+DO $$
+DECLARE
+    coltype text;
+    ops     text;
+BEGIN
+    SELECT format_type(a.atttypid, a.atttypmod)
+      INTO coltype
+      FROM pg_attribute a
+     WHERE a.attrelid = 'narratives'::regclass
+       AND a.attname  = 'embedding'
+       AND NOT a.attisdropped;
+
+    IF coltype IS NULL THEN
+        RAISE NOTICE '010: narratives.embedding not present, nothing to index';
+        RETURN;
+    END IF;
+
+    ops := CASE
+               WHEN coltype LIKE 'halfvec%' THEN 'halfvec_cosine_ops'
+               ELSE 'vector_cosine_ops'
+           END;
+
+    EXECUTE format(
+        'CREATE INDEX IF NOT EXISTS idx_nar_embedding '
+        'ON narratives USING hnsw (embedding %s)', ops);
+
+    RAISE NOTICE '010: idx_nar_embedding ensured for column % using %', coltype, ops;
+END $$;

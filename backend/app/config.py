@@ -105,8 +105,17 @@ class Settings(BaseSettings):
 
     # Embeddings (always BGE-M3 local — not configurable)
     embedding_dim: int = 1024
-    # vector_type: "vector" for local (fp32), "halfvec" for Neon free tier (fp16)
+    # pgvector column type, per source. The two databases genuinely differ, so a
+    # single global cannot serve both: the Neon free tier caps a project at
+    # 512 MB, where fp32 vectors plus an HNSW index do not fit, while local
+    # Postgres has no such cap and keeps full fp32 precision.
+    #   vector  = fp32, 4 bytes/dim
+    #   halfvec = fp16, 2 bytes/dim, roughly half the storage and index size
+    # Use db.session.active_vector_type() to resolve the one in force, never
+    # these fields directly: the Settings panel can switch source at runtime, and
+    # casting a query vector to the wrong type makes the pgvector operator fail.
     vector_type: Literal["vector", "halfvec"] = "vector"
+    cloud_vector_type: Literal["vector", "halfvec"] = "halfvec"
 
     # ── Local model weights (downloaded via huggingface-cli) ──────────────────
     # Paths are relative to the backend/ working directory.

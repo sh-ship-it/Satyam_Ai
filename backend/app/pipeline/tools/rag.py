@@ -77,8 +77,8 @@ from dataclasses import dataclass, field
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.config import get_settings
 from app.core import rbac
+from app.db.session import active_vector_type
 from app.models.registry import get_embedder, get_reranker
 
 log = logging.getLogger("satyam.rag")
@@ -194,7 +194,10 @@ async def _vector_candidates(
         log.warning("rag.vector_unavailable reason=embedder_failed err=%s", exc)
         return [], False
 
-    vt = get_settings().vector_type  # "vector" | "halfvec"
+    # Resolved per request, not from a single global: local stores fp32 `vector`
+    # and cloud stores fp16 `halfvec`, and the Settings panel can switch source
+    # at runtime. Casting to the wrong type breaks the `<=>` operator.
+    vt = active_vector_type()
     vec_literal = _to_pgvector(qvec)
 
     sql = text(
