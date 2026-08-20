@@ -625,12 +625,50 @@ async def run(
 
         elif intent == "narrative_search":
             yield PipelineEvent("tool", {"name": "rag", "status": "start"})
-            hits = await rag.search_narratives(session, message, k=5)
-            rows_data = hits
-            context = _rows_context(hits)
-            citations = [{"ref": h["case_id"], "label": "narrative"} for h in hits]
+            retrieval = await rag.retrieve_narratives(
+                session, message, k=5, principal=principal
+            )
+            rows_data = [
+                {
+                    "case_id": h.case_id,
+                    "text": h.text,
+                    "restricted": h.restricted,
+                }
+                for h in retrieval.hits
+            ]
+            context = _rows_context(rows_data)
+            # Only cite records that were actually retrieved, and never cite a
+            # record whose body was withheld for clearance.
+            citations = [
+                {"ref": h.case_id, "label": "narrative"}
+                for h in retrieval.hits
+                if not h.restricted
+            ]
+            # The detail string must distinguish "matched nothing" from "the lane
+            # could not run", which the previous f"{len(hits)} hits" could not.
+            # Those two states look identical to a user but mean opposite things
+            # to an operator: one is a legitimate empty result, the other is an
+            # outage.
+            arms_available = [
+                name
+                for name, ok in (
+                    ("vector", retrieval.vector_available),
+                    ("lexical", retrieval.lexical_available),
+                )
+                if ok
+            ]
+            if not arms_available:
+                detail = "lane unavailable: no retrieval strategy could run"
+            elif not retrieval.hits:
+                detail = f"no matches ({'+'.join(arms_available)} ran)"
+            else:
+                detail = f"{retrieval.strategy}, {len(retrieval.hits)} hits"
+                if retrieval.withheld_count:
+                    detail += f", {retrieval.withheld_count} withheld"
+            if not retrieval.vector_available:
+                detail += " | vector unavailable"
             yield PipelineEvent("tool", {"name": "rag", "status": "end",
-                                         "detail": f"{len(hits)} hits"})
+                                         "detail": detail})
 
         elif intent == "hotspot":
             if not principal.has(Permission.RUN_ANALYTICS):
