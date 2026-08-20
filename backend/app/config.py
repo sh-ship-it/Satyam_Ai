@@ -72,7 +72,15 @@ class Settings(BaseSettings):
 
     # Groq
     groq_api_key: str = ""
-    groq_model: str = "llama-3.3-70b-versatile"
+    # Groq retires models regularly and answers an unknown model id with HTTP 404
+    # on /chat/completions, which is easy to misread as a bad key or bad URL. The
+    # previous default, llama-3.3-70b-versatile, no longer exists. Check with:
+    #   curl -H "Authorization: Bearer $GROQ_API_KEY" \
+    #        https://api.groq.com/openai/v1/models
+    # A 200 there means the key is fine and only the model id is stale. Avoid
+    # reasoning models such as qwen3 for routing: they wrap the JSON in <think>
+    # prose and fail schema parsing.
+    groq_model: str = "openai/gpt-oss-120b"
 
     # OpenAI (ChatGPT)
     openai_api_key: str = ""

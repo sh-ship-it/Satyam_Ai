@@ -556,12 +556,18 @@ async def _compose(
         english_answer = await get_llm(brain_engine).complete(
             prompt, system=system, temperature=0.2
         )
-    except Exception:
+    except Exception as exc:  # noqa: BLE001
+        log.warning("compose.primary_failed err=%s", exc)
         try:
             english_answer = await get_fallback_llm().complete(
                 prompt, system=system, temperature=0.2
             )
-        except Exception:
+        except Exception as exc2:  # noqa: BLE001
+            # Both lanes are the same provider whenever BRAIN_ENGINE=groq, so one
+            # rate limit takes out primary and fallback together. Logged because
+            # the user-facing string alone cannot distinguish a 429 from a dead
+            # key, and this was silent before.
+            log.warning("compose.fallback_failed err=%s - returning ungrounded notice", exc2)
             english_answer = "I found the records below, but couldn't generate a summary just now."
 
     if lang != "kn":
