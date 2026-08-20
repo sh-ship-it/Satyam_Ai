@@ -119,14 +119,20 @@ async def main() -> None:
             texts = [r["body"] for r in rows]
             vecs = await embed(texts)
 
-            # Bulk update
+            # Bulk update.
+            # executemany sends the whole batch over the extended protocol instead
+            # of issuing one round trip per row. Against a remote Neon instance the
+            # per-row form cost ~1 RTT each (measured: 234 ms/row, ~4.3 rows/s,
+            # which put a 72k backfill at ~4.6 h). Batching collapses that to
+            # roughly one round trip per batch.
             async with conn.transaction():
-                for row, vec in zip(rows, vecs):
-                    await conn.execute(
-                        f"UPDATE narratives SET embedding = $1::{vt} WHERE narrative_id = $2",
-                        vec_literal(vec),
-                        row["narrative_id"],
-                    )
+                await conn.executemany(
+                    f"UPDATE narratives SET embedding = $1::{vt} WHERE narrative_id = $2",
+                    [
+                        (vec_literal(vec), row["narrative_id"])
+                        for row, vec in zip(rows, vecs)
+                    ],
+                )
 
             done += len(rows)
             pct = done / total * 100 if total else 0
@@ -134,9 +140,23 @@ async def main() -> None:
 
         # Build HNSW index after all embeddings are populated
         print(f"\nBuilding HNSW index on narratives.embedding…")
-        from app.config import get_settings
-        vt = get_settings().vector_type  # "vector" | "halfvec"
+        # `vt` is already resolved above from the module-level get_settings import.
+        # Re-importing it here made get_settings function-local, which turned the
+        # earlier read into an UnboundLocalError and meant this job could never run.
         ops = "halfvec_cosine_ops" if vt == "halfvec" else "vector_cosine_ops"
+
+        # HNSW builds the whole graph in maintenance_work_mem and spills to disk
+        # when it does not fit, which is drastically slower. The default here is
+        # 64 MB, while 200k 1024-dim vectors need roughly 860 MB. These are
+        # SET LOCAL-style session settings on a maintenance connection only, so
+        # they do not affect the running application.
+        try:
+            await conn.execute("SET maintenance_work_mem = '1GB'")
+            await conn.execute("SET max_parallel_maintenance_workers = 4")
+        except Exception as exc:  # noqa: BLE001
+            # Managed providers may forbid these; the build still succeeds.
+            print(f"  (could not raise build memory: {exc})")
+
         await conn.execute(
             f"CREATE INDEX IF NOT EXISTS idx_nar_embedding "
             f"ON narratives USING hnsw (embedding {ops})"

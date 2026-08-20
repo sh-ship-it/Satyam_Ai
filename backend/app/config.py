@@ -23,6 +23,13 @@ class Settings(BaseSettings):
     # Local Postgres URL — used when the Settings panel switches to "local" source.
     # Falls back to database_url if not set.
     local_database_url: str = "postgresql+asyncpg://satyam_app:satyam_app@localhost:5432/satyam"
+    # Which URL the app starts on: "cloud" -> database_url, "local" -> local_database_url.
+    # This exists because db/session.py previously hardcoded "cloud", leaving
+    # local_database_url and set_db_source() unreachable. The distinction is not
+    # cosmetic: database_url connects as the table OWNER, which bypasses every RLS
+    # policy when the tables are not FORCE-enabled, whereas local_database_url
+    # connects as the least-privilege satyam_app role and RLS actually applies.
+    db_source: Literal["cloud", "local"] = "cloud"
     redis_url: str = "redis://localhost:6379/0"
 
     # Auth

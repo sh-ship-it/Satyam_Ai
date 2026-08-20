@@ -25,14 +25,45 @@ class FakeResult:
         return list(self._rows)
 
 
+class FakeTransactionAborted(Exception):
+    """Stands in for asyncpg's InFailedSQLTransactionError."""
+
+
+class _FakeSavepoint:
+    """Async context manager modelling SAVEPOINT / ROLLBACK TO SAVEPOINT."""
+
+    def __init__(self, session):
+        self._session = session
+
+    async def __aenter__(self):
+        self._session.savepoints += 1
+        return self
+
+    async def __aexit__(self, exc_type, exc, tb):
+        if exc_type is not None:
+            # ROLLBACK TO SAVEPOINT clears the aborted state, which is the whole
+            # reason rag.py wraps each arm in one.
+            self._session.aborted = False
+            self._session.savepoint_rollbacks += 1
+        return False  # never swallow the error
+
+
 class FakeSession:
-    """Scripted stand-in for AsyncSession.
+    """Scripted stand-in for AsyncSession, with Postgres transaction semantics.
 
     `script` is consumed in order. Each entry is either a list of row dicts to
     return, or an Exception instance to raise. When the script is exhausted,
     further calls return no rows, which models a query that ran successfully and
     matched nothing. That is the exact condition the production defect cannot
     distinguish from a failure.
+
+    Transaction semantics matter here. A real Postgres transaction is poisoned by
+    any failed statement: every later statement raises
+    InFailedSQLTransactionError until the transaction is rolled back. An earlier
+    version of this fake ignored that, so the suite passed while the live lane
+    was dead, because the vector timeout took the lexical fallback down with it.
+    Raising from the script therefore sets `aborted`, and only a savepoint
+    rollback clears it.
 
     Every executed statement is recorded in `statements` (whitespace-normalised)
     so a test can assert which queries ran, and `params` records the bound
@@ -43,14 +74,28 @@ class FakeSession:
         self.script = list(script or [])
         self.statements: list[str] = []
         self.params: list[dict] = []
+        self.aborted = False
+        self.savepoints = 0
+        self.savepoint_rollbacks = 0
+
+    def begin_nested(self):
+        return _FakeSavepoint(self)
 
     async def execute(self, stmt, params=None):
+        if self.aborted:
+            # Postgres refuses the statement before it runs, so it is not
+            # recorded in `statements`.
+            raise FakeTransactionAborted(
+                "current transaction is aborted, commands ignored until end of "
+                "transaction block"
+            )
         self.statements.append(" ".join(str(stmt).split()))
         self.params.append(dict(params or {}))
         if not self.script:
             return FakeResult([])
         nxt = self.script.pop(0)
         if isinstance(nxt, BaseException):
+            self.aborted = True
             raise nxt
         return FakeResult(nxt)
 
@@ -964,3 +1009,81 @@ async def test_withheld_hit_is_still_returned_so_the_match_is_visible(monkeypatc
     assert len(result) == 1
     assert result.withheld_count == 1
     assert result.strategy == rag.STRATEGY_LEXICAL
+
+
+# ---------------------------------------------------------------------------
+# Property 12: a failing arm must not poison the transaction
+#
+# Regression guard for a live defect. Once embeddings were populated but before
+# the ANN index existed, the vector query hit the 5 s statement_timeout set by
+# apply_rls_context. In Postgres a failed statement aborts the whole
+# transaction, so the lexical fallback then died on
+# InFailedSQLTransactionError and the lane returned nothing at all — strictly
+# worse than before embeddings existed, when the vector arm returned zero rows
+# instantly. The earlier fake had no transaction semantics, so the suite passed
+# while the live lane was dead.
+# ---------------------------------------------------------------------------
+
+
+async def test_vector_timeout_does_not_poison_the_lexical_arm(monkeypatch):
+    """The documented live failure: vector times out, lexical must still answer."""
+    install_fakes(monkeypatch)
+    timeout = RuntimeError("canceling statement due to statement timeout")
+    session = FakeSession([timeout, [lex_row()], [{"case_id": 200, "crime_type": "THEFT"}]])
+
+    result = await rag.retrieve_narratives(
+        session, "chain snatching", k=3, principal=make_principal(clearance=4)
+    )
+
+    assert session.issued(LEXICAL_MARKER), "lexical arm never ran"
+    assert session.savepoint_rollbacks == 1, "the failed arm did not roll back a savepoint"
+    assert session.aborted is False, "transaction left in an aborted state"
+    assert result.vector_available is False
+    assert result.lexical_available is True
+    assert result.strategy == rag.STRATEGY_LEXICAL
+    assert len(result) == 1
+
+
+async def test_each_query_is_wrapped_in_its_own_savepoint(monkeypatch):
+    """Every statement rag.py issues is individually isolated."""
+    install_fakes(monkeypatch)
+    session = FakeSession(
+        [[vec_row()], [lex_row()], [{"case_id": 100, "crime_type": "THEFT"}]]
+    )
+
+    await rag.retrieve_narratives(
+        session, "chain snatching", k=3, principal=make_principal(clearance=4)
+    )
+
+    assert session.savepoints == session.call_count, (
+        f"{session.call_count} statements but only {session.savepoints} savepoints"
+    )
+    assert session.savepoint_rollbacks == 0, "no arm failed, nothing should roll back"
+
+
+async def test_guard_fails_without_savepoint_isolation(monkeypatch):
+    """Proves the two tests above are not tautological.
+
+    Replaces _execute_isolated with a savepoint-free version equivalent to the
+    pre-fix code. The lexical arm must then be unreachable, which is exactly the
+    live symptom.
+    """
+    install_fakes(monkeypatch)
+
+    async def unisolated(session, sql, params):
+        result = await session.execute(sql, params)
+        return [dict(r) for r in result.mappings().all()]
+
+    monkeypatch.setattr(rag, "_execute_isolated", unisolated)
+
+    timeout = RuntimeError("canceling statement due to statement timeout")
+    session = FakeSession([timeout, [lex_row()], [{"case_id": 200, "crime_type": "THEFT"}]])
+
+    result = await rag.retrieve_narratives(
+        session, "chain snatching", k=3, principal=make_principal(clearance=4)
+    )
+
+    assert not session.issued(LEXICAL_MARKER), "lexical should be unreachable here"
+    assert session.aborted is True
+    assert result.hits == []
+    assert result.strategy == rag.STRATEGY_NONE

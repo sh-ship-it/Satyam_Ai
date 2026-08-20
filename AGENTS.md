@@ -40,7 +40,8 @@ satyam/
     app/models/         base + api/(gemini,groq,bhashini) + local/(bge,whisper,parler,...) + registry
     app/core/           security, rbac, audit, masking
     app/db/             session, models, rls
-    migrations/001_init.sql   schema + RLS policies + masked persons_v view
+    migrations/               apply 0*.sql in order; 002_schema_v2.sql supersedes 001_init.sql
+    migrations/010_*.sql      HNSW index on narratives.embedding (required for vector RAG)
     seed/               synthetic data generator
   frontend/   React UI: Console, Map, Network, Case Drawer, Reports, Audit, Transcripts
     src/components/Shell.tsx   global voice-command router
@@ -64,9 +65,14 @@ docker compose up --build
 cd backend
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-# bring up Postgres+Redis (docker compose up db redis) then:
-psql "$DATABASE_URL" -f migrations/001_init.sql
-python -m seed.seed
+# bring up Postgres+Redis (docker compose up db redis) then apply migrations IN ORDER.
+# 001_init.sql alone is NOT enough: it is the v1 schema, and 002_schema_v2.sql
+# drops and recreates the core tables. Applying only 001 leaves a schema the app
+# cannot use.
+for f in migrations/0*.sql; do psql "$DATABASE_URL" -f "$f"; done
+python -m seed.load_seed          # core dataset (cases, persons, narratives)
+python -m seed.init_ops           # ops_* tables for the Response-Ops screens
+python -m seed.embed_narratives   # narratives.embedding + HNSW index; RAG is dead without it
 uvicorn app.main:app --reload --port 8000
 
 # frontend (separate terminal)
@@ -81,11 +87,37 @@ Copy `.env.example` -> `.env`. Key vars: `DATABASE_URL`, `REDIS_URL`, `JWT_SECRE
 `MODEL_BACKEND` (`api` default | `local`), `GEMINI_API_KEY`, `GROQ_API_KEY`,
 `BHASHINI_*`. Frontend uses `VITE_API_BASE_URL` (default `http://localhost:8000`).
 
+### `DB_SOURCE` decides whether RLS is actually enforced
+
+`DB_SOURCE` selects which URL the app starts on and is **security-relevant, not a
+convenience switch**:
+
+| value | URL used | connects as | RLS |
+|---|---|---|---|
+| `cloud` (default) | `DATABASE_URL` | `neondb_owner` — table owner, `rolbypassrls=true` | **bypassed** |
+| `local` | `LOCAL_DATABASE_URL` | `satyam_app` — non-owner, no bypass | **enforced** |
+
+The RLS policies are correct and identical in both databases, but no table has
+`FORCE ROW LEVEL SECURITY`, so any owner or `rolbypassrls` role ignores every policy.
+Measured: as `neondb_owner` with no jurisdiction context, `SELECT count(*) FROM cases`
+returns every row; as `satyam_app` it returns 0 and correctly narrows to 83 rows for a
+single-station scope.
+
+So a deployment that connects as a table owner has RBAC in Python but **no database-level
+jurisdiction enforcement**. Either run as a least-privilege role, or add `FORCE RLS` to
+the tables. Local dev uses `DB_SOURCE=local` for this reason; run
+`migrations/008_local_app_grants.sql` once so `satyam_app` has its grants.
+
 ## Hard rules (do not violate)
 
 - The LLM is **never** trusted for SQL: everything passes `pipeline/tools/sql_guard.py`
-  (single SELECT, allow-listed tables, auto-LIMIT). Text-to-SQL targets the masked
-  `persons_v` view, never raw PII.
+  (single SELECT, allow-listed tables, auto-LIMIT).
+- **Known gap, do not assume otherwise:** there is no `persons_v` masked view in any
+  database, and `sql_guard.ALLOWED_TABLES` includes raw `persons`. `core/masking.py`
+  exposes only `mask_case()`, which is called solely from `services/case_service.py`,
+  so **no masking is applied to Text-to-SQL output**. RLS still scopes *which* rows a
+  caller sees; it does not mask columns. Treat column-level PII masking on the
+  Text-to-SQL path as unimplemented rather than as an existing guarantee.
 - Never weaken **RLS** or the **audit hash chain**.
 - Keep all data **synthetic**; no individual-guilt prediction; human-in-the-loop.
 - Do not add hosted embedding models — BGE-M3 is the sole embedder.

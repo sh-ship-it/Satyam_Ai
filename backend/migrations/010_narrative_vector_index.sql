@@ -1,0 +1,46 @@
+-- ===========================================================================
+-- 010_narrative_vector_index.sql
+--
+-- Restores the approximate-nearest-neighbour index on narratives.embedding.
+--
+-- Additive and idempotent. Contains no DROP, no ALTER of an existing object,
+-- and touches no data. Safe to run repeatedly.
+--
+-- WHY THIS EXISTS
+-- ---------------
+-- 001_init.sql created this index (as idx_narratives_embedding, on the v1
+-- schema). 002_schema_v2.sql drops and recreates the narratives table and never
+-- recreates it, so on any database built from 002 onwards the index is absent
+-- and every vector search degrades to an exact KNN scan of the whole table.
+--
+-- seed/embed_narratives.py also creates this index, with this same name, once
+-- it finishes populating embeddings. That duplication is deliberate: the job
+-- covers the normal path, and this migration ensures a database restored from
+-- migrations alone ends up in the same shape. IF NOT EXISTS makes running both
+-- harmless.
+--
+-- OPERATIONAL NOTE ON ORDERING
+-- ----------------------------
+-- Prefer to populate embeddings FIRST and let the job build the index at the
+-- end. Building the index while it is empty means every one of the ~72k UPDATE
+-- statements has to maintain it, which is markedly slower than a single bulk
+-- build afterwards. Applying this migration to an already-embedded database, or
+-- after the job has run, costs nothing.
+--
+-- The index is useful only once embeddings exist. On a database where every
+-- narratives.embedding is NULL this builds an empty index, which is valid but
+-- does nothing until seed/embed_narratives.py has been run.
+--
+-- HNSW is chosen over ivfflat because it needs no training pass and keeps
+-- strong recall on a small or empty table, whereas ivfflat with lists=100
+-- degrades badly until many thousands of rows exist.
+--
+-- VECTOR TYPE
+-- -----------
+-- This assumes VECTOR_TYPE=vector, i.e. the column is vector(1024). If the
+-- deployment switches to halfvec(1024) (the Neon free-tier layout referenced in
+-- DATABASE.md), the operator class must become halfvec_cosine_ops instead.
+-- ===========================================================================
+
+CREATE INDEX IF NOT EXISTS idx_nar_embedding
+    ON narratives USING hnsw (embedding vector_cosine_ops);

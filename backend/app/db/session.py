@@ -21,7 +21,10 @@ from sqlalchemy.ext.asyncio import (
 from app.config import get_settings
 
 # ── Active source (process-wide, toggled by /settings/db-source) ─────────────
-_db_source: Literal["cloud", "local"] = "cloud"
+# Seeded from settings rather than hardcoded, so DB_SOURCE=local in the
+# environment is honoured at startup. Previously this was a literal "cloud",
+# which made local_database_url and set_db_source() unreachable dead code.
+_db_source: Literal["cloud", "local"] = get_settings().db_source
 
 # Separate engine + sessionmaker caches for each source
 _engines: dict[str, AsyncEngine] = {}

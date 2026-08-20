@@ -155,6 +155,29 @@ def _to_pgvector(vec: list[float]) -> str:
     return "[" + ",".join(f"{x:.6f}" for x in vec) + "]"
 
 
+async def _execute_isolated(session: AsyncSession, sql, params) -> list[dict]:
+    """Run one read-only query inside a SAVEPOINT and return mapped rows.
+
+    Postgres aborts the entire transaction on a failed statement, so without this
+    the first arm to fail takes every later arm down with it: the vector query
+    times out, and the lexical fallback then dies on
+    InFailedSQLTransactionError instead of answering. That turns a degraded lane
+    into a dead one, which is the exact failure mode this module exists to
+    prevent. Observed against the live database once embeddings were populated
+    but before the ANN index existed.
+
+    A savepoint rather than session.rollback() is deliberate. apply_rls_context
+    stamps the caller's jurisdiction with set_config(..., true), i.e.
+    transaction-local, so a plain rollback would silently discard the RLS scope
+    and the statement_timeout cap. Settings made before a savepoint survive
+    ROLLBACK TO SAVEPOINT, so this clears the error and keeps the security
+    context intact.
+    """
+    async with session.begin_nested():
+        result = await session.execute(sql, params)
+        return [dict(r) for r in result.mappings().all()]
+
+
 async def _vector_candidates(
     session: AsyncSession, query: str, k: int
 ) -> tuple[list[dict], bool]:
@@ -185,10 +208,9 @@ async def _vector_candidates(
         """
     )
     try:
-        result = await session.execute(
-            sql, {"qvec": vec_literal, "k": k * CANDIDATE_MULTIPLIER}
+        rows = await _execute_isolated(
+            session, sql, {"qvec": vec_literal, "k": k * CANDIDATE_MULTIPLIER}
         )
-        rows = [dict(r) for r in result.mappings().all()]
     except Exception as exc:  # noqa: BLE001
         log.warning("rag.vector_unavailable reason=query_failed err=%s", exc)
         return [], False
@@ -233,10 +255,9 @@ async def _lexical_candidates(
         "LIMIT :k"
     )
     try:
-        result = await session.execute(
-            sql, {"q": query, "k": k * CANDIDATE_MULTIPLIER}
+        rows = await _execute_isolated(
+            session, sql, {"q": query, "k": k * CANDIDATE_MULTIPLIER}
         )
-        rows = [dict(r) for r in result.mappings().all()]
     except Exception as exc:  # noqa: BLE001
         log.warning("rag.lexical_unavailable reason=query_failed err=%s", exc)
         return [], False
@@ -317,11 +338,12 @@ async def _crime_types_for(
     if not case_ids:
         return {}
     try:
-        result = await session.execute(
+        rows = await _execute_isolated(
+            session,
             text("SELECT case_id, crime_type FROM cases WHERE case_id = ANY(:ids)"),
             {"ids": list(case_ids)},
         )
-        return {int(r["case_id"]): r["crime_type"] for r in result.mappings().all()}
+        return {int(r["case_id"]): r["crime_type"] for r in rows}
     except Exception as exc:  # noqa: BLE001
         # Fail closed: an empty mapping marks every row restricted.
         log.warning("rag.crime_type_lookup_failed err=%s - failing closed", exc)

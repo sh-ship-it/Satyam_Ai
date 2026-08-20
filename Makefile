@@ -10,7 +10,10 @@ logs:          ## Tail backend logs
 	docker compose logs -f backend
 
 seed:          ## Load synthetic data
-	docker compose exec backend python -m seed.seed
+	docker compose exec backend python -m seed.load_seed
+
+embed:         ## Populate narratives.embedding + build the HNSW index (required for RAG)
+	docker compose exec backend python -m seed.embed_narratives
 
 backend:       ## Run backend locally (needs local Postgres/Redis)
 	cd backend && uvicorn app.main:app --reload
