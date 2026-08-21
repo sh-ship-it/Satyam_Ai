@@ -96,6 +96,30 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
     }
   }, [open]);
 
+  // Reconcile the DB selector with the server on open.
+  //
+  // dbSource is persisted in localStorage and defaulted to "cloud", but the
+  // active source is process-wide state on the backend seeded from DB_SOURCE.
+  // Without this the panel confidently showed "Neon cloud" selected while every
+  // query was being served from local Postgres, which is exactly the sort of
+  // claim an officer should never have to second-guess. The server is the only
+  // authority here, so its answer overwrites the cached value.
+  useEffect(() => {
+    if (!open) return;
+    api
+      .getDbSource()
+      .then(({ db_source }) => {
+        if (db_source !== "cloud" && db_source !== "local") return;
+        setEngines((prev) => {
+          if (prev.dbSource === db_source) return prev;
+          const next = { ...prev, dbSource: db_source };
+          saveEngineSettings(next);
+          return next;
+        });
+      })
+      .catch(() => {});
+  }, [open]);
+
   const updateEngine = <K extends keyof EngineSettings>(key: K, val: EngineSettings[K]) => {
     setEngines((prev) => {
       const next = { ...prev, [key]: val };

@@ -1,0 +1,17 @@
+# Pytest configuration for the Satyam backend.
+#
+# There is deliberately no [build-system] or [project] table here: this file
+# exists only so pytest has a config root. The backend is run from source, not
+# installed as a package, so adding build metadata would change how
+# `pip install -r requirements.txt` behaves.
+#
+# asyncio_mode = "auto" is required because pytest-asyncio is installed but was
+# previously unconfigured, which makes every `async def` test silently SKIP
+# rather than run.
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "integration: needs a live, seeded database or network access. Excluded from CI with -m 'not integration'.",
+]

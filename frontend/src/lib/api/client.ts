@@ -213,6 +213,15 @@ export const api = {
       body: JSON.stringify({ source }),
     });
   },
+  /**
+   * The source the SERVER is actually using. The selector must be initialised
+   * from this rather than from localStorage: the active source is process-wide
+   * state on the backend (seeded from DB_SOURCE), so a cached browser value can
+   * disagree with the database the answers are really coming from.
+   */
+  getDbSource(): Promise<{ db_source: "cloud" | "local"; url_host: string }> {
+    return request("/settings/db-source");
+  },
   modelProviders(): Promise<ModelProviderStatus> {
     return request<ModelProviderStatus>("/settings/db-source/models");
   },

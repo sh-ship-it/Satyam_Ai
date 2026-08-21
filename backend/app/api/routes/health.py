@@ -81,9 +81,35 @@ async def health_data(session: AsyncSession = Depends(get_scoped_session)) -> di
             )
         except Exception:
             out[tbl] = -1  # table missing or not migrated
+    # Embedding coverage. Without this, a completely non-functional semantic
+    # retrieval lane is invisible from outside the database: the narratives row
+    # count looks healthy while every embedding is NULL, so vector search
+    # matches nothing. Surfacing the count makes that state observable.
+    try:
+        embedded = int(
+            (
+                await session.execute(
+                    text("SELECT COUNT(*) FROM narratives WHERE embedding IS NOT NULL")
+                )
+            ).scalar()
+            or 0
+        )
+    except Exception:
+        embedded = -1  # column or table missing
+
+    narratives_total = out.get("narratives", 0)
     return {
         "row_counts": out,
         "seeded": out.get("cases", 0) > 0,
         "financial_seeded": out.get("financial_transactions", 0) > 0,
         "socio_seeded": out.get("district_socio_economic_indicators", 0) > 0,
+        "narratives_embedded": embedded,
+        "embedding_coverage_percent": (
+            round(embedded / narratives_total * 100, 1)
+            if embedded >= 0 and narratives_total > 0
+            else None
+        ),
+        # False means semantic retrieval cannot run; the lexical arm carries the
+        # lane on its own until `python -m seed.embed_narratives` has been run.
+        "vector_search_available": embedded > 0,
     }

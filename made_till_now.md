@@ -3653,3 +3653,155 @@ Full project scan produced 2 critical, 5 high, 9 medium, 10 low issues. All fixa
 
 #### Verification & Build
 - Ran full production builds and verified that both client and server compilations succeed without any errors or warnings.
+
+
+---
+
+### [2026-08-21] — RAG Retrieval Recovery: Dead Vector Lane, Broken Embedding Job, and the Actual Root Causes
+
+#### Summary
+The narrative-search / RAG lane returned nothing for every query, on both databases, and had never worked. Traced through five distinct, independently-hiding bugs rather than one — fixing the surface symptom at any single layer would have left the lane broken. All commits went to the `aaradhya` branch; nothing was pushed.
+
+#### Bug 1 — the embedding job could never run
+- `backend/seed/embed_narratives.py` had a **redundant, function-local** `from app.config import get_settings` inside `main()`, which shadowed the module-level import for the whole function scope. The earlier read of `get_settings().vector_type` then raised `UnboundLocalError` immediately after printing the row count.
+- This is why every embedding on both databases was NULL from the start — not a missed operational step. Fix: deleted the local import.
+
+#### Bug 2 — the job would have taken ~4.6 hours
+- The `# Bulk update` block issued 64 sequential `await conn.execute(UPDATE ...)` per batch — one network round trip per row. Measured against Neon: 234 ms/row, 4.3 rows/s.
+- Replaced with a single `conn.executemany(...)` per batch. Measured after: ~110 rows/s cloud, ~355 rows/s local (no network hop) — a 26–80x speedup.
+
+#### Bug 3 — the vector arm had no relevance-free failure path, and the old fallback was worse than none
+- `rag.py` was fully rewritten (`RetrievalHit` / `RetrievalResult` dataclasses; `_vector_candidates` / `_lexical_candidates` returning `(rows, available)` instead of silently empty lists; `_rrf_fuse` for hybrid ranking, `RRF_K=60`).
+- Deleted an unpredicated `SELECT case_id, body FROM narratives LIMIT :k` that used to run whenever the real lanes failed — it returned arbitrary rows with zero relevance to the query, and did so silently.
+- `retrieve_narratives()` is the new real implementation; `search_narratives()` kept as a `list[dict]` shim so callers written against the old contract still work.
+
+#### Bug 4 — clearance enforcement added to narrative content
+- `_apply_clearance()` added: routes through the existing `app.core.rbac.is_protected` / `Principal.can_see_narrative` (previously implemented but never called from this path). Protected-crime narratives below the caller's clearance are returned with `restricted=True` and the body replaced by a fixed notice, rather than being silently dropped — so the officer sees a match exists without seeing content they are not cleared for.
+- Clearance is applied **after** reranking, so the cross-encoder always ranks the real text, not the notice string.
+
+#### Bug 5 — transaction poisoning (a regression introduced while fixing Bug 1–4)
+- Once embeddings existed, the vector query started actually scanning and blew the 5 s `statement_timeout` set by `apply_rls_context`. Postgres aborts the **whole transaction** on a failed statement, so the lexical fallback then died on `InFailedSQLTransactionError` — strategy `none`, zero hits, worse than before embeddings existed.
+- Fixed with `_execute_isolated()`: every read-only query in `rag.py` now runs inside `session.begin_nested()` (a SAVEPOINT). A plain `session.rollback()` would have been wrong — `apply_rls_context` uses `set_config(..., true)`, which is transaction-local, so a rollback would have silently discarded the caller's RLS jurisdiction scope along with the failed statement.
+- `tests/test_rag_retrieval.py`'s `FakeSession` was rewritten to model real Postgres transaction-abort semantics (`FakeTransactionAborted`, `_FakeSavepoint`, `aborted` / `savepoints` / `savepoint_rollbacks` counters) — the old fake had none, which is exactly why this regression shipped past the test suite unnoticed.
+
+#### Files changed
+- `backend/app/pipeline/tools/rag.py` — full rewrite (see above)
+- `backend/app/pipeline/orchestrator.py` — narrative_search branch rewired to `retrieve_narratives()`; citations filtered on `if not h.restricted`
+- `backend/app/api/routes/health.py` — `/health/data` now reports `narratives_embedded`, `embedding_coverage_percent`, `vector_search_available`
+- `backend/tests/test_rag_retrieval.py` — new, 57+ tests covering availability-vs-emptiness, RRF fusion, clearance enforcement, and transaction-poisoning regressions
+- `backend/migrations/010_narrative_vector_index.sql` + `010_rollback.sql` — new, additive (`CREATE INDEX IF NOT EXISTS idx_nar_embedding`)
+- `backend/pyproject.toml` — new, shared pytest harness (`asyncio_mode=auto`, `integration` marker)
+
+---
+
+### [2026-08-21] — RLS Was Silently Bypassed on Both Databases (Security Finding)
+
+#### Summary
+Independent of the RAG work, discovered that Row-Level Security was **not being enforced anywhere** in the running application, on either database, despite the policies themselves being correct.
+
+#### Root cause
+- `db/session.py`'s `set_db_source()` had **no callers** anywhere in the codebase — only its own definition. `_db_source` was hardcoded to `"cloud"` at module load, so `local_database_url` and the entire local/RLS-enforcing code path were dead.
+- On cloud, the app connects as `neondb_owner`, which is both the table **owner** and a `rolbypassrls=true` role — two independent reasons RLS policies never apply to it. Measured: `SELECT count(*) FROM cases` with no jurisdiction context set returned all 35,993 rows.
+- On local, the app connected as `satyam` (superuser + owner) with the identical bypass, returning all 100,000 rows.
+- `satyam_app` (the intended least-privilege runtime role, non-owner, `bypassrls=false`) was fully configured — correct grants, correct policies — but simply never used. As `satyam_app`: no context → 0 rows (fails closed); state scope → 100,000; single station → 83 rows, `distinct station_id=1`.
+- `migrations/008_local_app_grants.sql` contained a comment incorrectly asserting that Neon "still applies RLS via FORCE RLS" — no table in either database has `FORCE ROW LEVEL SECURITY`, and that false assumption is what let the bypass go unnoticed. Comment corrected.
+
+#### Fix
+- `app/config.py` — added `db_source: Literal["cloud", "local"] = "cloud"` field, driven by a `DB_SOURCE` env var (gitignored `.env`, not committed).
+- `app/db/session.py` — `_db_source` now seeded from `get_settings().db_source` instead of a hardcoded literal.
+- Local dev runs with `DB_SOURCE=local`, connecting as `satyam_app`, with RLS genuinely enforced for the first time.
+
+#### A second, independent instance of the same class of bug
+- Even after switching to `satyam_app`, RAG and Text-to-SQL both returned zero rows through the real `/chat/stream` endpoint while `/health/data` (a non-streaming route using the identical dependency) worked fine.
+- Cause: `get_scoped_session` is a `Depends(...)`-with-`yield` dependency. FastAPI tears such a dependency down when the **handler returns**, and a streaming handler returns as soon as it hands back the `StreamingResponse` — before a single SSE frame is produced. The dependency's `async with session.begin()` therefore committed first, and because `apply_rls_context` stamps the jurisdiction with `set_config(..., true)` (transaction-local), the entire security context vanished before the generator body ran. Measured directly inside the generator: `app.scope` and `app.clearance` both read back as empty strings.
+- This was latent for as long as the app connected as a table owner (owners bypass RLS and never notice a missing context) and surfaced only once `DB_SOURCE=local` made RLS actually bite.
+- Fix: `chat.py` is the only `StreamingResponse` route in the app. Its event generator now opens and stamps its **own** session (`stamp_rls()`, extracted from `deps.py` as the single principal-to-GUC mapping), keeping the transaction alive for the full duration of the stream. `get_scoped_session` now documents that it must never be used from a streaming route.
+
+#### Files changed
+- `backend/app/config.py` — `db_source` field
+- `backend/app/db/session.py` — seeded from settings; added `active_vector_type()` (see below)
+- `backend/app/api/deps.py` — extracted `stamp_rls()`; documented the streaming caveat on `get_scoped_session`
+- `backend/app/api/routes/chat.py` — session now opened inside the SSE generator, not injected via `Depends`
+- `backend/migrations/008_local_app_grants.sql` — corrected the false FORCE RLS comment
+
+---
+
+### [2026-08-21] — Intent Router: Dead LLM Presented as Bad Routing
+
+#### Summary
+Reported symptom: incident-description queries were being routed to `hotspot` or `smalltalk` instead of `narrative_search`. Root cause was not the keyword lists — the primary LLM (Gemini) was returning `401 Unauthorized` on **every single call**, and `router.route()` caught the bare exception silently and fell back to keyword matching with no log line, so a 100%-failed brain looked identical to a routing bug.
+
+#### Fixes
+- `route()` now tries primary LLM → the existing Groq fallback lane (previously wired for answer composition but never used by the router) → keyword lane, logging every downgrade with its reason (`router.llm_failed`, `router.unparseable`, `router.invalid_intent`, `router.keyword_fallback`).
+- The LLM's returned `intent` is now validated against `VALID_INTENTS` (derived from `ROUTER_SCHEMA`'s enum) instead of trusted directly — a hallucinated intent string used to reach the orchestrator and match no branch.
+- Keyword fallback reordered by specificity: `"show hotspots in Mysuru"` used to match the generic verb `"show"` (a SQL signal) before it could match `"hotspot"`; `"what is my rank"` matched the aggregation word `"rank"` before a personal-question check existed. `"near"` removed as a hotspot trigger — it occurs constantly in ordinary incident prose. Last-resort default changed from `smalltalk` to `narrative_search`, since a free-text corpus description should reach the one lane built to accept arbitrary prose rather than be dropped.
+- `orchestrator.py`'s answer-composition fallback also logged nothing on double failure; added logging there too (`compose.primary_failed`, `compose.fallback_failed`).
+- `groq_model` default (`llama-3.3-70b-versatile`) had been decommissioned by Groq, which answers an unknown model id with an HTTP 404 that looks identical to a bad key or URL. Verified the key itself is valid (`GET /v1/models` → 200) and switched the default to a model confirmed present. `qwen3`-family reasoning models were ruled out for this role — they wrap JSON replies in `<think>` prose and fail schema parsing.
+- `backend/tests/test_router.py` — new, 31 tests: lane ordering, enum validation, the two live misroute regressions, and an explicit assertion that a healthy route produces zero log output.
+
+#### Files changed
+- `backend/app/pipeline/router.py`
+- `backend/app/pipeline/orchestrator.py` (composition logging only)
+- `backend/app/config.py` (`groq_model` default)
+- `backend/tests/test_router.py` — new
+
+---
+
+### [2026-08-21] — Cloud (Neon) Storage Recovery: Dead Vector Lane Fixed Without Growing the Dataset
+
+#### Summary
+Neon's free-tier project size cap (512 MB, `neon.max_cluster_size`) had been hit during the original embedding run, leaving the cloud database at 490.4 MB with only ~21 MB free, 47,616 of 71,986 narratives embedded as fp32 `vector(1024)` (a contiguous low-`case_id` prefix, not a random sample), no ANN index, and — once RLS started being enforced — every committed write above ~20 rows failing outright with `DiskFullError`. Fixed without adding a single new case or narrative to the cloud copy, per requirement.
+
+#### Sizing analysis
+- Full fp32 coverage (`vector(1024)`, all 71,986 rows) + HNSW index: ~596 MB — does not fit under any circumstance on this tier.
+- fp16 (`halfvec(1024)`), one narrative per case (35,993 rows, exactly matching the dataset's fixed 2-narratives-per-case structure) + HNSW: ~149 MB — the only configuration that fits with headroom to spare.
+- The ANN index is not an optimisation here: without it, `ORDER BY embedding <=> $1` is an exact KNN scan that always exceeds the 5 s `statement_timeout`, so the vector arm is permanently unavailable regardless of how many rows are embedded.
+
+#### Why the old embedding data could not simply be re-typed in place
+- `ALTER TABLE ... ALTER COLUMN embedding TYPE halfvec(1024)` rewrites the whole table and needs a second full copy — unaffordable with ~21 MB free.
+- `DROP COLUMN` + `ADD COLUMN` is metadata-only and was tried first, but Postgres leaves the old TOASTed values attached to the still-live tuples until each row is physically rewritten (`VACUUM` cannot reclaim them). Measured: 252 MB of TOAST for ~39 MB of actual narrative body text — the rest was the abandoned fp32 embeddings. Reclaiming that space required exactly the kind of bulk write the project could no longer accept: even a single 50-row `UPDATE` failed with `DiskFullError`.
+
+#### The path that worked: drop, verify, rebuild
+1. Confirmed (by exact-match sampling, then a full-row snapshot with a SHA-256 checksum) that the cloud `narratives` table is a byte-identical subset of the local copy — so the rebuild is fully recoverable even if something went wrong mid-operation.
+2. `DROP TABLE narratives` — frees ~419 MB **instantly**, since dropping removes files outright rather than needing writable space.
+3. Recreated the table from its captured DDL (PK, `case_id` FK to `cases` with `ON DELETE CASCADE`, `language` CHECK, the generated `body_tsv` column, `embedding halfvec(1024)`), with `ENABLE ROW LEVEL SECURITY` and the `p_narratives_scope` policy applied **before** any data was loaded, so there was never a window with unfiltered narrative rows.
+4. Reloaded all 71,986 original rows from the pre-drop snapshot (32 seconds via `executemany` batches) — full narrative coverage is unchanged and untouched, exactly as required.
+5. Rebuilt `idx_nar_case` and `idx_nar_bodytsv`.
+6. Ran `seed/embed_narratives.py --one-per-case` (new flag, see below) against cloud: 35,993 rows embedded as `halfvec`, then the HNSW index built.
+
+#### Result
+| | before | after |
+|---|---|---|
+| narratives (unchanged, as required) | 71,986 | **71,986** |
+| cases with vector coverage | 47,616 rows, 66%, biased to low `case_id` | **35,993 rows, 100% of all cases** |
+| ANN index | none | `idx_nar_embedding` (`halfvec_cosine_ops`) |
+| db size / 512 MB cap | 490.4 MB, ~0 headroom | **426.2 MB, 85.8 MB headroom** |
+| vector search | always timed out | works, ~2.5–2.7 s per query |
+| bulk writes | failing (`DiskFullError`) | working again (verified with a 2,000-row `UPDATE`) |
+
+Verified live through the real retrieval path: queries with no lexical overlap to their matching cases (e.g. "victim was threatened with a knife near a bus stand" → criminal-intimidation narratives; "fraudulent online transaction from the victim's bank account" → cyber-fraud narratives) now return correct, semantically-matched hits on cloud.
+
+#### Code changes required (the two databases now genuinely differ)
+- `app/config.py` — added `cloud_vector_type: Literal["vector", "halfvec"] = "halfvec"` alongside the existing `vector_type` (local, `"vector"`).
+- `app/db/session.py` — added `active_vector_type()`, resolved from the **currently active** source rather than one global. Necessary because the Settings panel can switch `DB_SOURCE` at runtime, and casting a query vector to the wrong pgvector type silently kills the vector arm.
+- `app/pipeline/tools/rag.py` — the `::vector` / `::halfvec` cast in both the SELECT and ORDER BY clauses now calls `active_vector_type()` instead of reading one global setting.
+- `seed/embed_narratives.py` — new `--one-per-case` flag (restricts the embed target to `min(narrative_id)` per `case_id`); vector type is now chosen from the target actually being embedded (`local` → `vector`, cloud → `halfvec`) rather than one global; raised `maintenance_work_mem` before the `CREATE INDEX` step (default 64 MB is far too small for an HNSW build over 1024-dim vectors and forces a disk spill).
+- `backend/migrations/010_narrative_vector_index.sql` — rewritten to detect the actual column type from `pg_attribute` at apply time and choose `vector_cosine_ops` or `halfvec_cosine_ops` accordingly, instead of hardcoding the former (which would fail outright against a `halfvec` column). Verified idempotent and correct against both databases.
+
+#### Local database left untouched
+Local Postgres holds the full uncapped dataset (100,000 cases / 200,000 narratives, all embedded as fp32 `vector(1024)` with its own HNSW index) and remains the default (`DB_SOURCE=local`) for development. This work only concerns the cloud copy's storage ceiling.
+
+---
+
+### [2026-08-21] — Settings Panel: Database Source Selector Showed Stale State
+
+#### Summary
+The Settings dialog's "Database Source" selector always initialised to "Neon cloud" from a hardcoded `localStorage` default and never asked the server which source was actually active — so it could (and did) show "cloud" selected while every query was in fact being served from local Postgres.
+
+#### Fix
+- `frontend/src/lib/api/client.ts` — added `getDbSource()`, calling the existing (and already correct) `GET /settings/db-source` endpoint, which returns `{ db_source, url_host }` for the process-wide active source.
+- `frontend/src/components/SettingsDialog.tsx` — on dialog open, fetches the server's real value and overwrites the cached `localStorage` selection, so the two can no longer drift apart.
+
+#### Files changed
+- `frontend/src/lib/api/client.ts`
+- `frontend/src/components/SettingsDialog.tsx`

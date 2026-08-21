@@ -59,7 +59,7 @@ docker compose up --build       # postgres + redis + backend + frontend
 Seed synthetic data:
 
 ```bash
-docker compose exec backend python -m seed.seed
+docker compose exec backend python -m seed.load_seed
 ```
 
 See `backend/README.md` for local (non-docker) development and `docs/ARCHITECTURE.md`

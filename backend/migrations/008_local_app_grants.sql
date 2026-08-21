@@ -3,10 +3,21 @@
 -- Make the LOCAL Postgres behave like the cloud DB.
 --
 -- On Neon (cloud) the API connects as the table OWNER (neondb_owner), so it has
--- full access and Row-Level Security still applies via FORCE RLS. On a local
--- install the API connects as the least-privilege role `satyam_app`, which must
--- be explicitly granted access to every table the owner (`satyam`) created —
--- otherwise every query fails with "permission denied for table …".
+-- full access. On a local install the API connects as the least-privilege role
+-- `satyam_app`, which must be explicitly granted access to every table the owner
+-- (`satyam`) created — otherwise every query fails with "permission denied for
+-- table …".
+--
+-- CORRECTION: an earlier version of this comment claimed RLS "still applies via
+-- FORCE RLS" on the cloud connection. That is FALSE and was the assumption that
+-- hid a real gap. No table in either database has FORCE ROW LEVEL SECURITY, and
+-- neondb_owner is both the table owner and a rolbypassrls role, so on the cloud
+-- connection every RLS policy is bypassed. Verified by measurement: as
+-- neondb_owner with no jurisdiction context set, `SELECT count(*) FROM cases`
+-- returns all rows, whereas as satyam_app it returns 0.
+--
+-- Granting satyam_app is therefore not merely a local convenience: connecting as
+-- this non-owner role is what makes the RLS policies take effect at all.
 --
 -- Run ONCE against the local DB as a superuser / the table owner, e.g.:
 --   psql "postgresql://postgres:<pw>@localhost:5432/satyam" -f migrations/008_local_app_grants.sql

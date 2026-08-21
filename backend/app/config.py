@@ -23,6 +23,13 @@ class Settings(BaseSettings):
     # Local Postgres URL — used when the Settings panel switches to "local" source.
     # Falls back to database_url if not set.
     local_database_url: str = "postgresql+asyncpg://satyam_app:satyam_app@localhost:5432/satyam"
+    # Which URL the app starts on: "cloud" -> database_url, "local" -> local_database_url.
+    # This exists because db/session.py previously hardcoded "cloud", leaving
+    # local_database_url and set_db_source() unreachable. The distinction is not
+    # cosmetic: database_url connects as the table OWNER, which bypasses every RLS
+    # policy when the tables are not FORCE-enabled, whereas local_database_url
+    # connects as the least-privilege satyam_app role and RLS actually applies.
+    db_source: Literal["cloud", "local"] = "cloud"
     redis_url: str = "redis://localhost:6379/0"
 
     # Auth
@@ -65,7 +72,15 @@ class Settings(BaseSettings):
 
     # Groq
     groq_api_key: str = ""
-    groq_model: str = "llama-3.3-70b-versatile"
+    # Groq retires models regularly and answers an unknown model id with HTTP 404
+    # on /chat/completions, which is easy to misread as a bad key or bad URL. The
+    # previous default, llama-3.3-70b-versatile, no longer exists. Check with:
+    #   curl -H "Authorization: Bearer $GROQ_API_KEY" \
+    #        https://api.groq.com/openai/v1/models
+    # A 200 there means the key is fine and only the model id is stale. Avoid
+    # reasoning models such as qwen3 for routing: they wrap the JSON in <think>
+    # prose and fail schema parsing.
+    groq_model: str = "openai/gpt-oss-120b"
 
     # OpenAI (ChatGPT)
     openai_api_key: str = ""
@@ -90,8 +105,17 @@ class Settings(BaseSettings):
 
     # Embeddings (always BGE-M3 local — not configurable)
     embedding_dim: int = 1024
-    # vector_type: "vector" for local (fp32), "halfvec" for Neon free tier (fp16)
+    # pgvector column type, per source. The two databases genuinely differ, so a
+    # single global cannot serve both: the Neon free tier caps a project at
+    # 512 MB, where fp32 vectors plus an HNSW index do not fit, while local
+    # Postgres has no such cap and keeps full fp32 precision.
+    #   vector  = fp32, 4 bytes/dim
+    #   halfvec = fp16, 2 bytes/dim, roughly half the storage and index size
+    # Use db.session.active_vector_type() to resolve the one in force, never
+    # these fields directly: the Settings panel can switch source at runtime, and
+    # casting a query vector to the wrong type makes the pgvector operator fail.
     vector_type: Literal["vector", "halfvec"] = "vector"
+    cloud_vector_type: Literal["vector", "halfvec"] = "halfvec"
 
     # ── Local model weights (downloaded via huggingface-cli) ──────────────────
     # Paths are relative to the backend/ working directory.

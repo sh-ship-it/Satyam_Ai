@@ -44,20 +44,39 @@ def get_principal(authorization: str | None = Header(default=None)) -> Principal
     )
 
 
+async def stamp_rls(session: AsyncSession, principal: Principal) -> None:
+    """Stamp `session`'s CURRENT TRANSACTION with the caller's jurisdiction.
+
+    The single mapping from Principal to Postgres GUCs. Anything that opens its
+    own session must call this, because apply_rls_context uses
+    set_config(..., true), which is transaction-local: the settings vanish the
+    moment that transaction ends, and every RLS policy then matches nothing.
+    """
+    await apply_rls_context(
+        session,
+        scope=principal.scope,
+        range_name=principal.range_name,
+        district=principal.district,
+        station_id=principal.station_id,
+        clearance=principal.clearance,
+        officer_id=principal.officer_id,
+    )
+
+
 async def get_scoped_session(
     principal: Principal = Depends(get_principal),
 ) -> AsyncIterator[AsyncSession]:
-    """Yield a transaction-scoped session stamped with the caller's RLS context."""
+    """Yield a transaction-scoped session stamped with the caller's RLS context.
+
+    NOT usable from a StreamingResponse. FastAPI tears a yield-dependency down
+    when the handler returns, which for a streaming route is *before* the
+    response body is generated, so the transaction — and with it the
+    transaction-local RLS context — is gone by the time the generator runs. A
+    streaming route must open and stamp its own session inside the generator;
+    see app/api/routes/chat.py.
+    """
     sessionmaker = get_sessionmaker()
     async with sessionmaker() as session:
         async with session.begin():
-            await apply_rls_context(
-                session,
-                scope=principal.scope,
-                range_name=principal.range_name,
-                district=principal.district,
-                station_id=principal.station_id,
-                clearance=principal.clearance,
-                officer_id=principal.officer_id,
-            )
+            await stamp_rls(session, principal)
             yield session
