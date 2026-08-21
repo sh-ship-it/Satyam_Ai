@@ -24,10 +24,14 @@ dist/
 !**/.env.example
 *.local
 
-# OS / editor
+# OS / editor / AI assistants
 .DS_Store
 .idea/
 .vscode/
+.claude/
+.kiro/
+claude/
+kiro/
 
 # Data artifacts
 *.pdf
