@@ -274,8 +274,8 @@ All checks PASSED
 
 `backend/.env` already had the correct local connection strings from the initial setup:
 ```
-DATABASE_URL=postgresql+asyncpg://satyam_app:satyam_app@localhost:5432/satyam
-SEED_DATABASE_URL=postgresql+asyncpg://satyam:satyam@localhost:5432/satyam
+DATABASE_URL=postgresql+asyncpg://satyam_app:<password>@localhost:5432/satyam
+SEED_DATABASE_URL=postgresql+asyncpg://satyam:<password>@localhost:5432/satyam
 ```
 
 ---
@@ -296,7 +296,7 @@ Both `DATABASE_URL` and `SEED_DATABASE_URL` now point at Neon. The local Postgre
 track is preserved as commented-out lines for instant flip-back during on-prem demo.
 
 #### What was confirmed
-- **Neon endpoint:** `ep-misty-haze-ad33z23j-pooler.c-2.us-east-1.aws.neon.tech`
+- **Neon endpoint:** `<neon-endpoint>.aws.neon.tech`
 - **Database:** `neondb` · **Region:** `us-east-1` (AWS)
 - **Server version:** PostgreSQL 16.14
 - **pgvector:** 0.8.0 — already installed on Neon
@@ -311,8 +311,8 @@ track is preserved as commented-out lines for instant flip-back during on-prem d
 - `SEED_DATABASE_URL` → same Neon URL (owner role, used only for migrations/seed)
 - Local URLs kept as comments for easy flip-back:
   ```
-  # DATABASE_URL=postgresql+asyncpg://satyam_app:satyam_app@localhost:5432/satyam
-  # SEED_DATABASE_URL=postgresql+asyncpg://satyam:satyam@localhost:5432/satyam
+  # DATABASE_URL=postgresql+asyncpg://satyam_app:<password>@localhost:5432/satyam
+  # SEED_DATABASE_URL=postgresql+asyncpg://satyam:<password>@localhost:5432/satyam
   ```
 - Also added the full new env vars from the architecture update
   (`BRAIN_ENGINE`, `SQL_ENGINE`, `VOICE_BACKEND`, `SARVAM_API_KEY`, `OLLAMA_CLOUD_*`)
@@ -480,7 +480,7 @@ for BGE-M3 and bge-reranker, and clearer two-track demo honesty section.
 Backend connected to Neon cloud PostgreSQL. `DATABASE_URL` and `SEED_DATABASE_URL` both point at Neon.
 Local URLs preserved as commented-out lines for instant flip-back.
 
-- Endpoint: `ep-misty-haze-ad33z23j-pooler.c-2.us-east-1.aws.neon.tech`
+- Endpoint: `<neon-endpoint>.aws.neon.tech`
 - PostgreSQL 16.14, pgvector 0.8.0 already installed.
 - `backend/app/config.py` — added `seed_database_url` field to `Settings`.
 - `backend/.env` — updated (gitignored).
@@ -626,7 +626,7 @@ can flip between Neon (cloud) and local PostgreSQL 17 without restarting the bac
 - Registered `settings_routes.router` at `/settings/db-source`.
 
 #### `backend/.env` + `backend/.env.example`
-- Added `LOCAL_DATABASE_URL=postgresql+asyncpg://satyam_app:satyam_app@localhost:5432/satyam`.
+- Added `LOCAL_DATABASE_URL=postgresql+asyncpg://satyam_app:<password>@localhost:5432/satyam`.
 
 ---
 
@@ -3805,3 +3805,152 @@ The Settings dialog's "Database Source" selector always initialised to "Neon clo
 #### Files changed
 - `frontend/src/lib/api/client.ts`
 - `frontend/src/components/SettingsDialog.tsx`
+
+
+---
+
+### [2026-08-21] — Cloud (Neon) Made the Default Startup Database
+
+#### Summary
+Switched the application's default database source from local Postgres to the Neon cloud instance, so that opening the app runs against cloud without any manual switching.
+
+#### Change
+- `backend/.env` (gitignored) — `DB_SOURCE=local` → `DB_SOURCE=cloud`. No code change was needed: `app/config.py` already defaults `db_source` to `"cloud"`, and the `.env` override was the only thing forcing local.
+- Requires a real process restart rather than a hot reload, since `uvicorn --reload` only watches `.py` files and `.env` is read at import time.
+
+#### Verified end-to-end against the running server
+| check | result |
+|---|---|
+| active source / role | `cloud` → `neondb_owner` @ Neon pooler |
+| vector cast resolved | `::halfvec` (matches the cloud column type) |
+| `/health/data` | 35,993 cases · 71,986 narratives · 35,993 embedded · `vector_search_available: true` |
+| `GET /settings/db-source` | `{"db_source": "cloud", ...}` — so the Settings panel selector now correctly shows "Neon cloud" |
+| `narrative_search` via SSE | routed correctly → `rag: vector, 5 hits` → grounded answer with FIR numbers, years, stations |
+| `sql_query` via SSE | real SQL generated → real aggregation (Cyber Crime 2,296 · Theft 1,209 · Cases of Hurt 568) |
+
+`embedding_coverage_percent` reports **50.0** on cloud, which is correct and intentional rather than a fault: 35,993 of 71,986 narratives are embedded because cloud uses the one-narrative-per-case strategy required to fit the 512 MB tier. Every one of the 35,993 cases is still reachable by vector search, and all 71,986 narratives remain lexically searchable.
+
+#### ⚠ Security consequence of this default (open, needs a decision)
+Cloud connects as `neondb_owner`, which is both the table **owner** and a `rolbypassrls=true` role. No table has `FORCE ROW LEVEL SECURITY`. Therefore **defaulting to cloud means running with no database-level jurisdiction enforcement** — RBAC still applies in the Python layer, but the RLS policies are inert, exactly as documented in the earlier RLS finding above.
+
+Local does not have this problem because it connects as the non-owner `satyam_app` role, where RLS is provably enforced (no context → 0 rows; single station → 83 rows).
+
+To close this on cloud, one of the following is needed:
+1. Create a least-privilege non-owner role on Neon (the cloud equivalent of `satyam_app`), grant it the same privileges, and point `DATABASE_URL` at it — cloud now has ~86 MB of headroom, so this is feasible; or
+2. Add `FORCE ROW LEVEL SECURITY` to `cases`, `narratives`, `persons`, `case_persons` on cloud, which makes policies apply even to the owner.
+
+Until one is done, treat cloud as having application-layer RBAC only.
+
+
+---
+---
+
+# CONSOLIDATED STATUS SUMMARY — as of 2026-08-21
+
+> Read this section first. Everything above is the chronological log; this is the
+> current state of the system, what has been verified, and what is still open.
+> All secrets are redacted here as `<password>` / `<neon-endpoint>` — see the
+> security note at the end of this section.
+
+## 1. Runtime configuration in force
+
+| Setting | Value | Notes |
+|---|---|---|
+| `DB_SOURCE` | `cloud` | Default on startup. Set in gitignored `backend/.env`; `config.py` also defaults to `cloud`. |
+| Cloud role | `neondb_owner` | Table owner **and** `rolbypassrls=true` → RLS inert. See open issue 1. |
+| Local role | `satyam_app` | Non-owner, `bypassrls=false` → RLS provably enforced. |
+| `BRAIN_ENGINE` | `groq` | Switched from `gemini`; the Gemini key returns 401 on every call. |
+| `GROQ_MODEL` | a current Groq model | Previous default `llama-3.3-70b-versatile` was decommissioned by Groq. |
+| `SQL_ENGINE` | `gemini` | Left unchanged deliberately. Its key is dead, so Text-to-SQL succeeds only via the Groq fallback path in `orchestrator.py`. |
+| `VECTOR_TYPE` (local) | `vector` (fp32) | |
+| `CLOUD_VECTOR_TYPE` | `halfvec` (fp16) | Required to fit the 512 MB Neon tier. |
+| Embedder / reranker | BGE-M3 + bge-reranker-v2-m3, CUDA | Always local, never hosted. |
+
+## 2. The two databases
+
+| | **Cloud (Neon)** | **Local (Postgres 17.7)** |
+|---|---|---|
+| Server / pgvector | PG 16.15 · pgvector 0.8.0 | PG 17.7 · pgvector 0.8.2 |
+| Cases | 35,993 | 100,000 |
+| Narratives | 71,986 | 200,000 |
+| Embedded | 35,993 (one per case) | 200,000 (all) |
+| Case coverage by vector search | **100%** of cases | **100%** of cases |
+| Embedding type | `halfvec(1024)` | `vector(1024)` |
+| ANN index | `idx_nar_embedding` (`halfvec_cosine_ops`) | `idx_nar_embedding` (`vector_cosine_ops`) |
+| DB size | 426 MB / 512 MB cap (86 MB free) | ~3.3 GB (no cap) |
+| RLS enforced at DB level | **No** (owner + bypassrls) | **Yes** |
+| Vector query latency (warm) | ~2.5–2.7 s | ~1.2–1.4 s |
+
+Cloud is a **byte-identical subset** of local (verified by exact-match sampling of
+300 narratives and 300 cases). Local is therefore the authoritative superset and a
+valid recovery source for cloud.
+
+`embedding_coverage_percent` reads **50.0** on cloud. This is correct, not a fault:
+35,993 of 71,986 narratives are embedded because cloud uses one-narrative-per-case
+to fit the tier. Every case is semantically reachable and all 71,986 narratives
+remain lexically searchable, so no case is invisible.
+
+## 3. What was fixed, grouped by root cause
+
+**The RAG lane never worked — five independent bugs, each hiding the next**
+1. `embed_narratives.py` had a function-local `get_settings` import shadowing the module-level one → `UnboundLocalError`. The job had never been runnable, which is why every embedding was NULL.
+2. The same job did 64 sequential per-row `UPDATE`s per batch (one network round trip each, 234 ms/row → ~4.6 h). Replaced with `executemany`: 26–80× faster.
+3. `rag.py` could not distinguish "strategy unavailable" from "no matches", and had an unpredicated `SELECT ... LIMIT k` fallback returning rows with zero relevance to the query. Rewritten with `(rows, available)` tuples and RRF hybrid fusion.
+4. Clearance was never applied to narrative bodies. `_apply_clearance()` now routes through the existing (previously uncalled) `rbac.is_protected` / `can_see_narrative`, applied **after** reranking so the cross-encoder ranks real text.
+5. Populating embeddings then caused the vector query to exceed the 5 s `statement_timeout`, which **aborted the whole transaction** and killed the lexical fallback too. Fixed with per-query SAVEPOINTs (`_execute_isolated`); a plain `rollback()` would have silently discarded the caller's RLS context, since `set_config(..., true)` is transaction-local.
+
+**RLS was inert everywhere**
+- `set_db_source()` had **no callers**; `_db_source` was hardcoded `"cloud"`, making `local_database_url` and the whole RLS-enforcing path dead code. Now driven by `DB_SOURCE`.
+- Separately, `Depends`-with-`yield` sessions are torn down when the handler returns — which for a `StreamingResponse` is *before* any frame is produced. The RLS context vanished mid-stream, so RAG and Text-to-SQL both returned zero rows while reporting success. `chat.py` (the only streaming route) now owns and stamps its own session.
+
+**The router looked broken but the brain was dead**
+- Gemini returned 401 on every call; `route()` swallowed it with a bare `except` and no logging, so keyword fallback did all routing. Now: primary → Groq fallback → keywords, with every downgrade logged; LLM intent validated against the schema enum; keyword lane reordered by specificity.
+
+**Cloud had hit a hard storage wall**
+- Neon was at 490/512 MB with ~0 writable space; even a 50-row `UPDATE` failed. 213 MB was dead fp32 embedding data stranded in live tuples, unreclaimable because reclaiming it required the very writes that were failing.
+- Resolved by snapshotting cloud's own 71,986 rows, `DROP TABLE narratives` (frees files instantly), recreating from captured DDL with RLS enabled *before* loading, reloading all rows (32 s), then embedding one-per-case as `halfvec` + HNSW. Result: 419 MB → 354 MB for the table, 86 MB headroom, bulk writes working again.
+
+## 4. Verified working (measured, not assumed)
+
+- Semantic retrieval on **both** databases for queries with no lexical overlap to their matches — e.g. "victim was threatened with a knife near a bus stand" → criminal-intimidation cases; "house broken into while the family was away" → house-breaking; "fraudulent online transaction" → cyber fraud. All returned zero hits before this work.
+- Full SSE chat path: `narrative_search` → 5 hits + 5 citations + grounded answer with FIR numbers; `sql_query` → real SQL + real aggregation; `smalltalk` → correct.
+- RLS scoping through the retrieval lane (local): state scope → hits; single station → correctly narrowed. No context → 0 rows (fails closed).
+- Clearance withholding: clearance 1 → hits returned with `restricted=True` and body replaced by a notice; clearance 4 → bodies visible.
+- Migration `010` is idempotent and picks the correct operator class on each database.
+- Backend test suite: **110 passed, exit 0**.
+- Audit chain integrity: attempting to delete a user with audit rows is correctly refused by the FK — the append-only log will not let evidence be erased.
+
+## 5. Open issues (need a decision or an external action)
+
+1. **Cloud has no database-level jurisdiction enforcement.** `neondb_owner` is owner + `rolbypassrls`, and no table has `FORCE ROW LEVEL SECURITY`. Since cloud is now the startup default, the deployed app relies on Python-layer RBAC alone. Fix by either creating a least-privilege non-owner role on Neon and pointing `DATABASE_URL` at it (~86 MB headroom available), or adding `FORCE ROW LEVEL SECURITY` to `cases`, `narratives`, `persons`, `case_persons`.
+2. **The Neon database password must be rotated.** It is committed in four tracked files and therefore in git history. A `.gitignore` change cannot fix this. Until rotated, treat that database as compromised.
+3. **The Gemini API key is invalid** (401). Groq covers routing, composition and — via the fallback path only — Text-to-SQL. `SQL_ENGINE` remains `gemini` by explicit decision, so every Text-to-SQL request wastes one failing round trip before falling back.
+4. **No PII masking on the Text-to-SQL path.** `persons_v` does not exist in either database, `sql_guard.ALLOWED_TABLES` includes raw `persons`, and `core/masking.py`'s `mask_case()` is called only from `case_service.py`. RLS scopes *which rows* are visible, never which columns. Treat column-level masking on that path as unimplemented.
+5. **`graphify-out/` is tracked** (~504 content-hashed cache files, a large share of the repo's file count) and is rewritten by the post-commit hook, so the working tree goes dirty after every commit. Candidate for gitignore + index removal.
+6. Frontend `tsc --noEmit` reports **56 pre-existing errors**, mostly duplicate keys in `i18n.tsx`. Untouched by this work, but they mean the typecheck is not a usable gate until cleaned.
+7. The Settings panel note reads "Changes apply to new requests in this session." Inaccurate — `set_db_source()` mutates a process-wide global, so switching affects **every user on that backend process**. Left alone because the string is an i18n key.
+
+## 6. Environment gotchas worth remembering
+
+- `get_settings()` reads `.env` **relative to the current working directory**. Any script must run with `cwd=backend` or it silently falls back to the localhost defaults instead of the configured database.
+- `uvicorn --reload` watches `.py` only. A `.env` change needs a real process restart.
+- Any standalone script importing `app.*` must replicate `app/main.py`'s `sys.setrecursionlimit(5000)` + `import pandas` + `import sklearn` preload, or it segfaults with `0xC0000005`.
+- HNSW builds need `maintenance_work_mem` raised well above the 64 MB default for 1024-dim vectors, or the build spills to disk and crawls.
+- Postgres aborts an entire transaction on any failed statement. Anything issuing multiple queries on one session must isolate them with SAVEPOINTs, or the first failure takes the rest down with it.
+- `DROP COLUMN` does **not** reclaim TOASTed data: the values stay attached to existing live tuples until each row is physically rewritten, and `VACUUM` cannot help.
+
+## 7. Security note about this file
+
+This file is **tracked by git and not gitignored**, so everything in it is committed
+and pushed. It was audited on 2026-08-21 and the following were redacted from it:
+
+- the Neon endpoint hostname → `<neon-endpoint>.aws.neon.tech`
+- local Postgres connection-string passwords → `<password>`
+
+Scanned clean for: Neon `npg_` passwords, Google `AIza` keys, OpenAI `sk-` keys,
+Groq `gsk_` keys, GitHub `ghp_` tokens, and bcrypt hashes.
+
+**Redacting this file does not remove those values from git history.** It only stops
+them being re-published in future commits. Rotating the Neon credential (open issue 2)
+is still required, and no future entry should paste a real connection string, API key,
+password hash, or live endpoint — use a placeholder and name the env var instead.
