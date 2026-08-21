@@ -45,3 +45,8 @@ backend/seed/generated/
 # Model weights (large files — download via huggingface-cli, never commit)
 models/
 catalyst-deploy
+
+# Vision design documents
+VISION.md
+docs/VISION.md
+**/VISION.md
