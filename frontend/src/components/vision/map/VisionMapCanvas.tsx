@@ -21,10 +21,28 @@
  */
 import { useEffect, useRef, useState } from "react";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { BASEMAPS, buildStyle, type BasemapId } from "./basemaps";
+import {
+  BASEMAPS,
+  BUILDINGS_ATTRIBUTION,
+  BUILDINGS_LAYER_ID,
+  BUILDINGS_SOURCE_ID,
+  TERRAIN_ATTRIBUTION,
+  TERRAIN_EXAGGERATION,
+  TERRAIN_SOURCE_ID,
+  buildStyle,
+  buildingsLayerSpec,
+  buildingsSourceSpec,
+  terrainSourceSpec,
+  type BasemapId,
+} from "./basemaps";
 import { useMapStack } from "./useVisionMap";
 
-export type VisionViewMode = "2d" | "3d" | "earth";
+/** `street3d` is rendered by Street3DCanvas (Google Photorealistic 3D), NOT by
+ *  this component — it is a different renderer entirely. It appears in this union
+ *  because the workspace, top bar and voice agent all switch on one mode value.
+ *  When it is active this component is unmounted, so its WebGL context and the
+ *  deck.gl overlay are released rather than sitting idle behind Google's globe. */
+export type VisionViewMode = "2d" | "3d" | "earth" | "street3d";
 
 export type VisionViewState = {
   lat: number;
@@ -81,6 +99,55 @@ export function VisionMapCanvas({
   // Earth mode silently drops the globe and looks like the button stopped working.
   const viewModeRef = useRef<VisionViewMode>(viewMode);
   viewModeRef.current = viewMode;
+  const buildingsRef = useRef<boolean>(buildings3d);
+  buildingsRef.current = buildings3d;
+
+  /** Terrain and buildings are extra sources layered onto the active raster
+   *  style, so `setStyle` wipes them and they must be re-applied every time the
+   *  style settles — same hazard as the projection above.
+   *
+   *  Terrain follows 3D automatically rather than adding another switch: a DEM
+   *  is invisible at pitch 0, and "3D" is exactly when an officer wants relief.
+   *  Earth stays base-map-only by design, so neither is applied there. */
+  const applyStyleExtras = (map: any) => {
+    const mode = viewModeRef.current;
+    const wantTerrain = mode === "3d";
+    const wantBuildings = buildingsRef.current && mode !== "earth";
+
+    try {
+      if (wantTerrain) {
+        if (!map.getSource(TERRAIN_SOURCE_ID)) {
+          map.addSource(TERRAIN_SOURCE_ID, terrainSourceSpec() as any);
+        }
+        map.setTerrain({
+          source: TERRAIN_SOURCE_ID,
+          exaggeration: TERRAIN_EXAGGERATION,
+        });
+      } else {
+        map.setTerrain(null);
+      }
+    } catch (e) {
+      // A DEM failure must not take the map down; relief is an enhancement.
+      // eslint-disable-next-line no-console
+      console.warn("[vision] terrain unavailable:", e);
+    }
+
+    try {
+      if (wantBuildings) {
+        if (!map.getSource(BUILDINGS_SOURCE_ID)) {
+          map.addSource(BUILDINGS_SOURCE_ID, buildingsSourceSpec() as any);
+        }
+        if (!map.getLayer(BUILDINGS_LAYER_ID)) {
+          map.addLayer(buildingsLayerSpec() as any);
+        }
+      } else if (map.getLayer(BUILDINGS_LAYER_ID)) {
+        map.removeLayer(BUILDINGS_LAYER_ID);
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn("[vision] 3D buildings unavailable:", e);
+    }
+  };
 
   useEffect(() => {
     if (error && onError) onError(`Map engine failed to load: ${error.message}`);
@@ -140,12 +207,16 @@ export function VisionMapCanvas({
       if (disposed) return;
       setReady(true);
       applyProjection();
+      applyStyleExtras(map);
       emit();
       onMapReady?.(map);
     });
-    // setStyle resets the projection, so re-assert it once the new style settles.
+    // setStyle resets the projection AND drops every source we added, so both
+    // have to be re-asserted once the new style settles.
     map.on("styledata", () => {
-      if (!disposed && map.isStyleLoaded()) applyProjection();
+      if (disposed || !map.isStyleLoaded()) return;
+      applyProjection();
+      applyStyleExtras(map);
     });
     map.on("move", emit);
     map.on("error", (e: any) => {
@@ -212,6 +283,16 @@ export function VisionMapCanvas({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewMode, ready]);
+
+  // ── Terrain + 3D buildings ─────────────────────────────────────────────────
+  // Re-runs when the mode or the buildings toggle changes. Adding a source is
+  // idempotent inside applyStyleExtras, so this is safe to call repeatedly.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !ready) return;
+    applyStyleExtras(map);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewMode, buildings3d, ready]);
 
   // ── Basemap swap ───────────────────────────────────────────────────────────
   // Safe with an overlaid deck overlay: deck draws to its own canvas, so
@@ -285,11 +366,23 @@ export function VisionMapCanvas({
         </div>
       )}
 
+      {/* Building heights are overwhelmingly derived defaults, not survey data
+          (1.9% of Karnataka buildings carry a real height/levels tag). Saying so
+          on the canvas is the difference between a visualisation and a claim. */}
+      {ready && buildings3d && viewMode !== "earth" && (
+        <div className="pointer-events-none absolute left-1/2 top-3 z-[600] -translate-x-1/2 rounded-[8px] border-2 border-[#94a3b8] bg-background/95 px-3 py-1 text-[10px] font-extrabold text-[#94a3b8] backdrop-blur">
+          BUILDING FOOTPRINTS OSM {"\u00b7"} HEIGHTS MOSTLY ESTIMATED {"\u00b7"} ZOOM IN PAST z14
+        </div>
+      )}
+
       {/* Attribution is a licence obligation for every provider we use, so it is
-          rendered unconditionally rather than behind a collapsed control. */}
-      <div className="pointer-events-none absolute bottom-0 right-0 z-[400] bg-background/70 px-1.5 py-0.5 text-[9px] text-muted-foreground backdrop-blur">
+          rendered unconditionally rather than behind a collapsed control. The
+          optional overlays add their own providers only while they are active. */}
+      <div className="pointer-events-none absolute bottom-0 right-0 z-[400] max-w-[70%] bg-background/70 px-1.5 py-0.5 text-right text-[9px] text-muted-foreground backdrop-blur">
         {meta.attribution}
         {meta.contextOnly && ` \u00b7 max z${meta.maxNativeZoom}`}
+        {viewMode === "3d" && ` \u00b7 ${TERRAIN_ATTRIBUTION} (x${TERRAIN_EXAGGERATION} vertical)`}
+        {buildings3d && viewMode !== "earth" && ` \u00b7 ${BUILDINGS_ATTRIBUTION}`}
       </div>
     </div>
   );

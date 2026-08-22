@@ -146,6 +146,18 @@ export function buildLayers({
   const { HexagonLayer } = deck.agg;
   const out: unknown[] = [];
 
+  // Aggregate layers (crime bins, risk cells) are wide-area summaries. Past
+  // roughly z14 a single 90 m bin or a 0.01 degree risk cell covers most of the
+  // viewport, so at street zoom they stop informing and start hiding the map —
+  // including the building footprints, which only appear from z14 up.
+  //
+  // They are faded rather than hidden: an officer who zoomed into a hotspot
+  // still wants to see that they are inside it, they just need to see the
+  // streets underneath as well.
+  const STREET_ZOOM = 14;
+  const aggregateOpacity = (base: number) =>
+    zoom >= STREET_ZOOM ? Math.min(base, 0.22) : base;
+
   // ── Crime density: 3D hexagonal bins ──────────────────────────────────────
   // Binning happens here, on the GPU/CPU, not in Postgres. That is why no
   // PostGIS or H3 extension is needed, and why changing the radius does not
@@ -168,7 +180,7 @@ export function buildLayers({
         // just makes bins overlap and read as noise.
         elevationScale: hex.extruded ? hex.elevationScale : 0,
         colorRange: DENSITY_RAMP.map(([r, g, b]) => [r, g, b]) as [number, number, number][],
-        opacity: 0.75,
+        opacity: aggregateOpacity(0.75),
         pickable: false,
         material: false,
         // Re-bin when the radius changes; without this deck.gl keeps the old

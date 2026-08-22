@@ -9,11 +9,21 @@ import { BASEMAPS, type BasemapId } from "../map/basemaps";
 import type { VisionViewMode } from "../map/VisionMapCanvas";
 import type { VisionTelemetry } from "@/lib/api/vision";
 
-const VIEW_MODES: { id: VisionViewMode; label: string }[] = [
+const VIEW_MODES: { id: VisionViewMode; label: string; hint?: string }[] = [
   { id: "2d", label: "2D" },
-  { id: "3d", label: "3D" },
-  { id: "earth", label: "EARTH" },
+  { id: "3d", label: "3D", hint: "Pitched camera with real terrain relief" },
+  { id: "earth", label: "EARTH", hint: "Globe projection \u2014 context only" },
+  {
+    id: "street3d",
+    label: "STREET 3D",
+    hint: "Google Photorealistic 3D \u2014 context only, no data layers",
+  },
 ];
+
+/** STREET 3D is the one view that needs a key, so the button says so rather than
+ *  looking broken when the key is absent. Read at module scope because Vite
+ *  inlines VITE_* at build time — this is not a runtime lookup. */
+const STREET3D_CONFIGURED = Boolean(import.meta.env.VITE_GOOGLE_MAPS_API_KEY);
 
 /** Camera presets.
  *
@@ -100,20 +110,35 @@ export function VisionTopBar({
       <div className="pointer-events-auto flex flex-col items-end gap-1.5">
         <div className="flex items-center gap-1.5">
           <div className="flex overflow-hidden rounded-full border-2 border-foreground bg-background/92 backdrop-blur">
-            {VIEW_MODES.map((m) => (
-              <button
-                key={m.id}
-                onClick={() => onViewMode(m.id)}
-                aria-pressed={viewMode === m.id}
-                className={`px-3 py-1 text-[11px] font-extrabold transition ${
-                  viewMode === m.id
-                    ? "bg-[var(--main,#91C5FD)] text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {m.label}
-              </button>
-            ))}
+            {VIEW_MODES.map((m) => {
+              // Only STREET 3D can be unconfigured. Disable rather than hide, so
+              // the capability is discoverable and the reason is stated.
+              const unconfigured = m.id === "street3d" && !STREET3D_CONFIGURED;
+              return (
+                <button
+                  key={m.id}
+                  onClick={() => onViewMode(m.id)}
+                  disabled={unconfigured}
+                  aria-pressed={viewMode === m.id}
+                  title={
+                    unconfigured
+                      ? t("Set VITE_GOOGLE_MAPS_API_KEY in frontend/.env to enable")
+                      : m.hint
+                        ? t(m.hint)
+                        : m.label
+                  }
+                  className={`px-3 py-1 text-[11px] font-extrabold transition ${
+                    viewMode === m.id
+                      ? "bg-[var(--main,#91C5FD)] text-foreground"
+                      : unconfigured
+                        ? "cursor-not-allowed text-muted-foreground/40"
+                        : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {m.label}
+                </button>
+              );
+            })}
           </div>
 
           <div
