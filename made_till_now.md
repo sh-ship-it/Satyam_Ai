@@ -4313,3 +4313,284 @@ Frontend `tsc --noEmit` unchanged at its 56-error pre-existing baseline, with ze
 - The screen honestly surfaces `DB-LEVEL RLS NOT ENFORCED — APP-LAYER SCOPING ONLY`, which is the cloud owner-role bypass recorded in the open issues above. Worth resolving before any demo that claims jurisdiction enforcement.
 - `Environment` layer still reports `Environment feed not wired yet.` — expected, that phase is unbuilt.
 - Only `frontend/src/components/vision/` was touched. The whole Vision feature is still uncommitted work in progress.
+
+
+---
+
+### [2026-08-22] — Vision 3D: Real Terrain, Wired-Up Buildings, and Aggregate Occlusion Fix
+
+#### 1. The `3D buildings` toggle was dead code
+`buildings3d` was threaded all the way from `localStorage` → `VisionWorkspace` → `VisionMapCanvas` as a prop, and the sidebar checkbox toggled and persisted — but the canvas only destructured and typed it. No effect consumed it, and there was no `fill-extrusion` anywhere in the repo. The control saved a preference and did nothing.
+
+#### 2. Terrain added (real measured data)
+`raster-dem` source from AWS/Mapzen Terrarium tiles (key-free HTTPS, verified 200), applied via `map.setTerrain()`. Tied to the existing **3D** view mode rather than adding another switch: a DEM is invisible at pitch 0, and 3D is exactly when relief is wanted. Earth stays base-map-only by design, so terrain is not applied there.
+
+Vertical exaggeration is **1.5x** and is stated in the on-canvas attribution (`x1.5 vertical`). Karnataka is plateau (~900 m) rising to the Western Ghats (~1900 m), so at statewide zoom true-scale relief is imperceptible — the exaggeration makes it read as terrain, which makes it a visual aid rather than a measurement, hence the label.
+
+**Honest assessment:** verified working (22–71 DEM tiles served 200 per session, attribution rendering, zero exceptions), but at the default statewide zoom on a dark raster basemap the relief is barely perceptible. It earns its keep zoomed into the Ghats, not at z6.4.
+
+#### 3. Buildings wired, with the height caveat made explicit
+Rather than switching to a vector basemap (which would have replaced the dark tactical look), the vector source and a single `fill-extrusion` layer are added **on top of the existing raster style** — MapLibre mixes raster and vector sources in one style. This preserves the visual language and means zero vector tiles are fetched until the toggle is switched on, satisfying VISION.md's cost rule.
+
+Source: OpenFreeMap (OpenMapTiles schema), key-free. Layer spec taken from OpenFreeMap's own `building-3d` definition: `source-layer: "building"`, `minzoom: 14`, `fill-extrusion-height: ["get","render_height"]`, plus a `hide_3d` filter for building parts that must not be extruded.
+
+**The data caveat, measured not assumed.** Overpass query over ~6x8 km of central Bengaluru:
+
+| | |
+|---|---|
+| buildings mapped in OSM | **57,569** |
+| with a real `height` or `building:levels` tag | **1,093** |
+| coverage | **1.9%** |
+
+The vector tile exposes only `render_height` / `render_min_height` / `hide_3d` / `colour` — there is **no raw height field**, so it is not possible to distinguish a surveyed height from a generated default at render time. Filtering to genuinely-tagged buildings is therefore impossible from the tiles, which is why the layer is labelled instead:
+
+> `BUILDING FOOTPRINTS OSM · HEIGHTS MOSTLY ESTIMATED · ZOOM IN PAST z14`
+
+On a screen that already badges CCTV cones `SIMULATED · FABRICATED GEOMETRY`, an unlabelled fabricated skyline would be the same failure at fifty times the scale. Full provider attribution for both new sources is appended to the canvas attribution line only while each is active (a licence obligation).
+
+#### 4. Aggregate layers were occluding everything at street zoom
+Enabling buildings exposed a real usability problem: at the zoom where footprints appear (z14+), the crime hexbins and risk cells fill the viewport. A single extruded 90 m bin viewed at pitch 55 covers most of the frame, so the first street-level screenshot was a solid blue field with a gold wedge (a high-density hexbin's side face) and no visible map.
+
+`buildLayers.ts` now fades aggregate layers past `STREET_ZOOM = 14` (`opacity` capped at 0.22) rather than hiding them — an officer who zoomed into a hotspot still needs to see they are inside it, they just also need the streets underneath. A 90 m crime bin carries no new information at z16 anyway.
+
+#### Verified in headless Chrome via CDP
+- Default 3D: `Z 6.40 · PITCH 55`, terrain attribution present, DEM tiles 200.
+- Buildings at `Z 16.50` over Bengaluru (12°57'54"N 77°35'50"E): footprints extruded across the city, streets legible, aggregates reduced to faint markers, height badge and OpenFreeMap attribution both rendering.
+- Zero uncaught exceptions in every run.
+- Frontend `tsc --noEmit` unchanged at its 56-error pre-existing baseline, zero errors under `components/vision/`.
+
+#### Files changed
+- `frontend/src/components/vision/map/basemaps.ts` — terrain + buildings source/layer factories, attributions, and the measured tag-coverage figure recorded in a comment
+- `frontend/src/components/vision/map/VisionMapCanvas.tsx` — `applyStyleExtras()` applied on `load`, on `styledata` (because `setStyle` drops added sources), and when the mode/toggle changes; height badge; conditional attribution
+- `frontend/src/components/vision/map/buildLayers.ts` — `aggregateOpacity()` zoom fade
+
+#### Not done, deliberately — the Akashic "Intelligence Deck" content
+Akashic's expanded deck carries regional-intelligence posture, actors & markets, global stock tickers, energy prices, seven-continent news, country dossiers, satellite TLE, conflict zones and GPS-jamming layers. **This was not an oversight — VISION.md §0.4 explicitly dropped it**: `CountryDashboard`, `GlobalRiskMatrix`, `ParliamentChart`, `MarketDeepDive` and `/api/wm/*` are listed as non-goals with the stated reason "No bearing on a KSP decision", and `/api/celestrak`, `/api/radio/*`, `/api/youtube/live`, `/api/panoramas`, `/api/sigint` are dropped in §1.3.
+
+What is worth adopting from those screenshots is the deck's **structure** — an expandable multi-panel workspace instead of the current four-tab strip — filled with data Satyam actually holds. See the open proposal in the section below.
+
+
+---
+
+### [2026-08-22] — Vision: STREET 3D (Google Photorealistic 3D Maps)
+
+#### What was added
+A fourth view mode on `/vision`, alongside `2D · 3D · EARTH`, rendering Google Photorealistic 3D Maps via the native `<gmp-map-3d>` custom element.
+
+New file `frontend/src/components/vision/map/Street3DCanvas.tsx`, plus the mode threaded through `VisionViewMode`, `VisionTopBar` and `VisionWorkspace`.
+
+#### Architectural notes
+- **Separate renderer, so it is a context view.** `<gmp-map-3d>` is Google's own WebGL globe and cannot host deck.gl layers. Like EARTH it therefore carries no data and is badged `CONTEXT VIEW · PHOTOREALISTIC 3D · NO DATA LAYERS`.
+- **MapLibre is unmounted while it is active**, not parked behind it. Two idle WebGL contexts plus MediaPipe on one page is the exact GPU contention VISION.md's Phase 0 flagged. The last `bbox` is deliberately retained so the sidebar counts and the deck keep their data instead of emptying while an officer is in a context view.
+- **Voice `set_view` widened.** The action previously allow-listed `2d|3d|earth` and would have silently ignored the new mode. It now also accepts `street3d` / `street` / `photoreal`, plus synonyms for the others (`flat`, `tilt`, `terrain`, `globe`).
+- **The button disables itself rather than breaking** when no key is configured, with the reason in its tooltip. Every other view is unaffected.
+- This is the one basemap in Vision that is not key-free, which contradicts the key-free preference recorded in VISION.md §0.3. Adopted as a deliberate product decision, not an oversight.
+
+#### The bug this took to get right
+First implementation resolved readiness from the `<script>` tag's `load` event, then called `google.maps.importLibrary("maps3d")`. It failed with:
+
+```
+Street 3D unavailable: w.google.maps.importLibrary is not a function
+```
+
+With `loading=async`, Google's bootstrap defines `importLibrary` **asynchronously**, so `load` fires while it is still undefined. Calling the same function manually a second later succeeded, which made the failure look intermittent rather than wrong. Diagnosed by driving headless Chrome over CDP: `maps3d.js`, `common.js` and `main.js` all returned 200, `customElements.get('gmp-map-3d')` was defined and `document.createElement('gmp-map-3d')` worked — so Google's side was healthy and the fault was ours.
+
+Fixed by taking readiness from Google's `callback=` parameter instead of the `load` event, which fires only when the API is genuinely usable. Multiple mounts chain onto any prior callback rather than clobbering it, and a 20 s timeout rejects with an actionable message so a blocked key cannot leave the screen on `LOADING` forever.
+
+#### The four loading requirements, each with its own failure signature
+| Requirement | Omitting it causes |
+|---|---|
+| `v=beta` | Photorealistic 3D is not on stable; the maps3d library does not exist |
+| `libraries=maps3d` | `importLibrary("maps3d")` rejects |
+| explicit height | the custom element collapses to 0 px and renders nothing, silently |
+| `mode` attribute | infinite loading spinner, not an error |
+
+Sizing is applied **inline** (`width/height: 100%`) for the same reason as the MapLibre container fix recorded above: a 0-height element renders nothing and reports no error, and inline styles cannot be lost to stylesheet order.
+
+#### Verified in headless Chrome
+`exists: true · tag: GMP-MAP-3D · 1376x765 · mode: hybrid · center followed the map's last position · context badge shown · MapLibre unmounted · 75 googleapis responses streaming 3D tiles · zero exceptions.` Screenshot confirmed photorealistic terrain over the Tungabhadra confluence with Google labels and the `Imagery © Google` attribution.
+
+Frontend `tsc --noEmit` unchanged at its 56-error pre-existing baseline, zero errors under `components/vision/`.
+
+#### API key handling — read this before deploying
+`VITE_GOOGLE_MAPS_API_KEY` lives in **gitignored** `frontend/.env` (`.gitignore:22 **/.env`), with a documented placeholder in the tracked `frontend/.env.example`. Verified absent from every tracked file.
+
+**Gitignoring it does not make it secret.** Vite inlines every `VITE_*` variable into the client bundle, and a Google Maps JS key must reach the browser by design — anyone using the app can read it. Keeping it out of the repository only prevents it being published in source history. The only real protection is server-side, in Google Cloud Console:
+
+1. **Application restrictions → HTTP referrers** — allow only your own origins (`http://localhost:3000/*` and the deployed domain).
+2. **API restrictions** — allow only "Maps JavaScript API".
+
+Without both, a key lifted from the bundle can be used by anyone and billed to the project. The demo key additionally has a daily quota that, once spent, stops rendering **silently** — which is why `Street3DCanvas` names that condition on screen rather than showing an empty canvas.
+
+#### Still outstanding
+The expanded multi-panel Intelligence Deck (district dossier, risk matrix, narrative brief, dispatches, review queue, alerts, layer search) is **not built yet**. Backend groundwork confirmed available: `/api/intelligence/socio/demographics` and `/socio/risk-index` already exist, so the district dossier needs no new endpoint.
+
+---
+
+## Expandable multi-panel Intelligence Deck (`/vision`)
+
+Built the expanded deck that was listed as outstanding immediately above. The deck
+now has two display modes and ships in the safer one.
+
+### What it does
+
+`IntelligenceDeck` gained an `EXPAND` / `LIST` toggle. `LIST` is the previous
+behaviour, unchanged: four tabs (`DISPATCHES`, `REVIEW QUEUE`, `RISK`, `ALERTS`)
+over a single scrolling list. `EXPAND` swaps that for a responsive grid of
+panels — one column on a phone, two at `md`, three at `xl`.
+
+Four panels, composed by `VisionWorkspace` and passed down as a `panels` prop so
+the deck stays presentational and still has no idea what a risk zone is:
+
+| Panel | Content | Source |
+|---|---|---|
+| `DISTRICT INTELLIGENCE` (double-width) | 40 districts: risk score, crime rate, literacy, urbanisation. Row click filters the crime layer to that district. | `/api/socio/risk-index` + `/api/socio/correlation` |
+| `RISK MATRIX` | Up to 60 zones: tier colour, coordinates, score, incidents, peak hour | existing snapshot `risk_zones` |
+| `FIELD ASSETS` | Patrol units, active dispatches, cameras, risk zones | existing snapshot |
+| `COVERAGE & PROVENANCE` | Every layer with its provenance badge and row count, plus degraded reasons and the coordinate-coarsening notice | existing snapshot envelopes |
+
+### Decisions
+
+- **Four panels, not six.** Dispatches, review queue and alerts already exist as
+  compact tabs in the same component. Duplicating them into panels would have
+  added surface area and no information.
+- **No new backend endpoint.** The district panel reuses the two `socio`
+  endpoints that were already serving this data. The join happens client-side in
+  `visionApi.districtIntel()`.
+- **`intelFetch` lives in `lib/api/vision.ts`,** alongside `visionFetch`, rather
+  than importing `intelligence.ts` into the screen. This keeps VISION.md's rule
+  that Vision talks to exactly one client: the *client* is allowed to know about
+  more than one backend router, the *screen* is not.
+- **`Promise.allSettled`, not `Promise.all`.** The two endpoints have different
+  clearance floors — risk-index is L2, correlation is L3 — so a mid-clearance
+  officer legitimately receives one and not the other. The panel renders what it
+  got and names the refusal ("Socio-economic indicators need clearance L3.")
+  instead of failing whole or showing unexplained blank columns.
+- **Grid mode is off by default.** An expanded deck must not eat the map the
+  first time an officer opens the screen on a field tablet. The grid body is
+  capped at `52vh` and each cell at `23vh`.
+- **Row click does not move the camera.** There is no geocoder on this screen, so
+  flying to a guessed district centroid would invent a location. It sets the
+  district filter, which is a real, server-backed action.
+- **Layer search was dropped, deliberately.** It was on the original
+  recommendation list. There are exactly seven layers and all seven are visible
+  at once in the sidebar's scroll pane, so a search box over them is pure
+  interface weight. Not missed — decided against.
+
+### Two bugs found and fixed during verification
+
+**1. Panels overlapped each other.** The grid cell used `maxHeight: 22vh` with no
+`overflow` rule, and the panel `<section>` inside it was never told to fill the
+cell. The 40-row district table therefore grew past its cell and the next grid
+row painted on top of it — the screenshot showed FIELD ASSETS and COVERAGE
+sitting over ghost district rows. Fixed by giving the cell a fixed `height` plus
+`overflow-hidden` and the section `h-full`, so a tall panel scrolls inside its
+own cell. The shell's body already had `overflow-y-auto`; it just had nothing
+constraining it.
+
+**2. Badges lied about truncation.** The district badge read `40` while the table
+rendered `slice(0, 14)`. Now that panels scroll properly, districts render in
+full and the badge is accurate. The risk panel still caps at 60 of a possible
+several hundred, so its badge reports the cap honestly as `60 / 336`.
+
+### Two data findings worth acting on separately
+
+**The social risk index is saturated and currently carries no information.**
+`get_social_risk_index` (`app/services/intelligence_service.py:909`) computes
+`min(99, 20 + int(log1p(n) * 8) + min(20, acc))`. At this data scale both of the
+last two terms are effectively constants: every district has hundreds of accused
+persons so `min(20, acc)` is always 20, and `log1p(n) * 8` for n in the thousands
+is around 64. All ten districts returned therefore score exactly **99**.
+
+Measured case counts show why no simple rescale fixes it either: Bengaluru City
+has 25,215 cases against 662–3,823 for everything else, so any log-scaled score
+off raw counts compresses to the top of the range. Raw case count is largely
+measuring district size, not risk.
+
+This affects the existing `socio.tsx` screen too, which colours the score against
+70/40 thresholds and so shows every district red. **Left unchanged on purpose** —
+recalibrating a police-facing risk metric is an analytical decision, not a
+refactor, and no test covers it. Recorded here for a deliberate fix.
+
+The deck works around it rather than displaying an arbitrary order: the district
+table **sorts by crime rate**, which is per-capita, has real spread (959.5 down to
+128.3) and covers all 40 districts instead of only the 10 that carry a score. The
+saturated score is still shown as a column, visibly constant, rather than hidden.
+
+**Risk zones carry no place name.** The payload has `label` (the tier), `score`,
+`incidents`, `peak_hour`, `reasons` and coordinates. Rendering `label` as the row
+text made every row read "High". `reasons` is always exactly three entries that
+restate incident count, severity weight and peak hour, so it is redundant inline.
+The panel therefore uses coordinates as the zone's identity and puts the full
+reasons in the row tooltip.
+
+### Verification
+
+- Frontend `tsc --noEmit`: **56 errors, unchanged from the pre-existing baseline**,
+  zero under `components/vision/` or `lib/api/vision.ts`.
+- `eslint` on the three changed files: clean, except one pre-existing
+  `useRef<any>` on a line this work did not touch (confirmed absent from the diff).
+- Driven in headless Chrome over CDP against the cloud database: all four panel
+  titles present, district table renders **40 rows** ordered by crime rate,
+  FIELD ASSETS reads `4 patrols / 0 dispatches / 2 cameras / 336 zones`, COVERAGE
+  lists all six layers with provenance badges and counts, clicking the first
+  district row produces the notice `filtered to district "Bengaluru City"`, and
+  **zero console errors**. Screenshot confirmed no panel overlap after the fix.
+- Verification used a throwaway DGP-rank account which was **disabled again
+  afterwards**. It cannot be deleted: `audit_log`'s foreign key to `users` holds
+  it, because the audit chain is append-only. That is correct behaviour.
+
+### Files touched
+
+- `frontend/src/lib/api/vision.ts` — `intelFetch`, the `DistrictIntel*` types and
+  `visionApi.districtIntel()`
+- `frontend/src/components/vision/chrome/IntelligenceDeck.tsx` — `DeckPanel` type,
+  `DeckPanelShell`, the `panels` prop and the grid mode
+- `frontend/src/components/vision/VisionWorkspace.tsx` — district fetch, the four
+  panel definitions, `submitSearchTerm` extracted so both the search box and a
+  district row can apply a filter
+
+---
+
+## Repository policy change: commits now target `main`
+
+On the user's instruction, the earlier "all commits go to `aaradhya`, never commit
+to `main`" rule is **superseded**. New work is committed to `main`.
+`.kiro/steering/git-and-secrets.md` was updated so the change persists across
+sessions rather than living only in one conversation.
+
+`aaradhya` still exists and still holds the commits made under the old rule
+(including `970ce67` streaming RLS fix and `c28a25f` router fix). It is simply no
+longer the target for new work.
+
+### One consequence worth knowing
+
+Part of the old no-push protection was **structural, not just a rule**:
+`aaradhya` had no upstream, so a bare `git push` failed rather than sending
+anything anywhere. `main` tracks `origin/main` on the GitHub remote, so the same
+command now would reach the remote.
+
+Unchanged, and now resting entirely on the rule rather than on a missing
+upstream: **never push, never set an upstream, never deploy** without an explicit
+request in that session. Anything committed to `main` is one command away from
+being public, so the secrets checks below matter more than they did before.
+
+## Secrets inventory: a fifth tracked file
+
+The policy file records four tracked files carrying the live Neon password. A
+fifth tracked file carrying credentials was found while cleaning up after the
+Intelligence Deck work:
+
+| File | Contents | Severity |
+|---|---|---|
+| `backend/_t_localdb.py` | two connection strings with embedded passwords, for local roles `satyam_app` and `postgres` | low — `localhost:5432` only, no remote exposure |
+
+Committed in `ddff64a` ("implement main console interface and add utility scripts
+for local database migration and testing"), so it is already in history. Left in
+place rather than deleted, because it is a tracked file and removing it is the
+user's decision, not a cleanup side effect.
+
+It matches the pattern the secrets policy says to refuse — a connection string
+with an embedded password — so it belongs in the inventory even though the
+credentials are local-only and the practical risk is small. Worth noting that
+`main` having a live upstream raises the stakes on this class of file.
