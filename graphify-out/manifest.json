@@ -60,8 +60,8 @@
     "semantic_hash": ""
   },
   "backend/app/config.py": {
-    "mtime": 1787306193.631359,
-    "ast_hash": "bf029e9ccb3372ea48a0bb075dc0fe7f",
+    "mtime": 1787335061.3563378,
+    "ast_hash": "b3e8e468852a92c3a0ce1be6a9155ff2",
     "semantic_hash": ""
   },
   "backend/app/core/__init__.py": {
@@ -105,8 +105,8 @@
     "semantic_hash": ""
   },
   "backend/app/db/session.py": {
-    "mtime": 1787306193.631359,
-    "ast_hash": "5d45c8d5e8c546663207fb051658d077",
+    "mtime": 1787339052.7679572,
+    "ast_hash": "f8135f5df4beac50a3d624a52db3bae6",
     "semantic_hash": ""
   },
   "backend/app/logging_config.py": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1782239067.3336198,
-    "ast_hash": "7bb28f6c64c6bd67baaa11731992a949",
+    "mtime": 1787335078.522499,
+    "ast_hash": "98867674e5498f9dc5bfa4536efda642",
     "semantic_hash": ""
   },
   "backend/app/models/__init__.py": {
@@ -220,8 +220,8 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/analytics.py": {
-    "mtime": 1781580576.190239,
-    "ast_hash": "9e60c66a0dd7149267992d2c4e7b8b07",
+    "mtime": 1787336547.602526,
+    "ast_hash": "2e5880c455fc756c67446174c10350ec",
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/rag.py": {
@@ -355,8 +355,8 @@
     "semantic_hash": ""
   },
   "frontend/package.json": {
-    "mtime": 1782238635.173167,
-    "ast_hash": "a12bbd755acb94e4c1c2bc6f693c4484",
+    "mtime": 1787335539.7565768,
+    "ast_hash": "9968735bc01ba263c4154d5320b2a978",
     "semantic_hash": ""
   },
   "frontend/src/assets/police.mp4.asset.json": {
@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1782282342.7580605,
-    "ast_hash": "05b9eec3956fbddd2228182509c02b19",
+    "mtime": 1787335848.9306562,
+    "ast_hash": "cc9285a75eb02b34f1766872c7d5e2aa",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -685,8 +685,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
-    "mtime": 1782210899.0213268,
-    "ast_hash": "f219b1d19b19c0cc79ff47a0f4fee2e7",
+    "mtime": 1787333691.5409267,
+    "ast_hash": "6202909c08c06eb3e7fbab79977041bf",
     "semantic_hash": ""
   },
   "frontend/src/router.tsx": {
@@ -825,8 +825,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1787331167.949078,
-    "ast_hash": "65e1d9ae0874b23c68f496e1d9c07235",
+    "mtime": 1787370625.2994733,
+    "ast_hash": "789a6c80e29e217a92015d0a1d0ae35e",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -1105,8 +1105,8 @@
     "semantic_hash": ""
   },
   "backend/seed/init_ops.py": {
-    "mtime": 1781945555.8937554,
-    "ast_hash": "56c74a3727125246b454a89cde7efb91",
+    "mtime": 1787339966.7953413,
+    "ast_hash": "269b177a40482f96c54c7b293620b935",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/responseOps.ts": {
@@ -1505,8 +1505,8 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/screen_agent.py": {
-    "mtime": 1782283370.9074779,
-    "ast_hash": "309b826d6dcb56f6776207f95403d23f",
+    "mtime": 1787338196.4110818,
+    "ast_hash": "7cef14b8049e83bd4523ec3aff79b38e",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/voiceAgent.ts": {
@@ -1812,6 +1812,116 @@
   "backend/tests/test_router.py": {
     "mtime": 1787306193.638358,
     "ast_hash": "daa40b4fac88502df26c5816bf470f3c",
+    "semantic_hash": ""
+  },
+  "backend/app/api/routes/vision.py": {
+    "mtime": 1787336683.3757308,
+    "ast_hash": "b6da3d64125e9410f346241c5e482209",
+    "semantic_hash": ""
+  },
+  "backend/app/schemas/vision.py": {
+    "mtime": 1787336639.5583603,
+    "ast_hash": "613fb2a39b71560956838c8d8ad8ff34",
+    "semantic_hash": ""
+  },
+  "backend/app/services/vision_service.py": {
+    "mtime": 1787336628.8769515,
+    "ast_hash": "60605633c632711f1badefc27be19a15",
+    "semantic_hash": ""
+  },
+  "backend/migrations/011_ops_rls.sql": {
+    "mtime": 1787338819.829283,
+    "ast_hash": "e1a6af286ee17cedb263dc43a2648f8e",
+    "semantic_hash": ""
+  },
+  "backend/tests/test_vision.py": {
+    "mtime": 1787339019.541695,
+    "ast_hash": "fe6ac0cea6d2fa8c3deb7785b56caa83",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/VisionWorkspace.tsx": {
+    "mtime": 1787341536.3795812,
+    "ast_hash": "060ad4e24d7be7d6b33d7e1a880d6ab3",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/chrome/CoordinateReadout.tsx": {
+    "mtime": 1787341496.6327105,
+    "ast_hash": "edac14112e0751007cb2267fade0ccdb",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/chrome/IntelligenceDeck.tsx": {
+    "mtime": 1787341485.5409627,
+    "ast_hash": "42eec613177f8a046ef4d1679384b75c",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/chrome/LayerMatrixSidebar.tsx": {
+    "mtime": 1787335637.8499682,
+    "ast_hash": "156145dd6504fb13a859d067f805fbc2",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/chrome/TreatmentBar.tsx": {
+    "mtime": 1787335647.7007923,
+    "ast_hash": "f4c956e7556b0805008f00924c45fdba",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/chrome/VisionTopBar.tsx": {
+    "mtime": 1787340050.09013,
+    "ast_hash": "910e375876ae3282cc0cd0f61b6b4fd3",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/chrome/treatments.ts": {
+    "mtime": 1787335579.648387,
+    "ast_hash": "a8aa0fcb893a28204b3cc67b758fac6f",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/dossiers/DraggableDossier.tsx": {
+    "mtime": 1787337568.6311371,
+    "ast_hash": "df3cbe115bc409c3c46d1810ccce3f4e",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/dossiers/EntityDossier.tsx": {
+    "mtime": 1787337610.7838707,
+    "ast_hash": "184aa8ce25f131a5997b98d537d17aea",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/layerRegistry.ts": {
+    "mtime": 1787335605.7905073,
+    "ast_hash": "055b01e20ed70f3b2dd19706b41fdf6b",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/map/VisionMapCanvas.tsx": {
+    "mtime": 1787369817.8294759,
+    "ast_hash": "1383424a032a160a9a9f08658128fb28",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/map/basemaps.ts": {
+    "mtime": 1787333554.1527448,
+    "ast_hash": "d17743ab407e88187cd0e4c76c1fa4f0",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/map/buildLayers.ts": {
+    "mtime": 1787341360.660259,
+    "ast_hash": "5f9ba4b9a0278fde85e63402b30bc40d",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/map/useVisionMap.ts": {
+    "mtime": 1787333589.2905738,
+    "ast_hash": "2521b00ed4122fec7cb7bbbebd57e6b1",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/useVisionData.ts": {
+    "mtime": 1787341571.7986486,
+    "ast_hash": "2e23d6b80f66c578ce9c949f69c9239b",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/api/vision.ts": {
+    "mtime": 1787337501.564466,
+    "ast_hash": "f51cbb1e139cb685114bf2fc0b369570",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/vision.tsx": {
+    "mtime": 1787333691.264241,
+    "ast_hash": "74ae00cbcae31f3d06c7084afe383f36",
     "semantic_hash": ""
   }
 }
