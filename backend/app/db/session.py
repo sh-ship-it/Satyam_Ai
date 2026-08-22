@@ -61,17 +61,47 @@ def active_vector_type() -> str:
     return s.vector_type if _db_source == "local" else s.cloud_vector_type
 
 
+def _engine_kwargs(url: str) -> dict:
+    """Engine options, adjusted for a pgbouncer-style pooled endpoint.
+
+    Neon's pooled host (``...-pooler...``) is pgbouncer in transaction mode, which
+    does not support prepared statements: asyncpg then raises
+    DuplicatePreparedStatementError ("prepared statement __asyncpg_stmt_N__
+    already exists") under concurrency. Disabling both statement caches is the
+    documented remedy.
+
+    Transaction-mode pooling *does* preserve ``set_config(..., is_local => true)``,
+    because the server connection is held for the whole transaction and
+    get_scoped_session wraps every request in ``session.begin()``. That matters:
+    if it did not, RLS would silently match nothing through the pooler.
+
+    Pool sizing is also smaller for a pooled endpoint. This module caches one
+    engine per source, so a process can hold two pools, and a scaled container
+    multiplies that again against the project's connection ceiling.
+    """
+    pooled = "-pooler" in url
+    kwargs: dict = {"pool_pre_ping": True, "future": True}
+    if pooled:
+        kwargs.update(
+            pool_size=3,
+            max_overflow=5,
+            connect_args={
+                # SQLAlchemy's asyncpg dialect option...
+                "prepared_statement_cache_size": 0,
+                # ...and asyncpg's own, since the dialect forwards unknown keys.
+                "statement_cache_size": 0,
+            },
+        )
+    else:
+        kwargs.update(pool_size=5, max_overflow=10)
+    return kwargs
+
+
 def _get_engine(source: Literal["cloud", "local"]) -> AsyncEngine:
     if source not in _engines:
         s = get_settings()
         url = s.local_database_url if source == "local" else s.database_url
-        _engines[source] = create_async_engine(
-            url,
-            pool_pre_ping=True,
-            pool_size=5,
-            max_overflow=10,
-            future=True,
-        )
+        _engines[source] = create_async_engine(url, **_engine_kwargs(url))
     return _engines[source]
 
 

@@ -1,0 +1,146 @@
+/* Vision tactical treatments.
+ *
+ * These are CSS filter stacks applied to the map wrapper, not GLSL shaders.
+ * That is a deliberate choice: a filter stack costs one compositor pass, works
+ * on any GPU, cannot break the WebGL context, and needs no custom deck.gl
+ * render pipeline. The visual result is what an officer sees on a dark ops-room
+ * display; the cost is that these are colour transforms, not true sensor
+ * simulations. Nothing here claims to be real thermal or real night vision.
+ *
+ * Each treatment is `.vx-<id>` on the wrapper. The optional ::after overlay adds
+ * scanlines / sweep / grain. Overlays are pointer-events:none so map interaction
+ * is never blocked.
+ */
+
+.vx {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+}
+
+.vx::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 500;
+}
+
+/* ── Standard: no transform at all, so there is zero cost when unused ─────── */
+.vx-standard::after {
+  display: none;
+}
+
+/* ── Noir: high-contrast monochrome ───────────────────────────────────────── */
+.vx-noir {
+  filter: grayscale(1) contrast(1.45) brightness(0.92);
+}
+.vx-noir::after {
+  display: none;
+}
+
+/* ── Night vision: green phosphor + grain + edge falloff ──────────────────── */
+.vx-nvg {
+  filter: grayscale(1) brightness(1.25) contrast(1.3) sepia(1) hue-rotate(65deg)
+    saturate(3.2);
+}
+.vx-nvg::after {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.72) 100%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 255, 120, 0.05) 0px,
+      rgba(0, 255, 120, 0.05) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  mix-blend-mode: screen;
+  animation: vx-grain 0.9s steps(3) infinite;
+}
+
+/* ── Thermal / FLIR-style pseudocolour ────────────────────────────────────────
+ * An ironbow ramp needs a per-pixel LUT, which CSS cannot express. This is a
+ * hue-rotated high-contrast approximation, labelled FLIR-STYLE in the UI rather
+ * than FLIR so nobody reads it as radiometric data. */
+.vx-flir {
+  filter: grayscale(1) contrast(1.7) brightness(1.05) sepia(1) hue-rotate(-35deg)
+    saturate(5.5);
+}
+.vx-flir::after {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 60, 0, 0.06), rgba(0, 0, 40, 0.28));
+  mix-blend-mode: overlay;
+}
+
+/* ── CRT: scanlines, slight bloom, chromatic edge ─────────────────────────── */
+.vx-crt {
+  filter: contrast(1.18) saturate(1.15) brightness(1.02);
+}
+.vx-crt::after {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.22) 0px,
+      rgba(0, 0, 0, 0.22) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* ── Radar: rotating sweep with phosphor decay ────────────────────────────── */
+.vx-radar {
+  filter: grayscale(0.65) contrast(1.25) brightness(0.95) sepia(0.35) hue-rotate(120deg)
+    saturate(2);
+}
+.vx-radar::after {
+  background: conic-gradient(
+    from 0deg,
+    rgba(0, 230, 168, 0.3) 0deg,
+    rgba(0, 230, 168, 0.08) 22deg,
+    transparent 55deg,
+    transparent 360deg
+  );
+  mix-blend-mode: screen;
+  animation: vx-sweep 4s linear infinite;
+}
+
+/* ── Satcom: washed low-bandwidth downlink look ───────────────────────────── */
+.vx-satcom {
+  filter: contrast(0.92) saturate(0.55) brightness(1.08);
+}
+.vx-satcom::after {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 0px,
+    rgba(255, 255, 255, 0.03) 2px,
+    transparent 2px,
+    transparent 6px
+  );
+}
+
+@keyframes vx-sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes vx-grain {
+  0% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.9;
+  }
+}
+
+/* Respect the OS reduced-motion preference: the sweep and grain are decorative,
+   and a continuously animating full-screen overlay is a vestibular trigger. */
+@media (prefers-reduced-motion: reduce) {
+  .vx-radar::after,
+  .vx-nvg::after {
+    animation: none;
+  }
+}

@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VisionRouteImport } from './routes/vision'
 import { Route as TrendsRouteImport } from './routes/trends'
 import { Route as TranscriptsRouteImport } from './routes/transcripts'
 import { Route as SocioRouteImport } from './routes/socio'
@@ -29,6 +30,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProfilePersonIdRouteImport } from './routes/profile.$personId'
 
+const VisionRoute = VisionRouteImport.update({
+  id: '/vision',
+  path: '/vision',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrendsRoute = TrendsRouteImport.update({
   id: '/trends',
   path: '/trends',
@@ -144,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/socio': typeof SocioRoute
   '/transcripts': typeof TranscriptsRoute
   '/trends': typeof TrendsRoute
+  '/vision': typeof VisionRoute
   '/profile/$personId': typeof ProfilePersonIdRoute
 }
 export interface FileRoutesByTo {
@@ -165,6 +172,7 @@ export interface FileRoutesByTo {
   '/socio': typeof SocioRoute
   '/transcripts': typeof TranscriptsRoute
   '/trends': typeof TrendsRoute
+  '/vision': typeof VisionRoute
   '/profile/$personId': typeof ProfilePersonIdRoute
 }
 export interface FileRoutesById {
@@ -187,6 +195,7 @@ export interface FileRoutesById {
   '/socio': typeof SocioRoute
   '/transcripts': typeof TranscriptsRoute
   '/trends': typeof TrendsRoute
+  '/vision': typeof VisionRoute
   '/profile/$personId': typeof ProfilePersonIdRoute
 }
 export interface FileRouteTypes {
@@ -210,6 +219,7 @@ export interface FileRouteTypes {
     | '/socio'
     | '/transcripts'
     | '/trends'
+    | '/vision'
     | '/profile/$personId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -231,6 +241,7 @@ export interface FileRouteTypes {
     | '/socio'
     | '/transcripts'
     | '/trends'
+    | '/vision'
     | '/profile/$personId'
   id:
     | '__root__'
@@ -252,6 +263,7 @@ export interface FileRouteTypes {
     | '/socio'
     | '/transcripts'
     | '/trends'
+    | '/vision'
     | '/profile/$personId'
   fileRoutesById: FileRoutesById
 }
@@ -274,11 +286,19 @@ export interface RootRouteChildren {
   SocioRoute: typeof SocioRoute
   TranscriptsRoute: typeof TranscriptsRoute
   TrendsRoute: typeof TrendsRoute
+  VisionRoute: typeof VisionRoute
   ProfilePersonIdRoute: typeof ProfilePersonIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vision': {
+      id: '/vision'
+      path: '/vision'
+      fullPath: '/vision'
+      preLoaderRoute: typeof VisionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trends': {
       id: '/trends'
       path: '/trends'
@@ -434,6 +454,7 @@ const rootRouteChildren: RootRouteChildren = {
   SocioRoute: SocioRoute,
   TranscriptsRoute: TranscriptsRoute,
   TrendsRoute: TrendsRoute,
+  VisionRoute: VisionRoute,
   ProfilePersonIdRoute: ProfilePersonIdRoute,
 }
 export const routeTree = rootRouteImport

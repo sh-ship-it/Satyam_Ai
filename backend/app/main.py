@@ -23,6 +23,7 @@ from app.api.routes import map as map_routes
 from app.api.routes import network, reports, settings as settings_routes, voice
 from app.api.routes import intelligence
 from app.api.routes import ops as ops_routes
+from app.api.routes import vision as vision_routes
 from app.api.routes import financial  # PS7 money-trail
 from app.api.routes import dossier as dossier_routes
 from app.api.routes import board as board_routes
@@ -119,6 +120,8 @@ def create_app() -> FastAPI:
     app.include_router(security_routes.router, prefix="/security", tags=["security"])
     if settings.enable_response_ops:
         app.include_router(ops_routes.router, prefix="/api/ops", tags=["response-ops"])
+    if settings.enable_vision:
+        app.include_router(vision_routes.router, prefix="/api/vision", tags=["vision"])
     return app
 
 

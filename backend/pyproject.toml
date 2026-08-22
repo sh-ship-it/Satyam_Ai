@@ -11,6 +11,11 @@
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+# Pin the async-fixture loop to the test's own loop. Without this, pytest-asyncio
+# runs async fixtures on a separate (and by then closed) event loop, so an
+# asyncpg connection created in a fixture fails with a bare RuntimeError when the
+# test body uses it.
+asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
 markers = [
     "integration: needs a live, seeded database or network access. Excluded from CI with -m 'not integration'.",

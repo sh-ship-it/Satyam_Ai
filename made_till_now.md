@@ -3841,6 +3841,291 @@ To close this on cloud, one of the following is needed:
 
 Until one is done, treat cloud as having application-layer RBAC only.
 
+---
+
+### [2026-08-21] — Vision: New `/vision` Tactical Map Screen (deck.gl + MapLibre), Plus Four Findings It Surfaced
+
+#### Summary
+Built a new geospatial screen at `/vision
+3D hexagonal crime density, live patrol/dispatch/signal/CCTV layers, seven visual
+treatments, 2D/3D/globe projections, draggable entity dossiers, and voice control.
+Additive and feature-flagged (`ENABLE_VISION`); no existing screen was modified
+except two additive lines in `Shell.tsx`.
+
+Planning lives in the (gitignored) `VISION.md`. Building it surfaced four problems
+in **existing** code that had nothing to do with Vision — those are the parts of
+this entry worth reading.
+
+#### Licence constraint that shaped the whole approach
+All Rights Reserved. 
+
+#### Finding 1 — `analytics.hotspots` was returning 1.4% of the data
+The hard `LIMIT 500` predates the dataset it now runs against. Measured on cloud:
+**34,641** distinct cells exist at 0.001° (~110 m); the query returned 500. The
+"500 CRIME HOTSPOTS" badge on the `/operations` screen was literally the LIMIT
+being displayed as a count.
+
+Separately, the query grouped by `(cell, crime_type)`, so `weight` was a
+per-crime-type count, not a per-cell count — summing it to drive one column
+double-counts. Inflation measured at ~3% (35,755 rows vs 34,641 cells): real but
+small.
+
+Fixed by adding `bbox`, `precision`, `group_by_crime_type` and `limit` parameters,
+**all defaulting to the historical behaviour** so `map_service.hotspots` and
+`orchestrator` are untouched (asserted by a test). `precision`/`limit` are
+validated before any SQL is built, since they are interpolated rather than bound.
+
+Also measured while here: 35,865 of 35,993 cases are geocoded — **99.6%**, not the
+sparse coverage the seed script's design implies. Geocoding is effectively done.
+
+#### Finding 2 — the `ops_*` tables had no RLS at all, in either database
+Open issue 1 in the consolidated summary covered `cases`/`narratives`/`persons`/
+`case_persons`. It did not cover the seven `ops_*` tables, which are created by
+`seed/init_ops.py` via `Base.metadata.create_all` rather than by a migration, so
+`002_schema_v2.sql`'s RLS block never reached them. Measured `relrowsecurity =
+false` on all of them in **both** databases, with row counts identical with and
+without a jurisdiction context — patrol positions, camera locations and dispatches
+were readable by any authenticated officer regardless of jurisdiction.
+
+Also discovered: `002_schema_v2.sql:246-249` already contains **uncommented**
+`ALTER TABLE ... FORCE ROW LEVEL SECURITY` for the four core tables, yet both live
+databases measure `relforcerowsecurity = false`. That migration has not been
+re-applied since those lines were added.
+
+New `migrations/011_ops_rls.sql` closes both, and had to split the tables because
+most of them have no jurisdiction column to scope by:
+
+- **Group A — real `fn_scope_ok` policies.** `ops_patrol_units` (joins `stations`
+  via `station_id` to obtain the officer's `range`, falling back to the
+  denormalised `district` when `station_id` is NULL), `ops_incident_dispatches`
+  (prefers the linked case, falls back to the assigned patrol), and
+  `ops_patrol_suggestions` / `ops_incident_review_queue` through their relations.
+- **Group B — fail-closed only.** `ops_traffic_signals`, `ops_cameras` and
+  `ops_risk_zones` store geometry and state and nothing else. An `fn_scope_ok`
+  policy on them would be theatre — filtering on a column that does not exist. A
+  new `fn_has_scope()` policy instead requires a stamped session, which converts
+  "an unscoped connection enumerates every camera in the state" into "sees
+  nothing". True scoping needs new columns plus a nearest-station backfill and is
+  deliberately deferred; the migration says so in a comment.
+- Repeats `FORCE ROW LEVEL SECURITY` on the four core tables, idempotently.
+- Grants `SELECT, INSERT, UPDATE` on the ops tables to `satyam_app` (`008`
+  predates them). `DELETE` withheld — nothing in the app deletes ops rows.
+
+**`FORCE` does not defeat `rolbypassrls`.** The migration is necessary but not
+sufficient on cloud; open issue 1's role change is still required. Applied and
+verified on **local only** (Neon untouched): as `satyam_app` with no context, the
+ops tables now return 0 rather than 4/2/5; with `scope=state` they return the
+seeded counts.
+
+#### Finding 3 — the audit hash chain does not verify, and has not for a long time
+`verify_chain()` returns `False` on cloud. Diagnosed: **5 breaks in 669 rows,
+earliest `audit_id=90`**, every one of them `action = financial.money_trail`. In
+each case the stored `prev_hash` does not match the actual predecessor's
+`row_hash`, while each row's own hash **is** self-consistent with its own stored
+`prev_hash`. That signature is a concurrent-write fork, not tampering — two
+transactions read the same chain tip and both inserted.
+
+`write_audit` takes `pg_advisory_xact_lock` specifically to prevent this, so the
+forks predate that guard. Not fixed: a hash chain cannot be repaired retroactively
+without rewriting history, which destroys the property the chain exists to
+provide. Recorded as a new open issue for a human decision.
+
+A latent second defect spotted in the same function: the hashed payload uses
+`reason=reason`, but the persisted row stores `reason=(reason or detail)`. Any
+caller passing the legacy `detail=` alias without `reason=` therefore writes a row
+whose stored fields do not rehash to its own `row_hash`, forking the chain
+permanently. Currently only one row has `reason` set at all, so this is latent
+rather than active.
+
+#### Finding 4 — voice commands navigated the officer off the screen they were using
+`screen_agent._detect_route` scored screens purely by keyword hits, with no notion
+of an in-screen command. Measured: "show the cctv cameras" while already on
+`/vision` scored `/ops-camera` 10 against `/vision` 0, so asking to toggle a layer
+threw the user onto a different screen.
+
+Fixed by deriving each screen's action vocabulary from its **own manifest** param
+enums (`_screen_action_vocab` / `_in_screen_command`) and returning `current_route`
+on a hit. Manifest-derived, so every screen gets the behaviour for free and it
+cannot drift from the declared actions. Verified against a 25-case matrix covering
+`/reports`, `/network`, `/forecast`, `/ops-camera`, `/operations`, `/audit`,
+`/board`, `/trends`, `/dossier`, `/admin`, `/transcripts`: 24/25, no regressions.
+The one known miss — singular "hide the camera layer" versus the layer id
+`cameras` — is documented with a `ponytail:` comment naming the ceiling, because
+naive singular stemming breaks the opposite case ("open the camera review screen").
+
+#### Bugs found in the new code before it shipped
+- **`import { forward } from "mgrs"` built cleanly under rolldown but threw at SSR
+  runtime**: "Named export not found... is a CommonJS module". A green production
+  build is not proof of SSR health — the dev-server request is what caught it.
+  Fixed with a namespace import. Lesson: always re-fetch the route after building.
+- **Sub-pixel hexagons.** The 500 m default bin radius is under half a pixel at
+  the statewide zoom (ground resolution ≈ 1,200 m/px at latitude 14), so 4,860
+  bins rendered as nothing and the map looked broken while working correctly. Bin
+  radius is now `AUTO`, derived from zoom.
+- **`setStyle` resets the projection to the style default**, so changing basemap
+  while in globe mode silently dropped back to flat. Projection is now re-asserted
+  on `styledata`.
+- **Layout collision.** The intelligence deck was anchored to the window bottom and
+  grew *upward* through the layer matrix and treatment bar, which were pinned to a
+  guessed offset. Replaced the overlapping absolutes with a flex column so the deck
+  and coordinate readout occupy real rows.
+- **Swallowed tile errors.** Tile failures were silently ignored by design, which
+  made a blocked CDN indistinguishable from a working map with invisible data. Now
+  surfaces "BASEMAP IMAGERY UNAVAILABLE · DATA LAYERS ACTIVE" after four failures.
+- **Seed district-code collisions.** "Belagavi City" and "Belagavi Dist" both
+  reduced to `BEL`, so the second district of each such pair was skipped as a
+  duplicate callsign and 8 of 40 districts got no units. Fixed with a
+  collision-disambiguating code map.
+- Two `\uXXXX` escapes written as JSX *children*, which would have rendered
+  literally on screen.
+- A test fixture of mine wrapped `yield` in `except Exception: pytest.skip(...)`,
+  reporting genuine assertion failures as "database unavailable". A test that lies
+  about why it skipped is worse than no test.
+
+#### Design decisions worth knowing
+- **One composite endpoint.** `GET /api/vision/snapshot` returns every layer in one
+  payload. Hotspots live in `client.ts`, patrols in `responseOps.ts` and risk cells
+  in `intelligence.ts`; three round trips would cost over a second of pure latency,
+  because a bare `SELECT 1` to Neon measures **250–500 ms** from the API.
+- **Binning happens on the client**, in deck.gl's `HexagonLayer`. No PostGIS, no H3,
+  no new extension — and changing the radius needs no server round trip.
+- **Provenance is part of the contract.** Every layer declares `live | cached |
+  seeded | derived | simulated`, rendered as a badge. CCTV field-of-view cones are
+  `simulated` and labelled FABRICATED, because `ops_cameras` stores no bearing, fov
+  or range; the values are derived from a hash of the camera id so cones stay put
+  instead of jittering like fake pan-tilt.
+- **Layers degrade individually**, following `routing_service`'s
+  `OSRM → STRAIGHT_LINE` convention. One dead upstream never blanks the screen, and
+  an empty layer always states why.
+- **Polling is a first-class transport**, not an error path, because WebSocket
+  support on Zoho Catalyst AppSail is unconfirmed. The active transport shows as
+  `LIVE` / `POLLING` / `OFFLINE` in the HUD so a dropped socket is visible rather
+  than looking like a frozen map.
+- **`should_coarsen_coords()` is now actually called.** It existed on `Principal`
+  and nothing in the codebase invoked it. L1 callers get 2 dp (~1.1 km) coordinates,
+  a `coords_coarsened` flag, and MGRS precision reduced from 1 m to 100 m so the
+  readout never implies accuracy the caller is not cleared for.
+- **Vision reads require L2** (`Permission.RUN_ANALYTICS`), matching `map.py` and
+  deliberately stricter than `ops.py`, which leaves reads open to every officer.
+- **Every Vision read writes exactly one audit row.** `ops.py` writes none; that is
+  the one pattern from it not worth copying on a screen exposing statewide crime
+  geography.
+- Earth is **base-map-only** by decision: deck.gl's `GlobeView` documents no
+  pitch/bearing, no high-precision rendering above zoom 12, and artefacts when
+  switching to and from map view. MapLibre's native globe is used instead and the
+  view is badged `CONTEXT VIEW — NOT OPERATIONAL`.
+- Basemaps are all key-free and HTTPS: CARTO dark (default), OSM street, and NASA
+  GIBS satellite / night-lights. GIBS tops out around zoom 8, so those two are
+  flagged `contextOnly` in the UI rather than pretending to street detail.
+
+#### Statewide ops seed
+`seed/init_ops.py --statewide` now derives units from the 637 geocoded `stations`
+rows instead of hand-typed coordinates. Local result: **4 → 83 patrols, 2 → 42
+cameras, 5 → 84 signals, 1 → 40 districts**. Idempotent (a re-run adds nothing).
+
+The point is not only coverage: it populates `ops_patrol_units.station_id`, which is
+what migration 011's policy joins to `stations` for the officer's range. With it
+NULL the policy could only match a denormalised district string. Measured after
+seeding, as `satyam_app`: `scope=district` Bengaluru City → 6, Belagavi Dist → 2;
+`scope=range` Commissionerates → 16. Per-range scoping works for the first time.
+
+Not run against cloud.
+
+#### Deployment work (Zoho Catalyst AppSail + Neon)
+- **`backend/Dockerfile` hardcoded `--port 8000`.** AppSail injects
+  `X_ZOHO_CATALYST_LISTEN_PORT` (default 9000), so the container would have built,
+  started, reported healthy and never received traffic. Now honours the env var
+  with 8000 as the local fallback, in both `CMD` and `HEALTHCHECK`.
+- **Neon's pooled endpoint is pgbouncer in transaction mode**, which does not
+  support prepared statements; asyncpg raises `DuplicatePreparedStatementError`.
+  `db/session.py` now detects `-pooler` and sets both statement caches to 0, with a
+  smaller pool (this module caches one engine per source, so a process can hold
+  two). Transaction-mode pooling *does* preserve `set_config(..., is_local => true)`
+  because `get_scoped_session` wraps requests in `session.begin()` — worth knowing,
+  since otherwise RLS would silently match nothing through the pooler.
+- Startup loads BGE-M3 + reranker from local weights (~2.3 GB, ~10 s) before serving.
+  Vision needs neither; `MODEL_SERVICE_URL` already exists to avoid it in a container.
+- A seven-point deployment checklist was added to `backend/.env.example`, each item
+  a measured finding rather than a precaution.
+
+#### Verification
+- `backend/tests/test_vision.py` — **23 tests, all passing.** Covers the
+  double-counting fix (per-cell weights must sum to the true geocoded case count in
+  a bbox), backwards compatibility for existing `hotspots` callers, bbox filtering,
+  LOD arithmetic (changing resolution must neither invent nor drop incidents), L1
+  coarsening, degraded-mode behaviour, provenance labelling, deterministic camera
+  optics, the voice manifest and rule planner, in-screen route stickiness, RLS
+  enabled **and** forced, and RLS denying an unscoped session.
+- Full backend suite: **133 passed**. The one failure, `test_health.py::test_login_and_me`,
+  is pre-existing and self-documented — it is marked `@pytest.mark.integration` and
+  its own docstring explains it returns 401 on a second run against a persistent
+  database. No marker filter is configured, so a bare `pytest tests` picks it up.
+- Frontend: `tsc --noEmit` unchanged at the pre-existing 56 errors, **zero in
+  `vision/`**. Production build exit 0. Runtime SSR `GET /vision` → 200 with all
+  chrome server-rendered and no `window`/`ReferenceError`/`SyntaxError`.
+- Bundle isolation: maplibre 264 kB gzip and deck.gl 175 kB gzip are separate lazy
+  chunks loaded only on `/vision`; route chunk 19 kB. For comparison `/board`
+  (tldraw) already ships 945 kB gzip. The SSR bundle correctly contains no map libs.
+
+#### Files added
+```
+backend/app/api/routes/vision.py          /telemetry, /snapshot, /entity/{kind}/{id}
+backend/app/schemas/vision.py             VisionTelemetry, VisionLayer, VisionSnapshot
+backend/app/services/vision_service.py    layer composition, fabricated optics, dossiers
+backend/migrations/011_ops_rls.sql        RLS + FORCE on ops_*; FORCE on the core four
+backend/tests/test_vision.py              23 tests
+frontend/src/routes/vision.tsx
+frontend/src/lib/api/vision.ts            the single Vision client + openVisionSocket
+frontend/src/components/vision/
+  VisionWorkspace.tsx                     screen state, flex-column layout
+  useVisionData.ts                        snapshot + dual WS/polling transport
+  layerRegistry.ts                        layers + provenance vocabulary
+  treatments.css                          7 CSS-filter treatments
+  map/{basemaps,useVisionMap,VisionMapCanvas,buildLayers}.ts(x)
+  chrome/{VisionTopBar,LayerMatrixSidebar,TreatmentBar,IntelligenceDeck,
+          CoordinateReadout,treatments}.tsx
+  dossiers/{DraggableDossier,EntityDossier}.tsx
+```
+
+#### Files changed
+- `backend/app/config.py` — `enable_vision: bool = False`
+- `backend/app/main.py` — flag-guarded `include_router` at `/api/vision`
+- `backend/app/pipeline/tools/analytics.py` — `hotspots()` gained bbox / precision /
+  cell-only mode / limit, all defaulting to prior behaviour
+- `backend/app/pipeline/screen_agent.py` — `SCREEN_CAPABILITIES["/vision"]`, a
+  `_rule_plan` branch, and the in-screen route stickiness fix
+- `backend/app/db/session.py` — `_engine_kwargs()` for pooled-endpoint handling
+- `backend/seed/init_ops.py` — `--statewide` seeding from `stations` + `station_id`
+  backfill
+- `backend/Dockerfile` — honours `X_ZOHO_CATALYST_LISTEN_PORT`
+- `backend/pyproject.toml` — `asyncio_default_fixture_loop_scope = "function"`
+- `backend/.env.example` — `ENABLE_VISION` + the deployment checklist
+- `frontend/src/components/Shell.tsx` — `Vision` nav entry; `SCREEN_ROUTES` regex
+  inserted **above** the generic `/console` "map" entry, because
+  `parseVoiceCommand` takes the first match and "vision map" contains "map"
+- `frontend/package.json` — added `maplibre-gl 5.24.0`, `@deck.gl/{core,layers,
+  aggregation-layers,mapbox} 9.3.10`, `react-draggable 4.7.1`, `mgrs 2.2.0`, all
+  exact-pinned. Scoped deck.gl packages, not the monolith. No `framer-motion`.
+
+#### Test-infrastructure note
+`app/db/session.py` caches one engine per source in module-level dicts, so its
+connection pool binds to whichever event loop created it. pytest-asyncio gives each
+test a fresh loop, producing `got Future attached to a different loop` on the second
+test onwards. `test_vision.py`'s session helper disposes and rebuilds the cached
+engine per test. This is a test-only concession to the global cache; production runs
+one loop per process and is unaffected.
+
+#### Still open from this work
+- Neon has neither `008` nor `011` applied, and `DATABASE_URL` still points at the
+  owner role — so on the deployed instance every RLS guarantee here is inert and
+  `/api/vision/telemetry` correctly reports `rls_enforced: false`.
+- The `/api/ops/ws` handler builds a `Principal` and never uses it, so every client
+  receives every broadcast including patrols outside its jurisdiction. Not fixed:
+  it touches the broadcast hub three existing screens depend on.
+- The statewide seed has not been run against cloud, so Vision shows 4 patrols there.
+- Kannada `DICT` strings for Vision are not written; `t()` falls back to the English
+  source string, so EN is complete and KN degrades gracefully.
+
 
 ---
 ---
@@ -3917,18 +4202,23 @@ remain lexically searchable, so no case is invisible.
 - RLS scoping through the retrieval lane (local): state scope → hits; single station → correctly narrowed. No context → 0 rows (fails closed).
 - Clearance withholding: clearance 1 → hits returned with `restricted=True` and body replaced by a notice; clearance 4 → bodies visible.
 - Migration `010` is idempotent and picks the correct operator class on each database.
-- Backend test suite: **110 passed, exit 0**.
+- Backend test suite: **133 passed** as of 2026-08-21 (was 110 before the Vision work added `test_vision.py`'s 23). The single failure, `test_health.py::test_login_and_me`, is pre-existing and self-documented: it is marked `@pytest.mark.integration` and returns 401 on any second run against a persistent database. No marker filter is configured, so a bare `pytest tests` picks it up — run `pytest -m "not integration"` for a clean signal.
 - Audit chain integrity: attempting to delete a user with audit rows is correctly refused by the FK — the append-only log will not let evidence be erased.
 
 ## 5. Open issues (need a decision or an external action)
 
-1. **Cloud has no database-level jurisdiction enforcement.** `neondb_owner` is owner + `rolbypassrls`, and no table has `FORCE ROW LEVEL SECURITY`. Since cloud is now the startup default, the deployed app relies on Python-layer RBAC alone. Fix by either creating a least-privilege non-owner role on Neon and pointing `DATABASE_URL` at it (~86 MB headroom available), or adding `FORCE ROW LEVEL SECURITY` to `cases`, `narratives`, `persons`, `case_persons`.
+1. **Cloud has no database-level jurisdiction enforcement.** `neondb_owner` is owner + `rolbypassrls`, and no table in cloud has `FORCE ROW LEVEL SECURITY`. Since cloud is the startup default, the deployed app relies on Python-layer RBAC alone.
+   *Updated 2026-08-21 (Vision work):* `migrations/011_ops_rls.sql` now supplies `ENABLE` + `FORCE` + policies for the seven `ops_*` tables (which had **no RLS at all**, in either database) and repeats `FORCE` for the four core tables — `002_schema_v2.sql:246-249` already declares it but neither live database has it, so that migration has not been re-applied since. Applied and verified on **local**; **not** applied to Neon. Note `FORCE` constrains the table owner but **not** a `rolbypassrls` role, so the migration alone does not fix cloud: `DATABASE_URL` must also be pointed at a least-privilege non-owner role, leaving the owner URL in the already-existing `SEED_DATABASE_URL` for migrations and seeding. Both halves are required. `GET /api/vision/telemetry` reports `rls_enforced` so this state is observable rather than assumed.
+   Three of the ops tables (`ops_traffic_signals`, `ops_cameras`, `ops_risk_zones`) carry no jurisdiction column at all, so they get a fail-closed "must have a stamped session" policy rather than a fake scope check. Real per-district scoping for them needs new columns plus a backfill and is deferred.
 2. **The Neon database password must be rotated.** It is committed in four tracked files and therefore in git history. A `.gitignore` change cannot fix this. Until rotated, treat that database as compromised.
 3. **The Gemini API key is invalid** (401). Groq covers routing, composition and — via the fallback path only — Text-to-SQL. `SQL_ENGINE` remains `gemini` by explicit decision, so every Text-to-SQL request wastes one failing round trip before falling back.
 4. **No PII masking on the Text-to-SQL path.** `persons_v` does not exist in either database, `sql_guard.ALLOWED_TABLES` includes raw `persons`, and `core/masking.py`'s `mask_case()` is called only from `case_service.py`. RLS scopes *which rows* are visible, never which columns. Treat column-level masking on that path as unimplemented.
 5. **`graphify-out/` is tracked** (~504 content-hashed cache files, a large share of the repo's file count) and is rewritten by the post-commit hook, so the working tree goes dirty after every commit. Candidate for gitignore + index removal.
 6. Frontend `tsc --noEmit` reports **56 pre-existing errors**, mostly duplicate keys in `i18n.tsx`. Untouched by this work, but they mean the typecheck is not a usable gate until cleaned.
 7. The Settings panel note reads "Changes apply to new requests in this session." Inaccurate — `set_db_source()` mutates a process-wide global, so switching affects **every user on that backend process**. Left alone because the string is an i18n key.
+8. **The audit hash chain does not verify.** `verify_chain()` returns `False` on cloud: 5 breaks in 669 rows, earliest `audit_id=90`, all `action = financial.money_trail`. In each, the stored `prev_hash` does not match the actual predecessor's `row_hash` while the row's own hash is self-consistent with its own stored `prev_hash` — the signature of a concurrent-write fork, not tampering. `write_audit` takes `pg_advisory_xact_lock` to prevent exactly this, so the forks predate that guard. **Needs a human decision**, because a hash chain cannot be repaired retroactively without rewriting history, which destroys the property it exists to provide. Options: leave and document, archive the old rows and re-genesis, or investigate `financial.money_trail` for concurrent writes within one request. Separately, `write_audit` hashes `reason=reason` but persists `reason=(reason or detail)`, so any caller using the legacy `detail=` alias without `reason=` writes a row that cannot rehash to its own `row_hash`. Latent today (one row has `reason` set) but it will fork the chain the moment a `detail=`-only caller appears.
+9. **`/api/ops/ws` broadcasts to every client regardless of jurisdiction.** The handler decodes the JWT and builds a `Principal`, then never uses it — no clearance gate, no scope filter — so patrol positions outside a caller's jurisdiction are streamed to them. The JWT also travels in the query string, which lands in proxy and access logs. Not fixed because it touches the broadcast hub `/operations`, `/ops-dispatch` and `/ops-camera` all depend on.
+10. **Deployment blockers for Catalyst AppSail**, each measured, all detailed in `backend/.env.example`'s checklist: WebSocket support on AppSail is unconfirmed (Vision already treats polling as a first-class transport and shows which is active); the live-CCTV path spawns an OS process needing `cv2` + `ultralytics` and opens an MJPEG port, so it cannot run there at all; `MODEL_SERVICE_URL` should be set so the container never loads the ~2.3 GB of local model weights; and `CORS_ORIGINS`' built-in default names the *development* Catalyst subdomain, which will not match production.
 
 ## 6. Environment gotchas worth remembering
 
@@ -3938,6 +4228,11 @@ remain lexically searchable, so no case is invisible.
 - HNSW builds need `maintenance_work_mem` raised well above the 64 MB default for 1024-dim vectors, or the build spills to disk and crawls.
 - Postgres aborts an entire transaction on any failed statement. Anything issuing multiple queries on one session must isolate them with SAVEPOINTs, or the first failure takes the rest down with it.
 - `DROP COLUMN` does **not** reclaim TOASTed data: the values stay attached to existing live tuples until each row is physically rewritten, and `VACUUM` cannot help.
+- `app/db/session.py` caches one engine per source in a module-level dict, so its pool binds to whichever event loop created it. Any test suite that gives each test a fresh event loop must dispose and rebuild that engine, or the second test onwards fails with `got Future attached to a different loop`.
+- On Windows, asyncpg + Neon prints `Fatal error on SSL transport` / `Event loop is closed` during interpreter shutdown. Cosmetic — the queries have already completed. `tests/conftest.py` avoids it by selecting `WindowsSelectorEventLoopPolicy`; standalone scripts do not.
+- A green `vite build` is **not** proof of SSR health. A CommonJS named-import that rolldown resolves happily still throws in Vite's SSR module runner at request time. Always re-fetch the route from a running dev server after building.
+- **Kannada is U+0C80–U+0CFF.** The visually similar Devanagari block starts at U+0900. A `\u09xx` escape in a test looks correct and silently fails every comparison against real Kannada strings — prefer literal characters in UTF-8 source.
+- The frontend is **npm**-managed despite `AGENTS.md` documenting `bun`: `node_modules` carries npm's marker, `package-lock.json` is newer than `bun.lock`, and `bun` is not installed. Adding a dependency with the wrong tool leaves the other lockfile stale, which will break a build that reads it.
 
 ## 7. Security note about this file
 
@@ -3954,3 +4249,67 @@ Groq `gsk_` keys, GitHub `ghp_` tokens, and bcrypt hashes.
 them being re-published in future commits. Rotating the Neon credential (open issue 2)
 is still required, and no future entry should paste a real connection string, API key,
 password hash, or live endpoint — use a placeholder and name the env var instead.
+
+
+---
+
+### [2026-08-21] — Vision Screen Fix: Map Rendered Nothing (Zero-Height Container)
+
+#### Symptom
+The `/vision` tactical map showed all its chrome — layer matrix with live counts, treatment bar, intelligence deck, coordinate readout — over a completely black canvas. No basemap, no hexbins, and the 2D / 3D / EARTH switcher appeared to do nothing. No error was displayed and no exception was thrown.
+
+#### Why it was misleading
+Every signal suggested the map was healthy:
+- `onViewState` fired, so the footer readout showed real values (`Z 6.40 · PITCH 0 · ALT 1,435,732 m`).
+- `bbox` was therefore non-null, so `useVisionData` ran and the sidebar showed genuine counts.
+- `LAYERS 6` reported six constructed deck.gl layers.
+- Zero console exceptions, and the component's own `MAP ENGINE UNAVAILABLE` and `BASEMAP IMAGERY UNAVAILABLE` guards never tripped.
+
+All four tile providers were verified reachable from the machine (CARTO, OSM, GIBS BlueMarble, GIBS Black Marble — all HTTP 200 with valid image bytes), and WebGL 2.0 initialised fine. So neither network nor GPU was at fault.
+
+#### Root cause — a CSS specificity tie decided by stylesheet injection order
+Diagnosed by driving headless Chrome over the DevTools Protocol and inspecting computed styles:
+
+```
+element:  <div>  classes: "absolute inset-0 maplibregl-map"
+computed: position: relative    height: 0px    width: 683px
+parent:   683 x 349  (correctly sized)
+winning rule: .maplibregl-map { ... position: relative ... }   (injected stylesheet)
+```
+
+`maplibre-gl` adds its own `maplibregl-map` class **to the container element we pass it**, and `maplibre-gl.css` declares `.maplibregl-map { position: relative }`. Against Tailwind's `.absolute` that is a specificity tie — one class each — so the stylesheet injected later wins, and the library's does.
+
+Once `position` flipped from `absolute` to `relative`, `inset-0` stopped stretching the box (on a relative element those are mere offsets). Every child of that container is absolutely positioned, so the element had nothing to derive height from and collapsed to **0 px**. MapLibre still constructed, still fired `load`, still reported bounds from its centre/zoom, and still requested almost no tiles — it was painting into a zero-height box. Hence a dead black canvas with no error anywhere.
+
+#### Fix
+`frontend/src/components/vision/map/VisionMapCanvas.tsx` — the map container's sizing moved from Tailwind utility classes to an **inline style**:
+
+```tsx
+<div ref={containerRef} style={{ position: "absolute", inset: 0 }} />
+```
+
+An inline style outranks any stylesheet regardless of injection order, so this cannot regress if Tailwind's layer ordering or `maplibre-gl.css` changes. A comment on the element records the failure mode and the measured before-state, because the obvious "tidy-up" here is to convert it back to `absolute inset-0`.
+
+#### Verified in a real browser (headless Chrome via CDP)
+| check | before | after |
+|---|---|---|
+| `.maplibregl-map` computed position | `relative` | `absolute` |
+| container height | **0 px** | **349 px** |
+| `maplibregl-canvas` | 683 x 300 (stale), clientHeight 300 | 683 x 349 |
+| deck.gl canvas | clientHeight **0** | 683 x 349 |
+| basemap tiles | none requested | **12 loaded, 0 failed** |
+| uncaught exceptions | none | none |
+
+All three view modes confirmed by screenshot:
+- **2D** — Karnataka dark basemap with place labels.
+- **3D** — same, `PITCH 55`, oblique camera.
+- **EARTH** — MapLibre native globe renders as a full sphere with country labels, correctly badged `CONTEXT VIEW — NOT OPERATIONAL`, and `LAYERS 0` because Earth intentionally suppresses data layers.
+
+With an authenticated session the data layers render as designed: crime-density hexbins across the state with a hot cluster over Bengaluru, live counts (Crime density 12,577 · Risk zones 336 · Patrols 4 · Dispatches 0 · Signals 5 · Cameras 2), provenance badges (`DERIVED` / `SEEDED` / `LIVE` / `SIMULATED · FABRICATED GEOMETRY`), telemetry pill `LIVE 728 ms`, and `LAYERS 6`.
+
+Frontend `tsc --noEmit` unchanged at its 56-error pre-existing baseline, with zero errors anywhere under `components/vision/`.
+
+#### Notes for later (not defects introduced here)
+- The screen honestly surfaces `DB-LEVEL RLS NOT ENFORCED — APP-LAYER SCOPING ONLY`, which is the cloud owner-role bypass recorded in the open issues above. Worth resolving before any demo that claims jurisdiction enforcement.
+- `Environment` layer still reports `Environment feed not wired yet.` — expected, that phase is unbuilt.
+- Only `frontend/src/components/vision/` was touched. The whole Vision feature is still uncommitted work in progress.

@@ -11,7 +11,39 @@ async def hotspots(
     crime_type: str | None = None,
     district: str | None = None,
     range_name: str | None = None,
+    bbox: tuple[float, float, float, float] | None = None,
+    precision: int = 3,
+    group_by_crime_type: bool = True,
+    limit: int = 500,
 ) -> list[dict]:
+    """Grid-aggregated crime density.
+
+    Every new parameter defaults to the historical behaviour, so the two existing
+    callers (services/map_service.hotspots and pipeline/orchestrator) are
+    unaffected.
+
+    `group_by_crime_type` matters more than it looks. With it on — the original
+    behaviour — one geographic cell yields one row PER crime type, so `weight` is
+    a per-(cell, crime-type) count, not a per-cell count. Summing those weights
+    to drive a single 3D column double-counts. Measured on the current dataset:
+    34,641 distinct cells at 0.001 deg versus 35,755 (cell, crime_type) rows, so
+    the inflation is real but small. Vision passes False to get true per-cell
+    counts.
+
+    `precision` is the grid resolution in decimal places: 3 = ~110 m, 2 = ~1.1 km.
+    Used for level-of-detail — coarse when the whole state is in view, fine when
+    zoomed in.
+
+    `limit` was a hard 500. On the current dataset that returned 1.4% of the
+    available cells, which silently understated crime density everywhere. It is
+    now a parameter; callers that need completeness raise it and check for
+    truncation by testing `len(rows) == limit`.
+    """
+    if precision < 0 or precision > 6:
+        raise ValueError("precision must be between 0 and 6")
+    if limit < 1:
+        raise ValueError("limit must be positive")
+
     clauses = ["latitude IS NOT NULL", "longitude IS NOT NULL"]
     params: dict = {}
     if crime_type:
@@ -23,17 +55,38 @@ async def hotspots(
     if range_name:
         clauses.append('"range" ILIKE :r')
         params["r"] = f"%{range_name}%"
+    if bbox:
+        west, south, east, north = bbox
+        clauses.append("longitude BETWEEN :west AND :east")
+        clauses.append("latitude  BETWEEN :south AND :north")
+        params.update(west=west, east=east, south=south, north=north)
     where = " AND ".join(clauses)
+
+    # `precision` and `limit` are validated ints above, never caller strings, so
+    # interpolating them cannot introduce injection. Every value-bearing filter
+    # stays a bound parameter.
+    cell = (
+        f"round(latitude::numeric, {precision})  AS lat, "
+        f"round(longitude::numeric, {precision}) AS lng"
+    )
+    group = (
+        f"round(latitude::numeric, {precision}), round(longitude::numeric, {precision})"
+    )
+    if group_by_crime_type:
+        select_extra = ", crime_type"
+        group_extra = ", crime_type"
+    else:
+        select_extra = ""
+        group_extra = ""
+
     sql = text(
         f"""
-        SELECT round(latitude::numeric, 3)  AS lat,
-               round(longitude::numeric, 3) AS lng,
-               count(*)                      AS weight,
-               crime_type
+        SELECT {cell},
+               count(*) AS weight{select_extra}
         FROM cases WHERE {where}
-        GROUP BY round(latitude::numeric, 3), round(longitude::numeric, 3), crime_type
+        GROUP BY {group}{group_extra}
         ORDER BY weight DESC
-        LIMIT 500
+        LIMIT {limit}
         """
     )
     result = await session.execute(sql, params)

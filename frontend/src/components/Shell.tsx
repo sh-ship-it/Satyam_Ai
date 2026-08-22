@@ -21,6 +21,7 @@ import {
   Video,
   Fingerprint,
   Workflow,
+  Globe2,
   Camera,
   CameraOff,
 } from "lucide-react";
@@ -59,6 +60,13 @@ function copilotVoiceProvider(): "sarvam" | "google" | "webspeech" {
 
 type VoiceScreen = { to: string; words: RegExp };
 const SCREEN_ROUTES: VoiceScreen[] = [
+  // MUST stay above the generic /console "map" entry below: parseVoiceCommand
+  // takes the FIRST match, and "vision map" / "tactical map" both contain "map",
+  // so a later position would silently route every Vision command to Console.
+  {
+    to: "/vision",
+    words: /(vision|tactical map|tactical view|earth view|globe view|3d map)|ವಿಷನ್|ತಂತ್ರಾತ್ಮಕ/i,
+  },
   { to: "/console", words: /(console|chat|assistant|conversation)|ಕನ್ಸೋಲ್|ಸಂಭಾಷಣೆ/i },
   { to: "/console", words: /(map|hotspot|heat ?map|geospatial)|ನಕ್ಷೆ/i },
   { to: "/network", words: /(network|graph|ego|link analysis|connections?)|ನೆಟ್‌ವರ್ಕ್/i },
@@ -313,6 +321,8 @@ export function Shell({ children }: { children: ReactNode }) {
     const NAV_LABEL: Record<string, string> = {
       "/console": t("Console"),
       "/map": t("Map"),
+      "/vision": t("Vision"),
+      "/operations": t("Live Ops"),
       "/network": t("Network"),
       "/reports": t("Reports"),
       "/audit": t("Audit"),
@@ -948,6 +958,7 @@ export function Shell({ children }: { children: ReactNode }) {
     { to: "/audit", icon: ShieldCheck, label: t("Audit") },
     { to: "/transcripts", icon: ClipboardList, label: t("Transcripts") },
     { to: "/operations", icon: Siren, label: t("Live Ops") },
+    { to: "/vision", icon: Globe2, label: t("Vision") },
     { to: "/ops-predictive", icon: Radar, label: t("Predictive") },
     { to: "/ops-dispatch", icon: Truck, label: t("Dispatch") },
     { to: "/ops-camera", icon: Video, label: t("Camera") },

@@ -16,6 +16,11 @@ class Settings(BaseSettings):
     # Response-Ops module (EMERGE-derived). Off by default — fully isolated.
     enable_response_ops: bool = False
 
+    # Vision tactical map (/vision + /api/vision). Off by default and fully
+    # additive, so flipping this to false is the kill switch: the route and its
+    # whole API surface disappear without touching any other screen.
+    enable_vision: bool = False
+
     # Infra
     database_url: str = "postgresql+asyncpg://satyam:satyam@localhost:5432/satyam"
     # Seed/migration URL — owner/superuser role, used ONLY by migrations + seed script.

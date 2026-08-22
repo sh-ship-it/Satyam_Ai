@@ -134,6 +134,39 @@ SCREEN_CAPABILITIES: dict[str, dict] = {
         "kn": ["ಕಾರ್ಯಾಚರಣೆ"],
         "actions": {},
     },
+    "/vision": {
+        "name": "Vision (3D tactical map: crime density, patrols, CCTV, globe)",
+        "keywords": [
+            "vision", "tactical map", "tactical view", "3d map", "globe", "earth",
+            "thermal", "night vision", "hexagon", "density",
+        ],
+        "kn": ["ವಿಷನ್", "ತಂತ್ರಾತ್ಮಕ ನಕ್ಷೆ", "ಭೂಗೋಳ"],
+        "actions": {
+            "set_view": {
+                "desc": "Switch projection/camera: flat 2D, tilted 3D, or the Earth globe",
+                "params": {"mode": "2d|3d|earth"},
+            },
+            "set_treatment": {
+                "desc": "Apply a visual treatment to the map",
+                "params": {"name": "standard|crt|nvg|flir|radar|satcom|noir"},
+            },
+            "set_basemap": {
+                "desc": "Change the base imagery",
+                "params": {"basemap": "dark|street|satellite|nightlights"},
+            },
+            "toggle_layer": {
+                "desc": "Show or hide one intelligence layer",
+                "params": {
+                    "layer": "crime_hex|risk_zones|patrols|dispatches|signals|cameras|environment",
+                    "on": "boolean",
+                },
+            },
+            "set_hex_radius": {
+                "desc": "Set the crime-density bin radius in metres",
+                "params": {"radius_m": "50|100|500|1000"},
+            },
+        },
+    },
     "/ops-predictive": {
         "name": "Predictive Deployment",
         "keywords": ["predictive deployment", "deployment", "patrol suggestion"],
@@ -271,10 +304,25 @@ _CRIMES = [
 
 
 def _detect_route(text: str, current_route: Optional[str]) -> Optional[str]:
-    """Match the command to a screen route by keyword (EN + KN)."""
+    """Match the command to a screen route by keyword (EN + KN).
+
+    Screens share vocabulary, so raw keyword scores collide. "show cameras" scores
+    /ops-camera highly, but an officer already looking at the Vision map who says
+    it wants the camera LAYER, not a different screen.
+
+    So before scoring screens, we ask whether the command names something the
+    CURRENT screen can already do, using that screen's own action vocabulary from
+    the manifest. If it does, we stay. This is derived from the manifest rather
+    than hardcoded, so every screen gets it for free and it cannot drift out of
+    sync with the declared actions. Explicitly naming another screen still wins,
+    because a screen name is not in another screen's action vocabulary.
+    """
     low = text.lower()
-    best: Optional[str] = None
-    best_score = 0
+
+    if current_route and _in_screen_command(current_route, low):
+        return current_route
+
+    scores: dict[str, int] = {}
     for route, spec in SCREEN_CAPABILITIES.items():
         score = 0
         for kw in spec["keywords"]:
@@ -283,9 +331,55 @@ def _detect_route(text: str, current_route: Optional[str]) -> Optional[str]:
         for kw in spec.get("kn", []):
             if kw in text:
                 score += 4
-        if score > best_score:
-            best_score, best = score, route
-    return best or current_route
+        if score:
+            scores[route] = score
+
+    if not scores:
+        return current_route
+    return max(scores, key=lambda r: scores[r])
+
+
+# Enum values shorter than this, or in this stoplist, are too generic to prove a
+# command is about the current screen.
+_VOCAB_MIN_LEN = 4
+_VOCAB_STOPLIST = frozenset({"dark", "normal", "standard", "none", "true", "false", "boolean"})
+
+
+def _screen_action_vocab(route: str) -> frozenset[str]:
+    """Distinctive words the manifest says this screen's actions accept.
+
+    Built from the param enums (e.g. "2d|3d|earth", the layer ids), not from the
+    action names, which are snake_case identifiers an officer never says aloud.
+    """
+    spec = SCREEN_CAPABILITIES.get(route) or {}
+    vocab: set[str] = set()
+    for meta in (spec.get("actions") or {}).values():
+        for ptype in (meta.get("params") or {}).values():
+            if not isinstance(ptype, str) or "|" not in ptype:
+                continue
+            for opt in ptype.split("|"):
+                opt = opt.strip().lower()
+                if len(opt) < _VOCAB_MIN_LEN or opt in _VOCAB_STOPLIST or opt.isdigit():
+                    continue
+                vocab.add(opt)
+                if "_" in opt:
+                    vocab.add(opt.replace("_", " "))
+    return frozenset(vocab)
+
+
+def _in_screen_command(route: str, low: str) -> bool:
+    """Does this command name something the current screen can already do?
+
+    ponytail: exact substring match on the manifest's enum values. It therefore
+    misses inflections — on /vision, "hide cameras" sticks (the layer id is
+    `cameras`) but "hide the camera layer" routes to /ops-camera, because
+    `camera` is that screen's own keyword. Adding naive singular stems fixes the
+    miss but breaks the opposite case ("open the camera review screen" would then
+    stick to /vision), so the ceiling is left in place deliberately. Upgrade path
+    is a real stemmer or per-action trigger phrases in the manifest, not more
+    substring rules.
+    """
+    return any(v in low for v in _screen_action_vocab(route))
 
 
 def _extract_crime(text: str) -> Optional[str]:
@@ -541,6 +635,84 @@ def _rule_plan(command: str, current_route: Optional[str], lang: str) -> dict:
             actions.append({"screen": route, "action": "save", "params": {}})
         elif "export" in low:
             actions.append({"screen": route, "action": "export", "params": {}})
+
+    elif route == "/vision":
+        # Deterministic fallback so Vision stays voice-drivable with planner="rule"
+        # and whenever the LLM lane is unavailable. Bilingual: the Kannada terms
+        # are the ones an officer actually says, transliterated.
+        if any(w in low for w in ("earth", "globe", "planet")) or "ಭೂಗೋಳ" in text:
+            actions.append({"screen": route, "action": "set_view", "params": {"mode": "earth"}})
+        elif "3d" in low or "three d" in low or "tilt" in low or "ತ್ರಿಡಿ" in text:
+            actions.append({"screen": route, "action": "set_view", "params": {"mode": "3d"}})
+        elif "2d" in low or "flat" in low or "top down" in low:
+            actions.append({"screen": route, "action": "set_view", "params": {"mode": "2d"}})
+
+        treatments = {
+            "thermal": "flir", "flir": "flir", "heat vision": "flir",
+            "night vision": "nvg", "nvg": "nvg", "night mode": "nvg",
+            "crt": "crt", "scanline": "crt",
+            "radar": "radar", "sweep": "radar",
+            "satcom": "satcom",
+            "noir": "noir", "monochrome": "noir", "black and white": "noir",
+            "standard": "standard", "normal": "standard",
+        }
+        for phrase, tid in treatments.items():
+            if phrase in low:
+                actions.append(
+                    {"screen": route, "action": "set_treatment", "params": {"name": tid}}
+                )
+                break
+        else:
+            if "ಥರ್ಮಲ್" in text:
+                actions.append(
+                    {"screen": route, "action": "set_treatment", "params": {"name": "flir"}}
+                )
+
+        basemaps = {
+            "satellite": "satellite", "imagery": "satellite",
+            "night lights": "nightlights", "nightlights": "nightlights",
+            "street": "street", "road": "street",
+            "dark": "dark",
+        }
+        for phrase, bid in basemaps.items():
+            if phrase in low:
+                actions.append(
+                    {"screen": route, "action": "set_basemap", "params": {"basemap": bid}}
+                )
+                break
+
+        layer_words = {
+            "crime_hex": ("crime", "density", "hotspot", "hexagon", "ಅಪರಾಧ"),
+            "risk_zones": ("risk", "zone", "ಅಪಾಯ"),
+            "patrols": ("patrol", "unit", "hoysala", "ಗಸ್ತು"),
+            "dispatches": ("dispatch", "route", "corridor"),
+            "signals": ("signal", "junction", "traffic"),
+            "cameras": ("camera", "cctv", "ಕ್ಯಾಮೆರಾ"),
+            "environment": ("weather", "rain", "wind", "environment"),
+        }
+        # "hide"/"off" must be checked before "show", because "don't show" contains
+        # "show" and would otherwise be read as a request to display the layer.
+        turning_off = any(w in low for w in ("hide", "turn off", "remove", "without", "ಮರೆಮಾಡು"))
+        wants_layer = turning_off or any(
+            w in low for w in ("show", "display", "turn on", "add", "ತೋರಿಸಿ")
+        )
+        if wants_layer:
+            for lid, words in layer_words.items():
+                if any(w in low or w in text for w in words):
+                    actions.append(
+                        {
+                            "screen": route,
+                            "action": "toggle_layer",
+                            "params": {"layer": lid, "on": not turning_off},
+                        }
+                    )
+                    break
+
+        radius = _extract_number(text, 50, 1000)
+        if radius in (50, 100, 500, 1000):
+            actions.append(
+                {"screen": route, "action": "set_hex_radius", "params": {"radius_m": radius}}
+            )
 
     elif route in ("/audit", "/dossier", "/admin"):
         val = _strip_to_value(text)
