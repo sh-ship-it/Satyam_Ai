@@ -4611,3 +4611,79 @@ All three are **local**. `main` is `[ahead 3]` of `origin/main` and nothing has
 been pushed. `.kiro/` is gitignored, so the steering rule change is on disk and
 active for future sessions but is deliberately not in the repository; it was not
 force-added over the ignore rule.
+
+---
+
+## Fix: STREET 3D camera fought the user
+
+**Symptom reported.** In STREET 3D, panning or zooming worked for a moment and
+then the camera snapped back to the same spot, repeatedly.
+
+**Root cause.** `Street3DCanvas`'s follow effect was keyed on the `center`
+*object*:
+
+```ts
+}, [center, state]);
+```
+
+and `VisionWorkspace` passed it as a fresh object literal on every render:
+
+```tsx
+center={view ? { lat: view.lat, lng: view.lng } : null}
+```
+
+A new object identity every render means the effect ran on every render.
+`VisionWorkspace` re-renders on a 15-second telemetry poll
+(`TELEMETRY_POLL_MS = 15000`) and on any other state change — a layer toggle, a
+deck interaction, a notice appearing. Each of those re-applied the camera.
+
+It was worse than a position reset, because the effect also wrote:
+
+```ts
+el.range = DEFAULT_RANGE;
+el.tilt  = DEFAULT_TILT;
+```
+
+so every spurious run discarded the user's **zoom and pitch** as well as their
+position. That is why zooming in felt like it was actively being undone.
+
+**Fix**, in the component rather than at the call site, so no future caller can
+reintroduce it by passing an inline object:
+
+1. Key the effect on the coordinate **values** (`center?.lat`, `center?.lng`),
+   not on object identity.
+2. Track the last camera target actually written in a `lastApplied` ref and skip
+   the write when the target has not moved (1e-6 deg, well under a metre). This
+   makes re-centering idempotent.
+3. Stop writing `range` and `tilt` in the follow effect. After mount those belong
+   to the user. They are set once, at mount.
+4. Seed `lastApplied` at mount so the first follow does not immediately rewrite
+   the camera the mount path just set.
+
+**Verified by reproducing it both ways** in headless Chrome, driving the real
+element, because a passing test proves nothing unless it fails on the old code:
+
+| | pre-fix (committed `edc0699`) | post-fix |
+|---|---|---|
+| camera moved to | `13.25, 77.95` range 480 tilt 35 | same |
+| after a layer-toggle re-render | **`14.5, 75.7` range 1400 tilt 62** | `13.25, 77.95` range 480 tilt 35 |
+| after the 15 s telemetry poll | **`14.5, 75.7` range 1400 tilt 62** | `13.25, 77.95` range 480 tilt 35 |
+| result | FAIL — snapped home, zoom and tilt reset | PASS — held position |
+
+A second check confirmed the fix did not simply disable following: entering
+STREET 3D put the camera at the caller's focus, dragging away then switching to
+2D and back re-applied that focus correctly. So a deliberate fly-to still works;
+only the spurious re-application is gone.
+
+One earlier version of that second check was **discarded as worthless**: an
+anchored button regex failed to match, so the element was never found and the
+comparison was `None == None` — a vacuous pass. It now lists the view buttons it
+found and asserts the element exists before comparing.
+
+`tsc --noEmit` stayed at its 56-error pre-existing baseline with zero errors under
+`vision/`; `eslint` clean on the changed file.
+
+**Note for anyone touching this component:** the same trap exists for any prop
+passed as an inline object or array. The component is now defensive about it, but
+`VisionWorkspace` still constructs `center` inline on every render, which is
+harmless now only because the effect no longer trusts identity.

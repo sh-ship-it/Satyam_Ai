@@ -156,6 +156,10 @@ export function Street3DCanvas({
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const elRef = useRef<any>(null);
+  /** Last camera target actually written to the element. Makes re-centering
+   *  idempotent so a re-render cannot yank the camera off the user. See the
+   *  follow effect below for the full reasoning. */
+  const lastApplied = useRef<{ lat: number; lng: number } | null>(null);
   const [state, setState] = useState<LoadState>("idle");
   const [message, setMessage] = useState<string>("");
 
@@ -195,6 +199,9 @@ export function Street3DCanvas({
 
           hostRef.current.appendChild(el);
           elRef.current = el;
+          // Record what mount already applied, so the follow effect below treats
+          // it as done and does not immediately re-write the same camera.
+          lastApplied.current = { lat: c.lat, lng: c.lng };
           setState("ready");
         } catch (e) {
           const m = e instanceof Error ? e.message : String(e);
@@ -224,17 +231,42 @@ export function Street3DCanvas({
   }, [apiKey]);
 
   // ── Follow the caller's focus, as PROPERTIES not attributes ────────────────
+  //
+  //  Two rules here, both learned from a real bug: the camera fought the user,
+  //  snapping back to the same place every few seconds while they panned.
+  //
+  //  1. Key off the coordinate VALUES, never the `center` object's identity.
+  //     Callers naturally write `center={{ lat: view.lat, lng: view.lng }}`,
+  //     which is a fresh object on every render. Vision re-renders on a 15 s
+  //     telemetry poll and on every unrelated state change, so an effect keyed
+  //     on identity re-ran constantly and re-applied the camera each time.
+  //     `lastApplied` makes the move idempotent: if the target has not actually
+  //     changed, nothing is written to the element.
+  //
+  //  2. Never re-apply `range` or `tilt` here. Those are the user's zoom and
+  //     pitch once the view is live; resetting them on a re-center threw away
+  //     their zoom along with their position. They are set once, at mount.
+  const lat = center?.lat;
+  const lng = center?.lng;
+
   useEffect(() => {
     const el = elRef.current;
-    if (!el || state !== "ready" || !center) return;
+    if (!el || state !== "ready" || lat == null || lng == null) return;
+
+    const prev = lastApplied.current;
+    // ~1e-6 deg is well under a metre, so this only blocks genuine no-ops, not a
+    // deliberate fly-to from a dispatch or a district click.
+    if (prev && Math.abs(prev.lat - lat) < 1e-6 && Math.abs(prev.lng - lng) < 1e-6) {
+      return;
+    }
+
     try {
-      el.center = { ...center, altitude: DEFAULT_CENTER.altitude };
-      el.range = DEFAULT_RANGE;
-      el.tilt = DEFAULT_TILT;
+      el.center = { lat, lng, altitude: DEFAULT_CENTER.altitude };
+      lastApplied.current = { lat, lng };
     } catch {
       /* element not upgraded yet; the attribute set at mount still applies */
     }
-  }, [center, state]);
+  }, [lat, lng, state]);
 
   useEffect(() => {
     const el = elRef.current;
