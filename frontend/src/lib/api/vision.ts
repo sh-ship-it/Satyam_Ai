@@ -162,8 +162,133 @@ export function openVisionSocket(): WebSocket {
   return new WebSocket(`${base}/api/ops/ws?token=${encodeURIComponent(token)}`);
 }
 
+/** Sibling of visionFetch for routes mounted under /api rather than /api/vision.
+ *
+ *  The district panel reuses the existing socio endpoints instead of adding a
+ *  third backend route for data that is already served. Keeping the call here
+ *  rather than importing `intelligence.ts` preserves the rule that Vision talks
+ *  to exactly one client — the client is allowed to know about more than one
+ *  router, the *screen* is not. */
+async function intelFetch<T>(path: string): Promise<T> {
+  const token = getAuthToken();
+  const res = await fetch(`${API_BASE}/api${path}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+  if (!res.ok) {
+    throw new ApiError(res.status, `${res.status} ${res.statusText}`);
+  }
+  return (await res.json()) as T;
+}
+
+export type DistrictRisk = {
+  district: string;
+  social_risk_score: number;
+  drivers: string[];
+};
+
+export type DistrictSocio = {
+  district: string;
+  crime_rate: number;
+  literacy_rate: number | null;
+  urbanization_percent: number | null;
+  income_index: number | null;
+};
+
+export type DistrictIntel = {
+  district: string;
+  social_risk_score: number | null;
+  drivers: string[];
+  crime_rate: number | null;
+  literacy_rate: number | null;
+  urbanization_percent: number | null;
+  income_index: number | null;
+};
+
+export type DistrictIntelResult = {
+  districts: DistrictIntel[];
+  /** Human-readable reasons a column is missing, e.g. a clearance refusal.
+   *  Rendered in the panel rather than leaving blank cells unexplained. */
+  degraded: string[];
+};
+
 export const visionApi = {
   telemetry: () => visionFetch<VisionTelemetry>("/telemetry"),
+
+  /** District intelligence, joined from the two existing socio endpoints.
+   *
+   *  They carry different clearance floors — risk-index needs L2, correlation
+   *  needs L3 — so a mid-clearance officer legitimately gets one and not the
+   *  other. `allSettled` keeps the panel useful in that case instead of failing
+   *  whole, and the refusal is reported in `degraded` rather than silently
+   *  presenting as empty columns. */
+  districtIntel: async (): Promise<DistrictIntelResult> => {
+    const [riskRes, socioRes] = await Promise.allSettled([
+      intelFetch<{ areas: DistrictRisk[] }>("/socio/risk-index"),
+      intelFetch<{ scatter: DistrictSocio[] }>("/socio/correlation"),
+    ]);
+
+    const degraded: string[] = [];
+    const byDistrict = new Map<string, DistrictIntel>();
+
+    const ensure = (district: string): DistrictIntel => {
+      let row = byDistrict.get(district);
+      if (!row) {
+        row = {
+          district,
+          social_risk_score: null,
+          drivers: [],
+          crime_rate: null,
+          literacy_rate: null,
+          urbanization_percent: null,
+          income_index: null,
+        };
+        byDistrict.set(district, row);
+      }
+      return row;
+    };
+
+    if (riskRes.status === "fulfilled") {
+      for (const a of riskRes.value.areas ?? []) {
+        const row = ensure(a.district);
+        row.social_risk_score = a.social_risk_score;
+        row.drivers = a.drivers ?? [];
+      }
+    } else {
+      const e = riskRes.reason;
+      degraded.push(
+        e instanceof ApiError && e.status === 403
+          ? "Social risk index needs clearance L2."
+          : "Social risk index unavailable.",
+      );
+    }
+
+    if (socioRes.status === "fulfilled") {
+      for (const s of socioRes.value.scatter ?? []) {
+        const row = ensure(s.district);
+        row.crime_rate = s.crime_rate;
+        row.literacy_rate = s.literacy_rate;
+        row.urbanization_percent = s.urbanization_percent;
+        row.income_index = s.income_index;
+      }
+    } else {
+      const e = socioRes.reason;
+      degraded.push(
+        e instanceof ApiError && e.status === 403
+          ? "Socio-economic indicators need clearance L3."
+          : "Socio-economic indicators unavailable.",
+      );
+    }
+
+    // Ordered by crime rate, not by social_risk_score. The score is a log
+    // function of raw case count, which at this data scale saturates — every
+    // district in the top-10 currently returns 99, so sorting by it produces an
+    // arbitrary order. crime_rate is per-capita and has real spread, and it
+    // covers all 40 districts rather than only the 10 that carry a score.
+    const districts = [...byDistrict.values()].sort(
+      (a, b) => (b.crime_rate ?? -1) - (a.crime_rate ?? -1),
+    );
+    return { districts, degraded };
+  },
 
   snapshot: (params: SnapshotParams = {}) => {
     const q = new URLSearchParams();

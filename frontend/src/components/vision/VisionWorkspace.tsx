@@ -9,6 +9,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./treatments.css";
 import { VisionMapCanvas, type VisionViewMode, type VisionViewState } from "./map/VisionMapCanvas";
+import { Street3DCanvas } from "./map/Street3DCanvas";
 import { BASEMAPS, type BasemapId } from "./map/basemaps";
 import { useMapStack } from "./map/useVisionMap";
 import {
@@ -22,11 +23,30 @@ import { VisionTopBar } from "./chrome/VisionTopBar";
 import { LayerMatrixSidebar } from "./chrome/LayerMatrixSidebar";
 import { TreatmentBar } from "./chrome/TreatmentBar";
 import { CoordinateReadout } from "./chrome/CoordinateReadout";
-import { IntelligenceDeck, type DeckRow, type DeckTabId } from "./chrome/IntelligenceDeck";
+import {
+  IntelligenceDeck,
+  type DeckPanel,
+  type DeckRow,
+  type DeckTabId,
+} from "./chrome/IntelligenceDeck";
 import { EntityDossier, type OpenEntity } from "./dossiers/EntityDossier";
 import { TREATMENT_STORAGE_KEY, treatmentClass, type TreatmentId } from "./chrome/treatments";
 import { LAYERS, LAYER_STORAGE_KEY, defaultLayerState, type LayerId } from "./layerRegistry";
-import { visionApi, type VisionTelemetry } from "@/lib/api/vision";
+import { visionApi, type DistrictIntelResult, type VisionTelemetry } from "@/lib/api/vision";
+
+/** Zones rendered in the deck's risk panel. Capped because the snapshot can
+ *  carry several hundred; the badge reports the cap honestly rather than
+ *  implying the panel shows everything. */
+const RISK_PANEL_LIMIT = 60;
+
+/** Risk label -> dot colour. Same five values the map layers use, so a zone
+ *  reads identically in the deck and on the canvas. */
+const RISK_ACCENT: Record<string, string> = {
+  Critical: "#ef4444",
+  High: "#f97316",
+  Medium: "#fbbf24",
+  Low: "#3b82f6",
+};
 import { useT } from "@/lib/i18n";
 
 type RunTaskDetail = {
@@ -39,15 +59,7 @@ const HEX_STORAGE_KEY = "fq-vision-hex";
 const TELEMETRY_POLL_MS = 15000;
 /** Used for the bin radius before the camera has reported a zoom. */
 const KARNATAKA_FALLBACK_ZOOM = 6.4;
-const TREATMENT_IDS: TreatmentId[] = [
-  "standard",
-  "crt",
-  "nvg",
-  "flir",
-  "radar",
-  "satcom",
-  "noir",
-];
+const TREATMENT_IDS: TreatmentId[] = ["standard", "crt", "nvg", "flir", "radar", "satcom", "noir"];
 
 function readStored<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
@@ -118,16 +130,13 @@ export function VisionWorkspace() {
     }
   }, []);
 
-  const openEntity = useCallback(
-    (kind: OpenEntity["kind"], id: string | number) => {
-      setOpen((prev) =>
-        prev.some((e) => e.kind === kind && String(e.id) === String(id))
-          ? prev
-          : [...prev, { kind, id }],
-      );
-    },
-    [],
-  );
+  const openEntity = useCallback((kind: OpenEntity["kind"], id: string | number) => {
+    setOpen((prev) =>
+      prev.some((e) => e.kind === kind && String(e.id) === String(id))
+        ? prev
+        : [...prev, { kind, id }],
+    );
+  }, []);
 
   // ── Voice: register before the map loads ───────────────────────────────────
   const applyRef = useRef<(d: RunTaskDetail) => void>(() => {});
@@ -137,8 +146,22 @@ export function VisionWorkspace() {
       const p = a.params ?? {};
       switch (a.action) {
         case "set_view": {
-          const m = String(p.mode ?? "").toLowerCase();
-          if (m === "2d" || m === "3d" || m === "earth") setViewMode(m);
+          // Accepts a few spoken forms per mode: the screen agent passes through
+          // whatever the officer said, so "street" and "street 3d" both land here.
+          const raw = String(p.mode ?? "")
+            .toLowerCase()
+            .replace(/[\s_-]+/g, "");
+          const m: VisionViewMode | null =
+            raw === "2d" || raw === "flat"
+              ? "2d"
+              : raw === "3d" || raw === "tilt" || raw === "terrain"
+                ? "3d"
+                : raw === "earth" || raw === "globe"
+                  ? "earth"
+                  : raw === "street3d" || raw === "street" || raw === "photoreal"
+                    ? "street3d"
+                    : null;
+          if (m) setViewMode(m);
           break;
         }
         case "set_treatment": {
@@ -211,19 +234,28 @@ export function VisionWorkspace() {
 
   const onError = useCallback((m: string) => setNotice(m), []);
 
+  /** Apply a district filter from anywhere (search box, deck panel row).
+   *  Deliberately does NOT move the camera: there is no geocoder here, and
+   *  flying to a guessed centroid would invent a location. */
+  const submitSearchTerm = useCallback(
+    (term: string) => {
+      const clean = term.trim();
+      if (!clean) {
+        setDistrictFilter(null);
+        setNotice(null);
+        return;
+      }
+      // The backend filters `cases.district ILIKE %term%`, so a partial name works.
+      setQuery(clean);
+      setDistrictFilter(clean);
+      setNotice(`${t("Crime layer filtered to district")} "${clean}"`);
+    },
+    [t],
+  );
+
   const submitSearch = useCallback(() => {
-    const term = query.trim();
-    if (!term) {
-      setDistrictFilter(null);
-      setNotice(null);
-      return;
-    }
-    // The backend filters `cases.district ILIKE %term%`, so a partial name works.
-    // No client-side geocoding is attempted: pretending to fly to an arbitrary
-    // place name would invent a location.
-    setDistrictFilter(term);
-    setNotice(`${t("Crime layer filtered to district")} "${term}"`);
-  }, [query, t]);
+    submitSearchTerm(query);
+  }, [query, submitSearchTerm]);
 
   const toggleLayer = useCallback((id: LayerId) => {
     setVisible((prev) => {
@@ -330,11 +362,229 @@ export function VisionWorkspace() {
     };
   }, [snapshot, flyTo, openEntity]);
 
+  // ── District intelligence for the expanded deck ────────────────────────────
+  // Fetched once on mount, not per bbox: these are district-level aggregates
+  // that do not change as the camera moves, so re-fetching on pan would be pure
+  // waste. Failure is non-fatal — the panel explains itself.
+  const [districtIntel, setDistrictIntel] = useState<DistrictIntelResult | null>(null);
+  useEffect(() => {
+    let stop = false;
+    visionApi
+      .districtIntel()
+      .then((d) => {
+        if (!stop) setDistrictIntel(d);
+      })
+      .catch(() => {
+        if (!stop)
+          setDistrictIntel({ districts: [], degraded: ["District intelligence unavailable."] });
+      });
+    return () => {
+      stop = true;
+    };
+  }, []);
+
+  const deckPanels = useMemo<DeckPanel[]>(() => {
+    const zones = snapshot?.layers.risk_zones?.data ?? [];
+    const dispatches = snapshot?.layers.dispatches?.data ?? [];
+    const cams = snapshot?.layers.cameras?.data ?? [];
+    const patrols = snapshot?.layers.patrols?.data ?? [];
+
+    const num = (v: number | null | undefined, suffix = "") =>
+      v == null ? "\u2014" : `${typeof v === "number" ? v.toFixed(1) : v}${suffix}`;
+
+    // 1. District intelligence — the police analogue of a place dossier.
+    const districts = districtIntel?.districts ?? [];
+    const districtBody =
+      districts.length === 0 ? undefined : (
+        <div className="space-y-1">
+          {districtIntel?.degraded?.length ? (
+            <p className="mb-1 rounded-[4px] border border-[#f97316]/50 px-1.5 py-1 text-[9px] font-bold text-[#f97316]">
+              {districtIntel.degraded.join(" ")}
+            </p>
+          ) : null}
+          <table className="w-full text-[10px]">
+            <thead className="text-[9px] uppercase text-muted-foreground">
+              <tr>
+                <th className="text-left font-bold">{t("District")}</th>
+                <th className="text-right font-bold">{t("Risk")}</th>
+                <th className="text-right font-bold">{t("Crime rate")}</th>
+                <th className="text-right font-bold">{t("Literacy")}</th>
+                <th className="text-right font-bold">{t("Urban")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {districts.map((d) => (
+                <tr
+                  key={d.district}
+                  className="cursor-pointer border-t border-foreground/10 hover:bg-foreground/5"
+                  onClick={() => submitSearchTerm(d.district)}
+                  title={d.drivers.length ? d.drivers.join(", ") : undefined}
+                >
+                  <td className="truncate py-0.5 font-bold">{d.district}</td>
+                  <td className="py-0.5 text-right font-mono">{d.social_risk_score ?? "\u2014"}</td>
+                  <td className="py-0.5 text-right font-mono">{num(d.crime_rate)}</td>
+                  <td className="py-0.5 text-right font-mono">{num(d.literacy_rate, "%")}</td>
+                  <td className="py-0.5 text-right font-mono">
+                    {num(d.urbanization_percent, "%")}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="pt-1 text-[9px] text-muted-foreground">
+            {t("Aggregate planning view. Never an individual risk judgement.")}
+          </p>
+        </div>
+      );
+
+    // 2. Risk matrix — already scored server-side, with its drivers.
+    const riskBody =
+      zones.length === 0 ? undefined : (
+        <ul className="space-y-0.5">
+          {zones.slice(0, RISK_PANEL_LIMIT).map((z) => (
+            <li key={z.id}>
+              <button
+                onClick={() => {
+                  flyTo(z.lat, z.lng, 13);
+                  openEntity("risk_zone", z.id);
+                }}
+                title={[z.label, ...(z.reasons ?? [])].join(" \u00b7 ")}
+                className="flex w-full items-center gap-1.5 rounded-[3px] px-1 py-0.5 text-left hover:bg-foreground/5"
+              >
+                <span
+                  aria-hidden
+                  className="h-2 w-2 shrink-0 rounded-full"
+                  style={{ background: RISK_ACCENT[z.label] ?? "#3b82f6" }}
+                  title={z.label}
+                />
+                {/* The tier is already the dot colour, so repeating it as text
+                    made every row read "High". Zones carry no place name, so
+                    coordinates are the identity; `reasons` is not shown inline
+                    because all three entries restate incidents, severity and
+                    peak hour, which are already columns or in the tooltip. */}
+                <span className="shrink-0 font-mono text-[10px] font-bold">
+                  {z.lat.toFixed(3)}, {z.lng.toFixed(3)}
+                </span>
+                <span className="ml-auto shrink-0 font-mono text-[10px] text-muted-foreground">
+                  {z.score.toFixed(1)} {"\u00b7"} {z.incidents}
+                  {z.peak_hour != null && (
+                    <>
+                      {" "}
+                      {"\u00b7"} {String(z.peak_hour).padStart(2, "0")}h
+                    </>
+                  )}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      );
+
+    // 3. Coverage & provenance — the honest status of every layer in one place,
+    //    including why a layer is empty. This is the panel that stops an empty
+    //    map reading as "no crime here".
+    // Structural view of the layer envelopes: every layer shares provenance and
+    // a data array, so one shape covers all of them without a cast.
+    type EnvelopeLike = { provenance?: string; data?: unknown } | undefined;
+    const envelopes = snapshot
+      ? Object.entries(snapshot.layers as Record<string, EnvelopeLike>).map(([name, v]) => ({
+          name,
+          provenance: v?.provenance,
+          count: Array.isArray(v?.data) ? v.data.length : undefined,
+        }))
+      : [];
+    const coverageBody = !snapshot ? undefined : (
+      <div className="space-y-0.5">
+        {envelopes.map((e) => (
+          <div key={e.name} className="flex items-center gap-1.5 text-[10px]">
+            <span className="truncate font-bold">{e.name.replace(/_/g, " ")}</span>
+            <span className="ml-auto shrink-0 rounded-full bg-foreground/10 px-1.5 text-[9px] font-bold uppercase">
+              {e.provenance ?? "\u2014"}
+            </span>
+            <span className="w-10 shrink-0 text-right font-mono text-[9px] text-muted-foreground">
+              {e.count ?? "\u2014"}
+            </span>
+          </div>
+        ))}
+        {snapshot.degraded?.length ? (
+          <p className="mt-1 rounded-[4px] border border-[#f97316]/50 px-1.5 py-1 text-[9px] font-bold text-[#f97316]">
+            {snapshot.degraded.join(" \u00b7 ")}
+          </p>
+        ) : (
+          <p className="mt-1 text-[9px] text-muted-foreground">
+            {t("All requested layers returned.")}
+          </p>
+        )}
+        {snapshot.coords_coarsened && (
+          <p className="text-[9px] font-bold text-[#f97316]">
+            {t("Coordinates coarsened for your clearance.")}
+          </p>
+        )}
+      </div>
+    );
+
+    // 4. Field assets — what is actually deployable right now.
+    const assetsBody = !snapshot ? undefined : (
+      <div className="grid grid-cols-2 gap-1.5 text-[10px]">
+        {[
+          [t("Patrol units"), patrols.length],
+          [t("Active dispatches"), dispatches.length],
+          [t("Cameras"), cams.length],
+          [t("Risk zones"), zones.length],
+        ].map(([label, n]) => (
+          <div
+            key={String(label)}
+            className="rounded-[4px] border border-foreground/20 px-1.5 py-1"
+          >
+            <div className="font-mono text-[13px] font-extrabold">{String(n)}</div>
+            <div className="text-[9px] text-muted-foreground">{String(label)}</div>
+          </div>
+        ))}
+      </div>
+    );
+
+    return [
+      {
+        id: "district",
+        title: "DISTRICT INTELLIGENCE",
+        badge: districts.length ? String(districts.length) : undefined,
+        wide: true,
+        body: districtBody,
+        emptyNote: districtIntel?.degraded?.join(" ") ?? t("Loading district indicators\u2026"),
+      },
+      {
+        id: "risk",
+        title: "RISK MATRIX",
+        badge: zones.length
+          ? zones.length > RISK_PANEL_LIMIT
+            ? `${RISK_PANEL_LIMIT} / ${zones.length}`
+            : String(zones.length)
+          : undefined,
+        body: riskBody,
+        emptyNote: t("No risk zones in range."),
+      },
+      {
+        id: "assets",
+        title: "FIELD ASSETS",
+        body: assetsBody,
+        emptyNote: t("No snapshot yet."),
+      },
+      {
+        id: "coverage",
+        title: "COVERAGE & PROVENANCE",
+        badge: snapshot?.degraded?.length ? t("DEGRADED") : undefined,
+        body: coverageBody,
+        emptyNote: t("No snapshot yet."),
+      },
+    ];
+  }, [snapshot, districtIntel, flyTo, openEntity, submitSearchTerm, t]);
+
   const deckEmpty = useMemo<Partial<Record<DeckTabId, string>>>(
     () => ({
-      dispatches: telemetry && !telemetry.ops_enabled
-        ? t("Response Ops is off on the server, so there are no live dispatches.")
-        : t("No active dispatches."),
+      dispatches:
+        telemetry && !telemetry.ops_enabled
+          ? t("Response Ops is off on the server, so there are no live dispatches.")
+          : t("No active dispatches."),
       review: t("Camera review queue is empty."),
       risk: t("No risk zones in range."),
       alerts: t("No alerts."),
@@ -353,17 +603,33 @@ export function VisionWorkspace() {
         {/* Treatment wrapper: the CSS filter applies to the map only, so the chrome
             above it stays readable under NVG/FLIR/CRT. */}
         <div className={treatmentClass(treatment)}>
-          <VisionMapCanvas
-            viewMode={viewMode}
-            basemap={basemap}
-            layers={layers}
-            buildings3d={buildings3d}
-            onViewState={setView}
-            onMapReady={(m) => {
-              mapRef.current = m;
-            }}
-            onError={onError}
-          />
+          {viewMode === "street3d" ? (
+            // Google's element is its own renderer and cannot host deck.gl
+            // layers, so MapLibre is unmounted rather than parked behind it —
+            // two idle WebGL contexts plus MediaPipe on the same page is exactly
+            // the contention VISION.md's Phase 0 warned about.
+            //
+            // `view` is intentionally not cleared: the last bbox stays valid, so
+            // the sidebar counts and the deck keep their data instead of
+            // emptying while the officer is in a context view.
+            <Street3DCanvas
+              center={view ? { lat: view.lat, lng: view.lng } : null}
+              imagery={basemap === "satellite" ? "satellite" : "hybrid"}
+              onError={onError}
+            />
+          ) : (
+            <VisionMapCanvas
+              viewMode={viewMode}
+              basemap={basemap}
+              layers={layers}
+              buildings3d={buildings3d}
+              onViewState={setView}
+              onMapReady={(m) => {
+                mapRef.current = m;
+              }}
+              onError={onError}
+            />
+          )}
         </div>
 
         <VisionTopBar
@@ -457,7 +723,7 @@ export function VisionWorkspace() {
       </div>
 
       {/* Real rows below the map, so they can never overlap the panels above. */}
-      <IntelligenceDeck rows={deckRows} emptyNote={deckEmpty} />
+      <IntelligenceDeck rows={deckRows} emptyNote={deckEmpty} panels={deckPanels} />
       <CoordinateReadout
         view={view}
         layerCount={activeLayerCount}
