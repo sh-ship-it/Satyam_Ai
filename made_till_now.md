@@ -4594,3 +4594,20 @@ It matches the pattern the secrets policy says to refuse — a connection string
 with an embedded password — so it belongs in the inventory even though the
 credentials are local-only and the practical risk is small. Worth noting that
 `main` having a live upstream raises the stakes on this class of file.
+
+### Commits for this session (on `main`, local only)
+
+| Commit | Contents |
+|---|---|
+| `68c6aae` | Expandable multi-panel Intelligence Deck — `vision.ts`, `IntelligenceDeck.tsx`, `VisionWorkspace.tsx` |
+| `74487ed` | Branch policy retargeted to `main`; deck writeup and the fifth secrets file recorded here |
+| `edc0699` | STREET 3D view, 3D terrain, 3D buildings, aggregate occlusion cap, `.env.example` key guidance |
+
+`edc0699` is work that was finished and verified earlier in the session but had
+sat uncommitted, because the branch rule in force at the time forbade committing
+to `main` and `aaradhya` was not checked out.
+
+All three are **local**. `main` is `[ahead 3]` of `origin/main` and nothing has
+been pushed. `.kiro/` is gitignored, so the steering rule change is on disk and
+active for future sessions but is deliberately not in the repository; it was not
+force-added over the ignore rule.
