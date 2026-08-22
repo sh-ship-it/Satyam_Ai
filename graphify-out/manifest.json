@@ -825,8 +825,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1787370625.2994733,
-    "ast_hash": "789a6c80e29e217a92015d0a1d0ae35e",
+    "mtime": 1787401327.7860599,
+    "ast_hash": "afb362cde2cd1c93490f4eab23c83be8",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -1840,8 +1840,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/vision/VisionWorkspace.tsx": {
-    "mtime": 1787341536.3795812,
-    "ast_hash": "060ad4e24d7be7d6b33d7e1a880d6ab3",
+    "mtime": 1787400631.3827593,
+    "ast_hash": "ba8ddedddddfe79541ea2b3a5cf4865b",
     "semantic_hash": ""
   },
   "frontend/src/components/vision/chrome/CoordinateReadout.tsx": {
@@ -1850,8 +1850,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/vision/chrome/IntelligenceDeck.tsx": {
-    "mtime": 1787341485.5409627,
-    "ast_hash": "42eec613177f8a046ef4d1679384b75c",
+    "mtime": 1787400631.457476,
+    "ast_hash": "edc3e32ab4e4289d05be73e248b2bb3c",
     "semantic_hash": ""
   },
   "frontend/src/components/vision/chrome/LayerMatrixSidebar.tsx": {
@@ -1865,8 +1865,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/vision/chrome/VisionTopBar.tsx": {
-    "mtime": 1787340050.09013,
-    "ast_hash": "910e375876ae3282cc0cd0f61b6b4fd3",
+    "mtime": 1787374354.832491,
+    "ast_hash": "d6a1b29e922f9796a0e942b558f0258a",
     "semantic_hash": ""
   },
   "frontend/src/components/vision/chrome/treatments.ts": {
@@ -1890,18 +1890,18 @@
     "semantic_hash": ""
   },
   "frontend/src/components/vision/map/VisionMapCanvas.tsx": {
-    "mtime": 1787369817.8294759,
-    "ast_hash": "1383424a032a160a9a9f08658128fb28",
+    "mtime": 1787374280.54448,
+    "ast_hash": "5e52ce856945d6a99bbe9f27262ee442",
     "semantic_hash": ""
   },
   "frontend/src/components/vision/map/basemaps.ts": {
-    "mtime": 1787333554.1527448,
-    "ast_hash": "d17743ab407e88187cd0e4c76c1fa4f0",
+    "mtime": 1787371429.4797063,
+    "ast_hash": "1079cf4bffe1f1cf45c01b8f766261b0",
     "semantic_hash": ""
   },
   "frontend/src/components/vision/map/buildLayers.ts": {
-    "mtime": 1787341360.660259,
-    "ast_hash": "5f9ba4b9a0278fde85e63402b30bc40d",
+    "mtime": 1787373408.7201433,
+    "ast_hash": "8aae664184968c7fede4ee22b9a95140",
     "semantic_hash": ""
   },
   "frontend/src/components/vision/map/useVisionMap.ts": {
@@ -1915,13 +1915,18 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/vision.ts": {
-    "mtime": 1787337501.564466,
-    "ast_hash": "f51cbb1e139cb685114bf2fc0b369570",
+    "mtime": 1787399975.342507,
+    "ast_hash": "d882b081e2021600d01158875f5b4e0f",
     "semantic_hash": ""
   },
   "frontend/src/routes/vision.tsx": {
     "mtime": 1787333691.264241,
     "ast_hash": "74ae00cbcae31f3d06c7084afe383f36",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/map/Street3DCanvas.tsx": {
+    "mtime": 1787396097.3783782,
+    "ast_hash": "62ea502b94d441f81fa1a13df5573e58",
     "semantic_hash": ""
   }
 }
