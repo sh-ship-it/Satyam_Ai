@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1787335848.9306562,
-    "ast_hash": "cc9285a75eb02b34f1766872c7d5e2aa",
+    "mtime": 1787488966.1084545,
+    "ast_hash": "ccf9ed9522ffa47b525608710865036d",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -685,8 +685,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
-    "mtime": 1787333691.5409267,
-    "ast_hash": "6202909c08c06eb3e7fbab79977041bf",
+    "mtime": 1787488818.9834473,
+    "ast_hash": "062e81bbd642580385b6587db79ae6c8",
     "semantic_hash": ""
   },
   "frontend/src/router.tsx": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
-    "mtime": 1782373538.5576298,
-    "ast_hash": "63cd3435d1df9ac74b74adf853a55303",
+    "mtime": 1787488967.9465718,
+    "ast_hash": "16a1a184e9840d19a05d86be06515589",
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
@@ -825,8 +825,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1787487991.9165192,
-    "ast_hash": "2f59e1329d281a8fd0f56b88960bf097",
+    "mtime": 1787489280.4145584,
+    "ast_hash": "a45f0a7474066b06ee8acd873efcfc9f",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -1114,11 +1114,6 @@
     "ast_hash": "d3a2c9644b0d2f4ad8234ae6bbc5aa99",
     "semantic_hash": ""
   },
-  "frontend/src/routes/operations.tsx": {
-    "mtime": 1782106293.0686858,
-    "ast_hash": "4bbfdc0bf4784a8ec06efaba3fd7f571",
-    "semantic_hash": ""
-  },
   "backend/app/schemas/ops.py": {
     "mtime": 1781942907.8143134,
     "ast_hash": "77ff6eca1c78772a491fbf3fc60039da",
@@ -1202,11 +1197,6 @@
   "model/requirements.txt": {
     "mtime": 1781952189.9255142,
     "ast_hash": "159a2c68ffd071145340f8ad7cb1e3c8",
-    "semantic_hash": ""
-  },
-  "frontend/src/components/ops/LiveOperationsMap.tsx": {
-    "mtime": 1782106291.9808023,
-    "ast_hash": "0307bc2a9eadda03e67cc86ed00639ff",
     "semantic_hash": ""
   },
   "frontend/public/total fight.mp4": {
@@ -1550,8 +1540,8 @@
     "semantic_hash": ""
   },
   "frontend/src/input/gestureActions.ts": {
-    "mtime": 1782239278.6570961,
-    "ast_hash": "98d2dcd2e768d7a22b746cd782078c47",
+    "mtime": 1787488837.2125542,
+    "ast_hash": "1e6dd4ff8e8fe179d5e7a3cd693175a1",
     "semantic_hash": ""
   },
   "frontend/src/input/gestureClassifier.ts": {
