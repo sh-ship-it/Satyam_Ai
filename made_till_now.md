@@ -5856,3 +5856,157 @@ in *"Nothing was transcribed"* — the correct empty-transcript branch, and the 
 the real-audio round trip above was run separately.
 
 `tsc --noEmit` held at 56. Only `routes/ask.tsx` changed.
+
+## The storage budget becomes enforced code, and the cap turns out to be smaller
+
+`AGENTS.md` documented the setup step as `python -m seed.embed_narratives`, with no
+`--one-per-case` flag. That script's filter is `WHERE embedding IS NULL`, which
+matches exactly the 35,993 unembedded Kannada narratives. Following the documented
+instruction would have added ~164 MB to a database with ~50 MB free, and past its
+quota Neon **fails writes that increase storage** — including the `audit_log` row
+written on every audited query. So the documented setup command could take the
+application down. No code was wrong; the instruction was, and nothing prevented it
+being followed.
+
+That is now closed, along with the rest of Track A of
+`docs/rag-budget-and-coverage/`.
+
+### The cap needed confirming, because "0.5 GB" is not 512 MB
+
+The figure everything depends on came from a docstring in `embed_narratives.py`
+saying "512 MB cap", while Neon's public documentation says **0.5 GB per project**
+and never writes 512 MB. Read as decimal that is 500,000,000 bytes; read as 512 MiB
+it is 536,870,912 — a **36.9 MB** difference, larger than the entire growth budget
+it governs.
+
+The code shipped defaulting to the smaller value while it was unconfirmed, on the
+principle that an under-estimated cap can only be conservative whereas an
+over-estimated one reports headroom that does not exist. Under that reading the
+database was over its steady ceiling and below its reserve floor, and
+`/health/data` reported `storage_ok: false`.
+
+**Confirmed as 512 MB**, so the binary reading is correct and
+`neon_storage_cap_bytes` is now 536,870,912. `NEON_STORAGE_CAP_BYTES` overrides it
+if the plan ever changes. The live position:
+
+```
+[OK] size 426.7 MB of 512.0 MB cap  free 85.3 MB
+     steady ceiling 448.0 MB   reserve floor 64.0 MB
+     cost/row 4783 B   embedded 35993/71986
+```
+
+Compliant on both limits, with **21.3 MB of growth budget — about 4,675 embedded
+narratives**, or 13% of the unembedded Kannada corpus. Which is the useful output of
+the whole exercise: the budget converts "can we embed Kannada?" from an argument
+into a number, and the number says not without reclaiming space first.
+
+Worth noting how narrow the margin was. Had the decimal reading been right, the
+database would already have been out of compliance and reclaiming the 94 MB HNSW
+index would have been a precondition rather than an option. A 36.9 MB ambiguity in
+a units convention decided that.
+
+A caveat recorded in the config comments and not addressed by any of this: Neon
+meters *its* notion of project storage, which includes instant-restore history,
+while the guard measures `pg_database_size()`. The guard can therefore under-report
+against the console. If the two disagree, believe the console.
+
+### A test caught a contradiction in the spec written an hour earlier
+
+The requirements set a reserved headroom floor of 12.5% and a peak migration
+ceiling of 93.75%. Those are mutually inconsistent: you cannot simultaneously
+promise that free space never falls below 12.5% and permit a migration to reach
+93.75%, which needs free space at 6.25%.
+
+Worse, at the chosen percentages `cap − floor` **equals** the steady ceiling
+(87.5% + 12.5% = 100%), so the reserve clamp in `project()` silently reduced the
+peak ceiling to the steady one. The two modes collapsed into one, and the index
+rebuild that would *free* 47 MB became impossible — the guard would have blocked
+the only operation capable of fixing the position it was reporting.
+
+`test_peak_ceiling_admits_what_steady_refuses` failed and surfaced it before any of
+it shipped. Resolved with two floors rather than one: **12.5% at rest, 6.25%
+transient**, the transient one derived from the peak ceiling so the two can never
+disagree. The clamp is retained in both modes, because the percentages are
+configurable and a self-contradictory pair should resolve to the stricter value
+rather than to whichever was written last.
+
+The dip is real and worth stating plainly: for the duration of one index build,
+free space may fall to about 31 MB.
+
+### Per-row costs are measured, never assumed
+
+One embedded narrative costs **4,783 bytes** all-in on the cloud database: a 2,052 B
+`halfvec(1024)` datum plus a 2,731 B share of the HNSW graph. The spec estimated
+4,792 B from a rounder index figure; the guard reads both halves live and got the
+real number.
+
+That is deliberate rather than fussy. Both halves are properties of the current
+column type, dimension and index parameters — all three of which the same spec
+proposes changing. A hardcoded constant would leave the projection silently wrong
+by a factor of two after a migration nobody thought to connect to this file. If a
+cost cannot be measured, `read_state` raises and the backfill refuses: a guard that
+cannot measure must not approve.
+
+### The guard projects before writing, because detecting afterwards is useless
+
+Observing that size has passed the ceiling is worthless — the rows are already
+written, and reclaiming the space then needs working room that no longer exists. So
+`project()` estimates from row count times measured cost and refuses before the
+first write. The projection also runs *before* the 4.4 GB embedder loads, so a
+refusal costs seconds rather than minutes.
+
+The flag contract is inverted. One-per-case is now the **default**; the
+unrestricted selection has to be named as `--all-narratives`, and naming it is not
+a way around the budget — it is still projected and still refused. There is no
+bypass flag.
+
+Verified against the live cloud database:
+
+| command | result |
+|---|---|
+| `python -m seed.embed_narratives` (the documented one) | `selection=one-per-case`, "Nothing to do.", exit 0 |
+| `python -m seed.embed_narratives --all-narratives` | `REFUSED: 35993 rows x 4783 B = 164.2 MB`, projected 590.9 MB, rows that fit **0**, exit 1 |
+
+Embedded count 35,993 before and after. `pg_database_size` unchanged at
+447,397,888 bytes. **Nothing was written.**
+
+### Changed
+
+| Path | |
+|---|---|
+| `backend/app/core/storage.py` | **new** — `StorageState`, `read_state`, `Projection`, `project`, `python -m app.core.storage` |
+| `backend/tests/test_storage_budget.py` | **new** — 28 tests, no database and no model |
+| `backend/app/config.py` | cap plus three controls, byte-valued, with the unit reasoning recorded |
+| `backend/seed/embed_narratives.py` | mandatory pre-flight; flag default inverted; exit 1 on refusal |
+| `backend/app/api/routes/health.py` | `/health/data` reports the budget and `storage_ok` |
+| `AGENTS.md` | corrected command plus a "Storage budget" section with the measured position |
+| `DATABASE.md` | corrected three command blocks; added the near-full warning |
+| `Makefile` | added `make storage` |
+
+An asyncpg adapter (`_GuardConn`) points the guard at the **same connection** the
+backfill writes to, rather than opening a SQLAlchemy session that would resolve its
+URL from `DB_SOURCE` — unrelated to the `--local` flag this job uses. Measuring one
+database while writing to another is precisely the class of mistake the budget
+exists to prevent.
+
+Backend suite **161 passed**, up from 133. RAG lane confirmed unaffected:
+`router → narrative_search`, `rag → vector, 5 hits`.
+
+### Found while verifying, unrelated to this change
+
+The backend server had been running **without `--reload`**, so it was serving stale
+code and `/health/data` returned no storage block until it was restarted. Stopping
+the terminal also left an orphaned python process holding port 8000, and a second
+start silently bind-failed while still reporting "running". Any result measured
+against `:8000` during that window is untrustworthy. Kill by port, not by terminal.
+
+### Still open
+
+Track A of the spec is complete and its tasks 1 to 4.1 are ticked. Tracks B and C
+are untouched: no evaluation harness, no cross-lingual measurement, no reclamation,
+Kannada narrative questions still route to `sql_query` instead of reaching RAG, and
+`POST /api/cases/similar/search` still reports a `40 + 30 + 20 + 10` similarity
+percentage over `ORDER BY RANDOM()`.
+
+None of those is urgent now that the hazard is closed. The one with a deadline was
+the documented command, and it can no longer overfill the database.

@@ -387,15 +387,31 @@ CREATE POLICY p_persons_scope ON persons
 
 ### Run the embedding job
 ```bash
-# GPU (recommended, ~8 min for 200k narratives on RTX 4070)
+# Cloud (Neon). Embeds ONE narrative per case — the only selection that fits the
+# storage quota. Projects its cost first and refuses to write if it would breach it.
 python -m seed.embed_narratives
 
-# Local Postgres
+# Local Postgres — no quota, so the budget guard is skipped
 python -m seed.embed_narratives --local
 
 # Custom batch size
 python -m seed.embed_narratives --batch 128
+
+# Every unembedded narrative. Still budget-checked, so on cloud this is REFUSED
+# (~164 MB more than the quota allows). Useful on --local only.
+python -m seed.embed_narratives --all-narratives
+
+# Check headroom without touching data
+python -m app.core.storage
 ```
+
+> **The cloud database has limited room.** Measured: 426.7 MB used, 85.3 MB free
+> against a confirmed 512 MB cap, with a 64 MB reserved floor — so the usable
+> growth budget is ~21 MB. One embedded narrative costs 4,783 B all-in, so that is
+> about **4,675 narratives**; the 35,993 unembedded Kannada rows would add ~164 MB
+> and overrun the cap. Half the corpus being embedded is deliberate, not
+> incomplete. Run `make storage` to see the live position. See `AGENTS.md` →
+> "Storage budget" and `docs/rag-budget-and-coverage/`.
 
 ### Storage budget
 
@@ -481,8 +497,8 @@ python -m seed.load_seed --dir /path/to/csvs
 
 ### After loading — embed narratives
 ```bash
-python -m seed.embed_narratives        # Neon
-python -m seed.embed_narratives --local  # local
+python -m seed.embed_narratives          # Neon: one narrative per case, budget-checked
+python -m seed.embed_narratives --local  # local: no quota, guard skipped
 ```
 
 ### CSV files (`backend/seed/satyam_synthetic_dataset/`)

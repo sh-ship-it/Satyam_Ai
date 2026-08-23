@@ -97,9 +97,44 @@ async def health_data(session: AsyncSession = Depends(get_scoped_session)) -> di
     except Exception:
         embedded = -1  # column or table missing
 
+    # Storage position against the budget. Without this, the distance to a hard
+    # quota is invisible from outside the database, and the quota is not a billing
+    # limit: past it, Neon fails writes that increase storage, which includes the
+    # audit_log row written on every audited query.
+    storage: dict = {}
+    try:
+        from app.core.storage import read_state
+
+        st = await read_state(session)
+        storage = {
+            "db_bytes": st.db_bytes,
+            "cap_bytes": st.cap_bytes,
+            "steady_ceiling_bytes": st.steady_ceiling_bytes,
+            "peak_ceiling_bytes": st.peak_ceiling_bytes,
+            "reserve_floor_bytes": st.reserve_floor_bytes,
+            "free_bytes": st.free_bytes,
+            "cost_per_embedded_row_bytes": st.cost_per_embedded_row,
+            "within_reserve": st.within_reserve,
+            "within_steady_ceiling": st.within_steady_ceiling,
+        }
+    except Exception as exc:  # noqa: BLE001
+        # Keep this endpoint's existing habit of degrading to a sentinel rather
+        # than failing the probe: a health check that 500s during a demo is worse
+        # than one reporting that a figure is unavailable.
+        storage = {"error": str(exc)[:200]}
+
+    storage_ok = bool(storage.get("within_reserve")) and bool(
+        storage.get("within_steady_ceiling")
+    )
+
     narratives_total = out.get("narratives", 0)
     return {
         "row_counts": out,
+        "storage": storage,
+        # False means the database is at or past its budget. Writes may still be
+        # succeeding, but there is no longer a safety margin, and no backfill or
+        # migration should be run until space is reclaimed.
+        "storage_ok": storage_ok,
         "seeded": out.get("cases", 0) > 0,
         "financial_seeded": out.get("financial_transactions", 0) > 0,
         "socio_seeded": out.get("district_socio_economic_indicators", 0) > 0,

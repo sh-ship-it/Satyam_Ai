@@ -122,6 +122,55 @@ class Settings(BaseSettings):
     vector_type: Literal["vector", "halfvec"] = "vector"
     cloud_vector_type: Literal["vector", "halfvec"] = "halfvec"
 
+    # ── Storage budget (cloud / Neon free plan) ───────────────────────────────
+    # The cloud database sits on a hard storage quota. Neon's documentation states
+    # the Free plan allows "0.5 GB of storage per project", and that exceeding it
+    # makes writes which increase storage FAIL until space is freed. That is an
+    # availability limit, not a billing one, so it is treated as a budget here.
+    #
+    # WHY 536_870_912 (512 MiB) AND NOT 500_000_000:
+    #   Neon's public docs say "0.5 GB per project", which is ambiguous: read as
+    #   decimal it is 500,000,000 bytes, read as 512 MiB it is 536,870,912 — a
+    #   36.9 MB difference, larger than the growth budget it governs. The figure
+    #   was CONFIRMED as 512 MB for this project, so the binary reading is used.
+    #   The code briefly defaulted to the smaller value while it was unconfirmed,
+    #   on the principle that an under-estimated cap can only be conservative.
+    #
+    # CAVEAT worth knowing before trusting these numbers: Neon meters *its* notion
+    # of project storage, which includes instant-restore history, while the guard
+    # measures pg_database_size(). The guard can therefore under-report relative
+    # to the console, which is one reason the reserve floor is not decoration.
+    # If the console ever disagrees with /health/data, believe the console.
+    neon_storage_cap_bytes: int = 536_870_912
+
+    # Three controls derived from the cap. Percentages are fixed so that changing
+    # the cap alone keeps the shape of the budget:
+    #   peak   93.75%  a single migration may exceed steady state briefly, because
+    #                  rebuilding an index requires the replacement to exist
+    #                  alongside the original before the original is dropped.
+    #   steady 87.50%  what the database may occupy at rest.
+    #   floor  12.50%  free space that must never be consumed. Sized as an
+    #                  availability control: WAL, temp sort files, vacuum working
+    #                  space, and runway for audit_log, which grows on every query.
+    # Stored and compared in BYTES. Megabytes are for rendered messages only — a
+    # check that rounds to MB will eventually disagree with a document that rounds
+    # differently, and the disagreement gets resolved in favour of the prettier one.
+    storage_peak_ceiling_pct: float = 93.75
+    storage_steady_ceiling_pct: float = 87.5
+    storage_reserve_floor_pct: float = 12.5
+
+    @property
+    def storage_peak_ceiling_bytes(self) -> int:
+        return int(self.neon_storage_cap_bytes * self.storage_peak_ceiling_pct / 100)
+
+    @property
+    def storage_steady_ceiling_bytes(self) -> int:
+        return int(self.neon_storage_cap_bytes * self.storage_steady_ceiling_pct / 100)
+
+    @property
+    def storage_reserve_floor_bytes(self) -> int:
+        return int(self.neon_storage_cap_bytes * self.storage_reserve_floor_pct / 100)
+
     # ── Local model weights (downloaded via huggingface-cli) ──────────────────
     # Paths are relative to the backend/ working directory.
     embedding_model_path: str = "models/bge-m3"

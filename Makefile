@@ -15,6 +15,9 @@ seed:          ## Load synthetic data
 embed:         ## Populate narratives.embedding + build the HNSW index (required for RAG)
 	docker compose exec backend python -m seed.embed_narratives
 
+storage:       ## Report storage usage against the budget (read-only; non-zero if breached)
+	docker compose exec backend python -m app.core.storage
+
 backend:       ## Run backend locally (needs local Postgres/Redis)
 	cd backend && uvicorn app.main:app --reload
 
