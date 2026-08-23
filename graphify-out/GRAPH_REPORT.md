@@ -1,16 +1,16 @@
 # Graph Report - Satyam  (2026-08-24)
 
 ## Corpus Check
-- 327 files · ~1,803,678 words
+- 332 files · ~1,818,828 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3081 nodes · 6230 edges · 220 communities (203 shown, 17 thin omitted)
-- Extraction: 77% EXTRACTED · 23% INFERRED · 0% AMBIGUOUS · INFERRED: 1457 edges (avg confidence: 0.54)
+- 3243 nodes · 6459 edges · 238 communities (219 shown, 19 thin omitted)
+- Extraction: 77% EXTRACTED · 23% INFERRED · 0% AMBIGUOUS · INFERRED: 1485 edges (avg confidence: 0.54)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9804a62f`
+- Built from commit: `9c2a9b48`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -191,15 +191,33 @@
 - [[_COMMUNITY_Community 190|Community 190]]
 - [[_COMMUNITY_Community 191|Community 191]]
 - [[_COMMUNITY_Community 193|Community 193]]
+- [[_COMMUNITY_Community 195|Community 195]]
+- [[_COMMUNITY_Community 197|Community 197]]
 - [[_COMMUNITY_Community 200|Community 200]]
+- [[_COMMUNITY_Community 201|Community 201]]
+- [[_COMMUNITY_Community 206|Community 206]]
+- [[_COMMUNITY_Community 207|Community 207]]
 - [[_COMMUNITY_Community 208|Community 208]]
 - [[_COMMUNITY_Community 209|Community 209]]
+- [[_COMMUNITY_Community 210|Community 210]]
+- [[_COMMUNITY_Community 211|Community 211]]
 - [[_COMMUNITY_Community 214|Community 214]]
+- [[_COMMUNITY_Community 215|Community 215]]
+- [[_COMMUNITY_Community 216|Community 216]]
+- [[_COMMUNITY_Community 218|Community 218]]
+- [[_COMMUNITY_Community 219|Community 219]]
+- [[_COMMUNITY_Community 220|Community 220]]
+- [[_COMMUNITY_Community 221|Community 221]]
 - [[_COMMUNITY_Community 222|Community 222]]
 - [[_COMMUNITY_Community 223|Community 223]]
+- [[_COMMUNITY_Community 224|Community 224]]
 - [[_COMMUNITY_Community 225|Community 225]]
 - [[_COMMUNITY_Community 226|Community 226]]
 - [[_COMMUNITY_Community 227|Community 227]]
+- [[_COMMUNITY_Community 228|Community 228]]
+- [[_COMMUNITY_Community 229|Community 229]]
+- [[_COMMUNITY_Community 230|Community 230]]
+- [[_COMMUNITY_Community 231|Community 231]]
 - [[_COMMUNITY_Community 233|Community 233]]
 - [[_COMMUNITY_Community 241|Community 241]]
 
@@ -220,26 +238,26 @@
   frontend/src/routes/network.tsx → frontend/src/lib/i18n.tsx
 - `main()` --calls--> `async_sessionmaker`  [INFERRED]
   backend/seed/init_ops.py → backend/app/db/session.py
-- `Any` --uses--> `Principal`  [INFERRED]
-  backend/app/core/masking.py → backend/app/core/rbac.py
+- `AsyncSession` --uses--> `Principal`  [INFERRED]
+  backend/app/api/routes/security.py → backend/app/core/rbac.py
 - `Principal` --uses--> `Principal`  [INFERRED]
-  backend/app/core/masking.py → backend/app/core/rbac.py
-- `BoardSnapshot` --uses--> `Base`  [INFERRED]
-  backend/app/db/board_models.py → backend/app/db/models.py
+  backend/app/api/routes/security.py → backend/app/core/rbac.py
+- `AuditLog` --uses--> `AuditLog`  [INFERRED]
+  backend/app/core/audit.py → backend/app/db/models.py
 
 ## Import Cycles
 - 1-file cycle: `backend/app/main.py -> backend/app/main.py`
 - 1-file cycle: `model/hf-space/main.py -> model/hf-space/main.py`
 
-## Communities (220 total, 17 thin omitted)
+## Communities (238 total, 19 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.10
-Nodes (23): apiFetch(), boardApi, BoardDetail, BoardImage, BoardListItem, SceneEdge, SceneEdgeZ, SceneGraph (+15 more)
+Cohesion: 0.11
+Nodes (22): boardApi, BoardDetail, BoardImage, BoardListItem, SceneEdge, SceneEdgeZ, SceneGraph, SceneGraphZ (+14 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.05
-Nodes (41): AgeBucket, CaseTimelineResponse, CorrelationPoint, DistrictCount, ForecastAlert, ForecastAlertsResponse, ForecastHotspotsResponse, GenderCount (+33 more)
+Cohesion: 0.03
+Nodes (83): AgeBucket, BacktestResponse, CaseTimelineResponse, CorrelationPoint, DistrictCount, ForecastAlert, ForecastAlertsResponse, ForecastCell (+75 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.03
@@ -267,15 +285,15 @@ Nodes (20): AccordionContent, AccordionItem, AccordionTrigger, Badge(), BadgePro
 
 ### Community 8 - "Community 8"
 Cohesion: 0.07
-Nodes (40): Route, Route, Route, Route, Route, Route, Route, Route (+32 more)
+Nodes (39): Route, Route, Route, Route, Route, Route, Route, Route (+31 more)
 
 ### Community 9 - "Community 9"
-Cohesion: 0.09
-Nodes (25): Account, AccountManager(), FetchState, Footer(), FooterCol(), GridBg(), Header(), NB() (+17 more)
+Cohesion: 0.16
+Nodes (16): Footer(), FooterCol(), GridBg(), Header(), NB(), DATA_THEME_IDS, Theme, ThemePicker() (+8 more)
 
 ### Community 10 - "Community 10"
-Cohesion: 0.06
-Nodes (35): AdminUserRow, api, ApiError, cacheUser(), getCachedUser(), HotspotPoint, HotspotResponse, ModelProviderStatus (+27 more)
+Cohesion: 0.05
+Nodes (42): AdminUserRow, api, ApiError, authHeaders(), cacheUser(), getCachedUser(), HotspotPoint, HotspotResponse (+34 more)
 
 ### Community 11 - "Community 11"
 Cohesion: 0.13
@@ -294,8 +312,8 @@ Cohesion: 0.10
 Nodes (19): compilerOptions, allowImportingTsExtensions, jsx, lib, module, moduleResolution, noEmit, noFallthroughCasesInSwitch (+11 more)
 
 ### Community 15 - "Community 15"
-Cohesion: 0.18
-Nodes (31): AsyncSession, HotspotRequest, HotspotResponse, Principal, StationBreakdownRequest, StationBreakdownResponse, AsyncSession, HotspotRequest (+23 more)
+Cohesion: 0.28
+Nodes (23): AsyncSession, HotspotRequest, HotspotResponse, Principal, StationBreakdownRequest, StationBreakdownResponse, AsyncSession, HotspotRequest (+15 more)
 
 ### Community 16 - "Community 16"
 Cohesion: 0.14
@@ -326,8 +344,8 @@ Cohesion: 0.14
 Nodes (11): FormControl, FormDescription, FormFieldContext, FormFieldContextValue, FormItem, FormItemContext, FormItemContextValue, FormLabel (+3 more)
 
 ### Community 23 - "Community 23"
-Cohesion: 0.09
-Nodes (24): authHeaders(), loadEngineSettingsForDebug(), request(), ttsSynthesize(), AgentPlan, ScreenAction, DarkModeToggle(), HandsFreeLayer() (+16 more)
+Cohesion: 0.12
+Nodes (33): project(), Estimate the effect of embedding `rows` more narratives.      `peak=True` measur, Storage budget guard — projection arithmetic and fail-closed behaviour.  No data, The ceiling is inclusive; landing exactly on it is allowed., The peak allowance exists for a single migration and must be higher., The peak allowance would be unreachable if clamped to the steady floor. It is, A refused caller needs a number, and so does an approved one., The real position: 426.7 MB against a confirmed 512 MiB cap. Compliant on both (+25 more)
 
 ### Community 24 - "Community 24"
 Cohesion: 0.14
@@ -350,8 +368,8 @@ Cohesion: 0.18
 Nodes (7): ChartConfig, ChartContainer, ChartContext, ChartContextProps, ChartLegendContent, ChartTooltipContent, THEMES
 
 ### Community 29 - "Community 29"
-Cohesion: 0.18
-Nodes (10): `DB_SOURCE` decides whether RLS is actually enforced, Environment, Hard rules (do not violate), Option A - Docker (everything), Option B - local dev, Repo layout, Satyam — Project Briefing for AI Assistants, Setup & run (+2 more)
+Cohesion: 0.17
+Nodes (11): `DB_SOURCE` decides whether RLS is actually enforced, Environment, Hard rules (do not violate), Option A - Docker (everything), Option B - local dev, Repo layout, Satyam — Project Briefing for AI Assistants, Setup & run (+3 more)
 
 ### Community 30 - "Community 30"
 Cohesion: 0.20
@@ -366,8 +384,8 @@ Cohesion: 0.05
 Nodes (72): AsyncSession, BoardGenerateRequest, Principal, SceneGraph, Any, BoardGenerateRequest, SceneGraph, AsyncSession (+64 more)
 
 ### Community 33 - "Community 33"
-Cohesion: 0.06
-Nodes (183): AgentPlan, AgentRequest, AsyncSession, Principal, Principal, AsyncSession, MoneyTrailRequest, MoneyTrailResponse (+175 more)
+Cohesion: 0.16
+Nodes (89): AuditLog, AsyncSession, BacktestResponse, CaseTimelineResponse, ForecastAlertsResponse, ForecastHotspotsResponse, GraphResponse, MOClustersResponse (+81 more)
 
 ### Community 34 - "Community 34"
 Cohesion: 0.10
@@ -414,8 +432,8 @@ Cohesion: 0.29
 Nodes (6): Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle
 
 ### Community 46 - "Community 46"
-Cohesion: 0.09
-Nodes (27): Any, Principal, _coarsen_coord(), mask_case(), _mask_str(), Server-side field masking — KSP clearance-aware.  Masking tiers (never send unma, Round to ~10 km grid (1 decimal degree ≈ 110 km → 0.1° ≈ 11 km)., Return a copy of `case` with fields masked according to clearance level.      Al (+19 more)
+Cohesion: 0.28
+Nodes (12): _make(), RBAC tests — updated for v2 Principal API (rank/scope/clearance)., test_dgp_everything(), test_l1_cannot_see_protected_narrative(), test_l1_masks_all(), test_l2_masks_all(), test_l3_can_see_protected_narrative(), test_l3_masks_protected_only() (+4 more)
 
 ### Community 47 - "Community 47"
 Cohesion: 0.24
@@ -434,8 +452,8 @@ Cohesion: 0.29
 Nodes (7): [2026-06-15] — Full DB Rebuild + KSP RBAC + 100k Dataset Loaded, Backend code changes, Database changes, Files moved / created, Next steps, RLS verification (live test), Summary
 
 ### Community 51 - "Community 51"
-Cohesion: 0.07
-Nodes (91): AsyncSession, AsyncSession, CameraOut, Case, Camera, IncidentDispatch, IncidentReview, PatrolSuggestion (+83 more)
+Cohesion: 0.09
+Nodes (52): AsyncSession, Principal, act_on_suggestion(), camera_start(), camera_status(), camera_stop(), cameras(), clear_review_queue() (+44 more)
 
 ### Community 53 - "Community 53"
 Cohesion: 0.40
@@ -451,7 +469,7 @@ Nodes (7): LayerMatrixSidebar(), defaultLayerState(), LayerId, LAYERS, LayerSpec
 
 ### Community 58 - "Community 58"
 Cohesion: 0.13
-Nodes (17): CAMERA_CONSTRAINTS, defaultHandsFree, loadHandsFree(), saveHandsFree(), FacePresenceController(), classifyGesture(), dist(), palmCenter() (+9 more)
+Nodes (29): AsyncSession, Principal, Principal, AsyncSession, require(), get_case(), list_cases(), person_locations() (+21 more)
 
 ### Community 59 - "Community 59"
 Cohesion: 0.17
@@ -462,28 +480,28 @@ Cohesion: 0.14
 Nodes (12): LOCATION_RADIUS_CHOICES, visionApi, VisionEntity, VisionEntityKind, VisionLocation, DraggableDossier(), Field(), ACCENT (+4 more)
 
 ### Community 61 - "Community 61"
-Cohesion: 0.24
-Nodes (8): benchmark_database(), benchmark_llm_api(), benchmark_local_embeddings(), benchmark_local_reranker(), benchmark_pipelines(), main(), PyTorchBgeM3Embedder, PyTorchBgeReranker
+Cohesion: 0.29
+Nodes (7): benchmark_database(), benchmark_llm_api(), benchmark_local_embeddings(), benchmark_local_reranker(), benchmark_pipelines(), main(), PyTorchBgeM3Embedder
 
 ### Community 62 - "Community 62"
 Cohesion: 0.33
 Nodes (6): [2026-06-15] — Architecture Update: Multi-Engine Support (Sarvam, Ollama Cloud, BRAIN_ENGINE, SQL_ENGINE, VOICE_BACKEND), Architectural Decisions Recorded, Backend Changes, Environment Files, Frontend Changes, Summary
 
 ### Community 64 - "Community 64"
-Cohesion: 0.20
-Nodes (16): AsyncSession, Principal, Base, CasePerson, DistrictSocioEconomicIndicator, FinancialAccount, FinancialTransaction, Narrative (+8 more)
+Cohesion: 0.19
+Nodes (17): AsyncSession, Principal, AuditLog, Base, CasePerson, DistrictSocioEconomicIndicator, FinancialAccount, FinancialTransaction (+9 more)
 
 ### Community 65 - "Community 65"
 Cohesion: 0.08
-Nodes (33): BacktestResponse, ForecastCell, SimilarCaseMatch, TimelineEvent, CaseDrawer(), ModelInferenceTheater(), RISK_HEX, useCountUp() (+25 more)
+Nodes (25): Acceptance Criteria, Acceptance Criteria, Acceptance Criteria, Acceptance Criteria, Acceptance Criteria, Acceptance Criteria, Acceptance Criteria, Acceptance Criteria (+17 more)
 
 ### Community 67 - "Community 67"
 Cohesion: 0.22
 Nodes (9): 1. PostgreSQL status confirmed, [2026-06-15] — Local Database Setup: PostgreSQL 17 + pgvector 0.8.2 + Full Schema, 2. pgvector 0.8.2 — build from source (Windows, MSVC), 3. Database creation, 4. Schema applied — `backend/migrations/001_init.sql`, 5. Connectivity verified via Python (`asyncpg`), 6. Backend `.env` — no changes needed, Next steps (deferred) (+1 more)
 
 ### Community 68 - "Community 68"
-Cohesion: 0.10
-Nodes (31): FakeLLM, install_lanes(), OtherFakeLLM, Intent router tests.  The router had no tests, and the defect that mattered was, Reasoning models wrap JSON in <think> prose; that must not become an intent., When primary and fallback are the same class, don't spend a second request., Regression: "rank" is also a SQL signal word.      Before the personal-question, Regression: "show" is a SQL signal and used to beat "hotspot". (+23 more)
+Cohesion: 0.09
+Nodes (32): Exception, FakeLLM, install_lanes(), OtherFakeLLM, Intent router tests.  The router had no tests, and the defect that mattered was, Reasoning models wrap JSON in <think> prose; that must not become an intent., When primary and fallback are the same class, don't spend a second request., Regression: "rank" is also a SQL signal word.      Before the personal-question (+24 more)
 
 ### Community 69 - "Community 69"
 Cohesion: 0.11
@@ -494,8 +512,8 @@ Cohesion: 0.25
 Nodes (8): _detect_route(), _in_screen_command(), Match the command to a screen route by keyword (EN + KN).      Screens share v, Distinctive words the manifest says this screen's actions accept.      Built f, Does this command name something the current screen can already do?      ponyt, _screen_action_vocab(), An in-screen command must not navigate the officer away., test_current_screen_is_sticky_for_in_screen_commands()
 
 ### Community 75 - "Community 75"
-Cohesion: 0.12
-Nodes (5): DataActions(), defaultEngineSettings, EngineSettings, formatRemaining(), Tab
+Cohesion: 0.11
+Nodes (6): DataActions(), defaultEngineSettings, EngineSettings, formatRemaining(), SettingsDialog(), Tab
 
 ### Community 76 - "Community 76"
 Cohesion: 0.10
@@ -506,16 +524,16 @@ Cohesion: 0.11
 Nodes (17): 1. Co-locate Compute and Database (Critical), 1. Executive Summary, 2. Component-Level Performance Metrics, 2. Implement True SSE Streaming from Gemini, 3.1 Local AI Inference: BGE-M3 & BGE-Reranker-v2-m3, 3.2 Database & Security Layer (Neon Cloud + RLS + Audit Log), 3. Component Deep Dives, 3. Database Connection Pooling (+9 more)
 
 ### Community 79 - "Community 79"
-Cohesion: 0.07
-Nodes (27): Shell(), hexToTlColor(), useT(), DispatchPanel(), PredictivePanel(), ReviewPanel(), Audit(), AuditRow (+19 more)
+Cohesion: 0.06
+Nodes (35): StationRow, Shell(), hexToTlColor(), useT(), DispatchPanel(), PredictivePanel(), ReviewPanel(), Audit() (+27 more)
 
 ### Community 83 - "Community 83"
 Cohesion: 0.22
 Nodes (8): AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter(), AlertDialogHeader(), AlertDialogOverlay, AlertDialogTitle
 
 ### Community 93 - "Community 93"
-Cohesion: 0.09
-Nodes (20): get_settings(), Application settings, loaded from environment / .env., No external model keys => run with deterministic stubs + fixtures., # NOTE: "webspeech" is a browser-only provider and is intentionally NOT a, Settings, AsyncSession, main(), BaseSettings (+12 more)
+Cohesion: 0.11
+Nodes (16): get_settings(), Application settings, loaded from environment / .env., # NOTE: "webspeech" is a browser-only provider and is intentionally NOT a, configure_logging(), Structured logging setup., create_app(), lifespan(), FastAPI application factory for Satyam. (+8 more)
 
 ### Community 94 - "Community 94"
 Cohesion: 0.25
@@ -546,8 +564,8 @@ Cohesion: 0.22
 Nodes (9): [2026-06-15] — Settings Panel: Database Source Dropdown, Backend — `backend/app/api/routes/settings.py` *(new file)*, Backend — `backend/app/config.py`, Backend — `backend/app/db/session.py` (rewritten), Backend — `backend/app/main.py`, `backend/.env` + `backend/.env.example`, Frontend — `frontend/src/components/SettingsDialog.tsx`, Frontend — `frontend/src/lib/api/client.ts` (+1 more)
 
 ### Community 101 - "Community 101"
-Cohesion: 0.10
-Nodes (16): OffenderListItem, OffenderProfileResponse, PersonTimelineEvent, SearchResult, OffenderPicker(), PersonSearch(), RISK_BG, RISK_RING (+8 more)
+Cohesion: 0.55
+Nodes (21): AsyncSession, CameraOut, Case, Camera, IncidentDispatch, IncidentReview, PatrolSuggestion, PatrolUnit (+13 more)
 
 ### Community 102 - "Community 102"
 Cohesion: 0.24
@@ -558,8 +576,8 @@ Cohesion: 0.17
 Nodes (15): fmtTime(), loadConversations(), StoredChatMessage, StoredConversation, esc(), exportConversationPdf(), exportConversationsPdf(), openPrint() (+7 more)
 
 ### Community 104 - "Community 104"
-Cohesion: 0.06
-Nodes (33): async_sessionmaker, AsyncEngine, main(), main(), main(), active_url(), _engine_kwargs(), get_db_source() (+25 more)
+Cohesion: 0.09
+Nodes (22): async_sessionmaker, main(), main(), main(), get_sessionmaker(), set_db_source(), activate_corridor(), activate_near() (+14 more)
 
 ### Community 105 - "Community 105"
 Cohesion: 0.15
@@ -574,28 +592,28 @@ Cohesion: 0.33
 Nodes (6): [2026-06-16] — Voice v2: Two-Language Lock + Hands-Free Conversation Agent (SATYAM_VOICE_CONVERSATION_FEATURE.md), Architecture: Turn-Taking State Machine, Bug Fixes, Changes, Summary, Verification
 
 ### Community 108 - "Community 108"
-Cohesion: 0.07
-Nodes (18): apiFetch(), financial, MoneyEdge, MoneyNode, MoneyTrailRequest, MoneyTrailResponse, ARROW_COLORS, FLAG_COLOR (+10 more)
+Cohesion: 0.05
+Nodes (31): apiFetch(), financial, MoneyEdge, MoneyNode, MoneyTrailRequest, MoneyTrailResponse, ARROW_COLORS, FinancialLinksPanel() (+23 more)
 
 ### Community 109 - "Community 109"
-Cohesion: 0.23
-Nodes (11): Status, blobToWav(), decodeAudio(), downsample(), encodeWav(), isBackendSttSupported(), pickMimeType(), startSttSession() (+3 more)
+Cohesion: 0.10
+Nodes (16): A budget input could not be read, so no projection may be trusted., StorageUnmeasurable, RuntimeError, FakeResult, FakeSession, Requirement 2.7: no substituting a default for an unmeasurable input., index_bytes_per_vector is derived from the index size, not assumed., A real state: rows embedded, HNSW not yet built. Cost is genuinely zero. (+8 more)
 
 ### Community 110 - "Community 110"
 Cohesion: 0.40
 Nodes (4): Alert, AlertDescription, AlertTitle, alertVariants
 
 ### Community 111 - "Community 111"
-Cohesion: 0.11
-Nodes (14): FinancialLinksPanel(), inr(), GROUP_COLOR, GROUP_COLOR_LIGHT, GROUP_SHAPE, Legend(), NetworkScreen(), PosMap (+6 more)
+Cohesion: 0.10
+Nodes (20): Architecture decisions, Components, Constraints carried from the requirements, D10. Similar Cases delegates to `rag.retrieve_narratives`, D1. Budget constants live in `Settings`, not in a new module, D2. One guard module, three consumers, D3. The guard is a pre-flight projection, and it fails closed, D4. Local Postgres is the measurement environment (+12 more)
 
 ### Community 112 - "Community 112"
-Cohesion: 0.13
-Nodes (14): dossier, DossierBankAccount, DossierContact, DossierCrime, DossierDetail, DossierFamilyItem, DossierListItem, DossierDetailPane() (+6 more)
+Cohesion: 0.07
+Nodes (29): apiFetch(), getAuthToken(), apiFetch(), dossier, DossierBankAccount, DossierContact, DossierCrime, DossierDetail (+21 more)
 
 ### Community 113 - "Community 113"
-Cohesion: 0.12
-Nodes (18): ChatEvent, streamChat(), Markdown(), loadEngineSettings(), ChatLane, ChatMessage, Conversation, generateId() (+10 more)
+Cohesion: 0.06
+Nodes (45): ChatEvent, sttTranscribe(), DarkModeToggle(), Markdown(), loadEngineSettings(), Status, copilotVoiceProvider(), ParsedVoice (+37 more)
 
 ### Community 114 - "Community 114"
 Cohesion: 0.18
@@ -630,16 +648,16 @@ Cohesion: 0.33
 Nodes (6): [2026-06-16] — Root-Cause Fix: Voice Input Dead + Chat 422 on Google Voice, Diagnosis (evidence-based), Files Changed, Root Cause 1 (voice input dead) — `frontend/src/lib/voice/recorder.ts`, Root Cause 2 (chat 422 when Google voice selected) — `backend/app/schemas/chat.py`, Verification
 
 ### Community 124 - "Community 124"
-Cohesion: 0.18
-Nodes (20): resolve_clearance(), resolve_scope(), _bcrypt(), create_access_token(), decode_token(), hash_password(), JWT issuing / verification + password hashing., Lazy import so the module loads without bcrypt if it's not installed. (+12 more)
+Cohesion: 0.16
+Nodes (23): resolve_clearance(), resolve_scope(), _bcrypt(), create_access_token(), decode_token(), hash_password(), JWT issuing / verification + password hashing., Lazy import so the module loads without bcrypt if it's not installed. (+15 more)
 
 ### Community 125 - "Community 125"
 Cohesion: 0.25
 Nodes (8): 16.1 Core, 16.2 Intelligence (`/api/`), 16.3 Response Ops (`/api/ops/`), 16.4 Board (`/api/board/`), 16.5 Dossier (`/api/dossier/`), 16.6 Admin (`/admin/`), 16.7 Settings, 16. API Reference
 
 ### Community 126 - "Community 126"
-Cohesion: 0.12
-Nodes (23): COPY, Lang, LockOverlay(), computeGestureIntent(), cycleIndex(), GestureIntent, GLabel, L() (+15 more)
+Cohesion: 0.07
+Nodes (42): logSecurityEvent(), HandsFreeLayer(), COPY, Lang, LockOverlay(), CAMERA_CONSTRAINTS, defaultHandsFree, loadHandsFree() (+34 more)
 
 ### Community 127 - "Community 127"
 Cohesion: 0.40
@@ -718,8 +736,8 @@ Cohesion: 0.50
 Nodes (4): 18.1 Docker, 18.2 Local Dev, 18.3 Migrations Applied (in order), 18. Deployment
 
 ### Community 149 - "Community 149"
-Cohesion: 0.14
-Nodes (9): MOCluster, SeasonalPeak, TrendPoint, TrendsResponse, BAR_COLORS, KpiCard(), TrendsScreen(), useCountUp() (+1 more)
+Cohesion: 0.13
+Nodes (10): MOCluster, SeasonalPeak, TrendPoint, TrendsResponse, BAR_COLORS, KpiCard(), Route, TrendsScreen() (+2 more)
 
 ### Community 150 - "Community 150"
 Cohesion: 0.50
@@ -774,8 +792,8 @@ Cohesion: 0.15
 Nodes (9): datetime, BoardSnapshot, Investigation Board ORM models — isolated from synthetic dataset., _now(), _date(), main(), Seed the 10 isolated demo dossiers. Safe and idempotent. Usage: python -m seed., Synthetic KSP-style crime data generator.  IMPORTANT (spec risk R4): this is SYN (+1 more)
 
 ### Community 164 - "Community 164"
-Cohesion: 0.19
-Nodes (8): configure_logging(), Structured logging setup., create_app(), lifespan(), FastAPI application factory for Satyam., FastAPI, Requires a live, seeded database.      Marked `integration` because it registers, test_login_and_me()
+Cohesion: 0.43
+Nodes (19): AgentPlan, AgentRequest, Principal, AccessDenied, _guard(), _norm_lang(), Voice pipeline endpoints: TTS / STT / MT.  Provider-agnostic: delegates to the, Voice Screen Agent: turn a spoken command into a navigation + in-screen     act (+11 more)
 
 ### Community 165 - "Community 165"
 Cohesion: 0.50
@@ -806,32 +824,32 @@ Cohesion: 0.67
 Nodes (3): [2026-06-17] — Landing Page: Full-Screen Background Video + Hero UI Improvements, File Changed: `frontend/src/routes/index.tsx`, Summary
 
 ### Community 172 - "Community 172"
-Cohesion: 0.21
-Nodes (10): AuditLog, AsyncSession, Principal, AsyncSession, _digest(), Tamper-evident, hash-chained audit log.  Each entry stores sha256(prev_hash + ca, verify_chain(), AuditLog (+2 more)
+Cohesion: 0.09
+Nodes (36): AsyncSession, Principal, Principal, AsyncSession, EgoRequest, EgoResponse, Principal, AsyncSession (+28 more)
 
 ### Community 173 - "Community 173"
 Cohesion: 0.47
 Nodes (5): CoordinateReadout(), dms(), MgrsForward, useClock(), VisionViewState
 
 ### Community 174 - "Community 174"
-Cohesion: 0.36
-Nodes (9): AdminUserList, Principal, PolicyUpdateRequest, list_users(), Admin Access Control routes.  GET  /admin/users                    — list all, Update rank, clearance override, scope override, or active status., Return all users with their effective clearance/scope and creator info., _require_admin() (+1 more)
+Cohesion: 0.43
+Nodes (7): AdminUserList, Principal, PolicyUpdateRequest, Admin Access Control routes.  GET  /admin/users                    — list all, Update rank, clearance override, scope override, or active status., _require_admin(), update_policy()
 
 ### Community 175 - "Community 175"
-Cohesion: 0.74
-Nodes (14): AsyncSession, Principal, Officer, Station, User, LoginRequest, LoginResponse, Officer (+6 more)
+Cohesion: 0.82
+Nodes (13): AsyncSession, Principal, Officer, Station, User, LoginRequest, LoginResponse, Officer (+5 more)
 
 ### Community 176 - "Community 176"
 Cohesion: 0.40
 Nodes (3): DEFAULT_CENTER, LoadState, Street3DCanvas()
 
 ### Community 178 - "Community 178"
-Cohesion: 0.08
-Nodes (33): AsyncSession, Exception, test_allows_simple_select_and_adds_limit(), test_blocks_delete(), test_blocks_multiple_statements(), test_blocks_unknown_table(), test_clamps_large_limit(), build_sql() (+25 more)
+Cohesion: 0.25
+Nodes (13): build_sql(), _crime_value(), _extract_place(), _place_clause(), _q(), Deterministic, keyless NL->SQL fallback for the chat SQL lane.  Used when (a), Return a guarded SELECT string, or None if we can't form one.      `relax` pro, Human-friendly explanation of what was broadened at a given relax level. (+5 more)
 
 ### Community 180 - "Community 180"
-Cohesion: 0.17
-Nodes (14): getAuthToken(), sttTranscribe(), apiFetch(), apiFetch(), opsFetch(), logSecurityEvent(), planVoiceAction(), consumeLastCapturedError() (+6 more)
+Cohesion: 0.14
+Nodes (12): get_url(), _GuardConn, _GuardResult, load_embedder(), main(), _preflight(), Satyam — BGE-M3 narrative embedding job.  Fills narratives.embedding (vector(1, The slice of a SQLAlchemy Result that `storage.read_state` actually uses. (+4 more)
 
 ### Community 182 - "Community 182"
 Cohesion: 0.50
@@ -858,12 +876,12 @@ Cohesion: 0.50
 Nodes (3): AdminUserList, AdminUserRow, PolicyUpdateRequest
 
 ### Community 189 - "Community 189"
-Cohesion: 0.32
-Nodes (3): reportError(), I18nProvider(), ErrorComponent()
+Cohesion: 0.14
+Nodes (11): reportError(), ALL_TRANSLATABLE, Ctx, DICT, enrichDictWithLLM(), I18nCtx, I18nProvider(), Lang (+3 more)
 
 ### Community 190 - "Community 190"
 Cohesion: 0.06
-Nodes (42): ActiveDispatch, CameraInfo, DispatchResult, openOpsSocket(), Patrol, responseOps, ReviewItem, Signal (+34 more)
+Nodes (42): ActiveDispatch, CameraInfo, DispatchResult, openOpsSocket(), Patrol, responseOps, ReviewItem, RiskZone (+34 more)
 
 ### Community 191 - "Community 191"
 Cohesion: 0.39
@@ -873,9 +891,29 @@ Nodes (7): load_env(), main(), parse_url(), progress(), Reload Neon cloud with 6
 Cohesion: 0.18
 Nodes (10): CameraOut, DetectNotify, DispatchOut, DispatchRequest, PatrolOut, ReviewItemOut, RiskZoneOut, RiskZonesResponse (+2 more)
 
+### Community 195 - "Community 195"
+Cohesion: 0.14
+Nodes (13): AsyncSession, AsyncSession, _main(), _mb(), Projection, Storage budget measurement and pre-flight projection.  The cloud database runs a, The estimated outcome of adding `rows_requested` embedded narratives., Measure the database against its budget.      Raises StorageUnmeasurable when an (+5 more)
+
+### Community 197 - "Community 197"
+Cohesion: 0.15
+Nodes (13): AsyncEngine, active_url(), active_vector_type(), _engine_kwargs(), get_db_source(), _get_engine(), get_session(), Async SQLAlchemy engine + session, with runtime database-source switching.  Th (+5 more)
+
 ### Community 200 - "Community 200"
 Cohesion: 0.05
 Nodes (36): AsyncClient, BaseHTTPRequestHandler, Connection, _FrameBuffer, main(), _MJPEGHandler, _notify_bg(), Satyam — live CCTV detection (YOLOv8).  Plays a video with live detection. Det (+28 more)
+
+### Community 201 - "Community 201"
+Cohesion: 0.30
+Nodes (12): AsyncSession, MoneyTrailRequest, MoneyTrailResponse, Principal, AsyncSession, MoneyTrailRequest, MoneyTrailResponse, money_trail() (+4 more)
+
+### Community 206 - "Community 206"
+Cohesion: 0.17
+Nodes (6): A measured snapshot of the database against its budget.      All byte fields are, Space remaining against the hard cap. Can go negative., Free space a single migration may temporarily reduce the reserve to.          De, All-in cost of embedding one more narrative: datum plus index share., True when free space still honours the reserved headroom floor., StorageState
+
+### Community 207 - "Community 207"
+Cohesion: 0.27
+Nodes (10): AsyncSession, answer_with_sql(), generate_sql(), _mask_rows(), NL -> guarded SQL -> rows, with PII masking for low-clearance callers.  The SQL, Return (safe_sql, masked_rows, recovery_note).      recovery_note is a human-fri, Bullet-mask PII columns for callers below clearance L3., Remove markdown code fences that LLMs sometimes wrap JSON responses in.      Gem (+2 more)
 
 ### Community 208 - "Community 208"
 Cohesion: 0.50
@@ -885,17 +923,49 @@ Nodes (4): 10.1 Four Dedicated Sidebar Routes, 10.2 Dataset-Grounded Ops (no bac
 Cohesion: 0.25
 Nodes (7): DossierBankAccountItem, DossierContactItem, DossierCrimeItem, DossierDetail, DossierFamilyItem, DossierListItem, Pydantic response schemas for the Person 360 dossier feature.
 
+### Community 211 - "Community 211"
+Cohesion: 0.24
+Nodes (10): LLM, _keyword_intent(), _llm_lanes(), Intent router. Uses the LLM with a JSON schema, with a cheap keyword fallback so, Drop ```json ... ``` fences. Gemini 2.5 Flash adds them despite the prompt., Primary lane, then the Groq fallback lane when it is a different provider., Classify `message` into an intent plus slots.      Returns the keyword guess onl, Best-effort intent when no LLM is reachable.      The default is narrative_searc (+2 more)
+
 ### Community 214 - "Community 214"
 Cohesion: 0.22
 Nodes (8): BoardGenerateRequest, BoardImage, BoardSaveRequest, Pydantic schemas for the Investigation Board feature., A named image supplied by the client (base-64 data-URL)., SceneEdge, SceneGraph, SceneNode
+
+### Community 215 - "Community 215"
+Cohesion: 0.29
+Nodes (10): _grid_key(), _haversine_km(), _label(), _parse_hour(), Predictive risk grid — Python port of EMERGE predictiveReadinessService.js.  L, For the top zones, suggest the nearest IDLE patrol to pre-position there., Recompute the risk grid if the debounce window elapsed. Returns True if it recom, _rebuild_suggestions() (+2 more)
+
+### Community 216 - "Community 216"
+Cohesion: 0.27
+Nodes (9): test_allows_simple_select_and_adds_limit(), test_blocks_delete(), test_blocks_multiple_statements(), test_blocks_unknown_table(), test_clamps_large_limit(), Text-to-SQL guardrail.  The LLM is never trusted to produce safe SQL. Every cand, Validate and normalize a candidate SELECT. Raises UnsafeSQL on violation., sanitize() (+1 more)
+
+### Community 218 - "Community 218"
+Cohesion: 0.20
+Nodes (9): Close-out, Implementation Plan, Notes, Overview, Task Dependency Graph, Tasks, Track A — budget enforcement and hazard closure, Track B — measure, then decide (+1 more)
+
+### Community 219 - "Community 219"
+Cohesion: 0.28
+Nodes (8): Any, Principal, _coarsen_coord(), mask_case(), _mask_str(), Server-side field masking — KSP clearance-aware.  Masking tiers (never send unma, Round to ~10 km grid (1 decimal degree ≈ 110 km → 0.1° ≈ 11 km)., Return a copy of `case` with fields masked according to clearance level.      Al
+
+### Community 220 - "Community 220"
+Cohesion: 0.22
+Nodes (8): HotspotRequest, HotspotResponse, OffenderTrailRequest, OffenderTrailResponse, StationBreakdownRequest, StationBreakdownResponse, StationRow, TrailPoint
+
+### Community 221 - "Community 221"
+Cohesion: 0.28
+Nodes (8): _backfill_station_ids(), _district_code(), Create + seed Response-Ops tables. Safe to run repeatedly.      python -m seed, Give the original hand-typed Bengaluru patrols a station_id.      They were se, Short, stable, readable code for callsigns. 'Bengaluru City' -> 'BEN'., Assign a unique code per district, disambiguating collisions.      KSP distric, _seed_statewide(), _unique_district_codes()
 
 ### Community 222 - "Community 222"
 Cohesion: 0.22
 Nodes (9): 21.1 Overview, 21.2 Architecture, 21.3 Backend Brain (`app/pipeline/screen_agent.py`), 21.4 Frontend Changes, 21.5 Security, 21.6 Example Voice Commands, 21.7 New API Endpoint, 21.8 Sample-Value Resolution (real data, never placeholders) (+1 more)
 
 ### Community 223 - "Community 223"
-Cohesion: 0.06
-Nodes (43): AsyncSession, Principal, DICT, LLM, _build_spoken_summary(), _compose(), _extract_speak(), PipelineEvent (+35 more)
+Cohesion: 0.07
+Nodes (35): AsyncSession, Principal, AsyncSession, Principal, ConversationState, _build_spoken_summary(), _compose(), _extract_speak() (+27 more)
+
+### Community 224 - "Community 224"
+Cohesion: 0.25
+Nodes (3): No external model keys => run with deterministic stubs + fixtures., Settings, BaseSettings
 
 ### Community 225 - "Community 225"
 Cohesion: 0.25
@@ -909,22 +979,34 @@ Nodes (5): 23.1 Static DICT (`src/lib/i18n.tsx`), 23.2 Runtime LLM Enrichment (S
 Cohesion: 0.67
 Nodes (3): 22.1 Backend Board Brain (`app/services/board_brain.py`), 22.2 Frontend Layout Engine (`src/lib/boardLayout.ts`), 22. Board Brain — Smart Layout Engine
 
+### Community 228 - "Community 228"
+Cohesion: 0.29
+Nodes (6): is_protected(), Sanity: the fixture crime really is in the shared protected set., test_protected_crime_set_comes_from_rbac(), test_case_insensitive(), test_non_protected_crimes(), test_protected_crimes_detected()
+
+### Community 229 - "Community 229"
+Cohesion: 0.40
+Nodes (5): AsyncSession, Principal, Client security-event endpoint (face-presence auto-lock telemetry).  Records U, security_event(), SecurityEvent
+
+### Community 230 - "Community 230"
+Cohesion: 0.40
+Nodes (5): StorageState, Requirement 1.5. The ceiling and the floor are separate limits: with a     confi, A ceiling above the cap must not be honoured just because it was configured., test_peak_is_still_clamped_when_percentages_are_contradictory(), test_reserve_floor_refuses_even_when_the_ceiling_is_satisfied()
+
 ### Community 233 - "Community 233"
-Cohesion: 0.10
-Nodes (29): AsyncSession, active_vector_type(), Return the pgvector column type of the ACTIVE source: vector | halfvec.      T, _apply_clearance(), _candidate_key(), _crime_types_for(), _execute_isolated(), _lexical_candidates() (+21 more)
+Cohesion: 0.11
+Nodes (27): AsyncSession, _apply_clearance(), _candidate_key(), _crime_types_for(), _execute_isolated(), _lexical_candidates(), Narrative retrieval (RAG) over pgvector, with a reachable lexical fallback.  Two, One narrative returned to the caller.      `restricted` is True when the record (+19 more)
 
 ## Knowledge Gaps
-- **884 isolated node(s):** `SUGGESTIONS`, `LANE_LABEL`, `[2026-06-15] — Initial Setup`, `Summary`, `Backend Changes` (+879 more)
+- **924 isolated node(s):** `What we are building`, `Tech stack`, `Repo layout`, `Option A - Docker (everything)`, `Option B - local dev` (+919 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **19 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `DICT` connect `Community 223` to `Community 9`?**
-  _High betweenness centrality (0.276) - this node is a cross-community bridge._
-- **Why does `Principal` connect `Community 33` to `Community 32`, `Community 64`, `Community 37`, `Community 39`, `Community 139`, `Community 172`, `Community 76`, `Community 174`, `Community 175`, `Community 15`, `Community 46`, `Community 178`, `Community 51`, `Community 184`, `Community 122`, `Community 61`, `Community 223`?**
-  _High betweenness centrality (0.151) - this node is a cross-community bridge._
+- **Why does `_MemoryStore` connect `Community 189` to `Community 223`?**
+  _High betweenness centrality (0.254) - this node is a cross-community bridge._
+- **Why does `Principal` connect `Community 172` to `Community 139`, `Community 15`, `Community 32`, `Community 33`, `Community 164`, `Community 37`, `Community 39`, `Community 174`, `Community 175`, `Community 184`, `Community 58`, `Community 61`, `Community 64`, `Community 201`, `Community 76`, `Community 207`, `Community 219`, `Community 223`, `Community 228`, `Community 229`, `Community 101`, `Community 122`?**
+  _High betweenness centrality (0.154) - this node is a cross-community bridge._
 - **Are the 144 inferred relationships involving `Principal` (e.g. with `AdminUserList` and `AgentPlan`) actually correct?**
   _`Principal` has 144 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 83 inferred relationships involving `Permission` (e.g. with `AdminUserList` and `AgentPlan`) actually correct?**
@@ -933,5 +1015,5 @@ _Questions this graph is uniquely positioned to answer:_
   _`AccessDenied` has 78 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 12 inferred relationships involving `useT()` (e.g. with `AdminAccessControl()` and `PolicyEditor()`) actually correct?**
   _`useT()` has 12 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `SUGGESTIONS`, `LANE_LABEL`, `[2026-06-15] — Initial Setup` to the rest of the system?**
-  _1223 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `What we are building`, `Tech stack`, `Repo layout` to the rest of the system?**
+  _1297 weakly-connected nodes found - possible documentation gaps or missing edges._
