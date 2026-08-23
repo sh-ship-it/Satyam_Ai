@@ -5770,3 +5770,89 @@ clean on a direct SSE call minutes earlier.
 **Not fixed here.** It is a pipeline bug that hits `/console` identically, it is
 unrelated to a starter-prompt swap, and the fix is a judgement call about tolerating
 an unclosed tag rather than a one-liner. Logged for its own change.
+
+## Voice in and out of `/ask`, with the language chosen in the chat
+
+The chat could be typed and read, but not spoken to or heard from, and its language
+came from the global header toggle two screens away. Now the composer owns all three:
+an **EN | ಕನ್ನಡ** selector, a speaker toggle, and a mic.
+
+### One selector, three effects
+
+The selected language drives the answer language (`lang` on `POST /chat/stream`),
+the TTS language, and the STT hint — one piece of state, so they cannot disagree.
+It seeds from the global EN/KN toggle, then persists per screen in
+`satyam.ask.lang`, so an officer who never touches it sees no change.
+
+Auto-detection from the typed script was **removed** on this path. `/ask` used to
+run `detectLang(text)` and flip the whole answer to Kannada if the question
+contained Kannada characters. With an explicit selector on screen that is a bug, not
+a convenience: typing one Kannada place name into an English session should not
+silently switch the reply. A hand-off from another screen may still carry its own
+locale, and that wins for that single turn.
+
+Confirmed against the live pipeline: the same question at `lang=en` returns *"In
+2025, Bengaluru City recorded a total of 201 theft incidents"* with 0 Kannada
+characters, and at `lang=kn` returns 38-44 Kannada characters plus a Kannada
+`[SPEAK]` block.
+
+### Output: a toggle that actually decides
+
+`speak()` previously fired only when `isServerVoiceEnabled()` — i.e. the global
+Settings TTS provider doubled as the on/off switch. Now the in-chat toggle decides
+*whether* to speak and Settings decides only *which engine* speaks. It persists in
+`satyam.ask.speak`, defaults to on when a server provider is configured (matching
+what `/console` already did), and shows a `voice on` / `speaking` badge in the top
+strip. Switching language mid-clip cancels the clip rather than letting it finish
+and contradict the new selection.
+
+**A conflict surfaced while wiring it.** The settle path read:
+
+```ts
+if (spokenText) speak(spokenText, !!opts?.speak || !!spoken);
+```
+
+That `|| !!spoken` force-spoke whenever the backend had emitted a `[SPEAK]` block —
+which is almost every grounded answer. With a user-facing toggle on screen, that
+silently overrode the officer switching voice off. Now only a voice-*initiated* turn
+forces speech. There is a regression check for exactly this: with the toggle off, a
+completed answer must not touch `/voice/tts`.
+
+The two settings are mirrored into refs, because the streaming callback would
+otherwise read the values captured when the message was sent, not the ones current
+when the answer lands.
+
+### Input: backend STT, not the browser's
+
+The mic uses the existing `startSttSession()` from `lib/voice/recorder.ts` — the
+same MediaRecorder → 16 kHz mono WAV → `POST /voice/stt` path the voice copilot
+uses — **not** the `SpeechRecognition` wiring in `console.tsx`. Two reasons: browser
+recognition is unreliable for `kn-IN` on desktop and this screen is explicitly
+bilingual, and copying console's ~50 lines would have made a third copy of mic
+handling in this repo. Nothing new was written for capture.
+
+The transcript **fills the composer and does not auto-send**. A misheard station or
+person name changes the query outright, so the officer reads it first. Capture
+stages (`Requesting microphone…`, `Listening… speak now`, transcribing) and every
+failure mode the recorder already distinguishes — permission denied, no device,
+device busy in another app — surface in a live region under the composer.
+
+### Verified
+
+Voice round-trip through the real providers, both languages: TTS returns
+`audio/wav` from `SarvamTTS` (180 KB / 125 KB), and feeding that audio straight back
+into `/voice/stt` returns `"How many theft cases were reported in Bengaluru city in
+2025?"` with `detected_lang: en-IN`, and the Kannada sentence with
+`detected_lang: kn-IN`. So both directions work on real audio, not just in principle.
+
+Driven in headless Chrome with `--use-fake-device-for-media-stream`, 16 checks, all
+passing: the selector renders EN + ಕನ್ನಡ with EN pressed; picking Kannada persists
+and updates the `kn-IN` badge; the speaker toggle round-trips off→on with the badge
+and `localStorage` following; a Kannada turn renders 44 Kannada characters and calls
+`/voice/tts`; with voice off a completed answer calls it **zero** times; the mic
+enters listening, reports `Listening… speak now`, reaches `/voice/stt`, and returns
+to idle. Chrome's fake device emits a tone rather than speech, so that last leg ends
+in *"Nothing was transcribed"* — the correct empty-transcript branch, and the reason
+the real-audio round trip above was run separately.
+
+`tsc --noEmit` held at 56. Only `routes/ask.tsx` changed.

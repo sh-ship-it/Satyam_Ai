@@ -7,20 +7,23 @@ import {
   Database,
   Layers,
   MessageSquarePlus,
+  Mic,
   PanelLeftClose,
   PanelLeftOpen,
   Search,
   Sparkles,
   Square,
   Trash2,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import { Shell } from "@/components/Shell";
 import { Markdown } from "@/components/Markdown";
 import { useI18n, useT } from "@/lib/i18n";
 import { streamChat, type ChatEvent } from "@/lib/api/client";
 import { loadEngineSettings } from "@/components/SettingsDialog";
-import { detectLang } from "@/lib/voice/lang";
-import { isServerVoiceEnabled, speakViaSarvam } from "@/lib/voice/tts";
+import { cancelSpeech, isServerVoiceEnabled, speakViaSarvam } from "@/lib/voice/tts";
+import { isBackendSttSupported, startSttSession, type SttSession } from "@/lib/voice/recorder";
 import {
   generateId,
   generateTitle,
@@ -58,6 +61,10 @@ const SUGGESTIONS: { icon: typeof Database; text: string }[] = [
   { icon: Database, text: "Which districts have the lowest clearance rate?" },
 ];
 
+/** Per-screen voice preferences. Kept out of Settings so the chat owns its own. */
+const LANG_KEY = "satyam.ask.lang";
+const SPEAK_KEY = "satyam.ask.speak";
+
 /** Human label for the pipeline lanes the backend reports as `tool` events. */
 const LANE_LABEL: Record<string, string> = {
   router: "Intent",
@@ -88,11 +95,61 @@ function Ask() {
   const [streaming, setStreaming] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  // ── Voice: one explicit language drives the answer, the speech and the mic ──
+  // Seeded from the global EN/KN toggle, then overridden by this screen's own
+  // choice. Auto-detection from the typed script is deliberately NOT applied:
+  // the officer picked a language, so a Kannada name typed into an English
+  // session must not silently flip the whole answer.
+  const [chatLang, setChatLang] = useState<"en" | "kn">(lang === "KN" ? "kn" : "en");
+  const [speakOut, setSpeakOut] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
+  const [listening, setListening] = useState(false);
+  const [micStatus, setMicStatus] = useState<string | null>(null);
+  const [micError, setMicError] = useState<string | null>(null);
+
   const backendConvId = useRef<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
+  const sttRef = useRef<SttSession | null>(null);
+  const speakOutRef = useRef(false);
+  const chatLangRef = useRef<"en" | "kn">("en");
   const engineLabel = loadEngineSettings().brainEngine;
+
+  // Refs shadow the two voice settings so the streaming callback reads the value
+  // that is current when the answer lands, not the one captured at send time.
+  useEffect(() => {
+    speakOutRef.current = speakOut;
+  }, [speakOut]);
+  useEffect(() => {
+    chatLangRef.current = chatLang;
+  }, [chatLang]);
+
+  // Hydrate the persisted voice prefs after mount — localStorage is unavailable
+  // during SSR, so reading it in a useState initialiser would break the render.
+  useEffect(() => {
+    try {
+      const savedLang = localStorage.getItem(LANG_KEY);
+      if (savedLang === "en" || savedLang === "kn") setChatLang(savedLang);
+      const savedSpeak = localStorage.getItem(SPEAK_KEY);
+      setSpeakOut(savedSpeak == null ? isServerVoiceEnabled() : savedSpeak === "1");
+    } catch {
+      setSpeakOut(isServerVoiceEnabled());
+    }
+  }, []);
+
+  // Drop the mic and silence any clip when the screen unmounts.
+  useEffect(
+    () => () => {
+      try {
+        sttRef.current?.cancel();
+      } catch {
+        /* already closed */
+      }
+      cancelSpeech();
+    },
+    [],
+  );
 
   // ── Bootstrap: adopt the shared history, or open a fresh conversation ──────
   useEffect(() => {
@@ -156,14 +213,118 @@ function Ask() {
     [activeId, t],
   );
 
+  /**
+   * Read an answer aloud in the language selected in the composer.
+   *
+   * `force` is for voice turns, which always speak. Typed turns speak only when
+   * the in-chat speaker is on — the global Settings provider is consulted for
+   * WHICH engine to use, never for WHETHER to speak.
+   */
   function speak(text: string, force = false) {
-    if (!force && !isServerVoiceEnabled()) return;
+    if (!force && !speakOutRef.current) return;
+    if (!text.trim()) return;
     const emit = (state: "speaking" | "done") =>
       window.dispatchEvent(new CustomEvent("satyam:ai-state", { detail: { state } }));
-    void speakViaSarvam(text, lang === "KN" ? "kn" : "en", 1, {
-      onStart: () => emit("speaking"),
-      onEnd: () => emit("done"),
+    void speakViaSarvam(text, chatLangRef.current, 1, {
+      onStart: () => {
+        setSpeaking(true);
+        emit("speaking");
+      },
+      onEnd: () => {
+        setSpeaking(false);
+        emit("done");
+      },
     });
+  }
+
+  function stopSpeaking() {
+    cancelSpeech();
+    setSpeaking(false);
+    window.dispatchEvent(new CustomEvent("satyam:ai-state", { detail: { state: "done" } }));
+  }
+
+  function toggleSpeakOut() {
+    setSpeakOut((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(SPEAK_KEY, next ? "1" : "0");
+      } catch {
+        /* best-effort */
+      }
+      if (!next) stopSpeaking();
+      return next;
+    });
+  }
+
+  function pickLang(next: "en" | "kn") {
+    if (next === chatLang) return;
+    setChatLang(next);
+    try {
+      localStorage.setItem(LANG_KEY, next);
+    } catch {
+      /* best-effort */
+    }
+    // A clip already playing is in the old language — drop it rather than let it
+    // finish and contradict the newly selected one.
+    stopSpeaking();
+  }
+
+  /**
+   * Dictate into the composer using the SAME backend STT the voice copilot uses
+   * (Sarvam Saaras via `POST /voice/stt`), not the browser's SpeechRecognition.
+   * That matters here: browser recognition is unreliable for `kn-IN` on desktop,
+   * and this screen is explicitly bilingual.
+   *
+   * The transcript fills the composer instead of sending straight away — a
+   * misheard station or person name changes the query, so the officer reviews it.
+   */
+  async function toggleMic() {
+    if (sttRef.current) {
+      try {
+        sttRef.current.stop(); // transcribe what was captured so far
+      } catch {
+        /* session already finished */
+      }
+      return;
+    }
+    if (!isBackendSttSupported()) {
+      setMicError(t("This browser cannot capture audio. Use Chrome or Edge."));
+      return;
+    }
+    setMicError(null);
+    setMicStatus(t("Starting…"));
+    setListening(true);
+    const finish = () => {
+      sttRef.current = null;
+      setListening(false);
+      setMicStatus(null);
+    };
+    try {
+      sttRef.current = await startSttSession({
+        lang: chatLang,
+        callbacks: {
+          onStatus: (s) => setMicStatus(s),
+          onSpeechStart: () => setMicStatus(t("Listening…")),
+          onResult: (transcript) => {
+            finish();
+            const heard = (transcript || "").trim();
+            if (!heard) {
+              setMicError(t("Nothing was transcribed. Try again, a little closer to the mic."));
+              return;
+            }
+            setInput((prev) => (prev.trim() ? `${prev.trim()} ${heard}` : heard));
+            taRef.current?.focus();
+          },
+          onError: (message) => {
+            finish();
+            setMicError(message);
+          },
+        },
+      });
+    } catch (err) {
+      finish();
+      setMicError((err as Error)?.message || t("Could not start the microphone."));
+    }
   }
 
   const send = useCallback(
@@ -177,13 +338,13 @@ function Ask() {
       setInput("");
       setStreaming(true);
 
-      const reqLang: "en" | "kn" = (opts?.lang || "").toLowerCase().startsWith("kn")
-        ? "kn"
-        : detectLang(text) === "kn"
+      // The composer's selector is the source of truth. A hand-off from another
+      // screen may carry its own locale, and that wins for that one turn.
+      const reqLang: "en" | "kn" = opts?.lang
+        ? opts.lang.toLowerCase().startsWith("kn")
           ? "kn"
-          : lang === "KN"
-            ? "kn"
-            : "en";
+          : "en"
+        : chatLang;
       const engines = loadEngineSettings();
 
       let acc = "";
@@ -219,7 +380,9 @@ function Ask() {
         persist(final);
         setStreaming(false);
         abortRef.current = null;
-        if (spokenText) speak(spokenText, !!opts?.speak || !!spoken);
+        // Only a voice-initiated turn forces speech. The presence of a backend
+        // [SPEAK] block must NOT override an officer who switched voice off.
+        if (spokenText) speak(spokenText, !!opts?.speak);
       };
 
       const ctrl = new AbortController();
@@ -281,7 +444,7 @@ function Ask() {
       settle(acc, spoken || acc);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [messages, streaming, lang, persist, t],
+    [messages, streaming, chatLang, persist, t],
   );
 
   // A question handed off from another screen (Transcripts, Forecast, voice nav).
@@ -440,8 +603,14 @@ function Ask() {
                 {engineLabel}
               </span>
               <span className="rounded-[5px] border border-border px-1.5 py-0.5">
-                {lang === "KN" ? "kn-IN" : "en-IN"}
+                {chatLang === "kn" ? "kn-IN" : "en-IN"}
               </span>
+              {speakOut && (
+                <span className="flex items-center gap-1 rounded-[5px] border border-border px-1.5 py-0.5">
+                  <Volume2 className="h-3 w-3" />
+                  {speaking ? t("speaking") : t("voice on")}
+                </span>
+              )}
             </div>
           </div>
 
@@ -506,14 +675,96 @@ function Ask() {
                     }
                   }}
                   rows={1}
-                  placeholder={t("Ask about FIRs, hotspots, narratives or links…")}
+                  placeholder={
+                    chatLang === "kn"
+                      ? "ಎಫ್‌ಐಆರ್, ಹಾಟ್‌ಸ್ಪಾಟ್ ಅಥವಾ ಸಂಪರ್ಕಗಳ ಬಗ್ಗೆ ಕೇಳಿ…"
+                      : t("Ask about FIRs, hotspots, narratives or links…")
+                  }
                   aria-label={t("Message Satyam")}
                   className="max-h-[220px] w-full resize-none bg-transparent px-4 pt-3 text-[15px] leading-6 text-foreground outline-none placeholder:text-muted-foreground"
                 />
-                <div className="flex items-center justify-between px-3 pb-2.5 pt-1">
-                  <span className="text-[10px] text-muted-foreground">
-                    {t("Enter to send · Shift+Enter for a new line")}
-                  </span>
+                <div className="flex items-center gap-2 px-3 pb-2.5 pt-1">
+                  {/* Answer + speech + dictation language. One control, three effects. */}
+                  <div
+                    role="group"
+                    aria-label={t("Answer language")}
+                    className="flex overflow-hidden rounded-[5px] border-2 border-foreground"
+                  >
+                    {(
+                      [
+                        ["en", "EN"],
+                        ["kn", "ಕನ್ನಡ"],
+                      ] as const
+                    ).map(([code, label]) => (
+                      <button
+                        key={code}
+                        onClick={() => pickLang(code)}
+                        aria-pressed={chatLang === code}
+                        title={
+                          code === "kn"
+                            ? t("Answer and speak in Kannada")
+                            : t("Answer and speak in English")
+                        }
+                        className={`px-2 py-1 text-[11px] font-bold transition ${
+                          chatLang === code
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-secondary-background text-muted-foreground hover:bg-muted"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Read answers aloud. Independent of the global Settings provider,
+                      which only decides WHICH engine speaks. */}
+                  <button
+                    onClick={toggleSpeakOut}
+                    aria-pressed={speakOut}
+                    title={speakOut ? t("Voice replies on") : t("Voice replies off")}
+                    aria-label={speakOut ? t("Turn voice replies off") : t("Turn voice replies on")}
+                    className={`nb-press grid h-7 w-7 place-items-center rounded-[5px] border-2 border-foreground transition ${
+                      speakOut
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-secondary-background text-muted-foreground"
+                    }`}
+                  >
+                    {speakOut ? (
+                      <Volume2 className="h-3.5 w-3.5" />
+                    ) : (
+                      <VolumeX className="h-3.5 w-3.5" />
+                    )}
+                  </button>
+
+                  {speaking && (
+                    <button
+                      onClick={stopSpeaking}
+                      title={t("Stop speaking")}
+                      aria-label={t("Stop speaking")}
+                      className="flex items-center gap-1 rounded-[5px] border border-border px-1.5 py-1 text-[10px] font-semibold text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                    >
+                      <Square className="h-3 w-3" />
+                      {t("Stop")}
+                    </button>
+                  )}
+
+                  <span className="ml-auto" />
+
+                  {/* Dictation — fills the composer, never auto-sends. */}
+                  <button
+                    onClick={() => void toggleMic()}
+                    aria-pressed={listening}
+                    title={listening ? t("Stop dictation") : t("Dictate a question")}
+                    aria-label={listening ? t("Stop dictation") : t("Dictate a question")}
+                    className={`nb-press grid h-8 w-8 place-items-center rounded-[5px] border-2 border-foreground transition ${
+                      listening
+                        ? "animate-pulse bg-destructive text-destructive-foreground"
+                        : "bg-secondary-background text-foreground"
+                    }`}
+                  >
+                    <Mic className="h-4 w-4" />
+                  </button>
+
                   {streaming ? (
                     <button
                       onClick={stop}
@@ -536,7 +787,19 @@ function Ask() {
                   )}
                 </div>
               </div>
+              {(micStatus || micError) && (
+                <p
+                  role="status"
+                  aria-live="polite"
+                  className={`mt-2 text-center text-[11px] ${
+                    micError ? "font-semibold text-destructive" : "text-muted-foreground"
+                  }`}
+                >
+                  {micError ?? micStatus}
+                </p>
+              )}
               <p className="mt-2 text-center text-[10px] text-muted-foreground">
+                {t("Enter to send · Shift+Enter for a new line")} ·{" "}
                 {t(
                   "Answers are grounded in RLS-scoped records and logged to the audit chain. Verify before acting.",
                 )}
