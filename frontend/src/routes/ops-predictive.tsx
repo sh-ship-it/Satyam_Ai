@@ -5,7 +5,7 @@ import { useT } from "@/lib/i18n";
 import { PredictivePanel } from "@/components/ops/PredictivePanel";
 
 export const Route = createFileRoute("/ops-predictive")({
-  head: () => ({ meta: [{ title: "Predictive Analytics · Satyam" }] }),
+  head: () => ({ meta: [{ title: "Predictive Deployment · Satyam" }] }),
   component: PredictiveScreen,
 });
 
@@ -20,9 +20,7 @@ function PredictiveScreen() {
           </div>
           <div>
             <h1 className="text-xl font-extrabold leading-none">{t("Predictive Deployment")}</h1>
-            <p className="text-xs text-muted-foreground">
-              {t("Crime hotspots forecasting · resource allocation planning")}
-            </p>
+            <p className="text-xs text-muted-foreground">{t("Rule-based forecast · real case data · no synthetic incidents")}</p>
           </div>
         </header>
         <PredictivePanel />
