@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-08-23)
 
 ## Corpus Check
-- 321 files · ~1,779,916 words
+- 321 files · ~1,781,331 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f5c7b643`
+- Built from commit: `a048ebc2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -884,7 +884,7 @@ Cohesion: 0.11
 Nodes (27): AsyncSession, _apply_clearance(), _candidate_key(), _crime_types_for(), _execute_isolated(), _lexical_candidates(), Narrative retrieval (RAG) over pgvector, with a reachable lexical fallback.  Two, One narrative returned to the caller.      `restricted` is True when the record (+19 more)
 
 ## Knowledge Gaps
-- **877 isolated node(s):** `Any`, `RISK_ACCENT`, `RunTaskDetail`, `TREATMENT_IDS`, `RGBA` (+872 more)
+- **877 isolated node(s):** `VIEW_MODES`, `STREET3D_CONFIGURED`, `CameraPreset`, `CAMERA_PRESETS`, `KARNATAKA_CENTER` (+872 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -892,9 +892,9 @@ Nodes (27): AsyncSession, _apply_clearance(), _candidate_key(), _crime_types_for
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 223` to `Community 9`?**
-  _High betweenness centrality (0.270) - this node is a cross-community bridge._
+  _High betweenness centrality (0.276) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 33` to `Community 32`, `Community 101`, `Community 37`, `Community 39`, `Community 104`, `Community 139`, `Community 108`, `Community 109`, `Community 174`, `Community 46`, `Community 76`, `Community 146`, `Community 51`, `Community 178`, `Community 23`, `Community 122`, `Community 223`?**
-  _High betweenness centrality (0.193) - this node is a cross-community bridge._
+  _High betweenness centrality (0.191) - this node is a cross-community bridge._
 - **Are the 147 inferred relationships involving `Principal` (e.g. with `AdminUserList` and `AgentPlan`) actually correct?**
   _`Principal` has 147 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 86 inferred relationships involving `Permission` (e.g. with `AdminUserList` and `AgentPlan`) actually correct?**
@@ -903,5 +903,5 @@ _Questions this graph is uniquely positioned to answer:_
   _`AccessDenied` has 81 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 12 inferred relationships involving `useT()` (e.g. with `AdminAccessControl()` and `PolicyEditor()`) actually correct?**
   _`useT()` has 12 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Vision tactical-map router. Mounted at /api/vision only when ENABLE_VISION=true.`, `Vision reads case geography, so it needs analyst clearance (L2+), the same     b`, `Is row-level security actually in force for the connected role?      A role with` to the rest of the system?**
+- **What connects `VIEW_MODES`, `STREET3D_CONFIGURED`, `CameraPreset` to the rest of the system?**
   _1212 weakly-connected nodes found - possible documentation gaps or missing edges._
