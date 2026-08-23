@@ -23,57 +23,15 @@ import { intelligence } from "@/lib/api/intelligence";
 import { speakViaSarvam, isServerVoiceEnabled } from "@/lib/voice/tts";
 import { detectLang, resolveLang } from "@/lib/voice/lang";
 import { loadEngineSettings } from "@/components/SettingsDialog";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-
-type ChatMessage =
-  | { role: "user"; text: string }
-  | {
-      role: "ai";
-      text: string;
-      citations?: string[];
-      streaming?: boolean;
-      action?: React.ReactNode;
-    };
-
-type Conversation = {
-  id: string;
-  title: string;
-  messages: ChatMessage[];
-  createdAt: string;
-  updatedAt: string;
-};
-
-const STORAGE_KEY = "satyam-chat-history";
-
-function generateId() {
-  return crypto.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-}
-
-function getDefaultMessages(): ChatMessage[] {
-  return []; // Start empty — no fabricated demo conversations
-}
-
-function loadConversations(): Conversation[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch {}
-  return [];
-}
-
-function saveConversations(conversations: Conversation[]) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
-  } catch {}
-}
-
-function generateTitle(text: string): string {
-  const cleaned = text.replace(/[?!.，。、]+/g, "").trim();
-  const words = cleaned.split(/\s+/);
-  const short = words.slice(0, 6).join(" ");
-  return short.length > 40 ? short.slice(0, 40) + "…" : short;
-}
+import { Markdown } from "@/components/Markdown";
+import {
+  generateId,
+  generateTitle,
+  loadConversations,
+  saveConversations,
+  type ChatMessage,
+  type Conversation,
+} from "@/lib/chatStore";
 
 export const Route = createFileRoute("/console")({
   head: () => ({
@@ -274,7 +232,7 @@ function Console() {
       const defaultConv: Conversation = {
         id: generateId(),
         title: t("New conversation"),
-        messages: getDefaultMessages(),
+        messages: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -1223,72 +1181,7 @@ function AiMsg({
       </div>
       <div className="flex-1">
         <div className="rounded-2xl rounded-tl-sm border border-border bg-muted/40 px-3.5 py-2.5 text-sm text-foreground">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            components={{
-              h1: ({ node, ...props }) => (
-                <h1 className="text-base font-bold my-2 text-foreground" {...props} />
-              ),
-              h2: ({ node, ...props }) => (
-                <h2 className="text-sm font-bold my-1.5 text-foreground" {...props} />
-              ),
-              h3: ({ node, ...props }) => (
-                <h3 className="text-xs font-bold my-1 text-foreground" {...props} />
-              ),
-              p: ({ node, ...props }) => <p className="my-1.5 leading-relaxed" {...props} />,
-              ul: ({ node, ...props }) => (
-                <ul className="list-disc pl-4 my-1.5 space-y-0.5" {...props} />
-              ),
-              ol: ({ node, ...props }) => (
-                <ol className="list-decimal pl-4 my-1.5 space-y-0.5" {...props} />
-              ),
-              li: ({ node, ...props }) => <li className="my-0.5" {...props} />,
-              table: ({ node, ...props }) => (
-                <div className="my-2 block max-w-full overflow-x-auto rounded border border-border">
-                  <table
-                    className="w-full text-xs border-collapse divide-y divide-border"
-                    {...props}
-                  />
-                </div>
-              ),
-              thead: ({ node, ...props }) => <thead className="bg-muted/60" {...props} />,
-              tbody: ({ node, ...props }) => (
-                <tbody className="divide-y divide-border" {...props} />
-              ),
-              tr: ({ node, ...props }) => <tr className="hover:bg-muted/20" {...props} />,
-              th: ({ node, ...props }) => (
-                <th
-                  className="px-2 py-1.5 text-left font-semibold border-r border-border last:border-r-0"
-                  {...props}
-                />
-              ),
-              td: ({ node, ...props }) => (
-                <td
-                  className="px-2 py-1.5 align-top border-r border-border last:border-r-0"
-                  {...props}
-                />
-              ),
-              code: ({ node, className, children, ...props }) => {
-                const match = /language-(\w+)/.exec(className || "");
-                return !match ? (
-                  <code className="rounded bg-muted px-1 py-0.5 text-[12px] font-mono" {...props}>
-                    {children}
-                  </code>
-                ) : (
-                  <pre className="rounded bg-muted p-2 overflow-x-auto text-[12px] font-mono my-2">
-                    <code className={className} {...props}>
-                      {children}
-                    </code>
-                  </pre>
-                );
-              },
-              strong: ({ node, ...props }) => (
-                <strong className="font-bold text-foreground" {...props} />
-              ),
-            }}
-          >
-            {text || ""}
-          </ReactMarkdown>
+          <Markdown>{text || ""}</Markdown>
           {streaming && (
             <span className="ml-1 inline-block h-3.5 w-1.5 translate-y-0.5 animate-pulse bg-primary" />
           )}

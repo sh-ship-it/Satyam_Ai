@@ -23,6 +23,7 @@ import {
   Globe2,
   Camera,
   CameraOff,
+  Sparkles,
 } from "lucide-react";
 import { type ReactNode, useState, useEffect, useRef, useCallback } from "react";
 import { ThemePicker } from "./ThemePicker";
@@ -66,7 +67,10 @@ const SCREEN_ROUTES: VoiceScreen[] = [
     to: "/vision",
     words: /(vision|tactical map|tactical view|earth view|globe view|3d map)|ವಿಷನ್|ತಂತ್ರಾತ್ಮಕ/i,
   },
-  { to: "/console", words: /(console|chat|assistant|conversation)|ಕನ್ಸೋಲ್|ಸಂಭಾಷಣೆ/i },
+  // The dedicated chat screen owns the conversational words; /console keeps only
+  // its own name plus the map words below, since its chat rail sits beside a map.
+  { to: "/ask", words: /(ask satyam|ai chat|chat|assistant|conversation)|ಚಾಟ್|ಸಂಭಾಷಣೆ/i },
+  { to: "/console", words: /(console)|ಕನ್ಸೋಲ್/i },
   { to: "/console", words: /(map|hotspot|heat ?map|geospatial)|ನಕ್ಷೆ/i },
   { to: "/network", words: /(network|graph|ego|link analysis|connections?)|ನೆಟ್‌ವರ್ಕ್/i },
   { to: "/reports", words: /(report|reports|brief|dossier|pdf)|ವರದಿ/i },
@@ -317,6 +321,7 @@ export function Shell({ children }: { children: ReactNode }) {
     };
 
     const NAV_LABEL: Record<string, string> = {
+      "/ask": t("Ask Satyam"),
       "/console": t("Console"),
       "/map": t("Map"),
       "/vision": t("Vision"),
@@ -525,7 +530,9 @@ export function Shell({ children }: { children: ReactNode }) {
         }
         return;
       }
-      if (cmd.route && cmd.route !== "/console") {
+      // Both chat surfaces answer in-place, so they skip the screen agent and
+      // fall through to the follow-up / data-question handling below.
+      if (cmd.route && cmd.route !== "/console" && cmd.route !== "/ask") {
         // Hand off to the Voice Screen Agent (backend brain): it decides the
         // exact screen + the in-screen actions to automate, then we navigate
         // and dispatch the structured action plan to that screen.
@@ -947,6 +954,7 @@ export function Shell({ children }: { children: ReactNode }) {
   }, [resumeListening, clearThinkWatchdog]);
 
   const NAV = [
+    { to: "/ask", icon: Sparkles, label: t("Ask Satyam") },
     { to: "/console", icon: MessageSquare, label: t("Console") },
     { to: "/network", icon: Network, label: t("Network") },
     { to: "/forecast", icon: ShieldCheck, label: t("Forecast") },

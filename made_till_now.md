@@ -5611,3 +5611,162 @@ candidates: the panel refetches per keystroke, so a partial name may win the rac
 and leave a stale empty result; and/or name resolution picks the lowest
 `person_id` without preferring one that actually has accounts. Worth fixing on its
 own merits — it is also what is blocking verification of this tab.
+
+## A dedicated AI chat screen: `/ask`
+
+The chat box lived inside `/console`, wedged into a 420px rail beside a map and a
+results canvas. That is a fine layout for "query while looking at hotspots", and a
+poor one for a long conversation. So chat now also has a screen of its own, laid
+out the way Claude lays one out: a history sidebar on the left, one centred
+conversation column, and a composer pinned to the bottom.
+
+### What was reused rather than rebuilt
+
+Nothing about the transport changed. `/ask` calls the same `streamChat` in
+`lib/api/client.ts`, hits the same `POST /chat/stream`, and therefore inherits the
+same RLS scoping, the same audit row and the same `Permission.CHAT` guard. No new
+endpoint, no new backend file, no backend change at all.
+
+Two things that were private to `console.tsx` became shared, which is why that file
+lost 120 lines:
+
+- **`lib/chatStore.ts`** now owns `ChatMessage`, `Conversation`, `generateId`,
+  `loadConversations`, `saveConversations` and `generateTitle`. Both screens read
+  and write the same `satyam-chat-history` key, so a conversation started in the
+  Console continues in `/ask` and back again. One store was the point: two copies
+  of the same serialisation format would have drifted within a week.
+- **`components/Markdown.tsx`** now owns the ~65-line react-markdown component map
+  that was inlined in `console.tsx`'s private `AiMsg`. Headings, table text and
+  code are sized in `em` instead of fixed `px`, so the identical map renders
+  correctly in the Console's compact 14px rail and in `/ask`'s roomier 15px column
+  without needing a size prop.
+
+`console.tsx`'s dead `getDefaultMessages()` (it returned `[]`) went with it.
+
+### Things the console was throwing away
+
+The chat stream carries more than tokens, and the Console discarded most of it.
+
+`tool` events were dropped entirely. The backend emits one per pipeline lane, and
+the `status: "end"` event carries the result: `router` reports the resolved intent,
+`text_to_sql` reports **the exact SQL that ran**, `rag` reports hit counts and how
+many rows were withheld. On `/ask` these collapse into a *How this was answered*
+disclosure under each answer. Measured on a live turn, that expands to:
+
+```
+INTENT       sql_query
+TEXT-TO-SQL  SELECT COUNT(*) FROM cases WHERE (district ILIKE '%Bengaluru City%'
+             OR station_name ILIKE '%Bengaluru City%' OR "range" ILIKE …) AND
+             fir_year = CAST(EXTRACT(YEAR FROM CURRENT_DATE) AS INT) LIMIT 200
+```
+
+For a tool whose hard rule is "the LLM is never trusted for SQL", showing the
+officer the guarded query that actually executed is the cheapest honesty available.
+Only `status: "end"` events are collected, so a lane is never listed twice.
+
+`streamChat` has always accepted an `AbortSignal` as its third argument and **no
+caller ever passed one**. `/ask` passes one, so Stop-generation cost a
+`new AbortController()` and one branch: an `AbortError` is not a failure, so the
+tokens already streamed are kept instead of being replaced by the
+backend-unreachable notice.
+
+### Layout notes
+
+Turn treatment follows Claude: the user's turn is a tinted rounded box capped at
+85% width, and the AI's turn is **not** a bubble at all, just prose on the page
+background under a small `SY · SATYAM` label. Bubbling both sides makes a long
+answer read like a chat log rather than a document.
+
+The composer auto-grows from one row to a 220px ceiling and then scrolls, Enter
+sends, Shift+Enter breaks the line. Auto-scroll only sticks to the bottom when the
+reader is already within 160px of it — otherwise scrolling back through a long
+answer gets yanked away by the next token.
+
+No microphone button was added, and that is deliberate. `/console` has ~50 lines of
+`SpeechRecognition` wiring for its chat-box dictation; copying that would have been
+the third copy of the same thing in this repo. The Shell's existing voice copilot
+already works on every screen, and `/ask` consumes the `satyam:pending-voice`
+hand-off, so a question queued from Transcripts or Forecast lands in the composer's
+conversation.
+
+### Voice routing had to be split
+
+`SCREEN_ROUTES` in `Shell.tsx` is first-match-wins, and `chat|assistant|conversation`
+all pointed at `/console`. Left alone, "open chat" would have kept opening the old
+screen. So `/ask` takes the conversational words and `/console` keeps only its own
+name plus the map words it needs (its chat rail sits beside a map, so "show me the
+hotspot map" must still land there).
+
+One more line mattered. Shell had `if (cmd.route && cmd.route !== "/console")` —
+hand everything except Console to the Voice Screen Agent, because Console answers
+in place. There are now two screens that answer in place, so that guard excludes
+`/ask` too. Without it, "ask about theft in Bengaluru" would have been handed to the
+screen agent and answered in the copilot popup instead of the conversation.
+
+`Sparkles` joins the nav rail above Console, plus a `NAV_LABEL` entry so the spoken
+confirmation says "Opening Ask Satyam".
+
+### Verified
+
+Driven in headless Chrome against the live backend as `demo` (DGP), 16 checks, all
+passing: empty state and its four starter prompts render; the sidebar and composer
+mount; the composer grows 36px → 180px on multi-line input; a clicked suggestion
+streams a real grounded answer; the lane disclosure contains
+the real `SELECT`; the turn is persisted and auto-titled into the shared store;
+`/console` then renders that same history without crashing, proving the extraction
+did not regress it; the nav link exists; and Stop-generation appears mid-stream and
+returns the composer to idle.
+
+`tsc --noEmit` stayed at its 56-error baseline before and after. Prettier is clean
+on all three new files. No backend file was touched, so the backend suite was not
+re-run.
+
+Changed: `Shell.tsx` (+12/-3), `console.tsx` (+9/-117). Added: `routes/ask.tsx`,
+`components/Markdown.tsx`, `lib/chatStore.ts`.
+
+### The first starter prompt asked for a year with no rows
+
+The empty state opened on *"How many FIRs were filed in Bengaluru City **this
+year**?"* and the answer was, correctly, **"Zero FIRs were recorded."** The pipeline
+was right; the prompt was wrong. `cases.fir_year` holds:
+
+| year | cases |
+|---|---|
+| 2021 | 6,586 |
+| 2022 | 7,061 |
+| 2023 | 8,614 |
+| 2024 | 8,012 |
+| 2025 | 5,720 |
+
+Nothing for 2026, so the LLM's `fir_year = EXTRACT(YEAR FROM CURRENT_DATE)` matched
+nothing. The prompt now names 2025 explicitly and returns **1,540 FIRs**. The year
+is hardcoded on purpose, with a comment saying so — a relative year silently rots
+the demo's first impression every January.
+
+Before swapping it, all eight candidate prompts were run through the live
+`/chat/stream` to see what actually comes back, rather than guessing. The other
+three shipped prompts were already fine and were left alone:
+
+| prompt | lane | result |
+|---|---|---|
+| FIRs in Bengaluru City in 2025 | `sql_query` | 1,540 |
+| theft hotspots across Karnataka | `hotspot` | 25 hotspots, clustered ~12.9-13.0 N |
+| cases similar to a chain snatching | `narrative_search` | 5 vector hits, 2021-2024 |
+| districts with lowest clearance rate | `sql_query` | CID 0.0, Ballari 18.1%, Chitradurga 18.7% |
+
+Re-driven in headless Chrome clicking each of the four cards in turn: 4/4 now
+return substantive answers, asserted against `/^zero\b/i`, "no results matched",
+and a 25-character floor so a stub reply cannot pass.
+
+### Found while verifying: `[SPEAK]` can leak into the visible answer
+
+One hotspots run rendered `[SPEAK] There are 25 theft incidents…` with the marker
+visible in the prose. `_extract_speak()` in `orchestrator.py` matches
+`[SPEAK]...[/SPEAK]` as a pair; when Gemini opens the block but omits the closing
+tag the regex misses, the function returns `("", answer)` unchanged, and the literal
+`[SPEAK]` ships to the screen. It is non-deterministic — the same question rendered
+clean on a direct SSE call minutes earlier.
+
+**Not fixed here.** It is a pipeline bug that hits `/console` identically, it is
+unrelated to a starter-prompt swap, and the fix is a judgement call about tolerating
+an unclosed tag rather than a one-liner. Logged for its own change.
