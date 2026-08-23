@@ -31,7 +31,14 @@ async def ego(session: AsyncSession, req: EgoRequest) -> EgoResponse:
                 except ValueError:
                     pass
 
-    seed_id = str(req.person_id)
+    # Take the seed from the node the graph builder flagged, rather than assuming it
+    # equals the request value. When the request carried a name, that assumption
+    # pointed at an id no edge referenced, so the disconnected duplicate was
+    # coloured as the seed and the real person was not.
+    seed_id = next(
+        (str(n["id"]) for n in nodes_raw if n.get("is_seed")),
+        str(req.person_id),
+    )
     nodes = []
     for n in nodes_raw:
         nid = str(n["id"])

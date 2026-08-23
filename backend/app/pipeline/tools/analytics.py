@@ -127,7 +127,20 @@ async def ego_network(
     rows = [dict(r) for r in result.mappings().all()]
 
     g = nx.Graph()
-    g.add_node(str(person_id), kind="person")
+    # Key the seed on the RESOLVED numeric id, not on the raw argument.
+    #
+    # This is the fix for a duplicated seed. When the caller passes a name, the raw
+    # argument is that name while every row below keys people on `cp.person_id`, so
+    # the seed was added twice: once under "Amrish Jhabbar" with no edges, and once
+    # under "4821" carrying all of them. The graph then showed the same person as a
+    # disconnected blue seed reading "0 connections" beside an orange node holding
+    # the real links.
+    #
+    # `label` is the raw argument so a seed with no cases at all still displays the
+    # name that was searched for; when rows exist, the loop below overwrites it with
+    # the name from the database.
+    seed_key = str(pid)
+    g.add_node(seed_key, kind="person", seed=True, label=str(person_id))
     for r in rows:
         case_node = f"case:{r['case_id']}"
         g.add_node(case_node, kind="case", label=r.get("fir_number", str(r["case_id"])),
@@ -143,6 +156,9 @@ async def ego_network(
             "kind":       d.get("kind", "person"),
             "crime_type": d.get("crime_type"),
             "degree":     g.degree(n),
+            # Lets the caller identify the seed without re-deriving it from the
+            # request value, which is exactly what went wrong before.
+            "is_seed":    bool(d.get("seed")),
         }
         for n, d in g.nodes(data=True)
     ]

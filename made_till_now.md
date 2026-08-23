@@ -5324,3 +5324,290 @@ frontier still peaks at 1,976 edges, the camera frames the action again, and the
 car still turns — 159.9° of bearing spread over 14 legs. `tsc` at its 56-error
 baseline; the two `no-explicit-any` lint errors in `DispatchPanel` are pre-existing
 `catch (err: any)` blocks, confirmed absent from this diff.
+
+---
+
+## Network graphs: shared force engine, smooth neighbour-aware drag
+
+Asked for: both graphs on `/network` to look better, with interactive nodes that
+drag smoothly and carry their connected neighbours.
+
+### The layout could never settle — measured, not guessed
+
+The People graph's inline simulation had a defect that explains the whole
+"feels unsettled" complaint, and it was not a rendering issue:
+
+- The rest length was a constant **22** with bounds `[6, 94]`. A chain of 12 nodes
+  therefore wants 242 units of length inside an 88-unit box. Springs pushed
+  permanently into the boundary clamp, the clamp reset the position, and the
+  residual velocity was never cleared — a **limit cycle**. Measured on a 12-node
+  chain: energy per node plateaued at **1.23 and stayed there for 20,000 frames**.
+- There was no energy decay either, so `requestAnimationFrame` plus a full React
+  re-render ran at 60 fps forever, even on an empty graph.
+- `dt` was measured each frame and then **not used** in the physics, so the layout
+  drifted faster on a high-refresh display.
+- `setFrameMs(dt)` fired every frame purely to update a HUD label, re-rendering the
+  whole route to do it.
+- The spring pass ran `nodes.find(n => n.id === a)` twice per edge per frame — a
+  linear scan inside the hot loop.
+
+### `src/lib/forceGraph.ts`
+
+One engine, shared by both graphs. Hand-rolled deliberately: `d3-force` is not a
+dependency, and `@xyflow/react` (which is installed) is a node editor, not a force
+layout. Repulsion stays O(n²) all-pairs because the backend caps the ego query at
+200 rows, where 20k pair checks per frame is cheap.
+
+Fixes carried by the engine:
+
+- **A wall absorbs momentum.** Clamping position while leaving velocity intact was
+  the limit cycle; velocity is now zeroed on the axis that hit the bound.
+- **`fitLinkDistance(n, span)`** sizes edge length to the node count
+  (`span / (2·√n)`), so the layout is not over-constrained at any size.
+- **Repulsion is bounded.** `repulsion / d²` is unbounded as separation approaches
+  zero. Without a floor, a 40-node chain reached **1.6e5 world units per frame** in
+  a 100-unit world. `d²` is floored, and a terminal speed clamps the vector as a
+  second net.
+- **Time-scaled steps** against a 60 fps reference, clamped so a backgrounded tab
+  returning with a huge `dt` cannot fling nodes.
+- **Adjacency precomputed** once per graph.
+- **Positions survive a graph update**, so changing a filter does not discard a
+  layout the officer arranged.
+
+**Neighbour-aware drag** is the interaction that was missing. `dragStart` runs a BFS
+to two hops and weights each neighbour by hop distance (`[1, 0.42, 0.16]`).
+Neighbours are *nudged*, not pinned, so springs resolve the result and releasing
+mid-drag relaxes instead of snapping. The falloff is steep on purpose: at 0.5 the
+whole graph slides as a rigid block and dragging stops revealing structure.
+
+### Both graphs
+
+**People graph** — engine swapped in behind the existing SVG renderer, so the visual
+treatment is untouched and the diff stays reviewable. Dropped nodes now stay where
+they were put; the old release check compared against the id `"S1"`, a leftover from
+a deleted demo dataset that never matched a real node. Zoom is cursor-anchored
+(it used to pull toward the view centre, walking a cluster off screen) and panning
+converts through the SVG matrix instead of a magic `0.15` factor that made the graph
+slide at a different speed from the pointer.
+
+**Financial graph** — this was the bigger gap: a static circle with no drag, no
+zoom and no force layout, which is why it read as "rings". Position carried no
+information — two accounts trading heavily sat as far apart as two unrelated ones.
+Now force-laid-out and draggable, with radial-gradient node bodies matching the
+People graph, curved edges (a straight line drew a reciprocal pair on top of
+itself), width from transferred amount on a √ scale (it was previously two values,
+1.2 or 2.5, discarding the amount), degree-scaled node radius, and a dashed ring
+marking accounts the analyst has pinned by dragging.
+
+### Verified
+
+- **`src/lib/forceGraph.check.mjs`** — runnable with `node`, no framework, 8 groups:
+  settling at n=3/12/40/80; a 30-node coincident clump neither exceeding terminal
+  velocity nor going non-finite; 60 Hz vs 144 Hz agreeing within 3.5 units over one
+  second; a 5-second frame not flinging anything; drag falloff strictly decreasing
+  with hop distance and stopping dead at 3 hops; pinned nodes immovable even under
+  drag; positions preserved across a graph update and dangling edges filtered;
+  bounds respected. All pass. Sizes matter in group 1 — the first version settled at
+  n=12 but sat in a limit cycle at n=40, well inside real range.
+- `tsc --noEmit` at its **56-error baseline**; `eslint` clean on the new engine (the
+  one remaining warning is a pre-existing missing `t` dep on the data-fetch effect).
+- **People graph in the browser**: the layout **came to rest** — 0.0000 world units
+  of drift over 3 seconds, where the old build never settled — and a drag moved both
+  tracked nodes (19.95 and 16.16 units), confirming the neighbour is carried.
+
+### Not verified
+
+**The Financial graph was not exercised end to end.** The seed used for testing
+(`Razia Ladkani`, 17 case links) has **no financial records**, so the panel
+correctly showed "No financial accounts or transactions linked to this seed" and
+there was no graph to measure. The changes typecheck and lint, and share the
+engine the self-check covers, but the rendering and drag on that tab are unproven.
+A seed with `financial_accounts` rows is needed to confirm it.
+
+The People-graph browser check also ran against a **3-node** graph, which exercises
+the mechanism but is thin evidence for a dense layout.
+
+Left **uncommitted**, per the standing rule.
+
+### Studied a reference implementation, and what was adopted
+
+A comparable graph screen was reviewed to understand its physics. Its approach, at
+the design level:
+
+- **`d3-force`, not hand-rolled.** Charge repulsion `strength(-280)`, a centring
+  force, `forceLink` at a fixed `distance(120)` in screen pixels, and — the part
+  worth copying — **`forceCollide` with `radius(nodeSize + 20)`**.
+- **Categorical clustering via positional forces:** separate `forceX` / `forceY`
+  with low strengths (0.12 / 0.05) pulling nodes toward a band per group, so
+  membership becomes spatial without any manual layout.
+- **The tick handler writes straight to the DOM** through d3 selections
+  (`attr("transform")`, line endpoints) and never touches React state. That, more
+  than the force choice, is where its smoothness comes from.
+- **Standard d3 drag:** `alphaTarget(0.3).restart()` on start to keep the layout
+  warm, `fx/fy` follow the pointer, `alphaTarget(0)` and release on end. Neighbours
+  move only because the springs are hot — there is no explicit neighbour carry.
+
+**Adopted: collision resolution.** This was the real gap. Charge repulsion does not
+prevent overlap, because it falls off as 1/d² while the spring pulling two linked
+nodes together does not — so connected nodes settle on top of each other and the
+labels collide. Implemented positionally rather than as another force (it converges
+immediately instead of oscillating), split by inverse mass so a heavy pinned hub
+barely yields, folded into the existing pair loop since that already computes the
+distance, and skipping pinned nodes.
+
+Both graphs now pass a drawn radius in: the People graph converts its `n.r / 10`
+render radius, the Financial panel converts its pixel radius into the 100-unit
+world.
+
+**Not adopted, and why.** Switching to `d3-force` would mean a new dependency to
+replace an engine that already exists and is covered by a self-check; the
+categorical `forceX`/`forceY` clustering is genuinely nice but nothing has asked
+for role-based spatial grouping yet. The DOM-write tick is the one worth taking
+later: the People graph still publishes positions through React state each frame,
+which is fine now that the layout actually settles, but it is the next real
+performance step if a dense graph feels heavy.
+
+**Verified the new check is not vacuous.** Group 8 initially passed *with collision
+disabled* — the springs were too weak to force any overlap, so it proved nothing.
+Retuned to create a genuine conflict (springs pulling to 2 units while bodies need
+9.2) and confirmed both directions: passes with collision, and fails with
+*"nodes overlap by 5.01 world units"* without it.
+
+### Bug: the seed person appeared twice, once disconnected
+
+Reported as the graph still being buggy. The screenshot showed it precisely: one
+person rendered as **two nodes** — a blue seed floating alone with
+`CONNECTIONS 0` and "No linked cases found", beside an orange node of the same name
+holding all the real edges. The HUD read `6 NODES · 4 EDGES`; the sixth was a
+phantom.
+
+Not a physics problem. `analytics.ego_network` keyed the seed on the **raw
+argument** while every row keyed people on the numeric column:
+
+```python
+g.add_node(str(person_id), kind="person")   # raw arg — the NAME when searched by name
+person_node = str(r["person_id"])           # numeric id
+g.add_edge(person_node, case_node, ...)
+```
+
+Searching by name therefore created `"Amrish Jhabbar"` with no edges *and* `"4"`
+with all of them. `network_service.ego` then set `seed_id = str(req.person_id)` —
+the name — so the frontend coloured the **edgeless duplicate** as the seed and left
+the real person as a generic co-accused. The floating position was a symptom: a node
+with no edges has no springs, so only repulsion and gravity act on it.
+
+Fixed by keying the seed on the resolved id (`str(pid)`), which unifies it with the
+row-derived node, and by flagging that node `is_seed` so the service identifies the
+seed from the graph instead of re-deriving it from the request value. The
+2-tuple return was kept because `orchestrator.py` also unpacks it. The seed's label
+falls back to the raw argument so a person with no cases still shows the name that
+was searched for.
+
+**Verified** against the live cloud data on the exact seed from the report:
+`Amrish Jhabbar` now returns **5 nodes / 4 edges** (was 6/4), `seed_id='4'`, seed
+degree 1, no duplicated person labels, every edge endpoint resolving, and no
+stranded nodes. Same for a second seed. Backend suite **133 passed**.
+
+### Financial links graph: three rendering bugs fixed
+
+With a seed that actually has bank records, the graph rendered and the defects were
+plain: **giant black triangles** larger than the nodes, sitting on top of them, and
+several nodes showing the same label text.
+
+**1. Arrowheads scaled with stroke width.** SVG markers default to
+`markerUnits="strokeWidth"`, so the amount-scaled stroke (up to ~6.6) multiplied the
+arrowhead by 6.6. Fixed with `markerUnits="userSpaceOnUse"` — the arrow is now an
+absolute size regardless of how much money the edge represents.
+
+**2. Arrowheads were black, not the edge colour.** A marker does **not** inherit
+`currentColor` from the path that references it; it resolves in its own context, so
+one shared marker with `fill="currentColor"` painted black on every edge. Fixed by
+enumerating one marker per edge colour (`fin-arrow-plain` plus one per pattern flag)
+and having each edge reference the matching one. `context-stroke` would be tidier
+but is not portable enough to depend on.
+
+**3. Edges terminated at the node centre**, burying the arrowhead under the circle —
+so direction, the entire point of an arrow on a money trail, was unreadable. Both
+ends are now trimmed clear of the node bodies. The back-off runs along the curve's
+**tangent** at the endpoint (`end - control`), not along the straight chord, because
+these are quadratic curves and the chord direction is wrong near the ends. Pairs
+closer together than the two trims are skipped rather than drawn inverted.
+
+**4. Labels were indistinguishable.** Account labels look like
+`"Canara Union Bank ****0421"`, and truncating the tail at 17 characters removed the
+account digits — the only part that differs — so unrelated accounts rendered
+identical text. Now the middle is elided, keeping both ends, and the label sits on a
+plate so it stops vanishing into the edges it crosses.
+
+`nodeRadius()` was extracted because the drawn radius, the collision radius given to
+the engine, and the new arrowhead trim all have to agree, and they had already
+drifted apart across three inlined copies.
+
+### Verified, and not verified
+
+`tsc --noEmit` stays at its 56-error baseline. The changes are direct responses to
+defects visible in a screenshot, and each has a specific mechanism.
+
+**Not confirmed in the browser.** The harness could not reach a rendered graph: the
+seed name in the report (`Ibraheem Vinay`) matches **two different people** — age 33
+with 1 case, age 54 with 0 — and typing the raw name left the panel showing
+*"Could not load financial links for this seed."* It works when an autocomplete
+suggestion is picked, which resolves to one person id.
+
+That points at a **pre-existing robustness gap**, not a regression: nothing in this
+change touched the fetch path or the backend. `POST /financial/money-trail` appears
+to fail on an ambiguous raw name where it succeeds on a resolved id. Worth fixing
+separately — either resolve to the best match server-side as `ego_network` does, or
+surface "multiple people share this name, pick one" instead of a generic failure.
+
+### Fix: financial graph labels were invisible (black on black)
+
+Reported as "names are not visible", and the screenshot showed why: every label
+rendered as a **solid black plate with black text**.
+
+Cause, confirmed by grepping the stylesheet: **`--card` is not defined anywhere in
+`styles.css`.** Only `--background`, `--secondary-background`, `--foreground` and
+`--border` exist. The label plate used `fill="var(--card)"`, and an unresolvable
+`var()` in an SVG `fill` is an *invalid value* — SVG falls back to **black** rather
+than ignoring the declaration. The text beside it was `currentColor`, which in the
+light theme resolves to `--foreground` = `oklch(0% 0 0)`. Black plate, black text.
+
+The plate now uses `var(--secondary-background)`, the variable the People graph's
+label pills already prove renders correctly in both themes, with the border drawn as
+`currentColor` at low opacity instead of the also-fine-but-inconsistent
+`var(--border)`.
+
+Swept the whole app afterwards for the same class of mistake: every CSS variable used
+in an SVG `fill` or `stroke` attribute is now checked against `styles.css`, and all
+of them resolve. This was a self-inflicted bug introduced with the label plates in
+the previous change — worth recording because the failure mode is silent (no console
+warning, no type error, just black).
+
+`tsc --noEmit` remains at its 56-error baseline.
+
+### Still not visually confirmed, and a lead on why
+
+The label fix is mechanically certain but **still unverified in a browser**, for the
+same reason as the previous attempt: the harness cannot get a financial graph to
+render.
+
+Measured while trying, and worth chasing separately:
+
+| name | person_id | financial accounts |
+|---|---|---|
+| Ibraheem Vinay | 1 | 1 |
+| Ibraheem Vinay | 342692 | **0** |
+| Biraj Nathi | 3 | 1 |
+
+So `Ibraheem Vinay` genuinely is ambiguous — two people, and resolving to the wrong
+one yields an empty trail. But `Biraj Nathi` is **not** ambiguous and person 3 does
+own an account, yet requesting the trail by that name returned
+*"No financial accounts or transactions linked to this seed."* while the same seed
+renders 5 accounts and 4 flows in the real UI.
+
+That points at the `/financial/money-trail` name-resolution path rather than at
+anything in this change (nothing here touches the fetch or the backend). Two
+candidates: the panel refetches per keystroke, so a partial name may win the race
+and leave a stale empty result; and/or name resolution picks the lowest
+`person_id` without preferring one that actually has accounts. Worth fixing on its
+own merits — it is also what is blocking verification of this tab.

@@ -20,6 +20,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useT, useI18n } from "@/lib/i18n";
+import { ForceGraph, fitLinkDistance, ringLayout } from "@/lib/forceGraph";
 import { tData, tAuto } from "@/lib/tData";
 import { api } from "@/lib/api/client";
 import { intelligence, type SearchResult, type OffenderListItem } from "@/lib/api/intelligence";
@@ -72,8 +73,7 @@ const GROUP_COLOR_LIGHT = [
 // Person silhouette for people (groups 0/1/2), document for case (group 3).
 const ICON_PERSON =
   "M12 12.6a3.4 3.4 0 100-6.8 3.4 3.4 0 000 6.8zm0 1.7c-3.4 0-6.2 1.8-6.2 4.1v1.3h12.4v-1.3c0-2.3-2.8-4.1-6.2-4.1z";
-const ICON_DOC =
-  "M7 3.5h6.5L18 8v12.5H7zM13 3.7V8h4.3";
+const ICON_DOC = "M7 3.5h6.5L18 8v12.5H7zM13 3.7V8h4.3";
 function groupIcon(group: number): { path: string; filled: boolean } {
   return group === 3 ? { path: ICON_DOC, filled: false } : { path: ICON_PERSON, filled: true };
 }
@@ -576,13 +576,17 @@ function NetworkScreen() {
   // ---- Dynamic filter options (derived from live graph data, never hardcoded) ----
   const edgeTypeOptions = useMemo(() => {
     const labels = new Set<string>();
-    EDGES.forEach(({ label }) => { if (label) labels.add(label); });
+    EDGES.forEach(({ label }) => {
+      if (label) labels.add(label);
+    });
     return ["All", ...Array.from(labels).sort()];
   }, [EDGES]);
 
   const communityOptions = useMemo(() => {
     const types = new Set<string>();
-    NODES.forEach((n) => { if (n.crime_type) types.add(n.crime_type); });
+    NODES.forEach((n) => {
+      if (n.crime_type) types.add(n.crime_type);
+    });
     return ["All", ...Array.from(types).sort()];
   }, [NODES]);
 
@@ -592,9 +596,7 @@ function NetworkScreen() {
     if (edgeTypeFilter !== "All") out = out.filter((e) => e.label === edgeTypeFilter);
     if (communityFilter !== "All") {
       // Keep only edges where at least one endpoint has the matching crime_type
-      const keep = new Set(
-        NODES.filter((n) => n.crime_type === communityFilter).map((n) => n.id),
-      );
+      const keep = new Set(NODES.filter((n) => n.crime_type === communityFilter).map((n) => n.id));
       out = out.filter((e) => keep.has(e.a) || keep.has(e.b));
     }
     return out;
@@ -603,9 +605,14 @@ function NetworkScreen() {
   const visNodes = useMemo(() => {
     if (communityFilter === "All") return NODES;
     const visIds = new Set<string>();
-    visEdges.forEach(({ a, b }) => { visIds.add(a); visIds.add(b); });
+    visEdges.forEach(({ a, b }) => {
+      visIds.add(a);
+      visIds.add(b);
+    });
     // Always keep the seed node visible
-    NODES.forEach((n) => { if (n.role === "seed") visIds.add(n.id); });
+    NODES.forEach((n) => {
+      if (n.role === "seed") visIds.add(n.id);
+    });
     return NODES.filter((n) => visIds.has(n.id));
   }, [NODES, visEdges, communityFilter]);
 
@@ -738,97 +745,106 @@ function NetworkScreen() {
     lastY: 0,
   });
 
-  // Force simulation loop
+  // ── Force simulation, driven by the shared engine ──────────────────────────
+  //
+  // Replaces an inline loop that had three problems worth naming, because they are
+  // exactly what made the graph feel unsettled:
+  //
+  //  * It never stopped. There was no energy decay, so `requestAnimationFrame` and
+  //    a full React re-render ran at 60 fps forever, even on an empty graph.
+  //  * It never *could* stop. The old rest length of 22 with bounds [6,94] cannot
+  //    fit more than about five chained nodes, so springs pushed permanently into
+  //    the boundary clamp — a limit cycle. Measured on a 12-node chain: energy
+  //    plateaued at 1.23 and stayed there for 20,000 frames.
+  //  * It measured frame time and then ignored it, so the layout drifted faster on
+  //    a high-refresh display.
+  //
+  // `linkDistance` is now sized to the node count, and the loop parks itself when
+  // the layout comes to rest.
+  const engineRef = useRef(new ForceGraph());
+  const [settled, setSettled] = useState(false);
+  const rafRef = useRef(0);
+
+  // Feed graph data in. Positions of nodes that already exist are preserved, so
+  // changing a filter does not throw away a layout the officer has arranged.
   useEffect(() => {
-    let raf = 0;
+    const g = engineRef.current;
+    const seeded = ringLayout(
+      visNodes.map((n) => n.id),
+      {
+        cx: 50,
+        cy: 50,
+        radius: 26,
+        centreIds: new Set(visNodes.filter((n) => n.role === "seed").map((n) => n.id)),
+      },
+    );
+    g.setGraph(
+      visNodes.map((n) => ({
+        id: n.id,
+        x: seeded[n.id]?.x ?? n.x,
+        y: seeded[n.id]?.y ?? n.y,
+        // The seed anchors the view, so it is pinned and heavy. Case nodes are
+        // light so they arrange themselves around the people rather than shoving.
+        mass: n.role === "seed" ? 6 : n.kind === "case" ? 0.7 : 1,
+        // The renderer draws at n.r / 10, so that is the world-space radius the
+        // collision pass has to respect or labels overlap the bodies.
+        radius: n.r / 10,
+        pinned: n.role === "seed",
+      })),
+      visEdges.map((e) => ({ a: e.a, b: e.b })),
+    );
+    g.params.linkDistance = fitLinkDistance(visNodes.length);
+    setSettled(false);
+  }, [visNodes, visEdges]);
+
+  // Keep the engine's tunables in step with the sliders.
+  useEffect(() => {
+    const g = engineRef.current;
+    g.params.repulsion = sim.repulsion;
+    g.params.spring = sim.spring;
+    g.params.gravity = sim.gravity;
+    g.params.damping = sim.damping;
+    g.reheat();
+    setSettled(false);
+  }, [sim]);
+
+  // The loop. Publishes positions into React state so the existing SVG renderer is
+  // untouched, and stops entirely once the layout is at rest — which is what turns
+  // a permanently-animating screen into a still one.
+  useEffect(() => {
+    if (settled) return;
     let last = performance.now();
+    let sinceHud = 0;
     const tick = (now: number) => {
-      const dt = Math.min(40, now - last);
+      const dt = now - last;
       last = now;
-      setFrameMs(dt);
-      const ph = physicsRef.current;
-      const p = { ...posRef.current };
+      const g = engineRef.current;
+      const moving = g.step(dt);
 
-      // Ensure all nodes have a position
-      nodesRef.current.forEach((n) => {
-        if (!p[n.id]) {
-          p[n.id] = {
-            x: n.x,
-            y: n.y,
-            vx: 0,
-            vy: 0,
-            fx: n.role === "seed" ? n.x : null,
-            fy: n.role === "seed" ? n.y : null,
-          };
-        }
-      });
-
-      const ids = nodesRef.current.map((n) => n.id);
-      // Repulsion
-      for (let i = 0; i < ids.length; i++) {
-        for (let j = i + 1; j < ids.length; j++) {
-          const a = p[ids[i]];
-          const b = p[ids[j]];
-          if (!a || !b) continue;
-          let dx = b.x - a.x;
-          let dy = b.y - a.y;
-          let d2 = dx * dx + dy * dy;
-          if (d2 < 0.01) d2 = 0.01;
-          const f = ph.repulsion / d2;
-          const d = Math.sqrt(d2);
-          const fx = (dx / d) * f;
-          const fy = (dy / d) * f;
-          a.vx -= fx;
-          a.vy -= fy;
-          b.vx += fx;
-          b.vy += fy;
-        }
+      const next: PosMap = {};
+      for (const n of g.nodes) {
+        next[n.id] = { x: n.x, y: n.y, vx: n.vx, vy: n.vy, fx: n.fx, fy: n.fy };
       }
-      // Edge springs
-      edgesRef.current.forEach(({ a, b }) => {
-        const A = p[a];
-        const B = p[b];
-        if (!A || !B) return;
-        const dx = B.x - A.x;
-        const dy = B.y - A.y;
-        const d = Math.sqrt(dx * dx + dy * dy) || 0.01;
-        const isSeedA = nodesRef.current.find((n) => n.id === a)?.role === "seed";
-        const isSeedB = nodesRef.current.find((n) => n.id === b)?.role === "seed";
-        const rest = isSeedA || isSeedB ? 26 : 22;
-        const k = ph.spring * (d - rest);
-        const fx = (dx / d) * k;
-        const fy = (dy / d) * k;
-        A.vx += fx;
-        A.vy += fy;
-        B.vx -= fx;
-        B.vy -= fy;
-      });
-      // Center gravity + integration
-      ids.forEach((id) => {
-        const n = p[id];
-        if (!n) return;
-        n.vx += (50 - n.x) * ph.gravity;
-        n.vy += (50 - n.y) * ph.gravity;
-        n.vx *= ph.damping;
-        n.vy *= ph.damping;
-        if (n.fx != null && n.fy != null) {
-          n.x = n.fx;
-          n.y = n.fy;
-          n.vx = 0;
-          n.vy = 0;
-        } else {
-          n.x += n.vx;
-          n.y += n.vy;
-          n.x = Math.max(6, Math.min(94, n.x));
-          n.y = Math.max(6, Math.min(94, n.y));
-        }
-      });
-      setPos({ ...p });
-      raf = requestAnimationFrame(tick);
+      setPos(next);
+
+      // The frame-time readout used to setState every frame purely to update a HUD
+      // label, re-rendering the whole route to do it. Four updates a second is more
+      // than a human can read anyway.
+      sinceHud += dt;
+      if (sinceHud > 250) {
+        sinceHud = 0;
+        setFrameMs(dt);
+      }
+
+      if (!moving && !g.dragging) {
+        setSettled(true);
+        return;
+      }
+      rafRef.current = requestAnimationFrame(tick);
     };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [settled]);
 
   // Convert client coords to SVG viewBox coords
   const clientToSvg = (cx: number, cy: number) => {
@@ -845,32 +861,38 @@ function NetworkScreen() {
 
   const onNodePointerDown = (id: string, e: React.PointerEvent) => {
     e.stopPropagation();
-    (e.target as Element).setPointerCapture?.(e.pointerId);
+    (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
     dragRef.current = { id, panning: false, lastX: e.clientX, lastY: e.clientY };
-    setPos((prev) => ({ ...prev, [id]: { ...prev[id], fx: prev[id].x, fy: prev[id].y } }));
+    // The engine gathers the neighbourhood here, so the drag carries connected
+    // nodes with it instead of stretching the edges and letting springs catch up.
+    engineRef.current.dragStart(id);
+    setSettled(false);
   };
   const onPointerMove = (e: React.PointerEvent) => {
     const d = dragRef.current;
     if (d.id) {
       const { x, y } = clientToSvg(e.clientX, e.clientY);
-      setPos((prev) => ({
-        ...prev,
-        [d.id!]: { ...prev[d.id!], x, y, fx: x, fy: y, vx: 0, vy: 0 },
-      }));
+      engineRef.current.dragTo(x, y);
+      setSettled(false);
     } else if (d.panning) {
-      const dx = e.clientX - d.lastX;
-      const dy = e.clientY - d.lastY;
+      // Pan in SVG units so the graph tracks the cursor exactly. The old code used
+      // a magic 0.15 factor, which meant the graph slid at a different speed from
+      // the pointer and felt like it was slipping.
+      const from = clientToSvg(d.lastX, d.lastY);
+      const to = clientToSvg(e.clientX, e.clientY);
       d.lastX = e.clientX;
       d.lastY = e.clientY;
-      setView((v) => ({ ...v, x: v.x - dx * 0.15 * v.scale, y: v.y - dy * 0.15 * v.scale }));
+      setView((v) => ({ ...v, x: v.x - (to.x - from.x), y: v.y - (to.y - from.y) }));
     }
   };
-  const onPointerUp = (id?: string) => (e: React.PointerEvent) => {
+  const onPointerUp = () => (e: React.PointerEvent) => {
     const d = dragRef.current;
-    if (d.id && id !== "S1") {
-      // release fixed unless seed
-      const did = d.id;
-      setPos((prev) => ({ ...prev, [did]: { ...prev[did], fx: null, fy: null } }));
+    if (d.id) {
+      // Dropped nodes stay put. Releasing them threw away the arrangement the user
+      // just made, and the old check compared against the id "S1" — a leftover from
+      // a deleted demo dataset that never matched a real node.
+      engineRef.current.dragEnd(true);
+      setSettled(false);
     }
     dragRef.current = { id: null, panning: false, lastX: 0, lastY: 0 };
   };
@@ -879,10 +901,24 @@ function NetworkScreen() {
   };
   const onWheel = (e: React.WheelEvent) => {
     e.preventDefault();
+    // Anchor the zoom on the cursor: the point under the pointer stays under it.
+    // Previously zoom always pulled toward the view centre, so zooming in on a
+    // cluster walked it off screen.
+    const before = clientToSvg(e.clientX, e.clientY);
+    const factor = e.deltaY > 0 ? 1.1 : 0.9;
     setView((v) => {
-      const factor = e.deltaY > 0 ? 1.1 : 0.9;
       const s = Math.max(0.4, Math.min(3, v.scale * factor));
-      return { ...v, scale: s };
+      if (s === v.scale) return v;
+      // viewBox centre is (50 + x, 50 + y) with side 100*s. Solve for the offset
+      // that keeps `before` at the same fractional position in the box.
+      const fx = (before.x - (50 + v.x - (100 * v.scale) / 2)) / (100 * v.scale);
+      const fy = (before.y - (50 + v.y - (100 * v.scale) / 2)) / (100 * v.scale);
+      return {
+        ...v,
+        scale: s,
+        x: before.x - fx * 100 * s + (100 * s) / 2 - 50,
+        y: before.y - fy * 100 * s + (100 * s) / 2 - 50,
+      };
     });
   };
 
@@ -1430,13 +1466,7 @@ function NetworkScreen() {
                   </filter>
                   {/* Glossy radial gradient per group (light highlight top-left) */}
                   {GROUP_COLOR.map((c, gi) => (
-                    <radialGradient
-                      key={gi}
-                      id={`nodeGrad${gi}`}
-                      cx="35%"
-                      cy="30%"
-                      r="75%"
-                    >
+                    <radialGradient key={gi} id={`nodeGrad${gi}`} cx="35%" cy="30%" r="75%">
                       <stop offset="0%" stopColor={GROUP_COLOR_LIGHT[gi]} />
                       <stop offset="100%" stopColor={c} />
                     </radialGradient>
@@ -1494,7 +1524,7 @@ function NetworkScreen() {
                       key={n.id}
                       onClick={(e) => handleNodeClick(n.id, e)}
                       onPointerDown={(e) => onNodePointerDown(n.id, e)}
-                      onPointerUp={onPointerUp(n.id)}
+                      onPointerUp={onPointerUp()}
                       className="cursor-grab active:cursor-grabbing"
                     >
                       {inSet && (
@@ -1699,7 +1729,9 @@ function NetworkScreen() {
           <div className="p-4 space-y-4">
             {(() => {
               const selNode = NODES.find((n) => n.id === selected) as any;
-              const edgeCount = visEdges.filter(({ a, b }) => a === selected || b === selected).length;
+              const edgeCount = visEdges.filter(
+                ({ a, b }) => a === selected || b === selected,
+              ).length;
               const isSeed = selNode?.role === "seed";
               const kind = selNode?.kind || "person";
               const isCase = kind === "case";
@@ -1746,7 +1778,9 @@ function NetworkScreen() {
                       value={t(roleLabel)}
                       tone={selNode?.group === 1 ? "red" : undefined}
                     />
-                    {crimeType && <Stat label={t("Crime type")} value={tData("crime_type", crimeType, lang)} />}
+                    {crimeType && (
+                      <Stat label={t("Crime type")} value={tData("crime_type", crimeType, lang)} />
+                    )}
                   </div>
 
                   {/* Linked cases */}
