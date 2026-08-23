@@ -4973,10 +4973,31 @@ recording because it nearly caused a fix to a bug that did not exist.
 - EARTH + Satellite confirmed as a **sphere** with true-colour imagery and the
   Karnataka bin cluster visible.
 
-### Still open
+### Orbital satellites — DROPPED, decided
 
-Orbital satellites over Karnataka, clickable for name and details, are **not
-built**. `/api/celestrak` was explicitly dropped in VISION.md §1.3, and an honest
-implementation needs SGP4 propagation (a new frontend dependency) plus a
-server-side TLE proxy with a TTL cache. Flagged to the user as a dependency
-decision rather than added silently.
+Clickable orbital satellites over Karnataka were requested, raised as a
+dependency decision, and then **dropped by the user**. This is settled, not
+outstanding work. Do not re-propose it.
+
+It re-confirms VISION.md §1.3, which had already dropped `/api/celestrak` along
+with the radio, YouTube-live, panorama and SIGINT feeds, on the grounds that none
+of them bear on a KSP decision.
+
+Why it was worth stopping to ask rather than just building:
+
+- **A new frontend dependency.** Positions require SGP4 propagation of TLEs
+  (`satellite.js` or equivalent). The tempting shortcut — a circular-orbit
+  approximation from mean motion and inclination — drifts by tens to hundreds of
+  kilometres. An unlabelled wrong satellite position on a police screen is exactly
+  the fabrication failure mode VISION.md §2 exists to prevent, and labelling it
+  "approximate" would leave a feature with no operational value.
+- **A new server-side feed.** CelesTrak TLEs behind a proxy with a TTL cache and a
+  `provider` field, per the `routing_service` convention. A direct browser fetch
+  would hit CORS and hammer a public service.
+
+Neither cost buys a KSP officer anything, which is the conclusion §1.3 had already
+reached. The globe keeps the part of the request that *is* useful: EARTH +
+Satellite renders a true-colour sphere with the crime bins on it.
+
+**Nothing was added for this.** No dependency installed, no route created, no
+placeholder, stub or dead prop left behind.
