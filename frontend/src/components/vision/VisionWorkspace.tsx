@@ -31,6 +31,9 @@ import {
 } from "./chrome/IntelligenceDeck";
 import { EntityDossier, type OpenEntity } from "./dossiers/EntityDossier";
 import { LocationDossier } from "./dossiers/LocationDossier";
+// Reused for the posture panel's label/value rows so the deck and the dossiers
+// present identical-looking fields.
+import { Field } from "./dossiers/DraggableDossier";
 import { TREATMENT_STORAGE_KEY, treatmentClass, type TreatmentId } from "./chrome/treatments";
 import { LAYERS, LAYER_STORAGE_KEY, defaultLayerState, type LayerId } from "./layerRegistry";
 import { visionApi, type DistrictIntelResult, type VisionTelemetry } from "@/lib/api/vision";
@@ -351,6 +354,52 @@ export function VisionWorkspace() {
     [visible, degraded],
   );
 
+  // ── Derivations for the expanded deck panels ───────────────────────────────
+  //
+  // All computed from the snapshot already in memory. No extra request is made
+  // for any of these panels: the deck's job is to say more about the data the map
+  // already fetched, not to open new round trips on a screen that measures
+  // 4-6 s per call against the cloud database.
+
+  /** Risk zones grouped by their own peak hour, as a 24-bucket histogram.
+   *
+   *  Counts ZONES, not cases: each zone contributes exactly one to the hour it
+   *  peaks at. That is the only honest reading of `peak_hour`, which the backend
+   *  derives per zone, and the panel says so rather than letting it be read as a
+   *  case-level time-of-day curve. */
+  const hourHistogram = useMemo(() => {
+    const bars = new Array<number>(24).fill(0);
+    let total = 0;
+    for (const z of snapshot?.layers.risk_zones?.data ?? []) {
+      if (z.peak_hour == null || z.peak_hour < 0 || z.peak_hour > 23) continue;
+      bars[z.peak_hour] += 1;
+      total += 1;
+    }
+    const peak = Math.max(0, ...bars);
+    return { bars, total, peak, peakHour: bars.indexOf(peak) };
+  }, [snapshot]);
+
+  /** Risk zones per tier, ordered by severity rather than by count, so the row
+   *  order does not jump around between refreshes. */
+  const tierMix = useMemo(() => {
+    const order = ["Critical", "High", "Medium", "Low"];
+    const counts = new Map<string, number>();
+    for (const z of snapshot?.layers.risk_zones?.data ?? []) {
+      counts.set(z.label, (counts.get(z.label) ?? 0) + 1);
+    }
+    const known = order.filter((l) => counts.has(l)).map((l) => [l, counts.get(l)!] as const);
+    const extra = [...counts.entries()].filter(([l]) => !order.includes(l));
+    return [...known, ...extra] as [string, number][];
+  }, [snapshot]);
+
+  /** Heaviest crime cells in view. A cell is [lat, lng, weight] where weight is
+   *  the case count the server aggregated into that grid square. */
+  const { topCells, crimeCellCount } = useMemo(() => {
+    const cells = snapshot?.layers.crime_hex?.data ?? [];
+    const top = [...cells].sort((a, b) => b[2] - a[2]).slice(0, 8);
+    return { topCells: top, crimeCellCount: cells.length };
+  }, [snapshot]);
+
   // ── Intelligence deck rows ────────────────────────────────────────────────
   const deckRows = useMemo<Partial<Record<DeckTabId, DeckRow[]>>>(() => {
     if (!snapshot) return {};
@@ -394,7 +443,12 @@ export function VisionWorkspace() {
       })
       .catch(() => {
         if (!stop)
-          setDistrictIntel({ districts: [], degraded: ["District intelligence unavailable."] });
+          setDistrictIntel({
+            districts: [],
+            correlations: null,
+            correlationN: 0,
+            degraded: ["District intelligence unavailable."],
+          });
       });
     return () => {
       stop = true;
@@ -561,6 +615,8 @@ export function VisionWorkspace() {
       </div>
     );
 
+    const correlations = districtIntel?.correlations ?? null;
+
     return [
       {
         id: "district",
@@ -594,8 +650,226 @@ export function VisionWorkspace() {
         body: coverageBody,
         emptyNote: t("No snapshot yet."),
       },
+      {
+        id: "hours",
+        title: "PEAK ACTIVITY BY HOUR",
+        badge: hourHistogram.total ? `${hourHistogram.total} ${t("zones")}` : undefined,
+        body: hourHistogram.total ? (
+          <div>
+            <div className="flex h-16 items-end gap-[1px]">
+              {hourHistogram.bars.map((n, h) => (
+                <div
+                  key={h}
+                  title={`${String(h).padStart(2, "0")}:00 \u2014 ${n} ${t("zones")}`}
+                  className="flex-1 rounded-t-[1px]"
+                  style={{
+                    height: `${hourHistogram.peak ? Math.max(2, (n / hourHistogram.peak) * 100) : 2}%`,
+                    background: n === hourHistogram.peak ? "#ef4444" : "#fbbf24",
+                    opacity: n ? 1 : 0.18,
+                  }}
+                />
+              ))}
+            </div>
+            {/* Only every sixth hour is labelled: 24 labels at this width become
+                an unreadable smear. */}
+            <div className="mt-1 flex justify-between font-mono text-[8px] text-muted-foreground">
+              {[0, 6, 12, 18, 23].map((h) => (
+                <span key={h}>{String(h).padStart(2, "0")}</span>
+              ))}
+            </div>
+            <p className="mt-1.5 text-[9px] leading-snug text-muted-foreground">
+              {t("Busiest hour")} {String(hourHistogram.peakHour).padStart(2, "0")}:00 {"\u00b7"}{" "}
+              {hourHistogram.peak} {t("zones peak then")}
+            </p>
+            <p className="mt-1 text-[9px] leading-snug text-muted-foreground">
+              {t(
+                "Counts risk zones by their own peak hour, not individual cases \u2014 one zone contributes once.",
+              )}
+            </p>
+          </div>
+        ) : undefined,
+        emptyNote: t("No risk zones in range to derive an hourly pattern."),
+      },
+      {
+        id: "tiers",
+        title: "RISK TIER MIX",
+        badge: zones.length ? String(zones.length) : undefined,
+        body: zones.length ? (
+          <div>
+            {tierMix.map(([label, n]) => (
+              <div key={label} className="mb-1">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="flex items-center gap-1.5 text-[10px] font-bold">
+                    <span
+                      aria-hidden
+                      className="h-2 w-2 rounded-full"
+                      style={{ background: RISK_ACCENT[label] ?? "#3b82f6" }}
+                    />
+                    {label}
+                  </span>
+                  <span className="font-mono text-[10px] text-muted-foreground">
+                    {n} {"\u00b7"} {Math.round((n / zones.length) * 100)}%
+                  </span>
+                </div>
+                <div className="h-[3px] w-full rounded-full bg-foreground/10">
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      width: `${(n / zones.length) * 100}%`,
+                      background: RISK_ACCENT[label] ?? "#3b82f6",
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : undefined,
+        emptyNote: t("No risk zones in range."),
+      },
+      {
+        id: "hotspots",
+        title: "DENSEST CRIME CELLS",
+        badge: topCells.length ? `${topCells.length} / ${crimeCellCount}` : undefined,
+        body: topCells.length ? (
+          <div>
+            {topCells.map(([lat, lng, w], i) => (
+              <button
+                key={`${lat},${lng}`}
+                onClick={() => {
+                  flyTo(lat, lng, 13);
+                  openLocation(lat, lng);
+                }}
+                title={t("Fly here and inspect this location")}
+                className="flex w-full items-center gap-1.5 rounded-[3px] px-1 py-[3px] text-left hover:bg-foreground/5"
+              >
+                <span className="w-3 shrink-0 font-mono text-[9px] text-muted-foreground">
+                  {i + 1}
+                </span>
+                <span className="shrink-0 font-mono text-[10px] font-bold">
+                  {lat.toFixed(3)}, {lng.toFixed(3)}
+                </span>
+                <span className="ml-auto shrink-0 font-mono text-[10px] text-[#ef4444]">{w}</span>
+              </button>
+            ))}
+            {/* "Cell", not "location": these are grid squares the server
+                aggregated, so the weight is a count within a cell, not at a point. */}
+            <p className="mt-1.5 text-[9px] leading-snug text-muted-foreground">
+              {t("Cases per aggregated grid cell. Click to inspect that ground.")}
+            </p>
+          </div>
+        ) : undefined,
+        emptyNote: t("No crime cells in range."),
+      },
+      {
+        id: "socio",
+        title: "SOCIO-ECONOMIC CORRELATION",
+        badge: correlations ? `n=${districtIntel?.correlationN ?? 0}` : undefined,
+        body: correlations ? (
+          <div>
+            {(
+              [
+                ["Literacy", correlations.crime_rate_vs_literacy],
+                ["Urbanisation", correlations.crime_rate_vs_urbanization],
+                ["Income", correlations.crime_rate_vs_income],
+              ] as [string, number | null][]
+            ).map(([label, r]) => (
+              <div key={label} className="mb-1.5">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="text-[10px] font-bold">{t(label)}</span>
+                  <span className="font-mono text-[11px] font-bold tabular-nums">
+                    {r == null ? "\u2014" : (r > 0 ? "+" : "") + r.toFixed(2)}
+                  </span>
+                </div>
+                {/* Bar grows from the centre: sign matters as much as magnitude. */}
+                {r != null && (
+                  <div className="relative h-[4px] w-full rounded-full bg-foreground/10">
+                    <span className="absolute left-1/2 top-0 h-full w-[1px] bg-foreground/30" />
+                    <div
+                      className="absolute top-0 h-full rounded-full"
+                      style={{
+                        width: `${Math.min(50, Math.abs(r) * 50)}%`,
+                        left: r >= 0 ? "50%" : `${50 - Math.min(50, Math.abs(r) * 50)}%`,
+                        background: r >= 0 ? "#ef4444" : "#22c55e",
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+            <p className="mt-1 text-[9px] leading-snug text-muted-foreground">
+              {t(
+                "Pearson r against recorded crime rate, measured over districts. Association only \u2014 not cause, and not a basis for action against any person.",
+              )}
+            </p>
+          </div>
+        ) : undefined,
+        emptyNote:
+          districtIntel?.degraded?.find((d) => /clearance L3|Socio/i.test(d)) ??
+          t("Correlations unavailable."),
+      },
+      {
+        id: "posture",
+        title: "SYSTEM POSTURE",
+        badge: telemetry ? (telemetry.db_source ?? "").toUpperCase() || undefined : undefined,
+        body: telemetry ? (
+          <div>
+            <Field label={t("Database")} value={(telemetry.db_source ?? "\u2014").toUpperCase()} />
+            <Field
+              label={t("DB latency")}
+              value={
+                telemetry.db_latency_ms == null ? (
+                  "\u2014"
+                ) : (
+                  <span className="font-mono">{Math.round(telemetry.db_latency_ms)} ms</span>
+                )
+              }
+            />
+            <Field label={t("Live transport")} value={transport.toUpperCase()} />
+            <Field
+              label={t("Response Ops")}
+              value={telemetry.ops_enabled ? t("Enabled") : t("Disabled")}
+            />
+            <Field label={t("Your rank")} value={telemetry.rank ?? "\u2014"} />
+            <Field
+              label={t("Row-level security")}
+              value={
+                <span className={telemetry.rls_enforced ? "text-success" : "text-[#f97316]"}>
+                  {telemetry.rls_enforced ? t("Enforced in DB") : t("App layer only")}
+                </span>
+              }
+            />
+            {/* The RLS note is the single fact that decides whether this screen's
+                jurisdiction guarantee is real. It is not hidden behind a tooltip. */}
+            {!telemetry.rls_enforced && telemetry.rls_note && (
+              <p className="mt-1.5 rounded-[4px] border border-[#f97316]/50 bg-[#f97316]/10 px-1.5 py-1 text-[9px] leading-snug text-muted-foreground">
+                {telemetry.rls_note}
+              </p>
+            )}
+            {telemetry.coords_coarsened && (
+              <p className="mt-1 text-[9px] font-bold text-[#f97316]">
+                {t("Coordinates coarsened for your clearance.")}
+              </p>
+            )}
+          </div>
+        ) : undefined,
+        emptyNote: t("Telemetry has not reported yet."),
+      },
     ];
-  }, [snapshot, districtIntel, flyTo, openEntity, submitSearchTerm, t]);
+  }, [
+    snapshot,
+    districtIntel,
+    telemetry,
+    transport,
+    hourHistogram,
+    tierMix,
+    topCells,
+    crimeCellCount,
+    flyTo,
+    openEntity,
+    openLocation,
+    submitSearchTerm,
+    t,
+  ]);
 
   const deckEmpty = useMemo<Partial<Record<DeckTabId, string>>>(
     () => ({

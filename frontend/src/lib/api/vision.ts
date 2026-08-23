@@ -204,8 +204,24 @@ export type DistrictIntel = {
   income_index: number | null;
 };
 
+/** Pearson coefficients the backend computes over the district table.
+ *
+ *  These are measured, not modelled: intelligence_service runs the correlation
+ *  in SQL/Python over `district_socio_economic_indicators` joined to case counts.
+ *  Null when a column has too few non-null pairs to correlate. */
+export type SocioCorrelations = {
+  crime_rate_vs_literacy: number | null;
+  crime_rate_vs_urbanization: number | null;
+  crime_rate_vs_income: number | null;
+};
+
 export type DistrictIntelResult = {
   districts: DistrictIntel[];
+  /** Absent when the caller's clearance did not clear the L3 correlation endpoint. */
+  correlations: SocioCorrelations | null;
+  /** How many districts the coefficients were computed over — a correlation
+   *  without its n is not interpretable. */
+  correlationN: number;
   /** Human-readable reasons a column is missing, e.g. a clearance refusal.
    *  Rendered in the panel rather than leaving blank cells unexplained. */
   degraded: string[];
@@ -267,7 +283,9 @@ export const visionApi = {
   districtIntel: async (): Promise<DistrictIntelResult> => {
     const [riskRes, socioRes] = await Promise.allSettled([
       intelFetch<{ areas: DistrictRisk[] }>("/socio/risk-index"),
-      intelFetch<{ scatter: DistrictSocio[] }>("/socio/correlation"),
+      intelFetch<{ scatter: DistrictSocio[]; correlations?: SocioCorrelations }>(
+        "/socio/correlation",
+      ),
     ]);
 
     const degraded: string[] = [];
@@ -305,6 +323,9 @@ export const visionApi = {
       );
     }
 
+    let correlations: SocioCorrelations | null = null;
+    let correlationN = 0;
+
     if (socioRes.status === "fulfilled") {
       for (const s of socioRes.value.scatter ?? []) {
         const row = ensure(s.district);
@@ -313,6 +334,8 @@ export const visionApi = {
         row.urbanization_percent = s.urbanization_percent;
         row.income_index = s.income_index;
       }
+      correlations = socioRes.value.correlations ?? null;
+      correlationN = (socioRes.value.scatter ?? []).length;
     } else {
       const e = socioRes.reason;
       degraded.push(
@@ -330,7 +353,7 @@ export const visionApi = {
     const districts = [...byDistrict.values()].sort(
       (a, b) => (b.crime_rate ?? -1) - (a.crime_rate ?? -1),
     );
-    return { districts, degraded };
+    return { districts, correlations, correlationN, degraded };
   },
 
   snapshot: (params: SnapshotParams = {}) => {

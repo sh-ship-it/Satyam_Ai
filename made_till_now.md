@@ -5001,3 +5001,97 @@ Satellite renders a true-colour sphere with the crime bins on it.
 
 **Nothing was added for this.** No dependency installed, no route created, no
 placeholder, stub or dead prop left behind.
+
+---
+
+## Intelligence Deck: five more information cards (4 -> 9)
+
+The expanded deck now carries nine panels. Everything added is derived from data
+the screen **already had in memory** — no new endpoint, no new request. That was
+the constraint, not an accident: every call on this screen costs 4–6 s against the
+cloud database, so a panel that opened its own round trip would make the deck
+slower to be more informative.
+
+| Panel | Source | New information it carries |
+|---|---|---|
+| `PEAK ACTIVITY BY HOUR` | snapshot `risk_zones[].peak_hour` | 24-bucket histogram; nothing else on the screen showed time-of-day |
+| `RISK TIER MIX` | snapshot `risk_zones[].label` | share per tier; the RISK MATRIX beside it is a flat list, not a distribution |
+| `DENSEST CRIME CELLS` | snapshot `crime_hex` | top 8 cells by weight, each click flies there and opens the location popup |
+| `SOCIO-ECONOMIC CORRELATION` | `/socio/correlation` — **already being fetched and discarded** | the three Pearson coefficients |
+| `SYSTEM POSTURE` | `/vision/telemetry` — already polled every 15 s | DB source, latency, transport, ops flag, rank, RLS posture |
+
+### The correlations were already on the wire and being thrown away
+
+`visionApi.districtIntel()` called `/socio/correlation`, kept `scatter`, and
+dropped the `correlations` object entirely. The backend computes real Pearson
+coefficients there — `intelligence_service` runs them over
+`district_socio_economic_indicators` joined to case counts, with a comment
+explicitly saying it computes them "instead of fabricating values". So this panel
+cost one extra field in the client type, not a request.
+
+Measured on the cloud data, n=40 districts:
+
+| against recorded crime rate | r |
+|---|---|
+| Literacy | **+0.41** |
+| Urbanisation | **+0.48** |
+| Income | **+0.50** |
+
+**All three are positive, including literacy**, which is counter-intuitive and
+worth stating plainly rather than presenting as insight: higher literacy tracking
+*higher* recorded crime almost certainly reflects reporting rates and
+urbanisation, not more offending. Districts that are wealthier, more urban and
+more literate are the same districts with more police stations and better FIR
+registration. The panel therefore prints "Association only — not cause, and not a
+basis for action against any person" under the bars, and shows `n=40` in the
+badge, because a correlation without its n is not interpretable.
+
+Bars grow from a centre line so sign reads as clearly as magnitude, and green/red
+distinguish negative from positive rather than colour meaning "good/bad".
+
+### SYSTEM POSTURE surfaces facts that were previously scattered or invisible
+
+`/vision/telemetry` already returned `db_source`, `db_latency_ms`, `rls_enforced`,
+`rls_note`, `ops_enabled`, `coords_coarsened` and `rank` every 15 seconds, and the
+screen used almost none of it — only `ops_enabled`, for one empty-state string.
+The panel now shows the lot, including the full RLS note inline rather than behind
+a tooltip:
+
+```
+CLOUD · 751 ms · LIVE · Ops Enabled · DGP · App layer only
+connected role bypasses RLS (rolsuper=False, rolbypassrls=True);
+jurisdiction scoping is enforced in the application layer only
+```
+
+That is the single fact deciding whether this screen's jurisdiction guarantee is
+real, so it is stated in full. It also answers "cloud or local?" directly on the
+screen, which previously required opening Settings.
+
+### Honesty notes carried in the panels
+
+- The hour histogram counts **zones, not cases** — each risk zone contributes once,
+  at its own peak hour. Printed under the chart so it cannot be read as a
+  case-level time-of-day curve.
+- `DENSEST CRIME CELLS` says "cases per aggregated **grid cell**". The weight is a
+  count within a server-aggregated square, not an incident count at a point.
+- `RISK TIER MIX` orders tiers by severity, not by count, so rows do not reorder
+  themselves between refreshes.
+- The socio panel's empty state reuses the real clearance refusal
+  ("Socio-economic indicators need clearance L3.") rather than a generic message,
+  so an L2 officer learns why the card is blank.
+
+### Verified
+
+- `tsc --noEmit` at its **56-error baseline**, zero under `vision/`; `eslint` clean
+  apart from the one pre-existing `useRef<any>` on an untouched line.
+- Headless Chrome against the cloud database: **9 of 9 panel titles present**, and
+  each new panel asserted for real content rather than an empty shell — 24
+  histogram bars present, "Busiest hour 14:00 · 34 zones", a tier percentage, at
+  least 5 clickable cells, `[+-]d.dd` coefficients, `CLOUD` in the posture card,
+  and the RLS state string.
+- Clicking the densest cell flew the camera and opened the location popup
+  (88 cases within 800 m at `12.9900, 77.5900`, S.J. Park PS) — confirming the new
+  card wires into the click-to-inspect work rather than duplicating it.
+
+Left **uncommitted** in the working tree, per the standing rule that commits
+happen only when asked.
