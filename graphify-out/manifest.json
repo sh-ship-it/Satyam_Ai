@@ -375,8 +375,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
-    "mtime": 1782106291.7437785,
-    "ast_hash": "57d64567a60a6320b3326c402a676046",
+    "mtime": 1787491993.9682426,
+    "ast_hash": "a226741af8e5ab5c8762651cb2cd70dc",
     "semantic_hash": ""
   },
   "frontend/src/components/DarkModeToggle.tsx": {
@@ -825,8 +825,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1787489280.4145584,
-    "ast_hash": "a45f0a7474066b06ee8acd873efcfc9f",
+    "mtime": 1787492309.5958078,
+    "ast_hash": "3499c86b553c0b280be01b31dd8e6ad6",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -1095,8 +1095,8 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/ops.py": {
-    "mtime": 1782105582.2527418,
-    "ast_hash": "000558389448237d9c57dcc353f0b565",
+    "mtime": 1787490430.3193238,
+    "ast_hash": "62e1db4e49c6eb61cef1ec518f74fdbc",
     "semantic_hash": ""
   },
   "backend/app/db/ops_models.py": {
@@ -1150,8 +1150,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ops/DispatchPanel.tsx": {
-    "mtime": 1782300737.9232807,
-    "ast_hash": "9f0b7ab36456c38a7d1e0dd1b966dd83",
+    "mtime": 1787492026.0528831,
+    "ast_hash": "66bee5707922272d589721ee1eafc652",
     "semantic_hash": ""
   },
   "backend/app/services/ops/corridor_service.py": {
@@ -1922,6 +1922,21 @@
   "frontend/src/components/vision/dossiers/LocationDossier.tsx": {
     "mtime": 1787481214.7655206,
     "ast_hash": "1b09e3060fb9fc01f36720fd354b4738",
+    "semantic_hash": ""
+  },
+  "backend/app/services/ops/roadgraph_service.py": {
+    "mtime": 1787490520.15218,
+    "ast_hash": "cbebbcb86ae558e26a737c5701db53c2",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/roadPath.check.mjs": {
+    "mtime": 1787490734.074731,
+    "ast_hash": "8dc6f2ccadd90ae2fae1ba6429f89795",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/roadPath.ts": {
+    "mtime": 1787491023.0564623,
+    "ast_hash": "ad1099a756d943f5c1cbebe432495685",
     "semantic_hash": ""
   }
 }
