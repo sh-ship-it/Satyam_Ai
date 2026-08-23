@@ -98,6 +98,16 @@ export type BuildLayersArgs = {
   /** Current camera zoom — drives the automatic bin radius. */
   zoom: number;
   onPick?: (kind: "patrol" | "camera" | "risk_zone" | "dispatch", id: string | number) => void;
+  /** A click on a crime bin, reported as the geographic point clicked.
+   *
+   *  Separate from `onPick` because a crime bin is not an entity: it has no id
+   *  and no server-side record. It is an aggregate the client computed, so the
+   *  only thing it can identify is a place.
+   *
+   *  `bin` carries the clicked bin's own totals, so a reader can see how the
+   *  radius figure relates to the shape they clicked. Both fields are optional
+   *  because they come from deck's aggregation output, not from our data. */
+  onPickLocation?: (lat: number, lng: number, bin?: { cases?: number; cells?: number }) => void;
 };
 
 /** Wedge polygon approximating a camera's field of view.
@@ -139,6 +149,7 @@ export function buildLayers({
   hex,
   zoom,
   onPick,
+  onPickLocation,
 }: BuildLayersArgs): unknown[] {
   if (!snapshot) return [];
 
@@ -155,8 +166,7 @@ export function buildLayers({
   // still wants to see that they are inside it, they just need to see the
   // streets underneath as well.
   const STREET_ZOOM = 14;
-  const aggregateOpacity = (base: number) =>
-    zoom >= STREET_ZOOM ? Math.min(base, 0.22) : base;
+  const aggregateOpacity = (base: number) => (zoom >= STREET_ZOOM ? Math.min(base, 0.22) : base);
 
   // ── Crime density: 3D hexagonal bins ──────────────────────────────────────
   // Binning happens here, on the GPU/CPU, not in Postgres. That is why no
@@ -181,7 +191,46 @@ export function buildLayers({
         elevationScale: hex.extruded ? hex.elevationScale : 0,
         colorRange: DENSITY_RAMP.map(([r, g, b]) => [r, g, b]) as [number, number, number][],
         opacity: aggregateOpacity(0.75),
-        pickable: false,
+        // Clickable so a bin can be inspected. A picked aggregate carries no id,
+        // so this reports a place, not an entity, and goes to onPickLocation
+        // rather than onPick.
+        pickable: !!onPickLocation,
+        // `unknown` then narrow, rather than deck.gl's own PickingInfo: the
+        // aggregation layers type onClick as an intersection of three
+        // overloads, so a narrowly-typed literal parameter is rejected where
+        // the same shape is accepted on ScatterplotLayer.
+        //
+        // Uses `info.coordinate`, the geographic [lng, lat] under the cursor —
+        // NOT `info.object.position`. On this layer the picked object is a GPU
+        // aggregation bin whose `position` is in the layer's internal space, not
+        // lng/lat: reading it yielded points near the south pole (-85, -180),
+        // which the backend then correctly refused as outside Karnataka.
+        // `info.coordinate` is also the more faithful answer to "what is here",
+        // since a bin at statewide zoom can span kilometres.
+        //
+        // Returns boolean because that overload demands it, and because the value
+        // is meaningful to deck.gl: `true` marks the click handled so it does not
+        // also fall through to whatever sits beneath the bin.
+        onClick: (info: unknown): boolean => {
+          const i = info as
+            | {
+                coordinate?: number[];
+                object?: { count?: number; colorValue?: number };
+              }
+            | undefined;
+          const c = i?.coordinate;
+          if (!c || c.length < 2 || !onPickLocation) return false;
+          // `colorValue` is the SUM of getColorWeight over the bin, and the
+          // weight of a crime cell is its case count — so this is the bin's own
+          // case total. `count` is how many cells were merged into the bin.
+          // Passing both lets the popup show the bin total beside the radius
+          // total instead of leaving a reader to assume they are the same number.
+          onPickLocation(c[1], c[0], {
+            cases: i?.object?.colorValue,
+            cells: i?.object?.count,
+          });
+          return true;
+        },
         material: false,
         // Re-bin when the radius changes; without this deck.gl keeps the old
         // aggregation because `data` is referentially unchanged.
@@ -206,8 +255,7 @@ export function buildLayers({
         radiusUnits: "meters",
         radiusMinPixels: 3,
         radiusMaxPixels: 46,
-        getFillColor: (z: RiskZonePoint) =>
-          RISK_LABEL_COLOR[z.label] ?? RISK_LABEL_COLOR.Low,
+        getFillColor: (z: RiskZonePoint) => RISK_LABEL_COLOR[z.label] ?? RISK_LABEL_COLOR.Low,
         stroked: false,
         pickable: true,
         onClick: ({ object }: { object?: RiskZonePoint }) =>
@@ -259,8 +307,7 @@ export function buildLayers({
         getPosition: (s: SignalPoint) => [s.lng, s.lat],
         getRadius: (s: SignalPoint) => (s.state === "GREEN" ? 7 : 4),
         radiusUnits: "pixels",
-        getFillColor: (s: SignalPoint) =>
-          SIGNAL_STATE_COLOR[s.state] ?? SIGNAL_STATE_COLOR.NORMAL,
+        getFillColor: (s: SignalPoint) => SIGNAL_STATE_COLOR[s.state] ?? SIGNAL_STATE_COLOR.NORMAL,
         getLineColor: [10, 10, 10, 255],
         lineWidthMinPixels: 1,
         stroked: true,
@@ -328,14 +375,12 @@ export function buildLayers({
         getPosition: (p: PatrolPoint) => [p.lng, p.lat],
         getRadius: 8,
         radiusUnits: "pixels",
-        getFillColor: (p: PatrolPoint) =>
-          PATROL_STATUS_COLOR[p.status] ?? PATROL_STATUS_COLOR.IDLE,
+        getFillColor: (p: PatrolPoint) => PATROL_STATUS_COLOR[p.status] ?? PATROL_STATUS_COLOR.IDLE,
         getLineColor: [10, 10, 10, 255],
         lineWidthMinPixels: 2,
         stroked: true,
         pickable: true,
-        onClick: ({ object }: { object?: PatrolPoint }) =>
-          object && onPick?.("patrol", object.id),
+        onClick: ({ object }: { object?: PatrolPoint }) => object && onPick?.("patrol", object.id),
       }),
     );
   }

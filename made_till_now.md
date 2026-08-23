@@ -4687,3 +4687,172 @@ found and asserts the element exists before comparing.
 passed as an inline object or array. The component is now defensive about it, but
 `VisionWorkspace` still constructs `center` inline on every render, which is
 harmless now only because the effect no longer trusts identity.
+
+---
+
+## Click-to-inspect location popup on the Vision map
+
+Clicking a crime bin now opens a panel answering the question the click implies:
+*what happened here?* Place context, aerial imagery of the spot, and the crime
+record around it.
+
+### The gap this closed
+
+Crime density hexagons were `pickable: false` (`buildLayers.ts`), so clicking the
+blue dots did nothing at all. Risk zones, cameras, dispatches and patrols were
+already clickable and opened an `EntityDossier`; the crime layer — the one an
+officer looks at most — was inert.
+
+### Backend: `GET /api/vision/location`
+
+New endpoint, `lat` / `lng` / `radius_m`. Same `Permission.RUN_ANALYTICS` (L2)
+guard as `/snapshot`, and one audit row per read, because this reads the same case
+geography at *higher* precision, which is a stronger reason to audit rather than a
+weaker one.
+
+Geography in two stages, for the same reason `build_entity` uses haversine:
+**there is no PostGIS in this database.** A bounding box does the cheap prefilter
+in SQL, then haversine refines it to a true circle in Python. Without the second
+stage an "800 m" answer would really be a 1.6 km square, over-reporting by about
+27 percent at the corners.
+
+Returns place context, `total_cases`, the top six crime types, a status
+breakdown, peak hours, and the eight most recent FIRs with their distance.
+
+Three deliberate constraints:
+
+- **No person data at all.** `core/masking.mask_case()` is only wired into
+  `services/case_service`, so any new case-level payload would be unmasked. The
+  safe answer was to expose case-level facts only. The panel says so on screen.
+- **Place names are inferred, not geocoded.** There is no reverse geocoder in this
+  stack, so district, station and place come from the *nearest recorded case*. A
+  point in open country legitimately has no name, and the panel shows a dash
+  rather than borrowing a town from kilometres away.
+- **Out-of-state points are refused** with 422 rather than clamped, and the radius
+  is clamped to 100..5000 m.
+
+### Frontend
+
+`visionApi.location()`, and a new `dossiers/LocationDossier.tsx` built on the
+existing `DraggableDossier` + `Field` shell, so it drags, minimises and stacks
+like every other panel. Radius is a control (200 m / 400 m / 800 m / 1.5 km /
+3 km), not a fixed assumption — the right neighbourhood differs between a city
+block and a rural highway.
+
+### Imagery: Esri World Imagery, not the existing satellite basemap
+
+The obvious move was to reuse the `satellite` basemap for the thumbnail. It does
+not work: that basemap is NASA GIBS BlueMarble, capped at **zoom 8** and already
+flagged `contextOnly` in `basemaps.ts`. One tile spans roughly 150 km, which is
+useless as a picture of a street corner.
+
+Used Esri World Imagery instead — key-free, HTTPS, real aerial detail to z19,
+consistent with the existing rule that every tile source in Vision is key-free.
+Attribution is rendered. The tile path is `/{z}/{y}/{x}`, **row before column**,
+the same trap GIBS has: getting it backwards returns a valid image of the wrong
+place rather than an error.
+
+The crosshair sits on the exact coordinate by using its *fractional* position
+within the tile, rather than the tile centre, which would be up to half a tile
+off. Imagery zoom follows the radius. A failed tile shows a written explanation,
+because a broken `<img>` on an intelligence screen reads as "no imagery exists
+here" rather than "the CDN failed".
+
+**Google Street View was rejected for now.** It would give a true street-level
+photograph and the project already has a Maps key, but Street View Static is a
+separate API that must be enabled, it bills per request, and enabling it
+contradicts the guidance recorded above to restrict that key to the Maps
+JavaScript API only. Worth doing as an explicit, costed decision — not a silent one.
+
+### Two numbers, stated separately
+
+`info.object` on the picked bin carries `colorValue` — the SUM of the bin's
+weights, i.e. the bin's own case total — and `count`, the number of cells merged
+into it. The panel shows *"Clicked bin holds N cases · M cells"* directly beneath
+*"X recorded cases within 800 m"*.
+
+These two figures genuinely differ, and by a lot: a rural click read **0 within
+800 m against 8 in the bin**, and a Bengaluru click read **84 within 800 m
+against 63 in the bin**. A hexagon at wide zoom spans kilometres, so showing a
+bare count next to it would invite exactly the wrong inference. Showing both,
+labelled, is the honest fix.
+
+### Three bugs found while verifying
+
+**1. `object.position` is not longitude/latitude.** The first implementation read
+the bin centroid from `info.object.position`. Popups opened, but at
+**-85.15, -179.90** — the south pole — and the backend correctly refused them with
+422. On a GPU-aggregated `HexagonLayer` that field is in the layer's internal
+aggregation space, not lng/lat. Diagnosed by probing the real picking object over
+CDP rather than guessing again:
+
+```
+object.position : [-180.57968703457254, -85.09424824746877]
+info.coordinate : [75.69999999999956,   14.19751229697599]
+```
+
+Fixed by using `info.coordinate`, which is the geographic point under the cursor.
+That is also the more faithful answer to "what is here", since the bin can be
+kilometres wide.
+
+**2. Two dev servers were running at once.** Port 3000 held a stale server from an
+earlier session and a second had started on 3001, so **every browser test was
+exercising different code than the files being edited**. This is what made the
+`info.coordinate` fix look like it had broken the feature — the fix was correct
+and the test was hitting the old bundle. Consolidated to a single server on 3000.
+Worth remembering: check the port Vite actually bound before trusting any UI test.
+
+**3. `HexagonLayer.onClick` must return `boolean`.** Its prop type is an
+intersection of three overloads, one of which requires a boolean return, unlike
+`ScatterplotLayer` where the existing handlers return void. Returning `true` is
+also semantically right: it marks the click handled so it does not fall through to
+whatever sits beneath the bin.
+
+Also corrected: the panel title used `place_label`, which is the nearest case's
+`place_of_offence`. That produced titles like *"apartment complex"* and *"an
+online platform / digital medium"* — asserting that the clicked point **is** that
+thing. The title is now the district, an administrative fact about the
+coordinate; the place stays a labelled field in the body.
+
+### Latency: pre-existing, and not from this endpoint
+
+`/location` takes about **5.5 s** against the cloud database. The SQL is not the
+problem — `EXPLAIN ANALYZE` puts the sequential scan of all 35,993 cases at
+**5.5 ms**. Measured for comparison:
+
+| endpoint | time |
+|---|---|
+| `/telemetry` (bare `SELECT 1`, no audit) | 3,732 ms |
+| `/snapshot` (bbox, one layer) | 5,732 ms |
+| `/snapshot` (full) | 10,239 ms |
+| `/entity` | 6,124 ms |
+| `/location` | 5,480 ms |
+
+So roughly 4 seconds is per-request round-trip overhead to Neon that affects every
+endpoint on the screen, and `/location` sits inside the existing band. Adding an
+index on `(latitude, longitude)` would save 5 ms out of 5,500 and is not worth a
+cloud migration. Recorded rather than papered over; `DB_SOURCE=local` is the fast
+path for demo work.
+
+### Verified
+
+- Backend suite: **133 passed**, 1 deselected.
+- `tsc --noEmit`: **56 errors, unchanged baseline**, zero under `vision/`.
+- `eslint`: clean on all new and changed files.
+- Endpoint checks against the cloud DB: dense point returns real data; the radius
+  is monotonic (a larger radius never returns fewer cases); an empty point is
+  explained rather than blank; out-of-state is refused 422; the radius clamp is
+  enforced 422; and the payload was scanned for person-ish keys and is clean.
+- Browser, headless Chrome driving the real deck.gl canvas: a click resolves to a
+  coordinate **inside Karnataka**, the aerial tile actually loads
+  (`complete && naturalWidth > 0`), the radius buttons re-query
+  (`0@800 -> 1@3000`), and in Bengaluru the populated panel renders crime types,
+  case status, most-recent FIRs with real FIR numbers, resolved district and
+  station, and peak hours.
+
+### Not done, deliberately
+
+Clicking a listed FIR does not open the full case yet. `components/CaseDrawer.tsx`
+already exists and takes a numeric `caseId`, so wiring it in is small — it was
+left out to keep this change reviewable. Traffic signals stay unclickable: they
+carry no crime information and `vision/entity` has no `signal` kind.

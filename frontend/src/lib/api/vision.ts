@@ -211,6 +211,49 @@ export type DistrictIntelResult = {
   degraded: string[];
 };
 
+/** Radius choices offered in the location popup, in metres.
+ *
+ *  Measured against the live data to make sure each step is actually useful
+ *  rather than decorative: at Bengaluru's centre 200 m returns 3 cases, 800 m
+ *  returns 81, 1.5 km returns 289 and 3 km returns 1,070. In a rural district
+ *  800 m typically returns 1. The backend clamps to 100..5000 m regardless. */
+export const LOCATION_RADIUS_CHOICES = [200, 400, 800, 1500, 3000] as const;
+export const LOCATION_RADIUS_DEFAULT_M = 800;
+
+export type LocationCrimeType = { crime_type: string; count: number };
+
+export type LocationCase = {
+  case_id: number;
+  fir_number: string;
+  fir_year: number | null;
+  crime_type: string;
+  status: string | null;
+  station_name: string | null;
+  district: string | null;
+  place_of_offence: string | null;
+  incident_date: string | null;
+  distance_m: number;
+};
+
+export type VisionLocation = {
+  lat: number;
+  lng: number;
+  radius_m: number;
+  coords_coarsened: boolean;
+  /** Taken from the nearest recorded case, not a gazetteer — there is no reverse
+   *  geocoder in this stack, so these are null when nothing is recorded nearby. */
+  district: string | null;
+  station_name: string | null;
+  place_label: string | null;
+  total_cases: number;
+  crime_types: LocationCrimeType[];
+  status_breakdown: Record<string, number>;
+  peak_hours: number[];
+  recent: LocationCase[];
+  truncated: boolean;
+  note: string | null;
+};
+
 export const visionApi = {
   telemetry: () => visionFetch<VisionTelemetry>("/telemetry"),
 
@@ -302,4 +345,14 @@ export const visionApi = {
 
   entity: (kind: VisionEntityKind, id: string | number) =>
     visionFetch<VisionEntity>(`/entity/${kind}/${encodeURIComponent(String(id))}`),
+
+  /** What is recorded near one clicked point. */
+  location: (lat: number, lng: number, radiusM = LOCATION_RADIUS_DEFAULT_M) => {
+    const q = new URLSearchParams({
+      lat: String(lat),
+      lng: String(lng),
+      radius_m: String(radiusM),
+    });
+    return visionFetch<VisionLocation>(`/location?${q.toString()}`);
+  },
 };

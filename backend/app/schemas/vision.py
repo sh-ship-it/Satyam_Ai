@@ -65,3 +65,61 @@ class VisionTelemetry(BaseModel):
     rank: str
     scope: str
     clearance: int
+
+
+class LocationCrimeType(BaseModel):
+    """One crime type in the neighbourhood breakdown."""
+
+    crime_type: str
+    count: int
+
+
+class LocationCase(BaseModel):
+    """A single FIR near the clicked point.
+
+    Deliberately carries **no person data**. `core/masking.mask_case()` is only
+    wired into services/case_service, so any new case-level payload would be
+    unmasked; the safe answer is to expose only case-level facts an officer can
+    already see on the map and to link out to the existing case drawer for the
+    rest.
+    """
+
+    case_id: int
+    fir_number: str
+    fir_year: int | None = None
+    crime_type: str
+    status: str | None = None
+    station_name: str | None = None
+    district: str | None = None
+    place_of_offence: str | None = None
+    incident_date: str | None = None
+    distance_m: int
+
+
+class VisionLocation(BaseModel):
+    """What is at, and recorded near, one point on the map.
+
+    Answers the question a click implies: *what happened here?* Built from the
+    `cases` table's own latitude/longitude, so it is the same ground truth the
+    crime layer aggregates — not a second, differently-derived number.
+    """
+
+    lat: float
+    lng: float
+    radius_m: int
+    coords_coarsened: bool = False
+
+    # Place context. There is no reverse geocoder in this stack, so these are
+    # taken from the nearest recorded case rather than from a gazetteer, and are
+    # null when nothing is recorded nearby.
+    district: str | None = None
+    station_name: str | None = None
+    place_label: str | None = None
+
+    total_cases: int = 0
+    crime_types: list[LocationCrimeType] = Field(default_factory=list)
+    status_breakdown: dict[str, int] = Field(default_factory=dict)
+    peak_hours: list[int] = Field(default_factory=list)
+    recent: list[LocationCase] = Field(default_factory=list)
+    truncated: bool = False
+    note: str | None = None

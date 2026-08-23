@@ -17,10 +17,13 @@ labelled as such wherever they appear.
 """
 from __future__ import annotations
 
+import datetime as dt
 import hashlib
+import math
+from collections import Counter
 from typing import Any, Iterable
 
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.rbac import Principal
@@ -483,3 +486,185 @@ async def build_entity(
         }
 
     return None
+
+
+# ── Point inspection ────────────────────────────────────────────────────────
+#
+# Radius bounds for a location click. The floor stops a click resolving to a
+# single address, the ceiling stops one click aggregating a whole district and
+# calling it "here".
+LOCATION_RADIUS_MIN_M = 100
+LOCATION_RADIUS_MAX_M = 5000
+LOCATION_RADIUS_DEFAULT_M = 800
+# Worst-case rows pulled before the distance filter. A bbox this small holds far
+# fewer in practice; the cap only bounds a pathological click in the densest part
+# of Bengaluru, and truncation is reported rather than silent.
+LOCATION_ROW_CAP = 4000
+LOCATION_RECENT_LIMIT = 8
+LOCATION_CRIME_TYPE_LIMIT = 6
+
+_METRES_PER_DEG_LAT = 111_320.0
+
+
+def _parse_hour(raw: str | None) -> int | None:
+    """Hour out of the free-text `cases.incident_time`.
+
+    The column is Text, not Time, so it holds whatever the seed wrote. Parse
+    defensively and drop anything that is not a plausible hour rather than
+    guessing — a wrong peak hour on a crime screen is worse than no peak hour.
+    """
+    if not raw:
+        return None
+    digits = ""
+    for ch in str(raw).strip():
+        if ch.isdigit():
+            digits += ch
+            if len(digits) == 2:
+                break
+        else:
+            break
+    if not digits:
+        return None
+    hour = int(digits)
+    return hour if 0 <= hour <= 23 else None
+
+
+async def build_location(
+    session: AsyncSession,
+    principal: Principal,
+    *,
+    lat: float,
+    lng: float,
+    radius_m: int,
+) -> dict:
+    """What is recorded near one point.
+
+    Two-stage geography, for the same reason build_entity uses haversine: there
+    is no PostGIS here. A bounding box does the cheap prefilter in SQL, then
+    haversine refines it to a true circle in Python. Without the second stage a
+    "800 m" answer would actually be a 1.6 km square, over-reporting by about
+    27 percent at the corners.
+
+    Person data is deliberately absent — see schemas.vision.LocationCase.
+    """
+    from app.services.ops import routing_service
+
+    radius_m = max(LOCATION_RADIUS_MIN_M, min(LOCATION_RADIUS_MAX_M, int(radius_m)))
+    coarsen = principal.should_coarsen_coords()
+    dp = COARSE_DP if coarsen else None
+
+    # Degree deltas for the prefilter box. Longitude degrees shrink with
+    # latitude, so scale by cos(lat) or the box is too narrow near the poles and
+    # too wide at the equator.
+    dlat = radius_m / _METRES_PER_DEG_LAT
+    cos_lat = math.cos(math.radians(lat))
+    dlng = radius_m / (_METRES_PER_DEG_LAT * (abs(cos_lat) if abs(cos_lat) > 1e-6 else 1e-6))
+
+    sql = text(
+        """
+        SELECT case_id, fir_number, fir_year, crime_type, status, district,
+               station_name, place_of_offence, incident_date, incident_time,
+               latitude, longitude
+        FROM cases
+        WHERE latitude  BETWEEN :south AND :north
+          AND longitude BETWEEN :west  AND :east
+        LIMIT :cap
+        """
+    )
+    rows = (
+        (
+            await session.execute(
+                sql,
+                {
+                    "south": lat - dlat,
+                    "north": lat + dlat,
+                    "west": lng - dlng,
+                    "east": lng + dlng,
+                    "cap": LOCATION_ROW_CAP,
+                },
+            )
+        )
+        .mappings()
+        .all()
+    )
+    truncated = len(rows) >= LOCATION_ROW_CAP
+
+    # Refine the square to a circle.
+    scored: list[tuple[float, Any]] = []
+    for r in rows:
+        if r["latitude"] is None or r["longitude"] is None:
+            continue
+        km = routing_service.haversine_km(lat, lng, float(r["latitude"]), float(r["longitude"]))
+        if km * 1000.0 <= radius_m:
+            scored.append((km, r))
+    scored.sort(key=lambda t: t[0])
+
+    types = Counter(r["crime_type"] for _, r in scored if r["crime_type"])
+    statuses = Counter(r["status"] for _, r in scored if r["status"])
+    hours = Counter(
+        h for _, r in scored if (h := _parse_hour(r["incident_time"])) is not None
+    )
+
+    # Place context from the closest recorded case. Not a gazetteer lookup: there
+    # is no reverse geocoder in this stack, and inventing a place name on a police
+    # screen is worse than admitting there is none.
+    district = station = place = None
+    if scored:
+        nearest_row = scored[0][1]
+        district = nearest_row["district"]
+        station = nearest_row["station_name"]
+        place = nearest_row["place_of_offence"]
+
+    # Sentinel rather than a two-part key: a tuple key would compare dates
+    # against None whenever two rows share a null date, which raises.
+    recent = sorted(
+        scored,
+        key=lambda t: t[1]["incident_date"] or dt.date.min,
+        reverse=True,
+    )[:LOCATION_RECENT_LIMIT]
+
+    note = None
+    if not scored:
+        note = (
+            f"No cases recorded within {radius_m} m of this point. "
+            "The crime layer bins cases into cells, so a visible cell centre can "
+            "sit slightly off the underlying case coordinates."
+        )
+    elif truncated:
+        note = f"Row cap of {LOCATION_ROW_CAP} reached before distance filtering."
+
+    return {
+        "lat": _round(lat, dp) if dp else lat,
+        "lng": _round(lng, dp) if dp else lng,
+        "radius_m": radius_m,
+        "coords_coarsened": coarsen,
+        "district": district,
+        "station_name": station,
+        "place_label": place,
+        "total_cases": len(scored),
+        "crime_types": [
+            {"crime_type": t, "count": n}
+            for t, n in types.most_common(LOCATION_CRIME_TYPE_LIMIT)
+        ],
+        "status_breakdown": dict(statuses.most_common()),
+        "peak_hours": [h for h, _ in hours.most_common(3)],
+        "recent": [
+            {
+                "case_id": r["case_id"],
+                "fir_number": r["fir_number"],
+                "fir_year": r["fir_year"],
+                "crime_type": r["crime_type"],
+                "status": r["status"],
+                "station_name": r["station_name"],
+                "district": r["district"],
+                "place_of_offence": r["place_of_offence"],
+                "incident_date": (
+                    r["incident_date"].isoformat() if r["incident_date"] else None
+                ),
+                "distance_m": int(round(km * 1000)),
+            }
+            for km, r in recent
+        ],
+        "truncated": truncated,
+        "note": note,
+    }

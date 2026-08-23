@@ -30,6 +30,7 @@ import {
   type DeckTabId,
 } from "./chrome/IntelligenceDeck";
 import { EntityDossier, type OpenEntity } from "./dossiers/EntityDossier";
+import { LocationDossier } from "./dossiers/LocationDossier";
 import { TREATMENT_STORAGE_KEY, treatmentClass, type TreatmentId } from "./chrome/treatments";
 import { LAYERS, LAYER_STORAGE_KEY, defaultLayerState, type LayerId } from "./layerRegistry";
 import { visionApi, type DistrictIntelResult, type VisionTelemetry } from "@/lib/api/vision";
@@ -137,6 +138,22 @@ export function VisionWorkspace() {
         : [...prev, { kind, id }],
     );
   }, []);
+
+  // Clicked crime bins, held separately from `open` because a place is not an
+  // entity: it has no kind and no id, only coordinates. Keyed on the rounded
+  // coordinate so clicking the same bin twice does not stack duplicate panels.
+  const [pins, setPins] = useState<
+    { key: string; lat: number; lng: number; bin?: { cases?: number; cells?: number } }[]
+  >([]);
+  const openLocation = useCallback(
+    (lat: number, lng: number, bin?: { cases?: number; cells?: number }) => {
+      const key = `${lat.toFixed(5)},${lng.toFixed(5)}`;
+      setPins((prev) =>
+        prev.some((p) => p.key === key) ? prev : [...prev, { key, lat, lng, bin }],
+      );
+    },
+    [],
+  );
 
   // ── Voice: register before the map loads ───────────────────────────────────
   const applyRef = useRef<(d: RunTaskDetail) => void>(() => {});
@@ -325,8 +342,9 @@ export function VisionWorkspace() {
       hex,
       zoom: zoomBucket,
       onPick: openEntity,
+      onPickLocation: openLocation,
     });
-  }, [stack, snapshot, visible, hex, zoomBucket, openEntity]);
+  }, [stack, snapshot, visible, hex, zoomBucket, openEntity, openLocation]);
 
   const activeLayerCount = useMemo(
     () => LAYERS.filter((l) => visible[l.id] && !degraded[l.id]).length,
@@ -705,6 +723,17 @@ export function VisionWorkspace() {
               )
             }
             onFocus={(lat, lng) => flyTo(lat, lng, 15)}
+          />
+        ))}
+
+        {pins.map((p) => (
+          <LocationDossier
+            key={p.key}
+            lat={p.lat}
+            lng={p.lng}
+            bin={p.bin}
+            onClose={() => setPins((prev) => prev.filter((x) => x.key !== p.key))}
+            onFocus={(lat, lng) => flyTo(lat, lng, 16)}
           />
         ))}
 

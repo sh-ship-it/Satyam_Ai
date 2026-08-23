@@ -24,7 +24,7 @@ from app.api.deps import get_principal, get_scoped_session
 from app.config import get_settings
 from app.core.audit import write_audit
 from app.core.rbac import AccessDenied, Permission, Principal, require
-from app.schemas.vision import VisionSnapshot, VisionTelemetry
+from app.schemas.vision import VisionLocation, VisionSnapshot, VisionTelemetry
 from app.services import vision_service
 
 router = APIRouter()
@@ -219,3 +219,51 @@ async def entity(
         query_text=f"kind={kind} id={entity_id}",
     )
     return payload
+
+
+@router.get("/location", response_model=VisionLocation)
+async def location(
+    lat: float = Query(..., description="latitude of the clicked point"),
+    lng: float = Query(..., description="longitude of the clicked point"),
+    radius_m: int = Query(
+        vision_service.LOCATION_RADIUS_DEFAULT_M,
+        ge=vision_service.LOCATION_RADIUS_MIN_M,
+        le=vision_service.LOCATION_RADIUS_MAX_M,
+        description="search radius in metres",
+    ),
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> VisionLocation:
+    """What is recorded near one point on the map.
+
+    Backs the click-to-inspect popup. Same L2 guard and same audit obligation as
+    /snapshot, because this reads the same case geography — at higher precision,
+    which is if anything a stronger reason to audit it.
+
+    The point is clamped to STATE_BOUNDS rather than rejected: a click a little
+    outside Karnataka is a user aiming at the edge of the data, not an attack,
+    and clamping keeps the answer inside the jurisdiction this system covers.
+    """
+    _guard(principal)
+
+    lo_w, lo_s, hi_e, hi_n = STATE_BOUNDS
+    if not (lo_s <= lat <= hi_n and lo_w <= lng <= hi_e):
+        raise HTTPException(
+            status_code=422,
+            detail="point outside Karnataka; this system holds no data there",
+        )
+
+    payload = await vision_service.build_location(
+        session, principal, lat=lat, lng=lng, radius_m=radius_m
+    )
+
+    await write_audit(
+        session,
+        action="vision.location",
+        user_id=principal.officer_id,
+        query_text=(
+            f"lat={lat:.5f} lng={lng:.5f} radius_m={payload['radius_m']} "
+            f"hits={payload['total_cases']}"
+        ),
+    )
+    return VisionLocation(**payload)
