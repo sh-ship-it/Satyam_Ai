@@ -220,8 +220,8 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/analytics.py": {
-    "mtime": 1787336547.602526,
-    "ast_hash": "2e5880c455fc756c67446174c10350ec",
+    "mtime": 1787497468.120899,
+    "ast_hash": "0167fc0b9d825c46428686faa40e1cc5",
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/rag.py": {
@@ -295,8 +295,8 @@
     "semantic_hash": ""
   },
   "backend/app/services/network_service.py": {
-    "mtime": 1781580657.3011084,
-    "ast_hash": "1d2b0876d6ed944f9606d8768ff31819",
+    "mtime": 1787497471.0118332,
+    "ast_hash": "54084db24ae66be8bb2c415815f4ed29",
     "semantic_hash": ""
   },
   "backend/app/services/report_service.py": {
@@ -720,8 +720,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
-    "mtime": 1782387105.2006607,
-    "ast_hash": "3169c7b28df448df2f0c581654fe7f2a",
+    "mtime": 1787497064.383642,
+    "ast_hash": "14307643c2733eb87ba4520747179e90",
     "semantic_hash": ""
   },
   "frontend/src/routes/reports.tsx": {
@@ -825,8 +825,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1787492309.5958078,
-    "ast_hash": "3499c86b553c0b280be01b31dd8e6ad6",
+    "mtime": 1787500146.5402548,
+    "ast_hash": "d0b2e93e0a2245dbe0ffcc8a52118afe",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -1050,8 +1050,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/FinancialLinksPanel.tsx": {
-    "mtime": 1782375858.0728672,
-    "ast_hash": "f7e94739126ef36b8731bd3846d10035",
+    "mtime": 1787499699.1168401,
+    "ast_hash": "05e6fd62d44af24ce7466bb9fe9d73c4",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/financial.ts": {
@@ -1937,6 +1937,16 @@
   "frontend/src/lib/roadPath.ts": {
     "mtime": 1787491023.0564623,
     "ast_hash": "ad1099a756d943f5c1cbebe432495685",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/forceGraph.check.mjs": {
+    "mtime": 1787497206.648275,
+    "ast_hash": "59987972046372e2589910085a81fd97",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/forceGraph.ts": {
+    "mtime": 1787497037.417527,
+    "ast_hash": "d99a9f69b8238aaeddfc30cbe10b15c0",
     "semantic_hash": ""
   }
 }
