@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1787505108.1944077,
-    "ast_hash": "16450cfeccb78c95ed342b2c41bb7045",
+    "mtime": 1787518936.72356,
+    "ast_hash": "cd329cfd9d7b18b41ad2eb7ee125066d",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -1960,8 +1960,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/ask.tsx": {
-    "mtime": 1787509547.1080487,
-    "ast_hash": "0d76c07188a44c57efd81b7a6a9f6a3b",
+    "mtime": 1787520043.4646118,
+    "ast_hash": "1907d53d04c37348447b1f7b15fdc424",
     "semantic_hash": ""
   },
   "backend/app/core/storage.py": {
@@ -1987,6 +1987,21 @@
   "docs/rag-budget-and-coverage/tasks.md": {
     "mtime": 1787516106.276223,
     "ast_hash": "e4dca1b77c6374dd509a4e49c3d26c3f",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/VoiceOrb.tsx": {
+    "mtime": 1787518728.3617408,
+    "ast_hash": "b4fa05bae612ee8f835bd588d45452b7",
+    "semantic_hash": ""
+  },
+  "ai face for chat.mp4": {
+    "mtime": 1787519382.7927735,
+    "ast_hash": "ecd6b2643c19f781a8b369e706281cd0",
+    "semantic_hash": ""
+  },
+  "frontend/public/voice-orb.mp4": {
+    "mtime": 1787517690.2121303,
+    "ast_hash": "be0516ca113b1c8ddaa830dbe0e1f934",
     "semantic_hash": ""
   }
 }
