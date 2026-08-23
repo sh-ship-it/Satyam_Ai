@@ -31,6 +31,7 @@ import { DarkModeToggle } from "./DarkModeToggle";
 import { SettingsDialog, loadEngineSettings } from "./SettingsDialog";
 import { ProfileMenu } from "./ProfileMenu";
 import { HandsFreeLayer } from "./HandsFreeLayer";
+import { VoiceOrb, type OrbState } from "./VoiceOrb";
 import { loadHandsFree, saveHandsFree } from "@/config/handsFreeConfig";
 import { useI18n } from "@/lib/i18n";
 import {
@@ -199,6 +200,19 @@ export function Shell({ children }: { children: ReactNode }) {
     saveHandsFree(next);
     setHandsFreeOn(next.enabled);
   }, []);
+  // ── Floating voice orb ────────────────────────────────────────────────────
+  // `orbMode` means "this capture was started by the floating orb", which changes
+  // two things: the full-screen copilot overlay stays closed (the orb is the whole
+  // UI for the turn), and the utterance does NOT auto-submit on silence — the
+  // officer taps the orb again to send. Both differences are deliberate; the
+  // top-bar mic keeps its existing overlay + auto-submit behaviour untouched.
+  const [orbMode, setOrbMode] = useState(false);
+  const orbModeRef = useRef(false);
+  const orbCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    orbModeRef.current = orbMode;
+  }, [orbMode]);
+
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [finalTranscript, setFinalTranscript] = useState("");
@@ -747,7 +761,9 @@ export function Shell({ children }: { children: ReactNode }) {
         }
         liveInterimRef.current = interim;
         setInterimTranscript(interim || (liveFinalRef.current ? "" : "\u2026"));
-        armSilence(); // reset end-of-utterance timer on every speech event
+        // Orb-initiated turns end on a tap, not on silence, so the officer can
+        // pause mid-sentence without the turn being sent out from under them.
+        if (!orbModeRef.current) armSilence();
       };
       rec.onerror = (e: any) => {
         if (e.error === "not-allowed" || e.error === "service-not-allowed")
@@ -835,7 +851,10 @@ export function Shell({ children }: { children: ReactNode }) {
     void startSttSession({
       lang: sttLang,
       silenceMs: 1500, // auto-end the utterance ~1.5s after speech stops
-      maxMs: 15000,
+      // Orb turns are stopped by a second tap. `manual` keeps the recorder open
+      // through pauses; the 60s cap is a runaway guard, not an expected path.
+      manual: orbModeRef.current,
+      maxMs: orbModeRef.current ? 60000 : 15000,
       callbacks: {
         onStatus: (s: string) => {
           if (!cancelled) setCaptureStatus(s);
@@ -857,6 +876,14 @@ export function Shell({ children }: { children: ReactNode }) {
             dispatchTurn(clean);
           } else {
             setCaptureStatus("Didn't catch that \u2014 tap the mic to try again.");
+            // The overlay can show that message and let the user retry in place.
+            // The orb cannot: it has no surface for it, so an empty result has to
+            // end the turn too, or tap-start → silence → tap-stop pins the orb in
+            // "listening" with no way back to idle.
+            if (orbModeRef.current) {
+              setMicActive(false);
+              setListening(false);
+            }
           }
         },
         onError: (msg: string) => {
@@ -953,6 +980,72 @@ export function Shell({ children }: { children: ReactNode }) {
     return () => window.removeEventListener("satyam:ai-state", onState);
   }, [resumeListening, clearThinkWatchdog]);
 
+  // ── Orb: one tap opens the mic, the next tap sends ────────────────────────
+  // Reuses the copilot capture effect and the whole `satyam:voice-command`
+  // pipeline rather than opening a second recognition session, so the orb answers
+  // questions, navigates and automates screens exactly as the top-bar mic does.
+  const orbState: OrbState = isSpeaking
+    ? "speaking"
+    : phaseRef.current === "processing"
+      ? "thinking"
+      : listening && micActive
+        ? "listening"
+        : "idle";
+
+  const handleOrbToggle = useCallback(() => {
+    if (listening) {
+      // Second tap: close the utterance. The engine's own stop path finalises the
+      // transcript and dispatches the turn, so there is no separate submit here —
+      // one code path for the orb, the overlay and silence auto-submit alike.
+      setCaptureStatus("Finishing\u2026");
+      try {
+        sttSessionRef.current?.stop();
+      } catch {
+        /* session already closed */
+      }
+      try {
+        recognitionRef.current?.stop();
+      } catch {
+        /* browser engine not in use */
+      }
+      // Guarantee the orb returns to idle. `stop()` normally resolves into a
+      // transcript, which dispatches the turn and clears the mic — but a silent
+      // capture, a transcription failure, or an engine that never fires its
+      // result callback would all leave the orb pinned in "listening" forever.
+      // The orb is the only visible control in this mode, so an unreachable idle
+      // state is unrecoverable without a reload.
+      if (orbCloseTimerRef.current) clearTimeout(orbCloseTimerRef.current);
+      orbCloseTimerRef.current = setTimeout(() => {
+        orbCloseTimerRef.current = null;
+        if (!orbModeRef.current || turnSubmittedRef.current) return;
+        setMicActive(false);
+        setListening(false);
+      }, 4000);
+      return;
+    }
+    // First tap. unlockAudioPlayback must run inside the gesture or the spoken
+    // reply is silently blocked by the autoplay policy.
+    unlockAudioPlayback();
+    setOrbMode(true);
+    orbModeRef.current = true; // the capture effect reads the ref this same tick
+    setListening(true);
+    setMicActive(true);
+    setIsSpeaking(false);
+    setIsPaused(false);
+  }, [listening]);
+
+  // Release orb mode once the turn is fully over, so the next top-bar mic press
+  // gets the normal overlay back.
+  useEffect(() => {
+    if (!listening && orbMode) {
+      setOrbMode(false);
+      if (orbCloseTimerRef.current) {
+        clearTimeout(orbCloseTimerRef.current);
+        orbCloseTimerRef.current = null;
+      }
+    }
+  }, [listening, orbMode]);
+
   const NAV = [
     { to: "/ask", icon: Sparkles, label: t("Ask Satyam") },
     { to: "/console", icon: MessageSquare, label: t("Console") },
@@ -1036,7 +1129,9 @@ export function Shell({ children }: { children: ReactNode }) {
 
       <SettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
-      {listening && (
+      {/* Full-screen copilot overlay — suppressed for orb-initiated turns, where
+          the floating orb itself is the entire interface for the turn. */}
+      {listening && !orbMode && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm"
           onClick={() => {
@@ -1454,6 +1549,11 @@ export function Shell({ children }: { children: ReactNode }) {
 
         <main className="flex-1 min-w-0 overflow-auto">{children}</main>
       </div>
+
+      {/* Floating voice orb — present on every screen because Shell wraps every
+          route. Hidden while the full overlay is up so there is only ever one
+          visible mic control. */}
+      <VoiceOrb state={orbState} onToggle={handleOrbToggle} hidden={listening && !orbMode} />
 
       {/* Hands-free multimodal layer: gesture control, face-presence auto-lock,
           wake word, and War-room mode. Self-gates on the user's settings. */}

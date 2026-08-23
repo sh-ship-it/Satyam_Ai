@@ -151,15 +151,12 @@ function Ask() {
     [],
   );
 
-  // ── Bootstrap: adopt the shared history, or open a fresh conversation ──────
+  // ── Bootstrap: always open on a fresh conversation ────────────────────────
+  // Past conversations stay in the sidebar to reopen by hand, but opening the
+  // screen never resumes one. Blank shells left by earlier visits are dropped
+  // first, otherwise every open would stack another empty row into history.
   useEffect(() => {
-    const saved = loadConversations();
-    if (saved.length > 0) {
-      setConversations(saved);
-      setActiveId(saved[0].id);
-      setMessages(saved[0].messages);
-      return;
-    }
+    const saved = loadConversations().filter((c) => c.messages.length > 0);
     const conv: Conversation = {
       id: generateId(),
       title: t("New conversation"),
@@ -167,9 +164,12 @@ function Ask() {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    setConversations([conv]);
+    const next = [conv, ...saved];
+    setConversations(next);
     setActiveId(conv.id);
-    saveConversations([conv]);
+    setMessages([]);
+    backendConvId.current = null;
+    saveConversations(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -854,7 +854,10 @@ function AiTurn({
         </span>
       </div>
 
-      <div className="pl-8 text-[15px] leading-7 text-foreground">
+      {/* Same bubble treatment as UserTurn (border + bg-muted), so both sides of the
+          conversation read as matching surfaces. ml-8 keeps the alignment the old
+          pl-8 gave, under the SY avatar. */}
+      <div className="ml-8 max-w-[85%] rounded-[10px] border border-border bg-muted px-4 py-2.5 text-[15px] leading-7 text-foreground">
         <Markdown>{text}</Markdown>
         {streaming && (
           <span className="ml-0.5 inline-block h-4 w-1.5 translate-y-0.5 animate-pulse bg-primary align-middle" />
