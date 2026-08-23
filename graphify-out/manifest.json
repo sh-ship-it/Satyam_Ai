@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1787488966.1084545,
-    "ast_hash": "ccf9ed9522ffa47b525608710865036d",
+    "mtime": 1787505108.1944077,
+    "ast_hash": "16450cfeccb78c95ed342b2c41bb7045",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -685,8 +685,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
-    "mtime": 1787488818.9834473,
-    "ast_hash": "062e81bbd642580385b6587db79ae6c8",
+    "mtime": 1787505047.6986141,
+    "ast_hash": "b2e813611ddfa0191c8e5186eeff253c",
     "semantic_hash": ""
   },
   "frontend/src/router.tsx": {
@@ -710,8 +710,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
-    "mtime": 1782298187.1418211,
-    "ast_hash": "4d939826dd9313aaaa3726b30ac78eac",
+    "mtime": 1787505077.400528,
+    "ast_hash": "76a4d92ce1b3ee3c8acb2639a202c281",
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
@@ -825,8 +825,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1787500146.5402548,
-    "ast_hash": "d0b2e93e0a2245dbe0ffcc8a52118afe",
+    "mtime": 1787507375.49606,
+    "ast_hash": "3fcf404ca93464bb23f0de44c21ec5b3",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -1947,6 +1947,21 @@
   "frontend/src/lib/forceGraph.ts": {
     "mtime": 1787497037.417527,
     "ast_hash": "d99a9f69b8238aaeddfc30cbe10b15c0",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/Markdown.tsx": {
+    "mtime": 1787505166.4456544,
+    "ast_hash": "7316d78d500adf5905fa2e04c3980e50",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/chatStore.ts": {
+    "mtime": 1787504918.3595126,
+    "ast_hash": "e21e50184f1e9043bca3c28bfb081ce6",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/ask.tsx": {
+    "mtime": 1787507155.4406505,
+    "ast_hash": "e6cfa3f33c657fe5a0bd3acd2e46d9c5",
     "semantic_hash": ""
   }
 }
