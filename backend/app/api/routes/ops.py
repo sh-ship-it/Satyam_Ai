@@ -16,7 +16,13 @@ from app.schemas.ops import (
     DispatchOut, DispatchRequest, PatrolOut,
     RiskZoneOut, RiskZonesResponse, SuggestionOut, SuggestionsResponse,
 )
-from app.services.ops import corridor_service, risk_service, routing_service, sim_service
+from app.services.ops import (
+    corridor_service,
+    risk_service,
+    roadgraph_service,
+    routing_service,
+    sim_service,
+)
 from app.services.ops.ws_manager import manager
 
 router = APIRouter()
@@ -277,6 +283,36 @@ async def signals(
     _guard(principal)
     rows = (await session.execute(select(TrafficSignal))).scalars().all()
     return [{"id": s.id, "junction_id": s.junction_id, "lat": s.lat, "lng": s.lng, "state": s.state} for s in rows]
+
+
+@router.get("/roadgraph")
+async def roadgraph(
+    bbox: str,
+    principal: Principal = Depends(get_principal),
+) -> dict:
+    """Arterial road graph for a bbox, so the client can run a real path search.
+
+    Read-only and cached server-side, so this uses the plain read guard. It returns
+    public OpenStreetMap geometry and no case data, which is why it does not need
+    the analyst gate that /api/vision/* carries.
+
+    `bbox` is "west,south,east,north" — same order as /api/vision/snapshot, so the
+    two are not subtly different.
+    """
+    _guard(principal)
+    parts = bbox.split(",")
+    if len(parts) != 4:
+        raise HTTPException(status_code=422, detail="bbox must be 'west,south,east,north'")
+    try:
+        west, south, east, north = (float(p) for p in parts)
+    except ValueError:
+        raise HTTPException(status_code=422, detail="bbox values must be numbers") from None
+    try:
+        return await roadgraph_service.get_graph(
+            south=south, west=west, north=north, east=east
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
 
 
 @router.get("/corridor/state")

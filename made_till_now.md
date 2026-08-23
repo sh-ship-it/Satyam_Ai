@@ -5164,3 +5164,163 @@ diff: **1 insertion, 7 deletions across 3 files**, with no collateral reformatti
   `/operations` link and no "Live Ops" text anywhere; the landing page link is gone.
 
 Left **uncommitted**, per the standing rule.
+
+---
+
+## Dispatch: real road routing and a real Dijkstra search animation
+
+Reported: on `/ops-dispatch` the patrol car drove in a straight line instead of
+following roads. Requested: clicking "Start simulation" should animate a search
+spreading down multiple roads until it finds the shortest path, then the car
+drives that path.
+
+### The straight line was hardcoded, not a routing failure
+
+Worth stating plainly because the natural assumption is wrong: **"Start
+simulation" made no network call at all.** The geometry came from
+`straightRoute()` in `DispatchPanel.tsx` — a linear interpolation between two
+literal lat/lngs — animated by `setInterval` at 140 ms stepping vertex to vertex.
+OSRM, `routing_service` and the whole websocket dispatch path were never involved.
+
+The legend made it worse. Two lines were drawn:
+
+| Legend said | Actually was |
+|---|---|
+| "Green corridor" | the **straight** line — and the car followed this one |
+| "Initial route" | `curvedRoute()`, a cosmetic quadratic Bézier bowed sideways so it would not overlap the straight line. No road data. The car never followed it. |
+
+So the thing labelled a route was decoration, and the thing the car followed was a
+straight line labelled as a corridor.
+
+A latent second straight line also exists server-side: `routing_service.get_route`
+falls back to `_straight_line` on any exception, and its `provider` field
+(`"OSRM"` / `"STRAIGHT_LINE"`) is **never read by any caller or surfaced in any
+response model** — so a silent degrade is invisible. `OSRM_BASE_URL` defaults to
+the public demo server over plain HTTP and appears nowhere in any env file or
+compose service.
+
+### Why OSRM could not deliver the requested animation
+
+A routing engine returns the winning path and discards the frontier it explored.
+Animating a search needs the *graph*. So this needed road topology, and the repo
+had none: no Dijkstra, no A\*, no adjacency, no roads table, no OSM extract, no
+Overpass client — verified absent rather than merely unlocated. (`networkx` is
+installed but only ever pointed at person-link graphs in `analytics.py`.)
+
+### What was built
+
+**Backend — `app/services/ops/roadgraph_service.py` + `GET /api/ops/roadgraph`.**
+Fetches arterial roads from Overpass for a bbox and returns a deduplicated graph:
+nodes once as `[lat, lng]`, edges as `[fromIdx, toIdx, metres]`. Six-hour TTL
+cache, two endpoint mirrors, `provider` field, and a bbox span cap so one request
+cannot pull half the state.
+
+Three details that mattered:
+
+- **Overpass returns `406 Not Acceptable` to a default `python-httpx` agent.** It
+  requires a User-Agent identifying the application. First attempt failed on this,
+  then timed out on the mirror — 26 s to produce nothing.
+- **Node dedup by rounded coordinate is what makes it a graph.** Ways share
+  endpoints; without collapsing them every way is an isolated chain and no path is
+  ever found.
+- **Residential streets excluded** (`motorway`..`tertiary` plus `_link` ramps).
+  Including them multiplies node count roughly tenfold for a demo that is showing
+  how a search works.
+
+**Frontend — `src/lib/roadPath.ts`.** Dijkstra with a hand-rolled binary min-heap
+(~30 lines; not worth a dependency), CSR-style flat adjacency arrays rather than
+an array-of-arrays to avoid ~20k object allocations, and — the point of the whole
+module — it records `explored`: the edge used to reach each node, in settle order.
+That array is the animation timeline. Also `resampleByDistance`, because road
+vertices are wildly uneven (two points across a highway, thirty round a
+roundabout) and stepping vertex-to-vertex makes the car crawl at junctions and
+teleport on straights.
+
+**`CrimeMap` gained a `searchEdges` prop** — thin translucent polylines, rebuilt
+wholesale per change so a cancelled search cannot leave edges behind.
+
+**`DispatchPanel.startSim` is now async** with phases
+`PLANNING -> SEARCHING -> EN_ROUTE -> ON_SCENE -> COMPLETED`, plus `NO_ROUTE`. A
+`simRun` ref invalidates in-flight work, so starting SIM-02 while SIM-01's graph
+fetch is still running cannot animate SIM-01's search over SIM-02.
+
+`curvedRoute` was **deleted**. `straightRoute` survives but only as an explicitly
+labelled "straight-line reference" overlay for comparing road distance against
+crow-flies — the car does not follow it.
+
+### Honesty carried on screen
+
+- Legend renamed: "Initial route" -> "Straight-line reference", plus a new "Roads
+  searched" entry.
+- The panel prints what the search did: *"Dijkstra settled 1,976 nodes · 1.99 km by
+  road vs 1.72 km straight"*.
+- And what it is not: *"Shortest distance on arterial roads — no one-ways or turn
+  restrictions, so not a drive-time estimate."* The graph has no turn restrictions,
+  no one-way flags and no signal timing, so calling the result an ETA would be a
+  claim the data cannot support.
+- **No straight-line fallback.** If Overpass is unreachable or the two points are
+  not connected within the fetched area, the phase becomes `NO_ROUTE` and the
+  reason is shown. Drawing a straight line on failure is the bug this change
+  removed; reintroducing it as an error path would undo the fix.
+
+### Verified
+
+- **Graph is real topology**, measured directly: 3,711 ways -> 19,293 nodes /
+  20,601 edges, with **2,028 nodes of degree >= 3**. A straight line has zero
+  junctions. Road paths came out 1.16x and 1.24x the straight-line distance across
+  two scenarios — a plausible city detour, not a suspicious 1.0 or 3.0+.
+- **`src/lib/roadPath.check.mjs`** — runnable with `node`, no framework. Five
+  groups: heap ordering; a cheap multi-hop detour beating a tempting direct edge
+  (this is the one that catches a broken heap, which would otherwise return a
+  plausible-looking but wrong path); disconnected graphs returning null rather than
+  guessing; explored order matching settle order; and resampling producing
+  near-uniform spacing from deliberately lopsided input. All pass.
+- **In the browser**, driving the real screen: phase went `Searching roads` ->
+  `ETA`, the panel reported *"Dijkstra settled 1,242 nodes · 2.08 km by road vs
+  1.85 km straight"*, and the map held **1,242 frontier polylines** in `#00e6a8`
+  alongside 1 straight-line reference and 2 corridor lines.
+- **The decisive check** — sampling the car marker's screen position and measuring
+  bearing between successive legs: **358° of bearing spread over 16 legs**, with
+  multiple direction changes above 8°. The old straight line would measure ~0°.
+- Backend suite **133 passed**; `tsc --noEmit` at its **56-error baseline** with
+  zero errors in `DispatchPanel`, `roadPath` or `CrimeMap`.
+
+### Not addressed
+
+`routing_service`'s silent `STRAIGHT_LINE` fallback still exists for the
+*backend-driven* dispatch path (`POST /api/ops/dispatch` -> websocket sim), and
+`provider` is still not surfaced to the UI. That is a separate honesty gap on a
+different code path and was left alone rather than widened into this change.
+
+Left **uncommitted**, per the standing rule.
+
+### Follow-up: the straight-line reference overlay removed
+
+Once the car followed real roads, the blue straight line had no job left except
+comparison, and on a map already covered by the search frontier it was clutter.
+Removed, along with the code that existed only to draw it: `straightRoute`, `lerp`,
+the `simRoute` state and the `routePath` prop on this screen. The legend entry went
+with it, so every line the Dispatch map now draws is real road geometry.
+
+The comparison it was there to make is not lost — it is still stated as numbers in
+the panel: *"1.99 km by road vs 1.72 km straight"*. A number makes the point
+without drawing something that looks like a route.
+
+**It turned out to be load-bearing, which is the interesting part.** Deleting it
+broke the map's auto-zoom. `CrimeMap`'s one-shot `fitBounds` framed
+`corridorPath ?? routePath`, and at the moment a simulation starts neither exists
+yet — the corridor is only known after the search finishes. The straight line had
+been the thing being framed, so a purely decorative overlay was silently holding up
+the camera.
+
+Fixed by separating the two concerns rather than by keeping the line: `CrimeMap`
+gained a `fitTo` prop, used only for framing and never drawn, and DispatchPanel
+passes the origin/scene pair. Framing no longer depends on what happens to be
+rendered.
+
+Verified in the browser after the removal: the legend no longer mentions a
+reference line, **no `#91C5FD` polyline appears at any point** during a run, the
+frontier still peaks at 1,976 edges, the camera frames the action again, and the
+car still turns — 159.9° of bearing spread over 14 legs. `tsc` at its 56-error
+baseline; the two `no-explicit-any` lint errors in `DispatchPanel` are pre-existing
+`catch (err: any)` blocks, confirmed absent from this diff.

@@ -26,6 +26,8 @@ export function CrimeMap({
   liveMarkers,
   routePaths,
   corridorPath,
+  searchEdges,
+  fitTo,
   fitSignal,
   lockBounds,
   darkTiles,
@@ -41,7 +43,19 @@ export function CrimeMap({
   liveMarkers?: Hotspot[];
   routePaths?: Hotspot[][];
   corridorPath?: [number, number][];
-  /** Increment this number to trigger a one-shot fitBounds to the current corridorPath. */
+  /** Road edges settled so far by the path search, each `[[lat,lng],[lat,lng]]`.
+   *  Drawn thin and translucent so a growing frontier reads as exploration rather
+   *  than as a chosen route. Grows during the search, then is cleared. */
+  searchEdges?: [number, number][][];
+  /** Points to frame on `fitSignal`, when what you want to *see* is not something
+   *  you want to *draw*.
+   *
+   *  Exists because framing used to piggyback on whichever line happened to be
+   *  rendered, which quietly made a decorative straight line load-bearing: delete
+   *  the line and the map stopped zooming. */
+  fitTo?: [number, number][];
+  /** Increment this number to trigger a one-shot fitBounds — to `fitTo` if given,
+   *  otherwise to the current corridorPath / routePath. */
   fitSignal?: number;
   /** When true, suppress the automatic fitBounds that fires when `points` changes. */
   lockBounds?: boolean;
@@ -333,6 +347,36 @@ export function CrimeMap({
     // No fitBounds here — fitSignal handles zooming.
   }, [corridorPath, ready]);
 
+  // --- Path-search frontier: road edges settled so far -----------------------
+  //
+  // Rebuilt wholesale on each change rather than appended to. The caller grows
+  // `searchEdges` in chunks, so a full rebuild is a few hundred polylines at
+  // most, and it keeps this effect stateless — no reconciliation bugs where a
+  // cancelled search leaves edges behind.
+  const searchRef = useRef<any>(null);
+  useEffect(() => {
+    const map = mapRef.current,
+      L = LRef.current;
+    if (!map || !L || !ready) return;
+    if (searchRef.current) {
+      map.removeLayer(searchRef.current);
+      searchRef.current = null;
+    }
+    if (!searchEdges || !searchEdges.length) return;
+    const group = L.layerGroup();
+    for (const seg of searchEdges) {
+      if (seg.length < 2) continue;
+      L.polyline(seg, {
+        color: "#00E6A8",
+        weight: 2,
+        opacity: 0.45,
+        interactive: false,
+      }).addTo(group);
+    }
+    group.addTo(map);
+    searchRef.current = group;
+  }, [searchEdges, ready]);
+
   // --- One-shot fitBounds: fires only when fitSignal increments ---
   useEffect(() => {
     if (!fitSignal) return;
@@ -340,7 +384,9 @@ export function CrimeMap({
       L = LRef.current;
     if (!map || !L || !ready) return;
     const path =
-      corridorPath ?? (routePath ? routePath.map((p) => [p.lat, p.lng] as [number, number]) : null);
+      (fitTo && fitTo.length >= 2 ? fitTo : null) ??
+      corridorPath ??
+      (routePath ? routePath.map((p) => [p.lat, p.lng] as [number, number]) : null);
     if (!path || path.length < 2) return;
     try {
       map.fitBounds(L.latLngBounds(path).pad(0.3), { maxZoom: 15, animate: true });

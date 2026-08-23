@@ -8,6 +8,7 @@ import {
   type ActiveDispatch,
 } from "@/lib/api/responseOps";
 import { useT } from "@/lib/i18n";
+import { fetchRoadGraph, resampleByDistance, shortestPath, type RoadGraph } from "@/lib/roadPath";
 
 const PHASES = [
   { key: "ACCEPTED", label: "Accepted" },
@@ -123,37 +124,19 @@ const DEMO_DISPATCHES: DemoDispatch[] = [
   },
 ];
 
-function lerp(a: number, b: number, t: number) {
-  return a + (b - a) * t;
-}
-
-function straightRoute(a: LL, b: LL, n = 56): LL[] {
-  const out: LL[] = [];
-  for (let i = 0; i <= n; i++) {
-    const t = i / n;
-    out.push({ lat: lerp(a.lat, b.lat, t), lng: lerp(a.lng, b.lng, t) });
-  }
-  return out;
-}
-
-function curvedRoute(a: LL, b: LL, bend = 0.22, n = 60): LL[] {
-  const mLat = (a.lat + b.lat) / 2,
-    mLng = (a.lng + b.lng) / 2;
-  const dLat = b.lat - a.lat,
-    dLng = b.lng - a.lng;
-  const cLat = mLat + -dLng * bend,
-    cLng = mLng + dLat * bend;
-  const out: LL[] = [];
-  for (let i = 0; i <= n; i++) {
-    const t = i / n,
-      u = 1 - t;
-    out.push({
-      lat: u * u * a.lat + 2 * u * t * cLat + t * t * b.lat,
-      lng: u * u * a.lng + 2 * u * t * cLng + t * t * b.lng,
-    });
-  }
-  return out;
-}
+// `lerp` and `straightRoute` lived here. `straightRoute` drew the line the car
+// used to follow; once the car started following real roads its only remaining job
+// was a "straight-line reference" overlay, and that turned out to be pure clutter
+// across a map already covered in the search frontier. The road-vs-crow-flies
+// comparison it existed to support is still made, as numbers, in the panel:
+// "1.99 km by road vs 1.72 km straight". A number states the comparison without
+// drawing a line that looks like a route.
+//
+// `curvedRoute` lived here too: a quadratic Bézier that bowed the "Initial route"
+// line sideways so it would not sit exactly on top of the straight corridor. It
+// was cosmetic — no road data, and the car never followed it. Deleted rather than
+// kept, because a curve that looks like a route but is not one is the kind of
+// decoration that gets mistaken for data.
 
 function haversineKm(a: LL, b: LL): number {
   const R = 6371,
@@ -192,14 +175,27 @@ export function DispatchPanel() {
 
   // ── self-contained demo sim state ──────────────────────────────────────────
   const [simId, setSimId] = useState<string | null>(null);
-  const [simRoute, setSimRoute] = useState<Hotspot[] | null>(null);
+
   const [simCorridor, setSimCorridor] = useState<[number, number][] | null>(null);
   const [simFitSignal, setSimFitSignal] = useState(0);
+  /** The two endpoints, used only to frame the map. Never drawn. */
+  const [simFitTo, setSimFitTo] = useState<[number, number][] | null>(null);
   const [simCar, setSimCar] = useState<LL | null>(null);
   const [simSignals, setSimSignals] = useState<SimSignal[]>([]);
   const [simPhase, setSimPhase] = useState<string>("ACCEPTED");
   const [simEta, setSimEta] = useState<number>(0);
   const simTimer = useRef<number | null>(null);
+
+  // ── path search state ──────────────────────────────────────────────────────
+  /** Road edges settled so far, revealed progressively as the search animates. */
+  const [simSearch, setSimSearch] = useState<[number, number][][] | null>(null);
+  /** Human-readable status for the search: what it is doing, or why it cannot. */
+  const [simNote, setSimNote] = useState<string | null>(null);
+  const [simRoadKm, setSimRoadKm] = useState<number | null>(null);
+  /** Bumped on every start/stop so async work from a previous run cannot write
+   *  into the current one. Without this, starting SIM-02 while SIM-01's graph
+   *  fetch is still in flight would animate SIM-01's search over SIM-02. */
+  const simRun = useRef(0);
 
   const clearSimTimer = () => {
     if (simTimer.current) {
@@ -210,51 +206,171 @@ export function DispatchPanel() {
   useEffect(() => () => clearSimTimer(), []);
 
   function stopSim() {
+    simRun.current += 1; // invalidate any in-flight search for the old run
     clearSimTimer();
     setSimId(null);
-    setSimRoute(null);
+
     setSimCorridor(null);
     setSimCar(null);
     setSimSignals([]);
     setSimPhase("ACCEPTED");
     setSimEta(0);
+    setSimSearch(null);
+    setSimNote(null);
+    setSimRoadKm(null);
+    setSimFitTo(null);
   }
 
-  function startSim(d: DemoDispatch) {
-    clearSimTimer();
-    const initial = curvedRoute(d.origin, d.scene, 0.22, 60);
-    const corridorPts = straightRoute(d.origin, d.scene, 56);
-    const sigs = makeSignals(corridorPts, d.id);
-    const totalKm = haversineKm(d.origin, d.scene);
-    setSimId(d.id);
-    setSimRoute(initial.map((p) => ({ lat: p.lat, lng: p.lng, weight: 1 })));
-    setSimCorridor(corridorPts.map((p) => [p.lat, p.lng] as [number, number]));
-    setSimFitSignal((n) => n + 1); // trigger one-shot fitBounds in CrimeMap
-    setSimSignals(sigs);
-    setSimCar({ lat: corridorPts[0].lat, lng: corridorPts[0].lng });
-    setSimPhase("ACCEPTED");
-    setSimEta(Math.max(1, Math.round((totalKm / 40) * 3600)));
-    const n = corridorPts.length;
+  /** Drive the car along a road path, one resampled step per tick. */
+  function driveAlong(pathLatLng: [number, number][], roadKm: number, runId: number) {
+    // Resampled so each tick covers the same ground. Road vertices are unevenly
+    // spaced — two points across a highway, thirty round a roundabout — so
+    // stepping vertex-to-vertex made the car crawl at junctions and jump on
+    // straights.
+    const pts = resampleByDistance(pathLatLng, 90);
+    const n = pts.length;
+    setSimCorridor(pts);
+    setSimSignals(
+      makeSignals(
+        pts.map(([lat, lng]) => ({ lat, lng })),
+        // Junction markers sit ON the real path now, not on a straight line.
+        pathLatLng.length ? "SIM" : "SIM",
+      ),
+    );
+    setSimCar({ lat: pts[0][0], lng: pts[0][1] });
+    setSimEta(Math.max(1, Math.round((roadKm / 40) * 3600)));
+    setSimPhase("EN_ROUTE");
+
     let i = 0;
-    window.setTimeout(() => setSimPhase((p) => (p === "ACCEPTED" ? "EN_ROUTE" : p)), 800);
     simTimer.current = window.setInterval(() => {
+      if (simRun.current !== runId) {
+        clearSimTimer();
+        return;
+      }
       i += 1;
       if (i >= n - 1) {
         clearSimTimer();
-        setSimCar({ lat: corridorPts[n - 1].lat, lng: corridorPts[n - 1].lng });
+        setSimCar({ lat: pts[n - 1][0], lng: pts[n - 1][1] });
         setSimPhase("ON_SCENE");
         setSimEta(0);
         window.setTimeout(() => {
+          if (simRun.current !== runId) return;
           setSimPhase("COMPLETED");
-          // Auto-stop 1.5s after showing COMPLETED so routes/corridor clear cleanly.
-          window.setTimeout(() => stopSim(), 1500);
+          window.setTimeout(() => {
+            if (simRun.current === runId) stopSim();
+          }, 1500);
         }, 1600);
         return;
       }
-      setSimCar({ lat: corridorPts[i].lat, lng: corridorPts[i].lng });
-      setSimPhase("EN_ROUTE");
-      setSimEta(Math.max(1, Math.round((((1 - i / n) * totalKm) / 40) * 3600)));
-    }, 140);
+      setSimCar({ lat: pts[i][0], lng: pts[i][1] });
+      setSimEta(Math.max(1, Math.round((((1 - i / n) * roadKm) / 40) * 3600)));
+    }, 90);
+  }
+
+  /** Replay the search frontier, then hand over to the car.
+   *
+   *  Reveals settled edges in chunks on a timer rather than one per frame: a city
+   *  search settles a couple of thousand edges, and one edge per frame would take
+   *  half a minute to watch. */
+  function animateSearch(explored: [number, number][][], onDone: () => void, runId: number) {
+    const FRAMES = 46;
+    const chunk = Math.max(1, Math.ceil(explored.length / FRAMES));
+    let shown = 0;
+    simTimer.current = window.setInterval(() => {
+      if (simRun.current !== runId) {
+        clearSimTimer();
+        return;
+      }
+      shown = Math.min(explored.length, shown + chunk);
+      setSimSearch(explored.slice(0, shown));
+      if (shown >= explored.length) {
+        clearSimTimer();
+        onDone();
+      }
+    }, 45);
+  }
+
+  async function startSim(d: DemoDispatch) {
+    simRun.current += 1;
+    const runId = simRun.current;
+    clearSimTimer();
+
+    // Reset to a clean slate, then show the straight-line reference immediately so
+    // the map has something while the road graph is fetched. This blue line is
+    // explicitly labelled "straight-line reference" in the legend — it is NOT the
+    // route, and the car never follows it. Previously the car followed a straight
+    // line while a cosmetic curve was drawn beside it.
+    setSimId(d.id);
+    setSimFitTo([
+      [d.origin.lat, d.origin.lng],
+      [d.scene.lat, d.scene.lng],
+    ]);
+    setSimCorridor(null);
+    setSimSearch(null);
+    setSimRoadKm(null);
+    setSimSignals([]);
+    setSimCar({ lat: d.origin.lat, lng: d.origin.lng });
+    setSimPhase("PLANNING");
+    setSimEta(0);
+    setSimFitSignal((n) => n + 1);
+    setSimNote(t("Fetching road network from OpenStreetMap\u2026"));
+
+    let graph: RoadGraph;
+    try {
+      graph = await fetchRoadGraph(d.origin, d.scene);
+    } catch (e) {
+      if (simRun.current !== runId) return;
+      setSimPhase("NO_ROUTE");
+      setSimNote(
+        `${t("Road network unavailable")} \u2014 ${e instanceof Error ? e.message : String(e)}. ${t(
+          "The search needs road geometry, so no route is shown.",
+        )}`,
+      );
+      return;
+    }
+    if (simRun.current !== runId) return;
+
+    if (graph.provider !== "OVERPASS" || !graph.nodes.length) {
+      setSimPhase("NO_ROUTE");
+      setSimNote(graph.note ?? t("Road network unavailable, so no route can be computed."));
+      return;
+    }
+
+    setSimNote(
+      `${t("Searching")} ${graph.nodes.length.toLocaleString()} ${t("road nodes")} \u00b7 ${graph.edges.length.toLocaleString()} ${t("segments")}${graph.cached ? ` \u00b7 ${t("cached")}` : ""}`,
+    );
+    setSimPhase("SEARCHING");
+
+    const result = shortestPath(graph, d.origin, d.scene);
+    if (simRun.current !== runId) return;
+    if (!result) {
+      // Honest dead end. The old code would have drawn a straight line here.
+      setSimPhase("NO_ROUTE");
+      setSimNote(
+        t(
+          "No connected road path found between these two points in the fetched area. Nothing is drawn rather than guessing a straight line.",
+        ),
+      );
+      return;
+    }
+
+    const roadKm = result.distanceM / 1000;
+    const straightKm = haversineKm(d.origin, d.scene);
+    setSimRoadKm(roadKm);
+    setSimNote(
+      `${t("Dijkstra settled")} ${result.settled.toLocaleString()} ${t("nodes")} \u00b7 ${roadKm.toFixed(
+        2,
+      )} km ${t("by road")} vs ${straightKm.toFixed(2)} km ${t("straight")}`,
+    );
+
+    animateSearch(
+      result.explored,
+      () => {
+        if (simRun.current !== runId) return;
+        driveAlong(result.path, roadKm, runId);
+      },
+      runId,
+    );
   }
 
   const simRunning = simId !== null;
@@ -527,7 +643,13 @@ export function DispatchPanel() {
                         <span className="text-[10px] font-bold">
                           {simPhase === "ON_SCENE" || simPhase === "COMPLETED"
                             ? t("Arrived")
-                            : `${t("ETA")} ${simEta}s`}
+                            : simPhase === "PLANNING"
+                              ? t("Fetching roads\u2026")
+                              : simPhase === "SEARCHING"
+                                ? t("Searching roads\u2026")
+                                : simPhase === "NO_ROUTE"
+                                  ? t("No route")
+                                  : `${t("ETA")} ${simEta}s`}
                         </span>
                         <button
                           onClick={stopSim}
@@ -536,6 +658,27 @@ export function DispatchPanel() {
                           <Square className="h-3 w-3" /> {t("Stop")}
                         </button>
                       </div>
+                      {/* What the search is doing, or why it cannot run. Shown
+                          rather than logged: a silent failure here used to mean a
+                          straight line the officer could mistake for a route. */}
+                      {simNote && (
+                        <p
+                          className={`mt-1 text-[9px] leading-snug ${
+                            simPhase === "NO_ROUTE"
+                              ? "font-bold text-[#b91c1c]"
+                              : "text-muted-foreground"
+                          }`}
+                        >
+                          {simNote}
+                        </p>
+                      )}
+                      {simRoadKm != null && (
+                        <p className="mt-0.5 text-[9px] text-muted-foreground">
+                          {t(
+                            "Shortest distance on arterial roads \u2014 no one-ways or turn restrictions, so not a drive-time estimate.",
+                          )}
+                        </p>
+                      )}
                     </div>
                   ) : (
                     <button
@@ -557,10 +700,13 @@ export function DispatchPanel() {
         <CrimeMap
           points={patrolPoints}
           mode="pins"
-          routePath={simRunning ? (simRoute ?? undefined) : undefined}
           corridorPath={
             simRunning ? (simCorridor ?? undefined) : (corridor?.routeCoords ?? undefined)
           }
+          searchEdges={simRunning ? (simSearch ?? undefined) : undefined}
+          // Framed on the origin/scene pair, not on any drawn line. That keeps the
+          // camera correct while the only thing on screen is the search frontier.
+          fitTo={simRunning ? (simFitTo ?? undefined) : undefined}
           fitSignal={simFitSignal}
           lockBounds={simRunning}
           darkTiles
@@ -588,8 +734,12 @@ export function DispatchPanel() {
           <div className="mb-1 flex items-center gap-1">
             <span className="inline-block h-2 w-4 rounded bg-[#00C896]" /> {t("Green corridor")}
           </div>
+          {/* The old "Initial route" entry is gone with the line it described: it
+              never was a route, and the straight-line overlay that briefly replaced
+              it was clutter. Every line on this map is now real road geometry. */}
           <div className="mb-1 flex items-center gap-1">
-            <span className="inline-block h-2 w-4 rounded bg-[#91C5FD]" /> {t("Initial route")}
+            <span className="inline-block h-1 w-4 rounded bg-[#00E6A8] opacity-50" />{" "}
+            {t("Roads searched")}
           </div>
           <div className="mb-1 flex items-center gap-1">
             <span className="inline-block h-2 w-2 rounded-full bg-[#ef4444]" /> {t("Patrol unit")}
