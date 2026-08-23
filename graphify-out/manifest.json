@@ -825,8 +825,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1787402363.001094,
-    "ast_hash": "59d47cad9181e7ef353173d149d6e787",
+    "mtime": 1787481896.715026,
+    "ast_hash": "df607eb87e353346ce46e9e81a218c4b",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -1815,18 +1815,18 @@
     "semantic_hash": ""
   },
   "backend/app/api/routes/vision.py": {
-    "mtime": 1787336683.3757308,
-    "ast_hash": "b6da3d64125e9410f346241c5e482209",
+    "mtime": 1787475024.8539772,
+    "ast_hash": "b181288150c70fb94c977c9158c68448",
     "semantic_hash": ""
   },
   "backend/app/schemas/vision.py": {
-    "mtime": 1787336639.5583603,
-    "ast_hash": "613fb2a39b71560956838c8d8ad8ff34",
+    "mtime": 1787474945.893159,
+    "ast_hash": "a6d26f8912fca097514f5e9e8b7547ea",
     "semantic_hash": ""
   },
   "backend/app/services/vision_service.py": {
-    "mtime": 1787336628.8769515,
-    "ast_hash": "60605633c632711f1badefc27be19a15",
+    "mtime": 1787475004.2361858,
+    "ast_hash": "244618f9a8a5e6b740f161d4d4c4d5f4",
     "semantic_hash": ""
   },
   "backend/migrations/011_ops_rls.sql": {
@@ -1840,8 +1840,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/vision/VisionWorkspace.tsx": {
-    "mtime": 1787400631.3827593,
-    "ast_hash": "ba8ddedddddfe79541ea2b3a5cf4865b",
+    "mtime": 1787480621.7931652,
+    "ast_hash": "7a661b1f6bacfd410f74fbb4cfd1267b",
     "semantic_hash": ""
   },
   "frontend/src/components/vision/chrome/CoordinateReadout.tsx": {
@@ -1900,8 +1900,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/vision/map/buildLayers.ts": {
-    "mtime": 1787373408.7201433,
-    "ast_hash": "8aae664184968c7fede4ee22b9a95140",
+    "mtime": 1787481221.6983318,
+    "ast_hash": "26cbf3420cc3187c4ad01ec8da28a9f0",
     "semantic_hash": ""
   },
   "frontend/src/components/vision/map/useVisionMap.ts": {
@@ -1915,8 +1915,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/vision.ts": {
-    "mtime": 1787399975.342507,
-    "ast_hash": "d882b081e2021600d01158875f5b4e0f",
+    "mtime": 1787475280.856453,
+    "ast_hash": "88e35474166527ed4fd9ecb4e8acbc17",
     "semantic_hash": ""
   },
   "frontend/src/routes/vision.tsx": {
@@ -1927,6 +1927,11 @@
   "frontend/src/components/vision/map/Street3DCanvas.tsx": {
     "mtime": 1787401687.5986333,
     "ast_hash": "d70e79d80974f8d8e9d99b19b2f8a20b",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/vision/dossiers/LocationDossier.tsx": {
+    "mtime": 1787481214.7655206,
+    "ast_hash": "1b09e3060fb9fc01f36720fd354b4738",
     "semantic_hash": ""
   }
 }
