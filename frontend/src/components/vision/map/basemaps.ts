@@ -153,9 +153,18 @@ function rasterStyle(
   attribution: string,
   maxzoom: number,
   background = "#0b0f17",
+  globe = false,
 ): StyleSpecification {
   return {
     version: 8,
+    // Declared IN the style, not applied afterwards with setProjection().
+    //
+    // Projection is part of the style spec in MapLibre 5, so `setStyle` replaces
+    // it — a style without this key silently reverts to mercator. That is what
+    // flattened the globe whenever the basemap was switched while in EARTH mode:
+    // the imperative re-assert in the `styledata` handler is gated on
+    // `isStyleLoaded()` and loses the race. Declaring it here cannot lose a race.
+    projection: { type: globe ? "globe" : "mercator" },
     // No glyphs/sprite declared on purpose: these styles have no symbol layers,
     // so MapLibre never needs a font or icon endpoint. One less remote
     // dependency to fail on a conference network.
@@ -171,7 +180,9 @@ function rasterStyle(
   };
 }
 
-export function buildStyle(id: BasemapId): StyleSpecification {
+/** @param globe render on a sphere rather than flat. Must be passed on every
+ *  `setStyle`, or switching basemap drops the globe. */
+export function buildStyle(id: BasemapId, globe = false): StyleSpecification {
   const meta = BASEMAPS[id];
   switch (id) {
     case "street":
@@ -180,6 +191,8 @@ export function buildStyle(id: BasemapId): StyleSpecification {
         ["a", "b", "c"].map((s) => `https://${s}.tile.openstreetmap.org/{z}/{x}/{y}.png`),
         meta.attribution,
         meta.maxNativeZoom,
+        "#0b0f17",
+        globe,
       );
     case "satellite":
       return rasterStyle(
@@ -190,6 +203,7 @@ export function buildStyle(id: BasemapId): StyleSpecification {
         meta.attribution,
         meta.maxNativeZoom,
         "#01050f",
+        globe,
       );
     case "nightlights":
       return rasterStyle(
@@ -200,6 +214,7 @@ export function buildStyle(id: BasemapId): StyleSpecification {
         meta.attribution,
         meta.maxNativeZoom,
         "#01050f",
+        globe,
       );
     case "dark":
     default:
@@ -210,6 +225,8 @@ export function buildStyle(id: BasemapId): StyleSpecification {
         ),
         meta.attribution,
         meta.maxNativeZoom,
+        "#0b0f17",
+        globe,
       );
   }
 }

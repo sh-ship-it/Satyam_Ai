@@ -12,7 +12,11 @@ import type { VisionTelemetry } from "@/lib/api/vision";
 const VIEW_MODES: { id: VisionViewMode; label: string; hint?: string }[] = [
   { id: "2d", label: "2D" },
   { id: "3d", label: "3D", hint: "Pitched camera with real terrain relief" },
-  { id: "earth", label: "EARTH", hint: "Globe projection \u2014 context only" },
+  {
+    id: "earth",
+    label: "EARTH",
+    hint: "Globe projection \u2014 data layers shown, but not for operational precision",
+  },
   {
     id: "street3d",
     label: "STREET 3D",
@@ -70,8 +74,7 @@ export function VisionTopBar({
 }) {
   const t = useT();
 
-  const dot =
-    transport === "live" ? "#00E6A8" : transport === "polling" ? "#fbbf24" : "#ef4444";
+  const dot = transport === "live" ? "#00E6A8" : transport === "polling" ? "#fbbf24" : "#ef4444";
   const transportLabel =
     transport === "live" ? "LIVE" : transport === "polling" ? "POLLING" : "OFFLINE";
 
@@ -82,9 +85,7 @@ export function VisionTopBar({
         <div className="rounded-[8px] border-2 border-foreground bg-background/92 px-3 py-1.5 backdrop-blur">
           <div className="text-sm font-extrabold leading-none">{t("Vision")}</div>
           <div className="mt-0.5 text-[10px] font-bold tracking-wide text-muted-foreground">
-            {viewMode === "earth"
-              ? t("CONTEXT VIEW \u2014 NOT OPERATIONAL")
-              : t("TACTICAL MAP")}
+            {viewMode === "earth" ? t("CONTEXT VIEW \u2014 NOT OPERATIONAL") : t("TACTICAL MAP")}
           </div>
         </div>
 

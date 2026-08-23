@@ -4856,3 +4856,127 @@ Clicking a listed FIR does not open the full case yet. `components/CaseDrawer.ts
 already exists and takes a numeric `caseId`, so wiring it in is small — it was
 left out to keep this change reviewable. Traffic signals stay unclickable: they
 carry no crime information and `vision/entity` has no `signal` kind.
+
+---
+
+## Data layers in every view, and the globe that kept flattening
+
+Asked for: the crime bin layer visible on 3D, EARTH, STREET and STREET 3D; and
+EARTH + Satellite showing a true-colour globe.
+
+### What each view actually needed
+
+Measured before changing anything, because three of the four were already fine or
+already impossible:
+
+| View | Before | Action |
+|---|---|---|
+| 2D | bins render | none needed |
+| 3D | bins render — Mercator with pitch 55 is a camera change, not a projection change, so deck handles it natively | none needed, verified only |
+| all four basemaps (Dark / Street / Satellite / Night lights) | bins render on every one — the deck overlay is *overlaid*, so `setStyle` cannot drop it | none needed, verified only |
+| EARTH | **suppressed**: `overlay.setProps({ layers: viewMode === "earth" ? [] : layers })` | enabled |
+| STREET 3D | **not possible** | explained, not attempted |
+
+So "STREET" in the request is a basemap, not a view mode, and it already worked.
+
+### EARTH: layers enabled after measuring the projection
+
+The suppression was defensive rather than wrong. The comment cited deck.gl's own
+experimental `GlobeView`, but this screen does not use it: it uses MapLibre's
+*native* globe with deck in overlaid mode, which is a different arrangement and
+was never actually tested.
+
+Measured: at the framing EARTH uses — z2.4 centred on the data — the bins land on
+Karnataka. deck derives a Mercator viewport from the map camera, so agreement is
+not guaranteed far from the centre of the sphere. In practice that is
+self-limiting: layers are bbox-scoped, so rotating Karnataka away from the centre
+removes the data rather than misplacing it. Confirmed by rotating the globe to
+171°E, where the sidebar counts simply go blank. The mode also still badges itself
+`CONTEXT VIEW — NOT OPERATIONAL`.
+
+### The bins were invisible on the globe until the radius table was extended
+
+Enabling the layers was not enough. `autoHexRadius` capped at 6,000 m for any
+zoom below 7, and EARTH parks the camera at **z2.4**, where ground resolution at
+latitude 14 is roughly **28,760 m per pixel** — so each bin rendered at **0.42 px**.
+
+That is precisely the sub-pixel failure that function's own docstring was written
+to fix ("4,860 bins were being drawn and none of them were visible"), one zoom
+band below where the table stopped. Added three entries:
+
+```
+zoom < 3.5 -> 120000 m
+zoom < 5   ->  40000 m
+zoom < 6   ->  20000 m
+zoom < 7   ->   6000 m   (unchanged)
+```
+
+Nothing at or above z6 changed, so the default statewide view is untouched.
+Verified: the BIN readout reports `120000m` on the globe and the cluster over
+Karnataka becomes clearly hexagonal.
+
+### Bug found: switching basemap flattened the globe
+
+With layers enabled, EARTH + Satellite rendered the NASA true-colour imagery but
+as a **flat Mercator map**. The globe was gone.
+
+Cause: in MapLibre 5 the projection is **part of the style specification**
+(`"projection"?: ProjectionSpecification` in `StyleSpecification`, confirmed in
+maplibre-gl 5.24.0). `buildStyle()` emitted no `projection` key, so every
+`setStyle` silently reverted to Mercator. The imperative re-assert in the
+`styledata` handler is gated on `map.isStyleLoaded()` and loses the race.
+
+Fixed declaratively — the style now *declares* its projection:
+
+```ts
+projection: { type: globe ? "globe" : "mercator" }
+```
+
+`buildStyle(id, globe)` takes the flag and both call sites pass it. Same reasoning
+as the inline map-container sizing recorded earlier: a declaration cannot lose a
+race, an imperative fix-up can.
+
+While fixing it, avoided a regression of my own: adding `viewMode` to the
+basemap-swap effect's dependency list would have made every 2D/3D/EARTH switch
+reload the whole style and refetch every tile. The flag is read from
+`viewModeRef.current` instead, leaving the dependencies as `[basemap, ready]`.
+
+### STREET 3D cannot carry data layers
+
+Not a gap to be closed. STREET 3D is Google Photorealistic 3D via
+`<gmp-map-3d>` — a different renderer. MapLibre and the deck.gl overlay are
+deliberately unmounted while it is active (two idle WebGL contexts plus MediaPipe
+is the GPU contention VISION.md's Phase 0 flagged). Google's element is an opaque
+full-surface canvas and publishes no view matrix, so deck.gl geometry cannot be
+projected onto it without inventing the camera maths — which would place police
+data at coordinates nobody verified. It stays badged
+`CONTEXT VIEW · PHOTOREALISTIC 3D · NO DATA LAYERS`.
+
+### A false alarm worth recording
+
+A mid-sequence screenshot showed the 2D hexagons as sparse dots and looked like a
+regression. Checked properly by copying the working tree aside, `git checkout`-ing
+the committed versions, screenshotting, then restoring: **before 415,847 bytes,
+after 415,934 bytes** — identical rendering. A follow-up sequence test
+(fresh 2D → EARTH → 2D → Satellite → Dark) came back at 415,807 and 415,761 bytes
+with `binLabel` correctly returning to `6000`. The sparse frame was captured while
+the snapshot was refetching for a changed bbox: a transient, not a defect. Worth
+recording because it nearly caused a fix to a bug that did not exist.
+
+### Verified
+
+- Backend suite **133 passed**; `tsc --noEmit` at its **56-error baseline**, zero
+  under `vision/`; `eslint` clean on all four changed files.
+- Headless Chrome, per mode, waiting for the sidebar counts to populate before
+  judging: 2D `pitch 0 / z6.40`, 3D `pitch 55 / z6.40`, EARTH `pitch 0 / z2.40`,
+  all three with 12,584–13,038 crime cells loaded and bins drawn.
+- EARTH + Satellite confirmed as a **sphere** with true-colour imagery and the
+  Karnataka bin cluster visible.
+
+### Still open
+
+Orbital satellites over Karnataka, clickable for name and details, are **not
+built**. `/api/celestrak` was explicitly dropped in VISION.md §1.3, and an honest
+implementation needs SGP4 propagation (a new frontend dependency) plus a
+server-side TLE proxy with a TTL cache. Flagged to the user as a dependency
+decision rather than added silently.

@@ -77,6 +77,15 @@ export const HEX_RADIUS_CHOICES = ["auto", 100, 500, 1000, 5000] as const;
  *  hexagon rather than a speck.
  */
 export function autoHexRadius(zoom: number): number {
+  // Globe/continental zooms. EARTH mode parks the camera at z2.4, where ground
+  // resolution at latitude 14 is roughly 28,760 m per pixel — so the 6,000 m bin
+  // below rendered at 0.42 px and the globe looked empty. Same sub-pixel failure
+  // this function was written to fix, one zoom band lower than the table covered.
+  // These keep a bin near 8 px across, which on a globe means Karnataka reads as
+  // a small cluster of large cells rather than nothing at all.
+  if (zoom < 3.5) return 120000;
+  if (zoom < 5) return 40000;
+  if (zoom < 6) return 20000;
   if (zoom < 7) return 6000;
   if (zoom < 8.5) return 3000;
   if (zoom < 10) return 1500;

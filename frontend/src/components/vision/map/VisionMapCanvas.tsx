@@ -6,13 +6,17 @@
  *  View modes
  *    2d    — Web Mercator, pitch 0
  *    3d    — Web Mercator, pitch 55 (a camera change, not a projection change)
- *    earth — MapLibre *native* globe projection, base map only
+ *    earth — MapLibre *native* globe projection
  *
- *  Earth deliberately carries no data layers. deck.gl's own GlobeView is
- *  experimental and documents no pitch/bearing, no high-precision rendering
- *  above zoom 12, and known artefacts when switching between globe and map
- *  views. Rather than render police data through a projection that quietly
- *  loses accuracy at operational zoom, Earth is a labelled context view.
+ *  Earth carries the data layers too, but stays labelled a context view. It uses
+ *  MapLibre's own globe projection, NOT deck.gl's experimental GlobeView, which
+ *  documents no pitch/bearing and no high-precision rendering above zoom 12.
+ *  The overlaid deck viewport was measured against the globe before enabling
+ *  layers: at the framing Earth uses (z2.4, centred on the data) the bins land on
+ *  Karnataka. deck derives a Mercator viewport from the map camera, so agreement
+ *  is not guaranteed far from the centre of the sphere — self-limiting in
+ *  practice, since layers are bbox-scoped and rotating the state away from centre
+ *  removes the data rather than misplacing it.
  *
  *  The deck overlay runs in *overlaid* mode (interleaved: false). That is a
  *  deliberate choice: overlaid needs no WebGL2 feature negotiation with the
@@ -163,7 +167,7 @@ export function VisionMapCanvas({
 
     const map = new maplibregl.Map({
       container: containerRef.current,
-      style: buildStyle(basemap) as any,
+      style: buildStyle(basemap, viewMode === "earth") as any,
       center: KARNATAKA_CENTER,
       zoom: KARNATAKA_ZOOM,
       pitch: viewMode === "3d" ? PITCH_3D : 0,
@@ -271,8 +275,7 @@ export function VisionMapCanvas({
           // Coming back from the globe the camera is at z2.4, which would leave
           // the officer looking at south Asia. Restore a usable state framing.
           zoom: Math.max(map.getZoom(), KARNATAKA_ZOOM),
-          center:
-            map.getZoom() < KARNATAKA_ZOOM ? KARNATAKA_CENTER : map.getCenter(),
+          center: map.getZoom() < KARNATAKA_ZOOM ? KARNATAKA_CENTER : map.getCenter(),
           duration: 900,
         });
       }
@@ -302,17 +305,33 @@ export function VisionMapCanvas({
     const map = mapRef.current;
     if (!map || !ready) return;
     setTilesFailed(0); // give the new provider a clean slate
-    map.setStyle(buildStyle(basemap) as any, { diff: false });
+    // The globe flag must be passed here too. Omitting it is what flattened the
+    // sphere when the basemap changed while EARTH was active.
+    //
+    // Read from the ref, and keep viewMode OUT of the dependency list: adding it
+    // would make every 2D/3D/EARTH switch reload the entire style and refetch
+    // every tile. The projection effect above already handles mode changes.
+    map.setStyle(buildStyle(basemap, viewModeRef.current === "earth") as any, {
+      diff: false,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [basemap, ready]);
 
   // ── Data layers ────────────────────────────────────────────────────────────
-  // Earth mode is base-map-only by design, so layers are suppressed rather than
-  // reprojected onto the globe.
+  // Rendered in every mode this component owns, including earth/globe.
+  //
+  // Earth previously suppressed them. Measured before enabling: the overlaid deck
+  // viewport does line up with MapLibre's globe projection at the framing Earth
+  // actually uses — z2.4 centred on the data — and the bins land on Karnataka.
+  // deck builds a Mercator viewport from the map camera, so agreement is not
+  // guaranteed far from the centre of the sphere; in practice that is
+  // self-limiting, because layers are bbox-scoped and rotating Karnataka away
+  // from the centre removes the data rather than misplacing it. The mode also
+  // still badges itself CONTEXT VIEW — NOT OPERATIONAL.
   useEffect(() => {
     const overlay = overlayRef.current;
     if (!overlay || !ready) return;
-    overlay.setProps({ layers: viewMode === "earth" ? [] : layers });
+    overlay.setProps({ layers });
   }, [layers, viewMode, ready]);
 
   const meta = BASEMAPS[basemap];
@@ -350,8 +369,7 @@ export function VisionMapCanvas({
           <div className="max-w-md rounded-[8px] border-2 border-[#ef4444] bg-background/95 px-4 py-3 text-xs backdrop-blur">
             <div className="font-extrabold text-[#ef4444]">MAP ENGINE UNAVAILABLE</div>
             <p className="mt-1 text-muted-foreground">
-              WebGL could not be initialised on this device. Other Satyam screens are
-              unaffected.
+              WebGL could not be initialised on this device. Other Satyam screens are unaffected.
             </p>
           </div>
         </div>
