@@ -17,7 +17,6 @@ import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as OpsPredictiveRouteImport } from './routes/ops-predictive'
 import { Route as OpsDispatchRouteImport } from './routes/ops-dispatch'
 import { Route as OpsCameraRouteImport } from './routes/ops-camera'
-import { Route as OperationsRouteImport } from './routes/operations'
 import { Route as NetworkRouteImport } from './routes/network'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForecastRouteImport } from './routes/forecast'
@@ -68,11 +67,6 @@ const OpsDispatchRoute = OpsDispatchRouteImport.update({
 const OpsCameraRoute = OpsCameraRouteImport.update({
   id: '/ops-camera',
   path: '/ops-camera',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OperationsRoute = OperationsRouteImport.update({
-  id: '/operations',
-  path: '/operations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NetworkRoute = NetworkRouteImport.update({
@@ -142,7 +136,6 @@ export interface FileRoutesByFullPath {
   '/forecast': typeof ForecastRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
-  '/operations': typeof OperationsRoute
   '/ops-camera': typeof OpsCameraRoute
   '/ops-dispatch': typeof OpsDispatchRoute
   '/ops-predictive': typeof OpsPredictiveRoute
@@ -164,7 +157,6 @@ export interface FileRoutesByTo {
   '/forecast': typeof ForecastRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
-  '/operations': typeof OperationsRoute
   '/ops-camera': typeof OpsCameraRoute
   '/ops-dispatch': typeof OpsDispatchRoute
   '/ops-predictive': typeof OpsPredictiveRoute
@@ -187,7 +179,6 @@ export interface FileRoutesById {
   '/forecast': typeof ForecastRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
-  '/operations': typeof OperationsRoute
   '/ops-camera': typeof OpsCameraRoute
   '/ops-dispatch': typeof OpsDispatchRoute
   '/ops-predictive': typeof OpsPredictiveRoute
@@ -211,7 +202,6 @@ export interface FileRouteTypes {
     | '/forecast'
     | '/login'
     | '/network'
-    | '/operations'
     | '/ops-camera'
     | '/ops-dispatch'
     | '/ops-predictive'
@@ -233,7 +223,6 @@ export interface FileRouteTypes {
     | '/forecast'
     | '/login'
     | '/network'
-    | '/operations'
     | '/ops-camera'
     | '/ops-dispatch'
     | '/ops-predictive'
@@ -255,7 +244,6 @@ export interface FileRouteTypes {
     | '/forecast'
     | '/login'
     | '/network'
-    | '/operations'
     | '/ops-camera'
     | '/ops-dispatch'
     | '/ops-predictive'
@@ -278,7 +266,6 @@ export interface RootRouteChildren {
   ForecastRoute: typeof ForecastRoute
   LoginRoute: typeof LoginRoute
   NetworkRoute: typeof NetworkRoute
-  OperationsRoute: typeof OperationsRoute
   OpsCameraRoute: typeof OpsCameraRoute
   OpsDispatchRoute: typeof OpsDispatchRoute
   OpsPredictiveRoute: typeof OpsPredictiveRoute
@@ -346,13 +333,6 @@ declare module '@tanstack/react-router' {
       path: '/ops-camera'
       fullPath: '/ops-camera'
       preLoaderRoute: typeof OpsCameraRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/operations': {
-      id: '/operations'
-      path: '/operations'
-      fullPath: '/operations'
-      preLoaderRoute: typeof OperationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/network': {
@@ -446,7 +426,6 @@ const rootRouteChildren: RootRouteChildren = {
   ForecastRoute: ForecastRoute,
   LoginRoute: LoginRoute,
   NetworkRoute: NetworkRoute,
-  OperationsRoute: OperationsRoute,
   OpsCameraRoute: OpsCameraRoute,
   OpsDispatchRoute: OpsDispatchRoute,
   OpsPredictiveRoute: OpsPredictiveRoute,

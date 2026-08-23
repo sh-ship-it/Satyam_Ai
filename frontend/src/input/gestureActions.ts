@@ -25,7 +25,7 @@ export type GestureIntent =
   | { kind: "run_task"; route: string; actions: any[]; label: GLabel };
 
 /** Routes that render an interactive Leaflet map (gesture pan/zoom target). */
-const MAP_ROUTES = new Set(["/console", "/operations", "/ops-predictive", "/ops-dispatch"]);
+const MAP_ROUTES = new Set(["/console", "/ops-predictive", "/ops-dispatch"]);
 
 // Ordered ring of primary screens for swipe-to-cycle navigation. Kept short and
 // analyst-relevant; the gesture layer is for browsing dashboards, not data entry.
@@ -34,7 +34,6 @@ export const SCREEN_CYCLE: string[] = [
   "/network",
   "/forecast",
   "/trends",
-  "/operations",
   "/board",
   "/reports",
   "/audit",

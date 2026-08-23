@@ -683,7 +683,6 @@ function LandingPage() {
             <Link to="/console">{t("Investigation Console")}</Link>
             <Link to="/network">{t("Network Analysis")}</Link>
             <Link to="/forecast">{t("Forecasting")}</Link>
-            <Link to="/operations">{t("Response Ops")}</Link>
           </div>
           <div className="fcol"><h4>{t("Explore")}</h4>
             <Link to="/about">{t("About us")}</Link>
