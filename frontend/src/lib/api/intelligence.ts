@@ -3,10 +3,11 @@
  * All calls use the authenticated request helper from client.ts.
  */
 import { API_BASE, getAuthToken, ApiError } from "./client";
+import { cachedFetch, peekCached } from "./readCache";
 
 async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
   const token = getAuthToken();
-  const res = await fetch(`${API_BASE}${path}`, {
+  const res = await cachedFetch(`${API_BASE}${path}`, {
     ...init,
     headers: {
       "content-type": "application/json",
@@ -473,13 +474,29 @@ export type DashboardSummary = {
   generated_at: string;
 };
 
+export type DashboardFilters = {
+  year?: number | null;
+  district?: string;
+  crime_type?: string;
+};
+
+function dashboardPath(opts?: DashboardFilters): string {
+  const p = new URLSearchParams();
+  if (opts?.year) p.set("year", String(opts.year));
+  if (opts?.district) p.set("district", opts.district);
+  if (opts?.crime_type) p.set("crime_type", opts.crime_type);
+  const qs = p.toString();
+  return `/api/dashboard/summary${qs ? "?" + qs : ""}`;
+}
+
 export const dashboard = {
-  summary: (opts?: { year?: number | null; district?: string; crime_type?: string }) => {
-    const p = new URLSearchParams();
-    if (opts?.year) p.set("year", String(opts.year));
-    if (opts?.district) p.set("district", opts.district);
-    if (opts?.crime_type) p.set("crime_type", opts.crime_type);
-    const qs = p.toString();
-    return apiFetch<DashboardSummary>(`/api/dashboard/summary${qs ? "?" + qs : ""}`);
-  },
+  summary: (opts?: DashboardFilters) => apiFetch<DashboardSummary>(dashboardPath(opts)),
+
+  /**
+   * The cached summary for these filters, or undefined. Synchronous, issues no
+   * request. A screen seeds its initial state from this so returning to it paints
+   * the previous figures on the first frame instead of an empty skeleton.
+   */
+  peek: (opts?: DashboardFilters) =>
+    peekCached<DashboardSummary>(`${API_BASE}${dashboardPath(opts)}`),
 };

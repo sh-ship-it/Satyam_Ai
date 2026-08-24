@@ -85,8 +85,11 @@ function Console() {
   const [page, setPage] = useState(0);
   const [sortKey, setSortKey] = useState<"firs" | "clearance">("firs");
 
-  const [summary, setSummary] = useState<DashboardSummary | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Seed from the read cache so coming back to this screen paints the previous
+  // figures on the first frame. Without it the component remounts with null and
+  // renders the empty skeleton for a frame even when the data is already in hand.
+  const [summary, setSummary] = useState<DashboardSummary | null>(() => dashboard.peek() ?? null);
+  const [loading, setLoading] = useState(() => dashboard.peek() === undefined);
   const [err, setErr] = useState<string | null>(null);
   const [loadedAt, setLoadedAt] = useState<Date | null>(null);
 
@@ -134,7 +137,13 @@ function Console() {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
+    const filters = { year, district: district || undefined, crime_type: crimeType || undefined };
+
+    // If this exact scope is already cached, show it immediately and skip the
+    // loading state entirely — the refetch below still runs and silently updates.
+    const cached = dashboard.peek(filters);
+    if (cached) setSummary(cached);
+    setLoading(!cached);
     setErr(null);
     setPage(0);
 

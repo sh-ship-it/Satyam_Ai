@@ -3,10 +3,11 @@
  * Calls /api/dossier/* which reads only demo_dossier_* tables (isolated).
  */
 import { API_BASE, getAuthToken } from "./client";
+import { cachedFetch } from "./readCache";
 
 async function apiFetch<T>(path: string): Promise<T> {
   const token = getAuthToken();
-  const res = await fetch(`${API_BASE}${path}`, {
+  const res = await cachedFetch(`${API_BASE}${path}`, {
     headers: {
       "content-type": "application/json",
       ...(token ? { authorization: `Bearer ${token}` } : {}),

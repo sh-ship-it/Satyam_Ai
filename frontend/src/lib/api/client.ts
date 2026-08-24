@@ -4,6 +4,8 @@
 // Replaces the previous managed-backend integration. Auth is a bearer JWT
 // issued by the backend /auth/login endpoint (demo role switcher in dev).
 
+import { cachedFetch, invalidateReadCache } from "./readCache";
+
 export const API_BASE =
   (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/$/, "") ??
   "http://localhost:8000";
@@ -62,7 +64,16 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
+  const method = (init.method ?? "GET").toUpperCase();
+
+  // Any write invalidates the read cache. Without this an admin could change a
+  // user, then read a five-minute-old list that does not contain the change and
+  // reasonably conclude the save failed.
+  if (method !== "GET") invalidateReadCache();
+
+  // cachedFetch only caches GETs (and opted-in POSTs), browser-side, so every
+  // mutation still goes to the network untouched.
+  const res = await cachedFetch(`${API_BASE}${path}`, {
     ...init,
     headers: authHeaders((init.headers as Record<string, string>) ?? {}),
   });
@@ -112,10 +123,9 @@ export type StationRow = {
 };
 export type StationBreakdownResponse = {
   rows: StationRow[];
-  total: number;        // number of rows returned (≤ limit)
-  grand_total: number;  // real DB-wide case count matching the filters
+  total: number; // number of rows returned (≤ limit)
+  grand_total: number; // real DB-wide case count matching the filters
 };
-
 
 export const api = {
   // --- auth ---
@@ -152,6 +162,8 @@ export const api = {
   logout() {
     setAuthToken(null);
     cacheUser(null);
+    // Never leave one officer's RLS-scoped rows in memory for the next sign-in.
+    invalidateReadCache();
   },
   async stations(): Promise<StationOption[]> {
     return request<StationOption[]>("/auth/stations");
@@ -177,10 +189,7 @@ export const api = {
       body: JSON.stringify(body),
     });
   },
-  offenderTrail(body: {
-    person_id?: string;
-    entity_name?: string;
-  }): Promise<{
+  offenderTrail(body: { person_id?: string; entity_name?: string }): Promise<{
     person_id: string;
     label: string;
     points: {

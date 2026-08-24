@@ -1,8 +1,9 @@
 import { API_BASE, getAuthToken, ApiError } from "./client";
+import { cachedFetch } from "./readCache";
 
 async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<T> {
   const token = getAuthToken();
-  const res = await fetch(`${API_BASE}${path}`, {
+  const res = await cachedFetch(`${API_BASE}${path}`, {
     ...init,
     headers: {
       "content-type": "application/json",

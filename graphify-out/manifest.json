@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
-    "mtime": 1787488967.9465718,
-    "ast_hash": "16a1a184e9840d19a05d86be06515589",
+    "mtime": 1787594698.7981088,
+    "ast_hash": "871cd30b175ad0f393dafecb9505e1ef",
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
@@ -2012,6 +2012,11 @@
   "backend/app/services/dashboard_service.py": {
     "mtime": 1787573666.3418965,
     "ast_hash": "b4eb6f82ba01ae6df08a9f71bccda64f",
+    "semantic_hash": ""
+  },
+  "frontend/_theme_check.mjs": {
+    "mtime": 1787594767.2662764,
+    "ast_hash": "131680570099502a9712ebb898660b2b",
     "semantic_hash": ""
   }
 }
