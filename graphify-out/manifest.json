@@ -645,8 +645,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/client.ts": {
-    "mtime": 1787306193.6403594,
-    "ast_hash": "29bd0067a617b6eeac45c6080cae6755",
+    "mtime": 1787595941.7234385,
+    "ast_hash": "d78877caec2c6966e9b44c22ba44827b",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/example.functions.ts": {
@@ -710,8 +710,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
-    "mtime": 1787574144.9836445,
-    "ast_hash": "649958a32d962a4d26b34b148ec0056e",
+    "mtime": 1787595689.6128304,
+    "ast_hash": "5331b371b88a126c7bda1b190f745da3",
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
@@ -980,8 +980,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/intelligence.ts": {
-    "mtime": 1787573697.334871,
-    "ast_hash": "7c6df99023c654283c385734ed70a7a8",
+    "mtime": 1787595675.8224635,
+    "ast_hash": "518ae86c18eb6225d0a96d4f10b5ee5b",
     "semantic_hash": ""
   },
   "frontend/src/routes/forecast.tsx": {
@@ -1055,8 +1055,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/financial.ts": {
-    "mtime": 1782106292.622638,
-    "ast_hash": "b7176a66ad672fd0ebf335171a63ac83",
+    "mtime": 1787595595.6565218,
+    "ast_hash": "949ee739c7ed9ad9d6482abebb872194",
     "semantic_hash": ""
   },
   "frontend/src/components/RingsPanel.tsx": {
@@ -1265,8 +1265,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/dossier.ts": {
-    "mtime": 1782130870.1528237,
-    "ast_hash": "37581caf849919a7c1755041a25a482d",
+    "mtime": 1787595595.657523,
+    "ast_hash": "0f10fbf9b112e7297bbf7551e1a2d1fb",
     "semantic_hash": ""
   },
   "frontend/src/routes/dossier.tsx": {
@@ -1455,8 +1455,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/api/board.ts": {
-    "mtime": 1782212689.2357104,
-    "ast_hash": "8e1a413aea45a1d132a05b278cce7ce9",
+    "mtime": 1787595595.658522,
+    "ast_hash": "8071dfa8287592aa97a9c9b90294c15d",
     "semantic_hash": ""
   },
   "frontend/src/routes/board.tsx": {
@@ -2014,9 +2014,9 @@
     "ast_hash": "b4eb6f82ba01ae6df08a9f71bccda64f",
     "semantic_hash": ""
   },
-  "frontend/_theme_check.mjs": {
-    "mtime": 1787594767.2662764,
-    "ast_hash": "131680570099502a9712ebb898660b2b",
+  "frontend/src/lib/api/readCache.ts": {
+    "mtime": 1787595941.5489218,
+    "ast_hash": "acf6ad1d7fc28e58c9a1b66aaac54234",
     "semantic_hash": ""
   }
 }
