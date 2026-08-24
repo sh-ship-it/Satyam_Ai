@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/DarkModeToggle.tsx": {
-    "mtime": 1781282330.640357,
-    "ast_hash": "e396b23239bc6385123ed6a8df51f218",
+    "mtime": 1787603679.6635275,
+    "ast_hash": "18f0b13f23551bf944eab0a057f27191",
     "semantic_hash": ""
   },
   "frontend/src/components/LandingShell.tsx": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
-    "mtime": 1782373939.6629646,
-    "ast_hash": "bbb88beca4254fed63bd644b38a82fe7",
+    "mtime": 1787603691.492499,
+    "ast_hash": "c6bb00a8cc81fbbd6625d93d17ae5913",
     "semantic_hash": ""
   },
   "frontend/src/components/ui/accordion.tsx": {
@@ -1960,8 +1960,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/ask.tsx": {
-    "mtime": 1787600337.6897054,
-    "ast_hash": "a5df1b6271ba8bc817876c39567bf37c",
+    "mtime": 1787602824.5563452,
+    "ast_hash": "7b2afadf2c8b1162e6719aaea770508a",
     "semantic_hash": ""
   },
   "backend/app/core/storage.py": {
@@ -2022,6 +2022,21 @@
   "frontend/src/components/Globe.tsx": {
     "mtime": 1787599888.2798398,
     "ast_hash": "f04f9e642f123222b2a9e16f65aed21d",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/BorderGlow.tsx": {
+    "mtime": 1787602409.2095268,
+    "ast_hash": "d905c959330e4662aab613ca169d4f24",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/theme.ts": {
+    "mtime": 1787603554.8730428,
+    "ast_hash": "f7bdd92cbe4eac4c0795487080f942c2",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/viewTransition.ts": {
+    "mtime": 1787601871.9469335,
+    "ast_hash": "aa7b24b9103689c6b34b1b33ada22b28",
     "semantic_hash": ""
   }
 }
