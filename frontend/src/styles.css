@@ -65,16 +65,16 @@
 
   /* Default theme palette (ocean-ish for command-center) */
   --background: #f0f6fc;
-  --main: #91C5FD;
+  --main: #91c5fd;
 
   --muted: oklch(96% 0.01 247);
   --muted-foreground: oklch(35% 0.02 257);
 
-  --destructive: #FF4D50;
+  --destructive: #ff4d50;
   --destructive-foreground: oklch(100% 0 0);
-  --success: #00C896;
+  --success: #00c896;
   --success-foreground: oklch(0% 0 0);
-  --warning: #FACC00;
+  --warning: #facc00;
   --warning-foreground: oklch(0% 0 0);
 
   /* Dark rail/header for command-center contrast */
@@ -103,7 +103,8 @@
   * {
     border-color: var(--color-border);
   }
-  html, body {
+  html,
+  body {
     font-family: var(--font-sans);
     font-weight: 500;
     background-color: var(--color-background);
@@ -111,10 +112,17 @@
     -webkit-font-smoothing: antialiased;
   }
   /* Apply Noto Sans Kannada globally when the UI language is Kannada */
-  html[lang="kn"], html[lang="kn"] body, html[lang="kn"] * {
+  html[lang="kn"],
+  html[lang="kn"] body,
+  html[lang="kn"] * {
     font-family: var(--font-kannada);
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-weight: 700;
     letter-spacing: -0.01em;
   }
@@ -125,10 +133,19 @@
 
 @layer components {
   /* Neobrutalism utilities */
-  .nb-border { border-width: 2px; border-color: var(--border); }
-  .nb-shadow { box-shadow: 4px 4px 0px 0px var(--border); }
-  .nb-shadow-sm { box-shadow: 2px 2px 0px 0px var(--border); }
-  .nb-shadow-lg { box-shadow: 6px 6px 0px 0px var(--border); }
+  .nb-border {
+    border-width: 2px;
+    border-color: var(--border);
+  }
+  .nb-shadow {
+    box-shadow: 4px 4px 0px 0px var(--border);
+  }
+  .nb-shadow-sm {
+    box-shadow: 2px 2px 0px 0px var(--border);
+  }
+  .nb-shadow-lg {
+    box-shadow: 6px 6px 0px 0px var(--border);
+  }
   .nb-card {
     background: var(--secondary-background);
     border: 2px solid var(--border);
@@ -136,7 +153,9 @@
     box-shadow: 4px 4px 0px 0px var(--border);
   }
   .nb-press {
-    transition: transform 120ms ease, box-shadow 120ms ease;
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease;
   }
   .nb-press:hover {
     transform: translate(2px, 2px);
@@ -262,7 +281,11 @@
 
 /* Globally upgrade existing shadcn primitives to neobrutalism */
 @layer base {
-  .rounded-xl, .rounded-lg, .rounded-md { border-radius: 5px !important; }
+  .rounded-xl,
+  .rounded-lg,
+  .rounded-md {
+    border-radius: 5px !important;
+  }
 }
 
 /* Neobrutalist form input/select — used by Access Control + other admin screens */
@@ -287,7 +310,8 @@
 body {
   cursor: auto !important;
 }
-input, textarea {
+input,
+textarea {
   cursor: text;
 }
 
@@ -339,4 +363,146 @@ input, textarea {
   --tl-color-divider: hsl(0, 0%, 91%) !important;
   --tl-color-tooltip: hsla(200, 14%, 4%, 1) !important;
   color-scheme: light !important;
+}
+
+/* ── BorderGlow (components/BorderGlow.tsx) ───────────────────────────────────
+ *
+ * Lights the border of a wrapped element. Two stacked layers, both masked down
+ * to a ring so nothing ever paints over the content:
+ *
+ *   .edge-glow-beam — a slow conic sweep that travels the edge continuously
+ *   .edge-glow-pool — a brighter pool that follows the pointer as it approaches
+ *
+ * Colour comes from `--main`, the token ThemePicker rewrites, so the glow tracks
+ * whichever theme the officer selected instead of carrying its own palette.
+ *
+ * Layout note: the layers are inset by -5px with a matching 5px padding, which
+ * puts the ring *outside* the wrapped element's own border. Satyam's borders are
+ * hard 2px with a hard offset shadow; blurring them would fight the rest of the
+ * UI, so the border is left alone and this is a halo around it.
+ *
+ * Named `edge-glow`, not `bg-glow`: the wrapper's class list is composed with
+ * `cn()`, and tailwind-merge reads any `bg-*` class as a background-color utility
+ * and drops it as conflicting with the `bg-secondary-background` alongside it.
+ * The class silently vanished from the DOM. Do not rename these back.
+ */
+
+/*
+ * A custom property must be registered with an <angle> syntax before CSS will
+ * interpolate it. Without this the sweep would jump 0deg -> 360deg in one step
+ * instead of rotating, because an unregistered property animates discretely.
+ */
+@property --edge-glow-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.edge-glow {
+  position: relative;
+  /* Contains the negative z-index layers below so they cannot slide behind an
+   * ancestor's background. */
+  isolation: isolate;
+  --glow-strength: 0;
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-radius: 160px;
+  /*
+   * Light themes pick a pale --main (the default is #91C5FD) and sit it on an
+   * almost-white page, which left the glow close to invisible. Mixing toward
+   * --foreground darkens it enough to read while keeping the theme's hue, so it
+   * still tracks the selected colour. Dark themes need no help: the same token is
+   * already high-contrast against the background, and darkening it there would
+   * make it disappear instead.
+   */
+  --edge-glow-color: color-mix(in oklab, var(--main) 78%, var(--foreground));
+}
+.dark .edge-glow {
+  --edge-glow-color: var(--main);
+}
+
+.edge-glow-beam,
+.edge-glow-pool {
+  position: absolute;
+  inset: -5px;
+  z-index: -1;
+  padding: 5px;
+  border-radius: 15px;
+  pointer-events: none;
+  /* Ring-only mask: paint the whole box, then subtract the content box. What is
+   * left is the 5px band around the edge. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.edge-glow-beam {
+  background: conic-gradient(
+    from var(--edge-glow-angle),
+    transparent 0deg,
+    color-mix(in oklab, var(--edge-glow-color) 35%, transparent) 18deg,
+    var(--edge-glow-color) 40deg,
+    color-mix(in oklab, var(--edge-glow-color) 35%, transparent) 62deg,
+    transparent 82deg,
+    transparent 360deg
+  );
+  filter: blur(3px);
+  opacity: 0.8;
+  animation: edgeGlowSweep 6s linear infinite;
+}
+
+.edge-glow-pool {
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    var(--edge-glow-color),
+    color-mix(in oklab, var(--edge-glow-color) 35%, transparent) 45%,
+    transparent 72%
+  );
+  filter: blur(5px);
+  opacity: var(--glow-strength);
+  transition: opacity 220ms ease-out;
+}
+
+@keyframes edgeGlowSweep {
+  to {
+    --edge-glow-angle: 360deg;
+  }
+}
+
+/*
+ * Reduced motion slows the ambient sweep rather than stopping it. The pointer
+ * pool is left alone deliberately: it only moves in direct response to the
+ * user's own pointer, which is not the kind of unprompted motion the media
+ * query is about, and killing it would leave the effect looking broken on any
+ * machine with OS animations switched off.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .edge-glow-beam {
+    animation-duration: 24s;
+    opacity: 0.4;
+  }
+}
+
+/* ── Animated theme toggle (lib/viewTransition.ts) ────────────────────────────
+ *
+ * The circular reveal is driven by a Web Animations call on
+ * ::view-transition-new(root), so the default cross-fade has to be switched off
+ * or the two would run at once and wash each other out. The new snapshot is
+ * stacked above the old one so the expanding circle wipes over it.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2147483646;
 }

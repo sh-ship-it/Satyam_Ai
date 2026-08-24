@@ -18,6 +18,7 @@ import {
   VolumeX,
 } from "lucide-react";
 import { Shell } from "@/components/Shell";
+import { BorderGlow } from "@/components/BorderGlow";
 import { Globe } from "@/components/Globe";
 import { Markdown } from "@/components/Markdown";
 import { useI18n, useT } from "@/lib/i18n";
@@ -645,17 +646,28 @@ function Ask() {
               actually reading.
             */}
             <div
+              // Dark mode needs a much lower opacity than light. The globe draws
+              // light dots, so on a dark page it is high-contrast against the
+              // background *and* against the text sitting over it — at the light
+              // value it washed the headline out completely.
               className={`pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
-                isEmpty ? "opacity-50" : "opacity-[0.16]"
+                isEmpty
+                  ? "opacity-[0.34] dark:opacity-[0.13]"
+                  : "opacity-[0.10] dark:opacity-[0.05]"
               }`}
             >
               {/*
-                Sized off the pane's height, not a fixed pixel width: at a fixed
-                width the sphere ran past the composer and showed as a cut-off
-                arc rather than a globe. `aspect-square` turns the height back
-                into the width, so it stays as large as will fit and complete.
+                Sized off the pane's height rather than a fixed pixel width, so
+                it scales with the window; `aspect-square` turns that height back
+                into the width.
+
+                It is deliberately larger than the pane (130%) and the radial
+                mask fades it to nothing before it reaches the pane edge. That
+                combination is what lets it be big without reading as a cut-off
+                arc: the sphere's silhouette never meets the hard clip, it has
+                already faded out by then.
               */}
-              <Globe className="h-[86%] w-auto [mask-image:radial-gradient(circle_at_50%_52%,#000_46%,transparent_76%)]" />
+              <Globe className="h-[130%] w-auto [mask-image:radial-gradient(circle_at_50%_50%,#000_30%,transparent_58%)]" />
             </div>
 
             <div ref={scrollRef} className="relative h-full overflow-y-auto">
@@ -708,7 +720,7 @@ function Ask() {
           {/* ── Composer ───────────────────────────────────────────────────── */}
           <div className="shrink-0 px-6 pb-5">
             <div className="mx-auto w-full max-w-3xl">
-              <div className="rounded-[10px] border-2 border-foreground bg-secondary-background nb-shadow-sm">
+              <BorderGlow className="rounded-[10px] border-2 border-foreground bg-secondary-background nb-shadow-sm">
                 <textarea
                   ref={taRef}
                   value={input}
@@ -831,7 +843,7 @@ function Ask() {
                     </button>
                   )}
                 </div>
-              </div>
+              </BorderGlow>
               {(micStatus || micError) && (
                 <p
                   role="status"

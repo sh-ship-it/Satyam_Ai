@@ -1,161 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { Palette, Check, Moon, Sun } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
-
-type Theme = {
-  id: string;
-  label: string;
-  desc: string;
-  swatch: string;
-  main: string;
-  background: string;
-  /** If true, uses data-theme CSS variables instead of inline style overrides. */
-  usesDataTheme?: boolean;
-};
-
-const THEMES: Theme[] = [
-  // ── Existing themes (inline --main / --background overrides) ──────────────
-  {
-    id: "default",
-    label: "Default Blue",
-    desc: "Cool blue theme",
-    swatch: "#91C5FD",
-    main: "#91C5FD",
-    background: "#f0f6fc",
-  },
-  {
-    id: "coral",
-    label: "Coral",
-    desc: "Warm coral and orange",
-    swatch: "#FF7A59",
-    main: "#FF7A59",
-    background: "#FFF4EE",
-  },
-  {
-    id: "rose",
-    label: "Rose",
-    desc: "Pink and rose theme",
-    swatch: "#F472B6",
-    main: "#F472B6",
-    background: "#FDF2F8",
-  },
-  {
-    id: "purple",
-    label: "Purple",
-    desc: "Purple and violet theme",
-    swatch: "#A78BFA",
-    main: "#A78BFA",
-    background: "#F5F3FF",
-  },
-  {
-    id: "ocean",
-    label: "Ocean",
-    desc: "Blue ocean theme",
-    swatch: "#38BDF8",
-    main: "#38BDF8",
-    background: "#ECFEFF",
-  },
-  {
-    id: "emerald",
-    label: "Emerald",
-    desc: "Green emerald theme",
-    swatch: "#34D399",
-    main: "#34D399",
-    background: "#ECFDF5",
-  },
-  {
-    id: "sunshine",
-    label: "Sunshine",
-    desc: "Yellow sunshine theme",
-    swatch: "#FACC15",
-    main: "#FACC15",
-    background: "#FEFCE8",
-  },
-
-  // ── Professional themes (data-theme CSS variable blocks) ──────────────────
-  {
-    id: "slate",
-    label: "Slate",
-    desc: "Clean corporate blue-gray",
-    swatch: "hsl(215 20% 45%)",
-    main: "hsl(215 20% 45%)",
-    background: "hsl(215 20% 96%)",
-    usesDataTheme: true,
-  },
-  {
-    id: "indigo",
-    label: "Indigo",
-    desc: "Modern premium violet-blue",
-    swatch: "hsl(239 84% 67%)",
-    main: "hsl(239 84% 67%)",
-    background: "hsl(240 20% 97%)",
-    usesDataTheme: true,
-  },
-  {
-    id: "forest",
-    label: "Forest",
-    desc: "Calm, trustworthy deep green",
-    swatch: "hsl(158 45% 38%)",
-    main: "hsl(158 45% 38%)",
-    background: "hsl(150 20% 96%)",
-    usesDataTheme: true,
-  },
-  {
-    id: "graphite",
-    label: "Graphite",
-    desc: "Near-monochrome, very premium",
-    swatch: "hsl(220 9% 36%)",
-    main: "hsl(220 9% 36%)",
-    background: "hsl(220 10% 95%)",
-    usesDataTheme: true,
-  },
-  {
-    id: "midnight",
-    label: "Midnight",
-    desc: "Navy-leaning, executive dark",
-    swatch: "hsl(222 40% 42%)",
-    main: "hsl(222 40% 42%)",
-    background: "hsl(222 20% 96%)",
-    usesDataTheme: true,
-  },
-  {
-    id: "pine",
-    label: "Pine",
-    desc: "Muted evergreen, deep forest",
-    swatch: "hsl(165 25% 32%)",
-    main: "hsl(165 25% 32%)",
-    background: "hsl(160 15% 96%)",
-    usesDataTheme: true,
-  },
-];
-
-const STORAGE_KEY = "fq-theme";
-const DARK_KEY = "fq-dark";
-
-/** The set of data-theme IDs — used to clean up when switching away. */
-const DATA_THEME_IDS = new Set(THEMES.filter((t) => t.usesDataTheme).map((t) => t.id));
-
-function applyTheme(t: Theme, dark: boolean) {
-  const root = document.documentElement;
-
-  // Always clear any previous data-theme so old CSS blocks don't bleed.
-  root.removeAttribute("data-theme");
-
-  if (t.usesDataTheme) {
-    // New professional themes: set data-theme and let CSS do the work.
-    root.setAttribute("data-theme", t.id);
-    // Remove any inline --main / --background overrides from previous themes.
-    root.style.removeProperty("--main");
-    root.style.removeProperty("--background");
-  } else {
-    // Legacy themes: override via inline style properties.
-    root.style.setProperty("--main", t.main);
-    root.style.setProperty("--background", t.background);
-  }
-
-  // Ensure dark class is in sync so [data-theme="x"].dark blocks apply.
-  root.classList.toggle("dark", dark);
-}
+import { revealThemeChange } from "@/lib/viewTransition";
+import {
+  applyTheme,
+  DARK_STORAGE_KEY as DARK_KEY,
+  THEME_STORAGE_KEY as STORAGE_KEY,
+  THEMES,
+  type Theme,
+} from "@/lib/theme";
 
 interface ThemePickerProps {
   buttonClass?: string;
@@ -185,19 +39,27 @@ export function ThemePicker({ buttonClass }: ThemePickerProps) {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
+  // Both handlers below reveal the change as a circle growing from the control
+  // that triggered it. `flushSync` keeps the React-driven bits (the active swatch,
+  // the tick, the sun/moon icon) inside the snapshot the transition captures;
+  // without it they would repaint a frame after the wipe had passed over them.
   const choose = (t: Theme) => {
-    setActive(t.id);
-    applyTheme(t, dark);
+    revealThemeChange(ref.current, () => {
+      flushSync(() => setActive(t.id));
+      applyTheme(t, dark);
+    });
     localStorage.setItem(STORAGE_KEY, t.id);
   };
 
   const toggleDark = () => {
     const next = !dark;
-    setDark(next);
     const t = THEMES.find((x) => x.id === active) ?? THEMES[0];
-    document.documentElement.classList.toggle("dark", next);
-    // Re-apply theme so data-theme + dark class are consistent.
-    applyTheme(t, next);
+    revealThemeChange(ref.current, () => {
+      flushSync(() => setDark(next));
+      document.documentElement.classList.toggle("dark", next);
+      // Re-apply theme so data-theme + dark class are consistent.
+      applyTheme(t, next);
+    });
     localStorage.setItem(DARK_KEY, next ? "1" : "0");
   };
 
