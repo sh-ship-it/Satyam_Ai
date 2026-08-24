@@ -355,8 +355,8 @@
     "semantic_hash": ""
   },
   "frontend/package.json": {
-    "mtime": 1787335539.7565768,
-    "ast_hash": "9968735bc01ba263c4154d5320b2a978",
+    "mtime": 1787598891.458685,
+    "ast_hash": "2a7c7a34ed8cdc388240a35d2a084691",
     "semantic_hash": ""
   },
   "frontend/src/assets/police.mp4.asset.json": {
@@ -810,8 +810,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/login.tsx": {
-    "mtime": 1782106292.9581692,
-    "ast_hash": "39becc894cd80c278f0c3047cf3dbf0f",
+    "mtime": 1787597280.7233157,
+    "ast_hash": "7519b174df2c04c4b6117c168bf6cfd6",
     "semantic_hash": ""
   },
   "backend/app/models/api/ollama_cloud.py": {
@@ -1960,8 +1960,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/ask.tsx": {
-    "mtime": 1787520043.4646118,
-    "ast_hash": "1907d53d04c37348447b1f7b15fdc424",
+    "mtime": 1787600337.6897054,
+    "ast_hash": "a5df1b6271ba8bc817876c39567bf37c",
     "semantic_hash": ""
   },
   "backend/app/core/storage.py": {
@@ -2017,6 +2017,11 @@
   "frontend/src/lib/api/readCache.ts": {
     "mtime": 1787595941.5489218,
     "ast_hash": "acf6ad1d7fc28e58c9a1b66aaac54234",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/Globe.tsx": {
+    "mtime": 1787599888.2798398,
+    "ast_hash": "f04f9e642f123222b2a9e16f65aed21d",
     "semantic_hash": ""
   }
 }
