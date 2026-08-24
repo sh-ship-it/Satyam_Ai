@@ -6010,3 +6010,152 @@ percentage over `ORDER BY RANDOM()`.
 
 None of those is urgent now that the hazard is closed. The one with a deadline was
 the documented command, and it can no longer overfill the database.
+
+## `/console` becomes an analytical dashboard, and the chat rail is deleted
+
+Chat has a dedicated home at `/ask`, so the Console no longer needs a composer.
+It is now what an officer opens to read the state of a jurisdiction rather than to
+ask about it. The chat rail, its streaming code, its conversation store usage and
+its private `UserMsg`/`AiMsg` components are gone; `lib/chatStore.ts` and
+`components/Markdown.tsx` stay because `/ask` uses them.
+
+### The first attempt was rejected, and the criticism was right
+
+The initial rebuild followed a supplied mockup literally: a large crime heatmap, a
+four-chart row, four KPI cards with sparklines. On real data it was poor, and for
+reasons worth recording rather than repeating.
+
+- **The map occupied the largest slot and showed ocean.** Fitting all of Karnataka
+  put the viewport over the Arabian Sea and Sri Lanka. The geospatial view is
+  `/vision`, which is built for it; a second map here competed for the most
+  valuable space on the page while conveying less.
+- **Three of the four charts were flat.** Measured before drawing them:
+  hour-of-day populates only 12 of 24 buckets, each within a few percent of the
+  others; weekday counts vary by 3.6%; and the clearance rate over five years is
+  20.3 / 20.3 / 20.5 / 20.6 / 19.9. Rendering those is not neutral — a flat line
+  labelled "trend" invites the officer to read movement that is not there.
+- **The KPI sparklines were the same yearly series four times**, tinted by a delta
+  belonging to a different quantity.
+- **"▼ 27.9% vs last year" sat beside an all-years total.** Two different spans in
+  one sentence.
+
+### What replaced it, chosen by measuring spread first
+
+Every candidate comparison was checked for variance before it earned a panel:
+
+| Comparison | Spread | Verdict |
+|---|---|---|
+| FIR volume by year | 6,552 → 8,622 → 5,764 | kept — rise then −27.9% |
+| Station clearance, 71 stations with 100+ FIRs | 11.0% / median 19.5% / 27.9% | kept — 2.5× |
+| Case disposition, 12 statuses | Pending Trial 10,780 … Un Traced 153 | kept |
+| Crime mix year on year | −17% to −38% by category | kept |
+| District clearance | 23.9% → 19.1% | kept, weaker |
+| Clearance rate over time | 0.7 points across 5 years | **dropped** |
+| Hour of day, day of week | 12/24 hours, 3.6% spread | **dropped** |
+
+The finding that shaped the layout: **aggregate clearance is flat near 20% every
+single year, but station-level clearance varies 2.5×.** So the screen stopped
+drawing the trend and started drawing the distribution — a box plot with the
+median marked, plus the five weakest and five strongest stations against it. The
+dropped dimensions are reported as coverage facts ("12/24 hours carry incidents")
+instead of being charted, which is the honest use of a null result.
+
+New backend: `app/schemas/dashboard.py`, `app/services/dashboard_service.py`, and
+`GET /api/dashboard/summary?year=&district=&crime_type=` on the existing
+intelligence router — one round trip for the whole screen, all of it fixed SQL on
+the RLS-scoped session rather than through the LLM, because a dashboard has to
+render the same numbers twice.
+
+### Three real bugs surfaced by building on real data
+
+**A pre-existing 500 on every date-filtered request.** `/map/station-breakdown`
+accepted `date_from`/`date_to` in its schema as `Optional[str]`, bound them into
+raw `text()` SQL against a DATE column, and asyncpg refused:
+
+```
+invalid input for query argument $1: '2025-01-01'
+('str' object has no attribute 'toordinal')
+```
+
+Those fields had been in the schema all along; the year filter was simply the
+first caller to use them. Fixed by typing them as `date` so Pydantic parses at the
+edge — the driver then gets a real date and malformed input returns 422 rather
+than 500. This is also what made the year filter look broken: the failing call
+rejected the whole `Promise.all`, so the summary was nulled and the UI never
+updated.
+
+**Two definitions of "cleared" on one screen.** The station table came from
+`/map/station-breakdown`, which counts `charge_sheeted`; everything else counted
+`convicted`. The table's worst station read 29.5% while the outlier panel's worst
+read 11.0%, and the "vs median" column was comparing a charge-sheet rate against a
+conviction median. The station table is now served from the dashboard endpoint so
+the screen has one definition throughout. After the fix both agree: worst station
+is Nandini Layout PS at 11.0%, −8.5 points against the median.
+
+**A fabricated +386.5%.** Crime-mix year-on-year paired an all-years count with a
+single prior year: 4,189 motor-vehicle cases across five years against 861 in
+2023. Year-on-year is now offered only when a year is selected, so both sides of
+the ratio cover the same span. Maximum magnitude went from 386.5% to 22.4%.
+
+### And one performance bug of my own making
+
+`pg_stat_activity` showed a backend **idle in transaction for 295 seconds holding
+the audit chain's advisory lock**, with the new station aggregate as its last
+statement, and other requests queued behind it until they hit statement timeout.
+
+Cause: the route called `write_audit()` first, and `write_audit` takes
+`pg_advisory_xact_lock` to serialise read-prev-hash → insert against other audit
+writers. That lock is held until the transaction commits, so writing the audit row
+before the aggregates held it across all ten of them — making the heaviest read in
+the application serialise every audited write in it.
+
+Fixed by auditing after the reads. The lock is now held only for the insert, and
+the ordering also matches what the row means: this is a disclosure log, and
+nothing was disclosed if the aggregation failed. Contention drained from two
+backends with one waiting to one with none queued.
+
+Note the remaining, pre-existing design point: a single global advisory lock
+serialises every audit write in the app, held until request-transaction commit.
+That is unchanged here and is fine at demo concurrency, but it is a throughput
+ceiling worth knowing about.
+
+### Also fixed, found while verifying
+
+A hydration mismatch of my own: `greeting()` reads the clock and `getCachedUser()`
+reads `localStorage`, and both were being called during render, so the SSR HTML
+disagreed with the first client render. React discarded the tree and the screen
+sat on its loading state indefinitely. Both moved into an effect.
+
+The chat rail's removal orphaned two hand-offs. `forecast.tsx` and
+`transcripts.tsx` both wrote `satyam:pending-voice` and navigated to `/console`,
+which no longer has anywhere to put the question — they now go to `/ask`, which
+consumes that key. `screen_agent.py`'s manifest advertised `ask` and `new_chat` on
+`/console`; those moved to a new `/ask` entry, and `/console` gained
+`set_district` / `set_crime_type`. Leaving them would have let the LLM emit actions
+the screen silently drops, which reads as the agent ignoring the officer.
+
+Nav label is now "Dashboard" with a `LayoutDashboard` icon, and the voice matcher
+for `/console` takes `dashboard|overview|crime intelligence|kpi|clearance`.
+
+### Verified
+
+35 checks in headless Chrome against the live API, all passing, including: no
+Leaflet container anywhere on the page; no hour-of-day, weekday or clearance-trend
+panel; every KPI matching the API exactly; year bars carrying real counts with the
+−27.9% delta; 12 real dispositions rather than a cleared/pending binary; the
+distribution showing 11% / 19.5% / 27.9%; the flat-clearance caveat present; no
+year-on-year offered without a year selected and plausible magnitudes once one is;
+the station table's clearance agreeing with the outlier panel; re-sorting to
+worst-first surfacing Nandini Layout PS; and clicking a year bar re-querying the
+whole dashboard.
+
+`pytest -m "not integration"` 161 passed. Frontend typecheck at its 56-error
+baseline. Prettier clean on the files touched.
+
+### Still open
+
+The dashboard is capped at the top 80 stations by volume, so "worst clearance"
+sorts within that subset rather than across all 629. For a state-wide worst-list
+the ranking belongs in SQL. The `/map/hotspots` endpoint still accepts
+`date_from`/`date_to` and ignores them — harmless now that the map is gone from
+this screen, but it means `/vision` is not date-filterable either.

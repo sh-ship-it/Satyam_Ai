@@ -234,7 +234,9 @@ export const intelligence = {
 
   // Search — unified person + case autocomplete
   searchPersonsAndCases: async (q: string, limit = 12) => {
-    const res = await apiFetch<SearchResult[]>(`/api/cases/search?q=${encodeURIComponent(q)}&limit=${limit}`);
+    const res = await apiFetch<SearchResult[]>(
+      `/api/cases/search?q=${encodeURIComponent(q)}&limit=${limit}`,
+    );
     return translateSearchResults(res);
   },
 
@@ -288,13 +290,17 @@ export async function translateOnTheFly(strings: string[]): Promise<Record<strin
   if (toTranslate.length === 0) return {};
 
   try {
-    const res = await apiFetch<{ translations: Record<string, string> }>("/settings/db-source/translate", {
-      method: "POST",
-      body: JSON.stringify({
-        strings: toTranslate,
-        system_hint: "Translate these police/crime database values, district names, and person names to formal Kannada (ಕನ್ನಡ) script. Keep numbers/codes/FIR formats as is."
-      }),
-    });
+    const res = await apiFetch<{ translations: Record<string, string> }>(
+      "/settings/db-source/translate",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          strings: toTranslate,
+          system_hint:
+            "Translate these police/crime database values, district names, and person names to formal Kannada (ಕನ್ನಡ) script. Keep numbers/codes/FIR formats as is.",
+        }),
+      },
+    );
     return res.translations;
   } catch (err) {
     console.warn("[intelligence api] translateOnTheFly failed:", err);
@@ -360,10 +366,10 @@ async function translateOffenders(offenders: OffenderListItem[]): Promise<Offend
   const translations = await translateOnTheFly(strings);
 
   const riskKN: Record<string, string> = {
-    "Critical": "ನಿರ್ಣಾಯಕ",
-    "High": "ಹೆಚ್ಚು",
-    "Medium": "ಮಧ್ಯಮ",
-    "Low": "ಕಡಿಮೆ"
+    Critical: "ನಿರ್ಣಾಯಕ",
+    High: "ಹೆಚ್ಚು",
+    Medium: "ಮಧ್ಯಮ",
+    Low: "ಕಡಿಮೆ",
   };
 
   return offenders.map((o) => {
@@ -371,8 +377,109 @@ async function translateOffenders(offenders: OffenderListItem[]): Promise<Offend
       ...o,
       display_name: translations[o.display_name] ?? o.display_name,
       district: o.district ? (translations[o.district] ?? o.district) : null,
-      top_crime_type: o.top_crime_type ? (translations[o.top_crime_type] ?? o.top_crime_type) : null,
+      top_crime_type: o.top_crime_type
+        ? (translations[o.top_crime_type] ?? o.top_crime_type)
+        : null,
       risk_label: translations[o.risk_label] ?? riskKN[o.risk_label] ?? o.risk_label,
     };
   });
 }
+
+// ── Console dashboard summary ────────────────────────────────────────────────
+
+export type DashboardKpis = {
+  total_firs: number;
+  cleared: number;
+  pending: number;
+  clearance_rate_percent: number;
+  per_day: number;
+  first_day: string | null;
+  last_day: string | null;
+  span_days: number;
+  districts_covered: number;
+  stations_covered: number;
+};
+
+/** A ranked row. `yoy_percent` is null when there is no comparable prior period. */
+export type NamedCount = {
+  name: string;
+  count: number;
+  percent: number;
+  prev_count: number | null;
+  yoy_percent: number | null;
+};
+
+export type YearRow = {
+  year: number;
+  count: number;
+  cleared: number;
+  clearance_percent: number;
+  yoy_percent: number | null;
+};
+
+export type DistrictRow = {
+  name: string;
+  count: number;
+  percent: number;
+  cleared: number;
+  clearance_percent: number;
+  /** Signed difference against the median station clearance, in points. */
+  vs_median_points: number;
+};
+
+/** One station in the performance table. `cleared` is convictions, matching the
+ *  KPI strip and the outlier median — unlike /map/station-breakdown, which counts
+ *  charge-sheeted cases and is therefore not comparable. */
+export type DashboardStationRow = {
+  station: string;
+  district: string | null;
+  firs: number;
+  cleared: number;
+  pending: number;
+  clearance_percent: number;
+  vs_median_points: number;
+  top_crime: string | null;
+};
+
+export type StationClearance = {
+  min_firs: number;
+  stations: number;
+  worst: number;
+  p25: number;
+  median: number;
+  p75: number;
+  best: number;
+  bottom: DistrictRow[];
+  top: DistrictRow[];
+};
+
+export type DashboardSummary = {
+  scope_label: string;
+  year: number | null;
+  compare_year: number | null;
+  district: string | null;
+  crime_type: string | null;
+  kpis: DashboardKpis;
+  yearly: YearRow[];
+  crime_mix: NamedCount[];
+  status_mix: NamedCount[];
+  districts: DistrictRow[];
+  station_clearance: StationClearance;
+  stations: DashboardStationRow[];
+  /** Coverage facts, reported instead of charted — both dimensions are near-uniform. */
+  hours_populated: number;
+  dow_spread_percent: number;
+  clearance_stable_note: string | null;
+  generated_at: string;
+};
+
+export const dashboard = {
+  summary: (opts?: { year?: number | null; district?: string; crime_type?: string }) => {
+    const p = new URLSearchParams();
+    if (opts?.year) p.set("year", String(opts.year));
+    if (opts?.district) p.set("district", opts.district);
+    if (opts?.crime_type) p.set("crime_type", opts.crime_type);
+    const qs = p.toString();
+    return apiFetch<DashboardSummary>(`/api/dashboard/summary${qs ? "?" + qs : ""}`);
+  },
+};

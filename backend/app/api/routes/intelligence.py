@@ -19,6 +19,8 @@ from app.schemas.intelligence import (
     SocialRiskIndexResponse, SocioDemographicsResponse,
     SocioCorrelationResponse, TrendsResponse,
 )
+from app.schemas.dashboard import DashboardSummary
+from app.services import dashboard_service as dashboard_svc
 from app.services import intelligence_service as svc
 
 router = APIRouter()
@@ -265,3 +267,46 @@ async def social_risk_index(
 ) -> SocialRiskIndexResponse:
     _guard(principal, min_clearance=2)
     return await svc.get_social_risk_index(session)
+
+
+# ── Console dashboard summary ─────────────────────────────────────────────────
+
+@router.get("/dashboard/summary", response_model=DashboardSummary, tags=["intelligence"])
+async def dashboard_summary(
+    year: int | None = Query(None, ge=1990, le=2100),
+    district: str | None = None,
+    crime_type: str | None = None,
+    session: AsyncSession = Depends(get_scoped_session),
+    principal: Principal = Depends(get_principal),
+) -> DashboardSummary:
+    """Every aggregate the Console dashboard renders, in one round trip.
+
+    L1 is sufficient: the response is entirely counts and rates with no named
+    person, no narrative text and no FIR identifier, so there is nothing here a
+    constable may not see for their own jurisdiction. RLS on the scoped session is
+    what limits *which* cases are counted.
+    """
+    _guard(principal)
+
+    # AUDIT AFTER THE READS, NOT BEFORE.
+    # write_audit() takes pg_advisory_xact_lock to serialise the read-prev-hash →
+    # insert against other audit writers, and that lock is held until the
+    # transaction commits. Writing the audit row first therefore held it across all
+    # ~ten aggregate queries in build_summary, so the heaviest read on the app
+    # serialised every audited write in it. Observed in pg_stat_activity: one
+    # backend idle-in-transaction holding the lock for 295s with the station
+    # aggregate as its last statement, and other requests queued behind it until
+    # they hit statement timeout.
+    #
+    # Ordering it after also matches what the row means: this is a disclosure log,
+    # and nothing was disclosed if the aggregation failed.
+    summary = await dashboard_svc.build_summary(
+        session, year=year, district=district, crime_type=crime_type
+    )
+    await write_audit(
+        session,
+        action="intelligence.dashboard_summary",
+        user_id=principal.officer_id,
+        query_text=f"year={year} district={district} crime_type={crime_type}",
+    )
+    return summary

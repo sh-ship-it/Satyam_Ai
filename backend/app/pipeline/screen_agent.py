@@ -40,15 +40,28 @@ log = logging.getLogger(__name__)
 # ════════════════════════════════════════════════════════════════════════════
 
 SCREEN_CAPABILITIES: dict[str, dict] = {
+    # Chat moved to /ask. The Console is now a KPI dashboard built on a crime map,
+    # so `ask` and `new_chat` were removed — leaving them here would let the LLM
+    # emit actions the screen silently drops, which looks like the agent ignoring
+    # the officer.
     "/console": {
-        "name": "Console (AI chat + map)",
-        "keywords": ["console", "chat", "assistant", "conversation", "ask", "query"],
-        "kn": ["ಕನ್ಸೋಲ್", "ಸಂಭಾಷಣೆ", "ಚಾಟ್"],
+        "name": "Dashboard (crime intelligence overview: KPIs, heatmap, station performance)",
+        "keywords": ["console", "dashboard", "overview", "crime intelligence", "kpi", "clearance", "stations"],
+        "kn": ["ಕನ್ಸೋಲ್", "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್"],
+        "actions": {
+            "show_on_map": {"desc": "Focus the map on a person's crime locations", "params": {"person": "string"}},
+            "set_map_mode": {"desc": "Switch map render mode", "params": {"mode": "heat|pins|grid"}},
+            "set_district": {"desc": "Filter the whole dashboard to one district", "params": {"district": "string"}},
+            "set_crime_type": {"desc": "Filter the whole dashboard to one crime type", "params": {"crime_type": "string"}},
+        },
+    },
+    "/ask": {
+        "name": "Ask Satyam (dedicated AI chat)",
+        "keywords": ["ask satyam", "chat", "assistant", "conversation", "ask", "query"],
+        "kn": ["ಸಂಭಾಷಣೆ", "ಚಾಟ್"],
         "actions": {
             "ask": {"desc": "Type a question into chat and send it", "params": {"text": "string"}},
             "new_chat": {"desc": "Start a new conversation", "params": {}},
-            "show_on_map": {"desc": "Focus the map on a person's crime locations", "params": {"person": "string"}},
-            "set_map_mode": {"desc": "Switch map render mode", "params": {"mode": "heat|pins|grid"}},
         },
     },
     "/network": {
@@ -719,10 +732,21 @@ def _rule_plan(command: str, current_route: Optional[str], lang: str) -> dict:
         if val:
             actions.append({"screen": route, "action": "search", "params": {"query": val}})
 
-    elif route == "/console":
+    elif route == "/ask":
         val = _strip_to_value(text)
         if val and not _NAV_VERBS.search(text):
             actions.append({"screen": route, "action": "ask", "params": {"text": text}})
+
+    elif route == "/console":
+        # Dashboard filters. No `ask` here — the Console has no composer.
+        if crime:
+            actions.append({"screen": route, "action": "set_crime_type", "params": {"crime_type": crime}})
+        if district:
+            actions.append({"screen": route, "action": "set_district", "params": {"district": district}})
+        for mode in ("heat", "pins", "grid"):
+            if mode in low:
+                actions.append({"screen": route, "action": "set_map_mode", "params": {"mode": mode}})
+                break
 
     # Build the spoken confirmation
     name = SCREEN_CAPABILITIES.get(route or "", {}).get("name", route or "")

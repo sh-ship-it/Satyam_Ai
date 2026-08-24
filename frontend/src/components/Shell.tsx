@@ -24,6 +24,7 @@ import {
   Camera,
   CameraOff,
   Sparkles,
+  LayoutDashboard,
 } from "lucide-react";
 import { type ReactNode, useState, useEffect, useRef, useCallback } from "react";
 import { ThemePicker } from "./ThemePicker";
@@ -69,9 +70,12 @@ const SCREEN_ROUTES: VoiceScreen[] = [
     words: /(vision|tactical map|tactical view|earth view|globe view|3d map)|ವಿಷನ್|ತಂತ್ರಾತ್ಮಕ/i,
   },
   // The dedicated chat screen owns the conversational words; /console keeps only
-  // its own name plus the map words below, since its chat rail sits beside a map.
+  // its own name plus the map words below, since its dashboard is built on a map.
   { to: "/ask", words: /(ask satyam|ai chat|chat|assistant|conversation)|ಚಾಟ್|ಸಂಭಾಷಣೆ/i },
-  { to: "/console", words: /(console)|ಕನ್ಸೋಲ್/i },
+  {
+    to: "/console",
+    words: /(console|dashboard|overview|crime intelligence|kpi|clearance)|ಕನ್ಸೋಲ್|ಡ್ಯಾಶ್‌ಬೋರ್ಡ್/i,
+  },
   { to: "/console", words: /(map|hotspot|heat ?map|geospatial)|ನಕ್ಷೆ/i },
   { to: "/network", words: /(network|graph|ego|link analysis|connections?)|ನೆಟ್‌ವರ್ಕ್/i },
   { to: "/reports", words: /(report|reports|brief|dossier|pdf)|ವರದಿ/i },
@@ -336,7 +340,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
     const NAV_LABEL: Record<string, string> = {
       "/ask": t("Ask Satyam"),
-      "/console": t("Console"),
+      "/console": t("Dashboard"),
       "/map": t("Map"),
       "/vision": t("Vision"),
       "/network": t("Network"),
@@ -1048,7 +1052,7 @@ export function Shell({ children }: { children: ReactNode }) {
 
   const NAV = [
     { to: "/ask", icon: Sparkles, label: t("Ask Satyam") },
-    { to: "/console", icon: MessageSquare, label: t("Console") },
+    { to: "/console", icon: LayoutDashboard, label: t("Dashboard") },
     { to: "/network", icon: Network, label: t("Network") },
     { to: "/forecast", icon: ShieldCheck, label: t("Forecast") },
     { to: "/trends", icon: FileText, label: t("Trends") },

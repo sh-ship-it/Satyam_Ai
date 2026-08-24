@@ -1,117 +1,108 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import {
+  AlertTriangle,
+  ArrowDown,
+  ArrowUp,
+  Download,
+  Gauge,
+  Hourglass,
+  Info,
+  Layers,
+  ListOrdered,
+  Scale,
+  ShieldCheck,
+  Sparkles,
+  TrendingDown,
+} from "lucide-react";
 import { Shell } from "@/components/Shell";
 import { CaseDrawer } from "@/components/CaseDrawer";
-import { useState, useEffect, useRef } from "react";
-import {
-  Mic,
-  Send,
-  Sparkles,
-  ShieldAlert,
-  History,
-  X,
-  Map as MapIcon,
-  Layers,
-  Filter,
-  Volume2,
-} from "lucide-react";
-import { useT, useI18n } from "@/lib/i18n";
-import { tData } from "@/lib/tData";
 import { SimilarCaseSearch } from "@/components/SimilarCaseSearch";
-import { streamChat, type ChatEvent, api, type StationRow, getAuthToken, API_BASE } from "@/lib/api/client";
-import { CrimeMap, type Hotspot } from "@/components/CrimeMap";
-import { intelligence } from "@/lib/api/intelligence";
-import { speakViaSarvam, isServerVoiceEnabled } from "@/lib/voice/tts";
-import { detectLang, resolveLang } from "@/lib/voice/lang";
-import { loadEngineSettings } from "@/components/SettingsDialog";
-import { Markdown } from "@/components/Markdown";
+import { useI18n, useT } from "@/lib/i18n";
+import { tData } from "@/lib/tData";
+import { api, API_BASE, getAuthToken, getCachedUser } from "@/lib/api/client";
 import {
-  generateId,
-  generateTitle,
-  loadConversations,
-  saveConversations,
-  type ChatMessage,
-  type Conversation,
-} from "@/lib/chatStore";
+  dashboard,
+  type DashboardStationRow,
+  type DashboardSummary,
+  type DistrictRow,
+  type NamedCount,
+} from "@/lib/api/intelligence";
+
+/**
+ * Crime Intelligence dashboard.
+ *
+ * Chat lives at /ask, so this screen is for reading the state of a jurisdiction
+ * rather than asking about it. Everything comes from `GET /api/dashboard/summary`,
+ * computed in SQL on the RLS-scoped session.
+ *
+ * WHAT IS NOT ON THIS SCREEN, AND WHY
+ * - No map. The geospatial view is /vision, which is built for it. A second map
+ *   here competed for the largest slot on the page while showing less.
+ * - No hour-of-day or day-of-week chart. Measured on this corpus: only 12 of 24
+ *   hours hold any incident and weekday counts vary by under 4%. Both are flat,
+ *   so they are stated as coverage facts instead of drawn as patterns.
+ * - No clearance-rate-over-time line. 20.3 / 20.3 / 20.5 / 20.6 / 19.9 across five
+ *   years is a flat line pretending to be a trend. The variance is *between
+ *   stations* (11.0% to 27.9%), which is what the outlier panel shows.
+ * - No per-KPI sparklines. They were the same yearly series repeated four times.
+ */
 
 export const Route = createFileRoute("/console")({
   head: () => ({
     meta: [
-      { title: "Console · Satyam" },
-      { name: "description", content: "Conversational AI console for crime intelligence queries." },
+      { title: "Crime Intelligence · Satyam" },
+      {
+        name: "description",
+        content:
+          "Analytical dashboard: FIR volume and year-on-year change, case disposition, clearance outliers by station, district league table.",
+      },
     ],
   }),
   component: Console,
 });
 
+const ROWS_PER_PAGE = 10;
+
+function greeting(): string {
+  const h = new Date().getHours();
+  if (h < 12) return "Good morning";
+  if (h < 17) return "Good afternoon";
+  return "Good evening";
+}
+
+const fmt = (n: number) => n.toLocaleString();
+
 function Console() {
   const t = useT();
   const { lang } = useI18n();
+
   const [drawerCaseId, setDrawerCaseId] = useState<number | null>(null);
-  const [historyOpen, setHistoryOpen] = useState(false);
-  const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
 
-  // ── Chat panel width (drag-to-resize) ────────────────────────────────────
-  const [chatWidth, setChatWidth] = useState(420);
-  const isDraggingRef = useRef(false);
-  const dragStartXRef = useRef(0);
-  const dragStartWidthRef = useRef(420);
-
-  function onDividerMouseDown(e: React.MouseEvent) {
-    e.preventDefault();
-    isDraggingRef.current = true;
-    dragStartXRef.current = e.clientX;
-    dragStartWidthRef.current = chatWidth;
-
-    function onMouseMove(ev: MouseEvent) {
-      if (!isDraggingRef.current) return;
-      const delta = ev.clientX - dragStartXRef.current;
-      const next = Math.min(Math.max(dragStartWidthRef.current + delta, 260), window.innerWidth * 0.6);
-      setChatWidth(next);
-    }
-    function onMouseUp() {
-      isDraggingRef.current = false;
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
-    }
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
-  }  const [input, setInput] = useState("");
-  const [chatDictating, setChatDictating] = useState(false);
-  const chatRecRef = useRef<any>(null);
-  const [streamingIdx, setStreamingIdx] = useState<number | null>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const backendConvId = useRef<string | null>(null);
-  const [isTtsSpeaking, setIsTtsSpeaking] = useState(false);
-
-  // Track when Sarvam/Google TTS is speaking so we can show a visual indicator.
-  useEffect(() => {
-    const onState = (e: Event) => {
-      const state = (e as CustomEvent).detail?.state;
-      if (state === "speaking") setIsTtsSpeaking(true);
-      else if (state === "done") setIsTtsSpeaking(false);
-    };
-    window.addEventListener("satyam:ai-state", onState);
-    return () => window.removeEventListener("satyam:ai-state", onState);
-  }, []);
-
-  // ── Results Canvas state ──────────────────────────────────────────────────
-  const [canvasTab, setCanvasTab] = useState<"data" | "map">("data");
-  const [mapMode, setMapMode] = useState<"heat" | "pins" | "grid">("heat");
+  const [year, setYear] = useState<number | null>(null);
   const [crimeType, setCrimeType] = useState("");
   const [district, setDistrict] = useState("");
-  const [hotspots, setHotspots] = useState<Hotspot[]>([]);
-  const [stations, setStations] = useState<StationRow[]>([]);
-  const [grandTotal, setGrandTotal] = useState<number>(0); // real DB-wide case count
-  const [canvasLoading, setCanvasLoading] = useState(false);
-  const [canvasErr, setCanvasErr] = useState<string | null>(null);
-  const [mapFocus, setMapFocus] = useState<Hotspot[] | null>(null);
+  const [page, setPage] = useState(0);
+  const [sortKey, setSortKey] = useState<"firs" | "clearance">("firs");
 
-  // Live filter options — crime types & districts pulled from the DB (RLS-scoped),
-  // never hardcoded, so the dropdowns always reflect the actual dataset.
+  const [summary, setSummary] = useState<DashboardSummary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState<string | null>(null);
+  const [loadedAt, setLoadedAt] = useState<Date | null>(null);
+
   const [crimeOptions, setCrimeOptions] = useState<string[]>([]);
   const [districtOptions, setDistrictOptions] = useState<string[]>([]);
+
+  // Client-only: `greeting()` reads the clock and `getCachedUser()` reads
+  // localStorage, so computing either during render makes the SSR HTML disagree
+  // with the first client render and React discards the tree.
+  const [officer, setOfficer] = useState<{ name?: string } | null>(null);
+  const [hello, setHello] = useState("");
+  useEffect(() => {
+    setOfficer(getCachedUser());
+    setHello(greeting());
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -120,7 +111,7 @@ function Console() {
           try {
             await api.login("demo", "");
           } catch {
-            /* backend down — handled below */
+            /* surfaced by the main load */
           }
         }
         const token = getAuthToken();
@@ -133,7 +124,7 @@ function Console() {
         setCrimeOptions(Array.isArray(d.crime_types) ? d.crime_types : []);
         setDistrictOptions(Array.isArray(d.districts) ? d.districts : []);
       } catch {
-        /* leave options empty — the "All …" option still works */
+        /* the "All …" options still work */
       }
     })();
     return () => {
@@ -141,1128 +132,939 @@ function Console() {
     };
   }, []);
 
-  // Open the Map tab if a voice "show map" intent navigated here
-  useEffect(() => {
-    try {
-      if (sessionStorage.getItem("satyam:open-canvas") === "map") {
-        sessionStorage.removeItem("satyam:open-canvas");
-        setCanvasTab("map");
-      }
-    } catch {}
-  }, []);
-
-  // Live canvas data: hotspots + station breakdown from one filter set
   useEffect(() => {
     let cancelled = false;
-    setCanvasLoading(true);
-    setCanvasErr(null);
-    const body: Record<string, unknown> = {
-      mode: "by_crime",
-    };
-    if (crimeType) body.crime_type = crimeType;
-    if (district) body.district = district;
+    setLoading(true);
+    setErr(null);
+    setPage(0);
+
     (async () => {
-      // Auto-login with the demo account if no token is stored yet.
-      // This ensures the canvas loads even when the user navigated directly to
-      // /console without going through the login page.
       if (!getAuthToken()) {
         try {
           await api.login("demo", "");
         } catch {
-          /* backend unreachable — requests will fail below with a clear message */
+          /* handled below */
         }
       }
       try {
-        const [hot, brk] = await Promise.all([
-          api.mapHotspots(body),
-          api.stationBreakdown({ ...body, limit: 25 }),
-        ]);
+        // One request for the whole screen. The station table used to come from
+        // /map/station-breakdown, but that endpoint counts charge-sheeted cases
+        // while everything else here counts convictions, so the table's clearance
+        // rate could not be compared against the median beside it.
+        const sum = await dashboard.summary({
+          year,
+          district: district || undefined,
+          crime_type: crimeType || undefined,
+        });
         if (cancelled) return;
-        setHotspots(
-          (hot.points || []).map((p) => ({
-            lat: p.lat,
-            lng: p.lng,
-            weight: p.weight,
-            label: p.label ?? undefined,
-          })),
+        setSummary(sum);
+        setLoadedAt(new Date());
+      } catch (e: unknown) {
+        if (cancelled) return;
+        const status = (e as { status?: number })?.status;
+        setErr(
+          status === 401
+            ? t("Session expired — please sign out and sign in again.")
+            : status === 403
+              ? t("Your rank does not have permission to view analytics.")
+              : status != null
+                ? `${t("API error")} ${status}`
+                : t("Could not reach the API — make sure the backend is running."),
         );
-        setStations(brk.rows || []);
-        // Use the real DB-wide count, not the sum of the top-N rows
-        setGrandTotal(brk.grand_total ?? brk.rows?.reduce((s: number, r: StationRow) => s + r.firs, 0) ?? 0);
-      } catch (err: any) {
-        if (!cancelled) {
-          const status: number | undefined = err?.status;
-          const msg =
-            status === 401
-              ? "Session expired — please sign out and sign in again."
-              : status === 403
-                ? "Your rank does not have permission to view analytics. Sign in with a higher rank (SP or above)."
-                : status != null
-                  ? `API error ${status} — check the backend is running.`
-                  : "Could not reach the API — make sure the backend is running on http://localhost:8000.";
-          setCanvasErr(msg);
-          setHotspots([]);
-          setStations([]);
-          setGrandTotal(0);
-        }
+        setSummary(null);
       } finally {
-        if (!cancelled) setCanvasLoading(false);
+        if (!cancelled) setLoading(false);
       }
     })();
     return () => {
       cancelled = true;
     };
-  }, [crimeType, district]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [year, crimeType, district]);
 
-  // Use grand_total from the backend (real DB-wide count) for the headline stat.
-  // Fall back to summing rows only when grand_total isn't available (old backend).
-  const totalFirs = grandTotal || stations.reduce((s, r) => s + r.firs, 0);
-  const totalCleared = stations.reduce((s, r) => s + r.cleared, 0);
-  const clearedPct = totalFirs ? Math.round((totalCleared / totalFirs) * 100) : 0;
-  const avgPerDay = totalFirs ? (totalFirs / 30).toFixed(1) : "—";
-
-  // ── Bootstrap conversations ───────────────────────────────────────────────
-  useEffect(() => {
-    const saved = loadConversations();
-    if (saved.length > 0) {
-      setConversations(saved);
-      setActiveId(saved[0].id);
-      setMessages(saved[0].messages);
-    } else {
-      const defaultConv: Conversation = {
-        id: generateId(),
-        title: t("New conversation"),
-        messages: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      setConversations([defaultConv]);
-      setActiveId(defaultConv.id);
-      setMessages(defaultConv.messages);
-      saveConversations([defaultConv]);
-    }
-  }, []);
-
-  // Consume a voice command queued from another screen
-  useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem("satyam:pending-voice");
-      if (!raw) return;
-      sessionStorage.removeItem("satyam:pending-voice");
-      const d = JSON.parse(raw);
-      if (d && typeof d.text === "string" && d.text.trim()) {
-        setTimeout(
-          () =>
-            sendMessage(d.text.trim(), { speak: d.speak !== false, lang: d.lang, rate: d.rate }),
-          90,
-        );
-      }
-    } catch {}
-  }, []);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, streamingIdx]);
-
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const text = (e as CustomEvent).detail;
-      if (typeof text === "string") setInput(text);
-    };
-    const voiceSendHandler = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      const text = typeof detail === "string" ? detail : detail?.text;
-      const lang = typeof detail === "object" ? detail?.lang : undefined;
-      const rate = typeof detail === "object" ? detail?.rate : undefined;
-      if (typeof text === "string" && text.trim()) {
-        sendMessage(text.trim(), { speak: true, lang, rate });
-      }
-    };
-    window.addEventListener("satyam:insert-transcript", handler);
-    window.addEventListener("satyam:voice-send", voiceSendHandler);
-    return () => {
-      window.removeEventListener("satyam:insert-transcript", handler);
-      window.removeEventListener("satyam:voice-send", voiceSendHandler);
-    };
-  }, []);
-
-  // AI: focus the map on a person's crime locations.
-  useEffect(() => {
-    const onMapFocus = async (e: Event) => {
-      const d = (e as CustomEvent).detail || {};
-      const who = d.person || d.place || "";
-      if (!who) return;
-      setCanvasTab("map"); // make sure the map panel is showing
-      setMapMode("pins");
-      try {
-        const locs = await intelligence.personLocations(who);
-        setMapFocus(locs.length ? locs : null);
-      } catch (err) {
-        console.error("[map-focus] failed:", err);
-        setMapFocus(null);
-      }
-    };
-    window.addEventListener("satyam:map-focus", onMapFocus);
-    return () => window.removeEventListener("satyam:map-focus", onMapFocus);
-  }, []);
-
-  // Voice Screen Agent: execute structured actions for /console.
+  // Voice Screen Agent actions. Filtering only — there is no composer here.
   useEffect(() => {
     const onTask = (e: Event) => {
       const d = (e as CustomEvent).detail;
       if (!d || d.route !== "/console") return;
-      const actions = Array.isArray(d.actions) ? d.actions : [];
-      for (const a of actions) {
+      for (const a of Array.isArray(d.actions) ? d.actions : []) {
         if (a.screen !== "/console") continue;
         const p = a.params || {};
-        if (a.action === "ask" && p.text) {
-          sendMessage(String(p.text), { speak: !!d.speak, lang: d.lang });
-        } else if (a.action === "new_chat") {
-          handleNewChat();
-        } else if (a.action === "set_map_mode" && p.mode) {
-          setCanvasTab("map");
-          setMapMode(p.mode as "heat" | "pins" | "grid");
-        } else if (a.action === "show_on_map" && p.person) {
-          window.dispatchEvent(
-            new CustomEvent("satyam:map-focus", { detail: { person: String(p.person) } }),
-          );
-        }
+        if (a.action === "set_district" && p.district) setDistrict(String(p.district));
+        else if (a.action === "set_crime_type" && p.crime_type) setCrimeType(String(p.crime_type));
       }
     };
     window.addEventListener("satyam:run-task", onTask);
     return () => window.removeEventListener("satyam:run-task", onTask);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ── Hands-free map control ─────────────────────────────────────────────────
-  // The Console map is rendered by <CrimeMap/>, which encapsulates a raw Leaflet
-  // `L.Map` (created with `L.map(...)`) and never exposes it as a prop or ref.
-  // Since we may only edit this file, we capture the live map instance with
-  // Leaflet's public `L.Map.addInitHook` — it runs for every Map construction
-  // (including CrimeMap's) with `this` bound to the new map. We stash the latest
-  // instance on a window global + ref so the gesture handler below can drive it.
-  // The hook is installed once and clears itself when a map is unloaded.
-  const mapRef = useRef<any>(null);
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      const L = (await import("leaflet")).default;
-      if (cancelled) return;
-      const w = window as any;
-      if (!w.__satyamMapInitHook) {
-        w.__satyamMapInitHook = true;
-        L.Map.addInitHook(function (this: any) {
-          w.__satyamLeafletMap = this;
-          this.on("unload", () => {
-            if (w.__satyamLeafletMap === this) w.__satyamLeafletMap = null;
-          });
-        });
-      }
-      // Adopt a map that may have been created before this hook installed.
-      if (w.__satyamLeafletMap) mapRef.current = w.__satyamLeafletMap;
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const k = summary?.kpis;
+  const sc = summary?.station_clearance;
 
-  // Hands-free gesture control: the Shell dispatches "satyam:hands-map" while the
-  // officer is on /console. detail is one of:
-  //   { action: "pan",  dir: "left" | "right" } → pan ~25% of the viewport width
-  //   { action: "zoom", delta: 1 | -1 }         → zoom in (+1) / out (-1) one level
-  useEffect(() => {
-    const onHandsMap = (e: Event) => {
-      const map = (window as any).__satyamLeafletMap ?? mapRef.current;
-      if (!map) return; // map not ready yet — no-op
-      mapRef.current = map;
-      const d = (e as CustomEvent).detail || {};
-      try {
-        if (d.action === "pan") {
-          const size = map.getSize();
-          const dx = d.dir === "right" ? size.x * 0.25 : -size.x * 0.25;
-          map.panBy([dx, 0], { animate: true });
-        } else if (d.action === "zoom") {
-          const delta = Number(d.delta) || 0;
-          if (delta) map.setZoom(map.getZoom() + delta);
-        }
-      } catch (err) {
-        console.error("[hands-map] failed:", err);
-      }
-    };
-    window.addEventListener("satyam:hands-map", onHandsMap);
-    return () => window.removeEventListener("satyam:hands-map", onHandsMap);
-  }, []);
-
-  const activeConv = conversations.find((c) => c.id === activeId);
-
-  function persistMessages(newMessages: ChatMessage[], convId?: string) {
-    const targetId = convId || activeId;
-    if (!targetId) return;
-    setConversations((prev) => {
-      const updated = prev.map((c) => {
-        if (c.id !== targetId) return c;
-        const firstUser = newMessages.find((m) => m.role === "user");
-        const shouldAutoTitle = firstUser && c.title === t("New conversation");
-        return {
-          ...c,
-          messages: newMessages,
-          updatedAt: new Date().toISOString(),
-          title: shouldAutoTitle ? generateTitle(firstUser.text) : c.title,
-        };
-      });
-      saveConversations(updated);
-      return updated;
-    });
-  }
-
-  function speak(text: string, opts?: { speak?: boolean; lang?: string; rate?: number }) {
-    const emit = (state: "speaking" | "done") =>
-      window.dispatchEvent(new CustomEvent("satyam:ai-state", { detail: { state } }));
-    // Voice turns always speak. Typed turns speak only when a server TTS provider
-    // (Sarvam or Google) is active in Settings — browser Web Speech is opt-in only.
-    const shouldSpeak = opts?.speak || isServerVoiceEnabled();
-    if (!shouldSpeak) return;
-
-    // Language priority:
-    // 1. If a voice turn explicitly passed a BCP-47 locale (e.g. "kn-IN"), use it.
-    // 2. Otherwise use the UI language toggle (EN / KN) set by the user.
-    //    This ensures "I set English → AI speaks English" always holds,
-    //    regardless of what characters appear in the response text.
-    let resolvedLang: "en" | "kn";
-    const explicitLang = (opts?.lang || "").toLowerCase();
-    if (explicitLang && explicitLang !== "auto") {
-      resolvedLang = explicitLang.startsWith("kn") ? "kn" : "en";
-    } else {
-      // Respect the UI toggle as the source of truth.
-      resolvedLang = lang === "KN" ? "kn" : "en";
-    }
-
-    console.debug(
-      "[console] speak lang=", resolvedLang,
-      "uiLang=", lang,
-      "provider=", loadEngineSettings().voiceBackend,
+  const sortedStations: DashboardStationRow[] = useMemo(() => {
+    const rows = [...(summary?.stations ?? [])];
+    // Worst-first when sorting by clearance: the underperforming end is the
+    // actionable one, so it should not require paging to the back of the list.
+    rows.sort((a, b) =>
+      sortKey === "clearance" ? a.clearance_percent - b.clearance_percent : b.firs - a.firs,
     );
-    void speakViaSarvam(text, resolvedLang, opts?.rate ?? 1, {
-      onStart: () => emit("speaking"),
-      onEnd: () => emit("done"),
+    return rows;
+  }, [summary, sortKey]);
+
+  const pageCount = Math.max(1, Math.ceil(sortedStations.length / ROWS_PER_PAGE));
+  const pageRows = sortedStations.slice(page * ROWS_PER_PAGE, (page + 1) * ROWS_PER_PAGE);
+
+  const scopeLine = [
+    district ? tData("district", district, lang) : t("all of Karnataka"),
+    crimeType ? tData("crime_type", crimeType, lang) : null,
+    year ? String(year) : t("all years"),
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
+  const activeFilters = [
+    year ? { label: String(year), clear: () => setYear(null) } : null,
+    district ? { label: tData("district", district, lang), clear: () => setDistrict("") } : null,
+    crimeType
+      ? { label: tData("crime_type", crimeType, lang), clear: () => setCrimeType("") }
+      : null,
+  ].filter(Boolean) as { label: string; clear: () => void }[];
+
+  function exportCsv() {
+    const head = [
+      "station",
+      "district",
+      "firs",
+      "cleared_convicted",
+      "pending",
+      "clearance_percent",
+      "vs_median_points",
+      "top_crime",
+    ];
+    const lines = sortedStations.map((r) =>
+      [
+        r.station,
+        r.district ?? "",
+        r.firs,
+        r.cleared,
+        r.pending,
+        r.clearance_percent,
+        r.vs_median_points,
+        r.top_crime ?? "",
+      ]
+        .map((v) => `"${String(v).replace(/"/g, '""')}"`)
+        .join(","),
+    );
+    const blob = new Blob([[head.join(","), ...lines].join("\n")], {
+      type: "text/csv;charset=utf-8",
     });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `satyam-stations-${year ?? "all"}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   }
-
-  async function sendMessage(
-    text: string,
-    opts?: { speak?: boolean; lang?: string; rate?: number },
-  ) {
-    const trimmed = text.trim();
-    if (!trimmed) return;
-
-    const isVoiceTurn = !!opts?.speak;
-    const speechLang = (opts?.lang || "").toLowerCase().startsWith("kn") ? "kn-IN" : "en-IN";
-    if (isVoiceTurn) {
-      window.dispatchEvent(new CustomEvent("satyam:ai-state", { detail: { state: "thinking" } }));
-    }
-
-    const userMsg: ChatMessage = { role: "user", text: trimmed };
-    const baseMessages = [...messages, userMsg];
-    setMessages([...baseMessages, { role: "ai", text: "", streaming: true }]);
-    persistMessages(baseMessages);
-    setInput("");
-    setStreamingIdx(baseMessages.length);
-
-    // TASK 2A: auto-detect chat request language from the user's text,
-    // falling back to the UI language toggle if detection gives nothing.
-    const reqLang: "en" | "kn" = (opts?.lang || "").toLowerCase().startsWith("kn")
-      ? "kn"
-      : detectLang(trimmed) === "kn"
-        ? "kn"
-        : lang === "KN"
-          ? "kn"
-          : "en";
-
-    // TASK 3: forward per-session engine settings from the Settings panel.
-    const engines = loadEngineSettings();
-
-    // Neutral fallback — no fabricated data
-    const cannedFallback = () => {
-      const aiText = t(
-        "I couldn't reach the backend just now. Please retry once the API is running.",
-      );
-      const finalMessages: ChatMessage[] = [...baseMessages, { role: "ai", text: aiText }];
-      setMessages(finalMessages);
-      persistMessages(finalMessages);
-      setStreamingIdx(null);
-      speak(aiText, opts);
-    };
-
-    let acc = "";
-    const citations: string[] = [];
-    let blocked = false;
-    let streamError = false;
-    let spokenSummary = ""; // [SPEAK] block from the backend — used for TTS
-
-    try {
-      await streamChat(
-        {
-          message: trimmed,
-          conversation_id: backendConvId.current ?? undefined,
-          lang: reqLang,
-          // TASK 3: forward per-session engine overrides from Settings panel.
-          brain_engine: engines.brainEngine,
-          sql_engine: engines.sqlEngine,
-          voice_backend: engines.voiceBackend === "webspeech" ? undefined : engines.voiceBackend,
-        },
-        (ev: ChatEvent) => {
-          if (ev.type === "token") acc += ev.text;
-          else if (ev.type === "speak") spokenSummary = ev.text ?? "";
-          else if (ev.type === "citation") citations.push(ev.label || ev.ref);
-          else if (ev.type === "blocked") {
-            blocked = true;
-            acc = t(
-              "Your role can't view named accused records. Showing aggregate counts instead.",
-            );
-          } else if (ev.type === "done") backendConvId.current = ev.conversation_id;
-          else if (ev.type === "error") streamError = true;
-          setMessages([
-            ...baseMessages,
-            {
-              role: "ai",
-              text: acc,
-              citations: citations.length ? [...citations] : undefined,
-              streaming: true,
-            },
-          ]);
-        },
-      );
-    } catch {
-      cannedFallback();
-      return;
-    }
-
-    if (streamError) {
-      cannedFallback();
-      return;
-    }
-    if (blocked) {
-      // 'acc' already holds the restricted-access notice set in the blocked handler.
-      const finalMessages: ChatMessage[] = [...baseMessages, { role: "ai", text: acc }];
-      setMessages(finalMessages);
-      persistMessages(finalMessages);
-      setStreamingIdx(null);
-      return;
-    }
-    if (!acc.trim()) {
-      const empty = t(
-        "No results matched your query. Try a broader question or different filters.",
-      );
-      const finalMessages: ChatMessage[] = [...baseMessages, { role: "ai", text: empty }];
-      setMessages(finalMessages);
-      persistMessages(finalMessages);
-      setStreamingIdx(null);
-      speak(empty, opts);
-      return;
-    }
-
-    const finalAi: ChatMessage = {
-      role: "ai",
-      text: acc,
-      citations: citations.length ? citations : undefined,
-    };
-    const finalMessages = [...baseMessages, finalAi];
-    setMessages(finalMessages);
-    persistMessages(finalMessages);
-    setStreamingIdx(null);
-    // If the backend sent a [SPEAK] smart summary, always speak it (force speak:true
-    // so it plays on both voice and typed turns, regardless of provider setting).
-    // If no summary, fall back to old behaviour: respect opts (voice turns) or
-    // server-provider check (typed turns).
-    if (spokenSummary) {
-      speak(spokenSummary, { speak: true, lang: opts?.lang, rate: opts?.rate });
-    } else {
-      speak(finalAi.text, opts);
-    }
-  }
-
-  // Chat-box dictation — fills ONLY the chat input. It must never open the
-  // top-right voice copilot (no "satyam:open-voice") or touch copilot state.
-  function toggleChatDictation() {
-    if (chatRecRef.current) {
-      try {
-        chatRecRef.current.stop();
-      } catch {
-        /* noop */
-      }
-      return; // onend clears the ref + flag
-    }
-    const SR: any =
-      (typeof window !== "undefined" &&
-        ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)) ||
-      null;
-    if (!SR) {
-      alert("This browser has no speech recognition. Use Chrome or Edge.");
-      return;
-    }
-    const rec = new SR();
-    rec.continuous = true;
-    rec.interimResults = true;
-    rec.lang = lang === "KN" ? "kn-IN" : "en-IN";
-
-    const prefix = input.trim() ? input.trim() + " " : "";
-    let finalText = "";
-
-    rec.onresult = (e: any) => {
-      let interim = "";
-      for (let i = e.resultIndex; i < e.results.length; i++) {
-        const r = e.results[i];
-        if (r.isFinal) finalText += r[0].transcript + " ";
-        else interim += r[0].transcript;
-      }
-      setInput((prefix + finalText + interim).replace(/\s+/g, " ").trimStart());
-    };
-    rec.onerror = () => {
-      /* swallow; onend cleans up */
-    };
-    rec.onend = () => {
-      chatRecRef.current = null;
-      setChatDictating(false);
-      setInput((prefix + finalText).replace(/\s+/g, " ").trim());
-    };
-
-    chatRecRef.current = rec;
-    setChatDictating(true);
-    try {
-      rec.start();
-    } catch {
-      chatRecRef.current = null;
-      setChatDictating(false);
-    }
-  }
-
-  function handleSend() {
-    sendMessage(input);
-  }
-
-  function handleNewChat() {
-    const newConv: Conversation = {
-      id: generateId(),
-      title: t("New conversation"),
-      messages: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    const updated = [newConv, ...conversations];
-    setConversations(updated);
-    setActiveId(newConv.id);
-    setMessages([]);
-    saveConversations(updated);
-    setHistoryOpen(false);
-  }
-
-  function handleSelectConversation(id: string) {
-    const conv = conversations.find((c) => c.id === id);
-    if (conv) {
-      setActiveId(id);
-      setMessages(conv.messages);
-      setHistoryOpen(false);
-    }
-  }
-
-  function handleDeleteConversation(e: React.MouseEvent, id: string) {
-    e.stopPropagation();
-    const updated = conversations.filter((c) => c.id !== id);
-    setConversations(updated);
-    saveConversations(updated);
-    if (activeId === id) {
-      if (updated.length > 0) {
-        setActiveId(updated[0].id);
-        setMessages(updated[0].messages);
-      } else {
-        handleNewChat();
-      }
-    }
-  }
-
-  function formatWhen(iso: string) {
-    const d = new Date(iso);
-    const now = new Date();
-    const diffDays = Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
-    if (diffDays === 0)
-      return t("Today") + " · " + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    if (diffDays === 1) return t("Yesterday");
-    if (diffDays < 7) return t("Last week");
-    return d.toLocaleDateString();
-  }
-
-  // Dataset-real example prompts
-  const EXAMPLES = [
-    t("Theft cases in Bengaluru City this year"),
-    t("Top crime types in Mysuru City"),
-    t("Network around a person in Dakshina Kannada"),
-    "ಬೆಂಗಳೂರಿನಲ್ಲಿ ಕಳ್ಳತನದ ಪ್ರವೃತ್ತಿ",
-  ];
 
   return (
     <Shell>
-      <div className="flex h-[calc(100vh-3.5rem-26px)] min-h-0">
-        {/* Conversation rail — drag the right-edge divider to resize width */}
-        <section
-          className="flex flex-col border-border bg-card overflow-hidden shrink-0"
-          style={{ width: chatWidth }}
-        >
-          <div className="flex items-center justify-between border-b border-border px-4 py-3">
+      <div className="h-[calc(100vh-3.5rem)] overflow-auto bg-background">
+        <div className="mx-auto max-w-[1500px] px-6 py-5">
+          {/* ── Header ──────────────────────────────────────────────────────── */}
+          <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
-                {t("Conversation")}
-              </div>
-              <h2 className="text-sm font-semibold text-foreground truncate max-w-[220px]">
-                {activeConv?.title || t("New conversation")}
-              </h2>
+              <h1 className="text-lg font-extrabold tracking-tight text-foreground">
+                {hello ? t(hello) : t("Crime intelligence")}
+                {officer?.name ? `, ${officer.name}` : ""}
+              </h1>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                {t("Analysis for")}{" "}
+                <span className="font-semibold text-foreground">{scopeLine}</span>
+                {k?.first_day && k?.last_day ? ` · ${k.first_day} → ${k.last_day}` : ""}
+              </p>
             </div>
-            <div className="flex items-center gap-3">
-              {isTtsSpeaking && (
-                <span className="inline-flex items-center gap-1 rounded-full border border-success/40 bg-success/10 px-2 py-0.5 text-[10px] font-bold text-success animate-pulse">
-                  <Volume2 className="h-2.5 w-2.5" />
-                  {t("Speaking…")}
-                </span>
-              )}
-              <button
-                onClick={() => setHistoryOpen((v) => !v)}
-                className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
-              >
-                <History className="h-3.5 w-3.5" />
-                {t("History")}
-              </button>
-              <button onClick={handleNewChat} className="text-xs text-primary hover:underline">
-                {t("+ New")}
-              </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="flex items-center gap-1.5 text-[11px] font-semibold text-muted-foreground">
+                <span
+                  className={`h-1.5 w-1.5 rounded-full ${loading ? "animate-pulse bg-amber-500" : err ? "bg-destructive" : "bg-emerald-500"}`}
+                />
+                {loading
+                  ? t("Loading…")
+                  : err
+                    ? t("Unavailable")
+                    : loadedAt
+                      ? loadedAt.toLocaleTimeString()
+                      : ""}
+              </span>
+              <Select
+                value={year == null ? "" : String(year)}
+                onChange={(v) => setYear(v ? Number(v) : null)}
+                options={(summary?.yearly ?? []).map((y) => String(y.year)).reverse()}
+                allLabel={t("All years")}
+              />
+              <Select
+                value={crimeType}
+                onChange={setCrimeType}
+                options={crimeOptions}
+                allLabel={t("All crime types")}
+                render={(v) => tData("crime_type", v, lang)}
+              />
+              <Select
+                value={district}
+                onChange={setDistrict}
+                options={districtOptions}
+                allLabel={t("All districts")}
+                render={(v) => tData("district", v, lang)}
+              />
             </div>
           </div>
 
-          {historyOpen && (
-            <div className="border-b border-border bg-muted/40 px-4 py-3 max-h-[280px] overflow-auto">
-              <div className="mb-2 flex items-center justify-between">
-                <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
-                  {t("Chat history")}
-                </div>
+          {activeFilters.length > 0 && (
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                {t("Filtered")}
+              </span>
+              {activeFilters.map((f) => (
                 <button
-                  onClick={() => setHistoryOpen(false)}
-                  className="text-muted-foreground hover:text-foreground"
+                  key={f.label}
+                  onClick={f.clear}
+                  className="rounded-full border border-border bg-muted px-2 py-0.5 text-[10px] font-semibold text-foreground transition hover:bg-card"
                 >
-                  <X className="h-3.5 w-3.5" />
+                  {f.label} ✕
                 </button>
-              </div>
-              {conversations.length === 0 ? (
-                <div className="text-xs text-muted-foreground py-2">
-                  {t("No conversations yet.")}
-                </div>
-              ) : (
-                <ul className="space-y-1">
-                  {conversations.map((c) => (
-                    <li key={c.id}>
-                      <button
-                        onClick={() => handleSelectConversation(c.id)}
-                        className={`flex w-full items-start rounded-md px-2 py-1.5 text-left text-xs hover:bg-card group ${
-                          c.id === activeId ? "bg-card ring-1 ring-primary/30" : ""
-                        }`}
-                      >
-                        <div className="flex-1 min-w-0">
-                          <div className="truncate text-foreground">{c.title}</div>
-                          <div className="mt-0.5 text-[10px] text-muted-foreground">
-                            {formatWhen(c.createdAt)}
-                          </div>
-                        </div>
-                        <span
-                          onClick={(e) => handleDeleteConversation(e, c.id)}
-                          className="ml-2 hidden group-hover:inline-flex text-muted-foreground hover:text-destructive"
-                          title={t("Delete")}
-                        >
-                          <X className="h-3 w-3" />
-                        </span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              ))}
             </div>
           )}
 
-          <div className="flex-1 space-y-4 overflow-auto px-4 py-5">
-            {messages.length === 0 && (
-              <div className="flex flex-col items-center justify-center h-full text-muted-foreground text-sm gap-2">
-                <Sparkles className="h-6 w-6 text-primary/60" />
-                <p>{t("Start a new conversation or pick one from history.")}</p>
-              </div>
-            )}
-            {messages.map((msg, i) => {
-              if (msg.role === "user") return <UserMsg key={i} text={msg.text} />;
-              if (
-                msg.text ===
-                t("Your role can't view named accused records. Showing aggregate counts instead.")
-              ) {
-                return (
-                  <div key={i} className="rounded-xl border border-warning/40 bg-warning/10 p-3">
-                    <div className="flex items-start gap-2.5">
-                      <ShieldAlert className="mt-0.5 h-4 w-4 text-warning" />
-                      <div>
-                        <div className="text-sm font-semibold text-foreground">
-                          {t("Answer restricted")}
-                        </div>
-                        <p className="mt-0.5 text-xs text-foreground/80">{msg.text}</p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-              return (
-                <AiMsg
-                  key={i}
-                  text={msg.text}
-                  citations={(msg as any).citations}
-                  streaming={i === streamingIdx}
-                  action={undefined}
-                />
-              );
-            })}
-            <div ref={messagesEndRef} />
-          </div>
-
-          <div className="border-t border-border p-3">
-            <div className="mb-2 flex flex-wrap gap-1.5">
-              {EXAMPLES.map((q) => (
-                <button
-                  key={q}
-                  onClick={() => setInput(q)}
-                  className="rounded-full border border-border bg-muted/60 px-2.5 py-1 text-[11px] text-muted-foreground hover:bg-muted hover:text-foreground transition"
-                >
-                  {q}
-                </button>
-              ))}
+          {err && (
+            <div className="mt-4 flex items-center gap-2 rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm font-semibold text-destructive">
+              <AlertTriangle className="h-4 w-4 shrink-0" />
+              {err}
             </div>
-            <div className="flex items-end gap-2 rounded-xl border border-input bg-card p-2 shadow-sm focus-within:ring-2 focus-within:ring-ring/40">
-              <textarea
-                rows={1}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSend();
-                  }
-                }}
-                placeholder={t("Ask Satyam… (EN or ಕನ್ನಡ)")}
-                className="flex-1 resize-none bg-transparent px-2 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+          )}
+
+          {/* Everything below is dimmed while a refetch is in flight. Without it
+              the filter chips update instantly while the figures beneath them are
+              still the previous scope's, so the screen briefly asserts something
+              false — "2024" above an all-years total. */}
+          <div
+            className={`transition-opacity duration-200 ${loading && summary ? "pointer-events-none opacity-40" : "opacity-100"}`}
+            aria-busy={loading}
+          >
+            {/* ── KPI strip ───────────────────────────────────────────────────── */}
+            <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-6">
+              <Metric label={t("FIRs")} value={k ? fmt(k.total_firs) : "—"} big />
+              <Metric
+                label={t("Clearance")}
+                value={k ? `${k.clearance_rate_percent}%` : "—"}
+                sub={k ? `${fmt(k.cleared)} ${t("convicted")}` : ""}
+                big
               />
-              <button
-                type="button"
-                onClick={toggleChatDictation}
-                className={
-                  "grid h-8 w-8 place-items-center rounded-md " +
-                  (chatDictating
-                    ? "bg-destructive text-destructive-foreground animate-pulse"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground")
+              <Metric label={t("Pending")} value={k ? fmt(k.pending) : "—"} />
+              <Metric
+                label={t("FIRs / day")}
+                value={k ? String(k.per_day) : "—"}
+                sub={k ? `${fmt(k.span_days)} ${t("days")}` : ""}
+              />
+              <Metric label={t("Districts")} value={k ? String(k.districts_covered) : "—"} />
+              <Metric label={t("Stations")} value={k ? String(k.stations_covered) : "—"} />
+            </div>
+
+            {/* ── Volume + disposition ───────────────────────────────────────── */}
+            <div className="mt-3 grid gap-3 xl:grid-cols-2">
+              <Panel
+                title={t("FIR volume by year")}
+                icon={ListOrdered}
+                subtitle={t("Year-on-year change. Click a year to filter the whole dashboard.")}
+              >
+                <YearBars
+                  rows={summary?.yearly ?? []}
+                  selected={year}
+                  onSelect={(y) => setYear(year === y ? null : y)}
+                  t={t}
+                />
+              </Panel>
+
+              <Panel
+                title={t("Case disposition")}
+                icon={Scale}
+                subtitle={t("Where every FIR in this scope currently stands")}
+                note={t(
+                  "'Cleared' above counts convictions only. These fourteen statuses are the full picture.",
+                )}
+              >
+                <RankedBars
+                  rows={summary?.status_mix ?? []}
+                  total={k?.total_firs ?? 0}
+                  accent="slate"
+                />
+              </Panel>
+            </div>
+
+            {/* ── Clearance outliers + crime mix ─────────────────────────────── */}
+            <div className="mt-3 grid gap-3 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+              <Panel
+                title={t("Clearance outliers by station")}
+                icon={Gauge}
+                subtitle={
+                  sc
+                    ? `${sc.stations} ${t("stations with")} ${sc.min_firs}+ ${t("FIRs")}`
+                    : undefined
                 }
-                aria-label={chatDictating ? t("Stop dictation") : t("Dictate into chat")}
-                title={chatDictating ? t("Stop dictation") : t("Dictate into chat")}
+                note={summary?.clearance_stable_note ?? undefined}
               >
-                <Mic className="h-4 w-4" />
-              </button>
-              <button
-                onClick={handleSend}
-                disabled={!input.trim()}
-                className="grid h-8 w-8 place-items-center rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-              >
-                <Send className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Drag divider */}
-        <div
-          onMouseDown={onDividerMouseDown}
-          className="w-1 shrink-0 cursor-col-resize bg-border hover:bg-primary/50 active:bg-primary transition-colors relative group"
-          title="Drag to resize"
-        >
-          {/* Visual grip dots */}
-          <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 flex flex-col items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-            <span className="h-1 w-1 rounded-full bg-current" />
-            <span className="h-1 w-1 rounded-full bg-current" />
-            <span className="h-1 w-1 rounded-full bg-current" />
-          </div>
-        </div>
-
-        {/* Results Canvas */}
-        <section className="flex flex-1 min-w-0 flex-col overflow-hidden bg-background">
-          {/* Canvas header + tab switcher */}
-          <div className="border-b border-border bg-card px-6 py-3 flex items-center justify-between">
-            <div>
-              <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
-                {t("Results Canvas")}
-              </div>
-              <h3 className="text-sm font-semibold text-foreground">
-                {crimeType || district
-                  ? `${crimeType || t("All crimes")} · ${district || t("All districts")}`
-                  : t("Crime overview · live")}
-              </h3>
-            </div>
-            <div className="flex rounded-md border border-border bg-muted/40 p-0.5">
-              {(
-                [
-                  ["data", t("Data")],
-                  ["map", t("Map")],
-                ] as const
-              ).map(([v, l]) => (
-                <button
-                  key={v}
-                  onClick={() => setCanvasTab(v as "data" | "map")}
-                  className={`rounded px-3 py-1.5 text-xs font-medium transition ${
-                    canvasTab === v
-                      ? "bg-card text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {v === "map" ? (
-                    <span className="inline-flex items-center gap-1">
-                      <MapIcon className="h-3.5 w-3.5" />
-                      {l}
-                    </span>
-                  ) : (
-                    l
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Shared filter bar */}
-          <div className="flex items-center gap-2 border-b border-border bg-card/60 px-6 py-2">
-            <Filter className="h-3.5 w-3.5 text-muted-foreground" />
-            <select
-              value={crimeType}
-              onChange={(e) => setCrimeType(e.target.value)}
-              className="rounded-md border border-input bg-card px-2 py-1 text-xs"
-            >
-              <option value="">{t("All crime types")}</option>
-              {crimeOptions.map((c) => (
-                <option key={c} value={c}>
-                  {tData("crime_type", c, lang)}
-                </option>
-              ))}
-            </select>
-            <select
-              value={district}
-              onChange={(e) => setDistrict(e.target.value)}
-              className="rounded-md border border-input bg-card px-2 py-1 text-xs"
-            >
-              <option value="">{t("All districts")}</option>
-              {districtOptions.map((d) => (
-                <option key={d} value={d}>
-                  {tData("district", d, lang)}
-                </option>
-              ))}
-            </select>
-            {canvasLoading && (
-              <span className="text-[11px] text-muted-foreground">{t("Loading…")}</span>
-            )}
-            {canvasErr && <span className="text-[11px] text-destructive">{canvasErr}</span>}
-          </div>
-
-          {canvasTab === "data" ? (
-            <div className="flex-1 overflow-auto">
-              <div className="grid grid-cols-3 gap-4 p-6">
-                <Stat
-                  label={t("Total FIRs")}
-                  value={totalFirs.toLocaleString()}
-                  delta={`${t("top")} ${stations.length} ${t("stations")}`}
-                  trend="flat"
-                />
-                <Stat label={t("Avg / day")} value={avgPerDay} delta="" trend="flat" />
-                <Stat
-                  label={t("Cleared")}
-                  value={String(totalCleared)}
-                  delta={`${clearedPct}%`}
-                  trend="flat"
-                />
-              </div>
-              <div className="px-6 pb-6">
-                <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
-                  <div className="flex items-center justify-between border-b border-border px-4 py-2.5 text-xs">
-                    <div className="font-medium text-foreground">{t("By Station")}</div>
-                    <div className="text-muted-foreground">
-                      {stations.length} {t("rows")}
-                      {canvasLoading ? " · " + t("loading…") : ""}
+                {sc && sc.stations > 0 ? (
+                  <>
+                    <Distribution sc={sc} t={t} />
+                    <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                      <TailList
+                        title={t("Lowest clearance")}
+                        rows={sc.bottom}
+                        lang={lang}
+                        tone="rose"
+                        onPick={setDistrict}
+                      />
+                      <TailList
+                        title={t("Highest clearance")}
+                        rows={sc.top}
+                        lang={lang}
+                        tone="emerald"
+                        onPick={setDistrict}
+                      />
                     </div>
-                  </div>
-                  <table className="w-full text-sm">
-                    <thead className="bg-muted/50 text-[11px] uppercase tracking-wider text-muted-foreground">
-                      <tr>
-                        <th className="px-4 py-2.5 text-left font-medium">{t("Station")}</th>
-                        <th className="px-4 py-2.5 text-left font-medium">{t("FIRs")}</th>
-                        <th className="px-4 py-2.5 text-left font-medium">{t("Cleared")}</th>
-                        <th className="px-4 py-2.5 text-left font-medium">{t("Trend (30d)")}</th>
-                        <th className="px-4 py-2.5 text-left font-medium">{t("Top crime")}</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border">
-                      {stations.length === 0 && !canvasLoading && (
-                        <tr>
-                          <td colSpan={5} className="px-4 py-6 text-center text-muted-foreground">
-                            {t("No data for this scope.")}
-                          </td>
-                        </tr>
+                  </>
+                ) : (
+                  <Empty t={t} />
+                )}
+              </Panel>
+
+              <Panel
+                title={t("Crime mix")}
+                icon={Layers}
+                subtitle={
+                  summary?.compare_year
+                    ? `${t("Change vs")} ${summary.compare_year}`
+                    : t("Share of FIRs in this scope")
+                }
+              >
+                <RankedBars
+                  rows={summary?.crime_mix ?? []}
+                  total={k?.total_firs ?? 0}
+                  accent="blue"
+                  showYoy
+                  lang={lang}
+                  translateKey="crime_type"
+                />
+              </Panel>
+            </div>
+
+            {/* ── District league + similar cases ────────────────────────────── */}
+            <div className="mt-3 grid gap-3 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+              <Panel
+                title={t("District league table")}
+                icon={ListOrdered}
+                subtitle={
+                  sc?.median
+                    ? `${t("Clearance compared against the")} ${sc.median}% ${t("station median")}`
+                    : undefined
+                }
+              >
+                <DistrictTable
+                  rows={summary?.districts ?? []}
+                  lang={lang}
+                  t={t}
+                  onPick={setDistrict}
+                />
+              </Panel>
+
+              <Panel title={t("Similar case lookup")} icon={Info}>
+                <SimilarCaseSearch onOpenCase={(id) => setDrawerCaseId(id)} />
+                {summary && (
+                  <div className="mt-3 space-y-1.5 border-t border-border pt-3">
+                    <SectionLabel>{t("Data coverage")}</SectionLabel>
+                    <Coverage
+                      label={t("Hours of day with incidents")}
+                      value={`${summary.hours_populated}/24`}
+                      warn={summary.hours_populated < 24}
+                    />
+                    <Coverage
+                      label={t("Weekday variation")}
+                      value={`${summary.dow_spread_percent}%`}
+                      warn={summary.dow_spread_percent < 10}
+                    />
+                    <p className="pt-1 text-[10px] leading-relaxed text-muted-foreground">
+                      {t(
+                        "Time-of-day and weekday breakdowns are omitted because this dataset is near-uniform on both, so any peak would be noise.",
                       )}
-                      {stations.map((r) => (
-                        <tr
-                          key={r.station}
-                          className="hover:bg-muted/30 cursor-pointer"
-                          onClick={() => sendMessage(`${t("Show cases in")} ${r.station}`)}
+                    </p>
+                  </div>
+                )}
+              </Panel>
+            </div>
+
+            {/* ── Station table ─────────────────────────────────────────────── */}
+            <div className="mt-3 mb-8">
+              <Panel
+                title={t("Station performance")}
+                icon={ShieldCheck}
+                subtitle={`${sortedStations.length} ${t("stations")} · ${scopeLine}`}
+                right={
+                  <div className="flex items-center gap-1.5">
+                    <div className="flex rounded-md border border-border bg-muted/40 p-0.5">
+                      {(
+                        [
+                          ["firs", t("By volume")],
+                          ["clearance", t("Worst clearance")],
+                        ] as const
+                      ).map(([v, label]) => (
+                        <button
+                          key={v}
+                          onClick={() => {
+                            setSortKey(v);
+                            setPage(0);
+                          }}
+                          className={`rounded px-2 py-1 text-[10px] font-bold transition ${
+                            sortKey === v
+                              ? "bg-card text-foreground shadow-sm ring-1 ring-border"
+                              : "text-muted-foreground hover:text-foreground"
+                          }`}
                         >
-                          <td className="px-4 py-2.5 font-medium text-foreground">{tData("station", r.station, lang)}</td>
-                          <td className="px-4 py-2.5 text-foreground">{r.firs}</td>
-                          <td className="px-4 py-2.5 text-muted-foreground">{r.cleared}</td>
-                          <td className="px-4 py-2.5">
-                            <Spark data={r.trend} />
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                    <button
+                      onClick={exportCsv}
+                      disabled={!sortedStations.length}
+                      className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2 py-1 text-[10px] font-bold text-foreground transition hover:bg-muted disabled:opacity-40"
+                    >
+                      <Download className="h-3 w-3" />
+                      {t("CSV")}
+                    </button>
+                  </div>
+                }
+              >
+                <table className="w-full text-sm">
+                  <thead className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                    <tr className="border-b border-border">
+                      <th className="px-2 py-1.5 text-left font-bold">#</th>
+                      <th className="px-2 py-1.5 text-left font-bold">{t("Station")}</th>
+                      <th className="px-2 py-1.5 text-right font-bold">{t("FIRs")}</th>
+                      <th className="px-2 py-1.5 text-right font-bold">{t("Cleared")}</th>
+                      <th className="px-2 py-1.5 text-right font-bold">{t("Pending")}</th>
+                      <th className="px-2 py-1.5 text-left font-bold">{t("Clearance")}</th>
+                      <th className="px-2 py-1.5 text-left font-bold">{t("vs median")}</th>
+                      <th className="px-2 py-1.5 text-left font-bold">{t("Top crime")}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {!loading && pageRows.length === 0 && (
+                      <tr>
+                        <td colSpan={8} className="px-2 py-8 text-center text-muted-foreground">
+                          {t("No data for this scope.")}
+                        </td>
+                      </tr>
+                    )}
+                    {pageRows.map((r, i) => {
+                      const pct = r.clearance_percent;
+                      const delta = r.vs_median_points;
+                      return (
+                        <tr key={r.station} className="hover:bg-muted/30">
+                          <td className="px-2 py-1.5 tabular-nums text-muted-foreground">
+                            {page * ROWS_PER_PAGE + i + 1}
                           </td>
-                          <td className="px-4 py-2.5">
-                            {r.top_legal_code ? (
-                              <span className="rounded bg-accent px-1.5 py-0.5 text-[11px] font-medium text-accent-foreground">
-                                {tData("crime_type", r.top_legal_code, lang)}
+                          <td className="px-2 py-1.5 font-medium text-foreground">
+                            {tData("station", r.station, lang)}
+                          </td>
+                          <td className="px-2 py-1.5 text-right tabular-nums text-foreground">
+                            {fmt(r.firs)}
+                          </td>
+                          <td className="px-2 py-1.5 text-right tabular-nums text-muted-foreground">
+                            {fmt(r.cleared)}
+                          </td>
+                          <td className="px-2 py-1.5 text-right tabular-nums text-muted-foreground">
+                            {fmt(r.pending)}
+                          </td>
+                          <td className="px-2 py-1.5">
+                            <div className="flex items-center gap-1.5">
+                              <span className="w-9 shrink-0 text-xs font-bold tabular-nums text-foreground">
+                                {pct}%
+                              </span>
+                              <span className="h-1.5 w-14 overflow-hidden rounded-full bg-muted">
+                                <span
+                                  className={`block h-full rounded-full ${delta < 0 ? "bg-rose-500" : "bg-emerald-500"}`}
+                                  style={{ width: `${Math.min(100, pct * 2.5)}%` }}
+                                />
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-2 py-1.5">
+                            {sc?.median ? <Delta value={delta} unit="pt" /> : <Dash />}
+                          </td>
+                          <td className="px-2 py-1.5">
+                            {r.top_crime ? (
+                              <span className="rounded bg-accent px-1.5 py-0.5 text-[10px] font-bold uppercase text-accent-foreground">
+                                {tData("crime_type", r.top_crime, lang)}
                               </span>
                             ) : (
-                              <span className="text-muted-foreground">—</span>
+                              <Dash />
                             )}
                           </td>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="mt-4 flex items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 px-3 py-2 text-xs text-foreground/80">
-                  <Sparkles className="h-3.5 w-3.5 text-primary" />
-                  {t("Live from Postgres (RLS-scoped). Click a station to drill into its FIRs.")}
-                </div>
-                <div className="mt-4">
-                  <SimilarCaseSearch onOpenCase={(id) => setDrawerCaseId(id)} />
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col flex-1 min-h-0">
-              {/* ── Back bar — rendered in normal flow ABOVE the map, never covered by Leaflet ── */}
-              <div className="flex items-center gap-2 border-b border-border bg-card px-4 py-2 shrink-0">
-                <button
-                  onClick={() => {
-                    setCanvasTab("data");
-                    setMapFocus(null);
-                  }}
-                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-muted px-3 py-1.5 text-xs font-bold text-foreground hover:bg-card transition"
-                >
-                  ← {t("Back")}
-                </button>
-                <div className="flex items-center gap-1 rounded-md border border-border bg-card p-1">
-                  <Layers className="ml-1 h-3.5 w-3.5 text-muted-foreground" />
-                  {(["heat", "pins", "grid"] as const).map((l) => (
-                    <button
-                      key={l}
-                      onClick={() => setMapMode(l)}
-                      className={`rounded px-2.5 py-1 text-xs font-medium capitalize transition ${
-                        mapMode === l
-                          ? "bg-card text-foreground shadow-sm ring-1 ring-border"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      {t(l)}
-                    </button>
-                  ))}
-                </div>
-              </div>
+                      );
+                    })}
+                  </tbody>
+                </table>
 
-              {/* Map fills the remaining space */}
-              <div className="relative flex-1 min-h-[380px]">
-              <CrimeMap
-                points={hotspots}
-                mode={mapMode}
-                focus={mapFocus}
-              />
-
-              {/* Legend */}
-              <div className="absolute bottom-4 left-4 z-[400] rounded-lg border border-border bg-card/95 backdrop-blur px-3 py-2 text-xs shadow-lg">
-                <div className="mb-1 font-medium text-foreground">{t("Intensity")}</div>
-                <div className="flex items-center gap-2">
-                  <div
-                    className="h-2 w-32 rounded-full"
-                    style={{ background: "linear-gradient(90deg,#3b82f6,#fbbf24,#f97316,#ef4444)" }}
-                  />
-                  <span className="text-muted-foreground">{t("low → high")}</span>
-                </div>
-              </div>
-              {/* Live top-hotspot card — sits over the inner map div */}
-              {stations[0] && (
-                <div className="absolute right-6 top-6 z-[400] w-72 rounded-xl border border-border bg-card/95 backdrop-blur p-4 shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
-                      {t("Top hotspot")}
-                    </div>
-                    <span className="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-medium text-success">
-                      {t("live")}
+                {pageCount > 1 && (
+                  <div className="mt-2.5 flex items-center justify-between">
+                    <span className="text-[10px] text-muted-foreground">
+                      {page * ROWS_PER_PAGE + 1}–
+                      {Math.min(sortedStations.length, (page + 1) * ROWS_PER_PAGE)} {t("of")}{" "}
+                      {sortedStations.length}
                     </span>
-                  </div>
-                  <h3 className="text-base font-semibold text-foreground">{tData("station", stations[0].station, lang)}</h3>
-                  <div className="mt-3 grid grid-cols-3 gap-2">
-                    <Mini label={t("FIRs")} value={String(stations[0].firs)} />
-                    <Mini label={t("Cleared")} value={String(stations[0].cleared)} />
-                    <Mini
-                      label={t("Top IPC")}
-                      value={stations[0].top_legal_code ? "§ " + stations[0].top_legal_code : "—"}
-                    />
-                  </div>
-                  <div className="mt-3">
-                    <div className="mb-1 text-[11px] font-medium text-muted-foreground">
-                      {t("Trend")}
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: Math.min(pageCount, 8) }).map((_, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setPage(i)}
+                          className={`h-6 w-6 rounded text-[10px] font-bold transition ${
+                            page === i
+                              ? "bg-primary text-primary-foreground"
+                              : "text-muted-foreground hover:bg-muted"
+                          }`}
+                        >
+                          {i + 1}
+                        </button>
+                      ))}
                     </div>
-                    <Spark data={stations[0].trend} />
                   </div>
-                  <button
-                    onClick={() =>
-                      sendMessage(`${t("Summarize crime around")} ${stations[0].station}`)
-                    }
-                    className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition"
-                  >
-                    <Sparkles className="h-3.5 w-3.5" /> {t("Ask AI about this area")}
-                  </button>
-                </div>
-              )}
-              </div>
+                )}
+
+                <p className="mt-2.5 flex items-center gap-1.5 text-[10px] text-muted-foreground">
+                  <Sparkles className="h-3 w-3 text-primary" />
+                  {t("Live from Postgres, scoped to your jurisdiction by row-level security.")}
+                </p>
+              </Panel>
             </div>
-          )}
-        </section>
+          </div>
+        </div>
       </div>
+
       <CaseDrawer
         open={drawerCaseId != null}
         caseId={drawerCaseId ?? undefined}
         onClose={() => setDrawerCaseId(null)}
-        onShowOnMap={(lat, lng, label) => {
-          // Switch the results canvas to map and drop a pin at the case location.
-          // Also close the drawer so the map is fully visible.
-          setDrawerCaseId(null);
-          setCanvasTab("map");
-          setMapMode("pins");
-          setMapFocus([{ lat, lng, weight: 3, label }]);
-        }}
       />
     </Shell>
   );
 }
 
-function UserMsg({ text }: { text: string }) {
-  return (
-    <div className="flex justify-end">
-      <div className="max-w-[90%] rounded-2xl rounded-tr-sm bg-primary px-3.5 py-2.5 text-sm text-primary-foreground">
-        {text}
-      </div>
-    </div>
-  );
-}
+/* ── Pieces ──────────────────────────────────────────────────────────────── */
 
-function AiMsg({
-  text,
-  citations,
-  streaming,
-  action,
+function Panel({
+  title,
+  subtitle,
+  icon: Icon,
+  right,
+  note,
+  children,
 }: {
-  text: string;
-  citations?: string[];
-  streaming?: boolean;
-  action?: React.ReactNode;
+  title: string;
+  subtitle?: string;
+  icon?: typeof Sparkles;
+  right?: React.ReactNode;
+  note?: string;
+  children: React.ReactNode;
 }) {
-  const t = useT();
   return (
-    <div className="flex gap-2">
-      <div className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-foreground text-background text-[10px] font-bold">
-        FQ
-      </div>
-      <div className="flex-1">
-        <div className="rounded-2xl rounded-tl-sm border border-border bg-muted/40 px-3.5 py-2.5 text-sm text-foreground">
-          <Markdown>{text || ""}</Markdown>
-          {streaming && (
-            <span className="ml-1 inline-block h-3.5 w-1.5 translate-y-0.5 animate-pulse bg-primary" />
+    <section className="rounded-lg border border-border bg-card p-3.5 shadow-sm">
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5">
+            {Icon && <Icon className="h-3.5 w-3.5 text-muted-foreground" />}
+            <h2 className="truncate text-[11px] font-bold uppercase tracking-wider text-foreground">
+              {title}
+            </h2>
+          </div>
+          {subtitle && (
+            <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground">{subtitle}</p>
           )}
         </div>
-        {citations && (
-          <div className="mt-1.5 flex flex-wrap gap-1">
-            {citations.map((c) => (
-              <span
-                key={c}
-                className="rounded border border-border bg-card px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground"
-              >
-                ↳ {c}
-              </span>
-            ))}
-          </div>
-        )}
-        {citations && (
-          <button className="mt-1 text-[11px] text-primary hover:underline">
-            {t("View SQL / sources →")}
-          </button>
-        )}
-        {action}
+        {right}
       </div>
+      {children}
+      {note && (
+        <p className="mt-2.5 flex items-start gap-1.5 border-t border-border pt-2 text-[10px] leading-relaxed text-muted-foreground">
+          <Info className="mt-px h-3 w-3 shrink-0" />
+          {note}
+        </p>
+      )}
+    </section>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+      {children}
     </div>
   );
 }
 
-function Stat({
+function Dash() {
+  return <span className="text-muted-foreground">—</span>;
+}
+
+function Empty({ t }: { t: (k: string) => string }) {
+  return (
+    <p className="py-6 text-center text-xs text-muted-foreground">{t("No data for this scope.")}</p>
+  );
+}
+
+function Metric({
   label,
   value,
-  delta,
-  trend,
+  sub,
+  big,
 }: {
   label: string;
   value: string;
-  delta: string;
-  trend: "up" | "down" | "flat";
+  sub?: string;
+  big?: boolean;
 }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-      <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</div>
-      <div className="mt-1 flex items-baseline gap-2">
-        <div className="text-2xl font-semibold text-foreground tabular-nums">{value}</div>
-        {delta && (
-          <div
-            className={`text-xs font-medium ${
-              trend === "up"
-                ? "text-success"
-                : trend === "down"
-                  ? "text-destructive"
-                  : "text-muted-foreground"
+    <div className="rounded-lg border border-border bg-card px-3 py-2.5 shadow-sm">
+      <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+        {label}
+      </div>
+      <div
+        className={`mt-0.5 font-extrabold tabular-nums text-foreground ${big ? "text-2xl" : "text-xl"}`}
+      >
+        {value}
+      </div>
+      {sub && <div className="text-[10px] text-muted-foreground">{sub}</div>}
+    </div>
+  );
+}
+
+/** Signed change, coloured by direction. For crime volume, down is good. */
+function Delta({ value, unit = "%" }: { value: number | null; unit?: string }) {
+  if (value == null) return <Dash />;
+  const down = value < 0;
+  const Icon = down ? ArrowDown : ArrowUp;
+  return (
+    <span
+      className={`inline-flex items-center gap-0.5 text-[11px] font-bold tabular-nums ${
+        down ? "text-emerald-600" : "text-rose-600"
+      }`}
+    >
+      <Icon className="h-3 w-3" />
+      {Math.abs(value)}
+      {unit}
+    </span>
+  );
+}
+
+function YearBars({
+  rows,
+  selected,
+  onSelect,
+  t,
+}: {
+  rows: { year: number; count: number; clearance_percent: number; yoy_percent: number | null }[];
+  selected: number | null;
+  onSelect: (y: number) => void;
+  t: (k: string) => string;
+}) {
+  if (!rows.length) return <Empty t={t} />;
+  const max = Math.max(...rows.map((r) => r.count));
+  return (
+    <div className="flex items-end gap-2">
+      {rows.map((r) => {
+        const active = selected === r.year;
+        return (
+          <button
+            key={r.year}
+            onClick={() => onSelect(r.year)}
+            className={`group flex flex-1 flex-col items-center gap-1 rounded p-1 transition ${
+              active ? "bg-primary/10 ring-1 ring-primary" : "hover:bg-muted/50"
             }`}
           >
-            {delta}
+            <span className="text-[11px] font-extrabold tabular-nums text-foreground">
+              {fmt(r.count)}
+            </span>
+            <span className="flex h-[92px] w-full items-end">
+              <span
+                className={`w-full rounded-t ${active ? "bg-primary" : "bg-blue-500/80 group-hover:bg-blue-500"}`}
+                style={{ height: `${Math.max(4, (r.count / max) * 92)}px` }}
+              />
+            </span>
+            <Delta value={r.yoy_percent} />
+            <span className="text-[10px] font-bold text-muted-foreground">{r.year}</span>
+            <span className="text-[9px] text-muted-foreground">{r.clearance_percent}%</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+const ACCENTS: Record<string, string> = {
+  blue: "bg-blue-500",
+  slate: "bg-slate-500",
+};
+
+function RankedBars({
+  rows,
+  total,
+  accent,
+  showYoy,
+  lang,
+  translateKey,
+}: {
+  rows: NamedCount[];
+  total: number;
+  accent: "blue" | "slate";
+  showYoy?: boolean;
+  lang?: string;
+  translateKey?: string;
+}) {
+  if (!rows.length) return <p className="py-6 text-center text-xs text-muted-foreground">—</p>;
+  const max = Math.max(...rows.map((r) => r.count));
+  return (
+    <div className="space-y-1">
+      {rows.map((r) => {
+        const label = translateKey && lang ? tData(translateKey, r.name, lang) : r.name;
+        return (
+          <div key={r.name} className="flex items-center gap-2">
+            <span
+              className="w-[38%] shrink-0 truncate text-[11px] font-medium text-foreground"
+              title={label}
+            >
+              {label}
+            </span>
+            <span className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+              <span
+                className={`block h-full rounded-full ${ACCENTS[accent]}`}
+                style={{ width: `${(r.count / max) * 100}%` }}
+              />
+            </span>
+            <span className="w-12 shrink-0 text-right text-[11px] font-bold tabular-nums text-foreground">
+              {fmt(r.count)}
+            </span>
+            <span className="w-9 shrink-0 text-right text-[10px] tabular-nums text-muted-foreground">
+              {total ? Math.round((r.count / total) * 100) : 0}%
+            </span>
+            {showYoy && (
+              <span className="w-14 shrink-0 text-right">
+                <Delta value={r.yoy_percent} />
+              </span>
+            )}
           </div>
-        )}
+        );
+      })}
+    </div>
+  );
+}
+
+/** Box-plot style summary of the clearance distribution across stations. */
+function Distribution({
+  sc,
+  t,
+}: {
+  sc: { worst: number; p25: number; median: number; p75: number; best: number };
+  t: (k: string) => string;
+}) {
+  const lo = sc.worst;
+  const hi = sc.best;
+  const span = hi - lo || 1;
+  const at = (v: number) => `${((v - lo) / span) * 100}%`;
+  return (
+    <div>
+      <div className="relative h-10">
+        {/* full range */}
+        <div className="absolute top-4 h-1 w-full rounded-full bg-muted" />
+        {/* interquartile band */}
+        <div
+          className="absolute top-3 h-3 rounded bg-blue-500/25"
+          style={{ left: at(sc.p25), width: `${((sc.p75 - sc.p25) / span) * 100}%` }}
+        />
+        {/* median */}
+        <div
+          className="absolute top-2 h-5 w-0.5 -translate-x-1/2 bg-foreground"
+          style={{ left: at(sc.median) }}
+        />
+        {[
+          { v: sc.worst, cls: "text-rose-600" },
+          { v: sc.best, cls: "text-emerald-600" },
+        ].map((m) => (
+          <div
+            key={m.v}
+            className={`absolute top-0 -translate-x-1/2 text-[10px] font-bold tabular-nums ${m.cls}`}
+            style={{ left: at(m.v) }}
+          >
+            {m.v}%
+          </div>
+        ))}
+        <div
+          className="absolute top-7 -translate-x-1/2 text-[10px] font-bold tabular-nums text-foreground"
+          style={{ left: at(sc.median) }}
+        >
+          {t("median")} {sc.median}%
+        </div>
+      </div>
+      <p className="mt-1 text-[10px] leading-relaxed text-muted-foreground">
+        {t("Best station clears")}{" "}
+        <span className="font-bold text-foreground">
+          {sc.median ? Math.round((sc.best / Math.max(0.1, sc.worst)) * 10) / 10 : 0}×
+        </span>{" "}
+        {t("the rate of the weakest, against a flat state-wide average.")}
+      </p>
+    </div>
+  );
+}
+
+function TailList({
+  title,
+  rows,
+  lang,
+  tone,
+  onPick,
+}: {
+  title: string;
+  rows: DistrictRow[];
+  lang: string;
+  tone: "rose" | "emerald";
+  onPick: (name: string) => void;
+}) {
+  return (
+    <div>
+      <SectionLabel>{title}</SectionLabel>
+      <div className="mt-1.5 space-y-1">
+        {rows.map((r) => (
+          <button
+            key={r.name}
+            onClick={() => onPick(r.name)}
+            className="flex w-full items-center gap-2 rounded px-1 py-0.5 text-left transition hover:bg-muted/60"
+          >
+            <span
+              className={`h-1.5 w-1.5 shrink-0 rounded-full ${tone === "rose" ? "bg-rose-500" : "bg-emerald-500"}`}
+            />
+            <span className="min-w-0 flex-1 truncate text-[11px] text-foreground">
+              {tData("station", r.name, lang)}
+            </span>
+            <span className="shrink-0 text-[11px] font-bold tabular-nums text-foreground">
+              {r.clearance_percent}%
+            </span>
+            <span className="w-11 shrink-0 text-right">
+              <Delta value={r.vs_median_points} unit="pt" />
+            </span>
+          </button>
+        ))}
       </div>
     </div>
   );
 }
 
-function Spark({ data }: { data: number[] }) {
-  const max = Math.max(1, ...data);
+function DistrictTable({
+  rows,
+  lang,
+  t,
+  onPick,
+}: {
+  rows: DistrictRow[];
+  lang: string;
+  t: (k: string) => string;
+  onPick: (name: string) => void;
+}) {
+  if (!rows.length) return <Empty t={t} />;
+  const max = Math.max(...rows.map((r) => r.count));
   return (
-    <div className="flex items-end gap-0.5 h-5">
-      {data.map((v, i) => (
-        <div
-          key={i}
-          className="w-1.5 rounded-sm bg-primary/70"
-          style={{ height: `${Math.max(8, (v / max) * 100)}%` }}
-        />
-      ))}
+    <table className="w-full text-sm">
+      <thead className="text-[10px] uppercase tracking-wider text-muted-foreground">
+        <tr className="border-b border-border">
+          <th className="px-1 py-1.5 text-left font-bold">{t("District")}</th>
+          <th className="px-1 py-1.5 text-right font-bold">{t("FIRs")}</th>
+          <th className="px-1 py-1.5 text-left font-bold">{t("Share")}</th>
+          <th className="px-1 py-1.5 text-right font-bold">{t("Clearance")}</th>
+          <th className="px-1 py-1.5 text-right font-bold">{t("vs median")}</th>
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-border">
+        {rows.map((r) => (
+          <tr
+            key={r.name}
+            onClick={() => onPick(r.name)}
+            className="cursor-pointer hover:bg-muted/30"
+          >
+            <td className="px-1 py-1.5 font-medium text-foreground">
+              {tData("district", r.name, lang)}
+            </td>
+            <td className="px-1 py-1.5 text-right tabular-nums text-foreground">{fmt(r.count)}</td>
+            <td className="px-1 py-1.5">
+              <div className="flex items-center gap-1.5">
+                <span className="h-1.5 w-16 overflow-hidden rounded-full bg-muted">
+                  <span
+                    className="block h-full rounded-full bg-blue-500"
+                    style={{ width: `${(r.count / max) * 100}%` }}
+                  />
+                </span>
+                <span className="text-[10px] tabular-nums text-muted-foreground">{r.percent}%</span>
+              </div>
+            </td>
+            <td className="px-1 py-1.5 text-right text-xs font-bold tabular-nums text-foreground">
+              {r.clearance_percent}%
+            </td>
+            <td className="px-1 py-1.5 text-right">
+              <Delta value={r.vs_median_points} unit="pt" />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+function Coverage({ label, value, warn }: { label: string; value: string; warn: boolean }) {
+  return (
+    <div className="flex items-center justify-between gap-2 text-[11px]">
+      <span className="min-w-0 truncate text-muted-foreground">{label}</span>
+      <span
+        className={`shrink-0 inline-flex items-center gap-1 font-bold tabular-nums ${warn ? "text-amber-600" : "text-foreground"}`}
+      >
+        {warn && <TrendingDown className="h-3 w-3" />}
+        {value}
+      </span>
     </div>
   );
 }
 
-function Mini({ label, value }: { label: string; value: string }) {
+function Select({
+  value,
+  onChange,
+  options,
+  allLabel,
+  render,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: string[];
+  allLabel: string;
+  render?: (v: string) => string;
+}) {
   return (
-    <div className="rounded-md border border-border bg-card p-2">
-      <div className="text-[9px] uppercase tracking-wider text-muted-foreground">{label}</div>
-      <div className="text-sm font-semibold text-foreground">{value}</div>
-    </div>
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="max-w-[170px] rounded-md border border-input bg-card px-2 py-1 text-[11px] font-semibold text-foreground"
+    >
+      <option value="">{allLabel}</option>
+      {options.map((o) => (
+        <option key={o} value={o}>
+          {render ? render(o) : o}
+        </option>
+      ))}
+    </select>
   );
 }

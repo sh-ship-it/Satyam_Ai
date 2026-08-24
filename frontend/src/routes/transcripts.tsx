@@ -219,7 +219,8 @@ function VoiceTranscriptsTab() {
         JSON.stringify({ text: it.text, lang: it.lang, speak: true }),
       );
     } catch {}
-    navigate({ to: "/console" });
+    // /ask consumes satyam:pending-voice; the console's chat box is gone.
+    navigate({ to: "/ask" });
   };
   const seedDemo = () => {
     setItems((prev) => [

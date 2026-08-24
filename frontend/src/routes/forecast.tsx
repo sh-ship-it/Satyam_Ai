@@ -473,7 +473,9 @@ function ForecastScreen() {
   const handleSendToChat = (text: string) => {
     try {
       sessionStorage.setItem("satyam:pending-voice", JSON.stringify({ text, speak: false }));
-      navigate({ to: "/console" });
+      // /ask owns chat now. /console is a dashboard and no longer has a composer
+      // to receive this, so sending it there would silently drop the question.
+      navigate({ to: "/ask" });
     } catch {}
   };
 
