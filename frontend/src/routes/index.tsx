@@ -229,8 +229,12 @@ function LandingPage() {
     // Shared state
     const S = (window as any).satyamState || ((window as any).satyamState = {hue:0.33,sat:0.92,rainbow:false,light:false});
 
-    // Apply persisted mode/theme
-    const savedMode = localStorage.getItem('satyam-mode') === 'light';
+    // Apply persisted mode/theme. Light is the default for a first-time visitor
+    // (no 'satyam-mode' key yet) — only an explicit 'dark' saved from a previous
+    // visit keeps the page dark. Without this, `=== 'light'` treated an absent
+    // key the same as an explicit dark choice, so every fresh session opened dark.
+    const storedMode = localStorage.getItem('satyam-mode');
+    const savedMode = storedMode !== 'dark';
     S.light = savedMode;
     applyMode(root, savedMode);
     const savedTheme = localStorage.getItem('satyam-theme');
