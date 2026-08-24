@@ -73,17 +73,23 @@ function Login() {
             )}
           </p>
 
-          {/* Trust badges */}
-          <div className="mt-10 flex flex-wrap gap-8">
+          {/* Trust badges — each floats toward and away from the viewer on its own
+              phase. Extra vertical padding so the forward-most position is not
+              clipped by the row's bounds. */}
+          <TrustBadgeStyles />
+          <div className="mt-10 flex flex-wrap gap-8 py-3">
             <TrustBadge
+              index={0}
               icon={<ShieldCheck className="h-7 w-7 text-success" strokeWidth={2.5} />}
               label={t("Chain-of-Custody")}
             />
             <TrustBadge
+              index={1}
               icon={<Fingerprint className="h-7 w-7 text-primary" strokeWidth={2.5} />}
               label={t("Forensically Sound")}
             />
             <TrustBadge
+              index={2}
               icon={<Lock className="h-7 w-7 text-destructive" strokeWidth={2.5} />}
               label={t("Secure Login")}
             />
@@ -299,13 +305,112 @@ function Login() {
   );
 }
 
-function TrustBadge({ icon, label }: { icon: React.ReactNode; label: string }) {
+/**
+ * Per-badge float timings.
+ *
+ * Deliberately fixed rather than randomised: this route is server-rendered, and
+ * calling Math.random() during render makes the SSR markup disagree with the first
+ * client render, which React reports as a hydration mismatch and recovers from by
+ * throwing the whole tree away.
+ *
+ * The three durations are mutually indivisible and each starts at a negative
+ * offset, so the badges drift out of phase and read as independent — then drift
+ * back into alignment every so often and pop together. That gives both behaviours
+ * asked for without a scheduler or any per-frame JavaScript.
+ */
+const BADGE_FLOAT = [
+  { duration: "3.1s", delay: "-0.2s" },
+  { duration: "4.3s", delay: "-1.7s" },
+  { duration: "3.7s", delay: "-2.9s" },
+];
+
+function TrustBadge({
+  icon,
+  label,
+  index = 0,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  /** Position in the row — selects this badge's float phase. */
+  index?: number;
+}) {
+  const f = BADGE_FLOAT[index % BADGE_FLOAT.length];
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="grid h-12 w-12 place-items-center rounded-[5px] border-2 border-foreground bg-secondary-background nb-shadow-sm">
+      <div
+        className="tb-float grid h-12 w-12 place-items-center rounded-[5px] border-2 border-foreground bg-secondary-background"
+        style={{ animationDuration: f.duration, animationDelay: f.delay }}
+      >
         {icon}
       </div>
       <span className="text-xs font-bold">{label}</span>
     </div>
+  );
+}
+
+/**
+ * Depth animation for the trust badges.
+ *
+ * `perspective()` is applied inside each element's own transform rather than on a
+ * shared parent, so the badges do not need a common 3D context and the row keeps
+ * its normal flex layout. The hard offset shadow grows as the box comes forward
+ * and collapses as it sinks back, which is what actually sells the depth — a
+ * scale change alone reads as a zoom rather than movement toward the viewer.
+ *
+ * Hover pauses the cycle and holds the box out front, so the icon is legible and
+ * steady at the moment someone is looking straight at it.
+ */
+function TrustBadgeStyles() {
+  return (
+    <style>{`
+      .tb-float {
+        animation-name: tbFloat;
+        animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+        animation-iteration-count: infinite;
+        transform-style: preserve-3d;
+        will-change: transform, box-shadow;
+      }
+      @keyframes tbFloat {
+        0%, 100% {
+          transform: perspective(600px) translateZ(-70px) scale(0.9) rotateX(7deg);
+          box-shadow: 1px 1px 0 0 var(--border);
+        }
+        50% {
+          transform: perspective(600px) translateZ(60px) scale(1.1) rotateX(-5deg);
+          box-shadow: 7px 8px 0 0 var(--border);
+        }
+      }
+      .tb-float:hover {
+        animation-play-state: paused;
+        transform: perspective(600px) translateZ(75px) scale(1.14) rotateX(0deg);
+        box-shadow: 8px 9px 0 0 var(--border);
+        transition: transform .25s ease-out, box-shadow .25s ease-out;
+      }
+      /* Reduced motion: soften, do not freeze.
+         The vestibular problem with this effect is the depth travel — 130px of
+         translateZ plus a tilt reads as the element lunging at the viewer. That is
+         removed here, along with the rotation and the perspective. What remains is
+         a slow, small scale-and-shadow breathe, which carries the same "these are
+         alive" intent without any apparent movement through space.
+         An earlier version set animation:none here, which meant anyone with OS
+         animations disabled — including on this project's own dev machine — saw a
+         completely static row and reasonably concluded the feature was broken. */
+      @media (prefers-reduced-motion: reduce) {
+        @keyframes tbFloat {
+          0%, 100% { transform: scale(0.97); box-shadow: 3px 3px 0 0 var(--border); }
+          50%      { transform: scale(1.03); box-shadow: 5px 5px 0 0 var(--border); }
+        }
+        .tb-float {
+          /* Slow it right down and drop the per-badge phase offsets so the row
+             reads as one calm pulse rather than three competing ones. */
+          animation-duration: 6s !important;
+          animation-delay: 0s !important;
+        }
+        .tb-float:hover {
+          transform: scale(1.05);
+          box-shadow: 5px 5px 0 0 var(--border);
+        }
+      }
+    `}</style>
   );
 }

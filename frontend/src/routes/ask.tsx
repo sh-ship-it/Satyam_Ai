@@ -18,6 +18,7 @@ import {
   VolumeX,
 } from "lucide-react";
 import { Shell } from "@/components/Shell";
+import { Globe } from "@/components/Globe";
 import { Markdown } from "@/components/Markdown";
 import { useI18n, useT } from "@/lib/i18n";
 import { streamChat, type ChatEvent } from "@/lib/api/client";
@@ -183,12 +184,27 @@ function Ask() {
 
   // Stick to the bottom only when the reader is already there, so a scroll-back
   // through a long answer is not yanked away by the next token.
+  //
+  // A conversation *switch* is the exception and has to be detected separately.
+  // The "already at the bottom" test is measured against the container's live
+  // scrollTop, which on switch is still the position inherited from the previous
+  // thread — usually 0. Against the newly-rendered, much taller transcript that
+  // reads as "scrolled far from the bottom", so the nudge was skipped and
+  // reopening a chat from history landed on its oldest message. There is no
+  // scroll position worth preserving across a switch: the reader wants the newest
+  // message, so jump unconditionally.
+  const scrolledConvRef = useRef<string | null>(null);
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
+    if (scrolledConvRef.current !== activeId) {
+      scrolledConvRef.current = activeId;
+      el.scrollTop = el.scrollHeight;
+      return;
+    }
     const distance = el.scrollHeight - el.scrollTop - el.clientHeight;
     if (distance < 160) el.scrollTop = el.scrollHeight;
-  }, [messages]);
+  }, [messages, activeId]);
 
   const persist = useCallback(
     (next: ChatMessage[], convId?: string | null) => {
@@ -614,50 +630,79 @@ function Ask() {
             </div>
           </div>
 
-          <div ref={scrollRef} className="flex-1 overflow-y-auto">
-            {isEmpty ? (
-              <div className="mx-auto flex h-full w-full max-w-3xl flex-col items-center justify-center px-6">
-                <div className="grid h-12 w-12 place-items-center rounded-full border-2 border-foreground bg-primary text-primary-foreground nb-shadow-sm">
-                  <Sparkles className="h-6 w-6" />
+          <div className="relative flex-1 overflow-hidden">
+            {/*
+              Decorative globe. It sits outside the scroll container on purpose:
+              placed inside, it would scroll away with the transcript, and the
+              brief here is that it stays put while the conversation runs.
+
+              `pointer-events-none` is what makes that safe — the transcript is
+              layered on top, and an interactive canvas underneath would swallow
+              text selection and wheel gestures aimed at the messages.
+
+              It dims once there are messages: a watermark that reads nicely
+              behind an empty state is noise behind body copy someone is
+              actually reading.
+            */}
+            <div
+              className={`pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
+                isEmpty ? "opacity-50" : "opacity-[0.16]"
+              }`}
+            >
+              {/*
+                Sized off the pane's height, not a fixed pixel width: at a fixed
+                width the sphere ran past the composer and showed as a cut-off
+                arc rather than a globe. `aspect-square` turns the height back
+                into the width, so it stays as large as will fit and complete.
+              */}
+              <Globe className="h-[86%] w-auto [mask-image:radial-gradient(circle_at_50%_52%,#000_46%,transparent_76%)]" />
+            </div>
+
+            <div ref={scrollRef} className="relative h-full overflow-y-auto">
+              {isEmpty ? (
+                <div className="mx-auto flex h-full w-full max-w-3xl flex-col items-center justify-center px-6">
+                  <div className="grid h-12 w-12 place-items-center rounded-full border-2 border-foreground bg-primary text-primary-foreground nb-shadow-sm">
+                    <Sparkles className="h-6 w-6" />
+                  </div>
+                  <h1 className="mt-5 text-2xl font-extrabold tracking-tight">
+                    {t("What can I look up for you?")}
+                  </h1>
+                  <p className="mt-2 text-center text-sm text-muted-foreground">
+                    {t(
+                      "Ask in English or Kannada. Every answer is drawn from records your rank is cleared to see.",
+                    )}
+                  </p>
+                  <div className="mt-7 grid w-full gap-2 sm:grid-cols-2">
+                    {SUGGESTIONS.map(({ icon: Icon, text }) => (
+                      <button
+                        key={text}
+                        onClick={() => void send(t(text))}
+                        className="nb-press flex items-start gap-2.5 rounded-[5px] border-2 border-foreground bg-secondary-background px-3 py-2.5 text-left text-xs font-semibold text-foreground nb-shadow-sm"
+                      >
+                        <Icon className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                        <span>{t(text)}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <h1 className="mt-5 text-2xl font-extrabold tracking-tight">
-                  {t("What can I look up for you?")}
-                </h1>
-                <p className="mt-2 text-center text-sm text-muted-foreground">
-                  {t(
-                    "Ask in English or Kannada. Every answer is drawn from records your rank is cleared to see.",
+              ) : (
+                <div className="mx-auto w-full max-w-3xl space-y-7 px-6 py-8">
+                  {messages.map((m, i) =>
+                    m.role === "user" ? (
+                      <UserTurn key={i} text={m.text} />
+                    ) : (
+                      <AiTurn
+                        key={i}
+                        text={m.text}
+                        citations={m.citations}
+                        lanes={m.lanes}
+                        streaming={m.streaming}
+                      />
+                    ),
                   )}
-                </p>
-                <div className="mt-7 grid w-full gap-2 sm:grid-cols-2">
-                  {SUGGESTIONS.map(({ icon: Icon, text }) => (
-                    <button
-                      key={text}
-                      onClick={() => void send(t(text))}
-                      className="nb-press flex items-start gap-2.5 rounded-[5px] border-2 border-foreground bg-secondary-background px-3 py-2.5 text-left text-xs font-semibold text-foreground nb-shadow-sm"
-                    >
-                      <Icon className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                      <span>{t(text)}</span>
-                    </button>
-                  ))}
                 </div>
-              </div>
-            ) : (
-              <div className="mx-auto w-full max-w-3xl space-y-7 px-6 py-8">
-                {messages.map((m, i) =>
-                  m.role === "user" ? (
-                    <UserTurn key={i} text={m.text} />
-                  ) : (
-                    <AiTurn
-                      key={i}
-                      text={m.text}
-                      citations={m.citations}
-                      lanes={m.lanes}
-                      streaming={m.streaming}
-                    />
-                  ),
-                )}
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* ── Composer ───────────────────────────────────────────────────── */}
