@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Shield,
   ShieldCheck,
@@ -15,6 +15,8 @@ import {
 import { useT } from "@/lib/i18n";
 import { api } from "@/lib/api/client";
 import { CreateAccountDialog } from "@/components/CreateAccountDialog";
+import { GridScan } from "@/components/GridScan";
+import { applyStoredTheme, DARK_STORAGE_KEY } from "@/lib/theme";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -35,17 +37,29 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // This route renders neither Shell nor LandingShell, so nothing else on it ever
+  // applied the saved theme: a direct hit on /login (a bookmark, a session
+  // timeout, a hard refresh) came up on the `:root` defaults regardless of what
+  // the officer had picked, and only inherited the right palette when reached by
+  // client-side navigation from a page that does mount ThemePicker. GridScan reads
+  // its colours from these tokens, so it has to happen here.
+  useEffect(() => {
+    applyStoredTheme(localStorage.getItem(DARK_STORAGE_KEY) === "1");
+  }, []);
+
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-background text-foreground">
-      {/* Grid background */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, color-mix(in oklab, var(--foreground) 8%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--foreground) 8%, transparent) 1px, transparent 1px)",
-          backgroundSize: "80px 80px",
-        }}
+      {/* Scanning grid background. Colours are left unset so they resolve from the
+          live theme tokens — see GridScan. */}
+      <GridScan
+        sensitivity={0.55}
+        lineThickness={1}
+        gridScale={0.1}
+        scanOpacity={0.4}
+        enablePost
+        bloomIntensity={0.6}
+        chromaticAberration={0.002}
+        noiseIntensity={0.01}
       />
 
       {/* Main split layout */}

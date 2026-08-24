@@ -3,7 +3,7 @@
 > **Project:** Satyam — Bilingual Voice-Enabled Crime Intelligence AI
 > **Event:** Datathon 2026 · KSP × hack2skill
 > **Stack:** Python 3.11 · FastAPI · PostgreSQL 16 + pgvector · React 19 · TanStack Start
-> **Last updated:** 2026-06-24 · v4.0
+> **Last updated:** 2026-08-24 · v4.1
 
 ---
 
@@ -33,6 +33,9 @@
 22. [Board Brain — Smart Layout Engine](#22-board-brain--smart-layout-engine)
 23. [Kannada Translation System](#23-kannada-translation-system)
 24. [Hands-free Multimodal Layer](#24-hands-free-multimodal-layer)
+25. [Client-Side Read Cache](#25-client-side-read-cache)
+26. [Theming & Motion System](#26-theming--motion-system)
+27. [About Handbook & SEO Surface](#27-about-handbook--seo-surface)
 
 ---
 
@@ -44,7 +47,7 @@ Satyam is a **bilingual (English + Kannada), voice-enabled conversational AI** f
 2. Composes a **cited, spoken-summary** answer streamed token-by-token over SSE
 3. Enforces **RBAC/ABAC** (14 KSP ranks, 4 clearance levels) + **Postgres Row-Level Security**
 4. Appends every query to a **SHA-256 hash-chained tamper-evident audit log**
-5. Can **speak answers in Kannada** via Sarvam Bulbul v3 TTS and navigate screens by voice
+5. Can **speak answers in Kannada** via Sarvam Bulbul v2 TTS and navigate screens by voice
 6. Has a full **design/investigation canvas** powered by tldraw with AI scene generation
 7. Provides **admin access control** so L4 officers can manage rank/clearance/scope
 8. Has a **Person 360 dossier** screen showing mugshots, crime history, bank accounts
@@ -83,7 +86,7 @@ All data is **100% synthetic** — no real FIRs or PII.
 | Text-to-SQL alt | qwen3-coder-next | Ollama Cloud | Optional |
 | Embeddings | BGE-M3 (local, FP16) | BAAI | Sole embedder — not swappable |
 | Reranking | bge-reranker-v2-m3 (local) | BAAI | FP16 cross-encoder |
-| TTS | Sarvam Bulbul v3 | Sarvam AI | Primary voice output |
+| TTS | Sarvam **Bulbul v2** + speaker `anushka` | Sarvam AI | Primary voice output. Speakers are **not** interchangeable across Bulbul versions — `bulbul:v3 + meera` is an invalid pair and was the cause of an earlier TTS failure. See the header comment in `models/api/sarvam.py`. |
 | STT | Sarvam Saaras v3 | Sarvam AI | Primary voice input |
 | Translation | Sarvam Mayura v1 | Sarvam AI | EN↔KN |
 | Voice fallback | Bhashini | Govt of India | Free, no rate cap |
@@ -105,7 +108,9 @@ All data is **100% synthetic** — no real FIRs or PII.
 | Categorical i18n | `tData()` + `kn-data.json` | crime_type, district (41), role, etc. |
 | Graph layout | **@dagrejs/dagre** + **elkjs** | Production-grade diagram layout engines |
 | Gesture / vision | **@mediapipe/tasks-vision 0.10.18** | HandLandmarker + FaceDetector; GPU-accelerated WASM, CDN or offline |
-| Themes | 6 professional + 8 legacy | `data-theme` on `<html>` |
+| Decorative globe | **cobe 2.0.1** (pinned exact) | WebGL dotted globe, zero transitive deps — `/ask` backdrop |
+| 3D | **three 0.160** | Landing-page particle brain + `GridScan` login backdrop |
+| Themes | **13 total** — 6 `data-theme` + 7 legacy inline | `data-theme` on `<html>`, catalogue in `lib/theme.ts` |
 
 ### 2.4 Infrastructure
 
@@ -125,7 +130,7 @@ All data is **100% synthetic** — no real FIRs or PII.
 │                        OFFICER'S BROWSER                                 │
 │                                                                          │
 │  Console │ Network │ Forecast │ Trends │ Board │ Dossier │ Admin        │
-│  Live Ops │ Predictive │ Dispatch │ Camera  (12 sidebar routes)          │
+│  Ask │ Vision │ Predictive │ Dispatch │ Camera     (see §14.1)           │
 │                                                                          │
 │              TanStack Router · Shell.tsx (Voice Router)                  │
 └──────────────────────────────┬──────────────────────────────────────────┘
@@ -191,7 +196,7 @@ Browser          FastAPI           Pipeline                 DB
 | `cases` | `case_id INT` | `fir_number`, `crime_type`, `status`, `district`, lat/lng, `sections` (pipe-joined) |
 | `persons` | `person_id INT` | `name`, `gender`, `age`, `district` |
 | `case_persons` | `(case_id, person_id, role)` | composite PK |
-| `narratives` | `narrative_id INT` | `case_id FK`, `language` (en/kn), `body`, `embedding vector(1024)` |
+| `narratives` | `narrative_id INT` | `case_id FK`, `language` (en/kn), `body`, `body_tsv` (generated, GIN), `embedding` — `vector(1024)` locally, `halfvec(1024)` on Neon. The column type is resolved **per request** by `db.session.active_vector_type()` and cast inline, because the Settings panel can switch DB source at runtime; casting to the wrong type breaks the `<=>` operator. |
 | `audit_log` | `audit_id SERIAL` | `at`, `user_id`, `action`, `query_text`, `row_hash` (SHA-256 chain) |
 
 ### 4.2 PS4/PS7 Extension Tables
@@ -299,7 +304,7 @@ app/pipeline/
 | Board AI | Configurable | Gemini / Groq / OpenAI — per `boardEngine` setting |
 | Embedder | BGE-M3 (local, FP16) | Sole embedder, 1024-dim |
 | Reranker | bge-reranker-v2-m3 (local) | ~2.4 GB combined |
-| TTS | Sarvam Bulbul v3 | `POST /voice/tts` |
+| TTS | Sarvam Bulbul v2 (`anushka`) | `POST /voice/tts` · 22.05 kHz · input trimmed to 480 chars on a sentence boundary |
 | STT | Sarvam Saaras v3 | `POST /voice/stt` |
 | Translation | Sarvam Mayura v1 | EN↔KN |
 | Voice fallback | Bhashini | Free |
@@ -383,16 +388,41 @@ Copilot mic tap  →  loadEngineSettings().copilotStt
 | HC, PC | station | L1 |
 | admin, analyst | state | L4/L3 |
 
-### 8.2 Four-Tier PII Masking
+### 8.2 PII Masking — three separate mechanisms, not one
 
-| Clearance | Effect |
-|-----------|--------|
-| L4 | Full access |
-| L3 | PROTECTED crime victim masked |
-| L2 | All names masked, coords coarsened |
-| L1 | L2 + PROTECTED narratives hidden |
+> **Corrected in v4.1.** This section previously described a single uniform
+> "four-tier masking" model. That is not what the code does, and the difference
+> matters: **row** scoping and **column** masking are enforced in different places,
+> by different code, with different coverage. Read them as three mechanisms.
 
-**PROTECTED:** POCSO, RAPE, MOLESTATION, DOWRY DEATHS, SC/ST ATROCITIES, SEXUAL HARASSMENT, STALKING, ASSAULT ON WOMEN, KIDNAPPING OF WOMEN AND GIRLS.
+| # | Mechanism | Where | Coverage |
+|---|-----------|-------|----------|
+| 1 | **Row scoping** | Postgres RLS policies, `db/rls.py` GUCs | Every query on the session, including LLM-generated SQL. Decides *which rows exist*. Does **not** mask columns. |
+| 2 | **Case-detail masking** | `core/masking.py::mask_case()` | Called only from `services/case_service.py`. Bullet-masks names and coarsens coordinates on the case-detail path. |
+| 3 | **Text-to-SQL masking** | `pipeline/tools/text_to_sql.py::_mask_rows()` | Applied to SQL-lane result rows when `principal.clearance < 3`. |
+
+**Mechanism 3 is a fixed column-name allow-list, not a semantic guarantee.**
+`_PII_COLUMNS` is exactly: `name`, `full_name`, `victim_name`, `accused_name`,
+`complainant`, `io_name`, `place_of_offence`. A generated query that selects a
+personal column under a different name — or aliases one — is **not** masked.
+
+**There is no `persons_v` masked view in any database**, and
+`sql_guard.ALLOWED_TABLES` includes raw `persons`. Treat column-level PII masking
+on the Text-to-SQL path as *partial* rather than as an enforced invariant. Any
+claim that the SQL lane is "pointed only at masked views, never raw PII" is false.
+
+**Narrative bodies** are gated separately, in `rag.py::_apply_clearance()`, via
+`Principal.can_see_narrative(crime_type)`. That path is deliberately
+**fail-closed**: a missing principal or an unresolvable crime type withholds the
+body rather than exposing it, and a withheld hit is still returned (with
+`restricted=True` and a notice in place of the text) so the officer learns a
+restricted record matched instead of seeing a silent absence.
+
+**PROTECTED crime types** (`rbac.PROTECTED_CRIMES`): POCSO, POCSO RAPE, RAPE,
+MOLESTATION, DOWRY DEATHS, SC/ST (ATROCITIES), SEXUAL HARASSMENT, STALKING,
+ASSAULT ON WOMEN, KIDNAPPING OF WOMEN AND GIRLS. Helpers: `can_view_case_full()`
+(L4 for protected, else L3), `should_mask_pii()`, `should_coarsen_coords()` (L<2),
+`can_see_narrative()` (L3 for protected).
 
 ### 8.3 SHA-256 Audit Hash-Chain (C1 fix applied)
 
@@ -437,11 +467,16 @@ Copilot mic tap  →  loadEngineSettings().copilotStt
 
 ## 10. Response Ops Module (`ENABLE_RESPONSE_OPS=true`)
 
-### 10.1 Four Dedicated Sidebar Routes
+### 10.1 Dedicated Sidebar Routes
+
+> **Changed since v4.0.** The standalone `/operations` route no longer exists.
+> `LiveOperationsMap` was absorbed into the Vision workspace and is now referenced
+> only from `components/vision/` (`VisionMapCanvas.tsx`, `useVisionData.ts`), which
+> the `/vision` route renders via `VisionWorkspace`.
 
 | Route | Screen | Component |
 |-------|--------|-----------|
-| `/operations` | Live Ops Map | `LiveOperationsMap` — dark CARTO heatmap; always shows real crime density base layer |
+| `/vision` | Tactical Map (formerly Live Ops Map) | `VisionWorkspace` → `VisionMapCanvas`, which hosts `LiveOperationsMap` |
 | `/ops-predictive` | Predictive Deployment | `PredictivePanel` — forecast heatmap + patrol suggestions + deployment simulation |
 | `/ops-dispatch` | Dispatch & Green Corridor | `DemoSimPanel` — in-browser patrol simulation; scenes from real forecast hotspots |
 | `/ops-camera` | Camera Review | `ReviewPanel` — live annotated MJPEG feed + incident queue |
@@ -559,11 +594,19 @@ The `BoardInner` overlay wrapper is `pointer-events: none` — only the toolbar 
 
 ## 14. Frontend Architecture
 
-### 14.1 Route Map (12 sidebar routes + landing)
+### 14.1 Route Map
+
+> Verified against `frontend/src/routes/*.tsx` on 2026-08-24. Two corrections
+> since v4.0: **`/operations` no longer exists** (the full-bleed ops map was
+> superseded by `/vision`; the name survives only in comments inside
+> `components/vision/map/buildLayers.ts`), and **`/ask` and `/vision` were missing**
+> from this list.
 
 ```
-/                     Animated landing page (tldraw Brain particle + Three.js)
-/login                Demo login — 14 KSP ranks (grouped by access tier)
+/                     Animated landing page (Three.js particle brain, scoped CSS)
+/login                Demo login — 14 KSP ranks · GridScan WebGL backdrop
+/about                Technical handbook — 5 chapters, LineSidebar rail (§27)
+/ask                  Dedicated chat surface — SSE stream, voice I/O, history rail
 /console              PS1: Chat + Results Canvas (resize divider, CaseDrawer)
 /network              PS2: People / Financial Links / Rings (3 tabs)
 /trends               PS3: Overview / Time Series / MO Clusters / Seasonal
@@ -573,21 +616,27 @@ The `BoardInner` overlay wrapper is `pointer-events: none` — only the toolbar 
 /reports              Report builder + PDF print
 /audit                Hash-chain audit log
 /transcripts          Conversations + Voice transcripts
-/operations           Live Ops Map (full-bleed dark CARTO)
+/vision               Tactical geospatial surface (deck.gl / MapLibre)
 /ops-predictive       Predictive Deployment
 /ops-dispatch         Dispatch & Green Corridor
 /ops-camera           Camera Review + YOLO MJPEG feed
 /board                Investigation Board (tldraw design canvas)
 /dossier              Person 360 Dossier (L4+ only)
 /admin                Access Control (L4+ only)
-/about                Project info
 ```
+
+**Public (no `Shell`, no auth):** `/`, `/about`, `/login`.
+**Everything else** renders inside `Shell`. Note there is **no route-level auth
+guard** — `Shell`-wrapped routes are protected only by the fact that their API
+calls 401 without a bearer token, and `login.tsx` has an offline demo path that
+navigates to `/console` when the backend is unreachable. Client-side rank gates
+exist on `/admin` and `/dossier` only.
 
 ### 14.2 Key Components
 
 | Component | Purpose |
 |-----------|---------|
-| `Shell.tsx` | Nav rail (18 routes) + voice router + language toggle + `isAdmin` gate + header Hands-free camera toggle + `HandsFreeLayer` mount |
+| `Shell.tsx` | Nav rail (`NAV` array — see §14.1 for the live route list) + voice router + language toggle + `isAdmin` gate + header Hands-free camera toggle + `HandsFreeLayer` mount |
 | `CrimeMap.tsx` | Leaflet map with `darkTiles`, `lockBounds`, `fitSignal`, `liveMarker`, `corridorPath` |
 | `CaseDrawer.tsx` | Persistent (never unmounts), per-caseId cache, Map tab with embedded map + "Take me to map" |
 | `SettingsDialog.tsx` | 3-provider AI Chat Model cards, Board AI engine dropdown, copilot STT toggle, **Hands-free** tab |
@@ -600,6 +649,14 @@ The `BoardInner` overlay wrapper is `pointer-events: none` — only the toolbar 
 | `dossier.tsx` | Person 360 — background pre-fetch, FaceCard with lightbox, crime timeline |
 | `admin.tsx` | Access Control — policy editor modal, anti-lockout warning |
 | `index.tsx` | Landing page — Three.js particle brain (v2 velocity physics), tldraw-inspired look |
+| `ask.tsx` | Dedicated chat surface — SSE, voice I/O, conversation rail, `Globe` backdrop, `BorderGlow` composer |
+| `LineSidebar.tsx` | Proximity-reactive chapter rail for `/about` (§26.4) |
+| `Globe.tsx` | Rotating dotted globe backdrop on `/ask`, `cobe` + theme tokens (§26.4) |
+| `BorderGlow.tsx` | Edge-lit halo around the chat composer, theme-driven (§26.4) |
+| `GridScan.tsx` | Scanning-grid WebGL backdrop on `/login`, reuses the existing `three` dep (§26.4) |
+| `lib/theme.ts` | Theme catalogue + `applyTheme()` / `applyStoredTheme()` — single source of truth (§26.1) |
+| `lib/viewTransition.ts` | Circular-reveal theme switch via the View Transitions API (§26.2) |
+| `lib/api/readCache.ts` | Short-TTL read cache at the transport seam (§25) |
 
 ### 14.3 Landing Page (/)
 
@@ -616,6 +673,11 @@ Key exports:
 - `api.modelProviders()` → configured booleans only
 - `api.cameraStart()` / `api.cameraStatus()` → returns `stream_port`
 - `streamChat()` — SSE with `"speak"` event type for spoken summary
+
+All GET traffic goes through `cachedFetch()` from `lib/api/readCache.ts` rather
+than `fetch()` directly — see §25. This applies to `client.ts::request()` and to
+the four duplicate `apiFetch` helpers in `intelligence.ts`, `financial.ts`,
+`dossier.ts` and `board.ts`.
 
 ---
 
@@ -707,7 +769,13 @@ Key exports:
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| `DATABASE_URL` | local asyncpg | Primary DB |
+| `DATABASE_URL` | local asyncpg | Cloud/primary DB, used when `DB_SOURCE=cloud` |
+| `LOCAL_DATABASE_URL` | `postgresql+asyncpg://satyam_app:…@localhost:5432/satyam` | Used when `DB_SOURCE=local` |
+| `DB_SOURCE` | `cloud` | **Security-relevant, not a convenience switch** — see the warning below |
+| `VECTOR_TYPE` | `vector` | `vector` (fp32, local) or `halfvec` (fp16, Neon) |
+| `EMBEDDING_DIM` | `1024` | Asserted against the embedder at load |
+| `NEON_STORAGE_CAP_BYTES` | `536870912` | 512 MiB hard cap the storage guard enforces |
+| `MODEL_SERVICE_URL` | `""` | If set, embed/rerank are POSTed to a remote model service instead of running in-process |
 | `REDIS_URL` | `redis://localhost:6379/0` | Conversation state |
 | `JWT_SECRET` | `change-me-in-production` | HS256 — **fails to start in production if default** |
 | `MODEL_BACKEND` | `api` | `api` or `local` |
@@ -727,6 +795,46 @@ Key exports:
 | `YOLO_MJPEG_PORT` | `8089` | MJPEG stream port (auto-finds free port) |
 
 **Demo mode:** Both `GEMINI_API_KEY` and `GROQ_API_KEY` empty → `demo_mode=True` → `rule_sql.py` handles SQL, `_render_grounded()` handles answers, no API calls needed.
+
+### 17.1 `DB_SOURCE` decides whether RLS is actually enforced
+
+| Value | URL used | Connects as | RLS |
+|-------|----------|-------------|-----|
+| `cloud` (default) | `DATABASE_URL` | `neondb_owner` — table owner, `rolbypassrls=true` | **bypassed** |
+| `local` | `LOCAL_DATABASE_URL` | `satyam_app` — non-owner | **enforced** |
+
+The RLS policies are correct and identical in both databases, but **no table has
+`FORCE ROW LEVEL SECURITY`**, so any table owner or `rolbypassrls` role ignores
+every policy. A deployment that connects as a table owner therefore has RBAC in
+Python but **no database-level jurisdiction enforcement**. Either run as a
+least-privilege role or add `FORCE RLS`. Local dev uses `DB_SOURCE=local` for this
+reason; run `migrations/008_local_app_grants.sql` once so `satyam_app` has grants.
+
+### 17.2 Storage budget — the cloud database is near its ceiling
+
+The Neon project has a hard **512 MiB** cap. Past it Neon rejects writes that
+increase storage, which includes the `audit_log` row written on every audited
+query — so this is an **availability** limit, not a billing one.
+
+| Control | Bytes | % of cap |
+|---------|-------|----------|
+| Cap | 536,870,912 | 100% |
+| Peak ceiling (one migration only) | 503,316,480 | 93.75% |
+| Steady-state ceiling | 469,762,048 | 87.5% |
+| Reserved headroom floor | 67,108,864 | 12.5% |
+
+Live position from `GET /health/data` on 2026-08-24: **447,528,960 bytes used
+(426.8 MiB), 89,341,952 free (85.2 MiB)**, `within_steady_ceiling: true`.
+Measured cost of embedding one more narrative: **4,783 bytes** (halfvec datum +
+HNSW share).
+
+`python -m app.core.storage` (or `make storage`) reports the live position and
+exits non-zero when a limit is breached. Every cloud backfill projects its cost
+before writing and refuses if it will not fit — there is no bypass flag. **Do not
+raise the ceilings to make an operation fit; reclaim space instead.** Caveat: Neon
+meters its own notion of project storage including instant-restore history, while
+the guard measures `pg_database_size()`. If the console disagrees with
+`/health/data`, believe the console.
 
 ---
 
@@ -766,12 +874,19 @@ cd frontend && bun install && bun run dev
 
 | File | Purpose |
 |------|---------|
-| `001_init.sql` | Legacy v1 schema |
+| `001_init.sql` | Legacy v1 schema. **Not sufficient on its own** — `002` drops and recreates the core tables, so applying only `001` leaves a schema the app cannot use. |
 | `002_schema_v2.sql` | Core schema — cases, persons, narratives, users, audit_log, RLS |
+| `003_add_ps4_ps7_tables.sql` | socio-economic indicators + financial accounts/transactions |
 | `003_users_extend.sql` | full_name, email, photo_b64 on users |
 | `004_demo_dossier.sql` | 5 isolated demo_dossier_* tables |
 | `005_boards.sql` | boards + board_snapshots |
 | `006_admin_access_control.sql` | created_by, clearance_override, scope_override on users |
+| `008_local_app_grants.sql` | Grants for the least-privilege `satyam_app` role — required for `DB_SOURCE=local` (§17.1) |
+| `010_narrative_vector_index.sql` | HNSW index on `narratives.embedding` — vector RAG is dead without it. `010_rollback.sql` reverses it. |
+| `011_ops_rls.sql` | RLS policies for the `ops_*` tables |
+
+Apply in filename order: `for f in migrations/0*.sql; do psql "$DATABASE_URL" -f "$f"; done`.
+`teardown.sql` exists for a clean reset and is not part of the forward sequence.
 
 ---
 
@@ -822,6 +937,13 @@ cd frontend && bun install && bun run dev
 | F4 | CaseDrawer Map tab "no records" — place extraction now keeps full phrases (e.g. "Cyber Crime Police Station"), uses progressive broadening fallback |
 | F5 | Board AI 429 rate-limit error — `_keyword_scene()` deterministic fallback builds a ring layout from prompt keywords when the LLM is rate-limited |
 | F6 | Landing page `.thin` keyword colour — dark mode: `var(--text)` (white); light mode: `#0a160a` (black) via `.satyam-landing.light` override |
+| F7 | **Landing page always opened dark.** `localStorage.getItem('satyam-mode') === 'light'` treated an *absent* key the same as an explicit dark choice, so every first visit was dark. Now reads the key once and treats anything other than an explicit `'dark'` as light. |
+| F8 | **Dark mode left the main content area on a light background.** For the 7 legacy themes `applyTheme()` pinned `--background` as an *inline* style on `<html>`, and an inline custom property outranks every selector — so it beat `.dark { --background: … }` while `--foreground` correctly flipped to near-white. On `/ask` the headline measured **1.05:1** contrast. The override is now dropped in dark mode; measured **14.79:1** after. `--main` is still applied in both modes, since clearing it would collapse all 7 legacy themes to one palette. |
+| F9 | **`DarkModeToggle` kept F8 alive through a second path** — it only toggled the `dark` class and never re-applied the theme. Both controls now route through `applyStoredTheme()` in `lib/theme.ts`. |
+| F10 | **Reopening a chat from history landed on its oldest message.** The stick-to-bottom effect decided by measuring distance from the container's bottom, but on a conversation switch `scrollTop` is still the previous thread's position (usually 0); against the taller new transcript that reads as "far from the bottom", so the scroll was skipped. A conversation switch now jumps unconditionally. |
+| F11 | **`/about` rail highlighted the wrong chapter at the top of the page.** The `IntersectionObserver` scrollspy tracked a band near the viewport top; above the first heading nothing intersects, so the callback had no entries and kept the previous chapter. Replaced with a scroll-position computation that always resolves. |
+| F12 | **A CSS class passed through `cn()` was silently deleted.** `bg-glow` was read by tailwind-merge as a background-color utility and dropped as conflicting with the `bg-secondary-background` beside it — the class never reached the DOM. Renamed `edge-glow`. **Any hand-written class composed via `cn()` must not begin with a Tailwind utility prefix.** |
+| F13 | **Screen-to-screen navigation refetched everything.** Added a short-TTL read cache at the transport seam (§25): 4 screens revisited went from **16 GETs to 6**, and all 6 remaining are `/auth/me`, which is deliberately never cached. |
 
 ### 20.4 Backend / API Fixes
 
@@ -1183,7 +1305,7 @@ Stateless pure function `classifyGesture(landmarks: Landmark[]): GestureName`. A
 
 #### Normal mode
 
-| Gesture | On map screens (`/console`, `/operations`, `/ops-*`) | On `/board` | Everywhere else |
+| Gesture | On map screens (`/console`, `/vision`, `/ops-*`) | On `/board` | Everywhere else |
 |---------|------------------------------------------------------|-------------|-----------------|
 | `swipe_right` | `map_pan dir:right` | `board_pan dir:right` | `nav_cycle dir:+1` (next screen) |
 | `swipe_left` | `map_pan dir:left` | `board_pan dir:left` | `nav_cycle dir:-1` (prev screen) |
@@ -1305,3 +1427,283 @@ By default MediaPipe models load from Google CDN. Override via env vars for offl
 - No video/image data leaves the device — all WASM runs in-browser.
 - No individual prediction or profiling from face data — only binary presence/absence.
 - All synthetic data rules from `AGENTS.md` remain in force.
+
+---
+
+## 25. Client-Side Read Cache
+
+`frontend/src/lib/api/readCache.ts` — a short-lived cache for GET responses, so
+returning to a screen shows the data it already had instead of blanking to a
+spinner and hitting the cloud database again.
+
+### 25.1 Why not react-query, which is already installed
+
+`@tanstack/react-query` **is** a dependency and `QueryClientProvider` **is**
+mounted in `__root.tsx` — but nothing uses it. All nine data screens hand-roll
+`useEffect` + `useState` with their own loading, error and abort handling.
+Adopting react-query's cache means consuming data through `useQuery`, which is a
+rewrite of nine screens' bespoke logic and a chance to regress each one's error
+path.
+
+Caching at the **transport seam** instead fixes every screen at once, changes no
+screen logic, and cannot touch those error paths. The tradeoff is explicit and
+recorded in the module header: **if those screens are ever converted to `useQuery`,
+this layer becomes redundant and should be deleted, not kept alongside it.**
+
+### 25.2 Wiring
+
+`cachedFetch()` replaces `fetch()` in all five transports:
+
+| File | Function |
+|------|----------|
+| `lib/api/client.ts` | `request()` |
+| `lib/api/intelligence.ts` | `apiFetch` |
+| `lib/api/financial.ts` | `apiFetch` |
+| `lib/api/dossier.ts` | `apiFetch` |
+| `lib/api/board.ts` | `apiFetch` |
+
+Exports: `cachedFetch`, `peekCached`, `invalidateReadCache`. `intelligence.ts`
+additionally exposes `dashboard.peek()`, which `console.tsx` uses to seed state
+synchronously on mount so the dashboard paints from cache with no loading frame.
+
+### 25.3 Rules, and the reasoning behind each
+
+| Rule | Why |
+|------|-----|
+| **Browser-only.** Inert unless `window` exists. | On the server `getRouter()` runs per request, so a module-level cache would be shared across concurrent officers and could hand one officer's RLS-scoped rows to another. This is a security property, not an optimisation. |
+| **Keyed to the auth token**, cleared on logout. | Switching accounts in one tab must not show the previous officer's rows. |
+| **GET only.** Any non-GET invalidates the *whole* cache. | Otherwise an admin saves a change, reads a 5-minute-old list that lacks it, and concludes the save failed. Coarse invalidation is correct here; a targeted one would need per-endpoint dependency knowledge the transport does not have. |
+| **Only `res.ok` is cached.** | A cached 403 would pin an authorisation failure in place for the full TTL after the permission was fixed. |
+| **TTL 5 minutes.** | Long enough to make navigation feel instant, short enough that stale analytics self-correct. |
+
+### 25.4 `NEVER_CACHE`
+
+Prefixes `/auth/`, `/settings/db-source`, `/chat/`, `/voice/`.
+
+`/auth/me` is excluded **on purpose**: it is how a revoked session gets kicked
+out, and caching it would keep a disabled account looking valid for up to five
+minutes. That is why 6 `/auth/me` calls remain on a second pass through the app —
+removing them would trade a real security property for 6 requests.
+`/settings/db-source` reports which database the *server* is using; `client.ts`
+already warns that a stale browser value can disagree.
+
+---
+
+## 26. Theming & Motion System
+
+### 26.1 `lib/theme.ts` — one source of truth
+
+The theme catalogue, `applyTheme()` and `applyStoredTheme()` were extracted from
+`components/ThemePicker.tsx` into `frontend/src/lib/theme.ts`.
+
+Two reasons, both load-bearing:
+
+1. **Two components need the logic.** `ThemePicker` and the header's
+   `DarkModeToggle` both change the mode. Toggling the `dark` class alone is not
+   sufficient (see F8/F9), so both must go through the same function rather than
+   keep separate copies of the rule.
+2. **Fast refresh.** A module exporting both a component and plain functions
+   loses HMR for the whole file — eslint's `react-refresh/only-export-components`
+   flags it. `lib/` is the correct home.
+
+`ThemePicker.tsx` dropped from 337 to 158 lines, and one piece of dead code
+(`DATA_THEME_IDS`, unused since `applyTheme` began clearing `data-theme`
+unconditionally) went with it.
+
+**Two theme families**, 13 total:
+
+| Family | Count | Mechanism |
+|--------|-------|-----------|
+| Legacy | 7 — default, coral, rose, purple, ocean, emerald, sunshine | Inline `--main` / `--background` on `<html>` |
+| `data-theme` | 6 — slate, indigo, forest, graphite, midnight, pine | `data-theme` attribute, resolved by CSS blocks in `styles.css` |
+
+The legacy family only ever defined light-mode values, which is the root of F8.
+
+### 26.2 `lib/viewTransition.ts` — circular-reveal theme switch
+
+`revealThemeChange(origin, apply)` wraps a theme change in the native **View
+Transitions API** and animates `clip-path` on `::view-transition-new(root)` from a
+zero-radius circle at the pressed control to a radius covering the furthest
+viewport corner.
+
+- `styles.css` switches off the browser's default cross-fade on
+  `::view-transition-*(root)`, or the two animations run together and wash each
+  other out, and stacks the new snapshot above the old one.
+- Callers wrap their `setState` in `flushSync` so React-driven bits (the sun/moon
+  icon, the active swatch, the tick) are inside the snapshot the transition
+  captures. Without it they repaint a frame after the wipe has already passed.
+- Falls back to an instant switch where the API is missing (Firefox, Safari < 18).
+  A skipped transition rejects `ready`; that is caught and ignored, because the
+  DOM change already happened and only the animation was lost.
+
+### 26.3 Reduced-motion policy — soften, do not freeze
+
+A project-wide convention, adopted after a concrete failure: the login trust
+badges originally used `@media (prefers-reduced-motion: reduce) { animation: none }`.
+The development machine has OS animations disabled and therefore reports `reduce`,
+so the feature looked completely broken — a static row — and was reported as "nothing
+changed". Judges or officers with the same OS setting would have seen the same.
+
+The rule now is that reduced motion **removes the vestibular component and keeps a
+reduced version**, rather than removing the effect:
+
+| Effect | Full motion | Reduced motion |
+|--------|-------------|----------------|
+| Login trust badges | 3D depth travel, per-badge phase offsets (3.1s / 4.3s / 3.7s with negative delays) | translateZ, rotation and perspective dropped; a 6s scale-and-shadow breathe, all badges in unison |
+| `/ask` globe | ~35s rotation | Slowed to 1/6 speed |
+| `BorderGlow` beam | 6s sweep | 24s sweep, lower opacity |
+| Theme reveal | 520ms wipe | 180ms wipe |
+| `BorderGlow` pointer pool | Tracks pointer | **Unchanged** — it only moves in direct response to the user's own pointer, which is not the unprompted motion the media query is about |
+
+### 26.4 Decorative components
+
+All four are written in-repo rather than installed, all read their colours from
+the live theme tokens by default, and all are SSR-safe.
+
+| Component | Used on | Notes |
+|-----------|---------|-------|
+| `Globe.tsx` | `/ask` | `cobe` 2.0.1. Sized off the pane height at 130% with a radial mask that fades the sphere before the hard clip, so it is large without reading as a cut-off arc. Opacity 0.34 empty / 0.10 with messages, and much lower in dark mode (0.13 / 0.05) because it draws light dots. |
+| `BorderGlow.tsx` | `/ask` composer | Two ring layers masked with `mask-composite: exclude`: a conic beam sweeping the edge, plus a pointer-tracked pool with linear falloff over 120px. Sits *outside* the existing hard 2px border rather than replacing it. |
+| `GridScan.tsx` | `/login` | WebGL scanning grid. Reuses the existing `three` dependency instead of the four-package React Three Fiber + postprocessing graph the original needed. |
+| `LineSidebar.tsx` | `/about` | Proximity-reactive chapter rail — see §27.2. |
+
+**Two `cobe` v2 facts that contradict its own README** (verified against
+`node_modules/cobe/dist/index.esm.js`):
+
+1. **There is no `onRender` callback and no internal animation loop.** The option
+   is still documented but the v2 bundle contains no reference to it. A globe
+   built the README's way renders exactly one frame. Rotation must be driven from
+   an explicit `requestAnimationFrame` loop calling `globe.update({ phi })`. This
+   is also why no spring/animation library is needed for inertia — the frame loop
+   is already owned.
+2. **`createGlobe` inserts its own wrapper `<div>` around the canvas** (for CSS
+   anchor positioning) and `destroy()` does not remove it. If the canvas were a
+   React child, React would later try to remove it from a parent it no longer
+   belongs to and throw `NotFoundError` from `removeChild` — reliably, on every
+   StrictMode double-mount. So React owns only a host `<div>`; the canvas is
+   created imperatively and the host is emptied on cleanup.
+
+### 26.5 Shared colour helpers (`lib/utils.ts`)
+
+`cssColorToRgb(value, fallback)` and `mixRgb(a, b, t)` were extracted from
+`Globe.tsx` and are now shared with `GridScan.tsx`.
+
+`cssColorToRgb` resolves **any** CSS colour token to an sRGB triple by pushing it
+through canvas 2D `fillStyle` and reading one pixel back, rather than parsing it.
+The theme tokens are written in a mix of `#hex`, `hsl()` and `oklch()`, and
+`getComputedStyle` returns `oklch()` verbatim for some of them — reading its three
+numbers as if they were RGB channels turns `L=0.92` into `R=1/255`. A sentinel
+(`#ff00ff`) is set first so an unparseable value is detected rather than silently
+becoming black.
+
+### 26.6 Gotcha: `cn()` and Tailwind class names
+
+Any hand-written CSS class composed through `cn()` **must not begin with a Tailwind
+utility prefix**. `cn()` runs tailwind-merge, which reads `bg-glow` as a
+background-color utility and deletes it as conflicting with the
+`bg-secondary-background` beside it. The class silently never reaches the DOM.
+This cost a debugging round; the classes are `edge-glow*` for that reason and the
+CSS carries a comment saying not to rename them back.
+
+---
+
+## 27. About Handbook & SEO Surface
+
+`/about` was rewritten from a feature-marketing page into a five-chapter technical
+handbook — the discoverable, plain-language explanation of how the system works.
+
+### 27.1 Structure
+
+| # | Chapter | Covers |
+|---|---------|--------|
+| I | Overview | The problem, what "grounded" means, the six lanes, the synthetic dataset |
+| II | How a question is answered | Ingest and language detection, routing and its fallbacks, lane execution, composition, the SSE event table |
+| III | Authority and evidence integrity | Rank → scope and clearance, RLS, the SQL guard, the audit hash chain |
+| IV | Retrieval and language | Hybrid retrieval and RRF, live embedding coverage, the bilingual voice path |
+| V | The platform | Screens, the model registry, honest status, stack |
+
+**All five chapters are in the DOM at once** and the rail scrolls to them, rather
+than swapping one chapter in at a time as the reference design did. Chapter
+swapping would mean a crawler indexes chapter one and nothing else, which defeats
+the purpose of the page. The reading experience is produced by scroll position.
+
+Content is defined as typed data (`Block` = `p | note | list | steps | table`)
+rendered by one `BlockView`, so a new section is a data entry rather than new JSX.
+Every string passes through `t()` for Kannada.
+
+### 27.2 `LineSidebar`
+
+Written in-repo; the component the design referenced does not exist here. The prop
+surface is kept compatible — `proximityRadius`, `maxShift`, `falloff`,
+`markerLength`, `markerGap`, `tickScale`, `scaleTick`, `itemGap`, `fontSize`,
+`smoothing`, `showIndex`, `showMarker`, `defaultActive`, `onItemClick` — with two
+deliberate differences:
+
+1. **`accentColor` / `textColor` / `markerColor` are optional** and default to
+   `--main` and mixes of `--foreground`. The original call site passes fixed hex
+   (`#A855F7`, `#c4c4c4`, `#6c6c6c`), which would make the rail the only element
+   on the page ignoring the selected theme. Passing a colour explicitly still wins.
+2. **`activeIndex` is accepted as a controlled prop** alongside `defaultActive`,
+   because the rail follows scroll position and a self-managing active item cannot
+   be told the reader has scrolled.
+
+The proximity effect runs on one `requestAnimationFrame` loop writing
+`--ls-shift` and `--ls-tick` as inline styles, not through React state — a state
+update per frame would re-render the list and its parent for a purely visual
+property. The loop **stops when everything settles and the pointer has left**, so
+an idle page is not holding a frame callback.
+
+### 27.3 SEO
+
+| Element | Value |
+|---------|-------|
+| `<title>` | "How Satyam works — bilingual crime intelligence for Karnataka State Police" |
+| `description` | 237 chars |
+| `robots` | `index, follow` |
+| `og:type` | `article`, with absolute `og:url` |
+| `twitter:card` | `summary_large_image` |
+| `canonical` | Absolute |
+| `hreflang` | `en-IN` + `kn-IN` |
+| Structured data | One `@graph` with `TechArticle`, `SoftwareApplication`, `WebSite`, `BreadcrumbList` |
+| Heading hierarchy | Exactly one `h1`; chapters are `h2`; sections are `h3` with anchor ids |
+
+`SITE` is a module constant in `about.tsx`. **It is currently
+`https://satyam.ksp.local` and must be changed to the real origin before any
+public deployment** — absolute canonical and `og:url` values pointing at a
+non-resolving host are worse than relative ones.
+
+### 27.4 Claims corrected during the rewrite
+
+The previous page asserted several things the code does not do. Each was verified
+against the implementation before being changed:
+
+| Old claim | Reality |
+|-----------|---------|
+| "Mask PII (L1–L4 clearance)" on the SQL lane | Partial — a fixed 7-column allow-list, only below L3, in Python. See §8.2. |
+| "Sarvam Bulbul **v3** (TTS)" | The code calls `bulbul:v2` + `anushka`. |
+| Token-by-token streaming | The answer is awaited in full, then split on spaces into `token` frames. Presentational only. |
+| Reports generated from chat | The `report` lane returns a pointer to the Reports screen; it generates nothing. |
+| Stack chips: "Redis PubSub Locks", "Zoho Catalyst Deploy", "YOLOv8s Weapon Detect" | Unverifiable from code at the time of writing; dropped rather than repeated. |
+
+The handbook also states plainly that the local model backend and the Bhashini
+provider are stubs, and that half the narrative corpus is unembedded. Two items
+were **deliberately kept off the public page** and documented here instead,
+because they are operational security notes rather than product facts: the
+`FORCE RLS` gap in §17.1, and the bcrypt-missing fallback in `core/security.py`
+that stores a `__plain__` sentinel.
+
+### 27.5 Live retrieval coverage
+
+`rag.py`'s module docstring claims "All 71,986 narratives currently have a NULL
+embedding". **That is stale.** `GET /health/data` on 2026-08-24 reports:
+
+```
+narratives_embedded:          35,993  of 71,986
+embedding_coverage_percent:   50.0
+vector_search_available:      true
+```
+
+All 35,993 English narratives are embedded; none of the 35,993 Kannada ones are,
+bounded by the storage cap in §17.2. The reported retrieval strategy is therefore
+`hybrid` for English queries. The `rag.py` docstring should be corrected — it is
+the first thing anyone reads in that file.

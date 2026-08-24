@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { cn } from "@/lib/utils";
+import { cn, cssColorToRgb } from "@/lib/utils";
 
 /**
  * Slowly rotating dotted globe, used as a decorative backdrop.
@@ -44,37 +44,6 @@ const SPIN_PER_FRAME = 0.003;
  * shipped that mistake once on the login badges.
  */
 const REDUCED_SPIN_FACTOR = 1 / 6;
-
-/**
- * Resolve any CSS colour token to an sRGB triple in 0..1.
- *
- * The theme tokens are written in a mix of `#hex`, `hsl()` and `oklch()`
- * (see `styles.css`), so rather than parse them, the browser's own colour
- * pipeline is used: canvas 2D `fillStyle` accepts every format the CSS parser
- * does, and `getImageData` hands back plain sRGB bytes.
- */
-function cssColorToRgb(
-  value: string,
-  fallback: [number, number, number],
-): [number, number, number] {
-  const v = value.trim();
-  if (!v) return fallback;
-  try {
-    const ctx = document.createElement("canvas").getContext("2d");
-    if (!ctx) return fallback;
-    // An unparseable value leaves fillStyle at its previous setting, which would
-    // be indistinguishable from a legitimate colour — so seed it with a sentinel
-    // and treat "unchanged" as a parse failure.
-    ctx.fillStyle = "#ff00ff";
-    ctx.fillStyle = v;
-    if (ctx.fillStyle === "#ff00ff") return fallback;
-    ctx.fillRect(0, 0, 1, 1);
-    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-    return [r / 255, g / 255, b / 255];
-  } catch {
-    return fallback;
-  }
-}
 
 function themeColors() {
   const cs = getComputedStyle(document.documentElement);

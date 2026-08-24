@@ -506,3 +506,109 @@ textarea {
 ::view-transition-new(root) {
   z-index: 2147483646;
 }
+
+/* ── LineSidebar (components/LineSidebar.tsx) ─────────────────────────────────
+ *
+ * Vertical chapter rail for the About handbook. The horizontal displacement and
+ * the tick length are written per frame by the component as `--ls-shift` and
+ * `--ls-tick` on each row; everything else is static and lives here.
+ *
+ * Colours come from `--ls-accent` / `--ls-text` / `--ls-marker`, which the
+ * component sets from the theme tokens unless the caller overrides them. Nothing
+ * in this block hardcodes a colour, so the rail follows the theme picker.
+ */
+.line-sidebar ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ls-gap, 20px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.line-sidebar li {
+  /* Set by the rAF loop. Declared here so the first paint has a value and the
+   * rail does not jump on hydration. */
+  --ls-shift: 0px;
+}
+
+.line-sidebar button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--ls-font, 1.1rem);
+  font-weight: 700;
+  color: var(--ls-text);
+  text-align: left;
+  cursor: pointer;
+  transform: translateX(var(--ls-shift));
+  transition: color 160ms ease-out;
+}
+
+.line-sidebar .ls-tick {
+  flex: none;
+  width: var(--ls-tick, 60px);
+  height: 2px;
+  margin-right: var(--ls-marker-gap, 0px);
+  /* Longhand rather than the `background` shorthand, so the declaration and the
+   * transition below name the same property. */
+  background-color: var(--ls-marker);
+  transition: background-color 160ms ease-out;
+}
+
+.line-sidebar .ls-index {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.72em;
+  font-weight: 800;
+  opacity: 0.65;
+}
+
+.line-sidebar .ls-label {
+  min-width: 0;
+}
+
+.line-sidebar li.is-active button,
+.line-sidebar button:hover,
+.line-sidebar button:focus-visible {
+  color: var(--foreground);
+}
+
+.line-sidebar li.is-active .ls-tick,
+.line-sidebar button:hover .ls-tick,
+.line-sidebar button:focus-visible .ls-tick {
+  background-color: var(--ls-accent);
+}
+
+/* Keyboard users get the same affordance as the pointer proximity effect, which
+ * they cannot trigger at all. */
+.line-sidebar button:focus-visible {
+  outline: 2px solid var(--ls-accent);
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+/* Sub-section list under the active chapter. */
+.line-subnav a {
+  display: block;
+  border-left: 2px solid color-mix(in oklab, var(--foreground) 16%, transparent);
+  padding: 0.28rem 0 0.28rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: color-mix(in oklab, var(--foreground) 55%, transparent);
+  transition:
+    color 140ms ease-out,
+    border-color 140ms ease-out;
+}
+.line-subnav a:hover {
+  color: var(--foreground);
+}
+.line-subnav a[aria-current="true"] {
+  border-left-color: var(--main);
+  color: var(--foreground);
+}
