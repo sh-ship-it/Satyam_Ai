@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1787678946.148835,
-    "ast_hash": "e2138a06c742862671a146e42c7cd507",
+    "mtime": 1787687536.0458355,
+    "ast_hash": "a75733c9ee90602dbc8f407360dd431b",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -675,8 +675,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1782376739.4620495,
-    "ast_hash": "1f0f9d5180e87967afe5757484d0411f",
+    "mtime": 1787687628.843177,
+    "ast_hash": "50e41377565f82e10a0a201369ab92a3",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -685,8 +685,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
-    "mtime": 1787671967.4376009,
-    "ast_hash": "41b429812cc262a7d7a31bc12ebe39e0",
+    "mtime": 1787687500.4303412,
+    "ast_hash": "81991c6fa9c4691dbf10cee38a8a43fa",
     "semantic_hash": ""
   },
   "frontend/src/router.tsx": {
@@ -1495,8 +1495,8 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/screen_agent.py": {
-    "mtime": 1787679036.2105649,
-    "ast_hash": "e9e9483461d9bacf3ae468a6bec44f35",
+    "mtime": 1787687575.3571675,
+    "ast_hash": "a8ab88663790365558e2e523fbadf94e",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/voiceAgent.ts": {
@@ -1540,8 +1540,8 @@
     "semantic_hash": ""
   },
   "frontend/src/input/gestureActions.ts": {
-    "mtime": 1787679067.138092,
-    "ast_hash": "ef6a41f27108395cd9c095d6cd912225",
+    "mtime": 1787687543.3975227,
+    "ast_hash": "bee666caa784ed6d77c3a43021e4b1b8",
     "semantic_hash": ""
   },
   "frontend/src/input/gestureClassifier.ts": {
@@ -2062,6 +2062,11 @@
   "backend/tests/test_forecast_backtest.py": {
     "mtime": 1787684884.4094546,
     "ast_hash": "304428e506ac3c1d4adfde1e1b6c740a",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/news.tsx": {
+    "mtime": 1787687628.5529003,
+    "ast_hash": "108dec08b696d6fcceeed297703133e3",
     "semantic_hash": ""
   }
 }
