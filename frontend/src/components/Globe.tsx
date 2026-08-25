@@ -50,9 +50,19 @@ function themeColors() {
   const isDark = document.documentElement.classList.contains("dark");
   return {
     dark: isDark ? 1 : 0,
-    diffuse: isDark ? 1.2 : 0.45,
-    mapBrightness: isDark ? 5.4 : 3.6,
-    baseColor: (isDark ? [0.32, 0.34, 0.4] : [1, 1, 1]) as [number, number, number],
+    // Light mode keeps `diffuse` very low so the sphere body stays flat and close
+    // to the page colour, leaving only the landmass dots to read. Raising it
+    // shades the limb and the globe turns into a grey disc with a visible rim,
+    // which is what it looked like before this was tuned. Dark mode wants the
+    // opposite: the shading is what separates the sphere from the background.
+    diffuse: isDark ? 1.35 : 0.08,
+    // `mapBrightness` moves in opposite directions for the two modes. In light
+    // mode the landmass dots are drawn *darker* as this drops, so a low value is
+    // what makes them read against a near-white page; in dark mode they are drawn
+    // lighter as it rises. Tuned against measured pixel spread rather than by eye
+    // — see the note in the component docstring.
+    mapBrightness: isDark ? 8.5 : 1.5,
+    baseColor: (isDark ? [0.26, 0.28, 0.34] : [1, 1, 1]) as [number, number, number],
     // No markers are drawn, but COBEOptions requires the colour.
     markerColor: cssColorToRgb(cs.getPropertyValue("--main"), [0.57, 0.77, 0.99]),
     glowColor: cssColorToRgb(

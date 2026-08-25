@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
-    "mtime": 1781282330.8640735,
-    "ast_hash": "d9837f38cc05303254571985e3164050",
+    "mtime": 1787605738.4564462,
+    "ast_hash": "a1cfc3cffb0e19fd79e064a0ac83a216",
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
@@ -700,8 +700,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/about.tsx": {
-    "mtime": 1782374731.8525646,
-    "ast_hash": "4558104ee5833ac5bd8b4addb55952ac",
+    "mtime": 1787606312.9749773,
+    "ast_hash": "0d82728125be10c024dee36a846f20ed",
     "semantic_hash": ""
   },
   "frontend/src/routes/audit.tsx": {
@@ -790,8 +790,8 @@
     "semantic_hash": ""
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1782386756.075484,
-    "ast_hash": "e327647efced00fc7439d00e0931e0f0",
+    "mtime": 1787607508.8091404,
+    "ast_hash": "79bc830c239dfe9afe2bd550880b1524",
     "semantic_hash": ""
   },
   "frontend/src/routes/README.md": {
@@ -810,8 +810,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/login.tsx": {
-    "mtime": 1787597280.7233157,
-    "ast_hash": "7519b174df2c04c4b6117c168bf6cfd6",
+    "mtime": 1787605934.4568305,
+    "ast_hash": "3fb8eb528bdedf07352fa84236f8bca8",
     "semantic_hash": ""
   },
   "backend/app/models/api/ollama_cloud.py": {
@@ -2020,8 +2020,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Globe.tsx": {
-    "mtime": 1787599888.2798398,
-    "ast_hash": "f04f9e642f123222b2a9e16f65aed21d",
+    "mtime": 1787605751.7566242,
+    "ast_hash": "0433b8dd2ab61895c64d6c481a850105",
     "semantic_hash": ""
   },
   "frontend/src/components/BorderGlow.tsx": {
@@ -2037,6 +2037,16 @@
   "frontend/src/lib/viewTransition.ts": {
     "mtime": 1787601871.9469335,
     "ast_hash": "aa7b24b9103689c6b34b1b33ada22b28",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/GridScan.tsx": {
+    "mtime": 1787606646.799548,
+    "ast_hash": "46312a5c8c1e3276366a86b961eaf3e9",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/LineSidebar.tsx": {
+    "mtime": 1787605839.66386,
+    "ast_hash": "9afe9966ab996869affb62fb041cc9dd",
     "semantic_hash": ""
   }
 }

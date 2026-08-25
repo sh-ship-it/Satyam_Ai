@@ -1562,7 +1562,7 @@ the live theme tokens by default, and all are SSR-safe.
 
 | Component | Used on | Notes |
 |-----------|---------|-------|
-| `Globe.tsx` | `/ask` | `cobe` 2.0.1. Sized off the pane height at 130% with a radial mask that fades the sphere before the hard clip, so it is large without reading as a cut-off arc. Opacity 0.34 empty / 0.10 with messages, and much lower in dark mode (0.13 / 0.05) because it draws light dots. |
+| `Globe.tsx` | `/ask` | `cobe` 2.0.1. Sized off the pane height at 130% with a radial mask that softens the rim. See §26.6 for the tuned visibility values and how they were arrived at. |
 | `BorderGlow.tsx` | `/ask` composer | Two ring layers masked with `mask-composite: exclude`: a conic beam sweeping the edge, plus a pointer-tracked pool with linear falloff over 120px. Sits *outside* the existing hard 2px border rather than replacing it. |
 | `GridScan.tsx` | `/login` | WebGL scanning grid. Reuses the existing `three` dependency instead of the four-package React Three Fiber + postprocessing graph the original needed. |
 | `LineSidebar.tsx` | `/about` | Proximity-reactive chapter rail — see §27.2. |
@@ -1596,7 +1596,50 @@ numbers as if they were RGB channels turns `L=0.92` into `R=1/255`. A sentinel
 (`#ff00ff`) is set first so an unparseable value is detected rather than silently
 becoming black.
 
-### 26.6 Gotcha: `cn()` and Tailwind class names
+### 26.6 Globe visibility — tuned against measured pixels
+
+The globe was initially far too faint in both modes. It was retuned by measuring
+composited pixels rather than by eye, because "visible enough" and "still legible"
+pull in opposite directions and neither is reliable to judge from a screenshot.
+
+**Method.** A headless screenshot is fed back into the page, drawn to a 2D canvas
+and sampled. (A WebGL canvas without `preserveDrawingBuffer` cannot be read
+directly, hence the round trip.) Two numbers per mode: the **standard deviation**
+of luminance in a text-free band — how much of the area the dots actually cover —
+and the **WCAG contrast** of the copy sitting over the globe, which is the
+constraint being spent against.
+
+> First attempt used `max - min` luminance as the visibility metric. It saturates
+> as soon as the band contains one near-white pixel and one dark dot, and reported
+> byte-identical numbers for visibly different renders. Standard deviation is the
+> metric that actually moves.
+
+**Three levers, and which direction each goes:**
+
+| Lever | Light | Dark | Note |
+|-------|-------|------|------|
+| Wrapper opacity (empty / chatting) | 0.78 / 0.22 | 0.46 / 0.14 | Dims once messages exist — a watermark that reads well behind an empty state is noise behind body copy |
+| `mapBrightness` | **1.5** | **8.5** | **Moves in opposite directions.** Light mode draws the landmass dots *darker* as this drops; dark mode draws them lighter as it rises. Raising it in light mode washes the globe out, which is the mistake that made it invisible. |
+| `diffuse` | **0.08** | 1.35 | Light mode keeps the sphere body flat and near the page colour so only dots read. At 0.3 the limb shading turned the globe into a grey disc with a visible rim. Dark mode needs the shading to separate sphere from background. |
+
+The mask stop is `#000 46%, transparent 74%`. Radial-gradient percentages run
+along the gradient ray, and with `farthest-corner` sizing 100% is ≈1.41× the
+radius — so 74% lands just outside the silhouette and removes the hard rim without
+eating the dots. 82% left the full disc edge showing; 58% faded most of the globe.
+
+**Measured result** (1440×950, `/ask`, both modes):
+
+| Mode | Band σ | Headline | Subtitle | Transcript body | AA |
+|------|--------|----------|----------|-----------------|-----|
+| Light | 19.9 | 20.62:1 | 11.10:1 | 10.39:1 | pass |
+| Dark | 10.7 | 15.30:1 | 7.29:1 | 7.04:1 | pass |
+
+Every text measurement clears the 4.5:1 AA floor with margin, so the visibility
+was gained out of headroom rather than out of legibility. **If these values are
+changed again, re-measure the text contrast** — the empty state has three short
+lines, but a live conversation puts paragraphs over the same backdrop.
+
+### 26.7 Gotcha: `cn()` and Tailwind class names
 
 Any hand-written CSS class composed through `cn()` **must not begin with a Tailwind
 utility prefix**. `cn()` runs tailwind-merge, which reads `bg-glow` as a

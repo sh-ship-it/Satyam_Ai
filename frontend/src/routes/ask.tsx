@@ -652,8 +652,8 @@ function Ask() {
               // value it washed the headline out completely.
               className={`pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
                 isEmpty
-                  ? "opacity-[0.34] dark:opacity-[0.13]"
-                  : "opacity-[0.10] dark:opacity-[0.05]"
+                  ? "opacity-[0.78] dark:opacity-[0.46]"
+                  : "opacity-[0.22] dark:opacity-[0.14]"
               }`}
             >
               {/*
@@ -667,7 +667,15 @@ function Ask() {
                 arc: the sphere's silhouette never meets the hard clip, it has
                 already faded out by then.
               */}
-              <Globe className="h-[130%] w-auto [mask-image:radial-gradient(circle_at_50%_50%,#000_30%,transparent_58%)]" />
+              {/*
+                The mask stop sits just past the sphere's own edge. Radial-gradient
+                percentages are along the gradient ray, and with `farthest-corner`
+                sizing 100% is about 1.41x the radius — so ~74% lands a little
+                outside the silhouette and takes the hard rim off without eating
+                into the landmass dots. Pushing it to 82% left the full disc edge
+                visible; pulling it to 58% faded most of the globe away.
+              */}
+              <Globe className="h-[130%] w-auto [mask-image:radial-gradient(circle_at_50%_50%,#000_46%,transparent_74%)]" />
             </div>
 
             <div ref={scrollRef} className="relative h-full overflow-y-auto">
