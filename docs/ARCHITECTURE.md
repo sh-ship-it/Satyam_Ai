@@ -608,11 +608,11 @@ The `BoardInner` overlay wrapper is `pointer-events: none` — only the toolbar 
 /about                Technical handbook — 5 chapters, LineSidebar rail (§27)
 /ask                  Dedicated chat surface — SSE stream, voice I/O, history rail
 /console              PS1: Chat + Results Canvas (resize divider, CaseDrawer)
+/forecast             PS8 + PS3 merged — Early warning · Risk surface · Trends · Patterns
+/trends               → 307 redirect to /forecast?tab=trends (see §14.5)
 /network              PS2: People / Financial Links / Rings (3 tabs)
-/trends               PS3: Overview / Time Series / MO Clusters / Seasonal
 /socio                PS4: Socio-Economic Dashboard
 /profile/:personId    PS5: Offender dossier
-/forecast             PS8: Early Warning + Forecast Risk Grid
 /reports              Report builder + PDF print
 /audit                Hash-chain audit log
 /transcripts          Conversations + Voice transcripts
@@ -680,6 +680,73 @@ the four duplicate `apiFetch` helpers in `intelligence.ts`, `financial.ts`,
 `dossier.ts` and `board.ts`.
 
 ---
+
+### 14.5 Trends merged into Forecast (PS3 + PS8)
+
+`/trends` was a separate screen. It asked the same question as `/forecast` from the
+other end of the same data — trend analysis is "where has this been", forecasting is
+"where is this going" — and an officer deciding where to place a patrol needs both at
+once. The two screens also duplicated a filter bar, a KPI idiom, a refresh control,
+three competing KPI treatments, two count-up hooks, four separate horizontal-bar
+implementations and five disagreeing colour schemes.
+
+`/forecast` is now four tabs, selectable via `?tab=`:
+
+| Tab | Content | Sources |
+|-----|---------|---------|
+| `warning` | Severity mix, alert cards, backtest validation | `/forecast/alerts`, `/forecast/backtest` |
+| `surface` | Geographic risk scatter, ranked highest-risk cells | `/forecast/hotspots` |
+| `trends` | Area+line time series, QoQ/YoY deltas, crime×period heatmap, top types and districts | `/trends` |
+| `patterns` | MO clusters (expandable, opens `CaseDrawer`), seasonal peaks | `/mo/clusters`, `/trends/seasonal` |
+
+**`/trends` is now a redirect**, not a deleted route:
+`beforeLoad: () => { throw redirect({ to: "/forecast", search: { tab: "trends" }, replace: true }) }`.
+Verified as `307 → /forecast?tab=trends`. It is the only redirect in the repo. The
+file is kept because `/trends` is still named by bookmarks and this document; the
+gesture ring and the voice manifest have been migrated.
+
+**Six sources settle independently.** The previous screen awaited three endpoints in
+one `Promise.all`, so a single failure blanked everything and every panel showed zero
+with no indication which request had died. Each source now settles on its own into
+`pending` / `failed` sets, so a dead endpoint degrades exactly one panel and names
+itself. Measured cold load: **~10-14s**, because the six endpoints take 3-6s each.
+
+**The load indicator is real.** The old "neural forecast engine" panel animated a
+four-stage pipeline (FIR intake → Features → Risk model → Risk surface) that was
+wired to nothing, so a slow load was indistinguishable from a broken screen — that is
+exactly what the "Acquiring signal… / 0 cells / 0 high risk" report was. `SourceStatus`
+reports `Loading n/6`, `All sources live`, or `n of 6 failed` with a Retry button.
+`pending` is seeded with all six keys, because an empty initial set makes the first
+paint claim every source is live before a single request has been made.
+
+**One severity scale.** `severityColor(level, palette)` is ordered
+green → yellow → orange → red from `--chart-down` / `--warning` / `--chart-2` /
+`--chart-up`. It replaces six `RISK_*` Tailwind maps, a `BAR_COLORS` gradient list,
+inline lift ternaries, a delta-card trio and direct `var(--main)` fills. The middle
+stop is `--warning` rather than a categorical series colour: an earlier revision used
+`--chart-6` (cyan) for Medium, which made Medium read as more urgent than High.
+
+**Honesty labels on this screen are deliberate.** There is no neural network:
+`risk_score` is a hand-tuned formula over incident density and a 30-vs-30-day lift,
+the `why` strings are templates, and the backend calls its own backtest a
+"data-driven pseudo-backtest". The screen therefore labels the PAI tile "heuristic,
+not a model", states on the risk surface that **the horizon control does not yet
+change the numbers** (`get_forecast_hotspots` accepts `horizon_days` and never uses
+it — the windows are fixed), and notes that MO clusters ignore the filters because
+`/mo/clusting` takes no parameters.
+
+**Voice.** `screen_agent.py` merged the `/trends` manifest into `/forecast`: the union
+of both keyword sets and `set_granularity` added to the seven existing actions. The
+`/trends` manifest entry and its `_rule_plan` branch are gone, with the
+week|month|quarter extraction folded into the `/forecast` branch. The frontend
+listener accepts actions addressed to **either** `/forecast` or `/trends`, so a stale
+plan still lands; `set_severity` opens the Early-warning tab and `set_granularity`
+opens the Trends tab. A `/forecast` entry was also added to `Shell.tsx`'s
+`SCREEN_ROUTES` (neither screen had one), placed above the `/console` "map" entry so
+"hotspot forecast" reaches Forecast, and deliberately claiming neither bare `hotspot`
+nor bare `predict` — `/ops-predictive` sits lower in that list and would be starved.
+
+`components/ModelInferenceTheater.tsx` is now unused by any route.
 
 ## 15. Bilingual Support — EN + KN
 

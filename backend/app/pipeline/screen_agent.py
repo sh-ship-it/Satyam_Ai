@@ -89,28 +89,28 @@ SCREEN_CAPABILITIES: dict[str, dict] = {
             "print": {"desc": "Print the report", "params": {}},
         },
     },
+    # Trends & MO Clustering used to be a separate "/trends" entry. That screen was
+    # folded into Early Warning & Forecast as its Trends and Patterns tabs, so the
+    # two manifests are merged here: one route, the union of both keyword sets, and
+    # set_granularity alongside the forecast actions. The frontend listener accepts
+    # actions addressed to either "/forecast" or "/trends", so a stale plan from a
+    # cached LLM response still lands.
     "/forecast": {
-        "name": "Early Warning & Forecast",
-        "keywords": ["forecast", "early warning", "predict", "risk grid", "hotspot forecast", "alerts"],
-        "kn": ["ಮುನ್ಸೂಚನೆ", "ಎಚ್ಚರಿಕೆ"],
+        "name": "Early Warning & Forecast (alerts, risk surface, trends, MO patterns)",
+        "keywords": [
+            "forecast", "early warning", "predict", "risk grid", "hotspot forecast", "alerts",
+            "trends", "patterns", "time series", "seasonal", "mo cluster", "modus",
+        ],
+        "kn": ["ಮುನ್ಸೂಚನೆ", "ಎಚ್ಚರಿಕೆ", "ಪ್ರವೃತ್ತಿ", "ಮಾದರಿ"],
         "actions": {
-            "set_crime_type": {"desc": "Filter forecast by crime type", "params": {"crime_type": "string"}},
-            "set_district": {"desc": "Filter forecast by district", "params": {"district": "string"}},
+            "set_crime_type": {"desc": "Filter by crime type", "params": {"crime_type": "string"}},
+            "set_district": {"desc": "Filter by district", "params": {"district": "string"}},
             "set_horizon": {"desc": "Set forecast horizon in days", "params": {"days": "3|7|14|30"}},
             "set_grid": {"desc": "Set grid resolution", "params": {"grid": "fine|med|coarse"}},
-            "set_severity": {"desc": "Filter alerts by risk level", "params": {"level": "All|Critical|High|Medium|Low"}},
-            "refresh": {"desc": "Reload forecast data", "params": {}},
+            "set_severity": {"desc": "Filter alerts by risk level (opens the Early warning tab)", "params": {"level": "All|Critical|High|Medium|Low"}},
+            "set_granularity": {"desc": "Set trend time granularity (opens the Trends tab)", "params": {"granularity": "week|month|quarter"}},
+            "refresh": {"desc": "Reload every data source", "params": {}},
             "toggle_auto": {"desc": "Toggle 60s auto-refresh", "params": {}},
-        },
-    },
-    "/trends": {
-        "name": "Trends & MO Clustering",
-        "keywords": ["trends", "patterns", "time series", "seasonal", "mo cluster", "modus"],
-        "kn": ["ಪ್ರವೃತ್ತಿ", "ಮಾದರಿ"],
-        "actions": {
-            "set_crime_type": {"desc": "Filter trends by crime type", "params": {"crime_type": "string"}},
-            "set_district": {"desc": "Filter trends by district", "params": {"district": "string"}},
-            "set_granularity": {"desc": "Set time granularity", "params": {"granularity": "week|month|quarter"}},
         },
     },
     "/board": {
@@ -603,6 +603,13 @@ def _rule_plan(command: str, current_route: Optional[str], lang: str) -> dict:
         if any(w in low for w in ("critical", "high", "medium", "low")):
             lvl = next(w for w in ("Critical", "High", "Medium", "Low") if w.lower() in low)
             actions.append({"screen": route, "action": "set_severity", "params": {"level": lvl}})
+        # Folded in from the old "/trends" branch when that screen became the Trends
+        # and Patterns tabs of this one. Without this, "show weekly trends" would
+        # route here and then do nothing.
+        for g in ("week", "month", "quarter"):
+            if g in low:
+                actions.append({"screen": route, "action": "set_granularity", "params": {"granularity": g}})
+                break
         if "refresh" in low or "reload" in low:
             actions.append({"screen": route, "action": "refresh", "params": {}})
 
@@ -629,16 +636,6 @@ def _rule_plan(command: str, current_route: Optional[str], lang: str) -> dict:
             val = _strip_to_value(text)
             if val:
                 actions.append({"screen": route, "action": "add_case", "params": {"query": val}})
-
-    elif route == "/trends":
-        if crime:
-            actions.append({"screen": route, "action": "set_crime_type", "params": {"crime_type": crime}})
-        if district:
-            actions.append({"screen": route, "action": "set_district", "params": {"district": district}})
-        for g in ("week", "month", "quarter"):
-            if g in low:
-                actions.append({"screen": route, "action": "set_granularity", "params": {"granularity": g}})
-                break
 
     elif route == "/board":
         if "generate" in low or "draw" in low or "create" in low or "scene" in low:

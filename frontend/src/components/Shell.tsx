@@ -26,6 +26,7 @@ import {
   Sparkles,
   LayoutDashboard,
   BarChart3,
+  Siren,
 } from "lucide-react";
 import { type ReactNode, useState, useEffect, useRef, useCallback } from "react";
 import { ThemePicker } from "./ThemePicker";
@@ -76,6 +77,17 @@ const SCREEN_ROUTES: VoiceScreen[] = [
   {
     to: "/console",
     words: /(console|dashboard|overview|crime intelligence|kpi|clearance)|ಕನ್ಸೋಲ್|ಡ್ಯಾಶ್‌ಬೋರ್ಡ್/i,
+  },
+  // MUST stay above the /console "map" entry below, so "hotspot forecast" reaches
+  // Forecast instead of Console. Deliberately does NOT claim bare "hotspot"
+  // (Console owns the map) or bare "predict" (/ops-predictive owns Predictive
+  // Deployment, and it sits further down this list so a claim here would steal
+  // every "predictive" command). Trends and Patterns words live here because
+  // /trends was folded into this screen.
+  {
+    to: "/forecast",
+    words:
+      /(forecast|early warning|risk grid|trends?|patterns?|seasonal|mo cluster|modus|time series)|ಮುನ್ಸೂಚನೆ|ಎಚ್ಚರಿಕೆ|ಪ್ರವೃತ್ತಿ|ಮಾದರಿ/i,
   },
   { to: "/console", words: /(map|hotspot|heat ?map|geospatial)|ನಕ್ಷೆ/i },
   // MUST stay above /network, which claims the singular word "graph" for link
@@ -1085,8 +1097,9 @@ export function Shell({ children }: { children: ReactNode }) {
     { to: "/console", icon: LayoutDashboard, label: t("Dashboard") },
     { to: "/graphs", icon: BarChart3, label: t("Graphs") },
     { to: "/network", icon: Network, label: t("Network") },
-    { to: "/forecast", icon: ShieldCheck, label: t("Forecast") },
-    { to: "/trends", icon: FileText, label: t("Trends") },
+    // Trends was folded into Forecast, so one entry covers both. `Siren` rather
+    // than `ShieldCheck` because that icon already means Audit in this rail.
+    { to: "/forecast", icon: Siren, label: t("Forecast") },
     { to: "/reports", icon: FileText, label: t("Reports") },
     { to: "/audit", icon: ShieldCheck, label: t("Audit") },
     { to: "/transcripts", icon: ClipboardList, label: t("Transcripts") },

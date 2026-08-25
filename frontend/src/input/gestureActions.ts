@@ -32,8 +32,10 @@ const MAP_ROUTES = new Set(["/console", "/ops-predictive", "/ops-dispatch"]);
 export const SCREEN_CYCLE: string[] = [
   "/console",
   "/network",
+  // "/trends" was removed here when it was folded into /forecast. Leaving it in
+  // would have put a redirect in the swipe ring, so a swipe onto it would bounce
+  // straight to /forecast and land the officer on the same screen twice.
   "/forecast",
-  "/trends",
   "/board",
   "/reports",
   "/audit",
@@ -88,7 +90,11 @@ export function computeGestureIntent(
     case "fist":
       return { kind: "history_back", label: L("Going back", "ಹಿಂದಕ್ಕೆ") };
     case "peace":
-      return { kind: "navigate", to: "/console", label: L("Opening Console", "ಕನ್ಸೋಲ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ") };
+      return {
+        kind: "navigate",
+        to: "/console",
+        label: L("Opening Console", "ಕನ್ಸೋಲ್ ತೆರೆಯಲಾಗುತ್ತಿದೆ"),
+      };
     case "three":
       return { kind: "toggle_warroom", label: L("War-room mode", "ವಾರ್-ರೂಮ್ ಮೋಡ್") };
 
@@ -96,13 +102,21 @@ export function computeGestureIntent(
       if (MAP_ROUTES.has(ctx.route))
         return { kind: "map_pan", dir: "right", label: L("Panning map", "ನಕ್ಷೆ ಸರಿಸಲಾಗುತ್ತಿದೆ") };
       if (ctx.route === "/board")
-        return { kind: "board_pan", dir: "right", label: L("Panning canvas", "ಕ್ಯಾನ್ವಾಸ್ ಸರಿಸಲಾಗುತ್ತಿದೆ") };
+        return {
+          kind: "board_pan",
+          dir: "right",
+          label: L("Panning canvas", "ಕ್ಯಾನ್ವಾಸ್ ಸರಿಸಲಾಗುತ್ತಿದೆ"),
+        };
       return { kind: "nav_cycle", dir: 1, label: L("Next screen", "ಮುಂದಿನ ಪರದೆ") };
     case "swipe_left":
       if (MAP_ROUTES.has(ctx.route))
         return { kind: "map_pan", dir: "left", label: L("Panning map", "ನಕ್ಷೆ ಸರಿಸಲಾಗುತ್ತಿದೆ") };
       if (ctx.route === "/board")
-        return { kind: "board_pan", dir: "left", label: L("Panning canvas", "ಕ್ಯಾನ್ವಾಸ್ ಸರಿಸಲಾಗುತ್ತಿದೆ") };
+        return {
+          kind: "board_pan",
+          dir: "left",
+          label: L("Panning canvas", "ಕ್ಯಾನ್ವಾಸ್ ಸರಿಸಲಾಗುತ್ತಿದೆ"),
+        };
       return { kind: "nav_cycle", dir: -1, label: L("Previous screen", "ಹಿಂದಿನ ಪರದೆ") };
     case "thumb_up":
       if (MAP_ROUTES.has(ctx.route))

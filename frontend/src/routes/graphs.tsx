@@ -37,7 +37,7 @@ import { Shell } from "@/components/Shell";
 import { ChartContainer } from "@/components/ui/chart";
 import { useI18n } from "@/lib/i18n";
 import { tData } from "@/lib/tData";
-import { cssColorToRgb } from "@/lib/utils";
+import { FALLBACK, useChartPalette, useMounted, type Palette } from "@/lib/chartPalette";
 import { api, getAuthToken } from "@/lib/api/client";
 import {
   dashboard,
@@ -72,123 +72,6 @@ export const Route = createFileRoute("/graphs")({
   }),
   component: GraphsScreen,
 });
-
-/* ────────────────────────────────────────────────────────────────────────────
- * Theme-resolved chart palette
- * ──────────────────────────────────────────────────────────────────────────── */
-
-const PALETTE_TOKENS = [
-  "--chart-1",
-  "--chart-2",
-  "--chart-3",
-  "--chart-4",
-  "--chart-5",
-  "--chart-6",
-  "--chart-muted",
-  "--chart-up",
-  "--chart-down",
-  "--border",
-  "--muted-foreground",
-] as const;
-
-type Palette = {
-  series: string[];
-  muted: string;
-  up: string;
-  down: string;
-  grid: string;
-  axis: string;
-};
-
-const FALLBACK: Palette = {
-  series: ["#4b83c4", "#e8871a", "#0f9d76", "#7c5cf0", "#d64550", "#0891b2"],
-  muted: "rgba(0,0,0,0.16)",
-  up: "#d64550",
-  down: "#0f9d76",
-  grid: "rgba(0,0,0,0.12)",
-  axis: "#6b7280",
-};
-
-/**
- * Resolve the `--chart-*` tokens to concrete `rgb()` strings.
- *
- * Recharts writes colours into SVG presentation attributes, and the tokens are
- * authored with `color-mix()` and `var()`, so handing the raw token text straight
- * to a `fill` prop is not reliable. Instead each token is resolved through a
- * throwaway probe element — `getComputedStyle().color` always returns a resolved
- * colour — and then normalised to sRGB bytes with the existing canvas-based
- * helper, which copes with `oklch`/`oklab` output.
- *
- * Re-resolved when the theme changes, so the charts follow the theme picker like
- * everything else on the screen.
- */
-function useChartPalette(): Palette {
-  const [palette, setPalette] = useState<Palette>(FALLBACK);
-
-  useEffect(() => {
-    const read = () => {
-      const probe = document.createElement("span");
-      probe.style.position = "absolute";
-      probe.style.visibility = "hidden";
-      probe.style.pointerEvents = "none";
-      document.body.appendChild(probe);
-
-      const resolved: Record<string, string> = {};
-      for (const token of PALETTE_TOKENS) {
-        probe.style.color = "";
-        probe.style.color = `var(${token})`;
-        const computed = getComputedStyle(probe).color;
-        const [r, g, b] = cssColorToRgb(computed, [0.4, 0.4, 0.4]);
-        // Alpha is dropped deliberately: --chart-muted is authored with
-        // transparency for use as a CSS background, but a semi-transparent SVG
-        // fill layered over gridlines reads as a different colour per chart.
-        resolved[token] =
-          `rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)})`;
-      }
-      probe.remove();
-
-      setPalette({
-        series: [
-          resolved["--chart-1"],
-          resolved["--chart-2"],
-          resolved["--chart-3"],
-          resolved["--chart-4"],
-          resolved["--chart-5"],
-          resolved["--chart-6"],
-        ],
-        muted: resolved["--chart-muted"],
-        up: resolved["--chart-up"],
-        down: resolved["--chart-down"],
-        grid: resolved["--border"],
-        axis: resolved["--muted-foreground"],
-      });
-    };
-
-    read();
-    const observer = new MutationObserver(read);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class", "data-theme", "style"],
-    });
-    return () => observer.disconnect();
-  }, []);
-
-  return palette;
-}
-
-/**
- * True only after the first client render.
- *
- * Recharts measures its container to lay out, so it renders nothing meaningful on
- * the server and the markup it produces after hydration does not match. This
- * route is server-rendered like every other, so the charts are held back until
- * the client has mounted and a skeleton is shown in the meantime.
- */
-function useMounted() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  return mounted;
-}
 
 /* ────────────────────────────────────────────────────────────────────────────
  * Layout primitives
