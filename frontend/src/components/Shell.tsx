@@ -25,6 +25,7 @@ import {
   CameraOff,
   Sparkles,
   LayoutDashboard,
+  BarChart3,
 } from "lucide-react";
 import { type ReactNode, useState, useEffect, useRef, useCallback } from "react";
 import { ThemePicker } from "./ThemePicker";
@@ -77,6 +78,16 @@ const SCREEN_ROUTES: VoiceScreen[] = [
     words: /(console|dashboard|overview|crime intelligence|kpi|clearance)|ಕನ್ಸೋಲ್|ಡ್ಯಾಶ್‌ಬೋರ್ಡ್/i,
   },
   { to: "/console", words: /(map|hotspot|heat ?map|geospatial)|ನಕ್ಷೆ/i },
+  // MUST stay above /network, which claims the singular word "graph" for link
+  // analysis. Only the plural "graphs" and "charts" are claimed here, plus the
+  // explicit "graph/chart screen", so "show me the network graph" still falls
+  // through to /network and /board keeps "link chart". Do not loosen `charts\b`
+  // to `charts?\b` — the singular would swallow /board's "link chart".
+  {
+    to: "/graphs",
+    words:
+      /(graphs\b|charts\b|chart screen|graph screen|graph view|visuali[sz]ations?)|ಗ್ರಾಫ್|ಚಾರ್ಟ್/i,
+  },
   { to: "/network", words: /(network|graph|ego|link analysis|connections?)|ನೆಟ್‌ವರ್ಕ್/i },
   { to: "/reports", words: /(report|reports|brief|dossier|pdf)|ವರದಿ/i },
   { to: "/audit", words: /(audit|compliance|chain|logs?)|ಆಡಿಟ್/i },
@@ -166,8 +177,10 @@ export function Shell({ children }: { children: ReactNode }) {
       const payload = JSON.parse(atob(tok.split(".")[1]));
       const cl = Number(payload.clearance ?? 0);
       const rank = String(payload.rank ?? payload.role ?? "");
-      setIsAdmin(cl >= 4 || ["admin","DGP","ADGP","IGP","SP"].includes(rank));
-    } catch { /* ignore */ }
+      setIsAdmin(cl >= 4 || ["admin", "DGP", "ADGP", "IGP", "SP"].includes(rank));
+    } catch {
+      /* ignore */
+    }
   }, []);
   const [listening, setListening] = useState(false);
   const [micActive, setMicActive] = useState(false);
@@ -197,10 +210,10 @@ export function Shell({ children }: { children: ReactNode }) {
     const cur = loadHandsFree();
     const next = cur.enabled
       ? { ...cur, enabled: false }
-      // Turning hands-free ON from the header enables the full experience —
-      // gestures + wake word — so "Satyam" works immediately without diving
-      // into Settings. Granular off-switches still live in Settings → Hands-free.
-      : { ...cur, enabled: true, gestures: true, wakeWord: true };
+      : // Turning hands-free ON from the header enables the full experience —
+        // gestures + wake word — so "Satyam" works immediately without diving
+        // into Settings. Granular off-switches still live in Settings → Hands-free.
+        { ...cur, enabled: true, gestures: true, wakeWord: true };
     saveHandsFree(next);
     setHandsFreeOn(next.enabled);
   }, []);
@@ -332,10 +345,16 @@ export function Shell({ children }: { children: ReactNode }) {
     const speakText = (text: string, speechLang: string, rate: number) => {
       // TASK 2A: resolve "auto" to detectLang(text); otherwise parse the BCP-47 locale.
       const lang: "en" | "kn" = resolveLang(speechLang, text);
-      void speakViaSarvam(text, lang, rate, {
-        onStart: () => setIsSpeaking(true),
-        onEnd: () => setIsSpeaking(false),
-      }, copilotVoiceProvider());
+      void speakViaSarvam(
+        text,
+        lang,
+        rate,
+        {
+          onStart: () => setIsSpeaking(true),
+          onEnd: () => setIsSpeaking(false),
+        },
+        copilotVoiceProvider(),
+      );
     };
 
     const NAV_LABEL: Record<string, string> = {
@@ -410,10 +429,16 @@ export function Shell({ children }: { children: ReactNode }) {
             return;
           }
           const spokenLang: "en" | "kn" = resolveLang(speechLang, toSpeak);
-          void speakViaSarvam(stripMarkdown(toSpeak), spokenLang, rate, {
-            onStart: () => aiState("speaking"),
-            onEnd: () => aiState("done"),
-          }, copilotVoiceProvider());
+          void speakViaSarvam(
+            stripMarkdown(toSpeak),
+            spokenLang,
+            rate,
+            {
+              onStart: () => aiState("speaking"),
+              onEnd: () => aiState("done"),
+            },
+            copilotVoiceProvider(),
+          );
         };
         void streamChat(
           {
@@ -457,10 +482,16 @@ export function Shell({ children }: { children: ReactNode }) {
         const sayConfirm = (text: string) => {
           if (!speak || !text) return;
           const sl: "en" | "kn" = resolveLang(spokenLocale, text);
-          void speakViaSarvam(stripMarkdown(text), sl, speechRate, {
-            onStart: () => setIsSpeaking(true),
-            onEnd: () => setIsSpeaking(false),
-          }, copilotVoiceProvider());
+          void speakViaSarvam(
+            stripMarkdown(text),
+            sl,
+            speechRate,
+            {
+              onStart: () => setIsSpeaking(true),
+              onEnd: () => setIsSpeaking(false),
+            },
+            copilotVoiceProvider(),
+          );
         };
         void planVoiceAction({
           command: question,
@@ -478,8 +509,7 @@ export function Shell({ children }: { children: ReactNode }) {
             const actions = (planRes.actions || []).filter(
               (a) => !(a.screen === "/console" && a.action === "ask"),
             );
-            const strippedConsoleAsk =
-              (planRes.actions || []).length > 0 && actions.length === 0;
+            const strippedConsoleAsk = (planRes.actions || []).length > 0 && actions.length === 0;
 
             // Pure data question, or the plan was only a console "ask", or it
             // targets the Console with nothing left to automate → answer in the
@@ -1053,6 +1083,7 @@ export function Shell({ children }: { children: ReactNode }) {
   const NAV = [
     { to: "/ask", icon: Sparkles, label: t("Ask Satyam") },
     { to: "/console", icon: LayoutDashboard, label: t("Dashboard") },
+    { to: "/graphs", icon: BarChart3, label: t("Graphs") },
     { to: "/network", icon: Network, label: t("Network") },
     { to: "/forecast", icon: ShieldCheck, label: t("Forecast") },
     { to: "/trends", icon: FileText, label: t("Trends") },
@@ -1092,7 +1123,11 @@ export function Shell({ children }: { children: ReactNode }) {
             aria-label={t("Hands-free camera")}
             title={handsFreeOn ? t("Hands-free: on") : t("Hands-free: off")}
           >
-            {handsFreeOn ? <Camera className="h-3.5 w-3.5" /> : <CameraOff className="h-3.5 w-3.5" />}
+            {handsFreeOn ? (
+              <Camera className="h-3.5 w-3.5" />
+            ) : (
+              <CameraOff className="h-3.5 w-3.5" />
+            )}
             <span className="hidden sm:inline">{t("Hands-free")}</span>
           </button>
           <ThemePicker />

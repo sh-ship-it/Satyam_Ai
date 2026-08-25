@@ -19,6 +19,7 @@ import { Route as OpsDispatchRouteImport } from './routes/ops-dispatch'
 import { Route as OpsCameraRouteImport } from './routes/ops-camera'
 import { Route as NetworkRouteImport } from './routes/network'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as GraphsRouteImport } from './routes/graphs'
 import { Route as ForecastRouteImport } from './routes/forecast'
 import { Route as DossierRouteImport } from './routes/dossier'
 import { Route as ConsoleRouteImport } from './routes/console'
@@ -78,6 +79,11 @@ const NetworkRoute = NetworkRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GraphsRoute = GraphsRouteImport.update({
+  id: '/graphs',
+  path: '/graphs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForecastRoute = ForecastRouteImport.update({
@@ -141,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/console': typeof ConsoleRoute
   '/dossier': typeof DossierRoute
   '/forecast': typeof ForecastRoute
+  '/graphs': typeof GraphsRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
   '/ops-camera': typeof OpsCameraRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByTo {
   '/console': typeof ConsoleRoute
   '/dossier': typeof DossierRoute
   '/forecast': typeof ForecastRoute
+  '/graphs': typeof GraphsRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
   '/ops-camera': typeof OpsCameraRoute
@@ -186,6 +194,7 @@ export interface FileRoutesById {
   '/console': typeof ConsoleRoute
   '/dossier': typeof DossierRoute
   '/forecast': typeof ForecastRoute
+  '/graphs': typeof GraphsRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
   '/ops-camera': typeof OpsCameraRoute
@@ -210,6 +219,7 @@ export interface FileRouteTypes {
     | '/console'
     | '/dossier'
     | '/forecast'
+    | '/graphs'
     | '/login'
     | '/network'
     | '/ops-camera'
@@ -232,6 +242,7 @@ export interface FileRouteTypes {
     | '/console'
     | '/dossier'
     | '/forecast'
+    | '/graphs'
     | '/login'
     | '/network'
     | '/ops-camera'
@@ -254,6 +265,7 @@ export interface FileRouteTypes {
     | '/console'
     | '/dossier'
     | '/forecast'
+    | '/graphs'
     | '/login'
     | '/network'
     | '/ops-camera'
@@ -277,6 +289,7 @@ export interface RootRouteChildren {
   ConsoleRoute: typeof ConsoleRoute
   DossierRoute: typeof DossierRoute
   ForecastRoute: typeof ForecastRoute
+  GraphsRoute: typeof GraphsRoute
   LoginRoute: typeof LoginRoute
   NetworkRoute: typeof NetworkRoute
   OpsCameraRoute: typeof OpsCameraRoute
@@ -362,6 +375,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/graphs': {
+      id: '/graphs'
+      path: '/graphs'
+      fullPath: '/graphs'
+      preLoaderRoute: typeof GraphsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/forecast': {
       id: '/forecast'
       path: '/forecast'
@@ -445,6 +465,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConsoleRoute: ConsoleRoute,
   DossierRoute: DossierRoute,
   ForecastRoute: ForecastRoute,
+  GraphsRoute: GraphsRoute,
   LoginRoute: LoginRoute,
   NetworkRoute: NetworkRoute,
   OpsCameraRoute: OpsCameraRoute,

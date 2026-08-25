@@ -1,9 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
   ArrowDown,
   ArrowUp,
+  ArrowUpRight,
   Download,
   Gauge,
   Hourglass,
@@ -385,6 +386,24 @@ function Console() {
                 title={t("FIR volume by year")}
                 icon={ListOrdered}
                 subtitle={t("Year-on-year change. Click a year to filter the whole dashboard.")}
+                right={
+                  // Hands the current scope over in the URL, so the Graphs screen
+                  // opens on the same slice the officer is already looking at
+                  // rather than resetting to all of Karnataka.
+                  <Link
+                    to="/graphs"
+                    search={{
+                      year: year ?? undefined,
+                      district: district || undefined,
+                      crime_type: crimeType || undefined,
+                    }}
+                    className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-border bg-card px-2 py-1 text-[10px] font-bold text-foreground transition hover:bg-muted"
+                    title={t("Open every chart for this scope")}
+                  >
+                    {t("See more")}
+                    <ArrowUpRight className="h-3 w-3" />
+                  </Link>
+                }
               >
                 <YearBars
                   rows={summary?.yearly ?? []}

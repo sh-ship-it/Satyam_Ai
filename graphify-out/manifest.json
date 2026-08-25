@@ -790,8 +790,8 @@
     "semantic_hash": ""
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1787607508.8091404,
-    "ast_hash": "79bc830c239dfe9afe2bd550880b1524",
+    "mtime": 1787670625.5703845,
+    "ast_hash": "237144bd509549bba50e07cd8071ab71",
     "semantic_hash": ""
   },
   "frontend/src/routes/README.md": {
@@ -1960,8 +1960,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/ask.tsx": {
-    "mtime": 1787602824.5563452,
-    "ast_hash": "7b2afadf2c8b1162e6719aaea770508a",
+    "mtime": 1787669287.1146364,
+    "ast_hash": "e98eb16b98b918d4666e92bf24078d01",
     "semantic_hash": ""
   },
   "backend/app/core/storage.py": {
@@ -2020,8 +2020,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Globe.tsx": {
-    "mtime": 1787605751.7566242,
-    "ast_hash": "0433b8dd2ab61895c64d6c481a850105",
+    "mtime": 1787669282.5227337,
+    "ast_hash": "be45ced9045fa384c4403c94129e884a",
     "semantic_hash": ""
   },
   "frontend/src/components/BorderGlow.tsx": {

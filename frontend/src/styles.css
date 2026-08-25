@@ -612,3 +612,50 @@ textarea {
   border-left-color: var(--main);
   color: var(--foreground);
 }
+
+/* ── Chart palette (routes/graphs.tsx) ────────────────────────────────────────
+ *
+ * Categorical series colours for the Graphs screen. `components/ui/chart.tsx` is
+ * the stock shadcn kit and expects `--chart-N`, which this project never defined,
+ * so the kit had nothing to colour with.
+ *
+ * Series 1 tracks the theme: it is `--main`, mixed toward `--foreground` in light
+ * mode for the same reason the border glow is (the default light `--main` is
+ * #91c5fd, pale enough on a near-white page to read as a smudge). Dark mode uses
+ * the token directly, where it is already high-contrast.
+ *
+ * Series 2-6 are deliberately NOT derived from the theme. Categorical series have
+ * to stay distinguishable from each other, and six hues rotated off one accent
+ * collapse into near-neighbours on at least a few of the thirteen themes. These
+ * are fixed mid-tones chosen to hold up on both the light and dark surfaces, and
+ * to remain separable for the common forms of colour blindness.
+ */
+:root {
+  --chart-1: color-mix(in oklab, var(--main) 82%, var(--foreground));
+  --chart-2: #e8871a;
+  --chart-3: #0f9d76;
+  --chart-4: #7c5cf0;
+  --chart-5: #d64550;
+  --chart-6: #0891b2;
+  /* Neutral fill for "everything else" slices and comparison baselines.
+   * Must be OPAQUE. The chart palette resolver drops alpha (a semi-transparent
+   * SVG fill over gridlines reads as a different colour in every chart), so a
+   * `color-mix(..., transparent)` here resolved to solid black and the "pending"
+   * segment of the stacked bar came out pitch black. */
+  --chart-muted: #c3c8d2;
+  /* Signed change: crime volume going down is good news, so down is green. */
+  --chart-up: #d64550;
+  --chart-down: #0f9d76;
+}
+
+.dark {
+  --chart-1: var(--main);
+  --chart-2: #f5a34a;
+  --chart-3: #34d3a6;
+  --chart-4: #a68bff;
+  --chart-5: #ff7a7d;
+  --chart-6: #38bdf8;
+  --chart-muted: #4b5364;
+  --chart-up: #ff7a7d;
+  --chart-down: #34d3a6;
+}
