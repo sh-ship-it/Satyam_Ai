@@ -17,6 +17,7 @@ import {
   Play,
   Radar,
   Truck,
+  Tv,
   Video,
   Fingerprint,
   Workflow,
@@ -101,6 +102,13 @@ const SCREEN_ROUTES: VoiceScreen[] = [
       /(graphs\b|charts\b|chart screen|graph screen|graph view|visuali[sz]ations?)|ಗ್ರಾಫ್|ಚಾರ್ಟ್/i,
   },
   { to: "/network", words: /(network|graph|ego|link analysis|connections?)|ನೆಟ್‌ವರ್ಕ್/i },
+  // MUST stay above /reports, which claims "report": "news report" would
+  // otherwise open the Report Builder instead of the news channels.
+  {
+    to: "/news",
+    words:
+      /(news feed|news channels?|news|live tv|tv channels?|watch tv|broadcast)|ಸುದ್ದಿ|ವಾರ್ತೆ|ಟಿವಿ|ಚಾನೆಲ್/i,
+  },
   { to: "/reports", words: /(report|reports|brief|dossier|pdf)|ವರದಿ/i },
   { to: "/audit", words: /(audit|compliance|chain|logs?)|ಆಡಿಟ್/i },
   { to: "/transcripts", words: /(transcripts?|recordings?)|ಪ್ರತಿಲೇಖನ/i },
@@ -378,6 +386,7 @@ export function Shell({ children }: { children: ReactNode }) {
       "/reports": t("Reports"),
       "/audit": t("Audit"),
       "/transcripts": t("Transcripts"),
+      "/news": t("News Feed"),
     };
 
     const handle = (detail: { text?: string; lang?: string; rate?: number; speak?: boolean }) => {
@@ -1103,6 +1112,8 @@ export function Shell({ children }: { children: ReactNode }) {
     { to: "/reports", icon: FileText, label: t("Reports") },
     { to: "/audit", icon: ShieldCheck, label: t("Audit") },
     { to: "/transcripts", icon: ClipboardList, label: t("Transcripts") },
+    // `Tv` rather than `Video`, which already means the Camera review screen.
+    { to: "/news", icon: Tv, label: t("News Feed") },
     { to: "/vision", icon: Globe2, label: t("Vision") },
     { to: "/ops-predictive", icon: Radar, label: t("Predictive") },
     { to: "/ops-dispatch", icon: Truck, label: t("Dispatch") },

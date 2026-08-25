@@ -17,6 +17,7 @@ import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as OpsPredictiveRouteImport } from './routes/ops-predictive'
 import { Route as OpsDispatchRouteImport } from './routes/ops-dispatch'
 import { Route as OpsCameraRouteImport } from './routes/ops-camera'
+import { Route as NewsRouteImport } from './routes/news'
 import { Route as NetworkRouteImport } from './routes/network'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GraphsRouteImport } from './routes/graphs'
@@ -69,6 +70,11 @@ const OpsDispatchRoute = OpsDispatchRouteImport.update({
 const OpsCameraRoute = OpsCameraRouteImport.update({
   id: '/ops-camera',
   path: '/ops-camera',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsRoute = NewsRouteImport.update({
+  id: '/news',
+  path: '/news',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NetworkRoute = NetworkRouteImport.update({
@@ -150,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/graphs': typeof GraphsRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
+  '/news': typeof NewsRoute
   '/ops-camera': typeof OpsCameraRoute
   '/ops-dispatch': typeof OpsDispatchRoute
   '/ops-predictive': typeof OpsPredictiveRoute
@@ -173,6 +180,7 @@ export interface FileRoutesByTo {
   '/graphs': typeof GraphsRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
+  '/news': typeof NewsRoute
   '/ops-camera': typeof OpsCameraRoute
   '/ops-dispatch': typeof OpsDispatchRoute
   '/ops-predictive': typeof OpsPredictiveRoute
@@ -197,6 +205,7 @@ export interface FileRoutesById {
   '/graphs': typeof GraphsRoute
   '/login': typeof LoginRoute
   '/network': typeof NetworkRoute
+  '/news': typeof NewsRoute
   '/ops-camera': typeof OpsCameraRoute
   '/ops-dispatch': typeof OpsDispatchRoute
   '/ops-predictive': typeof OpsPredictiveRoute
@@ -222,6 +231,7 @@ export interface FileRouteTypes {
     | '/graphs'
     | '/login'
     | '/network'
+    | '/news'
     | '/ops-camera'
     | '/ops-dispatch'
     | '/ops-predictive'
@@ -245,6 +255,7 @@ export interface FileRouteTypes {
     | '/graphs'
     | '/login'
     | '/network'
+    | '/news'
     | '/ops-camera'
     | '/ops-dispatch'
     | '/ops-predictive'
@@ -268,6 +279,7 @@ export interface FileRouteTypes {
     | '/graphs'
     | '/login'
     | '/network'
+    | '/news'
     | '/ops-camera'
     | '/ops-dispatch'
     | '/ops-predictive'
@@ -292,6 +304,7 @@ export interface RootRouteChildren {
   GraphsRoute: typeof GraphsRoute
   LoginRoute: typeof LoginRoute
   NetworkRoute: typeof NetworkRoute
+  NewsRoute: typeof NewsRoute
   OpsCameraRoute: typeof OpsCameraRoute
   OpsDispatchRoute: typeof OpsDispatchRoute
   OpsPredictiveRoute: typeof OpsPredictiveRoute
@@ -359,6 +372,13 @@ declare module '@tanstack/react-router' {
       path: '/ops-camera'
       fullPath: '/ops-camera'
       preLoaderRoute: typeof OpsCameraRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news': {
+      id: '/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/network': {
@@ -468,6 +488,7 @@ const rootRouteChildren: RootRouteChildren = {
   GraphsRoute: GraphsRoute,
   LoginRoute: LoginRoute,
   NetworkRoute: NetworkRoute,
+  NewsRoute: NewsRoute,
   OpsCameraRoute: OpsCameraRoute,
   OpsDispatchRoute: OpsDispatchRoute,
   OpsPredictiveRoute: OpsPredictiveRoute,

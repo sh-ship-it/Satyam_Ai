@@ -9,7 +9,7 @@ const DICT: Record<string, string> = {
   "TanStack Start (SSR)": "ಟ್ಯಾನ್‌ಸ್ಟ್ಯಾಕ್ ಸ್ಟಾರ್ಟ್ (SSR)",
   "TanStack Router": "ಟ್ಯಾನ್‌ಸ್ಟ್ಯಾಕ್ ರೂಟರ್",
   "Vite 7": "ವೈಟ್ 7",
-  "TypeScript": "ಟೈಪ್‌ಸ್ಕ್ರಿಪ್ಟ್",
+  TypeScript: "ಟೈಪ್‌ಸ್ಕ್ರಿಪ್ಟ್",
   "Bun Runtime": "ಬನ್ ರನ್‌ಟೈಮ್",
   "Tailwind CSS v4": "ಟೈಲ್‌ವಿಂಡ್ CSS v4",
   "React Flow (Canvas)": "ರಿಯಾಕ್ಟ್ ಫ್ಲೋ (ಕ್ಯಾನ್ವಾಸ್)",
@@ -24,7 +24,7 @@ const DICT: Record<string, string> = {
   "asyncpg (Driver)": "asyncpg (ಡ್ರೈವರ್)",
   "Pydantic v2 Schemas": "Pydantic v2 ಸ್ಕೀಮಾಗಳು",
   "httpx (Async Client)": "httpx (ಅಸಿಂಕ್ ಕ್ಲೈಂಟ್)",
-  "structlog": "structlog",
+  structlog: "structlog",
   "PostgreSQL 16/17": "PostgreSQL 16/17",
   "pgvector (halfvec/vector)": "pgvector (halfvec/vector)",
   "PostgreSQL 16 + pgvector": "PostgreSQL 16 + pgvector",
@@ -41,7 +41,7 @@ const DICT: Record<string, string> = {
   "bge-reranker-v2-m3": "bge-ರೀರ‍್ಯಾಂಕರ್-v2-m3",
   "YOLOv8s Weapon Detect": "YOLOv8s ಆಯುಧ ಪತ್ತೆ",
   "sentence-transformers": "ಸೆಂಟೆನ್ಸ್-ಟ್ರಾನ್ಸ್‌ಫಾರ್ಮರ್ಸ್",
-  "FlagEmbedding": "ಫ್ಲಾಗ್ ಎಂಬೆಡಿಂಗ್",
+  FlagEmbedding: "ಫ್ಲಾಗ್ ಎಂಬೆಡಿಂಗ್",
   "Sarvam Bulbul v3 (TTS)": "ಸರ್ವಮ್ ಬುಲ್‌ಬುಲ್ v3 (TTS)",
   "Sarvam Saaras v3 (STT)": "ಸರ್ವಮ್ ಸಾರಸ್ v3 (STT)",
   "Sarvam Mayura v1 (MT)": "ಸರ್ವಮ್ ಮಯೂರ v1 (MT)",
@@ -64,39 +64,49 @@ const DICT: Record<string, string> = {
   "engineered for evidence": "ಸಾಕ್ಷ್ಯಕ್ಕಾಗಿ ವಿನ್ಯಾಸಗೊಳಿಸಲಾಗಿದೆ",
   "Technology Stack": "ತಂತ್ರಜ್ಞಾನ ಸ್ಟಾಕ್",
   "AI Digital Forensics": "AI ಡಿಜಿಟಲ್ ಫೋರೆನ್ಸಿಕ್ಸ್",
-  "Theme": "ಥೀಮ್",
+  Theme: "ಥೀಮ್",
   "Color Themes": "ಬಣ್ಣದ ಥೀಮ್‌ಗಳು",
-  "Professional": "ವೃತ್ತಿಪರ",
+  Professional: "ವೃತ್ತಿಪರ",
   "Switch to Light Mode": "ಲೈಟ್ ಮೋಡ್‌ಗೆ ಬದಲಾಯಿಸಿ",
   "Switch to Dark Mode": "ಡಾರ್ಕ್ ಮೋಡ್‌ಗೆ ಬದಲಾಯಿಸಿ",
 
   // ── About Page Working Pipeline keys ────────────────────────────────────────
   "Query Ingest & STT": "ಪ್ರಶ್ನೆ ಸ್ವೀಕಾರ ಮತ್ತು STT",
-  "Capture typed queries or spoken voice in English or Kannada, utilizing Browser Web Speech or Sarvam Saaras v3 for high-fidelity transcription.": "ಬ್ರೌಸರ್ ವೆಬ್ ಸ್ಪೀಚ್ ಅಥವಾ ಸರ್ವಮ್ ಸಾರಸ್ v3 ಬಳಸಿ ಇಂಗ್ಲಿಷ್ ಅಥವಾ ಕನ್ನಡದಲ್ಲಿ ಟೈಪ್ ಮಾಡಿದ ಅಥವಾ ಮಾತನಾಡಿದ ಪ್ರಶ್ನೆಗಳನ್ನು ಸೆರೆಹಿಡಿಯಿರಿ.",
+  "Capture typed queries or spoken voice in English or Kannada, utilizing Browser Web Speech or Sarvam Saaras v3 for high-fidelity transcription.":
+    "ಬ್ರೌಸರ್ ವೆಬ್ ಸ್ಪೀಚ್ ಅಥವಾ ಸರ್ವಮ್ ಸಾರಸ್ v3 ಬಳಸಿ ಇಂಗ್ಲಿಷ್ ಅಥವಾ ಕನ್ನಡದಲ್ಲಿ ಟೈಪ್ ಮಾಡಿದ ಅಥವಾ ಮಾತನಾಡಿದ ಪ್ರಶ್ನೆಗಳನ್ನು ಸೆರೆಹಿಡಿಯಿರಿ.",
   "Intent Routing & Slots": "ಉದ್ದೇಶ ರೂಟಿಂಗ್ ಮತ್ತು ಸ್ಲಾಟ್‌ಗಳು",
-  "Classify the query's intent (e.g. SQL, RAG, Network, or Map) and extract contextual parameters from the conversation history.": "ಪ್ರಶ್ನೆಯ ಉದ್ದೇಶವನ್ನು (ಉದಾ. SQL, RAG, ನೆಟ್‌ವರ್ಕ್, ಅಥವಾ ನಕ್ಷೆ) ವರ್ಗೀಕರಿಸಿ ಮತ್ತು ಸಂಭಾಷಣೆಯ ಇತಿಹಾಸದಿಂದ ಸಂದರ್ಭೋಚಿತ ನಿಯತಾಂಕಗಳನ್ನು ಹೊರತೆಗೆಯಿರಿ.",
+  "Classify the query's intent (e.g. SQL, RAG, Network, or Map) and extract contextual parameters from the conversation history.":
+    "ಪ್ರಶ್ನೆಯ ಉದ್ದೇಶವನ್ನು (ಉದಾ. SQL, RAG, ನೆಟ್‌ವರ್ಕ್, ಅಥವಾ ನಕ್ಷೆ) ವರ್ಗೀಕರಿಸಿ ಮತ್ತು ಸಂಭಾಷಣೆಯ ಇತಿಹಾಸದಿಂದ ಸಂದರ್ಭೋಚಿತ ನಿಯತಾಂಕಗಳನ್ನು ಹೊರತೆಗೆಯಿರಿ.",
   "Grounded Processing": "ಆಧಾರಿತ ಪ್ರಕ್ರಿಯೆ",
-  "Run grounded retrieval: Text-to-SQL with progressive relaxation, pgvector semantic search (BGE-M3) over case narratives, or graph traversal.": "ಆಧಾರಿತ ಮರುಪಡೆಯುವಿಕೆಯನ್ನು ಚಲಾಯಿಸಿ: ಪ್ರೋಗ್ರಸ್ಸೀವ್ ರಿಲ್ಯಾಕ್ಸೇಷನ್‌ನೊಂದಿಗೆ ಟೆಕ್ಸ್ಟ್-ಟು-SQL, ಪ್ರಕರಣದ ನಿರೂಪಣೆಗಳ ಮೇಲೆ pgvector ಸೆಮ್ಯಾಂಟಿಕ್ ಹುಡುಕಾಟ (BGE-M3), ಅಥವಾ ಗ್ರಾಫ್ ಟ್ರಾವರ್ಸಲ್.",
+  "Run grounded retrieval: Text-to-SQL with progressive relaxation, pgvector semantic search (BGE-M3) over case narratives, or graph traversal.":
+    "ಆಧಾರಿತ ಮರುಪಡೆಯುವಿಕೆಯನ್ನು ಚಲಾಯಿಸಿ: ಪ್ರೋಗ್ರಸ್ಸೀವ್ ರಿಲ್ಯಾಕ್ಸೇಷನ್‌ನೊಂದಿಗೆ ಟೆಕ್ಸ್ಟ್-ಟು-SQL, ಪ್ರಕರಣದ ನಿರೂಪಣೆಗಳ ಮೇಲೆ pgvector ಸೆಮ್ಯಾಂಟಿಕ್ ಹುಡುಕಾಟ (BGE-M3), ಅಥವಾ ಗ್ರಾಫ್ ಟ್ರಾವರ್ಸಲ್.",
   "SQL Guard & Safety": "SQL ಗಾರ್ಡ್ ಮತ್ತು ಸುರಕ್ಷತೆ",
-  "Run the generated SQL through sqlglot to enforce a read-only, single SELECT statement restricted to a strict 6-table allow-list.": "ರಚಿಸಲಾದ SQL ಅನ್ನು sqlglot ಮೂಲಕ ಚಲಾಯಿಸಿ, ಕಟ್ಟುನಿಟ್ಟಾದ 6-ಕೋಷ್ಟಕಗಳ ಅನುಮತಿ ಪಟ್ಟಿಗೆ ಸೀಮಿತವಾದ ಏಕ SELECT ಹೇಳಿಕೆಯನ್ನು ಜಾರಿಗೊಳಿಸಿ.",
+  "Run the generated SQL through sqlglot to enforce a read-only, single SELECT statement restricted to a strict 6-table allow-list.":
+    "ರಚಿಸಲಾದ SQL ಅನ್ನು sqlglot ಮೂಲಕ ಚಲಾಯಿಸಿ, ಕಟ್ಟುನಿಟ್ಟಾದ 6-ಕೋಷ್ಟಕಗಳ ಅನುಮತಿ ಪಟ್ಟಿಗೆ ಸೀಮಿತವಾದ ಏಕ SELECT ಹೇಳಿಕೆಯನ್ನು ಜಾರಿಗೊಳಿಸಿ.",
   "Access Control (RLS)": "ಪ್ರವೇಶ ನಿಯಂತ್ರಣ (RLS)",
-  "Apply Row-Level Security at the Postgres engine level. Mask PII (L1-L4 clearance) and restrict rows based on the officer's KSP rank and station scope.": "ಪೋಸ್ಟ್‌ಗ್ರೆಸ್ ಎಂಜಿನ್ ಮಟ್ಟದಲ್ಲಿ ಸಾಲು-ಮಟ್ಟದ ಭದ್ರತೆಯನ್ನು ಅನ್ವಯಿಸಿ. ಅಧಿಕಾರಿಯ ಕೆಎಸ್‌ಪಿ ಶ್ರೇಣಿ ಮತ್ತು ಠಾಣೆಯ ವ್ಯಾಪ್ತಿಯ ಆಧಾರದ ಮೇಲೆ PII (L1-L4 ಕ್ಲಿಯರೆನ್ಸ್) ಅನ್ನು ಮಾಸ್ಕ್ ಮಾಡಿ ಮತ್ತು ಸಾಲುಗಳನ್ನು ನಿರ್ಬಂಧಿಸಿ.",
+  "Apply Row-Level Security at the Postgres engine level. Mask PII (L1-L4 clearance) and restrict rows based on the officer's KSP rank and station scope.":
+    "ಪೋಸ್ಟ್‌ಗ್ರೆಸ್ ಎಂಜಿನ್ ಮಟ್ಟದಲ್ಲಿ ಸಾಲು-ಮಟ್ಟದ ಭದ್ರತೆಯನ್ನು ಅನ್ವಯಿಸಿ. ಅಧಿಕಾರಿಯ ಕೆಎಸ್‌ಪಿ ಶ್ರೇಣಿ ಮತ್ತು ಠಾಣೆಯ ವ್ಯಾಪ್ತಿಯ ಆಧಾರದ ಮೇಲೆ PII (L1-L4 ಕ್ಲಿಯರೆನ್ಸ್) ಅನ್ನು ಮಾಸ್ಕ್ ಮಾಡಿ ಮತ್ತು ಸಾಲುಗಳನ್ನು ನಿರ್ಬಂಧಿಸಿ.",
   "Spoken Summary Synthesis": "ಮಾತನಾಡುವ ಸಾರಾಂಶದ ಸಂಶ್ಲೇಷಣೆ",
-  "Synthesize a cited answer in the requested language, and extract a concise 2-3 sentence spoken summary enclosed in a custom [SPEAK] block.": "ಕೋರಿದ ಭಾಷೆಯಲ್ಲಿ ಉಲ್ಲೇಖಿತ ಉತ್ತರವನ್ನು ಸಂಶ್ಲೇಷಿಸಿ, ಮತ್ತು ಕಸ್ಟಮ್ [SPEAK] ಬ್ಲಾಕ್‌ನಲ್ಲಿ ಅಡಕವಾಗಿರುವ ಸಂಕ್ಷಿಪ್ತ 2-3 ವಾಕ್ಯಗಳ ಮಾತನಾಡುವ ಸಾರಾಂಶವನ್ನು ಹೊರತೆಗೆಯಿರಿ.",
+  "Synthesize a cited answer in the requested language, and extract a concise 2-3 sentence spoken summary enclosed in a custom [SPEAK] block.":
+    "ಕೋರಿದ ಭಾಷೆಯಲ್ಲಿ ಉಲ್ಲೇಖಿತ ಉತ್ತರವನ್ನು ಸಂಶ್ಲೇಷಿಸಿ, ಮತ್ತು ಕಸ್ಟಮ್ [SPEAK] ಬ್ಲಾಕ್‌ನಲ್ಲಿ ಅಡಕವಾಗಿರುವ ಸಂಕ್ಷಿಪ್ತ 2-3 ವಾಕ್ಯಗಳ ಮಾತನಾಡುವ ಸಾರಾಂಶವನ್ನು ಹೊರತೆಗೆಯಿರಿ.",
   "SSE Stream & Hash Audit": "SSE ಸ್ಟ್ರೀಮ್ ಮತ್ತು ಹ್ಯಾಶ್ ಆಡಿಟ್",
-  "Stream the answer token-by-token over SSE, speak the summary via Sarvam Bulbul TTS, and record a SHA-256 hash-chained tamper-evident audit log.": "SSE ಮೂಲಕ ಉತ್ತರವನ್ನು ಟೋಕನ್-ಬೈ-ಟೋಕನ್ ಸ್ಟ್ರೀಮ್ ಮಾಡಿ, ಸರ್ವಮ್ ಬುಲ್‌ಬುಲ್ TTS ಮೂಲಕ ಸಾರಾಂಶವನ್ನು ಪ್ಲೇ ಮಾಡಿ, ಮತ್ತು SHA-256 ಹ್ಯಾಶ್-ಸರಣಿಯ ತಿರುಚುವಿಕೆ-ನಿರೋಧಕ ಆಡಿಟ್ ಲಾಗ್ ಅನ್ನು ರೆಕಾರ್ಡ್ ಮಾಡಿ.",
-  "End-to-end flow from natural-language query to a secure, cited, and audited response. Click any step to expand details.": "ನೈಸರ್ಗಿಕ ಭಾಷೆಯ ಪ್ರಶ್ನೆಯಿಂದ ಸುರಕ್ಷಿತ, ಉಲ್ಲೇಖಿತ ಮತ್ತು ಆಡಿಟ್ ಮಾಡಲಾದ ಉತ್ತರಕ್ಕೆ ಕೊನೆಯಿಂದ ಕೊನೆಯವರೆಗಿನ ಹರಿವು. ವಿವರಗಳನ್ನು ವಿಸ್ತರಿಸಲು ಯಾವುದೇ ಹಂತವನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ.",
+  "Stream the answer token-by-token over SSE, speak the summary via Sarvam Bulbul TTS, and record a SHA-256 hash-chained tamper-evident audit log.":
+    "SSE ಮೂಲಕ ಉತ್ತರವನ್ನು ಟೋಕನ್-ಬೈ-ಟೋಕನ್ ಸ್ಟ್ರೀಮ್ ಮಾಡಿ, ಸರ್ವಮ್ ಬುಲ್‌ಬುಲ್ TTS ಮೂಲಕ ಸಾರಾಂಶವನ್ನು ಪ್ಲೇ ಮಾಡಿ, ಮತ್ತು SHA-256 ಹ್ಯಾಶ್-ಸರಣಿಯ ತಿರುಚುವಿಕೆ-ನಿರೋಧಕ ಆಡಿಟ್ ಲಾಗ್ ಅನ್ನು ರೆಕಾರ್ಡ್ ಮಾಡಿ.",
+  "End-to-end flow from natural-language query to a secure, cited, and audited response. Click any step to expand details.":
+    "ನೈಸರ್ಗಿಕ ಭಾಷೆಯ ಪ್ರಶ್ನೆಯಿಂದ ಸುರಕ್ಷಿತ, ಉಲ್ಲೇಖಿತ ಮತ್ತು ಆಡಿಟ್ ಮಾಡಲಾದ ಉತ್ತರಕ್ಕೆ ಕೊನೆಯಿಂದ ಕೊನೆಯವರೆಗಿನ ಹರಿವು. ವಿವರಗಳನ್ನು ವಿಸ್ತರಿಸಲು ಯಾವುದೇ ಹಂತವನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ.",
 
   // ── About Page Blueprint keys ────────────────────────────────────────
-  "Architecture": "ಆರ್ಕಿಟೆಕ್ಚರ್",
+  Architecture: "ಆರ್ಕಿಟೆಕ್ಚರ್",
   "Under the hood": "ತಂತ್ರಜ್ಞಾನದ ಹಿನ್ನೆಲೆ",
-  "The complete toolset powering the Satyam platform.": "ಸತ್ಯಂ ವೇದಿಕೆಯನ್ನು ನಿಯಂತ್ರಿಸುವ ಸಂಪೂರ್ಣ ಟೂಲ್‌ಸೆಟ್.",
+  "The complete toolset powering the Satyam platform.":
+    "ಸತ್ಯಂ ವೇದಿಕೆಯನ್ನು ನಿಯಂತ್ರಿಸುವ ಸಂಪೂರ್ಣ ಟೂಲ್‌ಸೆಟ್.",
   "Bilingual Forensic System Blueprint": "ದ್ವಿಭಾಷಾ ಫೋರೆನ್ಸಿಕ್ ಸಿಸ್ಟಮ್ ನೀಲನಕ್ಷೆ",
   "Client Tier": "ಕ್ಲೈಂಟ್ ಹಂತ",
   "Officer's Browser Workspace": "ಅಧಿಕಾರಿಯ ಬ್ರೌಸರ್ ಕಾರ್ಯಕ್ಷೇತ್ರ",
   "Application Tier": "ಅಪ್ಲಿಕೇಶನ್ ಹಂತ",
   "FastAPI Async Backend": "FastAPI ಅಸಿಂಕ್ ಬ್ಯಾಕೆಂಡ್",
-  "Intents Router • Progressive NL→SQL • SSE Spoken Summary • RLS Enforcement": "ಇಂಟೆಂಟ್ಸ್ ರೂಟರ್ • ಪ್ರೋಗ್ರೆಸ್ಸಿವ್ NL→SQL • SSE ಸ್ಪೋಕನ್ ಸಾರಾಂಶ • RLS ಜಾರಿ",
+  "Intents Router • Progressive NL→SQL • SSE Spoken Summary • RLS Enforcement":
+    "ಇಂಟೆಂಟ್ಸ್ ರೂಟರ್ • ಪ್ರೋಗ್ರೆಸ್ಸಿವ್ NL→SQL • SSE ಸ್ಪೋಕನ್ ಸಾರಾಂಶ • RLS ಜಾರಿ",
   "Data Tier": "ಡೇಟಾ ಹಂತ",
   "Secure Storage": "ಸುರಕ್ಷಿತ ಸಂಗ್ರಹಣೆ",
   "Row-Level Security (RLS)": "ಸಾಲು-ಮಟ್ಟದ ಭದ್ರತೆ (RLS)",
@@ -109,24 +119,33 @@ const DICT: Record<string, string> = {
   "Local BGE-M3 Embedder": "ಸ್ಥಳೀಯ BGE-M3 ಎಂಬೆಡರ್",
   "Subprocess YOLOv8s": "ಸಬ್‌ಪ್ರೊಸೆಸ್ YOLOv8s",
   "Grounded Text-to-SQL Pipeline": "ಗ್ರೌಂಡೆಡ್ ಟೆಕ್ಸ್ಟ್-ಟು-SQL ಪೈಪ್‌ಲೈನ್",
-  "How plain-text English/Kannada questions are translated into secure database queries.": "ಸರಳ-ಪಠ್ಯ ಇಂಗ್ಲಿಷ್/ಕನ್ನಡ ಪ್ರಶ್ನೆಗಳನ್ನು ಸುರಕ್ಷಿತ ಡೇಟಾಬೇಸ್ ಪ್ರಶ್ನೆಗಳಾಗಿ ಹೇಗೆ ಅನುವಾದಿಸಲಾಗುತ್ತದೆ.",
+  "How plain-text English/Kannada questions are translated into secure database queries.":
+    "ಸರಳ-ಪಠ್ಯ ಇಂಗ್ಲಿಷ್/ಕನ್ನಡ ಪ್ರಶ್ನೆಗಳನ್ನು ಸುರಕ್ಷಿತ ಡೇಟಾಬೇಸ್ ಪ್ರಶ್ನೆಗಳಾಗಿ ಹೇಗೆ ಅನುವಾದಿಸಲಾಗುತ್ತದೆ.",
   "Natural Language Query": "ನೈಸರ್ಗಿಕ ಭಾಷೆಯ ಪ್ರಶ್ನೆ",
   "Show me vehicle thefts in Mysuru this year": "ಈ ವರ್ಷ ಮೈಸೂರಿನಲ್ಲಿ ವಾಹನ ಕಳ್ಳತನಗಳನ್ನು ತೋರಿಸಿ",
   "Conversational memory + Broadening": "ಸಂಭಾಷಣೆಯ ಮೆಮೊರಿ + ಬ್ರಾಡ್ನಿಂಗ್",
-  "Merges last 6 turns. If 0 rows return, relax filters (relax=0..3).": "ಕಳೆದ 6 ತಿರುವುಗಳನ್ನು ವಿಲೀನಗೊಳಿಸುತ್ತದೆ. 0 ಸಾಲುಗಳು ಮರಳಿದರೆ, ಫಿಲ್ಟರ್‌ಗಳನ್ನು ಸಡಿಲಗೊಳಿಸಿ (relax=0..3).",
+  "Merges last 6 turns. If 0 rows return, relax filters (relax=0..3).":
+    "ಕಳೆದ 6 ತಿರುವುಗಳನ್ನು ವಿಲೀನಗೊಳಿಸುತ್ತದೆ. 0 ಸಾಲುಗಳು ಮರಳಿದರೆ, ಫಿಲ್ಟರ್‌ಗಳನ್ನು ಸಡಿಲಗೊಳಿಸಿ (relax=0..3).",
   "sqlglot Security Guard": "sqlglot ಭದ್ರತಾ ಕಾವಲುಗಾರ",
-  "Validates single SELECT, restricts to 6-table allow-list, forces auto-LIMIT.": "ಏಕ SELECT ಅನ್ನು ಮೌಲ್ಯೀಕರಿಸುತ್ತದೆ, 6-ಕೋಷ್ಟಕಗಳ ಅನುಮತಿ ಪಟ್ಟಿಗೆ ನಿರ್ಬಂಧಿಸುತ್ತದೆ, ಸ್ವಯಂ-LIMIT ಅನ್ನು ಒತ್ತಾಯಿಸುತ್ತದೆ.",
-  "Restricts rows at the PG engine level via GUC session claims.": "GUC ಸೆಷನ್ ಕ್ಲೈಮ್‌ಗಳ ಮೂಲಕ PG ಎಂಜಿನ್ ಮಟ್ಟದಲ್ಲಿ ಸಾಲುಗಳನ್ನು ನಿರ್ಬಂಧಿಸುತ್ತದೆ.",
+  "Validates single SELECT, restricts to 6-table allow-list, forces auto-LIMIT.":
+    "ಏಕ SELECT ಅನ್ನು ಮೌಲ್ಯೀಕರಿಸುತ್ತದೆ, 6-ಕೋಷ್ಟಕಗಳ ಅನುಮತಿ ಪಟ್ಟಿಗೆ ನಿರ್ಬಂಧಿಸುತ್ತದೆ, ಸ್ವಯಂ-LIMIT ಅನ್ನು ಒತ್ತಾಯಿಸುತ್ತದೆ.",
+  "Restricts rows at the PG engine level via GUC session claims.":
+    "GUC ಸೆಷನ್ ಕ್ಲೈಮ್‌ಗಳ ಮೂಲಕ PG ಎಂಜಿನ್ ಮಟ್ಟದಲ್ಲಿ ಸಾಲುಗಳನ್ನು ನಿರ್ಬಂಧಿಸುತ್ತದೆ.",
   "Bilingual STT/TTS Pipeline": "ದ್ವಿಭಾಷಾ STT/TTS ಪೈಪ್‌ಲೈನ್",
-  "Bilingual voice processing with automatic language detection and spoken summaries.": "ಸ್ವಯಂಚಾಲಿತ ಭಾಷಾ ಪತ್ತೆ ಮತ್ತು ಮಾತನಾಡುವ ಸಾರಾಂಶಗಳೊಂದಿಗೆ ದ್ವಿಭಾಷಾ ಧ್ವನಿ ಪ್ರಕ್ರಿಯೆ.",
+  "Bilingual voice processing with automatic language detection and spoken summaries.":
+    "ಸ್ವಯಂಚಾಲಿತ ಭಾಷಾ ಪತ್ತೆ ಮತ್ತು ಮಾತನಾಡುವ ಸಾರಾಂಶಗಳೊಂದಿಗೆ ದ್ವಿಭಾಷಾ ಧ್ವನಿ ಪ್ರಕ್ರಿಯೆ.",
   "Speech Ingest & Transcription": "ಧ್ವನಿ ಸ್ವೀಕಾರ ಮತ್ತು ಪ್ರತಿಲಿಪಿ",
-  "Capture mic, transcribe via Browser Web Speech or Sarvam Saaras v3.": "ಮೈಕ್ ಅನ್ನು ಸೆರೆಹಿಡಿಯಿರಿ, ಬ್ರೌಸರ್ ವೆಬ್ ಸ್ಪೀಚ್ ಅಥವಾ ಸರ್ವಮ್ ಸಾರಸ್ v3 ಮೂಲಕ ಪ್ರತಿಲಿಪಿ ಮಾಡಿ.",
+  "Capture mic, transcribe via Browser Web Speech or Sarvam Saaras v3.":
+    "ಮೈಕ್ ಅನ್ನು ಸೆರೆಹಿಡಿಯಿರಿ, ಬ್ರೌಸರ್ ವೆಬ್ ಸ್ಪೀಚ್ ಅಥವಾ ಸರ್ವಮ್ ಸಾರಸ್ v3 ಮೂಲಕ ಪ್ರತಿಲಿಪಿ ಮಾಡಿ.",
   "Voice Screen Command Router": "ಧ್ವನಿ ಪರದೆ ಆಜ್ಞೆಯ ರೂಟರ್",
-  "Extracts navigation intents (e.g., \"open network\") or directs query to chat.": "ನ್ಯಾವಿಗೇಷನ್ ಉದ್ದೇಶಗಳನ್ನು ಹೊರತೆಗೆಯುತ್ತದೆ (ಉದಾ., \"ನೆಟ್‌ವರ್ಕ್ ತೆರೆಯಿರಿ\") ಅಥವಾ ಪ್ರಶ್ನೆಯನ್ನು ಚಾಟ್‌ಗೆ ನಿರ್ದೇಶಿಸುತ್ತದೆ.",
+  'Extracts navigation intents (e.g., "open network") or directs query to chat.':
+    'ನ್ಯಾವಿಗೇಷನ್ ಉದ್ದೇಶಗಳನ್ನು ಹೊರತೆಗೆಯುತ್ತದೆ (ಉದಾ., "ನೆಟ್‌ವರ್ಕ್ ತೆರೆಯಿರಿ") ಅಥವಾ ಪ್ರಶ್ನೆಯನ್ನು ಚಾಟ್‌ಗೆ ನಿರ್ದೇಶಿಸುತ್ತದೆ.',
   "Spoken Summary Generation": "ಮಾತನಾಡುವ ಸಾರಾಂಶದ ರಚನೆ",
-  "LLM outputs a 2-3 sentence [SPEAK] block, or backend builds it from rows.": "LLM 2-3 ವಾಕ್ಯಗಳ [SPEAK] ಬ್ಲಾಕ್ ಅನ್ನು ಔಟ್‌ಪುಟ್ ಮಾಡುತ್ತದೆ, ಅಥವಾ ಬ್ಯಾಕೆಂಡ್ ಅದನ್ನು ಸಾಲುಗಳಿಂದ ನಿರ್ಮಿಸುತ್ತದೆ.",
+  "LLM outputs a 2-3 sentence [SPEAK] block, or backend builds it from rows.":
+    "LLM 2-3 ವಾಕ್ಯಗಳ [SPEAK] ಬ್ಲಾಕ್ ಅನ್ನು ಔಟ್‌ಪುಟ್ ಮಾಡುತ್ತದೆ, ಅಥವಾ ಬ್ಯಾಕೆಂಡ್ ಅದನ್ನು ಸಾಲುಗಳಿಂದ ನಿರ್ಮಿಸುತ್ತದೆ.",
   "SSE Stream & Neural Speech": "SSE ಸ್ಟ್ರೀಮ್ ಮತ್ತು ನ್ಯೂರಲ್ ಸ್ಪೀಚ್",
-  "Streams speak event separate from UI table. Plays via Bulbul v3 TTS.": "UI ಕೋಷ್ಟಕದಿಂದ ಪ್ರತ್ಯೇಕವಾಗಿ ಮಾತನಾಡುವ ಈವೆಂಟ್ ಅನ್ನು ಸ್ಟ್ರೀಮ್ ಮಾಡುತ್ತದೆ. ಬುಲ್‌ಬುಲ್ v3 TTS ಮೂಲಕ ಪ್ಲೇ ಮಾಡುತ್ತದೆ.",
+  "Streams speak event separate from UI table. Plays via Bulbul v3 TTS.":
+    "UI ಕೋಷ್ಟಕದಿಂದ ಪ್ರತ್ಯೇಕವಾಗಿ ಮಾತನಾಡುವ ಈವೆಂಟ್ ಅನ್ನು ಸ್ಟ್ರೀಮ್ ಮಾಡುತ್ತದೆ. ಬುಲ್‌ಬುಲ್ v3 TTS ಮೂಲಕ ಪ್ಲೇ ಮಾಡುತ್ತದೆ.",
   "Frontend Core": "ಫ್ರಂಟ್‌ಎಂಡ್ ಕೋರ್",
   "UI & Visualization": "UI ಮತ್ತು ದೃಶ್ಯೀಕರಣ",
   "Backend & Server": "ಬ್ಯಾಕೆಂಡ್ ಮತ್ತು ಸರ್ವರ್",
@@ -137,98 +156,127 @@ const DICT: Record<string, string> = {
   "DevOps & Infra": "DevOps ಮತ್ತು ಇನ್ಫ್ರಾ",
 
   // ── Landing & About Page translations ────────────────────────────────────────
-  "Product": "ಉತ್ಪನ್ನ",
-  "Support": "ಬೆಂಬಲ",
-  "Contact": "ಸಂಪರ್ಕ",
+  Product: "ಉತ್ಪನ್ನ",
+  Support: "ಬೆಂಬಲ",
+  Contact: "ಸಂಪರ್ಕ",
   "Network Graph": "ನೆಟ್‌ವರ್ಕ್ ಗ್ರಾಫ್",
   "Help Center": "ಸಹಾಯ ಕೇಂದ್ರ",
   "Contact Us": "ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ",
   "Privacy Policy": "ಗೌಪ್ಯತಾ ನೀತಿ",
   "Terms of Service": "ಸೇವಾ ನಿಯಮಗಳು",
-  "An investigator-grade platform unifying evidence triage, link analysis, geospatial intelligence, and court-ready reporting.": "ಸಾಕ್ಷ್ಯ ಸಂಗ್ರಹಣೆ, ಲಿಂಕ್ ವಿಶ್ಲೇಷಣೆ, ಭೂಸ್ಥಳೀಯ ಗುಪ್ತಚರ ಮತ್ತು ನ್ಯಾಯಾಲಯಕ್ಕೆ ಸಿದ್ಧ ವರದಿಗಾರಿಕೆಯನ್ನು ಏಕೀಕರಿಸುವ ತನಿಖಾಧಿಕಾರಿ-ದರ್ಜೆಯ ವೇದಿಕೆ.",
+  "An investigator-grade platform unifying evidence triage, link analysis, geospatial intelligence, and court-ready reporting.":
+    "ಸಾಕ್ಷ್ಯ ಸಂಗ್ರಹಣೆ, ಲಿಂಕ್ ವಿಶ್ಲೇಷಣೆ, ಭೂಸ್ಥಳೀಯ ಗುಪ್ತಚರ ಮತ್ತು ನ್ಯಾಯಾಲಯಕ್ಕೆ ಸಿದ್ಧ ವರದಿಗಾರಿಕೆಯನ್ನು ಏಕೀಕರಿಸುವ ತನಿಖಾಧಿಕಾರಿ-ದರ್ಜೆಯ ವೇದಿಕೆ.",
   "Network & Rings": "ನೆಟ್‌ವರ್ಕ್ ಮತ್ತು ರಿಂಗ್‌ಗಳು",
-  "Built for investigators, engineered for evidence": "ತನಿಖಾಧಿಕಾರಿಗಳಿಗಾಗಿ ನಿರ್ಮಿಸಲಾಗಿದೆ, ಸಾಕ್ಷ್ಯಕ್ಕಾಗಿ ವಿನ್ಯಾಸಗೊಳಿಸಲಾಗಿದೆ",
-  "Build interactive network graphs and plot movements on a tactical heatmap with a time-slider.": "ಸಂವಾದಾತ್ಮಕ ನೆಟ್‌ವರ್ಕ್ ಗ್ರಾಫ್‌ಗಳನ್ನು ನಿರ್ಮಿಸಿ ಮತ್ತು ಟೈಮ್-ಸ್ಲೈಡರ್‌ನೊಂದಿಗೆ ಯುದ್ಧತಂತ್ರದ ಹೀಟ್‌ಮ್ಯಾಪ್‌ನಲ್ಲಿ ಚಲನೆಗಳನ್ನು ಗುರುತಿಸಿ.",
+  "Built for investigators, engineered for evidence":
+    "ತನಿಖಾಧಿಕಾರಿಗಳಿಗಾಗಿ ನಿರ್ಮಿಸಲಾಗಿದೆ, ಸಾಕ್ಷ್ಯಕ್ಕಾಗಿ ವಿನ್ಯಾಸಗೊಳಿಸಲಾಗಿದೆ",
+  "Build interactive network graphs and plot movements on a tactical heatmap with a time-slider.":
+    "ಸಂವಾದಾತ್ಮಕ ನೆಟ್‌ವರ್ಕ್ ಗ್ರಾಫ್‌ಗಳನ್ನು ನಿರ್ಮಿಸಿ ಮತ್ತು ಟೈಮ್-ಸ್ಲೈಡರ್‌ನೊಂದಿಗೆ ಯುದ್ಧತಂತ್ರದ ಹೀಟ್‌ಮ್ಯಾಪ್‌ನಲ್ಲಿ ಚಲನೆಗಳನ್ನು ಗುರುತಿಸಿ.",
   "Grounded Text-to-SQL": "ಗ್ರೌಂಡೆಡ್ ಟೆಕ್ಸ್ಟ್-ಟು-SQL",
-  "Generate signed, exhibit-numbered PDFs with full provenance, timeline, and citations.": "ಪೂರ್ಣ ಮೂಲ, ಟೈಮ್‌ಲೈನ್ ಮತ್ತು ಉಲ್ಲೇಖಗಳೊಂದಿಗೆ ಸಹಿ ಮಾಡಿದ, ಪ್ರದರ್ಶನ ಸಂಖ್ಯೆಯ PDF ಗಳನ್ನು ರಚಿಸಿ.",
+  "Generate signed, exhibit-numbered PDFs with full provenance, timeline, and citations.":
+    "ಪೂರ್ಣ ಮೂಲ, ಟೈಮ್‌ಲೈನ್ ಮತ್ತು ಉಲ್ಲೇಖಗಳೊಂದಿಗೆ ಸಹಿ ಮಾಡಿದ, ಪ್ರದರ್ಶನ ಸಂಖ್ಯೆಯ PDF ಗಳನ್ನು ರಚಿಸಿ.",
   "Hash & Custody": "ಹ್ಯಾಶ್ ಮತ್ತು ಕಸ್ಟಡಿ",
-  "Every query is written to a SHA-256 hash-chained audit log, with four-tier PII masking and L1–L4 clearance enforced at every layer.": "ಪ್ರತಿ ಪ್ರಶ್ನೆಯನ್ನು SHA-256 ಹ್ಯಾಶ್-ಸರಣಿಯ ಆಡಿಟ್ ಲಾಗ್‌ಗೆ ಬರೆಯಲಾಗುತ್ತದೆ, ನಾಲ್ಕು-ಹಂತದ PII ಮಾಸ್ಕಿಂಗ್ ಮತ್ತು L1–L4 ಅನುಮತಿಯನ್ನು ಪ್ರತಿ ಹಂತದಲ್ಲಿ ಜಾರಿಗೊಳಿಸಲಾಗುತ್ತದೆ.",
+  "Every query is written to a SHA-256 hash-chained audit log, with four-tier PII masking and L1–L4 clearance enforced at every layer.":
+    "ಪ್ರತಿ ಪ್ರಶ್ನೆಯನ್ನು SHA-256 ಹ್ಯಾಶ್-ಸರಣಿಯ ಆಡಿಟ್ ಲಾಗ್‌ಗೆ ಬರೆಯಲಾಗುತ್ತದೆ, ನಾಲ್ಕು-ಹಂತದ PII ಮಾಸ್ಕಿಂಗ್ ಮತ್ತು L1–L4 ಅನುಮತಿಯನ್ನು ಪ್ರತಿ ಹಂತದಲ್ಲಿ ಜಾರಿಗೊಳಿಸಲಾಗುತ್ತದೆ.",
   "Built to stay ahead of the curve": "ಪ್ರಗತಿಯಲ್ಲಿ ಮುಂಚೂಣಿಯಲ್ಲಿರಲು ನಿರ್ಮಿಸಲಾಗಿದೆ",
-  "Classify, deduplicate, and rank artifacts by investigative relevance using on-demand AI models.": "ಬೇಡಿಕೆಯ AI ಮಾದರಿಗಳನ್ನು ಬಳಸಿಕೊಂಡು ತನಿಖಾ ಸಂಬಂಧಿತತೆಯ ಆಧಾರದ ಮೇಲೆ ಕಲಾಕೃತಿಗಳನ್ನು ವರ್ಗೀಕರಿಸಿ, ನಕಲು ತೆಗೆದುಹಾಕಿ ಮತ್ತು ಶ್ರೇಣೀಕರಿಸಿ.",
-  "Workflow": "ಕಾರ್ಯವಿಧಾನ",
+  "Classify, deduplicate, and rank artifacts by investigative relevance using on-demand AI models.":
+    "ಬೇಡಿಕೆಯ AI ಮಾದರಿಗಳನ್ನು ಬಳಸಿಕೊಂಡು ತನಿಖಾ ಸಂಬಂಧಿತತೆಯ ಆಧಾರದ ಮೇಲೆ ಕಲಾಕೃತಿಗಳನ್ನು ವರ್ಗೀಕರಿಸಿ, ನಕಲು ತೆಗೆದುಹಾಕಿ ಮತ್ತು ಶ್ರೇಣೀಕರಿಸಿ.",
+  Workflow: "ಕಾರ್ಯವಿಧಾನ",
   "Court-Ready Reports": "ನ್ಯಾಯಾಲಯಕ್ಕೆ ಸಿದ್ಧ ವರದಿಗಳು",
   "Hide details": "ವಿವರಗಳನ್ನು ಮರೆಮಾಡಿ",
   "Investigation Console": "ತನಿಖಾ ಕನ್ಸೋಲ್",
   "System Architecture & Data Flows": "ಸಿಸ್ಟಮ್ ಆರ್ಕಿಟೆಕ್ಚರ್ ಮತ್ತು ಡೇಟಾ ಹರಿವುಗಳು",
-  "Capabilities": "ಸಾಮರ್ಥ್ಯಗಳು",
+  Capabilities: "ಸಾಮರ್ಥ್ಯಗಳು",
   "View details": "ವಿವರಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
-  "Surface hidden links between people, places and cases, expand ego-networks, and auto-detect criminal rings on an interactive graph.": "ವ್ಯಕ್ತಿಗಳು, ಸ್ಥಳಗಳು ಮತ್ತು ಪ್ರಕರಣಗಳ ನಡುವಿನ ಗುಪ್ತ ಸಂಪರ್ಕಗಳನ್ನು ಹೊರತೆಗೆಯಿರಿ, ಅಹಂ-ನೆಟ್‌ವರ್ಕ್‌ಗಳನ್ನು ವಿಸ್ತರಿಸಿ ಮತ್ತು ಸಂವಾದಾತ್ಮಕ ಗ್ರಾಫ್‌ನಲ್ಲಿ ಕ್ರಿಮಿನಲ್ ರಿಂಗ್‌ಗಳನ್ನು ಸ್ವಯಂ-ಪತ್ತೆ ಮಾಡಿ.",
+  "Surface hidden links between people, places and cases, expand ego-networks, and auto-detect criminal rings on an interactive graph.":
+    "ವ್ಯಕ್ತಿಗಳು, ಸ್ಥಳಗಳು ಮತ್ತು ಪ್ರಕರಣಗಳ ನಡುವಿನ ಗುಪ್ತ ಸಂಪರ್ಕಗಳನ್ನು ಹೊರತೆಗೆಯಿರಿ, ಅಹಂ-ನೆಟ್‌ವರ್ಕ್‌ಗಳನ್ನು ವಿಸ್ತರಿಸಿ ಮತ್ತು ಸಂವಾದಾತ್ಮಕ ಗ್ರಾಫ್‌ನಲ್ಲಿ ಕ್ರಿಮಿನಲ್ ರಿಂಗ್‌ಗಳನ್ನು ಸ್ವಯಂ-ಪತ್ತೆ ಮಾಡಿ.",
   "Entity Extraction": "ಎಂಟಿಟಿ ಹೊರತೆಗೆಯುವಿಕೆ",
-  "Ask in Kannada or English. Satyam runs grounded Text-to-SQL and RAG over case narratives, cites every source, and streams a spoken summary back to you.": "ಕನ್ನಡ ಅಥವಾ ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ ಕೇಳಿ. ಸತ್ಯಂ ಪ್ರಕರಣದ ನಿರೂಪಣೆಗಳ ಮೇಲೆ ಗ್ರೌಂಡೆಡ್ ಟೆಕ್ಸ್ಟ್-ಟು-SQL ಮತ್ತು RAG ಅನ್ನು ನಡೆಸುತ್ತದೆ, ಪ್ರತಿ ಮೂಲವನ್ನು ಉಲ್ಲೇಖಿಸುತ್ತದೆ ಮತ್ತು ನಿಮಗೆ ಮಾತನಾಡುವ ಸಾರಾಂಶವನ್ನು ಹಿಂತಿರುಗಿಸುತ್ತದೆ.",
+  "Ask in Kannada or English. Satyam runs grounded Text-to-SQL and RAG over case narratives, cites every source, and streams a spoken summary back to you.":
+    "ಕನ್ನಡ ಅಥವಾ ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ ಕೇಳಿ. ಸತ್ಯಂ ಪ್ರಕರಣದ ನಿರೂಪಣೆಗಳ ಮೇಲೆ ಗ್ರೌಂಡೆಡ್ ಟೆಕ್ಸ್ಟ್-ಟು-SQL ಮತ್ತು RAG ಅನ್ನು ನಡೆಸುತ್ತದೆ, ಪ್ರತಿ ಮೂಲವನ್ನು ಉಲ್ಲೇಖಿಸುತ್ತದೆ ಮತ್ತು ನಿಮಗೆ ಮಾತನಾಡುವ ಸಾರಾಂಶವನ್ನು ಹಿಂತಿರುಗಿಸುತ್ತದೆ.",
   "Forecast & Trends": "ಮುನ್ನೋಟ ಮತ್ತು ಪ್ರವೃತ್ತಿಗಳು",
   "© 2026 Satyam. All rights reserved.": "© 2026 ಸತ್ಯಂ. ಎಲ್ಲ ಹಕ್ಕುಗಳನ್ನು ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ.",
-  "Whenever you have queries, require a walkthrough, or need prompt support — we are just a click away.": "ನಿಮಗೆ ಪ್ರಶ್ನೆಗಳಿದ್ದಾಗ, ವಾಕ್‌ಥ್ರೂ ಬೇಕಾದಾಗ ಅಥವಾ ತಕ್ಷಣದ ಬೆಂಬಲ ಬೇಕಾದಾಗ — ನಾವು ಕೇವಲ ಒಂದು ಕ್ಲಿಕ್ ದೂರದಲ್ಲಿದ್ದೇವೆ.",
+  "Whenever you have queries, require a walkthrough, or need prompt support — we are just a click away.":
+    "ನಿಮಗೆ ಪ್ರಶ್ನೆಗಳಿದ್ದಾಗ, ವಾಕ್‌ಥ್ರೂ ಬೇಕಾದಾಗ ಅಥವಾ ತಕ್ಷಣದ ಬೆಂಬಲ ಬೇಕಾದಾಗ — ನಾವು ಕೇವಲ ಒಂದು ಕ್ಲಿಕ್ ದೂರದಲ್ಲಿದ್ದೇವೆ.",
   "AI Investigation Board": "AI ತನಿಖಾ ಮಂಡಳಿ",
   "Contact us Today": "ಇಂದು ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ",
-  "Platform": "ವೇದಿಕೆ",
-  "A bilingual voice agent, eye-gaze tracking, hands-free hand gesture control, an AI investigation canvas, and grounded reasoning — all behind row-level security and a tamper-evident audit trail.": "ದ್ವಿಭಾಷಾ ಧ್ವನಿ ಏಜೆಂಟ್, ಕಣ್ಣಿನ ನೋಟ ಟ್ರ್ಯಾಕಿಂಗ್, ಹ್ಯಾಂಡ್ಸ್-ಫ್ರೀ ಕೈ ಸನ್ನೆ ನಿಯಂತ್ರಣ, AI ತನಿಖಾ ಕ್ಯಾನ್ವಾಸ್, ಮತ್ತು ಗ್ರೌಂಡೆಡ್ ತಾರ್ಕಿಕತೆ — ಇವೆಲ್ಲವೂ ಸಾಲು-ಮಟ್ಟದ ಭದ್ರತೆ ಮತ್ತು ತಿರುಚುವಿಕೆ-ನಿರೋಧಕ ಆಡಿಟ್ ಟ್ರಯಲ್‌ನ ಹಿಂದೆ.",
-  "Private by design, fully auditable, and powered by state-of-the-art retrieval and reasoning — on synthetic data, with role-based access at every layer.": "ವಿನ್ಯಾಸದಿಂದಲೇ ಖಾಸಗಿ, ಸಂಪೂರ್ಣವಾಗಿ ಆಡಿಟ್ ಮಾಡಬಹುದಾದ, ಮತ್ತು ಅತ್ಯಾಧುನಿಕ ಮರುಪಡೆಯುವಿಕೆ ಮತ್ತು ತಾರ್ಕಿಕತೆಯಿಂದ ನಡೆಸಲ್ಪಡುವ — ಸಂಶ್ಲೇಷಿತ ಡೇಟಾದ ಮೇಲೆ, ಪ್ರತಿ ಹಂತದಲ್ಲಿ ಪಾತ್ರ-ಆಧಾರಿತ ಪ್ರವೇಶದೊಂದಿಗೆ.",
+  Platform: "ವೇದಿಕೆ",
+  "A bilingual voice agent, eye-gaze tracking, hands-free hand gesture control, an AI investigation canvas, and grounded reasoning — all behind row-level security and a tamper-evident audit trail.":
+    "ದ್ವಿಭಾಷಾ ಧ್ವನಿ ಏಜೆಂಟ್, ಕಣ್ಣಿನ ನೋಟ ಟ್ರ್ಯಾಕಿಂಗ್, ಹ್ಯಾಂಡ್ಸ್-ಫ್ರೀ ಕೈ ಸನ್ನೆ ನಿಯಂತ್ರಣ, AI ತನಿಖಾ ಕ್ಯಾನ್ವಾಸ್, ಮತ್ತು ಗ್ರೌಂಡೆಡ್ ತಾರ್ಕಿಕತೆ — ಇವೆಲ್ಲವೂ ಸಾಲು-ಮಟ್ಟದ ಭದ್ರತೆ ಮತ್ತು ತಿರುಚುವಿಕೆ-ನಿರೋಧಕ ಆಡಿಟ್ ಟ್ರಯಲ್‌ನ ಹಿಂದೆ.",
+  "Private by design, fully auditable, and powered by state-of-the-art retrieval and reasoning — on synthetic data, with role-based access at every layer.":
+    "ವಿನ್ಯಾಸದಿಂದಲೇ ಖಾಸಗಿ, ಸಂಪೂರ್ಣವಾಗಿ ಆಡಿಟ್ ಮಾಡಬಹುದಾದ, ಮತ್ತು ಅತ್ಯಾಧುನಿಕ ಮರುಪಡೆಯುವಿಕೆ ಮತ್ತು ತಾರ್ಕಿಕತೆಯಿಂದ ನಡೆಸಲ್ಪಡುವ — ಸಂಶ್ಲೇಷಿತ ಡೇಟಾದ ಮೇಲೆ, ಪ್ರತಿ ಹಂತದಲ್ಲಿ ಪಾತ್ರ-ಆಧಾರಿತ ಪ್ರವೇಶದೊಂದಿಗೆ.",
   "Crime Intelligence": "ಅಪರಾಧ ಗುಪ್ತಚರ",
   "Response Ops": "ಪ್ರತಿಕ್ರಿಯೆ ಕಾರ್ಯಾಚರಣೆಗಳು",
   "Tailored crime ⊗ intelligence solutions": "ಸೂಕ್ತ ಅಪರಾಧ ⊗ ಗುಪ್ತಚರ ಪರಿಹಾರಗಳು",
   "Screens in one voice-driven workspace": "ಒಂದು ಧ್ವನಿ-ಚಾಲಿತ ಕಾರ್ಯಕ್ಷೇತ್ರದಲ್ಲಿ ಪರದೆಗಳು",
-  "Login": "ಲಾಗಿನ್",
+  Login: "ಲಾಗಿನ್",
   "Financial Money-Trail": "ಹಣಕಾಸು ಹಣದ ಹಾದಿ",
   "tailored crime ⊗ intelligence": "ಸೂಕ್ತ ಅಪರಾಧ ⊗ ಗುಪ್ತಚರ",
-  "Satyam unifies AI triage, link analysis, geospatial intelligence, and tamper-evident reporting on a modern edge-native stack — multilingual, voice-enabled, and built to keep investigators in control of their case.": "ಸತ್ಯಂ AI ಟ್ರಿಯೇಜ್, ಲಿಂಕ್ ವಿಶ್ಲೇಷಣೆ, ಭೂಸ್ಥಳೀಯ ಗುಪ್ತಚರ, ಮತ್ತು ತಿರುಚುವಿಕೆ-ನಿರೋಧಕ ವರದಿಗಾರಿಕೆಯನ್ನು ಆಧುನಿಕ ಎಡ್ಜ್-ಸ್ಥಳೀಯ ಸ್ಟಾಕ್‌ನಲ್ಲಿ ಏಕೀಕರಿಸುತ್ತದೆ — ಬಹುಭಾಷಾ, ಧ್ವನಿ-ಸಕ್ರಿಯ, ಮತ್ತು ತನಿಖಾಧಿಕಾರಿಗಳು ತಮ್ಮ ಪ್ರಕರಣದ ನಿಯಂತ್ರಣದಲ್ಲಿರಲು ನಿರ್ಮಿಸಲಾಗಿದೆ.",
+  "Satyam unifies AI triage, link analysis, geospatial intelligence, and tamper-evident reporting on a modern edge-native stack — multilingual, voice-enabled, and built to keep investigators in control of their case.":
+    "ಸತ್ಯಂ AI ಟ್ರಿಯೇಜ್, ಲಿಂಕ್ ವಿಶ್ಲೇಷಣೆ, ಭೂಸ್ಥಳೀಯ ಗುಪ್ತಚರ, ಮತ್ತು ತಿರುಚುವಿಕೆ-ನಿರೋಧಕ ವರದಿಗಾರಿಕೆಯನ್ನು ಆಧುನಿಕ ಎಡ್ಜ್-ಸ್ಥಳೀಯ ಸ್ಟಾಕ್‌ನಲ್ಲಿ ಏಕೀಕರಿಸುತ್ತದೆ — ಬಹುಭಾಷಾ, ಧ್ವನಿ-ಸಕ್ರಿಯ, ಮತ್ತು ತನಿಖಾಧಿಕಾರಿಗಳು ತಮ್ಮ ಪ್ರಕರಣದ ನಿಯಂತ್ರಣದಲ್ಲಿರಲು ನಿರ್ಮಿಸಲಾಗಿದೆ.",
   "Link & Geo Analysis": "ಲಿಂಕ್ ಮತ್ತು ಭೂ ವಿಶ್ಲೇಷಣೆ",
   "About — Satyam AI Digital Forensics": "ಬಗ್ಗೆ — ಸತ್ಯಂ AI ಡಿಜಿಟಲ್ ಫೋರೆನ್ಸಿಕ್ಸ್",
   "Open Console": "ಕನ್ಸೋಲ್ ತೆರೆಯಿರಿ",
-  "End-to-end flow from raw evidence to court-ready exhibit. Click any step to expand details.": "ಕಚ್ಚಾ ಸಾಕ್ಷ್ಯದಿಂದ ನ್ಯಾಯಾಲಯಕ್ಕೆ ಸಿದ್ಧವಾದ ಪ್ರದರ್ಶನಕ್ಕೆ ಅಂತ್ಯದಿಂದ ಅಂತ್ಯದ ಹರಿವು. ವಿವರಗಳನ್ನು ವಿಸ್ತರಿಸಲು ಯಾವುದೇ ಹಂತವನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ.",
-  "Speak in English or Kannada — the copilot navigates to the right screen and runs the task for you: set filters, search a network, generate a report. It answers data questions aloud, grounded in your records.": "ಇಂಗ್ಲಿಷ್ ಅಥವಾ ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಿ — ಕೋಪೈಲಟ್ ಸರಿಯಾದ ಪರದೆಗೆ ನ್ಯಾವಿಗೇಟ್ ಮಾಡುತ್ತದೆ ಮತ್ತು ನಿಮಗಾಗಿ ಕಾರ್ಯವನ್ನು ನಡೆಸುತ್ತದೆ: ಫಿಲ್ಟರ್‌ಗಳನ್ನು ಹೊಂದಿಸಿ, ನೆಟ್‌ವರ್ಕ್ ಅನ್ನು ಹುಡುಕಿ, ವರದಿಯನ್ನು ರಚಿಸಿ. ಇದು ನಿಮ್ಮ ದಾಖಲೆಗಳಲ್ಲಿ ಆಧಾರಿತವಾದ ಡೇಟಾ ಪ್ರಶ್ನೆಗಳಿಗೆ ಗಟ್ಟಿಯಾಗಿ ಉತ್ತರಿಸುತ್ತದೆ.",
-  "Pull people, accounts, devices, locations, transactions, and communication threads from raw data.": "ಕಚ್ಚಾ ಡೇಟಾದಿಂದ ವ್ಯಕ್ತಿಗಳು, ಖಾತೆಗಳು, ಸಾಧನಗಳು, ಸ್ಥಳಗಳು, ವಹಿವಾಟುಗಳು ಮತ್ತು ಸಂವಹನ ಎಳೆಗಳನ್ನು ಹೊರತೆಗೆಯಿರಿ.",
+  "End-to-end flow from raw evidence to court-ready exhibit. Click any step to expand details.":
+    "ಕಚ್ಚಾ ಸಾಕ್ಷ್ಯದಿಂದ ನ್ಯಾಯಾಲಯಕ್ಕೆ ಸಿದ್ಧವಾದ ಪ್ರದರ್ಶನಕ್ಕೆ ಅಂತ್ಯದಿಂದ ಅಂತ್ಯದ ಹರಿವು. ವಿವರಗಳನ್ನು ವಿಸ್ತರಿಸಲು ಯಾವುದೇ ಹಂತವನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ.",
+  "Speak in English or Kannada — the copilot navigates to the right screen and runs the task for you: set filters, search a network, generate a report. It answers data questions aloud, grounded in your records.":
+    "ಇಂಗ್ಲಿಷ್ ಅಥವಾ ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಿ — ಕೋಪೈಲಟ್ ಸರಿಯಾದ ಪರದೆಗೆ ನ್ಯಾವಿಗೇಟ್ ಮಾಡುತ್ತದೆ ಮತ್ತು ನಿಮಗಾಗಿ ಕಾರ್ಯವನ್ನು ನಡೆಸುತ್ತದೆ: ಫಿಲ್ಟರ್‌ಗಳನ್ನು ಹೊಂದಿಸಿ, ನೆಟ್‌ವರ್ಕ್ ಅನ್ನು ಹುಡುಕಿ, ವರದಿಯನ್ನು ರಚಿಸಿ. ಇದು ನಿಮ್ಮ ದಾಖಲೆಗಳಲ್ಲಿ ಆಧಾರಿತವಾದ ಡೇಟಾ ಪ್ರಶ್ನೆಗಳಿಗೆ ಗಟ್ಟಿಯಾಗಿ ಉತ್ತರಿಸುತ್ತದೆ.",
+  "Pull people, accounts, devices, locations, transactions, and communication threads from raw data.":
+    "ಕಚ್ಚಾ ಡೇಟಾದಿಂದ ವ್ಯಕ್ತಿಗಳು, ಖಾತೆಗಳು, ಸಾಧನಗಳು, ಸ್ಥಳಗಳು, ವಹಿವಾಟುಗಳು ಮತ್ತು ಸಂವಹನ ಎಳೆಗಳನ್ನು ಹೊರತೆಗೆಯಿರಿ.",
   "Tamper-Evident Audit": "ತಿರುಚುವಿಕೆ-ನಿರೋಧಕ ಆಡಿಟ್",
   "Synthetic, privacy-safe data": "ಸಂಶ್ಲೇಷಿತ, ಗೌಪ್ಯತೆ-ಸುರಕ್ಷಿತ ಡೇಟಾ",
-  "Natural-language questions become safe, read-only SQL — validated by a sqlglot guard, scoped by Row-Level Security, and pointed only at masked views, never raw PII.": "ನೈಸರ್ಗಿಕ-ಭಾಷೆಯ ಪ್ರಶ್ನೆಗಳು ಸುರಕ್ಷಿತ, ಓದಲು-ಮಾತ್ರ SQL ಆಗುತ್ತವೆ — sqlglot ಗಾರ್ಡ್‌ನಿಂದ ಮೌಲ್ಯೀಕರಿಸಲ್ಪಟ್ಟಿವೆ, ಸಾಲು-ಮಟ್ಟದ ಭದ್ರತೆಯಿಂದ ವ್ಯಾಪ್ತಿಗೆ ಒಳಪಟ್ಟಿವೆ ಮತ್ತು ಮಾಸ್ಕ್ ಮಾಡಿದ ವೀಕ್ಷಣೆಗಳಿಗೆ ಮಾತ್ರ ತೋರಿಸುತ್ತವೆ, ಕಚ್ಚಾ PII ಗೆ ಎಂದಿಗೂ ಇಲ್ಲ.",
-  "Explore": "ಅನ್ವೇಷಿಸಿ",
+  "Natural-language questions become safe, read-only SQL — validated by a sqlglot guard, scoped by Row-Level Security, and pointed only at masked views, never raw PII.":
+    "ನೈಸರ್ಗಿಕ-ಭಾಷೆಯ ಪ್ರಶ್ನೆಗಳು ಸುರಕ್ಷಿತ, ಓದಲು-ಮಾತ್ರ SQL ಆಗುತ್ತವೆ — sqlglot ಗಾರ್ಡ್‌ನಿಂದ ಮೌಲ್ಯೀಕರಿಸಲ್ಪಟ್ಟಿವೆ, ಸಾಲು-ಮಟ್ಟದ ಭದ್ರತೆಯಿಂದ ವ್ಯಾಪ್ತಿಗೆ ಒಳಪಟ್ಟಿವೆ ಮತ್ತು ಮಾಸ್ಕ್ ಮಾಡಿದ ವೀಕ್ಷಣೆಗಳಿಗೆ ಮಾತ್ರ ತೋರಿಸುತ್ತವೆ, ಕಚ್ಚಾ PII ಗೆ ಎಂದಿಗೂ ಇಲ್ಲ.",
+  Explore: "ಅನ್ವೇಷಿಸಿ",
   "7 stages": "7 ಹಂತಗಳು",
   "Voice, Eye & Gesture Copilot": "ಧ್ವನಿ, ಕಣ್ಣು ಮತ್ತು ಸನ್ನೆ ಕೋಪೈಲಟ್",
   "AI Functions": "AI ಕಾರ್ಯಗಳು",
   "AI Triage": "AI ಟ್ರಿಯೇಜ್",
-  "Drive the cursor and hover elements using eye-gaze tracking, and click or scroll with webcam hand gestures. Say “Satyam” to wake the copilot, and the session auto-locks & blurs PII the moment you step away.": "ಕಣ್ಣಿನ ನೋಟ ಟ್ರ್ಯಾಕಿಂಗ್ ಬಳಸಿ ಕರ್ಸರ್ ಅನ್ನು ಚಾಲನೆ ಮಾಡಿ ಮತ್ತು ಅಂಶಗಳ ಮೇಲೆ ಸುಳಿದಾಡಿ, ಮತ್ತು ವೆಬ್‌ಕ್ಯಾಮ್ ಕೈ ಸನ್ನೆಗಳೊಂದಿಗೆ ಕ್ಲಿಕ್ ಮಾಡಿ ಅಥವಾ ಸ್ಕ್ರಾಲ್ ಮಾಡಿ. ಕೋಪೈಲಟ್ ಅನ್ನು ಎಚ್ಚರಗೊಳಿಸಲು \"ಸತ್ಯಂ\" ಎಂದು ಹೇಳಿ, ಮತ್ತು ನೀವು ದೂರ ಸರಿದ ತಕ್ಷಣ ಅಧಿವೇಶನವು ಸ್ವಯಂ-ಲಾಕ್ ಆಗುತ್ತದೆ ಮತ್ತು PII ಅನ್ನು ಮಸುಕುಗೊಳಿಸುತ್ತದೆ.",
+  "Drive the cursor and hover elements using eye-gaze tracking, and click or scroll with webcam hand gestures. Say “Satyam” to wake the copilot, and the session auto-locks & blurs PII the moment you step away.":
+    'ಕಣ್ಣಿನ ನೋಟ ಟ್ರ್ಯಾಕಿಂಗ್ ಬಳಸಿ ಕರ್ಸರ್ ಅನ್ನು ಚಾಲನೆ ಮಾಡಿ ಮತ್ತು ಅಂಶಗಳ ಮೇಲೆ ಸುಳಿದಾಡಿ, ಮತ್ತು ವೆಬ್‌ಕ್ಯಾಮ್ ಕೈ ಸನ್ನೆಗಳೊಂದಿಗೆ ಕ್ಲಿಕ್ ಮಾಡಿ ಅಥವಾ ಸ್ಕ್ರಾಲ್ ಮಾಡಿ. ಕೋಪೈಲಟ್ ಅನ್ನು ಎಚ್ಚರಗೊಳಿಸಲು "ಸತ್ಯಂ" ಎಂದು ಹೇಳಿ, ಮತ್ತು ನೀವು ದೂರ ಸರಿದ ತಕ್ಷಣ ಅಧಿವೇಶನವು ಸ್ವಯಂ-ಲಾಕ್ ಆಗುತ್ತದೆ ಮತ್ತು PII ಅನ್ನು ಮಸುಕುಗೊಳಿಸುತ್ತದೆ.',
   "build by Teen Titans": "ಟೀನ್ ಟೈಟಾನ್ಸ್‌ನಿಂದ ನಿರ್ಮಿಸಲಾಗಿದೆ",
-  "Ingest": "ಒಳತೆಗೆದುಕೊಳ್ಳಿ",
-  "Forecasting": "ಮುನ್ನೋಟ",
+  Ingest: "ಒಳತೆಗೆದುಕೊಳ್ಳಿ",
+  Forecasting: "ಮುನ್ನೋಟ",
   "Working Pipeline": "ಕಾರ್ಯನಿರ್ವಹಿಸುವ ಪೈಪ್‌ಲೈನ್",
-  "Connect": "ಸಂಪರ್ಕಿಸಿ",
+  Connect: "ಸಂಪರ್ಕಿಸಿ",
   "Defending Karnataka on the Data.": "ಡೇಟಾದ ಆಧಾರದ ಮೇಲೆ ಕರ್ನಾಟಕವನ್ನು ರಕ್ಷಿಸುವುದು.",
   "Network Analysis": "ನೆಟ್‌ವರ್ಕ್ ವಿಶ್ಲೇಷಣೆ",
   "Eye & Gesture Control": "ಕಣ್ಣು ಮತ್ತು ಸನ್ನೆ ನಿಯಂತ್ರಣ",
   "About us": "ನಮ್ಮ ಬಗ್ಗೆ",
-  "Hands-free, bilingual control — speak a command, calibrate eye-gaze tracking, or use webcam hand gestures to navigate and run any screen.": "ಹ್ಯಾಂಡ್ಸ್-ಫ್ರೀ, ದ್ವಿಭಾಷಾ ನಿಯಂತ್ರಣ — ಆಜ್ಞೆಯನ್ನು ಮಾತನಾಡಿ, ಕಣ್ಣಿನ ನೋಟ ಟ್ರ್ಯಾಕಿಂಗ್ ಅನ್ನು ಮಾಪನ ಮಾಡಿ, ಅಥವಾ ಯಾವುದೇ ಪರದೆಯನ್ನು ನ್ಯಾವಿಗೇಟ್ ಮಾಡಲು ಮತ್ತು ಕಾರ್ಯಗತಗೊಳಿಸಲು ವೆಬ್‌ಕ್ಯಾಮ್ ಕೈ ಸನ್ನೆಗಳನ್ನು ಬಳಸಿ.",
+  "Hands-free, bilingual control — speak a command, calibrate eye-gaze tracking, or use webcam hand gestures to navigate and run any screen.":
+    "ಹ್ಯಾಂಡ್ಸ್-ಫ್ರೀ, ದ್ವಿಭಾಷಾ ನಿಯಂತ್ರಣ — ಆಜ್ಞೆಯನ್ನು ಮಾತನಾಡಿ, ಕಣ್ಣಿನ ನೋಟ ಟ್ರ್ಯಾಕಿಂಗ್ ಅನ್ನು ಮಾಪನ ಮಾಡಿ, ಅಥವಾ ಯಾವುದೇ ಪರದೆಯನ್ನು ನ್ಯಾವಿಗೇಟ್ ಮಾಡಲು ಮತ್ತು ಕಾರ್ಯಗತಗೊಳಿಸಲು ವೆಬ್‌ಕ್ಯಾಮ್ ಕೈ ಸನ್ನೆಗಳನ್ನು ಬಳಸಿ.",
   "Court-Ready Report": "ನ್ಯಾಯಾಲಯಕ್ಕೆ ಸಿದ್ಧ ವರದಿ",
-  "STEP": "ಹಂತ",
+  STEP: "ಹಂತ",
   "State-of-the-art AI, built for the beat": "ಅತ್ಯಾಧುನಿಕ AI, ಬೀಟ್‌ಗಾಗಿ ನಿರ್ಮಿಸಲಾಗಿದೆ",
-  "We provide intelligence for your toughest cases": "ನಿಮ್ಮ ಕಠಿಣ ಪ್ರಕರಣಗಳಿಗೆ ನಾವು ಗುಪ್ತಚರವನ್ನು ಒದಗಿಸುತ್ತೇವೆ.",
-  "A comprehensive blueprint of the Satyam bilingual voice-enabled forensics platform.": "ಸತ್ಯಂ ದ್ವಿಭಾಷಾ ಧ್ವನಿ-ಸಕ್ರಿಯ ಫೋರೆನ್ಸಿಕ್ಸ್ ವೇದಿಕೆಯ ಸಮಗ್ರ ನೀಲನಕ್ಷೆ.",
-  "Trace funds across accounts and transactions with a flagged BFS money-trail — never via raw LLM SQL.": "ಫ್ಲಾಗ್ ಮಾಡಿದ BFS ಹಣದ ಹಾದಿಯೊಂದಿಗೆ ಖಾತೆಗಳು ಮತ್ತು ವಹಿವಾಟುಗಳಾದ್ಯಂತ ಹಣವನ್ನು ಪತ್ತೆಹಚ್ಚಿ — ಕಚ್ಚಾ LLM SQL ಮೂಲಕ ಎಂದಿಗೂ ಇಲ್ಲ.",
+  "We provide intelligence for your toughest cases":
+    "ನಿಮ್ಮ ಕಠಿಣ ಪ್ರಕರಣಗಳಿಗೆ ನಾವು ಗುಪ್ತಚರವನ್ನು ಒದಗಿಸುತ್ತೇವೆ.",
+  "A comprehensive blueprint of the Satyam bilingual voice-enabled forensics platform.":
+    "ಸತ್ಯಂ ದ್ವಿಭಾಷಾ ಧ್ವನಿ-ಸಕ್ರಿಯ ಫೋರೆನ್ಸಿಕ್ಸ್ ವೇದಿಕೆಯ ಸಮಗ್ರ ನೀಲನಕ್ಷೆ.",
+  "Trace funds across accounts and transactions with a flagged BFS money-trail — never via raw LLM SQL.":
+    "ಫ್ಲಾಗ್ ಮಾಡಿದ BFS ಹಣದ ಹಾದಿಯೊಂದಿಗೆ ಖಾತೆಗಳು ಮತ್ತು ವಹಿವಾಟುಗಳಾದ್ಯಂತ ಹಣವನ್ನು ಪತ್ತೆಹಚ್ಚಿ — ಕಚ್ಚಾ LLM SQL ಮೂಲಕ ಎಂದಿಗೂ ಇಲ್ಲ.",
   "Investigator Review": "ತನಿಖಾಧಿಕಾರಿಗಳ ಪರಿಶೀಲನೆ",
-  "About": "ಬಗ್ಗೆ",
-  "Home": "ಮುಖಪುಟ",
+  About: "ಬಗ್ಗೆ",
+  Home: "ಮುಖಪುಟ",
   "Watch Demo": "ಡೆಮೊ ವೀಕ್ಷಿಸಿ",
   "Voice Screen Agent": "ಧ್ವನಿ ಸ್ಕ್ರೀನ್ ಏಜೆಂಟ್",
-  "Upload disk images, mobile dumps, cloud exports, and case files into a single evidence vault.": "ಡಿಸ್ಕ್ ಚಿತ್ರಗಳು, ಮೊಬೈಲ್ ಡಂಪ್‌ಗಳು, ಕ್ಲೌಡ್ ಎಕ್ಸ್‌ಪೋರ್ಟ್‌ಗಳು, ಮತ್ತು ಪ್ರಕರಣದ ಫೈಲ್‌ಗಳನ್ನು ಒಂದೇ ಸಾಕ್ಷ್ಯ ಸಂಗ್ರಹಕ್ಕೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.",
-  "Features": "ವೈಶಿಷ್ಟ್ಯಗಳು",
-  "SHA-256 fingerprint every artifact; sign a chain-of-custody entry with timestamp and investigator identity.": "ಪ್ರತಿ ಕಲಾಕೃತಿಗೆ SHA-256 ಫಿಂಗರ್‌ಪ್ರಿಂಟ್ ಮಾಡಿ; ಸಮಯಮುದ್ರೆ ಮತ್ತು ತನಿಖಾಧಿಕಾರಿಯ ಗುರುತಿನೊಂದಿಗೆ ಕಸ್ಟಡಿ-ಸರಣಿ ನಮೂದಿಗೆ ಸಹಿ ಮಾಡಿ.",
-  "Build cited intelligence briefs from cases and FIRs, then export print-ready PDFs — with on-demand Kannada translation across the whole workspace.": "ಪ್ರಕರಣಗಳು ಮತ್ತು ಎಫ್‌ಐಆರ್‌ಗಳಿಂದ ಉಲ್ಲೇಖಿತ ಗುಪ್ತಚರ ಸಂಕ್ಷಿಪ್ತ ವರದಿಗಳನ್ನು ನಿರ್ಮಿಸಿ, ನಂತರ ಪ್ರಿಂಟ್-ರೆಡಿ PDF ಗಳನ್ನು ರಫ್ತು ಮಾಡಿ — ಸಂಪೂರ್ಣ ಕಾರ್ಯಕ್ಷೇತ್ರದಲ್ಲಿ ಬೇಡಿಕೆಯ ಕನ್ನಡ ಅನುವಾದದೊಂದಿಗೆ.",
+  "Upload disk images, mobile dumps, cloud exports, and case files into a single evidence vault.":
+    "ಡಿಸ್ಕ್ ಚಿತ್ರಗಳು, ಮೊಬೈಲ್ ಡಂಪ್‌ಗಳು, ಕ್ಲೌಡ್ ಎಕ್ಸ್‌ಪೋರ್ಟ್‌ಗಳು, ಮತ್ತು ಪ್ರಕರಣದ ಫೈಲ್‌ಗಳನ್ನು ಒಂದೇ ಸಾಕ್ಷ್ಯ ಸಂಗ್ರಹಕ್ಕೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.",
+  Features: "ವೈಶಿಷ್ಟ್ಯಗಳು",
+  "SHA-256 fingerprint every artifact; sign a chain-of-custody entry with timestamp and investigator identity.":
+    "ಪ್ರತಿ ಕಲಾಕೃತಿಗೆ SHA-256 ಫಿಂಗರ್‌ಪ್ರಿಂಟ್ ಮಾಡಿ; ಸಮಯಮುದ್ರೆ ಮತ್ತು ತನಿಖಾಧಿಕಾರಿಯ ಗುರುತಿನೊಂದಿಗೆ ಕಸ್ಟಡಿ-ಸರಣಿ ನಮೂದಿಗೆ ಸಹಿ ಮಾಡಿ.",
+  "Build cited intelligence briefs from cases and FIRs, then export print-ready PDFs — with on-demand Kannada translation across the whole workspace.":
+    "ಪ್ರಕರಣಗಳು ಮತ್ತು ಎಫ್‌ಐಆರ್‌ಗಳಿಂದ ಉಲ್ಲೇಖಿತ ಗುಪ್ತಚರ ಸಂಕ್ಷಿಪ್ತ ವರದಿಗಳನ್ನು ನಿರ್ಮಿಸಿ, ನಂತರ ಪ್ರಿಂಟ್-ರೆಡಿ PDF ಗಳನ್ನು ರಫ್ತು ಮಾಡಿ — ಸಂಪೂರ್ಣ ಕಾರ್ಯಕ್ಷೇತ್ರದಲ್ಲಿ ಬೇಡಿಕೆಯ ಕನ್ನಡ ಅನುವಾದದೊಂದಿಗೆ.",
   "About Satyam": "ಸತ್ಯಂ ಬಗ್ಗೆ",
-  "Anticipate hotspots and risk windows, and cluster modus-operandi patterns from historical data.": "ಹಾಟ್‌ಸ್ಪಾಟ್‌ಗಳು ಮತ್ತು ಅಪಾಯದ ವಿಂಡೋಗಳನ್ನು ನಿರೀಕ್ಷಿಸಿ, ಮತ್ತು ಐತಿಹಾಸಿಕ ಡೇಟಾದಿಂದ ಮೋಡಸ್-ಆಪರಂಡಿ ಮಾದರಿಗಳನ್ನು ಕ್ಲಸ್ಟರ್ ಮಾಡಿ.",
+  "Anticipate hotspots and risk windows, and cluster modus-operandi patterns from historical data.":
+    "ಹಾಟ್‌ಸ್ಪಾಟ್‌ಗಳು ಮತ್ತು ಅಪಾಯದ ವಿಂಡೋಗಳನ್ನು ನಿರೀಕ್ಷಿಸಿ, ಮತ್ತು ಐತಿಹಾಸಿಕ ಡೇಟಾದಿಂದ ಮೋಡಸ್-ಆಪರಂಡಿ ಮಾದರಿಗಳನ್ನು ಕ್ಲಸ್ಟರ್ ಮಾಡಿ.",
   "Bilingual — Kannada & English": "ದ್ವಿಭಾಷಾ — ಕನ್ನಡ ಮತ್ತು ಇಂಗ್ಲಿಷ್",
-  "Describe a crime scene in plain language and the AI lays out suspects, victims, locations and links on an infinite canvas — auto-arranged with production-grade graph layouts.": "ಸರಳ ಭಾಷೆಯಲ್ಲಿ ಅಪರಾಧ ಸ್ಥಳವನ್ನು ವಿವರಿಸಿ ಮತ್ತು AI ಶಂಕಿತರು, ಬಲಿಪಶುಗಳು, ಸ್ಥಳಗಳು ಮತ್ತು ಸಂಪರ್ಕಗಳನ್ನು ಅನಂತ ಕ್ಯಾನ್ವಾಸ್‌ನಲ್ಲಿ ಜೋಡಿಸುತ್ತದೆ — ಉತ್ಪಾದನೆ-ದರ್ಜೆಯ ಗ್ರಾಫ್ ವಿನ್ಯಾಸಗಳೊಂದಿಗೆ ಸ್ವಯಂ-ಜೋಡಿಸಲ್ಪಟ್ಟಿದೆ.",
-  "From first FIR to courtroom-ready reasoning — grounded Q&A, networks, money-trails, forecasting, and a hands-free voice & gesture copilot, all in one place.": "ಮೊದಲ FIR ನಿಂದ ನ್ಯಾಯಾಲಯಕ್ಕೆ ಸಿದ್ಧವಾದ ತಾರ್ಕಿಕತೆಗೆ — ಗ್ರೌಂಡೆಡ್ ಪ್ರಶ್ನೋತ್ತರ, ನೆಟ್‌ವರ್ಕ್‌ಗಳು, ಹಣದ ಹಾದಿಗಳು, ಮುನ್ನೋಟ, ಮತ್ತು ಹ್ಯಾಂಡ್ಸ್-ಫ್ರೀ ಧ್ವನಿ ಮತ್ತು ಸನ್ನೆ ಕೋಪೈಲಟ್, ಎಲ್ಲವೂ ಒಂದೇ ಸ್ಥಳದಲ್ಲಿ.",
-  "Voice + chat console, multi-user task boards, structured peer review, and redaction workflows.": "ಧ್ವನಿ + ಚಾಟ್ ಕನ್ಸೋಲ್, ಬಹು-ಬಳಕೆದಾರ ಕಾರ್ಯ ಮಂಡಳಿಗಳು, ಸಂರಚಿತ ಪೀರ್ ವಿಮರ್ಶೆ, ಮತ್ತು ಸಂಪಾದನೆ ಕಾರ್ಯವಿಧಾನಗಳು.",
+  "Describe a crime scene in plain language and the AI lays out suspects, victims, locations and links on an infinite canvas — auto-arranged with production-grade graph layouts.":
+    "ಸರಳ ಭಾಷೆಯಲ್ಲಿ ಅಪರಾಧ ಸ್ಥಳವನ್ನು ವಿವರಿಸಿ ಮತ್ತು AI ಶಂಕಿತರು, ಬಲಿಪಶುಗಳು, ಸ್ಥಳಗಳು ಮತ್ತು ಸಂಪರ್ಕಗಳನ್ನು ಅನಂತ ಕ್ಯಾನ್ವಾಸ್‌ನಲ್ಲಿ ಜೋಡಿಸುತ್ತದೆ — ಉತ್ಪಾದನೆ-ದರ್ಜೆಯ ಗ್ರಾಫ್ ವಿನ್ಯಾಸಗಳೊಂದಿಗೆ ಸ್ವಯಂ-ಜೋಡಿಸಲ್ಪಟ್ಟಿದೆ.",
+  "From first FIR to courtroom-ready reasoning — grounded Q&A, networks, money-trails, forecasting, and a hands-free voice & gesture copilot, all in one place.":
+    "ಮೊದಲ FIR ನಿಂದ ನ್ಯಾಯಾಲಯಕ್ಕೆ ಸಿದ್ಧವಾದ ತಾರ್ಕಿಕತೆಗೆ — ಗ್ರೌಂಡೆಡ್ ಪ್ರಶ್ನೋತ್ತರ, ನೆಟ್‌ವರ್ಕ್‌ಗಳು, ಹಣದ ಹಾದಿಗಳು, ಮುನ್ನೋಟ, ಮತ್ತು ಹ್ಯಾಂಡ್ಸ್-ಫ್ರೀ ಧ್ವನಿ ಮತ್ತು ಸನ್ನೆ ಕೋಪೈಲಟ್, ಎಲ್ಲವೂ ಒಂದೇ ಸ್ಥಳದಲ್ಲಿ.",
+  "Voice + chat console, multi-user task boards, structured peer review, and redaction workflows.":
+    "ಧ್ವನಿ + ಚಾಟ್ ಕನ್ಸೋಲ್, ಬಹು-ಬಳಕೆದಾರ ಕಾರ್ಯ ಮಂಡಳಿಗಳು, ಸಂರಚಿತ ಪೀರ್ ವಿಮರ್ಶೆ, ಮತ್ತು ಸಂಪಾದನೆ ಕಾರ್ಯವಿಧಾನಗಳು.",
   "Auditable end-to-end": "ಅಂತ್ಯದಿಂದ ಅಂತ್ಯದವರೆಗೆ ಆಡಿಟ್ ಮಾಡಬಹುದಾದ",
-  "Satyam turns scattered case records, statements and signals into one bilingual, voice-driven, explainable intelligence picture for the Karnataka State Police.": "ಸತ್ಯಂ ಚದುರಿದ ಪ್ರಕರಣದ ದಾಖಲೆಗಳು, ಹೇಳಿಕೆಗಳು ಮತ್ತು ಸಂಕೇತಗಳನ್ನು ಕರ್ನಾಟಕ ರಾಜ್ಯ ಪೊಲೀಸರಿಗಾಗಿ ಒಂದು ದ್ವಿಭಾಷಾ, ಧ್ವನಿ-ಚಾಲಿತ, ವಿವರಿಸಬಹುದಾದ ಗುಪ್ತಚರ ಚಿತ್ರವಾಗಿ ಪರಿವರ್ತಿಸುತ್ತದೆ.",
+  "Satyam turns scattered case records, statements and signals into one bilingual, voice-driven, explainable intelligence picture for the Karnataka State Police.":
+    "ಸತ್ಯಂ ಚದುರಿದ ಪ್ರಕರಣದ ದಾಖಲೆಗಳು, ಹೇಳಿಕೆಗಳು ಮತ್ತು ಸಂಕೇತಗಳನ್ನು ಕರ್ನಾಟಕ ರಾಜ್ಯ ಪೊಲೀಸರಿಗಾಗಿ ಒಂದು ದ್ವಿಭಾಷಾ, ಧ್ವನಿ-ಚಾಲಿತ, ವಿವರಿಸಬಹುದಾದ ಗುಪ್ತಚರ ಚಿತ್ರವಾಗಿ ಪರಿವರ್ತಿಸುತ್ತದೆ.",
 
   // ── Hands-free / multimodal layer ───────────────────────────────────────────
   "Hands-free": "ಕೈಮುಕ್ತ",
@@ -276,7 +324,6 @@ const DICT: Record<string, string> = {
   "Gemini → Groq · understands anything": "Gemini → Groq · ಯಾವುದನ್ನೂ ಅರ್ಥಮಾಡಿಕೊಳ್ಳುತ್ತದೆ",
   "Deterministic · offline · keyword based": "ನಿರ್ದಿಷ್ಟ · ಆಫ್‌ಲೈನ್ · ಕೀವರ್ಡ್ ಆಧಾರಿತ",
 
-
   // Banner / shell
   "Synthetic / demo data — not real case records": "ಕೃತಕ / ಡೆಮೋ ಡೇಟಾ — ನಿಜವಾದ ಪ್ರಕರಣ ದಾಖಲೆಗಳಲ್ಲ",
   "KSP Workspace": "ಕೆ.ಎಸ್.ಪಿ ಕಾರ್ಯಸ್ಥಳ",
@@ -285,30 +332,34 @@ const DICT: Record<string, string> = {
   Settings: "ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
 
   // Investigation Board + AI Model Settings
-  "Board": "ಬೋರ್ಡ್",
+  Board: "ಬೋರ್ಡ್",
   "Board AI (scene generator)": "ಬೋರ್ಡ್ AI (ದೃಶ್ಯ ರಚನೆ)",
-  "Powers the AI Scene Generator on the Board screen": "ಬೋರ್ಡ್ ಪರದೆಯ AI ದೃಶ್ಯ ಜನರೇಟರ್ ಅನ್ನು ಚಾಲನೆ ಮಾಡುತ್ತದೆ",
+  "Powers the AI Scene Generator on the Board screen":
+    "ಬೋರ್ಡ್ ಪರದೆಯ AI ದೃಶ್ಯ ಜನರೇಟರ್ ಅನ್ನು ಚಾಲನೆ ಮಾಡುತ್ತದೆ",
   "AI Chat Model": "AI ಚಾಟ್ ಮಾದರಿ",
-  "Configured": "ಸಂರಚಿಸಲಾಗಿದೆ",
+  Configured: "ಸಂರಚಿಸಲಾಗಿದೆ",
   "No key": "ಕೀ ಇಲ್ಲ",
-  "Uses": "ಬಳಕೆ",
+  Uses: "ಬಳಕೆ",
   "Google · multimodal · default": "Google · ಬಹುಮಾದರಿ · ಡಿಫಾಲ್ಟ್",
   "GPT-4o · strong reasoning": "GPT-4o · ಬಲವಾದ ತರ್ಕ",
   "Cloud · fastest": "ಕ್ಲೌಡ್ · ವೇಗವಾದ",
-  "Choose the model that powers chat. Keys are set on the server (.env).": "ಚಾಟ್ ಅನ್ನು ನಿಯಂತ್ರಿಸುವ ಮಾದರಿ ಆಯ್ಕೆ ಮಾಡಿ. ಕೀಗಳನ್ನು ಸರ್ವರ್‌ನಲ್ಲಿ ಹೊಂದಿಸಿ.",
-  "To enable a model, add its API key to the server .env and restart. Your selection is saved on this device and used for every chat.": "ಮಾದರಿ ಸಕ್ರಿಯಗೊಳಿಸಲು, .env ಗೆ API ಕೀ ಸೇರಿಸಿ ಮತ್ತು ಮರುಪ್ರಾರಂಭಿಸಿ.",
+  "Choose the model that powers chat. Keys are set on the server (.env).":
+    "ಚಾಟ್ ಅನ್ನು ನಿಯಂತ್ರಿಸುವ ಮಾದರಿ ಆಯ್ಕೆ ಮಾಡಿ. ಕೀಗಳನ್ನು ಸರ್ವರ್‌ನಲ್ಲಿ ಹೊಂದಿಸಿ.",
+  "To enable a model, add its API key to the server .env and restart. Your selection is saved on this device and used for every chat.":
+    "ಮಾದರಿ ಸಕ್ರಿಯಗೊಳಿಸಲು, .env ಗೆ API ಕೀ ಸೇರಿಸಿ ಮತ್ತು ಮರುಪ್ರಾರಂಭಿಸಿ.",
   // Access Control
   "Access Control": "ಪ್ರವೇಶ ನಿಯಂತ್ರಣ",
   "Restricted — L4 clearance required": "ನಿರ್ಬಂಧಿತ — L4 ಅನುಮತಿ ಅಗತ್ಯ",
-  "Only top-priority administrators (clearance L4) can open Access Control.": "ಕೇವಲ L4 ಅಧಿಕಾರಿಗಳು ಪ್ರವೇಶ ನಿಯಂತ್ರಣ ತೆರೆಯಬಹುದು.",
+  "Only top-priority administrators (clearance L4) can open Access Control.":
+    "ಕೇವಲ L4 ಅಧಿಕಾರಿಗಳು ಪ್ರವೇಶ ನಿಯಂತ್ರಣ ತೆರೆಯಬಹುದು.",
   "Your clearance": "ನಿಮ್ಮ ಅನುಮತಿ",
-  "Officer": "ಅಧಿಕಾರಿ",
-  "Clearance": "ಅನುಮತಿ",
-  "Scope": "ವ್ಯಾಪ್ತಿ",
+  Officer: "ಅಧಿಕಾರಿ",
+  Clearance: "ಅನುಮತಿ",
+  Scope: "ವ್ಯಾಪ್ತಿ",
   "Created by": "ರಚಿಸಿದವರು",
-  "Policy": "ನೀತಿ",
+  Policy: "ನೀತಿ",
   "Self-registered": "ಸ್ವ-ನೋಂದಣಿ",
-  "override": "ಅತಿಕ್ರಮಣ",
+  override: "ಅತಿಕ್ರಮಣ",
   "Change policy": "ನೀತಿ ಬದಲಾಯಿಸಿ",
   "Account active": "ಖಾತೆ ಸಕ್ರಿಯ",
   "Reason (audit-logged, required)": "ಕಾರಣ (ಆಡಿಟ್ ದಾಖಲು, ಅಗತ್ಯ)",
@@ -318,7 +369,8 @@ const DICT: Record<string, string> = {
   "Could not load accounts.": "ಖಾತೆಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗಲಿಲ್ಲ.",
   "Loading accounts…": "ಖಾತೆಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ…",
   "No accounts match.": "ಯಾವ ಖಾತೆಗಳೂ ಹೊಂದಿಕೆಯಾಗಲಿಲ್ಲ.",
-  "This is your own account. You can't disable it or drop below L4.": "ಇದು ನಿಮ್ಮ ಸ್ವಂತ ಖಾತೆ. ನೀವು ಇದನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲು ಅಥವಾ L4 ಗಿಂತ ಕಡಿಮೆ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+  "This is your own account. You can't disable it or drop below L4.":
+    "ಇದು ನಿಮ್ಮ ಸ್ವಂತ ಖಾತೆ. ನೀವು ಇದನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲು ಅಥವಾ L4 ಗಿಂತ ಕಡಿಮೆ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ.",
   "Search by name, email, rank or creator…": "ಹೆಸರು, ಇಮೇಲ್, ಶ್ರೇಣಿ ಅಥವಾ ರಚಿಸಿದವರಿಂದ ಹುಡುಕಿ…",
   "e.g. Promoted to SP — district handover": "ಉದಾ. SP ಗೆ ಬಡ್ತಿ — ಜಿಲ್ಲಾ ಹಸ್ತಾಂತರ",
 
@@ -359,6 +411,24 @@ const DICT: Record<string, string> = {
   Network: "ನೆಟ್‌ವರ್ಕ್",
   Reports: "ವರದಿಗಳು",
   Audit: "ಆಡಿಟ್",
+
+  // News Feed (live Karnataka news TV). Channel names are proper nouns and stay
+  // in Latin script deliberately — that is how the broadcasters brand themselves.
+  "News Feed": "ಸುದ್ದಿ ಪ್ರಸಾರ",
+  LIVE: "ನೇರ ಪ್ರಸಾರ",
+  "Karnataka news television, streamed live for situational awareness.":
+    "ಕರ್ನಾಟಕದ ಸುದ್ದಿ ವಾಹಿನಿಗಳು, ಪರಿಸ್ಥಿತಿ ಅರಿವಿಗಾಗಿ ನೇರ ಪ್ರಸಾರ.",
+  Channels: "ವಾಹಿನಿಗಳು",
+  "ON AIR": "ಪ್ರಸಾರದಲ್ಲಿ",
+  "Tuning in to": "ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ",
+  "live stream": "ನೇರ ಪ್ರಸಾರ",
+  "Open on YouTube": "ಯೂಟ್ಯೂಬ್‌ನಲ್ಲಿ ತೆರೆಯಿರಿ",
+  Mute: "ಶಬ್ದ ಆಫ್",
+  Unmute: "ಶಬ್ದ ಆನ್",
+  Reload: "ಮರುಲೋಡ್",
+  Kannada: "ಕನ್ನಡ",
+  "Third-party live broadcasts embedded for viewing only. Nothing is recorded, downloaded or written to the case database, and no channel content forms part of any case record. Audio starts muted because browsers block autoplay with sound. If a player reports it is offline, that channel is between broadcasts — pick another or reload.":
+    "ಮೂರನೇ ವ್ಯಕ್ತಿಯ ನೇರ ಪ್ರಸಾರಗಳನ್ನು ವೀಕ್ಷಣೆಗಾಗಿ ಮಾತ್ರ ಸೇರಿಸಲಾಗಿದೆ. ಯಾವುದನ್ನೂ ರೆಕಾರ್ಡ್ ಮಾಡುವುದಿಲ್ಲ, ಡೌನ್‌ಲೋಡ್ ಮಾಡುವುದಿಲ್ಲ ಅಥವಾ ಪ್ರಕರಣ ದತ್ತಸಂಚಯಕ್ಕೆ ಬರೆಯುವುದಿಲ್ಲ, ಮತ್ತು ಯಾವುದೇ ವಾಹಿನಿಯ ವಿಷಯ ಪ್ರಕರಣ ದಾಖಲೆಯ ಭಾಗವಾಗುವುದಿಲ್ಲ. ಬ್ರೌಸರ್‌ಗಳು ಶಬ್ದದೊಂದಿಗೆ ಸ್ವಯಂ ಪ್ಲೇ ತಡೆಯುವುದರಿಂದ ಆಡಿಯೋ ಶಬ್ದ ಆಫ್ ಆಗಿ ಪ್ರಾರಂಭವಾಗುತ್ತದೆ. ಪ್ಲೇಯರ್ ಆಫ್‌ಲೈನ್ ಎಂದು ತೋರಿಸಿದರೆ, ಆ ವಾಹಿನಿ ಪ್ರಸಾರಗಳ ನಡುವೆ ಇದೆ — ಬೇರೊಂದನ್ನು ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ ಮರುಲೋಡ್ ಮಾಡಿ.",
 
   // Console page
   Conversation: "ಸಂಭಾಷಣೆ",
@@ -903,7 +973,7 @@ const DICT: Record<string, string> = {
   Score: "ಸ್ಕೋರ್",
   "Backtest Window": "ಬ್ಯಾಕ್‌ಟೆಸ್ಟ್ ವಿಂಡೋ",
   "Historical validation period": "ಐತಿಹಾಸಿಕ ಮೌಲ್ಯೀಕರಣ ಅವಧಿ",
-  "data_rolling_30d": "30 ದಿನಗಳ ರೋಲಿಂಗ್ ಡೇಟಾ",
+  data_rolling_30d: "30 ದಿನಗಳ ರೋಲಿಂಗ್ ಡೇಟಾ",
   "Data Rolling 30d": "30 ದಿನಗಳ ರೋಲಿಂಗ್ ಡೇಟಾ",
   "data rolling 30d": "30 ದಿನಗಳ ರೋಲಿಂಗ್ ಡೇಟಾ",
   "What This Means": "ಇದರ ಅರ್ಥ",
@@ -931,18 +1001,18 @@ const DICT: Record<string, string> = {
   Cases: "ಪ್ರಕರಣಗಳು",
 
   // ── Admin screen ────────────────────────────────────────────────────────
-  "Rank": "ಶ್ರೇಣಿ",
-  "admin": "ನಿರ್ವಾಹಕ",
-  "Disabled": "ನಿಷ್ಕ್ರಿಯ",
-  "Edit": "ಸಂಪಾದಿಸಿ",
-  "Cancel": "ರದ್ದುಮಾಡಿ",
-  "Name": "ಹೆಸರು",
+  Rank: "ಶ್ರೇಣಿ",
+  admin: "ನಿರ್ವಾಹಕ",
+  Disabled: "ನಿಷ್ಕ್ರಿಯ",
+  Edit: "ಸಂಪಾದಿಸಿ",
+  Cancel: "ರದ್ದುಮಾಡಿ",
+  Name: "ಹೆಸರು",
   "No results": "ಯಾವುದೇ ಫಲಿತಾಂಶ ಇಲ್ಲ",
   "Save changes": "ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ",
-  "Profile": "ಪ್ರೊಫೈಲ್",
-  "Preferences": "ಆದ್ಯತೆಗಳು",
-  "Notifications": "ಅಧಿಸೂಚನೆಗಳು",
-  "Security": "ಭದ್ರತೆ",
+  Profile: "ಪ್ರೊಫೈಲ್",
+  Preferences: "ಆದ್ಯತೆಗಳು",
+  Notifications: "ಅಧಿಸೂಚನೆಗಳು",
+  Security: "ಭದ್ರತೆ",
   "Data & Privacy": "ಡೇಟಾ ಮತ್ತು ಗೌಪ್ಯತೆ",
   "Models & Backend": "ಮಾದರಿಗಳು ಮತ್ತು ಬ್ಯಾಕೆಂಡ್",
   "Live-switch engines without redeploying": "ಮರು-ನಿಯೋಜನೆ ಇಲ್ಲದೆ ಎಂಜಿನ್ ಬದಲಿಸಿ",
@@ -952,12 +1022,12 @@ const DICT: Record<string, string> = {
   "Text-to-SQL engine": "ಟೆಕ್ಸ್ಟ್-ಟು-SQL ಎಂಜಿನ್",
   "Your investigator details": "ನಿಮ್ಮ ತನಿಖಾಧಿಕಾರಿ ವಿವರಗಳು",
   "Badge ID": "ಬ್ಯಾಡ್ಜ್ ಐಡಿ",
-  "Email": "ಇಮೇಲ್",
-  "Language": "ಭಾಷೆ",
+  Email: "ಇಮೇಲ್",
+  Language: "ಭಾಷೆ",
   "Default landing": "ಡಿಫಾಲ್ಟ್ ಲ್ಯಾಂಡಿಂಗ್",
-  "Density": "ಸಾಂದ್ರತೆ",
-  "Comfortable": "ಆರಾಮದಾಯಕ",
-  "Compact": "ಸಂಕ್ಷಿಪ್ತ",
+  Density: "ಸಾಂದ್ರತೆ",
+  Comfortable: "ಆರಾಮದಾಯಕ",
+  Compact: "ಸಂಕ್ಷಿಪ್ತ",
   "Time format": "ಸಮಯ ಸ್ವರೂಪ",
   "New FIR assignments": "ಹೊಸ FIR ನಿಯೋಜನೆಗಳು",
   "Case status updates": "ಪ್ರಕರಣ ಸ್ಥಿತಿ ನವೀಕರಣಗಳು",
@@ -975,30 +1045,35 @@ const DICT: Record<string, string> = {
   "Workspace appearance & language": "ಕಾರ್ಯಸ್ಥಳ ಗೋಚರತೆ ಮತ್ತು ಭಾಷೆ",
 
   // ── Board screen ─────────────────────────────────────────────────────────
-  "Insert": "ಸೇರಿಸಿ",
+  Insert: "ಸೇರಿಸಿ",
   "Insert shapes / errors / media": "ಆಕಾರ / ದೋಷ / ಮಾಧ್ಯಮ ಸೇರಿಸಿ",
   "Saved boards": "ಉಳಿಸಿದ ಬೋರ್ಡ್‌ಗಳು",
   "No saved boards yet.": "ಇನ್ನೂ ಯಾವುದೇ ಉಳಿಸಿದ ಬೋರ್ಡ್‌ಗಳಿಲ್ಲ.",
   "Load saved canvas": "ಉಳಿಸಿದ ಕ್ಯಾನ್ವಾಸ್ ಲೋಡ್ ಮಾಡಿ",
   "AI Scene Generator": "AI ದೃಶ್ಯ ಜನರೇಟರ್",
-  "Describe suspects, evidence, crime scene… (Ctrl+Enter)": "ಶಂಕಿತರನ್ನು, ಸಾಕ್ಷ್ಯ, ಅಪರಾಧ ಸ್ಥಳ ವಿವರಿಸಿ… (Ctrl+Enter)",
-  "Photo": "ಫೋಟೋ",
-  "Generate": "ರಚಿಸಿ",
+  "Describe suspects, evidence, crime scene… (Ctrl+Enter)":
+    "ಶಂಕಿತರನ್ನು, ಸಾಕ್ಷ್ಯ, ಅಪರಾಧ ಸ್ಥಳ ವಿವರಿಸಿ… (Ctrl+Enter)",
+  Photo: "ಫೋಟೋ",
+  Generate: "ರಚಿಸಿ",
   "Generating…": "ರಚಿಸಲಾಗುತ್ತಿದೆ…",
-  "AI builds the scene — use tldraw tools to edit anything.": "AI ದೃಶ್ಯ ನಿರ್ಮಿಸುತ್ತದೆ — ಏನನ್ನಾದರೂ ಸಂಪಾದಿಸಲು tldraw ಉಪಕರಣಗಳನ್ನು ಬಳಸಿ.",
-  "Open": "ತೆರೆಯಿರಿ",
+  "AI builds the scene — use tldraw tools to edit anything.":
+    "AI ದೃಶ್ಯ ನಿರ್ಮಿಸುತ್ತದೆ — ಏನನ್ನಾದರೂ ಸಂಪಾದಿಸಲು tldraw ಉಪಕರಣಗಳನ್ನು ಬಳಸಿ.",
+  Open: "ತೆರೆಯಿರಿ",
   "Export PNG": "PNG ರಫ್ತು",
   "Clear board?": "ಬೋರ್ಡ್ ತೆರವು ಮಾಡಬೇಕೇ?",
-  "Recover": "ಮರುಪಡೆಯಿರಿ",
-  "Nothing to export — add some shapes first.": "ರಫ್ತು ಮಾಡಲು ಏನೂ ಇಲ್ಲ — ಮೊದಲು ಕೆಲವು ಆಕಾರಗಳನ್ನು ಸೇರಿಸಿ.",
+  Recover: "ಮರುಪಡೆಯಿರಿ",
+  "Nothing to export — add some shapes first.":
+    "ರಫ್ತು ಮಾಡಲು ಏನೂ ಇಲ್ಲ — ಮೊದಲು ಕೆಲವು ಆಕಾರಗಳನ್ನು ಸೇರಿಸಿ.",
   "Could not save board.": "ಬೋರ್ಡ್ ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
   "Could not open board.": "ಬೋರ್ಡ್ ತೆರೆಯಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
-  "Could not load boards — check you are signed in.": "ಬೋರ್ಡ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ — ನೀವು ಸೈನ್ ಇನ್ ಆಗಿದ್ದೀರಾ ಎಂದು ಪರಿಶೀಲಿಸಿ.",
-  "Rate limit hit — switch to Groq in Settings → Models → Board AI, then try again.": "ದರ ಮಿತಿ ತಲುಪಿದೆ — Settings → Models → Board AI ನಲ್ಲಿ Groq ಗೆ ಬದಲಿಸಿ, ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
-  "Shapes": "ಆಕಾರಗಳು",
-  "Errors": "ದೋಷಗಳು",
-  "Import": "ಆಮದು",
-  "Size": "ಗಾತ್ರ",
+  "Could not load boards — check you are signed in.":
+    "ಬೋರ್ಡ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ — ನೀವು ಸೈನ್ ಇನ್ ಆಗಿದ್ದೀರಾ ಎಂದು ಪರಿಶೀಲಿಸಿ.",
+  "Rate limit hit — switch to Groq in Settings → Models → Board AI, then try again.":
+    "ದರ ಮಿತಿ ತಲುಪಿದೆ — Settings → Models → Board AI ನಲ್ಲಿ Groq ಗೆ ಬದಲಿಸಿ, ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  Shapes: "ಆಕಾರಗಳು",
+  Errors: "ದೋಷಗಳು",
+  Import: "ಆಮದು",
+  Size: "ಗಾತ್ರ",
   "Import PNG / JPG": "PNG / JPG ಆಮದು",
   "Paste images onto canvas": "ಕ್ಯಾನ್ವಾಸ್ ಮೇಲೆ ಚಿತ್ರಗಳನ್ನು ಅಂಟಿಸಿ",
   "Import Audio Clip": "ಆಡಿಯೋ ಕ್ಲಿಪ್ ಆಮದು",
@@ -1006,11 +1081,12 @@ const DICT: Record<string, string> = {
 
   // ── Ops / Predictive Deployment ──────────────────────────────────────────
   "Predictive Deployment": "ಭವಿಷ್ಯಸೂಚಕ ನಿಯೋಜನೆ",
-  "Rule-based forecast · real case data · no synthetic incidents": "ನಿಯಮ-ಆಧಾರಿತ ಮುನ್ಸೂಚನೆ · ನಿಜ ಪ್ರಕರಣ ಡೇಟಾ · ಕೃತಕ ಘಟನೆಗಳಿಲ್ಲ",
+  "Rule-based forecast · real case data · no synthetic incidents":
+    "ನಿಯಮ-ಆಧಾರಿತ ಮುನ್ಸೂಚನೆ · ನಿಜ ಪ್ರಕರಣ ಡೇಟಾ · ಕೃತಕ ಘಟನೆಗಳಿಲ್ಲ",
   "Predicted Risk Surface": "ಭವಿಷ್ಯಸೂಚಕ ಅಪಾಯ ಮೇಲ್ಮೈ",
   "forecast cells": "ಮುನ್ಸೂಚನೆ ಕೋಶಗಳು",
   "Deployment suggestions": "ನಿಯೋಜನೆ ಸಲಹೆಗಳು",
-  "Recompute": "ಮರು-ಲೆಕ್ಕ ಹಾಕಿ",
+  Recompute: "ಮರು-ಲೆಕ್ಕ ಹಾಕಿ",
   "No active forecast alerts.": "ಯಾವುದೇ ಸಕ್ರಿಯ ಮುನ್ಸೂಚನೆ ಎಚ್ಚರಿಕೆಗಳಿಲ್ಲ.",
   "Simulate deployment": "ನಿಯೋಜನೆ ಅನುಕರಿಸಿ",
   "Stop simulation": "ಅನುಕರಣೆ ನಿಲ್ಲಿಸಿ",
@@ -1024,52 +1100,53 @@ const DICT: Record<string, string> = {
   "Active Dispatches": "ಸಕ್ರಿಯ ರವಾನೆಗಳು",
   "Turn on Demo Mode, then hit Simulate All.": "ಡೆಮೋ ಮೋಡ್ ಆನ್ ಮಾಡಿ, ನಂತರ Simulate All ಒತ್ತಿ.",
   "en route": "ಮಾರ್ಗದಲ್ಲಿ",
-  "min": "ನಿ",
+  min: "ನಿ",
   "Green Corridor": "ಹಸಿರು ಕಾರಿಡಾರ್",
-  "ACTIVE": "ಸಕ್ರಿಯ",
-  "IDLE": "ನಿಷ್ಕ್ರಿಯ",
-  "Signals prioritized for responding units.": "ಪ್ರತಿಕ್ರಿಯಿಸುವ ಘಟಕಗಳಿಗಾಗಿ ಸಂಕೇತಗಳಿಗೆ ಆದ್ಯತೆ ನೀಡಲಾಗಿದೆ.",
+  ACTIVE: "ಸಕ್ರಿಯ",
+  IDLE: "ನಿಷ್ಕ್ರಿಯ",
+  "Signals prioritized for responding units.":
+    "ಪ್ರತಿಕ್ರಿಯಿಸುವ ಘಟಕಗಳಿಗಾಗಿ ಸಂಕೇತಗಳಿಗೆ ಆದ್ಯತೆ ನೀಡಲಾಗಿದೆ.",
   "signals green": "ಸಂಕೇತಗಳು ಹಸಿರು",
   "Live Event Feed": "ಲೈವ್ ಘಟನೆ ಫೀಡ್",
   "No events yet.": "ಇನ್ನೂ ಯಾವುದೇ ಘಟನೆಗಳಿಲ್ಲ.",
 
   // ── Audit screen extra ────────────────────────────────────────────────────
-  "Reset": "ರೀಸೆಟ್",
+  Reset: "ರೀಸೆಟ್",
 
   // ── Reports extra ─────────────────────────────────────────────────────────
   "Remove from report": "ವರದಿಯಿಂದ ತೆಗೆಯಿರಿ",
   "Type 2+ characters to search FIRs": "FIR ಹುಡುಕಲು 2+ ಅಕ್ಷರಗಳನ್ನು ಟೈಪ್ ಮಾಡಿ",
 
   // ── General UI ────────────────────────────────────────────────────────────
-  "Back": "ಹಿಂದೆ",
-  "Done": "ಮುಗಿಯಿತು",
-  "Confirm": "ದೃಢೀಕರಿಸಿ",
-  "Yes": "ಹೌದು",
-  "No": "ಇಲ್ಲ",
-  "Unknown": "ತಿಳಿದಿಲ್ಲ",
-  "Retry": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+  Back: "ಹಿಂದೆ",
+  Done: "ಮುಗಿಯಿತು",
+  Confirm: "ದೃಢೀಕರಿಸಿ",
+  Yes: "ಹೌದು",
+  No: "ಇಲ್ಲ",
+  Unknown: "ತಿಳಿದಿಲ್ಲ",
+  Retry: "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
 
   // ── CaseDrawer ────────────────────────────────────────────────────────────
   "Similar Cases": "ಹೋಲುವ ಪ್ರಕರಣಗಳು",
-  "Timeline": "ಸಮಯರೇಖೆ",
+  Timeline: "ಸಮಯರೇಖೆ",
   "Loading timeline…": "ಸಮಯರೇಖೆ ಲೋಡ್ ಆಗುತ್ತಿದೆ…",
   "No timeline events found.": "ಯಾವುದೇ ಸಮಯರೇಖೆ ಘಟನೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ.",
   "Finding similar cases…": "ಹೋಲುವ ಪ್ರಕರಣಗಳನ್ನು ಹುಡುಕಲಾಗುತ್ತಿದೆ…",
   "No similar cases found.": "ಯಾವುದೇ ಹೋಲುವ ಪ್ರಕರಣಗಳು ಕಂಡುಬಂದಿಲ್ಲ.",
-  "match": "ಹೊಂದಾಣಿಕೆ",
+  match: "ಹೊಂದಾಣಿಕೆ",
   // Timeline event titles
   "Incident occurred": "ಘಟನೆ ಸಂಭವಿಸಿದೆ",
   "FIR registered": "ಎಫ್‌ಐಆರ್ ನೋಂದಾಯಿಸಲಾಗಿದೆ",
   "Charge sheet filed": "ಆರೋಪಪಟ್ಟಿ ಸಲ್ಲಿಸಲಾಗಿದೆ",
   "Conviction recorded": "ಶಿಕ್ಷೆ ದಾಖಲಾಗಿದೆ",
   // Timeline event type keys (raw from API)
-  "incident": "ಘಟನೆ",
-  "fir_registered": "ಎಫ್‌ಐಆರ್ ನೋಂದಾಯಿತ",
-  "io_assigned": "ತನಿಖಾಧಿಕಾರಿ ನಿಯೋಜಿತ",
-  "charge_sheeted": "ಆರೋಪಪಟ್ಟಿ ಸಲ್ಲಿಸಿದ",
-  "convicted": "ಶಿಕ್ಷೆಗೊಳಗಾದ",
-  "acquitted": "ಖುಲಾಸೆಗೊಂಡ",
-  "closed": "ಮುಕ್ತಾಯ",
+  incident: "ಘಟನೆ",
+  fir_registered: "ಎಫ್‌ಐಆರ್ ನೋಂದಾಯಿತ",
+  io_assigned: "ತನಿಖಾಧಿಕಾರಿ ನಿಯೋಜಿತ",
+  charge_sheeted: "ಆರೋಪಪಟ್ಟಿ ಸಲ್ಲಿಸಿದ",
+  convicted: "ಶಿಕ್ಷೆಗೊಳಗಾದ",
+  acquitted: "ಖುಲಾಸೆಗೊಂಡ",
+  closed: "ಮುಕ್ತಾಯ",
   // why_similar tags from API
   "Same crime type": "ಒಂದೇ ಅಪರಾಧ ಪ್ರಕಾರ",
   "Same district": "ಒಂದೇ ಜಿಲ್ಲೆ",
@@ -1079,18 +1156,19 @@ const DICT: Record<string, string> = {
 
   // ── Profile screen ────────────────────────────────────────────────────────
   "Browse offenders…": "ಅಪರಾಧಿಗಳನ್ನು ಬ್ರೌಸ್ ಮಾಡಿ…",
-  "Frequency": "ಆವರ್ತನ",
-  "Recency": "ಇತ್ತೀಚಿನತೆ",
-  "Severity": "ತೀವ್ರತೆ",
+  Frequency: "ಆವರ್ತನ",
+  Recency: "ಇತ್ತೀಚಿನತೆ",
+  Severity: "ತೀವ್ರತೆ",
   "Group offending": "ಗುಂಪು ಅಪರಾಧ",
-  "Outcomes": "ಫಲಿತಾಂಶಗಳು",
+  Outcomes: "ಫಲಿತಾಂಶಗಳು",
   "0 accused cases": "0 ಆರೋಪಿ ಪ್ರಕರಣಗಳು",
   "Recent case activity": "ಇತ್ತೀಚಿನ ಪ್ರಕರಣ ಚಟುವಟಿಕೆ",
   "0 heinous cases": "0 ಘೋರ ಪ್ರಕರಣಗಳು",
   "Connected to 0 associates": "0 ಸಹಚರರಿಗೆ ಸಂಪರ್ಕಿತ",
   "Charge-sheeted cases": "ಆರೋಪಪಟ್ಟಿ ಸಲ್ಲಿಸಿದ ಪ್ರಕರಣಗಳು",
-  "Decision support only — not predictive policing.": "ನಿರ್ಧಾರ ಬೆಂಬಲ ಮಾತ್ರ — ಭವಿಷ್ಯಸೂಚಕ ಪೊಲೀಸಿಂಗ್ ಅಲ್ಲ.",
-  "Associates": "ಸಹಚರರು",
+  "Decision support only — not predictive policing.":
+    "ನಿರ್ಧಾರ ಬೆಂಬಲ ಮಾತ್ರ — ಭವಿಷ್ಯಸೂಚಕ ಪೊಲೀಸಿಂಗ್ ಅಲ್ಲ.",
+  Associates: "ಸಹಚರರು",
   "PS5 · Offender Profile": "PS5 · ಅಪರಾಧಿ ಪ್ರೊಫೈಲ್",
   "Offender Intelligence": "ಅಪರಾಧಿ ಗುಪ್ತಚರ",
 
@@ -1116,11 +1194,13 @@ const DICT: Record<string, string> = {
   "Young offender concentration": "ಯುವ ಅಪರಾಧಿ ಸಾಂದ್ರತೆ",
 
   // ── Translation settings tab ─────────────────────────────────────────────
-  "Translation": "ಅನುವಾದ",
+  Translation: "ಅನುವಾದ",
   "Kannada Translation": "ಕನ್ನಡ ಅನುವಾದ",
-  "Use Groq Llama-3.1-70B to fill in missing Kannada translations": "ಕಾಣೆಯಾದ ಕನ್ನಡ ಅನುವಾದಗಳನ್ನು ತುಂಬಲು Groq Llama-3.1-70B ಬಳಸಿ",
+  "Use Groq Llama-3.1-70B to fill in missing Kannada translations":
+    "ಕಾಣೆಯಾದ ಕನ್ನಡ ಅನುವಾದಗಳನ್ನು ತುಂಬಲು Groq Llama-3.1-70B ಬಳಸಿ",
   "How it works": "ಇದು ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ",
-  "Translates UI labels AND synthetic data values (station names, crime types, districts)": "UI ಲೇಬಲ್‌ಗಳು ಮತ್ತು ಸಿಂಥೆಟಿಕ್ ಡೇಟಾ ಮೌಲ್ಯಗಳನ್ನು (ಠಾಣೆ ಹೆಸರುಗಳು, ಅಪರಾಧ ವಿಧಗಳು, ಜಿಲ್ಲೆಗಳು) ಅನುವಾದಿಸುತ್ತದೆ",
+  "Translates UI labels AND synthetic data values (station names, crime types, districts)":
+    "UI ಲೇಬಲ್‌ಗಳು ಮತ್ತು ಸಿಂಥೆಟಿಕ್ ಡೇಟಾ ಮೌಲ್ಯಗಳನ್ನು (ಠಾಣೆ ಹೆಸರುಗಳು, ಅಪರಾಧ ವಿಧಗಳು, ಜಿಲ್ಲೆಗಳು) ಅನುವಾದಿಸುತ್ತದೆ",
   // ── ProfileMenu / Account switcher ───────────────────────────────────────
   "Switch account": "ಖಾತೆ ಬದಲಾಯಿಸಿ",
   "Switch account?": "ಖಾತೆ ಬದಲಾಯಿಸಬೇಕೇ?",
@@ -1141,18 +1221,26 @@ const DICT: Record<string, string> = {
   "Loading workspace permissions": "ಕಾರ್ಯಸ್ಥಳ ಅನುಮತಿಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
   "Refreshing case data": "ಪ್ರಕರಣ ಡೇಟಾ ರಿಫ್ರೆಶ್ ಮಾಡಲಾಗುತ್ತಿದೆ",
 
-  "Sends untranslated strings to Groq Llama-3.1-70B in batches": "ಅನುವಾದಿಸದ ಸ್ಟ್ರಿಂಗ್‌ಗಳನ್ನು Groq Llama-3.1-70B ಗೆ ಬ್ಯಾಚ್‌ಗಳಲ್ಲಿ ಕಳುಹಿಸುತ್ತದೆ",
-  "Saves translations to your browser's local storage": "ಬ್ರೌಸರ್‌ನ ಲೋಕಲ್ ಸ್ಟೋರೇಜ್‌ಗೆ ಅನುವಾದಗಳನ್ನು ಉಳಿಸುತ್ತದೆ",
-  "Runs only once — uses cached result on every subsequent visit": "ಒಮ್ಮೆ ಮಾತ್ರ ಚಲಿಸುತ್ತದೆ — ನಂತರದ ಪ್ರತಿ ಭೇಟಿಯಲ್ಲಿ ಕ್ಯಾಶ್ ಫಲಿತಾಂಶ ಬಳಸುತ್ತದೆ",
-  "New screens added later can be re-enriched using the Reset button": "ನಂತರ ಸೇರಿಸಿದ ಹೊಸ ಪರದೆಗಳನ್ನು Reset ಬಟನ್ ಬಳಸಿ ಮತ್ತೆ ಸಮೃದ್ಧಗೊಳಿಸಬಹುದು",
-  "Requires": "ಅಗತ್ಯ",
-  "GROQ_API_KEY set on the backend server (.env). The key never leaves the server.": "GROQ_API_KEY ಬ್ಯಾಕೆಂಡ್ ಸರ್ವರ್‌ನಲ್ಲಿ (.env) ಹೊಂದಿಸಿ. ಕೀ ಎಂದಿಗೂ ಸರ್ವರ್ ಬಿಡುವುದಿಲ್ಲ.",
+  "Sends untranslated strings to Groq Llama-3.1-70B in batches":
+    "ಅನುವಾದಿಸದ ಸ್ಟ್ರಿಂಗ್‌ಗಳನ್ನು Groq Llama-3.1-70B ಗೆ ಬ್ಯಾಚ್‌ಗಳಲ್ಲಿ ಕಳುಹಿಸುತ್ತದೆ",
+  "Saves translations to your browser's local storage":
+    "ಬ್ರೌಸರ್‌ನ ಲೋಕಲ್ ಸ್ಟೋರೇಜ್‌ಗೆ ಅನುವಾದಗಳನ್ನು ಉಳಿಸುತ್ತದೆ",
+  "Runs only once — uses cached result on every subsequent visit":
+    "ಒಮ್ಮೆ ಮಾತ್ರ ಚಲಿಸುತ್ತದೆ — ನಂತರದ ಪ್ರತಿ ಭೇಟಿಯಲ್ಲಿ ಕ್ಯಾಶ್ ಫಲಿತಾಂಶ ಬಳಸುತ್ತದೆ",
+  "New screens added later can be re-enriched using the Reset button":
+    "ನಂತರ ಸೇರಿಸಿದ ಹೊಸ ಪರದೆಗಳನ್ನು Reset ಬಟನ್ ಬಳಸಿ ಮತ್ತೆ ಸಮೃದ್ಧಗೊಳಿಸಬಹುದು",
+  Requires: "ಅಗತ್ಯ",
+  "GROQ_API_KEY set on the backend server (.env). The key never leaves the server.":
+    "GROQ_API_KEY ಬ್ಯಾಕೆಂಡ್ ಸರ್ವರ್‌ನಲ್ಲಿ (.env) ಹೊಂದಿಸಿ. ಕೀ ಎಂದಿಗೂ ಸರ್ವರ್ ಬಿಡುವುದಿಲ್ಲ.",
   "Connecting to Groq Llama-3.1-70B…": "Groq Llama-3.1-70B ಗೆ ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ…",
-  "new translations added and saved to local storage": "ಹೊಸ ಅನುವಾದಗಳನ್ನು ಸೇರಿಸಿ ಲೋಕಲ್ ಸ್ಟೋರೇಜ್‌ಗೆ ಉಳಿಸಲಾಗಿದೆ",
-  "Enrichment already applied. All translations loaded from local storage.": "ಸಮೃದ್ಧೀಕರಣ ಈಗಾಗಲೇ ಅನ್ವಯಿಸಲಾಗಿದೆ. ಎಲ್ಲ ಅನುವಾದಗಳನ್ನು ಲೋಕಲ್ ಸ್ಟೋರೇಜ್‌ನಿಂದ ಲೋಡ್ ಮಾಡಲಾಗಿದೆ.",
+  "new translations added and saved to local storage":
+    "ಹೊಸ ಅನುವಾದಗಳನ್ನು ಸೇರಿಸಿ ಲೋಕಲ್ ಸ್ಟೋರೇಜ್‌ಗೆ ಉಳಿಸಲಾಗಿದೆ",
+  "Enrichment already applied. All translations loaded from local storage.":
+    "ಸಮೃದ್ಧೀಕರಣ ಈಗಾಗಲೇ ಅನ್ವಯಿಸಲಾಗಿದೆ. ಎಲ್ಲ ಅನುವಾದಗಳನ್ನು ಲೋಕಲ್ ಸ್ಟೋರೇಜ್‌ನಿಂದ ಲೋಡ್ ಮಾಡಲಾಗಿದೆ.",
   "Run Kannada enrichment": "ಕನ್ನಡ ಸಮೃದ್ಧೀಕರಣ ಚಲಾಯಿಸಿ",
   "Reset — allow re-enrichment for new screens": "ರೀಸೆಟ್ — ಹೊಸ ಪರದೆಗಳಿಗೆ ಮತ್ತೆ ಸಮೃದ್ಧೀಕರಣ ಅನುಮತಿಸಿ",
-  "Translations are saved to localStorage and merged with the built-in DICT on every page load. They are never sent anywhere except the backend /settings/translate endpoint.": "ಅನುವಾದಗಳನ್ನು localStorage ಗೆ ಉಳಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ಪ್ರತಿ ಪೇಜ್ ಲೋಡ್‌ನಲ್ಲಿ ಅಂತರ್ನಿರ್ಮಿತ DICT ಜೊತೆ ವಿಲೀನಗೊಳ್ಳುತ್ತವೆ.",
+  "Translations are saved to localStorage and merged with the built-in DICT on every page load. They are never sent anywhere except the backend /settings/translate endpoint.":
+    "ಅನುವಾದಗಳನ್ನು localStorage ಗೆ ಉಳಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ಪ್ರತಿ ಪೇಜ್ ಲೋಡ್‌ನಲ್ಲಿ ಅಂತರ್ನಿರ್ಮಿತ DICT ಜೊತೆ ವಿಲೀನಗೊಳ್ಳುತ್ತವೆ.",
 
   // ── Dossier screen ────────────────────────────────────────────────────────
   "Search name / district…": "ಹೆಸರು / ಜಿಲ್ಲೆ ಹುಡುಕಿ…",
@@ -1161,137 +1249,145 @@ const DICT: Record<string, string> = {
   "Admin access required": "ನಿರ್ವಾಹಕ ಪ್ರವೇಶ ಅಗತ್ಯ",
   "DEMO — fictional": "DEMO — ಕಾಲ್ಪನಿಕ",
   "Also known as": "ಇತರ ಹೆಸರುಗಳು",
-  "Front": "ಮುಂಭಾಗ",
+  Front: "ಮುಂಭಾಗ",
   "Left Profile": "ಎಡ ಪ್ರೊಫೈಲ್",
   "Right Profile": "ಬಲ ಪ್ರೊಫೈಲ್",
   "Personal & Physical": "ವೈಯಕ್ತಿಕ ಮತ್ತು ದೈಹಿಕ",
   "Contact Details": "ಸಂಪರ್ಕ ವಿವರಗಳು",
-  "Gender": "ಲಿಂಗ",
+  Gender: "ಲಿಂಗ",
   "Date of Birth": "ಜನ್ಮ ದಿನಾಂಕ",
-  "Height": "ಎತ್ತರ",
-  "Build": "ದೇಹ ರಚನೆ",
-  "Complexion": "ಮೈಬಣ್ಣ",
+  Height: "ಎತ್ತರ",
+  Build: "ದೇಹ ರಚನೆ",
+  Complexion: "ಮೈಬಣ್ಣ",
   "Blood Group": "ರಕ್ತ ಗುಂಪು",
-  "Nationality": "ರಾಷ್ಟ್ರೀಯತೆ",
+  Nationality: "ರಾಷ್ಟ್ರೀಯತೆ",
   "Identifying Marks": "ಗುರುತಿನ ಚಿಹ್ನೆಗಳು",
   "Primary Phone": "ಪ್ರಾಥಮಿಕ ಫೋನ್",
   "Secondary Phone": "ಮಾಧ್ಯಮಿಕ ಫೋನ್",
   "Home Address": "ಮನೆ ವಿಳಾಸ",
   "Bank Accounts": "ಬ್ಯಾಂಕ್ ಖಾತೆಗಳು",
-  "accounts": "ಖಾತೆಗಳು",
-  "Bank": "ಬ್ಯಾಂಕ್",
+  accounts: "ಖಾತೆಗಳು",
+  Bank: "ಬ್ಯಾಂಕ್",
   "Account No.": "ಖಾತೆ ಸಂಖ್ಯೆ",
-  "Type": "ವಿಧ",
-  "Balance": "ಬಾಕಿ",
-  "Flag": "ಫ್ಲ್ಯಾಗ್",
-  "records": "ದಾಖಲೆಗಳು",
-  "open": "ತೆರೆದ",
+  Type: "ವಿಧ",
+  Balance: "ಬಾಕಿ",
+  Flag: "ಫ್ಲ್ಯಾಗ್",
+  records: "ದಾಖಲೆಗಳು",
+  open: "ತೆರೆದ",
   "Family Members": "ಕುಟುಂಬ ಸದಸ್ಯರು",
   "Known Associates / Contacts": "ಪರಿಚಿತ ಆರೋಪಿಗಳು / ಸಂಪರ್ಕಗಳು",
   "No records.": "ಯಾವುದೇ ದಾಖಲೆಗಳಿಲ್ಲ.",
   "Print / Export PDF": "PDF ಮುದ್ರಿಸಿ / ರಫ್ತು",
-  "Sentence": "ಶಿಕ್ಷೆ",
-  "years": "ವರ್ಷಗಳು",
+  Sentence: "ಶಿಕ್ಷೆ",
+  years: "ವರ್ಷಗಳು",
   "Person 360": "ವ್ಯಕ್ತಿ 360",
 
   // ── Map / Ops legend ──────────────────────────────────────────────────────
   "Crime density": "ಅಪರಾಧ ಸಾಂದ್ರತೆ",
-  "Incident": "ಘಟನೆ",
-  "Corridor": "ಕಾರಿಡಾರ್",
-  "Signal": "ಸಂಕೇತ",
-  "Heatmap": "ಹೀಟ್‌ಮ್ಯಾಪ್",
-  "Routes": "ಮಾರ್ಗಗಳು",
-  "DEMO": "ಡೆಮೋ",
+  Incident: "ಘಟನೆ",
+  Corridor: "ಕಾರಿಡಾರ್",
+  Signal: "ಸಂಕೇತ",
+  Heatmap: "ಹೀಟ್‌ಮ್ಯಾಪ್",
+  Routes: "ಮಾರ್ಗಗಳು",
+  DEMO: "ಡೆಮೋ",
   "GREEN CORRIDOR ACTIVE": "ಹಸಿರು ಕಾರಿಡಾರ್ ಸಕ್ರಿಯ",
-  "signals": "ಸಂಕೇತಗಳು",
+  signals: "ಸಂಕೇತಗಳು",
   "Heatmap shows real crime density from the case dataset. Patrols, scenes and green corridors appear here live once Response Ops is running.":
     "ಹೀಟ್‌ಮ್ಯಾಪ್ ಪ್ರಕರಣ ಡೇಟಾಸೆಟ್‌ನಿಂದ ನಿಜ ಅಪರಾಧ ಸಾಂದ್ರತೆ ತೋರಿಸುತ್ತದೆ. Response Ops ಚಾಲನೆಯಾದ ನಂತರ ಗಸ್ತು, ದೃಶ್ಯಗಳು ಮತ್ತು ಹಸಿರು ಕಾರಿಡಾರ್‌ಗಳು ಲೈವ್ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತವೆ.",
 
   "Reset all cached translations": "ಎಲ್ಲ ಸಂಗ್ರಹಿಸಿದ ಅನುವಾದಗಳನ್ನು ರೀಸೆಟ್ ಮಾಡಿ",
-  "Camera": "ಕ್ಯಾಮೆರಾ",
+  Camera: "ಕ್ಯಾಮೆರಾ",
   "Live Ops": "ಲೈವ್ ಕಾರ್ಯಾಚರಣೆ",
-  "Dispatch": "ರವಾನೆ",
-  "Predictive": "ಭವಿಷ್ಯಸೂಚಕ",
-  "Trends": "ಪ್ರವೃತ್ತಿಗಳು",
-  "Forecast": "ಮುನ್ಸೂಚನೆ",
-  "Socio": "ಸಾಮಾಜಿಕ",
+  Dispatch: "ರವಾನೆ",
+  Predictive: "ಭವಿಷ್ಯಸೂಚಕ",
+  Trends: "ಪ್ರವೃತ್ತಿಗಳು",
+  Forecast: "ಮುನ್ಸೂಚನೆ",
+  Socio: "ಸಾಮಾಜಿಕ",
   "Detecting organised-crime rings…": "ಸಂಘಟಿತ ಅಪರಾಧ ಗ್ಯಾಂಗ್‌ಗಳನ್ನು ಪತ್ತೆಹಚ್ಚಲಾಗುತ್ತಿದೆ…",
   "1 ring detected": "1 ಅಪರಾಧ ಗ್ಯಾಂಗ್ ಪತ್ತೆಯಾಗಿದೆ",
   "rings detected": "ಅಪರಾಧ ಗ್ಯಾಂಗ್‌ಗಳು ಪತ್ತೆಯಾಗಿವೆ",
-  "— groups of co-accused appearing together across multiple FIRs": "— ಅನೇಕ ಎಫ್‌ಐಆರ್‌ಗಳಲ್ಲಿ ಒಟ್ಟಿಗೆ ಕಾಣಿಸಿಕೊಳ್ಳುವ ಸಹ-ಆರೋಪಿಗಳ ಗುಂಪುಗಳು",
+  "— groups of co-accused appearing together across multiple FIRs":
+    "— ಅನೇಕ ಎಫ್‌ಐಆರ್‌ಗಳಲ್ಲಿ ಒಟ್ಟಿಗೆ ಕಾಣಿಸಿಕೊಳ್ಳುವ ಸಹ-ಆರೋಪಿಗಳ ಗುಂಪುಗಳು",
   "Investigative leads only — not proof of guilt": "ತನಿಖಾ ಸುಳಿವುಗಳು ಮಾತ್ರ — ಅಪರಾಧದ ಪುರಾವೆಯಲ್ಲ",
   "Ring #": "ರಿಂಗ್ #",
-  "member": "ಸದಸ್ಯ",
-  "members": "ಸದಸ್ಯರು",
+  member: "ಸದಸ್ಯ",
+  members: "ಸದಸ್ಯರು",
   "shared case": "ಹಂಚಿಕೊಂಡ ಪ್ರಕರಣ",
-  "recency": "ಇತ್ತೀಚಿನದು",
+  recency: "ಇತ್ತೀಚಿನದು",
   "Why flagged": "ಏಕೆ ಗುರುತಿಸಲಾಗಿದೆ",
   "View kingpin profile →": "ಕಿಂಗ್‌ಪಿನ್ ಪ್ರೊಫೈಲ್ ವೀಕ್ಷಿಸಿ →",
-  "Enter a seed person above to view their financial links.": "ಅವರ ಹಣಕಾಸು ಲಿಂಕ್‌ಗಳನ್ನು ವೀಕ್ಷಿಸಲು ಮೇಲೆ ಒಬ್ಬ ಬೀಜ ವ್ಯಕ್ತಿಯನ್ನು ನಮೂದಿಸಿ.",
+  "Enter a seed person above to view their financial links.":
+    "ಅವರ ಹಣಕಾಸು ಲಿಂಕ್‌ಗಳನ್ನು ವೀಕ್ಷಿಸಲು ಮೇಲೆ ಒಬ್ಬ ಬೀಜ ವ್ಯಕ್ತಿಯನ್ನು ನಮೂದಿಸಿ.",
   "Loading financial links…": "ಹಣಕಾಸು ಲಿಂಕ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ…",
-  "No financial accounts or transactions linked to this seed.": "ಈ ಬೀಜ ವ್ಯಕ್ತಿಗೆ ಯಾವುದೇ ಹಣಕಾಸು ಖಾತೆಗಳು ಅಥವಾ ವಹಿವಾಟುಗಳು ಲಿಂಕ್ ಆಗಿಲ್ಲ.",
-  "Accounts": "ಖಾತೆಗಳು",
-  "Flows": "ಹರಿವುಗಳು",
-  "Flagged": "ಫ್ಲ್ಯಾಗ್ ಮಾಡಲಾಗಿದೆ",
-  "Total": "ಒಟ್ಟು",
+  "No financial accounts or transactions linked to this seed.":
+    "ಈ ಬೀಜ ವ್ಯಕ್ತಿಗೆ ಯಾವುದೇ ಹಣಕಾಸು ಖಾತೆಗಳು ಅಥವಾ ವಹಿವಾಟುಗಳು ಲಿಂಕ್ ಆಗಿಲ್ಲ.",
+  Accounts: "ಖಾತೆಗಳು",
+  Flows: "ಹರಿವುಗಳು",
+  Flagged: "ಫ್ಲ್ಯಾಗ್ ಮಾಡಲಾಗಿದೆ",
+  Total: "ಒಟ್ಟು",
   "Suspicious only": "ಶಂಕಾಸ್ಪದ ಮಾತ್ರ",
   "Min amount": "ಕನಿಷ್ಠ ಮೊತ್ತ",
-  "Any": "ಯಾವುದಾದರೂ",
+  Any: "ಯಾವುದಾದರೂ",
   "Account Details": "ಖಾತೆಯ ವಿವರಗಳು",
-  "Label": "ಹೆಸರು",
-  "Bank": "ಬ್ಯಾಂಕ್",
-  "Type": "ಪ್ರಕಾರ",
-  "District": "ಜಿಲ್ಲೆ",
+  Label: "ಹೆಸರು",
+  Bank: "ಬ್ಯಾಂಕ್",
+  Type: "ಪ್ರಕಾರ",
+  District: "ಜಿಲ್ಲೆ",
   "KYC Risk": "ಕೆವೈಸಿ ಅಪಾಯ",
-  "Owner": "ಮಾಲೀಕರು",
-  "In": "ಒಳಹರಿವು",
-  "Out": "ಹೊರಹರಿವು",
+  Owner: "ಮಾಲೀಕರು",
+  In: "ಒಳಹರಿವು",
+  Out: "ಹೊರಹರಿವು",
   "SEED ACCOUNT": "ಬೀಜ ಖಾತೆ",
   "Top Flows (click node to inspect)": "ಪ್ರಮುಖ ಹರಿವುಗಳು (ವೀಕ್ಷಿಸಲು ನೋಡ್ ಕ್ಲಿಕ್ ಮಾಡಿ)",
-  "Amount": "ಮೊತ್ತ",
-  "Flag": "ಫ್ಲ್ಯಾಗ್",
+  Amount: "ಮೊತ್ತ",
+  Flag: "ಫ್ಲ್ಯಾಗ್",
 
   // ── Network & Financial Links & Rings Panel missing keys ────────────────────────────────────────
-  "Could not load financial links for this seed.": "ಈ ಬೀಜ ವ್ಯಕ್ತಿಗೆ ಹಣಕಾಸು ಲಿಂಕ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
-  "Selection": "ಆಯ್ಕೆ",
-  "nodes": "ನೋಡ್‌ಗಳು",
-  "edges": "ಸಂಪರ್ಕಗಳು",
+  "Could not load financial links for this seed.":
+    "ಈ ಬೀಜ ವ್ಯಕ್ತಿಗೆ ಹಣಕಾಸು ಲಿಂಕ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+  Selection: "ಆಯ್ಕೆ",
+  nodes: "ನೋಡ್‌ಗಳು",
+  edges: "ಸಂಪರ್ಕಗಳು",
   "PNG image": "PNG ಚಿತ್ರ",
   "Rendered graph snapshot": "ಚಿತ್ರದ ರೂಪದಲ್ಲಿ ಗ್ರಾಫ್ ನಕ್ಷೆ",
   "JSON snapshot": "JSON ಸ್ನ್ಯಾಪ್‌ಶಾಟ್",
   "Nodes, edges, metadata": "ನೋಡ್‌ಗಳು, ಸಂಪರ್ಕಗಳು, ಮೆಟಾಡೇಟಾ",
-  "Tip: Shift-click nodes to add to selection": "ಸಲಹೆ: ಆಯ್ಕೆಗೆ ಸೇರಿಸಲು ನೋಡ್‌ಗಳನ್ನು ಶಿಫ್ಟ್-ಕ್ಲಿಕ್ ಮಾಡಿ",
+  "Tip: Shift-click nodes to add to selection":
+    "ಸಲಹೆ: ಆಯ್ಕೆಗೆ ಸೇರಿಸಲು ನೋಡ್‌ಗಳನ್ನು ಶಿಫ್ಟ್-ಕ್ಲಿಕ್ ಮಾಡಿ",
   "Seed Person": "ಬೀಜ ವ್ಯಕ್ತಿ",
-  "Accused": "ಆರೋಪಿ",
+  Accused: "ಆರೋಪಿ",
   "Victim / Complainant": "ಸಂತ್ರಸ್ತರು / ದೂರುದಾರರು",
   "Case / FIR": "ಪ್ರಕರಣ / ಎಫ್‌ಐಆರ್",
-  "SEED": "ಬೀಜ",
-  "Connections": "ಸಂಪರ್ಕಗಳು",
+  SEED: "ಬೀಜ",
+  Connections: "ಸಂಪರ್ಕಗಳು",
   "Node type": "ನೋಡ್ ಪ್ರಕಾರ",
-  "Role": "ಪಾತ್ರ",
+  Role: "ಪಾತ್ರ",
   "FIR/Case": "ಎಫ್‌ಐಆರ್/ಪ್ರಕರಣ",
-  "Person": "ವ್ಯಕ್ತಿ",
+  Person: "ವ್ಯಕ್ತಿ",
   "Linked cases": "ಲಿಂಕ್ ಮಾಡಲಾದ ಪ್ರಕರಣಗಳು",
   "Open case": "ಪ್ರಕರಣವನ್ನು ತೆರೆಯಿರಿ",
   "No linked cases found for this node.": "ಈ ನೋಡ್‌ಗೆ ಯಾವುದೇ ಲಿಂಕ್ ಮಾಡಿದ ಪ್ರಕರಣಗಳು ಕಂಡುಬಂದಿಲ್ಲ.",
   "Network summary": "ನೆಟ್‌ವರ್ಕ್ ಸಾರಾಂಶ",
   "Total nodes": "ಒಟ್ಟು ನೋಡ್‌ಗಳು",
-  "Victims": "ಸಂತ್ರಸ್ತರು",
+  Victims: "ಸಂತ್ರಸ್ತರು",
   "Cases / FIRs": "ಪ್ರಕರಣಗಳು / ಎಫ್‌ಐಆರ್‌ಗಳು",
-  "Could not load ring detection results. Clearance L2+ required.": "ರಿಂಗ್ ಪತ್ತೆ ಫಲಿತಾಂಶಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. L2+ ಅನುಮತಿ ಅಗತ್ಯವಿದೆ.",
+  "Could not load ring detection results. Clearance L2+ required.":
+    "ರಿಂಗ್ ಪತ್ತೆ ಫಲಿತಾಂಶಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. L2+ ಅನುಮತಿ ಅಗತ್ಯವಿದೆ.",
   "No rings detected": "ಯಾವುದೇ ರಿಂಗ್‌ಗಳು ಪತ್ತೆಯಾಗಿಲ್ಲ",
-  "No co-accused groups (≥3 shared cases) detected for the current filter.": "ಪ್ರಸ್ತುತ ಫಿಲ್ಟರ್‌ಗಾಗಿ ಯಾವುದೇ ಸಹ-ಆರೋಪಿ ಗುಂಪುಗಳು (≥3 ಹಂಚಿಕೊಂಡ ಪ್ರಕರಣಗಳು) ಪತ್ತೆಯಾಗಿಲ್ಲ.",
+  "No co-accused groups (≥3 shared cases) detected for the current filter.":
+    "ಪ್ರಸ್ತುತ ಫಿಲ್ಟರ್‌ಗಾಗಿ ಯಾವುದೇ ಸಹ-ಆರೋಪಿ ಗುಂಪುಗಳು (≥3 ಹಂಚಿಕೊಂಡ ಪ್ರಕರಣಗಳು) ಪತ್ತೆಯಾಗಿಲ್ಲ.",
   "shared cases": "ಹಂಚಿಕೊಂಡ ಪ್ರಕರಣಗಳು",
-  "Hide": "ಮರೆಮಾಡಿ",
+  Hide: "ಮರೆಮಾಡಿ",
   "High Value": "ಹೆಚ್ಚಿನ ಮೌಲ್ಯ",
   "Near Incident": "ಪ್ರಕರಣದ ಸಮಯದ ಸಮೀಪ",
   "Rapid Repeated": "ತ್ವರಿತ ಪುನರಾವರ್ತನೆ",
   "Circular Flow": "ವೃತ್ತಾಕಾರದ ಹರಿವು",
-  "Synthetic financial leads - investigative use only, not proof of guilt.": "ಸಂಶ್ಲೇಷಿತ ಹಣಕಾಸು ಪಾತ್ರಗಳು - ತನಿಖಾ ಬಳಕೆಗೆ ಮಾತ್ರ, ಇದು ಅಪರಾಧದ ಪುರಾವೆಯಲ್ಲ.",
-  "Fullscreen": "ಪೂರ್ಣ ಪರದೆ",
-  "cases": "ಪ್ರಕರಣಗಳು",
-  "Cases": "ಪ್ರಕರಣಗಳು",
-  "match": "ಹೊಂದಾಣಿಕೆ",
+  "Synthetic financial leads - investigative use only, not proof of guilt.":
+    "ಸಂಶ್ಲೇಷಿತ ಹಣಕಾಸು ಪಾತ್ರಗಳು - ತನಿಖಾ ಬಳಕೆಗೆ ಮಾತ್ರ, ಇದು ಅಪರಾಧದ ಪುರಾವೆಯಲ್ಲ.",
+  Fullscreen: "ಪೂರ್ಣ ಪರದೆ",
+  cases: "ಪ್ರಕರಣಗಳು",
+  Cases: "ಪ್ರಕರಣಗಳು",
+  match: "ಹೊಂದಾಣಿಕೆ",
 
   "⏱ Auto": "⏱ ಸ್ವಯಂ",
   "⏱ Manual": "⏱ ಮ್ಯಾನುಯಲ್",
@@ -1301,13 +1397,15 @@ const DICT: Record<string, string> = {
   "Circular Flow": "ವೃತ್ತಾಕಾರದ ಹರಿವು",
   "FIR/Case": "ಪ್ರಕರಣ / ಎಫ್‌ಐಆರ್",
   "Victim / Complainant": "ಸಂತ್ರಸ್ತ / ದೂರುದಾರ",
-  "Could not load ring detection results. Clearance L2+ required.": "ರಿಂಗ್ ಪತ್ತೆ ಫಲಿತಾಂಶಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. L2+ ಅನುಮತಿ ಅಗತ್ಯವಿದೆ.",
+  "Could not load ring detection results. Clearance L2+ required.":
+    "ರಿಂಗ್ ಪತ್ತೆ ಫಲಿತಾಂಶಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. L2+ ಅನುಮತಿ ಅಗತ್ಯವಿದೆ.",
   "No rings detected": "ಯಾವುದೇ ರಿಂಗ್‌ಗಳು ಪತ್ತೆಯಾಗಿಲ್ಲ",
-  "No co-accused groups (≥3 shared cases) detected for the current filter.": "ಪ್ರಸ್ತುತ ಫಿಲ್ಟರ್‌ಗಾಗಿ ಯಾವುದೇ ಸಹ-ಆರೋಪಿಗಳ ಗುಂಪುಗಳು (≥3 ಹಂಚಿಕೊಂಡ ಪ್ರಕರಣಗಳು) ಪತ್ತೆಯಾಗಿಲ್ಲ.",
-  "About": "ಬಗ್ಗೆ",
+  "No co-accused groups (≥3 shared cases) detected for the current filter.":
+    "ಪ್ರಸ್ತುತ ಫಿಲ್ಟರ್‌ಗಾಗಿ ಯಾವುದೇ ಸಹ-ಆರೋಪಿಗಳ ಗುಂಪುಗಳು (≥3 ಹಂಚಿಕೊಂಡ ಪ್ರಕರಣಗಳು) ಪತ್ತೆಯಾಗಿಲ್ಲ.",
+  About: "ಬಗ್ಗೆ",
 
   // ── Trends Screen ──────────────────────────────────────────────────────────
-  "Seasonal": "ಋತುಮಾನ",
+  Seasonal: "ಋತುಮಾನ",
   "Top District": "ಪ್ರಮುಖ ಜಿಲ್ಲೆ",
   "QoQ Trend": "ತ್ರೈಮಾಸಿಕದ ಪ್ರವೃತ್ತಿ",
   "QoQ Change": "QoQ ಬದಲಾವಣೆ",
@@ -1316,29 +1414,35 @@ const DICT: Record<string, string> = {
   "accounts for": "ಪ್ರತಿನಿಧಿಸುತ್ತದೆ",
   "of all incidents in this view.": "ಈ ವೀಕ್ಷಣೆಯಲ್ಲಿನ ಎಲ್ಲಾ ಘಟನೆಗಳ ಪೈಕಿ.",
   "by incident count": "ಘಟನೆಗಳ ಸಂಖ್ಯೆಯ ಆಧಾರದ ಮೇಲೆ",
-  "Total reported incidents per period. Peak bar is highlighted.": "ಪ್ರತಿ ಅವಧಿಗೆ ವರದಿಯಾದ ಒಟ್ಟು ಘಟನೆಗಳು. ಗರಿಷ್ಠ ಬಾರ್ ಅನ್ನು ಹೈಲೈಟ್ ಮಾಡಲಾಗಿದೆ.",
+  "Total reported incidents per period. Peak bar is highlighted.":
+    "ಪ್ರತಿ ಅವಧಿಗೆ ವರದಿಯಾದ ಒಟ್ಟು ಘಟನೆಗಳು. ಗರಿಷ್ಠ ಬಾರ್ ಅನ್ನು ಹೈಲೈಟ್ ಮಾಡಲಾಗಿದೆ.",
   "Peak period": "ಗರಿಷ್ಠ ಅವಧಿ",
-  "incidents": "ಘಟನೆಗಳು",
-  "max": "ಗರಿಷ್ಠ",
+  incidents: "ಘಟನೆಗಳು",
+  max: "ಗರಿಷ್ಠ",
   "No trend data": "ಯಾವುದೇ ಪ್ರವೃತ್ತಿ ಡೇಟಾ ಇಲ್ಲ",
-  "No seasonal data available for the current filters.": "ಪ್ರಸ್ತುತ ಫಿಲ್ಟರ್‌ಗಳಿಗೆ ಯಾವುದೇ ಋತುಮಾನ ಡೇಟಾ ಲಭ್ಯವಿಲ್ಲ.",
-  "Seasonal lift % indicates how much higher the crime rate is compared to the year-round baseline for that period. Higher values indicate stronger seasonal patterns.": "ಋತುಮಾನದ ಹೆಚ್ಚಳ % ಆ ಅವಧಿಯ ವರ್ಷಪೂರ್ತಿ ಬೇಸ್‌ಲೈನ್‌ಗೆ ಹೋಲಿಸದರೆ ಅಪರಾಧ ದರ ಎಷ್ಟು ಹೆಚ್ಚಾಗಿದೆ ಎಂಬುದನ್ನು ಸೂಚಿಸುತ್ತದೆ. ಹೆಚ್ಚಿನ ಮೌಲ್ಯಗಳು ಬಲವಾದ ಋತುಮಾನದ ಮಾದರಿಗಳನ್ನು ಸೂಚಿಸುತ್ತವೆ.",
+  "No seasonal data available for the current filters.":
+    "ಪ್ರಸ್ತುತ ಫಿಲ್ಟರ್‌ಗಳಿಗೆ ಯಾವುದೇ ಋತುಮಾನ ಡೇಟಾ ಲಭ್ಯವಿಲ್ಲ.",
+  "Seasonal lift % indicates how much higher the crime rate is compared to the year-round baseline for that period. Higher values indicate stronger seasonal patterns.":
+    "ಋತುಮಾನದ ಹೆಚ್ಚಳ % ಆ ಅವಧಿಯ ವರ್ಷಪೂರ್ತಿ ಬೇಸ್‌ಲೈನ್‌ಗೆ ಹೋಲಿಸದರೆ ಅಪರಾಧ ದರ ಎಷ್ಟು ಹೆಚ್ಚಾಗಿದೆ ಎಂಬುದನ್ನು ಸೂಚಿಸುತ್ತದೆ. ಹೆಚ್ಚಿನ ಮೌಲ್ಯಗಳು ಬಲವಾದ ಋತುಮಾನದ ಮಾದರಿಗಳನ್ನು ಸೂಚಿಸುತ್ತವೆ.",
   "Highest Seasonal Spike": "ಅತಿ ಹೆಚ್ಚಿನ ಋತುಮಾನದ ಏರಿಕೆ",
   "above baseline": "ಬೇಸ್‌ಲೈನ್‌ಗಿಂತ ಹೆಚ್ಚು",
 
   // ── Network Screen ──────────────────────────────────────────────────────────
   "Seed Entity Link Graph": "ಬೀಜ ಘಟಕ ಲಿಂಕ್ ಗ್ರಾಫ್",
-  "Enter a suspect, victim, case, or vehicle in the search bar above to build and explore the criminal relationship network.": "ಅಪರಾಧ ಸಂಬಂಧದ ಜಾಲವನ್ನು ನಿರ್ಮಿಸಲು ಮತ್ತು ಅನ್ವೇಷಿಸಲು ಮೇಲಿನ ಹುಡುಕಾಟ ಪಟ್ಟಿಯಲ್ಲಿ ಶಂಕಿತ, ಬಲಿಪಶು, ಪ್ರಕರಣ ಅಥವಾ ವಾಹನವನ್ನು ನಮೂದಿಸಿ.",
+  "Enter a suspect, victim, case, or vehicle in the search bar above to build and explore the criminal relationship network.":
+    "ಅಪರಾಧ ಸಂಬಂಧದ ಜಾಲವನ್ನು ನಿರ್ಮಿಸಲು ಮತ್ತು ಅನ್ವೇಷಿಸಲು ಮೇಲಿನ ಹುಡುಕಾಟ ಪಟ್ಟಿಯಲ್ಲಿ ಶಂಕಿತ, ಬಲಿಪಶು, ಪ್ರಕರಣ ಅಥವಾ ವಾಹನವನ್ನು ನಮೂದಿಸಿ.",
   "Enter suspect name…": "ಶಂಕಿತನ ಹೆಸರು ನಮೂದಿಸಿ…",
-  "Build": "ನಿರ್ಮಿಸಿ",
+  Build: "ನಿರ್ಮಿಸಿ",
 
   // ── Dispatch Panel ──────────────────────────────────────────────────────────
   "Dispatch & Green Corridor": "ರವಾನೆ ಮತ್ತು ಹಸಿರು ಕಾರಿಡಾರ್",
-  "Dispatch patrol units · priority signal corridor · live tracking": "ಗಸ್ತು ಘಟಕಗಳ ರವಾನೆ · ಆದ್ಯತೆಯ ಸಿಗ್ನಲ್ ಕಾರಿಡಾರ್ · ಲೈವ್ ಟ್ರ್ಯಾಕಿಂಗ್",
-  "Scene": "ಘಟನಾ ಸ್ಥಳ",
+  "Dispatch patrol units · priority signal corridor · live tracking":
+    "ಗಸ್ತು ಘಟಕಗಳ ರವಾನೆ · ಆದ್ಯತೆಯ ಸಿಗ್ನಲ್ ಕಾರಿಡಾರ್ · ಲೈವ್ ಟ್ರ್ಯಾಕಿಂಗ್",
+  Scene: "ಘಟನಾ ಸ್ಥಳ",
   "Dispatch nearest unit": "ಹತ್ತಿರದ ಘಟಕವನ್ನು ರವಾನಿಸಿ",
   "Simulate Dispatch & Green Corridor": "ರವಾನೆ ಮತ್ತು ಹಸಿರು ಕಾರಿಡಾರ್ ಸಿಮ್ಯುಲೇಶನ್",
-  "Demo routes only — not linked to live data or the Demo Simulation tab.": "ಡೆಮೋ ಮಾರ್ಗಗಳು ಮಾತ್ರ — ಲೈವ್ ಡೇಟಾ ಅಥವಾ ಡೆಮೋ ಸಿಮ್ಯುಲೇಶನ್ ಟ್ಯಾಬ್‌ಗೆ ಲಿಂಕ್ ಮಾಡಲಾಗಿಲ್ಲ.",
+  "Demo routes only — not linked to live data or the Demo Simulation tab.":
+    "ಡೆಮೋ ಮಾರ್ಗಗಳು ಮಾತ್ರ — ಲೈವ್ ಡೇಟಾ ಅಥವಾ ಡೆಮೋ ಸಿಮ್ಯುಲೇಶನ್ ಟ್ಯಾಬ್‌ಗೆ ಲಿಂಕ್ ಮಾಡಲಾಗಿಲ್ಲ.",
   "Armed robbery in progress": "ಶಸ್ತ್ರಸಜ್ಜಿತ ದರೋಡೆ ನಡೆಯುತ್ತಿದೆ",
   "Hit & run with injuries": "ಗಾಯಗಳೊಂದಿಗೆ ಡಿಕ್ಕಿ ಹೊಡೆದು ಪರಾರಿಯಾದ ಪ್ರಕರಣ",
   "Chain snatching": "ಚೈನ್ ಕಿತ್ತುಕೊಳ್ಳುವಿಕೆ",
@@ -1349,41 +1453,43 @@ const DICT: Record<string, string> = {
   "Initial route": "ಆರಂಭಿಕ ಮಾರ್ಗ",
   "Patrol unit": "ಗಸ್ತು ಘಟಕ",
   "Deactivate Corridor": "ಕಾರಿಡಾರ್ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ",
-  "Arrived": "ತಲುಪಿದೆ",
-  "ETA": "ನಿರೀಕ್ಷಿತ ಸಮಯ",
-  "Accepted": "ಸ್ವೀಕರಿಸಲಾಗಿದೆ",
+  Arrived: "ತಲುಪಿದೆ",
+  ETA: "ನಿರೀಕ್ಷಿತ ಸಮಯ",
+  Accepted: "ಸ್ವೀಕರಿಸಲಾಗಿದೆ",
   "En route": "ಮಾರ್ಗದಲ್ಲಿದೆ",
   "On scene": "ಸ್ಥಳದಲ್ಲಿದೆ",
-  "Cleared": "ಪರಿಹರಿಸಲಾಗಿದೆ",
+  Cleared: "ಪರಿಹರಿಸಲಾಗಿದೆ",
   "Working…": "ಕೆಲಸ ಮಾಡಲಾಗುತ್ತಿದೆ…",
   "Simulate All": "ಎಲ್ಲವನ್ನೂ ಸಿಮ್ಯುಲೇಟ್ ಮಾಡಿ",
   "Stop All": "ಎಲ್ಲವನ್ನೂ ನಿಲ್ಲಿಸಿ",
 
   // ── Camera Review ───────────────────────────────────────────────────────────
   "Camera Review": "ಕ್ಯಾಮೆರಾ ಪರಿಶೀಲನೆ",
-  "AI detection · human confirmation · incident filing": "AI ಪತ್ತೆಹಚ್ಚುವಿಕೆ · ಮಾನವ ದೃಢೀಕರಣ · ಪ್ರಕರಣ ದಾಖಲಿಸುವಿಕೆ",
+  "AI detection · human confirmation · incident filing":
+    "AI ಪತ್ತೆಹಚ್ಚುವಿಕೆ · ಮಾನವ ದೃಢೀಕರಣ · ಪ್ರಕರಣ ದಾಖಲಿಸುವಿಕೆ",
   "Live CCTV Feed": "ಲೈವ್ ಸಿಸಿಟಿವಿ ಫೀಡ್",
-  "STOPPED": "ನಿಲ್ಲಿಸಲಾಗಿದೆ",
+  STOPPED: "ನಿಲ್ಲಿಸಲಾಗಿದೆ",
   "YOLO RUNNING": "YOLO ಚಾಲನೆಯಲ್ಲಿದೆ",
   "Starting…": "ಪ್ರಾರಂಭಿಸಲಾಗುತ್ತಿದೆ…",
   "Stopping…": "ನಿಲ್ಲಿಸಲಾಗುತ್ತಿದೆ…",
-  "Start": "ಪ್ರಾರಂಭಿಸಿ",
-  "Stop": "ನಿಲ್ಲಿಸಿ",
+  Start: "ಪ್ರಾರಂಭಿಸಿ",
+  Stop: "ನಿಲ್ಲಿಸಿ",
   "Incident Review Queue": "ಘಟನೆ ಪರಿಶೀಲನಾ ಸರತಿ ಸಾಲು",
   "Clear All": "ಎಲ್ಲವನ್ನೂ ಅಳಿಸಿ",
   "No candidates awaiting review.": "ಪರಿಶೀಲನೆಗಾಗಿ ಯಾವುದೇ ಘಟನೆಗಳು ಕಾಯುತ್ತಿಲ್ಲ.",
-  "Press Start to run YOLO on the preloaded video": "ಪೂರ್ವ-ಲೋಡ್ ಮಾಡಿದ ವೀಡಿಯೊದಲ್ಲಿ YOLO ರನ್ ಮಾಡಲು ಪ್ರಾರಂಭಿಸಿ ಕ್ಲಿಕ್ ಮಾಡಿ",
+  "Press Start to run YOLO on the preloaded video":
+    "ಪೂರ್ವ-ಲೋಡ್ ಮಾಡಿದ ವೀಡಿಯೊದಲ್ಲಿ YOLO ರನ್ ಮಾಡಲು ಪ್ರಾರಂಭಿಸಿ ಕ್ಲಿಕ್ ಮಾಡಿ",
   "total fight.mp4 · loops until stopped": "total fight.mp4 · ನಿಲ್ಲಿಸುವವರೆಗೆ ಲೂಪ್ ಆಗುತ್ತದೆ",
   "Detection Feed": "ಪತ್ತೆಹಚ್ಚುವಿಕೆ ಫೀಡ್",
   "Start the detector to see events here.": "ಇಲ್ಲಿ ಘಟನೆಗಳನ್ನು ನೋಡಲು ಡಿಟೆಕ್ಟರ್ ಪ್ರಾರಂಭಿಸಿ.",
-  "events": "ಘಟನೆಗಳು",
+  events: "ಘಟನೆಗಳು",
   "Connecting to detection stream…": "ಪತ್ತೆಹಚ್ಚುವಿಕೆ ಸ್ಟ್ರೀಮ್‌ಗೆ ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ…",
   "Clear all?": "ಎಲ್ಲವನ್ನೂ ಅಳಿಸುವುದೇ?",
   "Clearing…": "ಅಳಿಸಲಾಗುತ್ತಿದೆ…",
-  "Cancel": "ರದ್ದುಮಾಡಿ",
+  Cancel: "ರದ್ದುಮಾಡಿ",
   "No preview": "ಮುನ್ನೋಟ ಲಭ್ಯವಿಲ್ಲ",
   "Confirm → file case": "ದೃಢೀಕರಿಸಿ → ಪ್ರಕರಣ ದಾಖಲಿಸಿ",
-  "Reject": "ತಿರಸ್ಕರಿಸಿ",
+  Reject: "ತಿರಸ್ಕರಿಸಿ",
   "Weapon / Firearm": "ಆಯುಧ / ಬಂದೂಕು",
   "Firearm Detected": "ಬಂದೂಕು ಪತ್ತೆಯಾಗಿದೆ",
   "Physical Altercation": "ದೈಹಿಕ ಜಗಳ",
@@ -1391,8 +1497,9 @@ const DICT: Record<string, string> = {
   "Suspicious Vehicle": "ಶಂಕಾಸ್ಪದ ವಾಹನ",
   "Road Accident": "ರಸ್ತೆ ಅಪಘಾತ",
   "Theft / Snatching": "ಕಳ್ಳತನ / ಕಿತ್ತುಕೊಳ್ಳುವಿಕೆ",
-  "Incident": "ಘಟನೆ",
-  "YOLO is scanning. Flagged incidents will appear here.": "YOLO ಸ್ಕ್ಯಾನ್ ಮಾಡುತ್ತಿದೆ. ಗುರುತಿಸಲಾದ ಘಟನೆಗಳು ಇಲ್ಲಿ ಗೋಚರಿಸುತ್ತವೆ.",
+  Incident: "ಘಟನೆ",
+  "YOLO is scanning. Flagged incidents will appear here.":
+    "YOLO ಸ್ಕ್ಯಾನ್ ಮಾಡುತ್ತಿದೆ. ಗುರುತಿಸಲಾದ ಘಟನೆಗಳು ಇಲ್ಲಿ ಗೋಚರಿಸುತ್ತವೆ.",
 };
 
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (s: string) => string };
@@ -2171,7 +2278,7 @@ const ALL_TRANSLATABLE: string[] = [
   "your.name@ksp.gov.in",
   "— groups of co-accused appearing together across multiple FIRs",
   "⏱ Auto",
-  "⏱ Manual"
+  "⏱ Manual",
 ];
 const LLM_CACHE_KEY = "satyam.translation.llm-cache";
 
@@ -2212,22 +2319,29 @@ export async function enrichDictWithLLM(
   // Combine: static manifest + runtime misses — everything needing translation
   // Filter to only strings not already in DICT with a real Kannada value
   const selfHits = Object.keys(DICT).filter((k) => DICT[k] === k);
-  const allMissing = Array.from(new Set([...ALL_TRANSLATABLE, ...selfHits, ...runtimeMisses]))
-    .filter((s) => {
-      if (!s || s.trim().length <= 1) return false;
-      // Skip if already in DICT with a real Kannada translation
-      const existing = DICT[s];
-      if (existing && existing !== s && /[\u0C80-\u0CFF]/.test(existing)) return false;
-      // Skip pure numbers / symbols
-      if (/^[\d\s.%,:/()[\]{}#@!?]+$/.test(s)) return false;
-      // Skip strings already in Kannada
-      if (/[\u0C80-\u0CFF]/.test(s)) return false;
-      return true;
-    });
+  const allMissing = Array.from(
+    new Set([...ALL_TRANSLATABLE, ...selfHits, ...runtimeMisses]),
+  ).filter((s) => {
+    if (!s || s.trim().length <= 1) return false;
+    // Skip if already in DICT with a real Kannada translation
+    const existing = DICT[s];
+    if (existing && existing !== s && /[\u0C80-\u0CFF]/.test(existing)) return false;
+    // Skip pure numbers / symbols
+    if (/^[\d\s.%,:/()[\]{}#@!?]+$/.test(s)) return false;
+    // Skip strings already in Kannada
+    if (/[\u0C80-\u0CFF]/.test(s)) return false;
+    return true;
+  });
 
   if (allMissing.length === 0) {
-    onProgress?.(`All ${ALL_TRANSLATABLE.length} strings are already translated — nothing to enrich.`, 0, 0);
-    try { localStorage.removeItem(missedKey); } catch {}
+    onProgress?.(
+      `All ${ALL_TRANSLATABLE.length} strings are already translated — nothing to enrich.`,
+      0,
+      0,
+    );
+    try {
+      localStorage.removeItem(missedKey);
+    } catch {}
     return 0;
   }
 
@@ -2340,14 +2454,22 @@ Rules:
 
   // Translate each field type
   const fieldGroups: [string, string[], string][] = [
-    ["station", dataValues.station_names,
-      "Translate these Karnataka police station names to Kannada. Keep 'PS' suffix in English."],
-    ["district", dataValues.districts,
-      "Translate these Karnataka district names to Kannada script."],
-    ["crime_type", dataValues.crime_types,
-      "Translate these crime type names to Kannada. Use official police terminology."],
-    ["status", dataValues.statuses,
-      "Translate these case status values to Kannada."],
+    [
+      "station",
+      dataValues.station_names,
+      "Translate these Karnataka police station names to Kannada. Keep 'PS' suffix in English.",
+    ],
+    [
+      "district",
+      dataValues.districts,
+      "Translate these Karnataka district names to Kannada script.",
+    ],
+    [
+      "crime_type",
+      dataValues.crime_types,
+      "Translate these crime type names to Kannada. Use official police terminology.",
+    ],
+    ["status", dataValues.statuses, "Translate these case status values to Kannada."],
   ];
 
   for (const [field, values, hint] of fieldGroups) {
@@ -2387,7 +2509,9 @@ Rules:
         if (Object.keys(valid).length > 0) {
           setDataTranslations(field, valid);
         }
-      } catch { /* continue with next batch */ }
+      } catch {
+        /* continue with next batch */
+      }
     }
   }
 

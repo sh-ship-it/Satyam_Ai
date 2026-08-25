@@ -39,6 +39,7 @@ export const SCREEN_CYCLE: string[] = [
   "/board",
   "/reports",
   "/audit",
+  "/news",
 ];
 
 /** Index of the current route within the cycle (or 0 if not found). */

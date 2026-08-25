@@ -76,6 +76,28 @@ SCREEN_CAPABILITIES: dict[str, dict] = {
             "filter_community": {"desc": "Filter to a community/crime type", "params": {"value": "string"}},
         },
     },
+    # Viewing-only screen: live Kannada news television embedded from YouTube.
+    # It reads no database and writes nothing, so the actions are all playback.
+    # Declared here so a command that merely mentions news does not score onto
+    # /reports (which owns "report") and navigate the officer to the wrong screen.
+    "/news": {
+        "name": "News Feed (live Karnataka news TV channels)",
+        "keywords": ["news", "news feed", "news channel", "channels", "live tv", "tv",
+                     "broadcast", "telecast", "watch news"],
+        "kn": ["ಸುದ್ದಿ", "ವಾರ್ತೆ", "ಟಿವಿ", "ಚಾನೆಲ್"],
+        "actions": {
+            "set_channel": {
+                "desc": "Switch to a named Kannada news channel",
+                "params": {"channel": "TV9 Kannada|Public TV|Asianet Suvarna News|News18 Kannada|"
+                                      "Power TV News|Republic Kannada|NewsFirst Kannada|"
+                                      "TV5 Kannada|Vistara News|News 1 Kannada"},
+            },
+            "next_channel": {"desc": "Move to the next channel in the list", "params": {}},
+            "mute": {"desc": "Mute the stream audio", "params": {}},
+            "unmute": {"desc": "Unmute the stream audio", "params": {}},
+            "refresh": {"desc": "Reload the live stream", "params": {}},
+        },
+    },
     "/reports": {
         "name": "Report Builder",
         "keywords": ["report", "reports", "brief", "pdf", "document", "dossier"],
@@ -636,6 +658,23 @@ def _rule_plan(command: str, current_route: Optional[str], lang: str) -> dict:
             val = _strip_to_value(text)
             if val:
                 actions.append({"screen": route, "action": "add_case", "params": {"query": val}})
+
+    elif route == "/news":
+        # Playback only. Channel matching is left to the frontend, which owns the
+        # verified slug/name table — duplicating it here would give two lists to
+        # keep in sync and the backend has no use for the channel ids.
+        if "mute" in low and "unmute" not in low:
+            actions.append({"screen": route, "action": "mute", "params": {}})
+        elif "unmute" in low or "sound" in low or "audio" in low or "volume" in low:
+            actions.append({"screen": route, "action": "unmute", "params": {}})
+        elif "next" in low or "another" in low or "change channel" in low or "ಮುಂದಿನ" in text:
+            actions.append({"screen": route, "action": "next_channel", "params": {}})
+        elif "refresh" in low or "reload" in low:
+            actions.append({"screen": route, "action": "refresh", "params": {}})
+        else:
+            val = _strip_to_value(text)
+            if val:
+                actions.append({"screen": route, "action": "set_channel", "params": {"channel": val}})
 
     elif route == "/board":
         if "generate" in low or "draw" in low or "create" in low or "scene" in low:
