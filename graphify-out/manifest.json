@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1787568845.9759307,
-    "ast_hash": "3d60837be52bbab4d2e87d7e0410e059",
+    "mtime": 1787672367.573488,
+    "ast_hash": "bae2e61f8dcb9a37ad36cde0daf56948",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -685,8 +685,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routeTree.gen.ts": {
-    "mtime": 1787505047.6986141,
-    "ast_hash": "b2e813611ddfa0191c8e5186eeff253c",
+    "mtime": 1787671967.4376009,
+    "ast_hash": "41b429812cc262a7d7a31bc12ebe39e0",
     "semantic_hash": ""
   },
   "frontend/src/router.tsx": {
@@ -710,8 +710,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
-    "mtime": 1787595689.6128304,
-    "ast_hash": "5331b371b88a126c7bda1b190f745da3",
+    "mtime": 1787672222.6194017,
+    "ast_hash": "9be61b5e49c9d70d627bd6f1eb08e2a5",
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
@@ -2047,6 +2047,11 @@
   "frontend/src/components/LineSidebar.tsx": {
     "mtime": 1787605839.66386,
     "ast_hash": "9afe9966ab996869affb62fb041cc9dd",
+    "semantic_hash": ""
+  },
+  "frontend/src/routes/graphs.tsx": {
+    "mtime": 1787675537.4089077,
+    "ast_hash": "fb570115cf1cef24d559633dd446c949",
     "semantic_hash": ""
   }
 }
