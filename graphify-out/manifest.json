@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1787672367.573488,
-    "ast_hash": "bae2e61f8dcb9a37ad36cde0daf56948",
+    "mtime": 1787678946.148835,
+    "ast_hash": "e2138a06c742862671a146e42c7cd507",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -790,8 +790,8 @@
     "semantic_hash": ""
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1787670625.5703845,
-    "ast_hash": "237144bd509549bba50e07cd8071ab71",
+    "mtime": 1787680038.3646507,
+    "ast_hash": "bfe829ddc6a61e59948ba76255172171",
     "semantic_hash": ""
   },
   "frontend/src/routes/README.md": {
@@ -985,8 +985,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/forecast.tsx": {
-    "mtime": 1787568774.6432765,
-    "ast_hash": "f49d100e70d36002e86943a20c3e64eb",
+    "mtime": 1787679819.7525327,
+    "ast_hash": "feb67ded1835fef0c9c449757147073f",
     "semantic_hash": ""
   },
   "frontend/src/routes/profile.$personId.tsx": {
@@ -1000,8 +1000,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/trends.tsx": {
-    "mtime": 1782299043.9276738,
-    "ast_hash": "8f6aeba81487a3bf906bf260c72579e3",
+    "mtime": 1787678886.8038692,
+    "ast_hash": "c2762c0eec90acb3dbfc7b6d645c9ac6",
     "semantic_hash": ""
   },
   "backend/migrations/003_add_ps4_ps7_tables.sql": {
@@ -1495,8 +1495,8 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/screen_agent.py": {
-    "mtime": 1787568812.539361,
-    "ast_hash": "baf23ce273402398f9f4ce3a593bc97e",
+    "mtime": 1787679036.2105649,
+    "ast_hash": "e9e9483461d9bacf3ae468a6bec44f35",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/voiceAgent.ts": {
@@ -1540,8 +1540,8 @@
     "semantic_hash": ""
   },
   "frontend/src/input/gestureActions.ts": {
-    "mtime": 1787488837.2125542,
-    "ast_hash": "1e6dd4ff8e8fe179d5e7a3cd693175a1",
+    "mtime": 1787679067.138092,
+    "ast_hash": "ef6a41f27108395cd9c095d6cd912225",
     "semantic_hash": ""
   },
   "frontend/src/input/gestureClassifier.ts": {
@@ -2050,8 +2050,13 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/graphs.tsx": {
-    "mtime": 1787675537.4089077,
-    "ast_hash": "fb570115cf1cef24d559633dd446c949",
+    "mtime": 1787678094.4146872,
+    "ast_hash": "3f39496d637d0d27f7a85e3c835ec181",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/chartPalette.ts": {
+    "mtime": 1787679789.1936102,
+    "ast_hash": "adc5427dcc29e109408caa35cc67a0ea",
     "semantic_hash": ""
   }
 }

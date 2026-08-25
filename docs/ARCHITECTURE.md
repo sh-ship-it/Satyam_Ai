@@ -728,12 +728,57 @@ stop is `--warning` rather than a categorical series colour: an earlier revision
 
 **Honesty labels on this screen are deliberate.** There is no neural network:
 `risk_score` is a hand-tuned formula over incident density and a 30-vs-30-day lift,
-the `why` strings are templates, and the backend calls its own backtest a
-"data-driven pseudo-backtest". The screen therefore labels the PAI tile "heuristic,
-not a model", states on the risk surface that **the horizon control does not yet
+and the `why` strings are templates. The screen therefore labels the PAI tile
+"heuristic", states on the risk surface that **the horizon control does not yet
 change the numbers** (`get_forecast_hotspots` accepts `horizon_days` and never uses
 it — the windows are fixed), and notes that MO clusters ignore the filters because
-`/mo/clusting` takes no parameters.
+`/mo/clusters` takes no parameters.
+
+### The forecast backtest is a real backtest now
+
+`get_forecast_backtest` was a single-fold density comparison that published a
+figure it could not support. Every problem below was live, and all of them are
+fixed together because they interact — correcting the denominator alone moves the
+number in the opposite direction to correcting the train window.
+
+| Was | Problem | Now |
+|---|---|---|
+| `metric="PAI"` on a hit rate | PAI is a *ratio* against area share, not a percentage. The card printed 41% as "PAI score". | `pai` is the ratio (4.41x measured); `hit_rate_top_10_percent_cells` stays a rate and is labelled as one. |
+| `ranked … WHERE train_cnt > 0` | Cells with no history were dropped from the **denominator**, not just from selection. 345 of 452 held-out incidents (76%) never counted. | Unrankable cells are still never selected, but every held-out incident stays in the denominator. `excluded_incidents` reports how many. |
+| 30-day train window | Combined with the filter above, only 381 cells were rankable and the busiest held 4 incidents. | Features match the scorer: all-time density, last-30-day count, prior 30-90-day baseline, all as of the fold origin. |
+| Hardcoded `0.02` grid | ~1.1 incidents per cell. Ranking counts that small ranks Poisson noise. | `grid_size` parameter, default `0.05`. The screen forwards its own Grid control, so Fine/Medium/Coarse now changes the score. |
+| One fold, n=107 | 95% CI of 32-50%. Any "improvement" under 18 points was unmeasurable. | `folds` rolling-origin windows (default 6, n=2,581) plus a Wilson interval and per-fold breakdown. |
+| Ranked raw `train_cnt` | The screen shows `20 + density + lift`, so the backtest validated a different model than the UI. | `_RISK_SCORE_SQL` transcribes `_risk_score()`; the two are pinned together by `tests/test_forecast_backtest.py`. |
+| `PERCENT_RANK() <= 0.10` | Ties on a sparse grid pushed the "top decile" to 11.0% of cells. | `NTILE(10)`, tie-broken on coordinates — never on `test_cnt`, which would leak the answer. |
+| No parameters | Crime type, district and grid filters could not narrow it. | All three accepted and forwarded from the screen. |
+| No baseline | 41% sounds good or bad depending on nothing. | Reports the random-targeting baseline, and PEI against the best achievable selection at equal area. |
+
+Measured on the cloud dataset, 6 folds x 30 days, n=2,581 held-out incidents:
+
+| Grid | Hit rate | PAI | PEI | Train incidents/cell |
+|---|---|---|---|---|
+| 0.01° | 27.7% | 2.78x | 0.28 | 3.4 |
+| 0.02° | 33.8% | 3.39x | 0.34 | 6.4 |
+| 0.05° | 44.1% (95% CI 42-46) | 4.41x | 0.61 | 20.3 |
+
+The PEI column is the finding: at 0.02° the formula captures a third of what a
+hindsight-perfect selection of the same cell count would capture, at 0.05° nearly
+two thirds. Grid resolution, not data quality, was the binding constraint — 99.6%
+of cases carry coordinates.
+
+**Definitions that a reader has to know to quote the number.** The *study area* is
+the set of cells that ever hold an incident, not the map extent; a wider study
+area inflates PAI for identical predictions. *Hit rate* is pooled over incidents
+rather than averaged over folds, so a sparse fold cannot outvote a busy one. The
+response carries these as a `caveats` list and the screen renders them under the
+metrics, so the qualifications travel with the figure instead of living only here.
+
+**Still open, and deliberately not hidden:** this validates a hand-tuned formula,
+not a learned model. The next gains are model-side — near-repeat/Hawkes decay
+instead of a flat window, kernel density instead of hard cell edges, per-crime-type
+models, and the unused `district_socio_economic_indicators` and `incident_time`
+hour-of-day features. Fitting the `20 + density + lift` weights against this
+backtest is now possible because there is finally a stable metric to fit against.
 
 **Voice.** `screen_agent.py` merged the `/trends` manifest into `/forecast`: the union
 of both keyword sets and `set_granularity` added to the seven existing actions. The

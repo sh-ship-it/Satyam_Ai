@@ -147,11 +147,41 @@ export type ForecastAlert = {
   fairness_note: string;
 };
 export type ForecastAlertsResponse = { alerts: ForecastAlert[]; as_of_date: string | null };
+export type BacktestFold = {
+  fold: number;
+  origin: string | null;
+  test_end: string | null;
+  hits: number;
+  test_incidents: number;
+  hit_rate: number;
+  cells_selected: number;
+  cells_study_area: number;
+  pai: number;
+};
 export type BacktestResponse = {
   metric: string;
+  /** A hit rate (0-1), not PAI. Field name kept for API compatibility. */
   hit_rate_top_10_percent_cells: number;
   window: string;
   explanation: string;
+  pai: number;
+  pei: number;
+  baseline_hit_rate: number;
+  area_share_percent: number;
+  hit_rate_ci_low: number;
+  hit_rate_ci_high: number;
+  hits: number;
+  test_incidents: number;
+  excluded_incidents: number;
+  folds: number;
+  grid_size: number;
+  grid_degrees_note: string | null;
+  cells_selected: number;
+  cells_study_area: number;
+  mean_train_incidents_per_cell: number;
+  scorer: string;
+  caveats: string[];
+  per_fold: BacktestFold[];
 };
 
 export type TrendPoint = { period: string; crime_type: string; district: string; count: number };
@@ -256,7 +286,8 @@ export const intelligence = {
   getForecastHotspots: (params?: URLSearchParams) =>
     apiFetch<ForecastHotspotsResponse>(`/api/forecast/hotspots${params ? "?" + params : ""}`),
   getForecastAlerts: () => apiFetch<ForecastAlertsResponse>("/api/forecast/alerts"),
-  getForecastBacktest: () => apiFetch<BacktestResponse>("/api/forecast/backtest"),
+  getForecastBacktest: (params?: URLSearchParams) =>
+    apiFetch<BacktestResponse>(`/api/forecast/backtest${params ? "?" + params : ""}`),
 
   // PS3 — Trends & MO
   getTrends: (params?: URLSearchParams) =>

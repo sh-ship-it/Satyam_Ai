@@ -14,7 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.rbac import Principal
 from app.schemas.intelligence import (
-    AgeBucket, BacktestResponse, CaseTimelineResponse, CorrelationPoint,
+    AgeBucket, BacktestFold, BacktestResponse, CaseTimelineResponse, CorrelationPoint,
     Correlations, DistrictCount, ForecastAlert, ForecastAlertsResponse,
     ForecastCell, ForecastHotspotsResponse, GenderCount, GraphResponse,
     KnownAssociate, MOCluster, MOClustersResponse, OffenderProfileResponse,
@@ -45,6 +45,29 @@ def _risk_label(score: int) -> str:
     if score >= 30:
         return "Medium"
     return "Low"
+
+
+def _lift_percent(recent: int, baseline: int) -> int:
+    """How much more active the last 30 days are than the prior 30-90 days."""
+    if baseline > 0:
+        return int(((recent - baseline) / baseline) * 100)
+    # Any recent activity where there was none before counts as a spike.
+    return 50 if recent > 0 else 0
+
+
+def _risk_score(total: int, recent: int, baseline: int) -> int:
+    """
+    The forecast risk score served by /forecast/hotspots.
+
+    Hand-tuned, not learned: a log-damped density term plus a bounded recency-lift
+    bonus over a floor of 20. Kept as a named function because
+    `_RISK_SCORE_SQL` in this module transcribes it into SQL for the backtest —
+    the two must agree or the backtest measures a different model than the screen
+    shows. `tests/test_forecast_backtest.py` pins the values.
+    """
+    density_score = min(50, int(math.log1p(total) * 10))
+    lift_score = min(30, max(0, int(_lift_percent(recent, baseline) * 0.3)))
+    return min(99, 20 + density_score + lift_score)
 
 
 def _mask(name: str | None, principal: Principal) -> str:
@@ -448,17 +471,8 @@ async def get_forecast_hotspots(
         total = int(r["total"] or 1)
         recent = int(r["recent"] or 0)
         baseline = int(r["baseline_count"] or 0)
-        # Lift = how much more active recently vs the prior period
-        lift_pct = 0
-        if baseline > 0:
-            lift_pct = int(((recent - baseline) / baseline) * 100)
-        elif recent > 0:
-            lift_pct = 50  # any recent activity when there was none before = spike
-
-        # Risk score: base from density + lift bonus
-        density_score = min(50, int(math.log1p(total) * 10))
-        lift_score = min(30, max(0, int(lift_pct * 0.3)))
-        risk_score = min(99, 20 + density_score + lift_score)
+        lift_pct = _lift_percent(recent, baseline)
+        risk_score = _risk_score(total, recent, baseline)
 
         why = [f"Historical density: {total} incidents"]
         if lift_pct > 0:
@@ -612,58 +626,294 @@ async def get_forecast_alerts(session: AsyncSession) -> ForecastAlertsResponse:
     return ForecastAlertsResponse(alerts=alerts, as_of_date=as_of_str)
 
 
-async def get_forecast_backtest(session: AsyncSession) -> BacktestResponse:
+def _wilson_ci(hits: int, n: int, z: float = 1.959964) -> tuple[float, float]:
     """
-    Data-driven pseudo-backtest.
+    95% Wilson score interval for a binomial proportion.
 
-    Methodology:
-    - "Prediction": top-10% highest-density grid cells in the period
-      MAX(report_date) - 60 to -30 days.
-    - "Actuals": incidents in MAX(report_date) - 30 days to MAX(report_date).
-    - PAI hit rate = fraction of actuals that fell in the predicted cells.
+    Wilson rather than the normal approximation because the sample here is small
+    (a few hundred incidents) and the proportion is far from 0.5, which is exactly
+    where the normal approximation produces bounds outside [0, 1).
     """
-    sql = text("""
+    if n <= 0:
+        return (0.0, 0.0)
+    p = hits / n
+    d = 1.0 + z * z / n
+    centre = (p + z * z / (2 * n)) / d
+    half = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+    return (max(0.0, centre - half), min(1.0, centre + half))
+
+
+# The scorer under test, transcribed from get_forecast_hotspots so the backtest
+# validates the formula the UI actually displays rather than raw density. Any
+# change to the risk_score formula there must be mirrored here or the backtest
+# silently starts measuring a different model.
+_RISK_SCORE_SQL = """
+    least(99, 20
+        + least(50, trunc(ln(1 + total) * 10)::int)
+        + least(30, greatest(0, trunc(
+            trunc(CASE
+                WHEN baseline > 0 THEN ((recent - baseline)::numeric / baseline) * 100
+                WHEN recent  > 0 THEN 50
+                ELSE 0
+            END) * 0.3
+        )::int))
+    )
+"""
+
+
+async def get_forecast_backtest(
+    session: AsyncSession,
+    crime_type: str | None = None,
+    district: str | None = None,
+    grid_size: float = 0.05,
+    folds: int = 6,
+    test_days: int = 30,
+) -> BacktestResponse:
+    """
+    Rolling-origin backtest of the forecast risk score.
+
+    For each of `folds` consecutive `test_days` windows ending at MAX(report_date):
+
+    - **Origin** is the start of the test window. Every feature (all-time density,
+      last-30-day count, prior 30-90-day baseline) is computed from data at or
+      before the origin, so no fold sees its own future.
+    - **Prediction** is the top decile of *rankable* cells by the same
+      `risk_score` formula the hotspots endpoint serves, via `NTILE(10)`. Cells
+      with no pre-origin history are unrankable and are never selected — you
+      cannot forecast a cell you have never observed.
+    - **Denominator** is every held-out incident in the study area, including the
+      ones in cells that had no prior history. The previous implementation
+      filtered those out of the denominator, which flattered the score by roughly
+      four times on this dataset.
+    - **Study area** is every cell holding at least one incident in the fold's
+      span. Area is a normalisation constant, not a prediction, so defining it
+      over the full span leaks nothing into cell selection while keeping every
+      held-out incident inside the denominator.
+
+    Reported metrics:
+
+    - `hit_rate` — share of held-out incidents inside the selected cells.
+    - `pai` — hit rate / area share. This is the actual Predictive Accuracy Index,
+      a ratio: 1.0 means no better than picking the same amount of area at random.
+    - `pei` — hits / the most hits any selection of that many cells could have
+      achieved. Bounded 0-1, so it separates "the model is weak" from "this window
+      was unpredictable for anyone".
+    - Wilson 95% interval on the pooled hit rate, because a single 30-day window
+      carries only a few hundred incidents.
+    """
+    folds = max(1, min(24, folds))
+    test_days = max(7, min(90, test_days))
+
+    sql = text(f"""
         WITH ref AS (SELECT MAX(report_date) AS as_of FROM cases),
-        grid AS (
+        folds AS (
             SELECT
-                round(latitude / 0.02) * 0.02  AS lat_c,
-                round(longitude / 0.02) * 0.02 AS lng_c,
-                COUNT(*) FILTER (
-                    WHERE report_date BETWEEN
-                        (SELECT as_of FROM ref) - INTERVAL '60 days'
-                        AND (SELECT as_of FROM ref) - INTERVAL '30 days'
-                ) AS train_cnt,
-                COUNT(*) FILTER (
-                    WHERE report_date >= (SELECT as_of FROM ref) - INTERVAL '30 days'
-                ) AS test_cnt
+                g AS fold,
+                -- CAST(x AS int) rather than a postgres double-colon cast on the
+                -- bind name: SQLAlchemy's text() scanner skips a parameter that is
+                -- immediately followed by a cast, so the name reaches the driver
+                -- verbatim and errors. (Also why no comment here spells a bind
+                -- name with a leading colon — text() scans comments too.)
+                ((SELECT as_of FROM ref) - ((g + 1) * CAST(:test_days AS int)) * INTERVAL '1 day')::date AS origin,
+                ((SELECT as_of FROM ref) - (g * CAST(:test_days AS int)) * INTERVAL '1 day')::date       AS test_end
+            FROM generate_series(0, CAST(:folds AS int) - 1) AS g
+        ),
+        pts AS (
+            SELECT
+                round(latitude  / :grid) * :grid AS lat_c,
+                round(longitude / :grid) * :grid AS lng_c,
+                crime_type,
+                report_date
             FROM cases
             WHERE latitude IS NOT NULL AND longitude IS NOT NULL
-            GROUP BY lat_c, lng_c
+              AND (CAST(:ct   AS text) IS NULL OR crime_type ILIKE :ct)
+              AND (CAST(:dist AS text) IS NULL OR district   ILIKE :dist)
         ),
-        ranked AS (
-            SELECT *, PERCENT_RANK() OVER (ORDER BY train_cnt DESC) AS prank
-            FROM grid WHERE train_cnt > 0
+        -- Features per (fold, cell, crime type) from pre-origin data only, plus
+        -- the held-out count after the origin.
+        feat AS (
+            SELECT
+                f.fold, p.lat_c, p.lng_c,
+                COUNT(*) FILTER (WHERE p.report_date <= f.origin) AS total,
+                COUNT(*) FILTER (
+                    WHERE p.report_date >  f.origin - INTERVAL '30 days'
+                      AND p.report_date <= f.origin
+                ) AS recent,
+                COUNT(*) FILTER (
+                    WHERE p.report_date >  f.origin - INTERVAL '90 days'
+                      AND p.report_date <= f.origin - INTERVAL '30 days'
+                ) AS baseline,
+                COUNT(*) FILTER (WHERE p.report_date > f.origin) AS test_cnt
+            FROM folds f
+            JOIN pts p ON p.report_date <= f.test_end
+            GROUP BY f.fold, p.lat_c, p.lng_c, p.crime_type
+        ),
+        -- The hotspots endpoint scores per crime type and the screen surfaces the
+        -- worst one per cell, so a cell inherits its highest crime-type score.
+        scored AS (
+            SELECT
+                fold, lat_c, lng_c,
+                SUM(test_cnt) AS test_cnt,
+                SUM(total)    AS train_cnt,
+                MAX({_RISK_SCORE_SQL}) FILTER (WHERE total > 0) AS risk
+            FROM feat
+            GROUP BY fold, lat_c, lng_c
+        ),
+        area AS (
+            SELECT
+                fold,
+                COUNT(*)                                   AS cells_study_area,
+                COUNT(*) FILTER (WHERE risk IS NOT NULL)   AS cells_rankable,
+                SUM(test_cnt)                              AS test_incidents,
+                SUM(test_cnt) FILTER (WHERE risk IS NULL)  AS test_unrankable,
+                SUM(train_cnt)                             AS train_incidents
+            FROM scored GROUP BY fold
+        ),
+        -- NTILE, not PERCENT_RANK: PERCENT_RANK assigns tied cells the same rank,
+        -- so a "top 10%" cut over the ties this grid produces overshot to 11%.
+        -- Tie-break on coordinates, never on test_cnt, which would leak the answer.
+        sel AS (
+            SELECT fold, lat_c, lng_c, test_cnt,
+                   NTILE(10) OVER (PARTITION BY fold ORDER BY risk DESC, lat_c, lng_c) AS decile
+            FROM scored WHERE risk IS NOT NULL
+        ),
+        agg AS (
+            SELECT fold,
+                   COUNT(*)      AS cells_selected,
+                   SUM(test_cnt) AS hits
+            FROM sel WHERE decile = 1 GROUP BY fold
+        ),
+        -- Best achievable: the same number of cells, chosen with hindsight.
+        best AS (
+            SELECT fold, test_cnt,
+                   ROW_NUMBER() OVER (PARTITION BY fold ORDER BY test_cnt DESC) AS rn
+            FROM scored
+        ),
+        best_agg AS (
+            SELECT b.fold, SUM(b.test_cnt) AS hits_max
+            FROM best b JOIN agg a USING (fold)
+            WHERE b.rn <= a.cells_selected
+            GROUP BY b.fold
         )
         SELECT
-            SUM(test_cnt) FILTER (WHERE prank <= 0.10) AS hits,
-            SUM(test_cnt) AS total_test
-        FROM ranked
+            a.fold, f.origin, f.test_end,
+            a.cells_study_area, a.cells_rankable,
+            COALESCE(a.test_incidents, 0)  AS test_incidents,
+            COALESCE(a.test_unrankable, 0) AS test_unrankable,
+            COALESCE(a.train_incidents, 0) AS train_incidents,
+            COALESCE(g.cells_selected, 0)  AS cells_selected,
+            COALESCE(g.hits, 0)            AS hits,
+            COALESCE(m.hits_max, 0)        AS hits_max
+        FROM area a
+        JOIN folds f USING (fold)
+        LEFT JOIN agg g      USING (fold)
+        LEFT JOIN best_agg m USING (fold)
+        ORDER BY a.fold
     """)
-    r = (await session.execute(sql)).mappings().first()
-    hits = int(r["hits"] or 0) if r else 0
-    total = int(r["total_test"] or 1) if r else 1
-    hit_rate = hits / max(1, total)
+    rows = (await session.execute(sql, {
+        "grid": grid_size,
+        "folds": folds,
+        "test_days": test_days,
+        "ct": f"%{crime_type}%" if crime_type else None,
+        "dist": f"%{district}%" if district else None,
+    })).mappings().all()
+
+    per_fold: list[BacktestFold] = []
+    hits = test_total = hits_max = 0
+    cells_sel = cells_area = 0
+    train_total = rankable_total = excluded = 0
+
+    for r in rows:
+        f_hits = int(r["hits"] or 0)
+        f_test = int(r["test_incidents"] or 0)
+        f_sel = int(r["cells_selected"] or 0)
+        f_area = int(r["cells_study_area"] or 0)
+        f_rate = f_hits / f_test if f_test else 0.0
+        f_share = f_sel / f_area if f_area else 0.0
+        per_fold.append(BacktestFold(
+            fold=int(r["fold"]),
+            origin=_fmt(r["origin"]),
+            test_end=_fmt(r["test_end"]),
+            hits=f_hits,
+            test_incidents=f_test,
+            hit_rate=round(f_rate, 4),
+            cells_selected=f_sel,
+            cells_study_area=f_area,
+            pai=round(f_rate / f_share, 2) if f_share else 0.0,
+        ))
+        hits += f_hits
+        test_total += f_test
+        hits_max += int(r["hits_max"] or 0)
+        cells_sel += f_sel
+        cells_area += f_area
+        train_total += int(r["train_incidents"] or 0)
+        rankable_total += int(r["cells_rankable"] or 0)
+        excluded += int(r["test_unrankable"] or 0)
+
+    # Pooled over folds: one estimate on every held-out incident, not an average
+    # of per-fold rates, which would weight a sparse fold the same as a busy one.
+    hit_rate = hits / test_total if test_total else 0.0
+    area_share = cells_sel / cells_area if cells_area else 0.0
+    pai = hit_rate / area_share if area_share else 0.0
+    pei = hits / hits_max if hits_max else 0.0
+    ci_low, ci_high = _wilson_ci(hits, test_total)
+    per_cell = train_total / rankable_total if rankable_total else 0.0
+
+    caveats = [
+        "Not a trained model. The score under test is the hand-tuned "
+        "20 + density + lift formula the hotspots endpoint serves.",
+        "Cells with no incident history before a fold's origin are never selected, "
+        f"but their held-out incidents stay in the denominator ({excluded} of "
+        f"{test_total} incidents, {round(excluded / test_total * 100) if test_total else 0}%).",
+        "The study area is the set of cells that ever hold an incident, not the "
+        "full map extent. A larger study area would report a larger PAI for "
+        "identical predictions.",
+    ]
+    if per_cell < 3:
+        caveats.append(
+            f"Sparse grid: {per_cell:.1f} training incidents per rankable cell at "
+            f"{grid_size}°. Ranking counts this small is close to ranking noise — "
+            "widen the grid for a more stable estimate."
+        )
+    if test_total < 384:
+        caveats.append(
+            f"Only {test_total} held-out incidents, so the hit rate carries a "
+            f"95% interval of {round(ci_low * 100)}-{round(ci_high * 100)}%. "
+            "Add folds before reading small differences as improvements."
+        )
 
     return BacktestResponse(
         metric="PAI",
-        hit_rate_top_10_percent_cells=round(hit_rate, 2),
-        window="data_rolling_30d",
+        hit_rate_top_10_percent_cells=round(hit_rate, 4),
+        window=f"rolling_origin_{folds}x{test_days}d",
         explanation=(
-            f"{hits} of {total} incidents in the most recent 30-day window "
-            f"fell inside the top 10% highest-density grid cells from the prior period "
-            f"({round(hit_rate * 100)}% hit rate). "
-            "Higher values indicate the historical density signal predicts future incidents well."
+            f"Across {folds} rolling {test_days}-day windows, the top decile of "
+            f"scored cells ({cells_sel} of {cells_area} cells, "
+            f"{round(area_share * 100, 1)}% of the study area) contained {hits} of "
+            f"{test_total} held-out incidents — a {round(hit_rate * 100)}% hit rate "
+            f"(95% CI {round(ci_low * 100)}-{round(ci_high * 100)}%). "
+            f"That is PAI {pai:.2f}x versus random targeting of the same area, and "
+            f"PEI {pei:.2f} of the best any selection of {cells_sel} cells could "
+            f"have achieved with hindsight."
         ),
+        pai=round(pai, 2),
+        pei=round(pei, 3),
+        baseline_hit_rate=round(area_share, 4),
+        area_share_percent=round(area_share * 100, 2),
+        hit_rate_ci_low=round(ci_low, 4),
+        hit_rate_ci_high=round(ci_high, 4),
+        hits=hits,
+        test_incidents=test_total,
+        excluded_incidents=excluded,
+        folds=folds,
+        grid_size=grid_size,
+        grid_degrees_note=f"{grid_size}° cells (~{round(grid_size * 111)} km)",
+        cells_selected=cells_sel,
+        cells_study_area=cells_area,
+        mean_train_incidents_per_cell=round(per_cell, 2),
+        scorer="risk_score = min(99, 20 + density + lift), as served by /forecast/hotspots",
+        caveats=caveats,
+        per_fold=per_fold,
     )
 
 

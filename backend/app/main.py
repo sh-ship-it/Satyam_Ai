@@ -96,6 +96,12 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origin_list,
+        # Quick-tunnel demo links (cloudflared) get a random subdomain per run, so
+        # a fixed allow_origins entry can't be added ahead of time. Regex-matching
+        # the whole *.trycloudflare.com family covers frontend AND backend tunnel
+        # URLs without needing a restart once the link is known. Remove this once
+        # the demo is over.
+        allow_origin_regex=r"https://.*\.trycloudflare\.com",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

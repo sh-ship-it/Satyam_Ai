@@ -100,11 +100,13 @@ export function ModelInferenceTheater({
     () => nodes.filter((n) => n.level === "Critical" || n.level === "High").length,
     [nodes],
   );
-  const pai = backtest ? Math.round(backtest.hit_rate_top_10_percent_cells * 100) : null;
+  // A hit rate, not PAI. PAI is `backtest.pai`, a ratio against area share, and
+  // rendering this value with a "PAI" label overstated it by roughly ten times.
+  const hitRate = backtest ? Math.round(backtest.hit_rate_top_10_percent_cells * 100) : null;
 
   const scoredUp = useCountUp(nodes.length);
   const highUp = useCountUp(highCount);
-  const paiUp = useCountUp(pai ?? 0);
+  const hitRateUp = useCountUp(hitRate ?? 0);
 
   // Live "scoring" ticker cycling through the real cells.
   const [tickIdx, setTickIdx] = useState(0);
@@ -148,7 +150,7 @@ export function ModelInferenceTheater({
         <div className="flex items-center gap-2">
           <Metric label={t("Cells scored")} value={scoredUp} />
           <Metric label={t("High risk")} value={highUp} tone="warn" />
-          {pai !== null && <Metric label={t("PAI")} value={`${paiUp}%`} tone="ok" />}
+          {hitRate !== null && <Metric label={t("Hit rate")} value={`${hitRateUp}%`} tone="ok" />}
         </div>
       </div>
 
@@ -315,7 +317,7 @@ export function ModelInferenceTheater({
         </div>
       </div>
 
-      {/* ── Footer: live scoring ticker + backtest PAI ──────────────────── */}
+      {/* ── Footer: live scoring ticker + backtest hit rate ──────────────── */}
       <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 border-t border-border bg-muted/20">
         <div className="flex min-w-0 items-center gap-2">
           <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-success mit-ping" />
@@ -325,16 +327,18 @@ export function ModelInferenceTheater({
               : t("Standing by…")}
           </span>
         </div>
-        {pai !== null && (
+        {hitRate !== null && (
           <div className="flex shrink-0 items-center gap-2">
-            <span className="text-[10px] text-muted-foreground">{t("Backtest PAI")}</span>
+            <span className="text-[10px] text-muted-foreground">{t("Backtest hit rate")}</span>
             <div className="h-1.5 w-24 overflow-hidden rounded-full bg-muted">
               <div
                 className="h-full rounded-full bg-success"
-                style={{ width: `${Math.min(100, paiUp)}%` }}
+                style={{ width: `${Math.min(100, hitRateUp)}%` }}
               />
             </div>
-            <span className="text-[11px] font-extrabold text-success tabular-nums">{paiUp}%</span>
+            <span className="text-[11px] font-extrabold text-success tabular-nums">
+              {hitRateUp}%
+            </span>
           </div>
         )}
       </div>

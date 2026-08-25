@@ -1,7 +1,7 @@
 """Typed response schemas for all intelligence feature endpoints."""
 from __future__ import annotations
 from typing import Any
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 # ── Network / Rings ───────────────────────────────────────────────────────────
@@ -165,11 +165,46 @@ class ForecastAlertsResponse(BaseModel):
     alerts: list[ForecastAlert]
     as_of_date: str | None = None
 
+class BacktestFold(BaseModel):
+    """One rolling-origin fold: train on everything up to `origin`, test after it."""
+    fold: int
+    origin: str | None = None
+    test_end: str | None = None
+    hits: int
+    test_incidents: int
+    hit_rate: float
+    cells_selected: int
+    cells_study_area: int
+    pai: float
+
+
 class BacktestResponse(BaseModel):
     metric: str
+    # Retained field name for API compatibility. It is a *hit rate* (0-1), i.e.
+    # the share of held-out incidents inside the selected cells — not PAI.
     hit_rate_top_10_percent_cells: float
     window: str
     explanation: str
+
+    # ── honest metrics ────────────────────────────────────────────────────────
+    pai: float = 0.0             # hit rate / area share. 1.0 == no better than random.
+    pei: float = 0.0             # hits / best achievable hits at the same area. 0-1.
+    baseline_hit_rate: float = 0.0   # what random targeting of the same area yields.
+    area_share_percent: float = 0.0  # selected cells as a share of the study area.
+    hit_rate_ci_low: float = 0.0     # Wilson 95% interval on the pooled hit rate.
+    hit_rate_ci_high: float = 0.0
+    hits: int = 0
+    test_incidents: int = 0
+    excluded_incidents: int = 0   # held-out incidents in cells with no prior history.
+    folds: int = 0
+    grid_size: float = 0.0
+    grid_degrees_note: str | None = None
+    cells_selected: int = 0
+    cells_study_area: int = 0
+    mean_train_incidents_per_cell: float = 0.0
+    scorer: str = ""
+    caveats: list[str] = Field(default_factory=list)
+    per_fold: list[BacktestFold] = Field(default_factory=list)
 
 
 # ── Trends & MO ───────────────────────────────────────────────────────────────

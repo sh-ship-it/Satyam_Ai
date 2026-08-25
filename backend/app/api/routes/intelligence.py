@@ -194,11 +194,21 @@ async def forecast_alerts(
 
 @router.get("/forecast/backtest", response_model=BacktestResponse, tags=["intelligence"])
 async def forecast_backtest(
+    crime_type: str | None = None,
+    district: str | None = None,
+    # Coarser default than /forecast/hotspots on purpose: at 0.02 deg this dataset
+    # averages ~1 incident per cell, so cell ranking is mostly Poisson noise.
+    grid_size: float = Query(0.05, ge=0.005, le=0.5),
+    folds: int = Query(6, ge=1, le=24),
+    test_days: int = Query(30, ge=7, le=90),
     session: AsyncSession = Depends(get_scoped_session),
     principal: Principal = Depends(get_principal),
 ) -> BacktestResponse:
     _guard(principal)
-    return await svc.get_forecast_backtest(session)
+    return await svc.get_forecast_backtest(
+        session, crime_type=crime_type, district=district,
+        grid_size=grid_size, folds=folds, test_days=test_days,
+    )
 
 
 # ── PS3 — Trends & MO ─────────────────────────────────────────────────────────

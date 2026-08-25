@@ -86,11 +86,16 @@ import {
  *
  * HONESTY ABOUT THE MODEL
  * There is no neural network here. `risk_score` is a hand-tuned formula over
- * incident density and a 30-vs-30-day lift, the `why` strings are templates, and
- * the backend's own docstring calls the backtest a "data-driven pseudo-backtest".
+ * incident density and a 30-vs-30-day lift, and the `why` strings are templates.
  * The labelling on this screen says "heuristic" rather than implying a trained
  * model, and `horizon_days` is marked as not yet affecting the computation because
  * the service accepts the parameter and never uses it.
+ *
+ * The validation card reports a real rolling-origin backtest of that same
+ * formula: PAI as a ratio against random targeting of equal area, PEI against
+ * the best achievable selection, a Wilson interval on the hit rate, and the
+ * per-fold spread. PAI and the hit rate are different numbers and are shown
+ * separately — the tile used to print the hit rate under a "PAI" label.
  */
 
 const TAB_KEYS = ["warning", "surface", "trends", "patterns"] as const;
@@ -747,13 +752,18 @@ function ForecastScreen() {
       grid_size: String(gridSize),
     });
     const trendParams = new URLSearchParams({ granularity });
+    // The backtest validates the grid actually on screen, so a coarser grid shows
+    // a genuinely better score rather than the metric quietly using its own grid.
+    const backtestParams = new URLSearchParams({ grid_size: String(gridSize) });
     if (crimeType) {
       hotspotParams.set("crime_type", crimeType);
       trendParams.set("crime_type", crimeType);
+      backtestParams.set("crime_type", crimeType);
     }
     if (district) {
       hotspotParams.set("district", district);
       trendParams.set("district", district);
+      backtestParams.set("district", district);
     }
 
     const settle = (key: SourceKey, ok: boolean) => {
@@ -785,7 +795,7 @@ function ForecastScreen() {
       run("hotspots", intelligence.getForecastHotspots(hotspotParams), async (h) => {
         setCells(lang === "KN" ? await translateCells(h.cells) : h.cells);
       }),
-      run("backtest", intelligence.getForecastBacktest(), (b) => setBacktest(b)),
+      run("backtest", intelligence.getForecastBacktest(backtestParams), (b) => setBacktest(b)),
       run("trends", intelligence.getTrends(trendParams), (tr) => {
         setSeries(tr.series);
         setDeltas(tr.deltas);
@@ -1132,17 +1142,18 @@ function ForecastScreen() {
               }
               tone={trendDir === "up" ? palette.up : trendDir === "down" ? palette.down : undefined}
             />
+            {/* PAI is a ratio against random targeting of the same area, not a
+                percentage. The tile previously showed the hit rate under a "PAI"
+                label, which are different numbers. */}
             <KpiTile
               icon={ShieldAlert}
               label={t("Backtest PAI")}
-              value={
-                isPending("backtest")
-                  ? "…"
-                  : backtest
-                    ? `${Math.round(backtest.hit_rate_top_10_percent_cells * 100)}%`
-                    : "—"
+              value={isPending("backtest") ? "…" : backtest ? `${backtest.pai.toFixed(1)}×` : "—"}
+              sub={
+                backtest
+                  ? `${Math.round(backtest.hit_rate_top_10_percent_cells * 100)}% ${t("hit rate")} · ${t("heuristic")}`
+                  : t("heuristic, not a model")
               }
-              sub={t("heuristic, not a model")}
             />
           </div>
 
@@ -1293,31 +1304,130 @@ function ForecastScreen() {
                 ) : !backtest ? (
                   <Empty label={t("Backtest unavailable")} icon={ShieldAlert} />
                 ) : (
-                  <div className="grid gap-4 md:grid-cols-3">
-                    <div>
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                        {backtest.metric} {t("score")}
+                  <div className="space-y-4">
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                      {/* PAI — the headline, as a ratio. */}
+                      <div>
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                          {t("PAI vs random")}
+                        </div>
+                        <div className="mt-1 flex items-end gap-1.5">
+                          <span
+                            className="text-3xl font-extrabold tabular-nums leading-none"
+                            style={{ color: palette.down }}
+                          >
+                            {backtest.pai.toFixed(2)}×
+                          </span>
+                        </div>
+                        <p className="mt-1.5 text-[10px] leading-snug text-muted-foreground">
+                          {t("Same area picked at random would hit")}{" "}
+                          {(backtest.baseline_hit_rate * 100).toFixed(1)}%
+                        </p>
                       </div>
-                      <div className="mt-1 flex items-end gap-1.5">
-                        <span
-                          className="text-3xl font-extrabold tabular-nums leading-none"
-                          style={{ color: palette.down }}
-                        >
-                          {Math.round(backtest.hit_rate_top_10_percent_cells * 100)}%
-                        </span>
-                        <span className="mb-0.5 text-[10px] text-muted-foreground">
-                          {t("hit rate")}
-                        </span>
+
+                      {/* Hit rate, with the interval that makes it readable. */}
+                      <div>
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                          {t("Hit rate")}
+                        </div>
+                        <div className="mt-1 flex items-end gap-1.5">
+                          <span className="text-3xl font-extrabold tabular-nums leading-none">
+                            {Math.round(backtest.hit_rate_top_10_percent_cells * 100)}%
+                          </span>
+                          <span className="mb-0.5 text-[10px] tabular-nums text-muted-foreground">
+                            ±
+                            {Math.round(
+                              ((backtest.hit_rate_ci_high - backtest.hit_rate_ci_low) / 2) * 100,
+                            )}
+                          </span>
+                        </div>
+                        <p className="mt-1.5 text-[10px] leading-snug tabular-nums text-muted-foreground">
+                          {backtest.hits}/{backtest.test_incidents} · 95% CI{" "}
+                          {Math.round(backtest.hit_rate_ci_low * 100)}–
+                          {Math.round(backtest.hit_rate_ci_high * 100)}%
+                        </p>
                       </div>
-                      <div className="mt-2">
-                        <MeterBar
-                          value={backtest.hit_rate_top_10_percent_cells * 100}
-                          max={100}
-                          color={palette.down}
-                        />
+
+                      {/* PEI — bounded 0-1, so it separates a weak model from an
+                          unpredictable window. */}
+                      <div>
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                          {t("PEI of best possible")}
+                        </div>
+                        <div className="mt-1 flex items-end gap-1.5">
+                          <span className="text-3xl font-extrabold tabular-nums leading-none">
+                            {backtest.pei.toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="mt-2">
+                          <MeterBar value={backtest.pei * 100} max={100} color={palette.down} />
+                        </div>
+                      </div>
+
+                      {/* What was actually measured. */}
+                      <div>
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                          {t("Setup")}
+                        </div>
+                        <dl className="mt-1 space-y-0.5 text-[10px] tabular-nums text-muted-foreground">
+                          <div className="flex justify-between gap-2">
+                            <dt>{t("Folds")}</dt>
+                            <dd className="text-foreground/80">
+                              {backtest.window.replace("rolling_origin_", "")}
+                            </dd>
+                          </div>
+                          <div className="flex justify-between gap-2">
+                            <dt>{t("Grid")}</dt>
+                            <dd className="text-foreground/80">{backtest.grid_degrees_note}</dd>
+                          </div>
+                          <div className="flex justify-between gap-2">
+                            <dt>{t("Cells picked")}</dt>
+                            <dd className="text-foreground/80">
+                              {fmt(backtest.cells_selected)}/{fmt(backtest.cells_study_area)}
+                            </dd>
+                          </div>
+                          <div className="flex justify-between gap-2">
+                            <dt>{t("Train per cell")}</dt>
+                            <dd className="text-foreground/80">
+                              {backtest.mean_train_incidents_per_cell}
+                            </dd>
+                          </div>
+                        </dl>
                       </div>
                     </div>
-                    <div className="md:col-span-2">
+
+                    {/* Fold spread: one window is noisy, the shape across windows
+                        is what says whether the signal is stable. */}
+                    {backtest.per_fold.length > 1 && (
+                      <div>
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                          {t("Hit rate by fold")}
+                        </div>
+                        <div className="mt-1.5 space-y-1">
+                          {backtest.per_fold.map((f) => (
+                            <div key={f.fold} className="flex items-center gap-2">
+                              <span className="w-14 shrink-0 text-[10px] tabular-nums text-muted-foreground">
+                                {f.origin?.slice(0, 7) ?? "—"}
+                              </span>
+                              <div className="min-w-0 flex-1">
+                                <MeterBar
+                                  value={f.hit_rate * 100}
+                                  max={100}
+                                  color={palette.down}
+                                  height="h-1.5"
+                                />
+                              </div>
+                              <span className="w-[8.5rem] shrink-0 text-right text-[10px] tabular-nums text-muted-foreground">
+                                {Math.round(f.hit_rate * 100)}% · {f.hits}/{f.test_incidents} ·{" "}
+                                {f.pai.toFixed(1)}×
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div>
                       <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                         {t("What this means")}
                       </div>
@@ -1325,6 +1435,25 @@ function ForecastScreen() {
                         {backtest.explanation}
                       </p>
                     </div>
+
+                    {backtest.caveats.length > 0 && (
+                      <div>
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                          {t("Read this before quoting the number")}
+                        </div>
+                        <ul className="mt-1 space-y-1">
+                          {backtest.caveats.map((c, i) => (
+                            <li
+                              key={i}
+                              className="flex gap-1.5 text-[10px] leading-relaxed text-muted-foreground"
+                            >
+                              <span className="mt-[0.35rem] h-1 w-1 shrink-0 rounded-full bg-muted-foreground/60" />
+                              <span>{c}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 )}
               </Card>
