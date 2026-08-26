@@ -28,7 +28,7 @@ import logging
 import re
 from typing import Any, Literal, Optional
 
-from app.models.registry import get_llm
+from app.models.registry import get_classifier_llm, get_llm
 
 log = logging.getLogger(__name__)
 
@@ -128,7 +128,10 @@ SCREEN_CAPABILITIES: dict[str, dict] = {
             "set_crime_type": {"desc": "Filter by crime type", "params": {"crime_type": "string"}},
             "set_district": {"desc": "Filter by district", "params": {"district": "string"}},
             "set_horizon": {"desc": "Set forecast horizon in days", "params": {"days": "3|7|14|30"}},
-            "set_grid": {"desc": "Set grid resolution", "params": {"grid": "fine|med|coarse"}},
+            # "med" was declared here but the screen only understands "medium"
+            # (it fell through to the default), so the value domain and the screen
+            # disagreed. Now the domain IS enforced, so it has to be the truth.
+            "set_grid": {"desc": "Set grid resolution", "params": {"grid": "fine|medium|coarse"}},
             "set_severity": {"desc": "Filter alerts by risk level (opens the Early warning tab)", "params": {"level": "All|Critical|High|Medium|Low"}},
             "set_granularity": {"desc": "Set trend time granularity (opens the Trends tab)", "params": {"granularity": "week|month|quarter"}},
             "refresh": {"desc": "Reload every data source", "params": {}},
@@ -178,8 +181,10 @@ SCREEN_CAPABILITIES: dict[str, dict] = {
         "kn": ["ವಿಷನ್", "ತಂತ್ರಾತ್ಮಕ ನಕ್ಷೆ", "ಭೂಗೋಳ"],
         "actions": {
             "set_view": {
-                "desc": "Switch projection/camera: flat 2D, tilted 3D, or the Earth globe",
-                "params": {"mode": "2d|3d|earth"},
+                # street3d is a real mode the screen has always supported; leaving
+                # it out of the manifest hid it from the planner entirely.
+                "desc": "Switch projection/camera: flat 2D, tilted 3D, the Earth globe, or photoreal street 3D",
+                "params": {"mode": "2d|3d|earth|street3d"},
             },
             "set_treatment": {
                 "desc": "Apply a visual treatment to the map",
@@ -197,8 +202,11 @@ SCREEN_CAPABILITIES: dict[str, dict] = {
                 },
             },
             "set_hex_radius": {
-                "desc": "Set the crime-density bin radius in metres",
-                "params": {"radius_m": "50|100|500|1000"},
+                # The BIN control offers auto/100/500/1000. 50 was declared here
+                # and is not selectable, so it re-binned into a state the control
+                # could not display.
+                "desc": "Set the crime-density bin radius in metres, or auto to scale with zoom",
+                "params": {"radius_m": "auto|100|500|1000"},
             },
         },
     },
@@ -757,11 +765,16 @@ def _rule_plan(command: str, current_route: Optional[str], lang: str) -> dict:
                     )
                     break
 
-        radius = _extract_number(text, 50, 1000)
-        if radius in (50, 100, 500, 1000):
+        if "auto" in low and any(w in low for w in ("bin", "radius", "hex")):
             actions.append(
-                {"screen": route, "action": "set_hex_radius", "params": {"radius_m": radius}}
+                {"screen": route, "action": "set_hex_radius", "params": {"radius_m": "auto"}}
             )
+        else:
+            radius = _extract_number(text, 100, 1000)
+            if radius in (100, 500, 1000):
+                actions.append(
+                    {"screen": route, "action": "set_hex_radius", "params": {"radius_m": radius}}
+                )
 
     elif route in ("/audit", "/dossier", "/admin"):
         val = _strip_to_value(text)
@@ -795,15 +808,95 @@ def _rule_plan(command: str, current_route: Optional[str], lang: str) -> dict:
         # Pure data question — let the chat brain answer
         return {"route": None, "answer": True, "speak": "", "actions": []}
 
-    return {"route": route, "answer": False, "speak": speak, "actions": _normalize_samples(actions)}
+    # The rule planner went straight out without validation, on the reasoning that
+    # it only ever emits canonical values. True today, but it left the manifest
+    # with two places to keep in sync — and the hex-radius domain had already
+    # drifted from the control it describes. One gate for every plan, LLM or rule.
+    # Sanitize BEFORE normalizing: a sentinel is not a valid domain value.
+    return {
+        "route": route,
+        "answer": False,
+        "speak": speak,
+        "actions": _normalize_samples(_sanitize_actions(actions)),
+    }
 
 # ════════════════════════════════════════════════════════════════════════════
 # VALIDATION — only allow-listed (screen, action, param) survive
 # ════════════════════════════════════════════════════════════════════════════
 
+_TRUE_WORDS = {"1", "true", "yes", "y", "on", "enable", "enabled", "show", "shown"}
+_FALSE_WORDS = {"0", "false", "no", "n", "off", "disable", "disabled", "hide", "hidden"}
+
+
+def _coerce_param(value: object, domain: str) -> object | None:
+    """Validate one param VALUE against its declared domain. None means reject.
+
+    The domains in SCREEN_CAPABILITIES were already written as a contract
+    ("3|7|14|30", "boolean", "people|financial|rings") and fed to the LLM in the
+    system prompt, but nothing enforced them: _sanitize_actions filtered param
+    KEYS and passed any value straight through. So `set_horizon days=9` reached a
+    control that only offers 3/7/14/30 and blanked it, and `toggle_layer on="no"`
+    reached a `Boolean(...)` cast that reads "no" as true and switched the layer
+    ON. Validating here means each screen gets one guard instead of eleven.
+
+    Returns the CANONICAL form, so "3D" becomes "3d" and "14" becomes 14 —
+    otherwise the screens would each need their own normalisation.
+    """
+    if domain == "boolean":
+        if isinstance(value, bool):
+            return value
+        s = str(value).strip().lower()
+        if s in _TRUE_WORDS:
+            return True
+        if s in _FALSE_WORDS:
+            return False
+        return None
+
+    if domain == "number":
+        if isinstance(value, bool):  # bool is an int subclass; not a number here
+            return None
+        try:
+            n = float(value)  # type: ignore[arg-type]
+        except (TypeError, ValueError):
+            return None
+        if n != n or n in (float("inf"), float("-inf")):
+            return None
+        return int(n) if n.is_integer() else n
+
+    if "|" in domain:
+        options = [o.strip() for o in domain.split("|")]
+        # An enum whose options contain spaces is a human-readable NAME list, and
+        # the screen resolves those fuzzily on purpose (see /news set_channel,
+        # where the frontend owns the verified slug table). Treat it as prompt
+        # documentation rather than a contract, or "put on public tv" gets dropped.
+        if any(" " in o for o in options):
+            return _coerce_param(value, "string")
+        s = str(value).strip().lower()
+        for opt in options:
+            if s == opt.lower():
+                # Numeric enums ("3|7|14|30") must arrive as numbers, or the
+                # frontend's `Number(p.days)` comparison against its own list
+                # would be comparing a string.
+                try:
+                    return int(opt)
+                except ValueError:
+                    return opt
+        return None
+
+    # domain == "string" (and anything unrecognised, which is treated as free text)
+    s = str(value).strip()
+    return s or None
+
+
 def _sanitize_actions(raw_actions: list[dict]) -> list[dict]:
     """Drop anything not in the manifest. Guarantees the frontend only ever
-    receives safe, known (screen, action) pairs."""
+    receives safe, known (screen, action) pairs with in-domain VALUES.
+
+    An action whose parameter fails validation is dropped whole rather than
+    passed on with the bad key removed: `set_horizon` with no `days` is not a
+    weaker version of the request, it is a different one, and the screen would
+    report it as applied.
+    """
     clean: list[dict] = []
     for a in raw_actions or []:
         if not isinstance(a, dict):
@@ -813,9 +906,26 @@ def _sanitize_actions(raw_actions: list[dict]) -> list[dict]:
         spec = SCREEN_CAPABILITIES.get(screen or "")
         if not spec or action not in spec["actions"]:
             continue
-        allowed_params = spec["actions"][action]["params"]
+        allowed_params: dict[str, str] = spec["actions"][action]["params"]
         params_in = a.get("params") or {}
-        params_out = {k: v for k, v in params_in.items() if k in allowed_params}
+        if not isinstance(params_in, dict):
+            params_in = {}
+        params_out: dict[str, object] = {}
+        rejected = False
+        for k, domain in allowed_params.items():
+            if k not in params_in:
+                continue
+            coerced = _coerce_param(params_in[k], domain)
+            if coerced is None:
+                log.warning(
+                    "screen_agent.param_rejected screen=%s action=%s param=%s value=%r domain=%s",
+                    screen, action, k, params_in[k], domain,
+                )
+                rejected = True
+                break
+            params_out[k] = coerced
+        if rejected:
+            continue
         clean.append({"screen": screen, "action": action, "params": params_out})
     return clean
 
@@ -846,9 +956,15 @@ def _is_demo_echo(raw: str) -> bool:
 
 async def _try_llm(engine: Optional[str], user_prompt: str) -> Optional[dict]:
     """Run ONE LLM engine and return a parsed plan dict, or None on any problem
-    (demo echo, parse failure, network/429 error)."""
+    (demo echo, parse failure, network/429 error).
+
+    Screen planning uses the cheap classifier lane, never the metered OpenAI
+    brain: picking one of ~17 screens is classification, and a spoken command
+    would otherwise cost two budget units (plan + compose) instead of one. An
+    explicit non-OpenAI engine from the Settings panel is still honoured.
+    """
     try:
-        llm = get_llm(engine)
+        llm = get_classifier_llm() if (engine or "") in ("", "openai") else get_llm(engine)
         raw = await llm.complete(
             user_prompt, system=AGENT_SYSTEM, temperature=0.1, json_schema=AGENT_SCHEMA
         )

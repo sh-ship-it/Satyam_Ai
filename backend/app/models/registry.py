@@ -14,10 +14,13 @@ by calling the override variants `get_llm_for`, `get_sql_llm_for`, etc.
 """
 from __future__ import annotations
 
+import logging
 from functools import lru_cache
 from typing import Literal
 
 from app.config import get_settings
+
+log = logging.getLogger(__name__)
 from app.models.base import (
     LLM, Embedder, Reranker, SpeechToText, TextToSpeech, Translator,
 )
@@ -56,6 +59,118 @@ def get_fallback_llm() -> LLM:
     """Low-latency fallback lane (always Groq) used on timeout / 429 from primary."""
     from app.models.api.groq import GroqLLM
     return GroqLLM()
+
+
+@lru_cache
+def get_classifier_llm() -> LLM:
+    """Cheap lane for intent routing and screen planning. NEVER OpenAI.
+
+    Classifying an utterance into a closed enum, or picking one of ~17 screens,
+    does not need GPT-4o — and at a 50/day budget it must not, because a single
+    spoken command costs screen_agent + router + compose. Spending two of those
+    three on classification leaves ~16 commands for a whole day.
+
+    Groq first (fastest, and its own quota is generous), Gemini if Groq is
+    unavailable.
+    """
+    s = get_settings()
+    if s.groq_api_key:
+        from app.models.api.groq import GroqLLM
+        return GroqLLM()
+    from app.models.api.gemini import GeminiLLM
+    return GeminiLLM()
+
+
+def _is_demo(text: str) -> bool:
+    """A `[demo:...]` echo means the adapter had no API key.
+
+    Same convention as `screen_agent._is_demo_echo`: treat it as a miss so the
+    cascade keeps looking instead of shipping a placeholder as an answer.
+    """
+    return not text or text.lstrip().startswith("[demo:")
+
+
+async def complete_with_brain(
+    prompt: str,
+    *,
+    system: str | None = None,
+    temperature: float = 0.0,
+    json_schema: dict | None = None,
+    engine: str | None = None,
+) -> tuple[str, str]:
+    """Budgeted brain call. Returns `(text, engine_actually_used)`.
+
+    THIS IS THE ONLY PLACE THE OPENAI BUDGET IS MEANT TO BE SPENT.
+    The 50 requests/day buy ANSWER QUALITY, not classification. Routing
+    (`pipeline/router.py`) and screen planning (`pipeline/screen_agent.py`) use
+    `get_classifier_llm()` instead; Text-to-SQL has its own `get_sql_llm()` lane
+    and stays off this budget entirely.
+
+    Cascade: OpenAI (if requested and in budget) → Gemini → Groq. Gemini is the
+    explicit failover target for an exhausted OpenAI budget.
+
+    Every downgrade is logged with its own event name. That discipline is copied
+    from `pipeline/router.py`, where it exists because a silent fallback once made
+    a dead Gemini key look like bad routing.
+    """
+    s = get_settings()
+    resolved = engine or (None if s.model_backend != "local" else "local") or s.brain_engine
+    attempted: list[str] = []
+
+    async def _run(name: str) -> str | None:
+        attempted.append(name)
+        try:
+            out = await get_llm(name).complete(  # type: ignore[arg-type]
+                prompt, system=system, temperature=temperature, json_schema=json_schema
+            )
+        except Exception as exc:  # noqa: BLE001
+            from app.models.quota import is_quota_error
+
+            if name == "openai" and is_quota_error(exc):
+                log.warning("brain.openai_429_marking_exhausted err=%s", exc)
+            else:
+                log.warning("brain.lane_failed engine=%s err=%s", name, exc)
+            return None
+        if _is_demo(out):
+            log.warning("brain.demo_echo engine=%s - no API key, falling through", name)
+            return None
+        return out
+
+    # 1) OpenAI, but only if it is the requested brain AND has budget left.
+    if resolved == "openai":
+        from app.models.quota import openai_quota
+
+        remaining = await openai_quota.remaining()
+        if remaining <= 0:
+            log.warning("brain.openai_quota_exhausted remaining=0 - using gemini")
+        else:
+            out = await _run("openai")
+            if out is not None:
+                return out, "openai"
+
+    # 2) The requested engine, when it was not OpenAI (gemini / groq / local).
+    elif resolved:
+        out = await _run(resolved)
+        if out is not None:
+            return out, resolved
+
+    # 3) Gemini — the explicit failover target.
+    if "gemini" not in attempted:
+        out = await _run("gemini")
+        if out is not None:
+            log.info("brain.failover_to_gemini after=%s", ",".join(attempted[:-1]) or "none")
+            return out, "gemini"
+
+    # 4) Groq — final lane, so a Gemini outage still answers.
+    if "groq" not in attempted:
+        out = await _run("groq")
+        if out is not None:
+            log.info("brain.failover_to_groq after=%s", ",".join(attempted[:-1]))
+            return out, "groq"
+
+    raise RuntimeError(
+        f"every brain lane failed or was unconfigured (tried: {', '.join(attempted) or 'none'})"
+    )
 
 
 # ── Text-to-SQL LLM ──────────────────────────────────────────────────────────

@@ -342,6 +342,10 @@ const DICT: Record<string, string> = {
   Uses: "ಬಳಕೆ",
   "Google · multimodal · default": "Google · ಬಹುಮಾದರಿ · ಡಿಫಾಲ್ಟ್",
   "GPT-4o · strong reasoning": "GPT-4o · ಬಲವಾದ ತರ್ಕ",
+  "left today": "ಇಂದು ಉಳಿದಿದೆ",
+  "I couldn't do that on this screen.": "ಈ ಪರದೆಯಲ್ಲಿ ಅದನ್ನು ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
+  "Some steps didn't apply.": "ಕೆಲವು ಹಂತಗಳು ಅನ್ವಯಿಸಲಿಲ್ಲ.",
+  "Daily budget spent · using Gemini": "ದೈನಂದಿನ ಮಿತಿ ಮುಗಿದಿದೆ · Gemini ಬಳಕೆ",
   "Cloud · fastest": "ಕ್ಲೌಡ್ · ವೇಗವಾದ",
   "Choose the model that powers chat. Keys are set on the server (.env).":
     "ಚಾಟ್ ಅನ್ನು ನಿಯಂತ್ರಿಸುವ ಮಾದರಿ ಆಯ್ಕೆ ಮಾಡಿ. ಕೀಗಳನ್ನು ಸರ್ವರ್‌ನಲ್ಲಿ ಹೊಂದಿಸಿ.",

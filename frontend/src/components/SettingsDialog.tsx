@@ -21,14 +21,18 @@ import {
 import { useI18n } from "@/lib/i18n";
 import { enrichDictWithLLM, enrichDataWithLLM } from "@/lib/i18n";
 import { api, type SessionUser } from "@/lib/api/client";
-import {
-  loadHandsFree,
-  saveHandsFree,
-  defaultHandsFree,
-} from "@/config/handsFreeConfig";
+import { loadHandsFree, saveHandsFree, defaultHandsFree } from "@/config/handsFreeConfig";
 import type { HandsFreeSettings } from "@/input/types";
 
-type Tab = "profile" | "models" | "preferences" | "notifications" | "security" | "data" | "handsfree" | "translation";
+type Tab =
+  | "profile"
+  | "models"
+  | "preferences"
+  | "notifications"
+  | "security"
+  | "data"
+  | "handsfree"
+  | "translation";
 
 // Per-session engine overrides — persisted in localStorage and sent with each chat request.
 export type EngineSettings = {
@@ -79,11 +83,16 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
   const [tab, setTab] = useState<Tab>("profile");
   const [engines, setEngines] = useState<EngineSettings>(loadEngineSettings);
   const [me, setMe] = useState<SessionUser | null>(null);
-  const [providers, setProviders] = useState<import("@/lib/api/client").ModelProviderStatus | null>(null);
+  const [providers, setProviders] = useState<import("@/lib/api/client").ModelProviderStatus | null>(
+    null,
+  );
 
   useEffect(() => {
     if (open && tab === "models") {
-      api.modelProviders().then(setProviders).catch(() => {});
+      api
+        .modelProviders()
+        .then(setProviders)
+        .catch(() => {});
     }
   }, [open, tab]);
 
@@ -337,15 +346,35 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                   <div className="flex flex-col gap-2">
                     {(
                       [
-                        { id: "gemini", label: "Gemini 2.5 Flash",    hint: t("Google · multimodal · default"), envKey: "GEMINI_API_KEY",  ok: providers?.gemini_configured },
-                        { id: "openai", label: "ChatGPT (OpenAI)",    hint: t("GPT-4o · strong reasoning"),     envKey: "OPENAI_API_KEY",  ok: providers?.openai_configured },
-                        { id: "groq",   label: "Groq Llama-3.3-70B",  hint: t("Cloud · fastest"),               envKey: "GROQ_API_KEY",    ok: providers?.groq_configured },
+                        {
+                          id: "gemini",
+                          label: "Gemini 2.5 Flash",
+                          hint: t("Google · multimodal · default"),
+                          envKey: "GEMINI_API_KEY",
+                          ok: providers?.gemini_configured,
+                        },
+                        {
+                          id: "openai",
+                          label: "ChatGPT (OpenAI)",
+                          hint: t("GPT-4o · strong reasoning"),
+                          envKey: "OPENAI_API_KEY",
+                          ok: providers?.openai_configured,
+                        },
+                        {
+                          id: "groq",
+                          label: "Groq Llama-3.3-70B",
+                          hint: t("Cloud · fastest"),
+                          envKey: "GROQ_API_KEY",
+                          ok: providers?.groq_configured,
+                        },
                       ] as const
                     ).map((m) => (
                       <button
                         key={m.id}
                         type="button"
-                        onClick={() => updateEngine("brainEngine", m.id as EngineSettings["brainEngine"])}
+                        onClick={() =>
+                          updateEngine("brainEngine", m.id as EngineSettings["brainEngine"])
+                        }
                         className={
                           "flex items-center justify-between rounded-[5px] border-2 border-foreground px-3 py-2 text-left transition " +
                           (engines.brainEngine === m.id
@@ -362,6 +391,18 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                           <span className="block text-[10px] font-mono opacity-60">
                             {t("Uses")} {m.envKey}
                           </span>
+                          {/* The OpenAI key is capped at 50 requests/day, so what
+                              is left is operational info: at zero the brain has
+                              already failed over to Gemini for the rest of the
+                              UTC day and the officer should see that here rather
+                              than infer it from slower, differently-worded answers. */}
+                          {m.id === "openai" && providers?.openai_calls_remaining != null && (
+                            <span className="block text-[10px] font-bold">
+                              {providers.openai_calls_remaining > 0
+                                ? `${providers.openai_calls_remaining} / ${providers.openai_daily_limit} ${t("left today")}`
+                                : t("Daily budget spent · using Gemini")}
+                            </span>
+                          )}
                         </span>
                         <span
                           className={
@@ -377,7 +418,9 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                     ))}
                   </div>
                   <p className="text-[10px] text-muted-foreground">
-                    {t("To enable a model, add its API key to the server .env and restart. Your selection is saved on this device and used for every chat.")}
+                    {t(
+                      "To enable a model, add its API key to the server .env and restart. Your selection is saved on this device and used for every chat.",
+                    )}
                   </p>
                 </div>
 
@@ -575,9 +618,10 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                       // Notify backend so the active connection switches immediately,
                       // then clear the cached token (cloud vs local have different users)
                       // and reload so all pages re-fetch from the new database.
-                      api.setDbSource(v)
+                      api
+                        .setDbSource(v)
                         .then(() => {
-                          api.logout();          // clear token — new DB, new session
+                          api.logout(); // clear token — new DB, new session
                           window.location.reload();
                         })
                         .catch(() => {
@@ -649,13 +693,9 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
               </Section>
             )}
 
-            {tab === "handsfree" && (
-              <HandsFreePanel t={t} />
-            )}
+            {tab === "handsfree" && <HandsFreePanel t={t} />}
 
-            {tab === "translation" && (
-              <TranslationPanel t={t} />
-            )}
+            {tab === "translation" && <TranslationPanel t={t} />}
           </div>
         </div>
 
@@ -698,7 +738,9 @@ function HandsFreePanel({ t }: { t: (s: string) => string }) {
   return (
     <Section
       title={t("Hands-free control")}
-      subtitle={t("Camera gestures, wake word, and presence-aware auto-lock. All processing stays on this device.")}
+      subtitle={t(
+        "Camera gestures, wake word, and presence-aware auto-lock. All processing stays on this device.",
+      )}
     >
       <HFToggle
         label={t("Enable hands-free")}
@@ -710,7 +752,9 @@ function HandsFreePanel({ t }: { t: (s: string) => string }) {
       <div className={s.enabled ? "space-y-3" : "space-y-3 opacity-40 pointer-events-none"}>
         <HFToggle
           label={t("Hand-gesture control")}
-          hint={t("Point to move the cursor, pinch to click, swipe to navigate, ✋ to talk, ✊ to go back.")}
+          hint={t(
+            "Point to move the cursor, pinch to click, swipe to navigate, ✋ to talk, ✊ to go back.",
+          )}
           on={s.gestures}
           onChange={(v) => update("gestures", v)}
         />
@@ -728,7 +772,9 @@ function HandsFreePanel({ t }: { t: (s: string) => string }) {
         />
         <HFToggle
           label={t("Presence auto-lock")}
-          hint={t("Blur sensitive data and lock the session when no officer is at the camera. Writes an audit entry.")}
+          hint={t(
+            "Blur sensitive data and lock the session when no officer is at the camera. Writes an audit entry.",
+          )}
           on={s.presenceLock}
           onChange={(v) => update("presenceLock", v)}
         />
@@ -1220,11 +1266,11 @@ const ENRICH_KEY = "satyam.translation.enriched";
 
 function TranslationPanel({ t }: { t: (s: string) => string }) {
   const [status, setStatus] = useState<"idle" | "running" | "done" | "error">("idle");
-  const [phase, setPhase] = useState("");           // current phase label
+  const [phase, setPhase] = useState(""); // current phase label
   const [phaseDetail, setPhaseDetail] = useState(""); // detailed step
-  const [done, setDone] = useState(0);               // items translated so far
-  const [total, setTotal] = useState(0);             // total items in current phase
-  const [totalAll, setTotalAll] = useState(0);       // grand total across phases
+  const [done, setDone] = useState(0); // items translated so far
+  const [total, setTotal] = useState(0); // total items in current phase
+  const [totalAll, setTotalAll] = useState(0); // grand total across phases
   const [alreadyDone, setAlreadyDone] = useState(false);
 
   useEffect(() => {
@@ -1235,8 +1281,11 @@ function TranslationPanel({ t }: { t: (s: string) => string }) {
 
   async function runEnrichment() {
     setStatus("running");
-    setDone(0); setTotal(0); setTotalAll(0);
-    setPhase("Starting…"); setPhaseDetail("");
+    setDone(0);
+    setTotal(0);
+    setTotalAll(0);
+    setPhase("Starting…");
+    setPhaseDetail("");
 
     try {
       // Phase 1: UI strings (~271 strings, ~14 batches)
@@ -1252,7 +1301,9 @@ function TranslationPanel({ t }: { t: (s: string) => string }) {
 
       // Phase 2: Synthetic data values (station names, districts, crime types)
       setPhase("Phase 2/2 — Data values (stations, districts, crime types)");
-      setDone(0); setTotal(0); setPhaseDetail("Fetching from database…");
+      setDone(0);
+      setTotal(0);
+      setPhaseDetail("Fetching from database…");
       const dataAdded = await enrichDataWithLLM((msg, n, tot) => {
         setPhaseDetail(msg);
         setDone(n);
@@ -1263,7 +1314,9 @@ function TranslationPanel({ t }: { t: (s: string) => string }) {
 
       setStatus("done");
       setAlreadyDone(true);
-      try { localStorage.setItem(ENRICH_KEY, "1"); } catch {}
+      try {
+        localStorage.setItem(ENRICH_KEY, "1");
+      } catch {}
     } catch (err) {
       setStatus("error");
       setPhaseDetail(err instanceof Error ? err.message : "Unknown error");
@@ -1279,8 +1332,11 @@ function TranslationPanel({ t }: { t: (s: string) => string }) {
     } catch {}
     setAlreadyDone(false);
     setStatus("idle");
-    setPhase(""); setPhaseDetail("");
-    setDone(0); setTotal(0); setTotalAll(0);
+    setPhase("");
+    setPhaseDetail("");
+    setDone(0);
+    setTotal(0);
+    setTotalAll(0);
   }
 
   const pct = total > 0 ? Math.min(100, Math.round((done / total) * 100)) : 0;
@@ -1297,11 +1353,19 @@ function TranslationPanel({ t }: { t: (s: string) => string }) {
           {t("How it works")}
         </div>
         <ul className="space-y-1 text-muted-foreground list-disc list-inside">
-          <li>{t("Translates UI labels AND synthetic data values (station names, crime types, districts)")}</li>
+          <li>
+            {t(
+              "Translates UI labels AND synthetic data values (station names, crime types, districts)",
+            )}
+          </li>
           <li>{t("Sends untranslated strings to Groq Llama-3.1-70B in batches")}</li>
           <li>{t("Saves translations to your browser's local storage")}</li>
           <li>{t("Runs only once — uses cached result on every subsequent visit")}</li>
-          <li>{t("New screens added later: switch to Kannada, browse those screens, then click Reset + Run")}</li>
+          <li>
+            {t(
+              "New screens added later: switch to Kannada, browse those screens, then click Reset + Run",
+            )}
+          </li>
         </ul>
       </div>
 
@@ -1346,7 +1410,9 @@ function TranslationPanel({ t }: { t: (s: string) => string }) {
       {/* Error */}
       {status === "error" && (
         <div className="rounded-[5px] border-2 border-destructive/40 bg-destructive/10 px-3 py-2 text-xs font-bold text-destructive">
-          <div>{t("Error")}: {phaseDetail}</div>
+          <div>
+            {t("Error")}: {phaseDetail}
+          </div>
           <div className="text-[10px] mt-1 font-normal opacity-80">
             Make sure GROQ_API_KEY is set in backend .env and the server is running.
           </div>
@@ -1383,7 +1449,9 @@ function TranslationPanel({ t }: { t: (s: string) => string }) {
       </div>
 
       <p className="text-[10px] text-muted-foreground">
-        {t("Translations are saved to localStorage and merged with the built-in DICT on every page load. They are never sent anywhere except the backend /settings/translate endpoint.")}
+        {t(
+          "Translations are saved to localStorage and merged with the built-in DICT on every page load. They are never sent anywhere except the backend /settings/translate endpoint.",
+        )}
       </p>
     </Section>
   );

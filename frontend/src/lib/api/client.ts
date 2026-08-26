@@ -334,6 +334,11 @@ export type ModelProviderStatus = {
   openai_configured: boolean;
   groq_configured: boolean;
   local_available: boolean;
+  /** Requests/day the OpenAI key allows (OPENAI_DAILY_LIMIT, default 50). */
+  openai_daily_limit: number;
+  /** Budget left today. null when no OpenAI key is set. 0 means the brain has
+   *  already failed over to Gemini for the rest of the UTC day. */
+  openai_calls_remaining: number | null;
 };
 export type ChatEvent =
   | { type: "token"; text: string }

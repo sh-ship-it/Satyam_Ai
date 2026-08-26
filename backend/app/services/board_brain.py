@@ -28,7 +28,7 @@ from typing import Any, Optional
 import httpx
 
 from app.config import get_settings
-from app.models.registry import get_llm
+from app.models.registry import complete_with_brain
 from app.schemas.board import (
     BoardGenerateRequest,
     SceneEdge,
@@ -328,17 +328,25 @@ async def _llm_extract(
     engine: str,
     system: str,
 ) -> str:
-    """Call whichever LLM engine is requested. Returns raw JSON string."""
+    """Call whichever LLM engine is requested. Returns raw JSON string.
+
+    Routed through `complete_with_brain` rather than `get_llm` so that an
+    "openai" engine both RESERVES against the daily budget and falls through to
+    Gemini once it is spent. Calling the adapter directly would raise
+    QuotaExhausted here and surface as a failed board generation instead of a
+    slightly-less-capable one.
+    """
     s = get_settings()
     if images and engine == "gemini" and s.gemini_api_key:
         return await _gemini_multimodal(prompt, images, system)
-    llm = get_llm(engine)
-    return await llm.complete(
+    text, _used = await complete_with_brain(
         prompt,
         system=system,
         temperature=0.3,
         json_schema=SCENE_SCHEMA,
+        engine=engine,
     )
+    return text
 
 # ════════════════════════════════════════════════════════════════════════════
 # 4. NODE STYLER — enriches raw LLM nodes with correct shape/color/size

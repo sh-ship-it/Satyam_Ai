@@ -51,6 +51,7 @@ import { resolveLang } from "@/lib/voice/lang";
 import { startSttSession, isBackendSttSupported } from "@/lib/voice/recorder";
 import { streamChat, type ChatEvent } from "@/lib/api/client";
 import { planVoiceAction, type AgentPlan } from "@/lib/api/voiceAgent";
+import { SCREEN_READY_EVENT, TASK_RESULT_EVENT, type TaskResult } from "@/lib/taskBus";
 
 // The voice copilot (top-right) uses ONE engine for BOTH listening and speaking.
 // When its mic engine is "browser", replies use the device's built-in Web-Speech
@@ -431,9 +432,16 @@ export function Shell({ children }: { children: ReactNode }) {
         aiState("thinking"); // orb shows "Thinking…" + arms the recovery watchdog
         const engines = loadEngineSettings();
         let acc = "";
+        // The backend emits a separate `speak` event carrying a short, TTS-shaped
+        // version of the answer (from the [SPEAK]…[/SPEAK] block). /ask already
+        // uses it; the copilot was ignoring it and reading the full display text
+        // aloud instead — tables, citation refs and markdown included.
+        let spoken = "";
         let streamError = false;
         const finish = () => {
-          let answer = acc.trim();
+          // Prefer the spoken variant, but only when there is display text to
+          // pair it with; a bare `speak` with no tokens means the turn broke.
+          let answer = (spoken.trim() && acc.trim() ? spoken : acc).trim();
           if (streamError)
             answer = t(
               "I couldn't reach the backend just now. Please retry once the API is running.",
@@ -472,11 +480,15 @@ export function Shell({ children }: { children: ReactNode }) {
           },
           (ev: ChatEvent) => {
             if (ev.type === "token") acc += ev.text;
-            else if (ev.type === "blocked")
+            else if (ev.type === "speak") spoken = ev.text ?? "";
+            else if (ev.type === "blocked") {
               acc = t(
                 "Your role can't view named accused records. Showing aggregate counts instead.",
               );
-            else if (ev.type === "done") copilotConvId.current = ev.conversation_id;
+              // A blocked turn REPLACES the answer, so a speak variant captured
+              // before the block would read out the masked content anyway.
+              spoken = "";
+            } else if (ev.type === "done") copilotConvId.current = ev.conversation_id;
             else if (ev.type === "error") streamError = true;
           },
         )
@@ -500,8 +512,18 @@ export function Shell({ children }: { children: ReactNode }) {
         spokenLocale: string,
       ) => {
         const engines = loadEngineSettings();
+        // Re-arming the mic is owned by the confirmation, not by a timer at the
+        // call site. The confirmation now waits for the screen's ack, so a blind
+        // 1200 ms re-arm could open the mic mid-synthesis and feed the
+        // assistant's own voice straight back into recognition.
+        const rearm = () => {
+          if (conversationModeRef.current) resumeListening();
+        };
         const sayConfirm = (text: string) => {
-          if (!speak || !text) return;
+          if (!speak || !text) {
+            rearm();
+            return;
+          }
           const sl: "en" | "kn" = resolveLang(spokenLocale, text);
           void speakViaSarvam(
             stripMarkdown(text),
@@ -509,7 +531,10 @@ export function Shell({ children }: { children: ReactNode }) {
             speechRate,
             {
               onStart: () => setIsSpeaking(true),
-              onEnd: () => setIsSpeaking(false),
+              onEnd: () => {
+                setIsSpeaking(false);
+                rearm();
+              },
             },
             copilotVoiceProvider(),
           );
@@ -544,6 +569,34 @@ export function Shell({ children }: { children: ReactNode }) {
               answerInCopilot(question);
               return;
             }
+            // Speak the RESULT, not the plan. `planRes.speak` is the model's
+            // claim about what it is going to do; the screen's handler is the only
+            // thing that knows whether the action name existed and the parameter
+            // survived validation. Confirming before the ack meant an unhandled
+            // action or an out-of-range value was reported as success.
+            let confirmed = false;
+            const onResult = (e: Event) => {
+              const r = (e as CustomEvent<TaskResult>).detail;
+              // Route-matched so a gesture-driven run-task firing in the same
+              // window cannot be mistaken for this plan's result.
+              if (!r || confirmed || r.route !== planRes.route) return;
+              confirmed = true;
+              window.removeEventListener(TASK_RESULT_EVENT, onResult);
+              if (r.applied.length === 0) sayConfirm(t("I couldn't do that on this screen."));
+              else if (r.skipped.length > 0)
+                sayConfirm(`${planRes.speak} ${t("Some steps didn't apply.")}`.trim());
+              else sayConfirm(planRes.speak);
+            };
+            window.addEventListener(TASK_RESULT_EVENT, onResult);
+            // A screen that never reports (older listener, or the event landed
+            // between unmount and mount) must not leave the officer in silence.
+            setTimeout(() => {
+              if (confirmed) return;
+              confirmed = true;
+              window.removeEventListener(TASK_RESULT_EVENT, onResult);
+              sayConfirm(t("I couldn't do that on this screen."));
+            }, 3000);
+
             const dispatchActions = () => {
               window.dispatchEvent(
                 new CustomEvent("satyam:run-task", {
@@ -561,12 +614,27 @@ export function Shell({ children }: { children: ReactNode }) {
             };
             if (planRes.route && planRes.route !== pathname) {
               navigate({ to: planRes.route });
-              // Let the destination screen mount its run-task listener first.
-              setTimeout(dispatchActions, 550);
+              // Dispatch on the destination screen's own ack. The 550 ms timer is
+              // kept as a ceiling so a screen that does not announce still gets
+              // its actions exactly as before — but in the normal case the mount
+              // effect fires within a frame or two, so the plan no longer races
+              // a fixed guess about how long navigation takes.
+              const target = planRes.route;
+              let sent = false;
+              const go = () => {
+                if (sent) return;
+                sent = true;
+                window.removeEventListener(SCREEN_READY_EVENT, onReady);
+                dispatchActions();
+              };
+              const onReady = (e: Event) => {
+                if ((e as CustomEvent<{ route?: string }>).detail?.route === target) go();
+              };
+              window.addEventListener(SCREEN_READY_EVENT, onReady);
+              setTimeout(go, 550);
             } else {
               dispatchActions();
             }
-            sayConfirm(planRes.speak);
           })
           .catch(() => {
             // Backend agent unreachable → fall back to answering the question.
@@ -607,7 +675,10 @@ export function Shell({ children }: { children: ReactNode }) {
         // and dispatch the structured action plan to that screen.
         runScreenAgent(cmd.query, resolved, rate, !!detail.speak, speechLang);
         closePanel();
-        if (conversationModeRef.current) setTimeout(() => resumeListening(), 1200);
+        // No blind re-arm here: runScreenAgent re-arms from the spoken
+        // confirmation's onEnd, which is the only point at which the audio is
+        // actually finished. Its own 3 s ack timeout guarantees the confirmation
+        // fires, so the mic cannot be left closed.
         return;
       }
       // 2.5) Follow-up actions after a person-crime answer ("yes / on the map / in the network").
@@ -733,7 +804,7 @@ export function Shell({ children }: { children: ReactNode }) {
     const sttEngine = loadEngineSettings().copilotStt; // "browser" | "sarvam"
 
     // Shared: hand a finished utterance to the Gemini brain.
-    const dispatchTurn = (rawText: string) => {
+    const dispatchTurn = (rawText: string, detectedLang?: string | null) => {
       if (turnSubmittedRef.current) return;
       const text = rawText.trim();
       if (!text) return;
@@ -741,7 +812,16 @@ export function Shell({ children }: { children: ReactNode }) {
       clearSilenceTimer();
       phaseRef.current = "processing";
       setMicActive(false);
-      const turnLang = voiceLangRef.current; // "auto" | "kn-IN" | "en-IN"
+      // Sarvam reports the language it actually heard, and the recorder has been
+      // passing it to onResult all along — Shell's handler was typed
+      // `(transcript: string)` and dropped the second argument. Without it,
+      // "auto" reached the command handler as the literal string "auto", which
+      // matches no language check, so the turn fell back to the UI language: a
+      // Kannada question with the UI in English was answered and spoken in
+      // English. Script detection does not cover it either, because Saaras can
+      // return Kannada transliterated into Latin script.
+      const turnLang =
+        voiceLangRef.current === "auto" && detectedLang ? detectedLang : voiceLangRef.current; // "auto" | "kn-IN" | "en-IN"
       console.debug("[voice] dispatchTurn", { engine: sttEngine, text, turnLang });
       window.dispatchEvent(
         new CustomEvent("satyam:voice-command", {
@@ -919,7 +999,7 @@ export function Shell({ children }: { children: ReactNode }) {
           setInterimTranscript("\u2026");
           setCaptureStatus("Hearing you\u2026");
         },
-        onResult: (transcript: string) => {
+        onResult: (transcript: string, detectedLang: string | null) => {
           if (cancelled) return;
           const clean = (transcript || "").trim();
           setInterimTranscript("");
@@ -928,7 +1008,7 @@ export function Shell({ children }: { children: ReactNode }) {
             setFinalTranscript(clean);
             setEditableTranscript(clean);
             liveFinalRef.current = clean;
-            dispatchTurn(clean);
+            dispatchTurn(clean, detectedLang);
           } else {
             setCaptureStatus("Didn't catch that \u2014 tap the mic to try again.");
             // The overlay can show that message and let the user retry in place.

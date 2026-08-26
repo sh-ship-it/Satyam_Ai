@@ -17,7 +17,12 @@ from typing import AsyncIterator, Literal
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.rbac import Permission, Principal
-from app.models.registry import get_fallback_llm, get_llm
+from app.models.registry import (
+    complete_with_brain,
+    get_classifier_llm,
+    get_fallback_llm,
+    get_llm,
+)
 from app.config import get_settings
 from app.pipeline import guardrails
 from app.pipeline.prompts import build_answer_system
@@ -517,8 +522,11 @@ async def _translate_to_kannada(
         "Preserve all markdown table formatting and FIR/IPC codes exactly as-is:\n\n"
         + english_answer
     )
+    # Translation is mechanical, not reasoning, so it uses the cheap classifier
+    # lane rather than the metered brain. Spending an OpenAI unit to translate an
+    # answer OpenAI just wrote would double the cost of every Kannada turn.
     try:
-        return await get_llm(brain_engine).complete(
+        return await get_classifier_llm().complete(
             translate_prompt, system=system, temperature=0.1
         )
     except Exception:
@@ -552,23 +560,19 @@ async def _compose(
         return _render_grounded(question, context, lang)
 
     prompt = f"Question: {question}\n\nGrounded data:\n{context}"
+    # Answer composition is the ONE place the OpenAI daily budget is spent — it is
+    # what the 50 requests/day are for. complete_with_brain owns the whole
+    # OpenAI → Gemini → Groq cascade, so the hand-rolled two-lane try/except that
+    # used to live here is gone: it duplicated the cascade and could not see the
+    # budget, so an exhausted key looked identical to a dead one.
     try:
-        english_answer = await get_llm(brain_engine).complete(
-            prompt, system=system, temperature=0.2
+        english_answer, used = await complete_with_brain(
+            prompt, system=system, temperature=0.2, engine=brain_engine
         )
+        log.info("compose.engine engine=%s", used)
     except Exception as exc:  # noqa: BLE001
-        log.warning("compose.primary_failed err=%s", exc)
-        try:
-            english_answer = await get_fallback_llm().complete(
-                prompt, system=system, temperature=0.2
-            )
-        except Exception as exc2:  # noqa: BLE001
-            # Both lanes are the same provider whenever BRAIN_ENGINE=groq, so one
-            # rate limit takes out primary and fallback together. Logged because
-            # the user-facing string alone cannot distinguish a 429 from a dead
-            # key, and this was silent before.
-            log.warning("compose.fallback_failed err=%s - returning ungrounded notice", exc2)
-            english_answer = "I found the records below, but couldn't generate a summary just now."
+        log.warning("compose.all_lanes_failed err=%s - returning ungrounded notice", exc)
+        english_answer = "I found the records below, but couldn't generate a summary just now."
 
     if lang != "kn":
         return english_answer
@@ -724,8 +728,11 @@ async def run(
                     " Respond entirely in Kannada (ಕನ್ನಡ)." if lang == "kn" else ""
                 )
                 try:
-                    answer = await get_llm(brain_engine).complete(
-                        message + lang_directive, system=system, temperature=0.3
+                    answer, _used = await complete_with_brain(
+                        message + lang_directive,
+                        system=system,
+                        temperature=0.3,
+                        engine=brain_engine,
                     )
                 except Exception:
                     try:

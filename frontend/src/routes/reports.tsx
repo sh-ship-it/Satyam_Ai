@@ -23,6 +23,7 @@ import {
   Database,
 } from "lucide-react";
 import { useT, useI18n } from "@/lib/i18n";
+import { announceScreenReady, runActions } from "@/lib/taskBus";
 import { tData } from "@/lib/tData";
 import { api, type StationRow } from "@/lib/api/client";
 import { intelligence, type SearchResult, type OffenderListItem } from "@/lib/api/intelligence";
@@ -220,7 +221,10 @@ function UploadPanel({ onAdd }: { onAdd: (item: ReportItem) => void }) {
         .catch(() => setResults([]))
         .finally(() => setLoading(false));
     }, 250);
-    return () => { clearTimeout(id); setLoading(false); };
+    return () => {
+      clearTimeout(id);
+      setLoading(false);
+    };
   }, [q, picking]);
 
   const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -276,7 +280,11 @@ function UploadPanel({ onAdd }: { onAdd: (item: ReportItem) => void }) {
       />
       {/* Dataset import */}
       <button
-        onClick={() => { setPicking((v) => !v); setQ(""); setResults([]); }}
+        onClick={() => {
+          setPicking((v) => !v);
+          setQ("");
+          setResults([]);
+        }}
         className="w-full rounded-xl border border-border bg-background hover:bg-muted/50 transition p-2.5 text-left flex items-center gap-2"
       >
         <Database className="h-4 w-4 text-primary shrink-0" />
@@ -302,7 +310,10 @@ function UploadPanel({ onAdd }: { onAdd: (item: ReportItem) => void }) {
             />
             {q && (
               <button
-                onClick={() => { setQ(""); setResults([]); }}
+                onClick={() => {
+                  setQ("");
+                  setResults([]);
+                }}
                 className="absolute right-2 text-muted-foreground hover:text-foreground"
               >
                 <X className="h-3 w-3" />
@@ -394,37 +405,36 @@ function Reports() {
     const onTask = (e: Event) => {
       const d = (e as CustomEvent).detail;
       if (!d || d.route !== "/reports") return;
-      const actions = Array.isArray(d.actions) ? d.actions : [];
-      if (actions.length === 0) {
-        handlePrint();
-        return;
-      }
-      for (const a of actions) {
-        if (a.screen !== "/reports") continue;
-        const p = a.params || {};
-        if (a.action === "set_title" && p.title) setReportTitle(String(p.title));
-        else if (a.action === "set_template" && p.template) selectTemplate(p.template as Template);
-        else if (a.action === "clear") setItems([]);
-        else if (a.action === "generate") handleGenerate();
-        else if (a.action === "print") handlePrint();
-        else if (a.action === "add_case" && p.query) {
+      // An empty action list used to call handlePrint(), so merely saying "open
+      // reports" opened the browser print dialog on an empty report. A plan with
+      // nothing in it is a no-op, not an instruction to print.
+      runActions("/reports", d, (action, p) => {
+        if (action === "set_title" && p.title) setReportTitle(String(p.title));
+        else if (action === "set_template" && p.template) selectTemplate(p.template as Template);
+        else if (action === "clear") setItems([]);
+        else if (action === "generate") handleGenerate();
+        else if (action === "print") handlePrint();
+        else if (action === "add_case" && p.query) {
           // Search the dataset for the FIR/crime and add the top match.
           intelligence
             .searchPersonsAndCases(String(p.query), 1)
             .then((r) => {
               const hit = r.find((x) => x.type === "case") ?? r[0];
-              if (hit) addItem({
-                id: `${hit.type}-${hit.id}-${Date.now()}`,
-                type: hit.type === "person" ? "person" : "case",
-                title: hit.label, meta: hit.sub,
-                data: { id: hit.id } as any,
-              });
+              if (hit)
+                addItem({
+                  id: `${hit.type}-${hit.id}-${Date.now()}`,
+                  type: hit.type === "person" ? "person" : "case",
+                  title: hit.label,
+                  meta: hit.sub,
+                  data: { id: hit.id } as any,
+                });
             })
             .catch(() => {});
-        }
-      }
+        } else return false;
+      });
     };
     window.addEventListener("satyam:run-task", onTask);
+    announceScreenReady("/reports");
     return () => window.removeEventListener("satyam:run-task", onTask);
   }, []);
 
@@ -551,7 +561,9 @@ function Reports() {
                     onClick={() => addStation(r.station, r.firs, r.cleared)}
                     className="w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-left hover:bg-muted/50 transition group"
                   >
-                    <span className="text-xs text-foreground truncate flex-1">{tData("station", r.station, lang)}</span>
+                    <span className="text-xs text-foreground truncate flex-1">
+                      {tData("station", r.station, lang)}
+                    </span>
                     <span className="text-[10px] text-muted-foreground mr-2">{r.firs} FIRs</span>
                     <Plus className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 shrink-0" />
                   </button>
@@ -665,7 +677,9 @@ function Reports() {
                 className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary text-primary-foreground py-2 text-xs font-bold hover:bg-primary/90 transition disabled:opacity-60 min-w-0"
               >
                 <FileDown className="h-3.5 w-3.5 shrink-0" />
-                <span className="truncate">{generating ? t("Generating…") : t("Generate PDF")}</span>
+                <span className="truncate">
+                  {generating ? t("Generating…") : t("Generate PDF")}
+                </span>
               </button>
             </div>
             {genMsg && <p className="text-[10px] text-center text-muted-foreground">{genMsg}</p>}
@@ -752,7 +766,8 @@ function Reports() {
                 <div className="bg-muted/30 rounded-xl p-4 text-sm leading-relaxed">
                   {topStation ? (
                     <p>
-                      Top performing station: <strong>{tData("station", topStation.station, lang)}</strong> with{" "}
+                      Top performing station:{" "}
+                      <strong>{tData("station", topStation.station, lang)}</strong> with{" "}
                       <strong>{topStation.firs.toLocaleString()}</strong> FIRs registered,{" "}
                       <strong>{topStation.cleared}</strong> cases cleared. Report covers{" "}
                       <strong>{stations.length}</strong> stations in the scoped jurisdiction.{" "}
@@ -817,7 +832,9 @@ function Reports() {
                               <td className="px-4 py-2.5 text-muted-foreground text-[11px] tabular-nums">
                                 {i + 1}
                               </td>
-                              <td className="px-4 py-2.5 font-medium text-sm">{tData("station", r.station, lang)}</td>
+                              <td className="px-4 py-2.5 font-medium text-sm">
+                                {tData("station", r.station, lang)}
+                              </td>
                               <td className="px-4 py-2.5 text-right tabular-nums font-bold">
                                 {r.firs.toLocaleString()}
                               </td>

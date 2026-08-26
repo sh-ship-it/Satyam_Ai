@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { ExternalLink, Radio, RefreshCw, Tv, Volume2, VolumeX, WifiOff } from "lucide-react";
 import { Shell } from "@/components/Shell";
 import { useI18n } from "@/lib/i18n";
+import { announceScreenReady, runActions } from "@/lib/taskBus";
 import { news, type NewsChannel } from "@/lib/api/news";
 
 /**
@@ -109,10 +110,8 @@ function NewsScreen() {
     const onTask = (e: Event) => {
       const d = (e as CustomEvent).detail;
       if (!d || d.route !== "/news") return;
-      for (const a of Array.isArray(d.actions) ? d.actions : []) {
-        if (a.screen !== "/news") continue;
-        const p = a.params || {};
-        if (a.action === "set_channel" && p.channel) {
+      runActions("/news", d, (action, p) => {
+        if (action === "set_channel" && p.channel) {
           // Spoken names arrive loosely ("put on public tv"), so match on a
           // normalised substring in both directions rather than equality.
           const q = String(p.channel)
@@ -122,19 +121,26 @@ function NewsScreen() {
             const n = c.name.toLowerCase().replace(/[^a-z0-9]/g, "");
             return q.length > 1 && (n.includes(q) || q.includes(c.slug));
           });
-          if (hit) select(hit.slug);
-        } else if (a.action === "next_channel") {
+          // A channel name that matched nothing is a miss, not a no-op: without
+          // this the officer hears "switching to Public TV" and keeps watching
+          // whatever was already on.
+          if (!hit) return false;
+          select(hit.slug);
+        } else if (action === "next_channel") {
           // Skip off-air channels: "next channel" should land on something watchable.
           const liveList = channels.filter((c) => c.live);
           const pool = liveList.length ? liveList : channels;
           const i = pool.findIndex((c) => c.slug === active?.slug);
-          if (pool.length) select(pool[(i + 1 + pool.length) % pool.length].slug);
-        } else if (a.action === "mute") setMuted(true);
-        else if (a.action === "unmute") setMuted(false);
-        else if (a.action === "refresh") void load(true);
-      }
+          if (!pool.length) return false;
+          select(pool[(i + 1 + pool.length) % pool.length].slug);
+        } else if (action === "mute") setMuted(true);
+        else if (action === "unmute") setMuted(false);
+        else if (action === "refresh") void load(true);
+        else return false;
+      });
     };
     window.addEventListener("satyam:run-task", onTask);
+    announceScreenReady("/news");
     return () => window.removeEventListener("satyam:run-task", onTask);
   }, [channels, active?.slug, select, load]);
 

@@ -46,6 +46,7 @@ import { Shell } from "@/components/Shell";
 import { CaseDrawer } from "@/components/CaseDrawer";
 import { ChartContainer } from "@/components/ui/chart";
 import { useI18n } from "@/lib/i18n";
+import { announceScreenReady, runActions } from "@/lib/taskBus";
 import { tData } from "@/lib/tData";
 import { useChartPalette, useMounted, type Palette } from "@/lib/chartPalette";
 import {
@@ -697,6 +698,10 @@ const ALL_SOURCES: SourceKey[] = [
   "seasonal",
 ];
 
+/** The only horizons the control offers. Shared with the voice-action handler so
+ *  a spoken "9 days" is rejected instead of blanking the select. */
+const HORIZONS = [3, 7, 14, 30] as const;
+
 function ForecastScreen() {
   const { t, lang } = useI18n();
   const navigate = useNavigate();
@@ -831,27 +836,38 @@ function ForecastScreen() {
       if (!d) return;
       // Accepts /trends too, so voice commands aimed at the old screen still land.
       if (d.route !== "/forecast" && d.route !== "/trends") return;
-      for (const a of Array.isArray(d.actions) ? d.actions : []) {
-        if (a.screen !== "/forecast" && a.screen !== "/trends") continue;
-        const p = a.params || {};
-        if (a.action === "set_crime_type" && p.crime_type) setCrimeInput(String(p.crime_type));
-        else if (a.action === "set_district" && p.district) setDistrictInput(String(p.district));
-        else if (a.action === "set_horizon" && p.days) setHorizon(Number(p.days));
-        else if (a.action === "set_grid" && p.grid) {
+      runActions(["/forecast", "/trends"], d, (action, p) => {
+        if (action === "set_crime_type" && p.crime_type) setCrimeInput(String(p.crime_type));
+        else if (action === "set_district" && p.district) setDistrictInput(String(p.district));
+        else if (action === "set_horizon") {
+          // The control only offers HORIZONS. An out-of-range number used to be
+          // written into state anyway, leaving a Segmented with no matching
+          // option and a forecast that silently kept the old window while the
+          // copilot said the change had been made.
+          const days = Number(p.days);
+          if (!HORIZONS.includes(days as (typeof HORIZONS)[number])) return false;
+          setHorizon(days);
+        } else if (action === "set_grid" && p.grid) {
+          // Matches the backend manifest's fine|medium|coarse domain. "med" is
+          // still accepted because older cached plans used it.
           const g = String(p.grid).toLowerCase();
+          if (!["fine", "medium", "med", "coarse"].includes(g)) return false;
           setGridSize(g === "fine" ? 0.01 : g === "coarse" ? 0.05 : 0.02);
-        } else if (a.action === "set_severity" && p.level) {
+        } else if (action === "set_severity" && p.level) {
           setSeverity(String(p.level));
           setTab("warning");
-        } else if (a.action === "set_granularity" && p.granularity) {
+        } else if (action === "set_granularity" && p.granularity) {
           const g = String(p.granularity).toLowerCase();
-          if (g === "week" || g === "month" || g === "quarter") setGranularity(g);
+          if (g !== "week" && g !== "month" && g !== "quarter") return false;
+          setGranularity(g);
           setTab("trends");
-        } else if (a.action === "toggle_auto") setAutoRefresh((v) => !v);
-        else if (a.action === "refresh") reload();
-      }
+        } else if (action === "toggle_auto") setAutoRefresh((v) => !v);
+        else if (action === "refresh") reload();
+        else return false;
+      });
     };
     window.addEventListener("satyam:run-task", onTask);
+    announceScreenReady("/forecast");
     return () => window.removeEventListener("satyam:run-task", onTask);
   }, [reload]);
 
@@ -1038,7 +1054,7 @@ function ForecastScreen() {
                   label={t("Horizon")}
                   value={horizon}
                   onChange={setHorizon}
-                  options={[3, 7, 14, 30].map((d) => ({ value: d, label: `${d}${t("d")}` }))}
+                  options={HORIZONS.map((d) => ({ value: d, label: `${d}${t("d")}` }))}
                 />
                 <Segmented
                   label={t("Grid")}

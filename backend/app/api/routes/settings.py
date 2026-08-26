@@ -35,6 +35,11 @@ class ModelProviderStatus(BaseModel):
     openai_configured: bool
     groq_configured: bool
     local_available: bool
+    # The OpenAI key allows 50 requests/day, so the remaining count is operational
+    # information, not a statistic: at zero the brain has silently failed over to
+    # Gemini and the officer should be able to see that without reading logs.
+    openai_daily_limit: int
+    openai_calls_remaining: int | None = None
 
 
 @router.get("/models", response_model=ModelProviderStatus)
@@ -47,6 +52,7 @@ async def model_providers(
     except AccessDenied as e:
         raise HTTPException(status_code=403, detail=str(e))
     from app.config import get_settings
+    from app.models.quota import openai_quota
     s = get_settings()
     return ModelProviderStatus(
         default_brain_engine=s.brain_engine,
@@ -54,6 +60,10 @@ async def model_providers(
         openai_configured=bool(s.openai_api_key),
         groq_configured=bool(s.groq_api_key),
         local_available=(s.model_backend == "local"),
+        openai_daily_limit=openai_quota.limit,
+        openai_calls_remaining=(
+            await openai_quota.remaining() if s.openai_api_key else None
+        ),
     )
 
 

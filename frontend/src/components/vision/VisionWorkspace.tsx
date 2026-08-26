@@ -52,6 +52,7 @@ const RISK_ACCENT: Record<string, string> = {
   Low: "#3b82f6",
 };
 import { useT } from "@/lib/i18n";
+import { announceScreenReady, asBool, runActions } from "@/lib/taskBus";
 
 type RunTaskDetail = {
   route?: string;
@@ -161,10 +162,8 @@ export function VisionWorkspace() {
   // ── Voice: register before the map loads ───────────────────────────────────
   const applyRef = useRef<(d: RunTaskDetail) => void>(() => {});
   applyRef.current = (detail: RunTaskDetail) => {
-    for (const a of detail.actions ?? []) {
-      if (a.screen && a.screen !== "/vision") continue;
-      const p = a.params ?? {};
-      switch (a.action) {
+    runActions("/vision", detail, (action, p) => {
+      switch (action) {
         case "set_view": {
           // Accepts a few spoken forms per mode: the screen agent passes through
           // whatever the officer said, so "street" and "street 3d" both land here.
@@ -181,49 +180,58 @@ export function VisionWorkspace() {
                   : raw === "street3d" || raw === "street" || raw === "photoreal"
                     ? "street3d"
                     : null;
-          if (m) setViewMode(m);
-          break;
+          if (!m) return false;
+          setViewMode(m);
+          return true;
         }
         case "set_treatment": {
           const n = String(p.name ?? "").toLowerCase() as TreatmentId;
-          if (TREATMENT_IDS.includes(n)) {
-            setTreatment(n);
-            writeStored(TREATMENT_STORAGE_KEY, n);
-          }
-          break;
+          if (!TREATMENT_IDS.includes(n)) return false;
+          setTreatment(n);
+          writeStored(TREATMENT_STORAGE_KEY, n);
+          return true;
         }
         case "set_basemap": {
           const b = String(p.basemap ?? "").toLowerCase();
-          if (b in BASEMAPS) setBasemap(b as BasemapId);
-          break;
+          if (!(b in BASEMAPS)) return false;
+          setBasemap(b as BasemapId);
+          return true;
         }
         case "toggle_layer": {
           const id = String(p.layer ?? "") as LayerId;
-          if (LAYERS.some((l) => l.id === id)) {
-            const on = p.on === undefined ? undefined : Boolean(p.on);
-            setVisible((prev) => {
-              const next = { ...prev, [id]: on === undefined ? !prev[id] : on };
-              writeStored(LAYER_STORAGE_KEY, next);
-              return next;
-            });
-          }
-          break;
+          if (!LAYERS.some((l) => l.id === id)) return false;
+          // asBool, not Boolean: `Boolean("no")` is true, so "turn off the
+          // heatmap" used to turn it ON. An unparseable flag falls back to a
+          // level-free toggle rather than guessing a direction.
+          const on = p.on === undefined ? undefined : asBool(p.on);
+          setVisible((prev) => {
+            const next = { ...prev, [id]: on === undefined ? !prev[id] : on };
+            writeStored(LAYER_STORAGE_KEY, next);
+            return next;
+          });
+          return true;
         }
         case "set_hex_radius": {
-          const r = Number(p.radius_m);
-          if (Number.isFinite(r) && r > 0) {
-            setHex((prev) => {
-              const next = { ...prev, radiusM: r };
-              writeStored(HEX_STORAGE_KEY, next);
-              return next;
-            });
-          }
-          break;
+          // Only the offered bin sizes: an arbitrary metre value leaves the BIN
+          // control with nothing selected and re-bins into something the legend
+          // no longer describes.
+          const raw = String(p.radius_m ?? "").toLowerCase();
+          const r: (typeof HEX_RADIUS_CHOICES)[number] | undefined =
+            raw === "auto"
+              ? "auto"
+              : HEX_RADIUS_CHOICES.find((c) => c !== "auto" && c === Number(p.radius_m));
+          if (r === undefined) return false;
+          setHex((prev) => {
+            const next = { ...prev, radiusM: r };
+            writeStored(HEX_STORAGE_KEY, next);
+            return next;
+          });
+          return true;
         }
         default:
-          break;
+          return false;
       }
-    }
+    });
   };
 
   useEffect(() => {
@@ -233,6 +241,7 @@ export function VisionWorkspace() {
       applyRef.current(detail ?? {});
     };
     window.addEventListener("satyam:run-task", onRunTask);
+    announceScreenReady("/vision");
     return () => window.removeEventListener("satyam:run-task", onRunTask);
   }, []);
 

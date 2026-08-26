@@ -20,6 +20,7 @@ import { Shell } from "@/components/Shell";
 import { CaseDrawer } from "@/components/CaseDrawer";
 import { SimilarCaseSearch } from "@/components/SimilarCaseSearch";
 import { useI18n, useT } from "@/lib/i18n";
+import { announceScreenReady, runActions } from "@/lib/taskBus";
 import { tData } from "@/lib/tData";
 import { api, API_BASE, getAuthToken, getCachedUser } from "@/lib/api/client";
 import {
@@ -197,14 +198,14 @@ function Console() {
     const onTask = (e: Event) => {
       const d = (e as CustomEvent).detail;
       if (!d || d.route !== "/console") return;
-      for (const a of Array.isArray(d.actions) ? d.actions : []) {
-        if (a.screen !== "/console") continue;
-        const p = a.params || {};
-        if (a.action === "set_district" && p.district) setDistrict(String(p.district));
-        else if (a.action === "set_crime_type" && p.crime_type) setCrimeType(String(p.crime_type));
-      }
+      runActions("/console", d, (action, p) => {
+        if (action === "set_district" && p.district) setDistrict(String(p.district));
+        else if (action === "set_crime_type" && p.crime_type) setCrimeType(String(p.crime_type));
+        else return false;
+      });
     };
     window.addEventListener("satyam:run-task", onTask);
+    announceScreenReady("/console");
     return () => window.removeEventListener("satyam:run-task", onTask);
   }, []);
 

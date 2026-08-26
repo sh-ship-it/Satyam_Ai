@@ -44,7 +44,7 @@
 Satyam is a **bilingual (English + Kannada), voice-enabled conversational AI** for Karnataka State Police crime intelligence. An officer asks a question in natural language — typed or spoken — and Satyam:
 
 1. Auto-detects language, routes intent, runs a **grounded** answer pipeline (Text-to-SQL, RAG, analytics)
-2. Composes a **cited, spoken-summary** answer streamed token-by-token over SSE
+2. Composes a **cited, spoken-summary** answer delivered over SSE as `token` frames. The answer is awaited in full and then split on spaces, so the framing is presentational rather than incremental generation — see §5.2 and §27.4.
 3. Enforces **RBAC/ABAC** (14 KSP ranks, 4 clearance levels) + **Postgres Row-Level Security**
 4. Appends every query to a **SHA-256 hash-chained tamper-evident audit log**
 5. Can **speak answers in Kannada** via Sarvam Bulbul v2 TTS and navigate screens by voice
@@ -273,6 +273,30 @@ Every grounded answer now includes a spoken summary separate from the table:
 5. Frontend uses it for TTS — voice output never reads the table row-by-row
 6. Language follows the UI toggle: EN selected → English summary; KN selected → Kannada summary (generated natively)
 
+**Why the `token` stream is not incremental, and what would have to change.**
+Both `LLM.stream()` implementations that matter are chunkers over a finished
+completion (`api/gemini.py`, `api/groq.py` call `complete()` then `split(" ")`), and
+nothing in the app calls `.stream()` at all — the orchestrator splits the composed
+string itself. Making the framing real is blocked on the grounded path by three
+whole-answer post-processes that each need the complete text before the first token
+can be emitted:
+
+| Step | Why it needs the whole answer |
+|---|---|
+| `_extract_speak()` | Needs the closing `[/SPEAK]` tag to know where the spoken block ends, and the `speak` event is emitted *before* the display tokens. |
+| `_post_translate_kn()` | A whole-string substitution; applied to partial text it corrupts chunk boundaries. |
+| `recovery_note` prepend | Prefixed to the finished answer when the query was auto-broadened. |
+
+The smalltalk path has no post-processing and *could* stream, but it would need real
+`streamGenerateContent`/Groq SSE adapters plus a streaming twin of
+`complete_with_brain` with its own cascade — and a mid-stream failure cannot fail
+over to another lane without duplicating text the caller already has. Against that,
+the payoff is limited to the `/ask` text pane: the voice copilot speaks only after
+`onEnd`, so it sees no benefit at all. Left unimplemented deliberately, and the
+claim corrected wherever it appeared (§1, §27.4) rather than being left to imply
+otherwise. `api/openai_llm.py` does implement real SSE streaming; it is currently
+unused.
+
 ### 5.3 Pipeline Directory
 
 ```
@@ -321,6 +345,78 @@ Three settings in `EngineSettings` (stored in `localStorage`):
 - `voiceBackend` — `sarvam | google | webspeech` — TTS engine for voice replies
 
 The Settings → Models tab shows each provider as a card with configured/unconfigured badge fetched from `GET /settings/db-source/models` (returns booleans only — never API keys). The copilot STT picker is a two-button selector independent of `voiceBackend`.
+
+### 6.2 OpenAI daily budget and the brain cascade
+
+The ChatGPT key allows **50 requests per UTC day**. That is small enough that the
+budget has to be a hard cap rather than a dashboard: one runaway retry loop or one
+unmetered call site burns a measurable slice of the day.
+
+**`app/models/quota.py` — `DailyQuota`**
+
+| Property | Value | Why |
+|---|---|---|
+| Counter key | `llm:quota:openai:{YYYY-MM-DD}` (UTC) | OpenAI RPD resets at UTC midnight. An IST date would roll 5h30m early and hand back budget the provider has not restored. |
+| Exhausted flag | `…:exhausted`, set on a provider 429/402 | Stops further attempts for the rest of the day instead of re-proving a spent key. |
+| TTL | 36 h | Outlives the day the key names without a midnight-aligned expiry calculation. |
+| Storage | Redis, with a process-local dict fallback | Mirrors `ConversationStore` in `pipeline/slots.py`, so tests and demo mode need no Redis. |
+| Limit | `OPENAI_DAILY_LIMIT` (default 50) | |
+
+**Reserve-before-call.** `try_reserve()` INCRs then compares, so two concurrent
+requests cannot both see "49 used" and both proceed. The cost is that a call
+failing for a *non-quota* reason (network blip, 500) has still consumed a unit,
+which under-uses the allowance rather than overshooting it. Exceeding a hard cap
+gets the key throttled for the rest of the day; losing one unit does not.
+
+**The meter lives in the adapter, not at the call sites.** `OpenAILLM.complete()`
+and `.stream()` reserve before every real HTTP request. `services/board_brain.py`
+and `pipeline/screen_agent.py` both reach the brain through `get_llm()` and know
+nothing about budgets, so caller-side metering would have left `brain_engine=openai`
+spending unmetered and the cap would not be a cap.
+
+**Reservation happens inside the tenacity retry body**, because a retried transport
+fault is a second real request and must cost a second unit. The retry predicate is
+`retry_if_exception(_is_retryable)`, so a 429 for `insufficient_quota` is *not*
+retried — the previous `stop_after_attempt(2)` spent a second reserved unit proving
+a request that can never succeed.
+
+**Cascade — `registry.complete_with_brain(...) -> (text, engine_used)`**
+
+```
+OpenAI (if requested AND remaining > 0)  →  Gemini  →  Groq
+```
+
+Gemini is the explicit failover target for an exhausted OpenAI budget; Groq is the
+final lane so a Gemini outage still answers. A `[demo:` echo counts as a miss (it
+means the key is missing) and falls through rather than shipping a placeholder as a
+grounded answer. Every downgrade logs its own event name — `brain.openai_quota_exhausted`,
+`brain.openai_429_marking_exhausted`, `brain.lane_failed`, `brain.demo_echo`,
+`brain.failover_to_gemini`, `brain.failover_to_groq` — the same discipline as
+`pipeline/router.py`, where it exists because a silent fallback once made a dead
+Gemini key look like bad routing.
+
+**What is deliberately kept OFF the budget.** The 50 requests buy *answer quality*,
+not classification. A single spoken command already costs screen_agent + router +
+compose, so letting the cheap lanes spend the budget would leave roughly 16 commands
+for a whole day:
+
+| Lane | Uses | Rationale |
+|---|---|---|
+| Compose / smalltalk | `complete_with_brain` | The only intended spender. |
+| Board scene extract | `complete_with_brain` | Degrades to Gemini instead of raising on an exhausted budget. |
+| Intent routing (`pipeline/router.py`) | `get_classifier_llm()` | Groq → Gemini. Classifying into a closed enum does not need GPT-4o. |
+| Screen planning (`pipeline/screen_agent.py`) | `get_classifier_llm()` | Picking one of ~17 screens does not need GPT-4o. |
+| Kannada post-translation | `get_classifier_llm()` | Spending a unit to translate an answer OpenAI just wrote would double the cost of every Kannada turn. |
+| Text-to-SQL | `get_sql_llm()` | Separate lane, never on this budget. |
+
+`GET /settings/db-source/models` reports `openai_daily_limit` and
+`openai_calls_remaining` (null when no key is set), and the Settings → Models card
+shows "42 / 50 left today" or "Daily budget spent · using Gemini". At zero the brain
+has already failed over and the officer should be able to see that without reading logs.
+
+Tests: `backend/tests/test_brain_quota.py` (19) — the counter, the UTC-date reset,
+the per-day exhausted flag, error classification, the no-retry-on-429 rule, the
+refuse-before-spending rule, and the full cascade including "Gemini not Groq".
 
 ---
 
@@ -1243,6 +1339,95 @@ The planner is user-switchable in Settings → Models → **Copilot screen agent
 - `_sanitize_actions()` — only allow-listed `(screen, action, param_key)` triples reach the frontend. The LLM cannot inject arbitrary screen interactions.
 - The frontend never executes raw command text — only structured typed actions.
 - All requests to `/voice/agent` require `Permission.CHAT` (clearance ≥ 1).
+
+### 21.7 Value validation and the action-result feedback loop
+
+Two gaps made a failed action indistinguishable from a successful one.
+
+**1. `_sanitize_actions()` validated param KEYS, never VALUES.** Every domain was
+already declared in `SCREEN_CAPABILITIES` (`"3|7|14|30"`, `"boolean"`,
+`"people|financial|rings"`) and fed to the LLM as a contract, but nothing enforced
+it, so `set_horizon days=9` reached a control offering only 3/7/14/30 and blanked
+it, and `toggle_layer on="no"` reached a `Boolean(...)` cast — which reads `"no"` as
+`true` — and switched the layer ON.
+
+`_coerce_param(value, domain)` now enforces the declared domain and returns the
+**canonical** form, so `"3D"` becomes `"3d"` and `"14"` becomes `14`:
+
+| Domain | Behaviour |
+|---|---|
+| `"boolean"` | Word-aware: `yes/on/1/show` → true, `no/off/0/hide` → false, anything else rejected rather than guessed. |
+| `"number"` | Numeric coercion; `bool` rejected (it is an `int` subclass). |
+| `"a\|b\|c"` | Case-insensitive enum membership, returns the canonical option; numeric enums return an `int`. |
+| `"a b\|c d"` | An enum whose options contain spaces is a human-readable **name list**, treated as prompt documentation and validated as free text — `/news set_channel` is resolved fuzzily by the screen, which owns the verified slug table. |
+| `"string"` | Non-empty after trimming. |
+
+An action whose parameter fails validation is dropped **whole**, not passed on with
+the bad key removed: `set_horizon` with no `days` is a different request, not a
+weaker one, and the screen would report it as applied. Rejections log
+`screen_agent.param_rejected`.
+
+Three declared domains were wrong and are now fixed, because an unenforced domain
+that disagrees with its screen becomes a bug the moment it is enforced:
+`set_grid` `fine|med|coarse` → `fine|medium|coarse` (the screen only understood
+"medium"); `set_hex_radius` `50|100|500|1000` → `auto|100|500|1000` (50 is not one
+of the BIN control's choices, `auto` is); `set_view` `2d|3d|earth` → adds `street3d`
+(a mode the screen always supported but the manifest hid from the planner).
+
+`_rule_plan()` now passes through `_sanitize_actions()` too. It only ever emitted
+canonical values, but that was unenforced and left the manifest with two places to
+keep in sync — which is how the hex-radius domain drifted.
+
+**2. The copilot spoke the plan, not the result.** `runScreenAgent` said
+`planRes.speak` the moment it dispatched `satyam:run-task` — whether or not a screen
+was listening, the action name existed, or the parameter survived. Since every
+screen handler is an if/else chain that falls off the end on an unknown action, the
+failure was invisible.
+
+`frontend/src/lib/taskBus.ts` adds two events on the existing window bus:
+
+| Event | Direction | Purpose |
+|---|---|---|
+| `satyam:screen-ready` | screen → Shell | The screen's `satyam:run-task` listener is attached. The Shell dispatches on this ack instead of a blind 550 ms post-navigation timer (the timer is kept as a ceiling, so a screen that never announces behaves exactly as before). |
+| `satyam:task-result` | screen → Shell | `{ route, applied[], skipped[] }` — what actually ran. |
+
+`runActions(route, detail, handle)` wraps each screen's existing if/else chain: the
+handler returns `false` to mark a skip, a throwing handler is a skip that does not
+abandon the rest of the plan, and the result fires even for an empty action list
+(otherwise "nothing to do" is indistinguishable from "the event was never
+received"). `asBool()` is the frontend twin of the backend boolean coercion, for the
+same `Boolean("no") === true` reason.
+
+The Shell then speaks the truth: all applied → `planRes.speak`; some skipped →
+`planRes.speak` + "Some steps didn't apply."; none applied (or no result within 3 s)
+→ "I couldn't do that on this screen." Results are route-matched so a
+gesture-driven `run-task` in the same window is not mistaken for this plan's result.
+
+Mic re-arm moved with it. The old blind `setTimeout(resumeListening, 1200)` at the
+call site could open the mic mid-synthesis and feed the assistant's own voice back
+into recognition; the confirmation's `onEnd` now owns the re-arm, and the 3 s ack
+timeout guarantees the confirmation fires so the mic is never left closed.
+
+Screen-side bounds were added where the control defines them and the backend cannot:
+Forecast rejects a horizon outside its `HORIZONS` list (now a single shared const
+instead of an inline `[3, 7, 14, 30]`), Network rejects a depth outside 1–3, Vision
+rejects a hex radius that is not one of `HEX_RADIUS_CHOICES`. Reports no longer
+calls `handlePrint()` on an **empty** action list — merely saying "open reports"
+opened the browser print dialog on an empty report.
+
+Runnable check: `cd frontend && node --experimental-strip-types src/lib/taskBus.check.ts`
+(assert-based, no test runner). Backend: `backend/tests/test_screen_agent.py` (55).
+
+### 21.8 Detected language reaches the turn
+
+`lib/voice/recorder.ts` has always passed Sarvam's `detected_lang` to
+`onResult(transcript, detectedLang)`, but `Shell.tsx` typed its handler
+`(transcript: string)` and dropped the second argument. With `voiceLang: "auto"` the
+literal string `"auto"` then reached the command handler, matched no language check,
+and fell through to the UI language — so a Kannada question with the UI in English
+was answered *and spoken* in English. Script detection does not cover it either,
+because Saaras can return Kannada transliterated into Latin script. `dispatchTurn`
+now takes the detected language and prefers it whenever the picker is on `auto`.
 
 ### 21.6 Example Voice Commands
 

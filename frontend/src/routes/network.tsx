@@ -20,6 +20,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useT, useI18n } from "@/lib/i18n";
+import { announceScreenReady, runActions } from "@/lib/taskBus";
 import { ForceGraph, fitLinkDistance, ringLayout } from "@/lib/forceGraph";
 import { tData, tAuto } from "@/lib/tData";
 import { api } from "@/lib/api/client";
@@ -501,22 +502,27 @@ function NetworkScreen() {
       // Structured actions from the Voice Screen Agent
       const actions = Array.isArray(d.actions) ? d.actions : [];
       if (actions.length > 0) {
-        for (const a of actions) {
-          if (a.screen !== "/network") continue;
-          const p = a.params || {};
-          if (a.action === "search_seed" && p.entity) {
+        runActions("/network", d, (action, p) => {
+          if (action === "search_seed" && p.entity) {
             setSeedInput(String(p.entity));
             fetchGraph(String(p.entity));
-          } else if (a.action === "set_depth" && p.depth) {
-            handleDepthChange(Number(p.depth));
-          } else if (a.action === "set_link_mode" && p.mode) {
-            setLinkMode(p.mode as "people" | "financial" | "rings");
-          } else if (a.action === "filter_edge" && p.value) {
+          } else if (action === "set_depth") {
+            // The select only offers 1-3 hops; a spoken "depth 7" would have
+            // been written straight into state, blanking the control and firing
+            // a graph query the backend cannot answer.
+            const hops = Number(p.depth);
+            if (!Number.isInteger(hops) || hops < 1 || hops > 3) return false;
+            handleDepthChange(hops);
+          } else if (action === "set_link_mode" && p.mode) {
+            const mode = String(p.mode);
+            if (!["people", "financial", "rings"].includes(mode)) return false;
+            setLinkMode(mode as "people" | "financial" | "rings");
+          } else if (action === "filter_edge" && p.value) {
             setEdgeTypeFilter(String(p.value));
-          } else if (a.action === "filter_community" && p.value) {
+          } else if (action === "filter_community" && p.value) {
             setCommunityFilter(String(p.value));
-          }
-        }
+          } else return false;
+        });
         return;
       }
       // Legacy free-text task fallback
@@ -527,6 +533,7 @@ function NetworkScreen() {
       }
     };
     window.addEventListener("satyam:run-task", onTask);
+    announceScreenReady("/network");
     return () => window.removeEventListener("satyam:run-task", onTask);
   }, [fetchGraph]);
   useEffect(() => {

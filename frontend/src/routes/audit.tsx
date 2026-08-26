@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Shell } from "@/components/Shell";
 import { ShieldCheck, Lock, ChevronDown, Check, Search, X } from "lucide-react";
 import { useT } from "@/lib/i18n";
+import { announceScreenReady, runActions } from "@/lib/taskBus";
 import { api } from "@/lib/api/client";
 import { useState, useMemo, useEffect } from "react";
 
@@ -108,17 +109,17 @@ function Audit() {
       if (!d || d.route !== "/audit") return;
       const actions = Array.isArray(d.actions) ? d.actions : [];
       if (actions.length > 0) {
-        for (const a of actions) {
-          if (a.screen !== "/audit") continue;
-          const p = a.params || {};
-          if (a.action === "search" && p.query) setQuery(String(p.query));
-          else if (a.action === "filter_action" && p.action) setActionFilter(String(p.action));
-        }
+        runActions("/audit", d, (action, p) => {
+          if (action === "search" && p.query) setQuery(String(p.query));
+          else if (action === "filter_action" && p.action) setActionFilter(String(p.action));
+          else return false;
+        });
         return;
       }
       if (typeof d.task === "string" && d.task.trim()) setQuery(d.task.trim());
     };
     window.addEventListener("satyam:run-task", onTask);
+    announceScreenReady("/audit");
     return () => window.removeEventListener("satyam:run-task", onTask);
   }, []);
 
@@ -148,8 +149,11 @@ function Audit() {
       if (srcFilter !== "All" && r.src !== srcFilter) return false;
       if (from && r.rawTs && r.rawTs < from) return false;
       if (to && r.rawTs && r.rawTs > to) return false;
-      if (q && ![r.t, r.u, r.role, r.action, r.query, r.result, r.src]
-        .join(" ").toLowerCase().includes(q)) return false;
+      if (
+        q &&
+        ![r.t, r.u, r.role, r.action, r.query, r.result, r.src].join(" ").toLowerCase().includes(q)
+      )
+        return false;
       return true;
     });
   }, [query, rows, userFilter, actionFilter, srcFilter, fromDate, toDate]);
@@ -360,7 +364,9 @@ function Audit() {
               {liveTotal?.toLocaleString() ?? rows.length} {t("entries")} ·{" "}
               {t("Read-only · No edit controls exposed")}
             </span>
-            <span className="font-mono">SHA-256 head: {chainHead ? `${chainHead.slice(0,4)}…${chainHead.slice(-4)}` : "—"}</span>
+            <span className="font-mono">
+              SHA-256 head: {chainHead ? `${chainHead.slice(0, 4)}…${chainHead.slice(-4)}` : "—"}
+            </span>
           </div>
         </div>
       </div>
