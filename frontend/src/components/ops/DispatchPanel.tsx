@@ -1,14 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Truck, Navigation, Radio, Square, Zap, Play, MapPin } from "lucide-react";
 import { CrimeMap, type Hotspot } from "@/components/CrimeMap";
-import {
-  responseOps,
-  openOpsSocket,
-  type Patrol,
-  type ActiveDispatch,
-} from "@/lib/api/responseOps";
+import { responseOps, openOpsSocket, type ActiveDispatch } from "@/lib/api/responseOps";
 import { useT } from "@/lib/i18n";
+import { api } from "@/lib/api/client";
 import { fetchRoadGraph, resampleByDistance, shortestPath, type RoadGraph } from "@/lib/roadPath";
+import { DEMO_SCENES, type SimScene } from "@/lib/simScenes";
 
 const PHASES = [
   { key: "ACCEPTED", label: "Accepted" },
@@ -66,62 +63,25 @@ type Corridor = {
 
 type LL = { lat: number; lng: number };
 type SimSignal = { id: number; junction_id: string; lat: number; lng: number; state: string };
-type DemoDispatch = {
-  id: string;
-  callsign: string;
-  incident: string;
-  origin: LL;
-  originName: string;
-  scene: LL;
-  sceneName: string;
-};
+// `DemoDispatch` and its five hardcoded Bengaluru scenarios (PCR-21 / Cubbon Park
+// -> Commercial Street, and so on) lived here. They looked like data and were not:
+// switching the Settings panel between the cloud and local databases changed every
+// other figure on this screen and left these five untouched, so the panel
+// contradicted the rest of the app.
+//
+// A later revision derived them from real patrol units and crime hotspots on the
+// active database, which worked but produced an 18 km Bidar leg whose endpoints sat
+// in disconnected fragments of the arterial network — the card could only report
+// NO_ROUTE. They are now five curated short Bengaluru legs, each verified to route.
+// See `lib/simScenes.ts` for the measurements.
 
-const DEMO_DISPATCHES: DemoDispatch[] = [
-  {
-    id: "SIM-01",
-    callsign: "PCR-21",
-    incident: "Armed robbery in progress",
-    origin: { lat: 12.9763, lng: 77.5929 },
-    originName: "Cubbon Park",
-    scene: { lat: 12.985, lng: 77.606 },
-    sceneName: "Commercial Street",
-  },
-  {
-    id: "SIM-02",
-    callsign: "PCR-07",
-    incident: "Hit & run with injuries",
-    origin: { lat: 12.9116, lng: 77.6389 },
-    originName: "HSR Layout",
-    scene: { lat: 12.9172, lng: 77.6228 },
-    sceneName: "Silk Board",
-  },
-  {
-    id: "SIM-03",
-    callsign: "PCR-14",
-    incident: "Chain snatching",
-    origin: { lat: 12.961, lng: 77.6387 },
-    originName: "Domlur",
-    scene: { lat: 12.9719, lng: 77.6412 },
-    sceneName: "Indiranagar",
-  },
-  {
-    id: "SIM-04",
-    callsign: "PCR-03",
-    incident: "Public disturbance",
-    origin: { lat: 12.9794, lng: 77.5912 },
-    originName: "Vidhana Soudha",
-    scene: { lat: 12.9767, lng: 77.5713 },
-    sceneName: "Majestic",
-  },
-  {
-    id: "SIM-05",
-    callsign: "PCR-19",
-    incident: "Road accident, multi-vehicle",
-    origin: { lat: 12.9166, lng: 77.6101 },
-    originName: "BTM Layout",
-    scene: { lat: 12.9352, lng: 77.6245 },
-    sceneName: "Koramangala",
-  },
+/** Bengaluru anchor points, used only to seed backend dispatches for "Simulate
+ *  All" when the risk grid has not been computed yet. Not the simulation cards —
+ *  those come from `lib/simScenes.ts`. */
+const SEED_SCENE_POINTS: LL[] = [
+  { lat: 12.985, lng: 77.606 },
+  { lat: 12.9719, lng: 77.6412 },
+  { lat: 12.9172, lng: 77.6228 },
 ];
 
 // `lerp` and `straightRoute` lived here. `straightRoute` drew the line the car
@@ -163,8 +123,15 @@ function makeSignals(route: LL[], id: string): SimSignal[] {
 
 export function DispatchPanel() {
   const t = useT();
-  const [patrols, setPatrols] = useState<Patrol[]>([]);
+  // The `patrols` list used to live here purely to draw 83 static red pins on the
+  // map. Now that the dots are the crime scenes, nothing read it, so the state and
+  // its two fetches are gone rather than left as dead reads.
   const [active, setActive] = useState<ActiveDispatch[]>([]);
+
+  /** The five verified demo scenes. Fixed on purpose — see lib/simScenes.ts. */
+  const scenes: SimScene[] = DEMO_SCENES;
+  /** Which database the rest of the screen is reading, shown for context. */
+  const [dbSource, setDbSource] = useState<string | null>(null);
   const [live, setLive] = useState<{ lat: number; lng: number; etaSec: number } | null>(null);
   const [scene, setScene] = useState({ lat: 12.9352, lng: 77.6245 });
   const [signals, setSignals] = useState<
@@ -290,7 +257,7 @@ export function DispatchPanel() {
     }, 45);
   }
 
-  async function startSim(d: DemoDispatch) {
+  async function startSim(d: SimScene) {
     simRun.current += 1;
     const runId = simRun.current;
     clearSimTimer();
@@ -374,7 +341,16 @@ export function DispatchPanel() {
   }
 
   const simRunning = simId !== null;
-  const simDispatch = DEMO_DISPATCHES.find((d) => d.id === simId) ?? null;
+  const simDispatch = scenes.find((d) => d.id === simId) ?? null;
+
+  // Which database the rest of this screen is reading. The demo scenes themselves
+  // are fixed, so this is context rather than their provenance.
+  useEffect(() => {
+    api
+      .getDbSource()
+      .then((r) => setDbSource(r.db_source))
+      .catch(() => setDbSource(null));
+  }, []);
 
   // ── live backend data ──────────────────────────────────────────────────────
   const refreshActive = () =>
@@ -382,9 +358,7 @@ export function DispatchPanel() {
       .activeDispatches()
       .then((r) => setActive(r.active))
       .catch(() => {});
-  useEffect(() => {
-    responseOps.patrols().then(setPatrols);
-  }, []);
+
   useEffect(() => {
     responseOps.signals().then(setSignals);
   }, []);
@@ -430,7 +404,6 @@ export function DispatchPanel() {
         );
         if (msg.status === "COMPLETED") {
           setLive(null);
-          responseOps.patrols().then(setPatrols);
           setTimeout(refreshActive, 300);
         }
       }
@@ -454,12 +427,10 @@ export function DispatchPanel() {
   const [actionBusy, setActionBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
-  // Bengaluru demo scenes — used when no risk zones are available.
-  const FALLBACK_SCENES = [
-    { lat: 12.985, lng: 77.606 },
-    { lat: 12.9719, lng: 77.6412 },
-    { lat: 12.9172, lng: 77.6228 },
-  ];
+  // NOTE: this used to be a component-local `FALLBACK_SCENES`, which silently
+  // shadowed the imported one of the same name and made the simulation cards fall
+  // back to three bare coordinates with no callsign or crime type. Renamed, and
+  // moved to module scope since it is a constant.
 
   async function dispatchNearest() {
     stopSim();
@@ -489,16 +460,19 @@ export function DispatchPanel() {
       // Try the backend simulate-all first.
       const res = await responseOps.simulateAll();
       if (res.started === 0) {
-        // Nothing to simulate — seed dispatches from risk zones or fallback scenes.
-        let scenes = FALLBACK_SCENES;
+        // Nothing to simulate — seed dispatches from risk zones, or from the
+        // anchor points if the risk grid has not been computed yet.
+        let seedPoints: LL[] = SEED_SCENE_POINTS;
         try {
           const rz = await responseOps.riskZones();
           if (rz.zones.length >= 2)
-            scenes = rz.zones.slice(0, 3).map((z) => ({ lat: z.center_lat, lng: z.center_lng }));
+            seedPoints = rz.zones
+              .slice(0, 3)
+              .map((z) => ({ lat: z.center_lat, lng: z.center_lng }));
         } catch {
-          /* use fallback */
+          /* use the anchor points */
         }
-        for (const s of scenes) {
+        for (const s of seedPoints) {
           try {
             const d = await responseOps.dispatch({ scene_lat: s.lat, scene_lng: s.lng });
             await responseOps.simulate(d.id);
@@ -534,14 +508,23 @@ export function DispatchPanel() {
     }
   }
 
-  const patrolPoints: Hotspot[] = patrols
-    .map((p) => ({
-      lat: p.lat ?? 0,
-      lng: p.lng ?? 0,
-      weight: 1,
-      label: `${p.callsign} (${p.status})`,
-    }))
-    .filter((p) => p.lat && p.lng);
+  /**
+   * The dots on the map are the five CRIME SCENES — the places a unit drives to.
+   *
+   * This used to plot `patrols`, which on the local database is 83 units spread
+   * across 40 districts: the map became a solid mass of red covering Karnataka,
+   * none of it related to the simulation being run. Scene markers are the useful
+   * layer, because they are the destinations the cards actually dispatch to.
+   *
+   * The unit's own position is not drawn as a static pin either — during a run it
+   * is the animated vehicle marker (`liveMarker`), which is where it belongs.
+   */
+  const scenePoints: Hotspot[] = scenes.map((s) => ({
+    lat: s.scene.lat,
+    lng: s.scene.lng,
+    weight: 1,
+    label: `${s.id} · ${s.incident} — ${s.sceneName}`,
+  }));
 
   const corridorPanel = simRunning
     ? simCorridor
@@ -613,11 +596,25 @@ export function DispatchPanel() {
           <div className="mb-1 flex items-center gap-1 text-sm font-extrabold">
             <Zap className="h-4 w-4 text-[#00C896]" /> {t("Simulate Dispatch & Green Corridor")}
           </div>
-          <p className="mb-2 text-[10px] text-muted-foreground">
-            {t("Demo routes only \u2014 not linked to live data or the Demo Simulation tab.")}
-          </p>
+
+          {/* The scenes are fixed and verified routable; the badge says which
+              database the rest of the screen is reading, which is separate. */}
+          <div className="mb-2 flex flex-wrap items-center gap-1">
+            {dbSource && (
+              <span
+                className={`rounded-[4px] border-2 border-foreground px-1.5 py-0.5 text-[9px] font-extrabold uppercase ${
+                  dbSource === "local" ? "bg-[#00C896]/20" : "bg-[var(--main,#91C5FD)]/30"
+                }`}
+              >
+                {dbSource === "local" ? t("Local DB") : t("Cloud DB")}
+              </span>
+            )}
+            <span className="text-[10px] text-muted-foreground">
+              {scenes.length} {t("demo scenes \u00b7 short Bengaluru legs, each verified to route")}
+            </span>
+          </div>
           <div className="flex flex-col gap-2">
-            {DEMO_DISPATCHES.map((d) => {
+            {scenes.map((d) => {
               const running = simId === d.id;
               return (
                 <div
@@ -632,9 +629,14 @@ export function DispatchPanel() {
                       {d.id}
                     </span>
                   </div>
+                  {/* All written UI copy now, so plain t(). The derived version had
+                      DB crime types and districts here and needed tData. */}
                   <div className="mt-0.5 font-semibold">{t(d.incident)}</div>
                   <div className="mt-0.5 flex items-center gap-1 text-[10px] text-muted-foreground">
-                    <MapPin className="h-3 w-3" /> {t(d.originName)} → {t(d.sceneName)}
+                    <MapPin className="h-3 w-3 shrink-0" />
+                    <span className="truncate">
+                      {t(d.originName)} → {t(d.sceneName)} · {d.distanceKm.toFixed(1)} km
+                    </span>
                   </div>
                   {running ? (
                     <div className="mt-2">
@@ -698,7 +700,7 @@ export function DispatchPanel() {
       {/* RIGHT: map */}
       <div className="relative h-[560px] overflow-hidden rounded-[8px] border-2 border-foreground">
         <CrimeMap
-          points={patrolPoints}
+          points={scenePoints}
           mode="pins"
           corridorPath={
             simRunning ? (simCorridor ?? undefined) : (corridor?.routeCoords ?? undefined)
@@ -741,8 +743,16 @@ export function DispatchPanel() {
             <span className="inline-block h-1 w-4 rounded bg-[#00E6A8] opacity-50" />{" "}
             {t("Roads searched")}
           </div>
+          {/* The red dot was labelled "Patrol unit" while it plotted the patrol
+              list. It now marks the crime scene a unit drives TO, so the label had
+              to move with it — a legend that names the wrong thing is worse than
+              no legend. The unit itself is the animated vehicle marker. */}
           <div className="mb-1 flex items-center gap-1">
-            <span className="inline-block h-2 w-2 rounded-full bg-[#ef4444]" /> {t("Patrol unit")}
+            <span className="inline-block h-2 w-2 rounded-full bg-[#ef4444]" /> {t("Crime scene")}
+          </div>
+          <div className="mb-1 flex items-center gap-1">
+            <span className="inline-block h-2 w-2 rounded-full bg-[#00C896]" />{" "}
+            {t("Patrol unit (moving)")}
           </div>
           <div className="flex items-center gap-1">
             <span className="inline-block h-2 w-2 rounded-full bg-[#9ca3af]" /> {t("Signal")}

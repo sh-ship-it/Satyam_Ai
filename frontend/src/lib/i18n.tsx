@@ -412,6 +412,19 @@ const DICT: Record<string, string> = {
   Reports: "ವರದಿಗಳು",
   Audit: "ಆಡಿಟ್",
 
+  // Dispatch simulation scenes, now derived from the active database.
+  Rebuild: "ಮರುನಿರ್ಮಾಣ",
+  "Rebuild from the active database": "ಸಕ್ರಿಯ ದತ್ತಸಂಚಯದಿಂದ ಮರುನಿರ್ಮಾಣ ಮಾಡಿ",
+  "Local DB": "ಸ್ಥಳೀಯ ಡಿಬಿ",
+  "Cloud DB": "ಕ್ಲೌಡ್ ಡಿಬಿ",
+  "demo scenes · short Bengaluru legs, each verified to route":
+    "ಡೆಮೋ ದೃಶ್ಯಗಳು · ಸಣ್ಣ ಬೆಂಗಳೂರು ಮಾರ್ಗಗಳು, ಪ್ರತಿಯೊಂದೂ ಪರಿಶೀಲಿಸಲಾಗಿದೆ",
+  "Crime scene": "ಅಪರಾಧ ಸ್ಥಳ",
+  "Patrol unit (moving)": "ಗಸ್ತು ಘಟಕ (ಚಲಿಸುತ್ತಿದೆ)",
+  "Two-wheeler theft": "ದ್ವಿಚಕ್ರ ವಾಹನ ಕಳ್ಳತನ",
+  "Silk Board Junction": "ಸಿಲ್ಕ್ ಬೋರ್ಡ್ ಜಂಕ್ಷನ್",
+  "Jayanagar 4th Block": "ಜಯನಗರ 4ನೇ ಬ್ಲಾಕ್",
+
   // News Feed (live Karnataka news TV). Channel names are proper nouns and stay
   // in Latin script deliberately — that is how the broadcasters brand themselves.
   "News Feed": "ಸುದ್ದಿ ಪ್ರಸಾರ",
