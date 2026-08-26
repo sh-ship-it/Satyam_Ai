@@ -24,7 +24,14 @@ import { Markdown } from "@/components/Markdown";
 import { useI18n, useT } from "@/lib/i18n";
 import { streamChat, type ChatEvent } from "@/lib/api/client";
 import { loadEngineSettings } from "@/components/SettingsDialog";
-import { cancelSpeech, isServerVoiceEnabled, speakViaSarvam } from "@/lib/voice/tts";
+import {
+  cancelSpeech,
+  isServerVoiceEnabled,
+  speakViaSarvam,
+  TTS_FALLBACK_EVENT,
+  unlockAudioPlayback,
+  type TtsFallbackDetail,
+} from "@/lib/voice/tts";
 import { isBackendSttSupported, startSttSession, type SttSession } from "@/lib/voice/recorder";
 import {
   generateId,
@@ -108,6 +115,10 @@ function Ask() {
   const [listening, setListening] = useState(false);
   const [micStatus, setMicStatus] = useState<string | null>(null);
   const [micError, setMicError] = useState<string | null>(null);
+  // Set when the selected cloud voice could not be used and the browser voice
+  // spoke instead. Shown next to the speaker toggle, because the alternative is
+  // the officer hearing a different voice and having no way to know why.
+  const [voiceFallback, setVoiceFallback] = useState<string | null>(null);
 
   const backendConvId = useRef<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -242,6 +253,14 @@ function Ask() {
     if (!text.trim()) return;
     const emit = (state: "speaking" | "done") =>
       window.dispatchEvent(new CustomEvent("satyam:ai-state", { detail: { state } }));
+    // Belt-and-braces: the send/toggle handlers unlock inside the click, but a
+    // reply can also be spoken from a path with no gesture behind it (a handed-off
+    // question, an auto-spoken answer). Without an unlock, audio.play() is
+    // rejected by the autoplay policy and speak() quietly degrades to the browser
+    // voice — which is why Sarvam sounded "not like Sarvam" on this screen while
+    // the backend was returning perfectly good Sarvam audio.
+    unlockAudioPlayback();
+    setVoiceFallback(null); // a fresh turn re-tests the provider
     void speakViaSarvam(text, chatLangRef.current, 1, {
       onStart: () => {
         setSpeaking(true);
@@ -261,6 +280,9 @@ function Ask() {
   }
 
   function toggleSpeakOut() {
+    // Must run synchronously inside the click to spend the gesture token, which
+    // is what lets the later async audio.play() through the autoplay policy.
+    unlockAudioPlayback();
     setSpeakOut((prev) => {
       const next = !prev;
       try {
@@ -272,6 +294,15 @@ function Ask() {
       return next;
     });
   }
+
+  useEffect(() => {
+    const onFallback = (e: Event) => {
+      const d = (e as CustomEvent<TtsFallbackDetail>).detail;
+      setVoiceFallback(d ? `${d.provider}: ${d.reason}` : null);
+    };
+    window.addEventListener(TTS_FALLBACK_EVENT, onFallback);
+    return () => window.removeEventListener(TTS_FALLBACK_EVENT, onFallback);
+  }, []);
 
   function pickLang(next: "en" | "kn") {
     if (next === chatLang) return;
@@ -437,6 +468,13 @@ function Ask() {
         // A user-pressed Stop is not an error — keep whatever streamed so far.
         if ((err as { name?: string })?.name === "AbortError") {
           settle(acc.trim() || t("Stopped."));
+          return;
+        }
+        // A 401 is a dead session, NOT an unreachable backend. Reporting it as
+        // the latter sent the officer looking for a server that was up and
+        // answering, with no hint that signing in again was the fix.
+        if ((err as { status?: number })?.status === 401) {
+          settle(t("Your session has expired. Please sign in again."));
           return;
         }
         settle(t("I couldn't reach the backend just now. Please retry once the API is running."));
@@ -811,6 +849,16 @@ function Ask() {
                       <Square className="h-3 w-3" />
                       {t("Stop")}
                     </button>
+                  )}
+
+                  {voiceFallback && (
+                    <span
+                      role="status"
+                      title={voiceFallback}
+                      className="max-w-[18rem] truncate rounded-[3px] bg-destructive/15 px-1.5 py-0.5 text-[10px] font-bold text-destructive"
+                    >
+                      {t("Browser voice used — cloud voice unavailable")}
+                    </span>
                   )}
 
                   <span className="ml-auto" />

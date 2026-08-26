@@ -2,7 +2,13 @@ import asyncio
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy import text
 
-CLOUD_URL = "postgresql+asyncpg://neondb_owner:npg_7qDbsmiyR2Jt@ep-misty-haze-ad33z23j-pooler.c-2.us-east-1.aws.neon.tech/neondb?ssl=require"
+# Never hardcode a connection string with a password here — this file is tracked
+# in git, which is how the Neon credential ended up in history.
+import os
+
+CLOUD_URL = os.environ.get("DATABASE_URL", "")
+if not CLOUD_URL:
+    raise SystemExit("DATABASE_URL is not set. Load backend/.env before running.")
 
 async def main():
     print("[INFO] Testing connection to Cloud Neon DB...")

@@ -63,6 +63,32 @@ export class ApiError extends Error {
   }
 }
 
+/** Broadcast when a stored token is rejected, so the shell can send the officer
+ *  back to the sign-in screen instead of leaving a dead session in place. */
+export const SESSION_EXPIRED_EVENT = "satyam:session-expired";
+
+/**
+ * A 401 on an authenticated call means the STORED TOKEN is no longer usable —
+ * expired, or signed with a secret the server no longer has.
+ *
+ * Handled here, once, rather than at each call site. Leaving the dead token in
+ * localStorage produced two separate misdiagnoses that both pointed the officer
+ * at the wrong thing: chat reported "I couldn't reach the backend just now"
+ * (the backend was up and answering), and the Settings panel rendered every
+ * provider as "No key" because its fetch threw and `providers` stayed null —
+ * so a stale session looked exactly like three unconfigured API keys.
+ */
+function handleUnauthorized(path: string): void {
+  // /auth/login answering 401 is "wrong password", not an expired session, and
+  // must not fire the redirect — the officer is already on the sign-in screen.
+  if (path.startsWith("/auth/login")) return;
+  setAuthToken(null);
+  cacheUser(null);
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent(SESSION_EXPIRED_EVENT));
+  }
+}
+
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const method = (init.method ?? "GET").toUpperCase();
 
@@ -84,6 +110,7 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
     } catch {
       /* ignore */
     }
+    if (res.status === 401) handleUnauthorized(path);
     throw new ApiError(res.status, `Request failed: ${res.status}`, body);
   }
   if (res.status === 204) return undefined as T;
@@ -234,6 +261,17 @@ export const api = {
   modelProviders(): Promise<ModelProviderStatus> {
     return request<ModelProviderStatus>("/settings/db-source/models");
   },
+  /**
+   * Switch the Gemini model and/or reasoning depth. Process-wide server state,
+   * same as the DB source — so the response is the authoritative new status and
+   * the panel should render from it rather than from optimistic local state.
+   */
+  setGeminiConfig(body: { model?: string; thinking_level?: string }): Promise<ModelProviderStatus> {
+    return request<ModelProviderStatus>("/settings/db-source/gemini", {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+  },
   adminUsers(): Promise<{ rows: AdminUserRow[]; total: number }> {
     return request("/admin/users");
   },
@@ -339,6 +377,14 @@ export type ModelProviderStatus = {
   /** Budget left today. null when no OpenAI key is set. 0 means the brain has
    *  already failed over to Gemini for the rest of the UTC day. */
   openai_calls_remaining: number | null;
+  /** Live Gemini model id, and the server's allow-list as `{ id: label }`.
+   *  Served rather than hardcoded here so the frontend cannot offer a model the
+   *  backend would reject. */
+  gemini_model: string;
+  gemini_models: Record<string, string>;
+  /** Reasoning depth for the Gemini 3 thinking models. */
+  gemini_thinking_level: string;
+  gemini_thinking_levels: string[];
 };
 export type ChatEvent =
   | { type: "token"; text: string }
@@ -368,6 +414,9 @@ export async function streamChat(
     signal,
   });
   if (!res.ok || !res.body) {
+    // Same treatment as request(): the SSE path bypasses it entirely, which is
+    // why an expired token surfaced in chat as a backend-unreachable message.
+    if (res.status === 401) handleUnauthorized("/chat/stream");
     throw new ApiError(res.status, `Chat stream failed: ${res.status}`);
   }
   const reader = res.body.getReader();

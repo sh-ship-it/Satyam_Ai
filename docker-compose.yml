@@ -31,7 +31,11 @@ services:
     env_file: .env
     environment:
       # App connects as the least-privilege role so Postgres RLS is enforced.
-      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://neondb_owner:npg_7qDbsmiyR2Jt@ep-misty-haze-ad33z23j-pooler.c-2.us-east-1.aws.neon.tech/neondb?ssl=require}
+      # NO inline default: a shell default here is a tracked file carrying a live
+      # password, which is how the Neon credential reached git history. Comes from
+      # .env (gitignored) via env_file above; the local Postgres service is the
+      # fallback so a fresh clone still boots without any cloud credential.
+      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://satyam_app:satyam_app@postgres:5432/satyam}
       # Local database connection (used when "local" is selected in Settings)
       LOCAL_DATABASE_URL: ${LOCAL_DATABASE_URL:-postgresql+asyncpg://satyam_app:satyam_app@postgres:5432/satyam}
       # Owner/superuser URL, used ONLY by `make seed` / migrations.

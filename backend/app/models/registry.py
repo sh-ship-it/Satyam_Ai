@@ -106,8 +106,9 @@ async def complete_with_brain(
     `get_classifier_llm()` instead; Text-to-SQL has its own `get_sql_llm()` lane
     and stays off this budget entirely.
 
-    Cascade: OpenAI (if requested and in budget) → Gemini → Groq. Gemini is the
-    explicit failover target for an exhausted OpenAI budget.
+    Cascade: the requested engine → Gemini → Groq → OpenAI. OpenAI is last on
+    measured latency (see the comment on the lane loop below), and remains capped
+    at its daily budget wherever it sits in the order.
 
     Every downgrade is logged with its own event name. That discipline is copied
     from `pipeline/router.py`, where it exists because a silent fallback once made
@@ -136,37 +137,33 @@ async def complete_with_brain(
             return None
         return out
 
-    # 1) OpenAI, but only if it is the requested brain AND has budget left.
-    if resolved == "openai":
-        from app.models.quota import openai_quota
+    # Lane order: whatever was explicitly requested, then Gemini, then Groq, then
+    # OpenAI LAST.
+    #
+    # OpenAI is deliberately the final lane rather than the first, on measured
+    # latency: gpt-4o answered a one-word prompt in ~19 s and its rate limit
+    # returned 429 after 12.8 s of waiting, while the Groq lane answered the same
+    # prompt in 0.36 s and Gemini Flash Lite in ~0.7 s. Putting the slowest,
+    # tightest-quota provider first cost roughly 20 s on every single voice turn,
+    # and a voice assistant pays that in dead air. It stays in the cascade as a
+    # last-resort quality lane for when both of the others are down.
+    for name in [resolved, "gemini", "groq", "openai"]:
+        if not name or name in attempted:
+            continue
+        if name == "openai":
+            # Still budget-gated even as the last lane: the 50/day cap has to hold
+            # regardless of where in the order the lane sits.
+            from app.models.quota import openai_quota
 
-        remaining = await openai_quota.remaining()
-        if remaining <= 0:
-            log.warning("brain.openai_quota_exhausted remaining=0 - using gemini")
-        else:
-            out = await _run("openai")
-            if out is not None:
-                return out, "openai"
-
-    # 2) The requested engine, when it was not OpenAI (gemini / groq / local).
-    elif resolved:
-        out = await _run(resolved)
-        if out is not None:
-            return out, resolved
-
-    # 3) Gemini — the explicit failover target.
-    if "gemini" not in attempted:
-        out = await _run("gemini")
-        if out is not None:
-            log.info("brain.failover_to_gemini after=%s", ",".join(attempted[:-1]) or "none")
-            return out, "gemini"
-
-    # 4) Groq — final lane, so a Gemini outage still answers.
-    if "groq" not in attempted:
-        out = await _run("groq")
-        if out is not None:
-            log.info("brain.failover_to_groq after=%s", ",".join(attempted[:-1]))
-            return out, "groq"
+            if await openai_quota.remaining() <= 0:
+                log.warning("brain.openai_quota_exhausted remaining=0 - lane skipped")
+                continue
+        out = await _run(name)
+        if out is None:
+            continue
+        if attempted[:-1]:
+            log.info("brain.failover_to_%s after=%s", name, ",".join(attempted[:-1]))
+        return out, name
 
     raise RuntimeError(
         f"every brain lane failed or was unconfigured (tried: {', '.join(attempted) or 'none'})"

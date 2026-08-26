@@ -2,8 +2,21 @@ import asyncio
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy import text
 
-LOCAL_URL = "postgresql+asyncpg://postgres:postgres@localhost:5432/satyam"
-CLOUD_URL = "postgresql+asyncpg://neondb_owner:npg_7qDbsmiyR2Jt@ep-misty-haze-ad33z23j-pooler.c-2.us-east-1.aws.neon.tech/neondb?ssl=require"
+# Never hardcode a connection string with a password here — this file is tracked
+# in git, which is how the Neon credential ended up in history. Read the URLs the
+# app already resolves from the gitignored .env instead.
+import os
+
+LOCAL_URL = os.environ.get(
+    "LOCAL_DATABASE_URL", "postgresql+asyncpg://postgres:postgres@localhost:5432/satyam"
+)
+CLOUD_URL = os.environ.get("DATABASE_URL", "")
+if not CLOUD_URL:
+    raise SystemExit(
+        "DATABASE_URL is not set. Load backend/.env first, e.g. in PowerShell:\n"
+        '  Get-Content backend/.env | ForEach-Object { if ($_ -match "^([A-Z_]+)=(.*)$") '
+        '{ [Environment]::SetEnvironmentVariable($Matches[1], $Matches[2]) } }'
+    )
 
 async def check_db(name, url):
     print(f"\n--- Checking {name} Database ---")

@@ -40,6 +40,18 @@ class ModelProviderStatus(BaseModel):
     # Gemini and the officer should be able to see that without reading logs.
     openai_daily_limit: int
     openai_calls_remaining: int | None = None
+    # Gemini model + reasoning depth are runtime-switchable, so the panel needs
+    # the live values and the allow-list rather than a hardcoded frontend copy.
+    gemini_model: str = ""
+    gemini_models: dict[str, str] = {}
+    gemini_thinking_level: str = ""
+    gemini_thinking_levels: list[str] = []
+
+
+class GeminiConfigRequest(BaseModel):
+    """Both fields optional so the panel can change one without the other."""
+    model: str | None = None
+    thinking_level: str | None = None
 
 
 @router.get("/models", response_model=ModelProviderStatus)
@@ -52,6 +64,9 @@ async def model_providers(
     except AccessDenied as e:
         raise HTTPException(status_code=403, detail=str(e))
     from app.config import get_settings
+    from app.models.api.gemini import (
+        GEMINI_MODELS, THINKING_LEVELS, active_gemini_model, active_thinking_level,
+    )
     from app.models.quota import openai_quota
     s = get_settings()
     return ModelProviderStatus(
@@ -64,7 +79,40 @@ async def model_providers(
         openai_calls_remaining=(
             await openai_quota.remaining() if s.openai_api_key else None
         ),
+        gemini_model=active_gemini_model(),
+        gemini_models=dict(GEMINI_MODELS),
+        gemini_thinking_level=active_thinking_level(),
+        gemini_thinking_levels=list(THINKING_LEVELS),
     )
+
+
+@router.post("/gemini", response_model=ModelProviderStatus)
+async def set_gemini_config(
+    req: GeminiConfigRequest,
+    principal: Principal = Depends(get_principal),
+) -> ModelProviderStatus:
+    """Switch the Gemini model and/or reasoning depth without a restart.
+
+    Process-wide, like `set_db_source` — the Gemini adapter reads both on every
+    call rather than caching them, because `registry.get_llm` is `@lru_cache`d and
+    one adapter instance outlives every Settings change.
+    """
+    try:
+        require(principal, Permission.CHAT)
+    except AccessDenied as e:
+        raise HTTPException(status_code=403, detail=str(e))
+
+    from app.models.api.gemini import set_gemini_model, set_thinking_level
+    try:
+        if req.model is not None:
+            set_gemini_model(req.model)
+        if req.thinking_level is not None:
+            set_thinking_level(req.thinking_level)
+    except ValueError as e:
+        # The id is interpolated into the upstream request URL, so an unknown
+        # value is rejected rather than forwarded.
+        raise HTTPException(status_code=400, detail=str(e))
+    return await model_providers(principal)
 
 
 @router.post("", response_model=DbSourceResponse)

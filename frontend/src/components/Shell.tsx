@@ -49,7 +49,7 @@ import {
 } from "@/lib/voice/tts";
 import { resolveLang } from "@/lib/voice/lang";
 import { startSttSession, isBackendSttSupported } from "@/lib/voice/recorder";
-import { streamChat, type ChatEvent } from "@/lib/api/client";
+import { SESSION_EXPIRED_EVENT, streamChat, type ChatEvent } from "@/lib/api/client";
 import { planVoiceAction, type AgentPlan } from "@/lib/api/voiceAgent";
 import { SCREEN_READY_EVENT, TASK_RESULT_EVENT, type TaskResult } from "@/lib/taskBus";
 
@@ -221,6 +221,16 @@ export function Shell({ children }: { children: ReactNode }) {
     window.addEventListener("satyam:handsfree-settings", onHF);
     return () => window.removeEventListener("satyam:handsfree-settings", onHF);
   }, []);
+
+  // An expired token used to leave the officer inside the app with every panel
+  // quietly failing — chat blaming the backend, Settings showing three "No key"
+  // badges. The client clears the dead token and fires this; the only useful
+  // response is to send them to sign in again.
+  useEffect(() => {
+    const onExpired = () => navigate({ to: "/login" });
+    window.addEventListener(SESSION_EXPIRED_EVENT, onExpired);
+    return () => window.removeEventListener(SESSION_EXPIRED_EVENT, onExpired);
+  }, [navigate]);
   // Announce when the voice panel closes so the hands-free wake word can resume
   // listening (it is paused while the copilot mic is open to avoid two Web-Speech
   // recognizers fighting over the audio device).
@@ -438,11 +448,16 @@ export function Shell({ children }: { children: ReactNode }) {
         // aloud instead — tables, citation refs and markdown included.
         let spoken = "";
         let streamError = false;
+        // A dead session is not an unreachable backend, and the copilot SPEAKS
+        // this text — telling an officer the server is down when their token
+        // simply expired is the least actionable thing it could say.
+        let sessionExpired = false;
         const finish = () => {
           // Prefer the spoken variant, but only when there is display text to
           // pair it with; a bare `speak` with no tokens means the turn broke.
           let answer = (spoken.trim() && acc.trim() ? spoken : acc).trim();
-          if (streamError)
+          if (sessionExpired) answer = t("Your session has expired. Please sign in again.");
+          else if (streamError)
             answer = t(
               "I couldn't reach the backend just now. Please retry once the API is running.",
             );
@@ -493,8 +508,9 @@ export function Shell({ children }: { children: ReactNode }) {
           },
         )
           .then(finish)
-          .catch(() => {
-            streamError = true;
+          .catch((err: unknown) => {
+            if ((err as { status?: number })?.status === 401) sessionExpired = true;
+            else streamError = true;
             finish();
           });
       };

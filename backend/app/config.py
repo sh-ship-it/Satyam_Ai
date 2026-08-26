@@ -73,7 +73,25 @@ class Settings(BaseSettings):
 
     # Gemini
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-2.5-flash"
+    # The 2.5 family answers 404 "no longer available to new users" on keys
+    # issued to newer account cohorts, so the default has to be a 3.x id.
+    #
+    # Default is the LITE model, chosen on measured latency (see GEMINI_MODELS in
+    # models/api/gemini.py). gemini-3.7-flash is offered but is not a sane default
+    # on a free key: it has no non-thinking variant (thinkingLevel only accepts
+    # low/medium/high — "off" is a 400), no -lite sibling exists, and it measured
+    # 131.8 s at the lowest reasoning setting or answered 503 "high demand".
+    gemini_model: str = "gemini-3.5-flash-lite"
+    # Reasoning depth for the Gemini 3 thinking models (3.5/3.6/3.7 all report
+    # thinking: true in their model metadata). The API enum is exactly
+    # low|medium|high — "off" and "none" are both rejected with HTTP 400, so
+    # reasoning cannot be switched off, only turned down.
+    gemini_thinking_level: Literal["low", "medium", "high"] = "low"
+    # 60 s, not 200 s. The default model answers in under a second, so this only
+    # bites when someone picks gemini-3.7-flash, and for that model a long timeout
+    # buys a three-minute stall on a voice turn rather than an answer. Failing over
+    # to Groq is the better outcome; the Settings label says so.
+    gemini_timeout_seconds: int = 60
 
     # Groq
     groq_api_key: str = ""

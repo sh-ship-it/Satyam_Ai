@@ -294,7 +294,7 @@ function AboutPage() {
                 items: [
                   {
                     label: t("Primary"),
-                    text: t("The configured brain model, currently Gemini 2.5 Flash by default."),
+                    text: t("The configured brain model, currently Gemini by default."),
                   },
                   {
                     label: t("Fallback"),
@@ -715,8 +715,8 @@ function AboutPage() {
                 kind: "table",
                 head: [t("Role"), t("Default"), t("Alternatives")],
                 rows: [
-                  [t("Reasoning and routing"), "Gemini 2.5 Flash", t("Groq, OpenAI")],
-                  [t("Text-to-SQL"), "Gemini 2.5 Flash", t("Qwen3 Coder via Ollama Cloud")],
+                  [t("Reasoning and routing"), "Gemini", t("Groq, OpenAI")],
+                  [t("Text-to-SQL"), "Gemini", t("Qwen3 Coder via Ollama Cloud")],
                   [t("Embeddings"), "BGE-M3", t("None — deliberately the only embedder")],
                   [t("Reranking"), "BGE Reranker v2-m3", t("None")],
                   [t("Speech and translation"), "Sarvam", t("Google Cloud voice")],

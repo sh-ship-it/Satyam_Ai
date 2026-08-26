@@ -17,10 +17,41 @@ v2 caps a single input at ~500 chars, so we trim on a sentence boundary.
 from __future__ import annotations
 
 import base64
+import logging
 
 import httpx
+from tenacity import retry, retry_if_exception, stop_after_attempt, wait_exponential
 
 from app.config import get_settings
+
+log = logging.getLogger(__name__)
+
+
+def _is_transient(exc: BaseException) -> bool:
+    """Retry Sarvam 5xx and transport faults, never a 4xx.
+
+    Measured: Sarvam intermittently answers 500 `error preprocessing input text`
+    for a request that succeeds unchanged on the next attempt. Without a retry that
+    became a backend 502, and the frontend then substituted the BROWSER voice with
+    no visible signal — so an intermittent provider blip presented as "Sarvam is
+    connected but the tone is wrong".
+
+    4xx is excluded on purpose: an invalid speaker/model pair (e.g. anushka with
+    bulbul:v3) is a permanent configuration error and retrying only delays the
+    real message.
+    """
+    resp = getattr(exc, "response", None)
+    if resp is not None:
+        return 500 <= int(getattr(resp, "status_code", 0) or 0) < 600
+    # A TIMEOUT is deliberately NOT retried. The 500 this retry exists for comes
+    # back in under a second, so a second attempt is nearly free — but a timeout
+    # means the full budget was already spent waiting, and retrying doubles it.
+    # Measured: two timed-out attempts cost 26.5 s of silence before the frontend
+    # fell back to the browser voice, against ~2.8 s for a healthy call. Failing
+    # fast to the fallback voice is the better outcome for a voice product.
+    if isinstance(exc, httpx.TimeoutException):
+        return False
+    return isinstance(exc, httpx.TransportError)
 
 _BASE = "https://api.sarvam.ai"
 _TTS_MAX_CHARS = 480  # safety margin under Bulbul v2's ~500-char per-input limit
@@ -117,13 +148,27 @@ class SarvamTTS(_SarvamBase):
 
     mime = "audio/wav"
 
+    # Two attempts, not three, and a 12 s per-attempt timeout below rather than 30 s.
+    # MEASURED: a persistently failing Kannada call cost 93.4 s of wall clock under
+    # 3 x 30 s, and the officer is waiting in silence for every one of those
+    # seconds. A retry is worth having for the intermittent 500, but the budget has
+    # to stay inside what a person will tolerate before giving up — worst case is
+    # now ~25 s, and the frontend's browser-voice fallback covers the rest.
+    @retry(
+        retry=retry_if_exception(_is_transient),
+        stop=stop_after_attempt(2),
+        wait=wait_exponential(multiplier=0.3, min=0.3, max=1),
+        reraise=True,
+    )
     async def synthesize(self, text: str, *, lang: str = "kn") -> bytes:
         if self._demo:
             return b""  # no key → 502 → frontend browser fallback
         spoken = _trim_for_tts(text)
         if not spoken:
             return b""
-        async with httpx.AsyncClient(timeout=30) as client:
+        # 12 s: a healthy Sarvam TTS call measures ~2.5-2.8 s, so anything past this
+        # is a stall, and waiting 30 s for it only delays the fallback voice.
+        async with httpx.AsyncClient(timeout=12) as client:
             r = await client.post(
                 f"{_BASE}/text-to-speech",
                 headers={"Content-Type": "application/json", **self._auth()},
@@ -136,8 +181,18 @@ class SarvamTTS(_SarvamBase):
                     "enable_preprocessing": True,
                 },
             )
+            if r.status_code >= 400:
+                # Log the provider's own message before raising. Without it the
+                # route reports a bare "TTS provider error:" and the actual cause
+                # (bad speaker/model pair, transient preprocessing failure) is lost.
+                log.warning(
+                    "sarvam.tts_failed status=%s lang=%s body=%s",
+                    r.status_code, _bcp(lang), (r.text or "")[:300],
+                )
             r.raise_for_status()
         audio_b64 = (r.json() or {}).get("audios", [""])[0]
+        if not audio_b64:
+            log.warning("sarvam.tts_empty lang=%s chars=%d", _bcp(lang), len(spoken))
         return base64.b64decode(audio_b64) if audio_b64 else b""
 
 

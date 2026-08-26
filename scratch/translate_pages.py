@@ -2,7 +2,15 @@ import os
 import json
 import httpx
 
-api_key = "AQ.Ab8RN6KO9AaIjrMVDtVX9RqCtdhaqeDDMX3pw7QRebhR6CiwSw"
+# Never hardcode a real key here — this file is tracked in git. Read it from
+# the environment (backend/.env, gitignored) instead.
+api_key = os.environ.get("GEMINI_API_KEY", "")
+if not api_key:
+    raise SystemExit(
+        "GEMINI_API_KEY is not set. Export it or run this with the backend "
+        "venv's env loaded (e.g. `set -a; source backend/.env; set +a` on "
+        "bash, or set $env:GEMINI_API_KEY in PowerShell) before running."
+    )
 
 strings = [
   # Landing Page
@@ -96,7 +104,9 @@ strings = [
 strings = list(set(strings))
 print(f"Translating {len(strings)} strings with Gemini...")
 
-url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+# gemini-2.5-flash 404s "no longer available to new users" on newer key cohorts.
+model = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")
+url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
 system_prompt = """You are translating Karnataka State Police crime intelligence web application labels to formal Kannada (ಕನ್ನಡ).
 Rules:
@@ -117,7 +127,9 @@ data = {
 }
 
 try:
-    r = httpx.post(url, json=data, timeout=60.0)
+    # Key in a header, never the URL query string — a query-string key leaks
+    # into access logs, proxy logs, browser history, and Referer headers.
+    r = httpx.post(url, json=data, headers={"x-goog-api-key": api_key}, timeout=60.0)
     if r.status_code != 200:
         print("Error response:", r.text)
         r.raise_for_status()

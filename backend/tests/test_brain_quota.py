@@ -383,3 +383,94 @@ def _int(n):
         return n
 
     return _v()
+
+
+# ── lane ORDER: Gemini first, OpenAI last ────────────────────────────────────
+#
+# Reordered on measured latency. gpt-4o answered a one-word prompt in ~19 s and
+# its rate limit returned 429 only after 12.8 s of waiting; Groq answered the same
+# prompt in 0.36 s and Gemini Flash Lite in ~0.7 s. With OpenAI first, every voice
+# turn paid ~20 s of dead air before a word was spoken.
+
+
+def _install_default(monkeypatch, lanes: dict, brain: str = "gemini"):
+    from app.models import registry
+
+    monkeypatch.setattr(registry, "get_llm", lambda name=None: lanes[name])
+    monkeypatch.setattr(
+        registry,
+        "get_settings",
+        lambda: type("S", (), {"model_backend": "api", "brain_engine": brain})(),
+    )
+    return registry
+
+
+async def test_the_default_brain_is_gemini_and_openai_is_not_touched(monkeypatch):
+    """The whole point of the reorder: a healthy turn never waits on OpenAI."""
+    lanes = {
+        "gemini": FakeLLM("from gemini"),
+        "groq": FakeLLM("from groq"),
+        "openai": FakeLLM("from openai"),
+    }
+    registry = _install_default(monkeypatch, lanes)
+
+    text, used = await registry.complete_with_brain("q")
+    assert (text, used) == ("from gemini", "gemini")
+    assert lanes["groq"].calls == 0
+    assert lanes["openai"].calls == 0, "OpenAI must not be called on a healthy turn"
+
+
+async def test_gemini_down_falls_to_groq_before_openai(monkeypatch):
+    lanes = {
+        "gemini": FakeLLM(raises=httpx.ConnectError("down")),
+        "groq": FakeLLM("from groq"),
+        "openai": FakeLLM("from openai"),
+    }
+    registry = _install_default(monkeypatch, lanes)
+
+    text, used = await registry.complete_with_brain("q")
+    assert (text, used) == ("from groq", "groq"), "Groq is the second lane, not OpenAI"
+    assert lanes["openai"].calls == 0
+
+
+async def test_openai_is_the_last_resort_when_gemini_and_groq_both_fail(monkeypatch):
+    lanes = {
+        "gemini": FakeLLM(raises=httpx.ConnectError("down")),
+        "groq": FakeLLM(raises=httpx.ConnectError("down")),
+        "openai": FakeLLM("from openai"),
+    }
+    registry = _install_default(monkeypatch, lanes)
+    monkeypatch.setattr(quota_mod.openai_quota, "remaining", lambda: _int(9))
+
+    text, used = await registry.complete_with_brain("q")
+    assert (text, used) == ("from openai", "openai")
+
+
+async def test_the_daily_cap_still_holds_in_the_last_position(monkeypatch):
+    """Moving the lane to the end must not quietly un-meter it."""
+    lanes = {
+        "gemini": FakeLLM(raises=httpx.ConnectError("down")),
+        "groq": FakeLLM(raises=httpx.ConnectError("down")),
+        "openai": FakeLLM("from openai"),
+    }
+    registry = _install_default(monkeypatch, lanes)
+    monkeypatch.setattr(quota_mod.openai_quota, "remaining", lambda: _zero())
+
+    with pytest.raises(RuntimeError):
+        await registry.complete_with_brain("q")
+    assert lanes["openai"].calls == 0, "spent budget must skip the lane entirely"
+
+
+async def test_an_explicit_engine_request_still_wins(monkeypatch):
+    """The Settings panel must keep working: picking OpenAI puts it first again."""
+    lanes = {
+        "gemini": FakeLLM("from gemini"),
+        "groq": FakeLLM("from groq"),
+        "openai": FakeLLM("from openai"),
+    }
+    registry = _install_default(monkeypatch, lanes, brain="gemini")
+    monkeypatch.setattr(quota_mod.openai_quota, "remaining", lambda: _int(9))
+
+    text, used = await registry.complete_with_brain("q", engine="openai")
+    assert (text, used) == ("from openai", "openai")
+    assert lanes["gemini"].calls == 0

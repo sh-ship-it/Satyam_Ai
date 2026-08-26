@@ -9,6 +9,7 @@ ChatRequest so the Settings panel can flip lanes live without redeploying.
 """
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 from dataclasses import dataclass
@@ -234,6 +235,17 @@ from collections import Counter as _Counter
 
 _SPEAK_RE = _re.compile(r"\[SPEAK\](.*?)\[/SPEAK\]", _re.DOTALL | _re.IGNORECASE)
 
+# Tolerant tag matchers. The strict pair above is what the prompt ASKS for; these
+# are what the models actually emit. Measured live on an English turn:
+#     "[SPEAK] The theft hotspots ... repeated incidents. [SPEAK]\n\nThe data ..."
+# — the block was closed with [SPEAK] instead of [/SPEAK]. The strict regex missed
+# it, so the tag leaked into the officer's display AND no `speak` event was sent,
+# which is silent voice on a voice-first product. Whitespace inside the brackets
+# and a spaced "[ / SPEAK ]" are covered for the same reason.
+_SPEAK_OPEN_RE = _re.compile(r"\[\s*SPEAK\s*\]", _re.IGNORECASE)
+_SPEAK_CLOSE_RE = _re.compile(r"\[\s*/\s*SPEAK\s*\]", _re.IGNORECASE)
+_SPEAK_ANY_RE = _re.compile(r"\[\s*/?\s*SPEAK\s*\]", _re.IGNORECASE)
+
 
 def _build_spoken_summary(rows: list[dict], message: str, lang: str = "en") -> str:
     """Build a 2–3 sentence spoken briefing from raw SQL rows.
@@ -312,17 +324,104 @@ def _build_spoken_summary(rows: list[dict], message: str, lang: str = "en") -> s
 def _extract_speak(answer: str) -> tuple[str, str]:
     """Return (spoken_summary, display_text).
 
-    Pulls out the [SPEAK]...[/SPEAK] block from a Gemini answer when it exists.
-    If not found returns ("", answer) — caller falls back to the deterministic summary.
+    Pulls the spoken block out of the composed answer. The prompt asks for
+    [SPEAK]...[/SPEAK], but this is parsing UNTRUSTED model output, so it accepts
+    the malformations that actually occur rather than failing closed:
+
+      [SPEAK] x [/SPEAK]   the documented form
+      [SPEAK] x [SPEAK]    closed WITHOUT the slash — observed live on an English
+                           turn, and the reason this function was rewritten
+      [SPEAK] x            never closed; the block is taken to the end of the
+                           first paragraph
+
+    Whatever happens, every speak-ish tag is scrubbed from `display`: a leaked
+    "[SPEAK]" in an officer's answer looks like a broken product.
+
+    Returns ("", answer) only when there is no opening tag at all.
     """
-    m = _SPEAK_RE.search(answer)
-    if not m:
+    if not answer:
         return "", answer
-    spoken = m.group(1).strip()
-    display = _SPEAK_RE.sub("", answer).strip()
-    return spoken, display
+
+    open_m = _SPEAK_OPEN_RE.search(answer)
+    if not open_m:
+        return "", answer
+
+    body_start = open_m.end()
+    rest = answer[body_start:]
+
+    close_m = _SPEAK_CLOSE_RE.search(rest)
+    if close_m:
+        body_end, block_end = close_m.start(), close_m.end()
+    else:
+        # No proper closing tag. A second opening tag is the model's own attempt
+        # at closing the block, so treat it as the terminator.
+        stray = _SPEAK_OPEN_RE.search(rest)
+        if stray:
+            body_end, block_end = stray.start(), stray.end()
+        else:
+            # Unclosed: the spoken block is a short lead-in, so stop at the first
+            # blank line rather than reading the whole answer (tables included)
+            # aloud.
+            para = rest.split("\n\n", 1)[0]
+            body_end = block_end = len(para)
+
+    spoken = rest[:body_end]
+    # Remove the WHOLE block, not just its tags: the spoken lead-in is a voice
+    # script, and leaving its text behind duplicates it in the written answer —
+    # which is exactly what the officer saw above the table.
+    display = answer[: open_m.start()] + answer[body_start + block_end :]
+    # Any tag left elsewhere in the answer still has to go.
+    display = _SPEAK_ANY_RE.sub("", display).strip()
+    return spoken.strip(), display
 
 
+def _strip_markdown_for_speech(text: str) -> str:
+    """Flatten markdown to something worth reading aloud.
+
+    Drops table rows and separators outright — a TTS engine reading
+    "pipe 101 pipe 2023 pipe THEFT pipe" is worse than saying nothing.
+    """
+    lines: list[str] = []
+    for raw in (text or "").splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+        if line.startswith("|"):          # table row
+            continue
+        if set(line) <= set("-|: "):      # table separator
+            continue
+        line = _re.sub(r"[*_`#>]+", "", line)          # emphasis / heading marks
+        line = _re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", line)  # links → label
+        line = _re.sub(r"\s+", " ", line).strip()
+        if line:
+            lines.append(line)
+    return " ".join(lines)
+
+
+def _spoken_from_prose(display_answer: str, lang: str = "en", max_sentences: int = 3) -> str:
+    """Last-resort spoken summary: the opening sentences of the written answer.
+
+    WHY THIS EXISTS
+    `_build_spoken_summary` returns "" when there are no SQL rows, and the
+    hotspot, network, RAG and report lanes all produce no rows. So a hotspot
+    question whose answer carried no usable [SPEAK] block emitted NO speak event
+    at all, and the officer got a written answer with total silence — measured on
+    a live "Show me theft hotspots across Karnataka" turn.
+
+    A voice-first assistant has no acceptable silent path, so this guarantees
+    there is always something to say. It is deliberately last in the chain:
+    prose read aloud is worse than a purpose-built briefing, just far better
+    than nothing.
+    """
+    flat = _strip_markdown_for_speech(display_answer)
+    if not flat:
+        return ""
+    # Kannada uses the same full stop as English in this corpus, plus the danda.
+    sentences = [s.strip() for s in _re.split(r"(?<=[.!?\u0964])\s+", flat) if s.strip()]
+    out = " ".join(sentences[:max_sentences]) if sentences else flat
+    # Sarvam's bulbul:v2 caps a single input near 500 chars; trimming here keeps
+    # the spoken text inside that window instead of relying on the adapter's cut.
+    return out[:460].strip()
 
 
 
@@ -577,10 +676,35 @@ async def _compose(
     if lang != "kn":
         return english_answer
 
-    # Two-pass for Kannada: translate the complete answer, then run the
-    # deterministic post-processor as a safety net.
-    kannada_answer = await _translate_to_kannada(english_answer, brain_engine=brain_engine)
-    return _post_translate_kn(kannada_answer)
+    # Kannada: translate, then run the deterministic post-processor as a safety net.
+    #
+    # The [SPEAK] markers are pulled out BEFORE translation and re-attached after,
+    # because they are control sentinels and the translator is instructed to render
+    # every English word in Kannada — so it obediently turned "[SPEAK]" into
+    # "[ಮಾತು]" (measured). That broke the marker for the parser, leaked it into the
+    # written answer, and left Sarvam reading the literal string "[ಮಾತು]" out loud.
+    # Asking the prompt to spare them would be relying on model obedience for a
+    # parsing contract; splitting the string does not rely on anything.
+    spoken_en, display_en = _extract_speak(english_answer)
+
+    if not spoken_en:
+        return _post_translate_kn(
+            await _translate_to_kannada(display_en, brain_engine=brain_engine)
+        )
+
+    # CONCURRENTLY, not one after the other. The two translations are independent,
+    # and a Kannada turn was measured at 34.2 s to first audio against 28.6 s for
+    # the same question in English — awaiting them in sequence spent a whole extra
+    # round trip of wall clock for no reason. The spoken block is only 2-3
+    # sentences, so the pair costs about what the display alone used to.
+    display_raw, spoken_raw = await asyncio.gather(
+        _translate_to_kannada(display_en, brain_engine=brain_engine),
+        _translate_to_kannada(spoken_en, brain_engine=brain_engine),
+    )
+    display_kn = _post_translate_kn(display_raw)
+    spoken_kn = _post_translate_kn(spoken_raw)
+    # Re-attach markers WE control, so the parser is matching our own output.
+    return f"[SPEAK]{spoken_kn.strip()}[/SPEAK]\n\n{display_kn}"
 
 
 async def run(
@@ -750,6 +874,13 @@ async def run(
                                 "I'm Satyam, the KSP crime-intelligence assistant. "
                                 "Ask me about crime statistics, FIRs, hotspots, or networks."
                             )
+            # Smalltalk has no [SPEAK] block in its prompt, but the brain
+            # sometimes carries the convention over from the grounded system
+            # prompt. Scrub it either way — an unstripped "[SPEAK]" would be both
+            # shown to the officer and read out loud by the TTS.
+            spoken_smalltalk, answer = _extract_speak(answer)
+            if spoken_smalltalk:
+                yield PipelineEvent("speak", {"text": spoken_smalltalk})
             for chunk in answer.split(" "):
                 yield PipelineEvent("token", {"text": chunk + " "})
             state.add_turn("assistant", answer)
@@ -769,21 +900,28 @@ async def run(
         if recovery_note and rows_data:
             answer = f"*{recovery_note}*\n\n{answer}"
 
-        # Build the spoken summary two ways and take the best one:
-        # (a) Deterministic — built directly from rows, always available.
-        # (b) LLM tag — Gemini may have wrapped [SPEAK]...[/SPEAK] in its answer.
-        # Prefer (b) when it exists (more contextual), fall back to (a).
-        gemini_spoken, display_answer = _extract_speak(answer)
-        if gemini_spoken:
-            spoken_summary = gemini_spoken
-        else:
-            # Gemini didn't include the tag (demo mode, or it forgot) —
-            # build it deterministically from the raw rows.
-            display_answer = answer
-            spoken_summary = _build_spoken_summary(rows_data, message, lang=lang)
+        # Spoken summary, best source first. `display_answer` always comes from
+        # _extract_speak so the tag is scrubbed even when the block is unusable —
+        # a leaked "[SPEAK]" in the officer's answer is a visible defect.
+        #   (a) the model's own [SPEAK] block — most contextual
+        #   (b) a deterministic briefing built from the SQL rows
+        #   (c) the opening sentences of the written answer
+        # (c) is what makes silence impossible. (b) returns "" with no rows, and
+        # the hotspot / network / RAG / report lanes never produce rows, so before
+        # this chain existed those lanes emitted NO speak event and the voice
+        # simply said nothing.
+        llm_spoken, display_answer = _extract_speak(answer)
+        spoken_summary = (
+            llm_spoken
+            or _build_spoken_summary(rows_data, message, lang=lang)
+            or _spoken_from_prose(display_answer, lang=lang)
+        )
 
         if spoken_summary:
             yield PipelineEvent("speak", {"text": spoken_summary})
+        else:
+            # Should be unreachable: (c) only returns "" for an empty answer.
+            log.warning("pipeline.no_spoken_summary intent=%s lang=%s", intent, lang)
         for chunk in display_answer.split(" "):
             yield PipelineEvent("token", {"text": chunk + " "})
         for c in citations:

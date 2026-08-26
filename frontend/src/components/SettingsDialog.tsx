@@ -87,14 +87,31 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
     null,
   );
 
+  // Distinguish "could not ask the server" from "the server says no key". Both
+  // used to render as three red "No key" badges, which reads as broken API keys
+  // when the real cause is an expired session or a stopped backend — and sends
+  // the officer editing .env to fix something that was never wrong.
+  const [providersError, setProvidersError] = useState<string | null>(null);
+
   useEffect(() => {
     if (open && tab === "models") {
+      setProvidersError(null);
       api
         .modelProviders()
-        .then(setProviders)
-        .catch(() => {});
+        .then((p) => {
+          setProviders(p);
+          setProvidersError(null);
+        })
+        .catch((err: unknown) => {
+          setProviders(null);
+          setProvidersError(
+            (err as { status?: number })?.status === 401
+              ? t("Session expired — sign in again to see provider status.")
+              : t("Couldn't load provider status. Is the backend running?"),
+          );
+        });
     }
-  }, [open, tab]);
+  }, [open, tab, t]);
 
   useEffect(() => {
     if (open) {
@@ -342,13 +359,25 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                     <span className="block text-[10px] text-muted-foreground mt-0.5">
                       {t("Choose the model that powers chat. Keys are set on the server (.env).")}
                     </span>
+                    {providersError && (
+                      <span
+                        role="alert"
+                        className="mt-1 block rounded-[3px] bg-destructive/15 px-1.5 py-1 text-[10px] font-bold text-destructive"
+                      >
+                        {providersError}
+                      </span>
+                    )}
                   </div>
                   <div className="flex flex-col gap-2">
                     {(
                       [
                         {
                           id: "gemini",
-                          label: "Gemini 2.5 Flash",
+                          // Not a fixed version: the actual model is chosen below
+                          // in the Gemini model picker, and defaults to whichever
+                          // the server reports as fastest — pinning a version
+                          // label here would go stale every time that changes.
+                          label: "Gemini",
                           hint: t("Google · multimodal · default"),
                           envKey: "GEMINI_API_KEY",
                           ok: providers?.gemini_configured,
@@ -404,15 +433,20 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                             </span>
                           )}
                         </span>
+                        {/* Three states, not two. Without the unknown case, a
+                            failed status fetch claimed "No key" for a key that
+                            was present and working. */}
                         <span
                           className={
                             "rounded-[3px] px-1.5 py-0.5 text-[9px] font-bold uppercase " +
-                            (m.ok
-                              ? "bg-success/15 text-success"
-                              : "bg-destructive/15 text-destructive")
+                            (!providers
+                              ? "bg-muted text-muted-foreground"
+                              : m.ok
+                                ? "bg-success/15 text-success"
+                                : "bg-destructive/15 text-destructive")
                           }
                         >
-                          {m.ok ? t("Configured") : t("No key")}
+                          {!providers ? t("Unknown") : m.ok ? t("Configured") : t("No key")}
                         </span>
                       </button>
                     ))}
@@ -424,6 +458,61 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                   </p>
                 </div>
 
+                {/* Gemini model + reasoning depth.
+                    Server state, not localStorage: the adapter reads both on every
+                    call, so the panel renders from the server's response rather
+                    than an optimistic local value that could disagree with the
+                    model actually answering. */}
+                {providers && Object.keys(providers.gemini_models).length > 0 && (
+                  <div className="space-y-2">
+                    <Row label={t("Gemini model")}>
+                      <select
+                        value={providers.gemini_model}
+                        onChange={(e) => {
+                          void api
+                            .setGeminiConfig({ model: e.target.value })
+                            .then(setProviders)
+                            .catch(() => {});
+                        }}
+                        className="max-w-[15rem] rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
+                      >
+                        {Object.entries(providers.gemini_models).map(([id, label]) => (
+                          <option key={id} value={id}>
+                            {label}
+                          </option>
+                        ))}
+                      </select>
+                    </Row>
+                    <Row label={t("Gemini reasoning depth")}>
+                      <div className="flex flex-col items-end gap-0.5">
+                        <select
+                          value={providers.gemini_thinking_level}
+                          onChange={(e) => {
+                            void api
+                              .setGeminiConfig({ thinking_level: e.target.value })
+                              .then(setProviders)
+                              .catch(() => {});
+                          }}
+                          className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
+                        >
+                          {providers.gemini_thinking_levels.map((lvl) => (
+                            <option key={lvl} value={lvl}>
+                              {lvl === "low"
+                                ? t("Low — fastest")
+                                : lvl === "medium"
+                                  ? t("Medium")
+                                  : t("High — slowest")}
+                            </option>
+                          ))}
+                        </select>
+                        <span className="text-[10px] text-muted-foreground">
+                          {t("Deeper reasoning is much slower · cannot be turned off")}
+                        </span>
+                      </div>
+                    </Row>
+                  </div>
+                )}
+
                 {/* Text-to-SQL engine */}
                 <Row label={t("Text-to-SQL engine")}>
                   <div className="flex flex-col items-end gap-0.5">
@@ -434,7 +523,10 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                       }
                       className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
                     >
-                      <option value="gemini">Gemini 2.5 Flash (cloud)</option>
+                      {/* Follows the Gemini model picker above — this lane uses the
+                          same adapter, so naming a fixed version here would go
+                          stale the moment the picker changes. */}
+                      <option value="gemini">Gemini (cloud)</option>
                       <option value="qwen3-coder-next">qwen3-coder-next (Ollama Cloud)</option>
                       <option value="local">Local LLM (on-prem · GPU)</option>
                     </select>
@@ -454,7 +546,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                       }
                       className="rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1.5 text-xs font-bold"
                     >
-                      <option value="gemini">Gemini 2.5 Flash (recommended)</option>
+                      <option value="gemini">Gemini (recommended)</option>
                       <option value="groq">Groq Llama-3.3-70B (fast)</option>
                       <option value="openai">ChatGPT / OpenAI (GPT-4o)</option>
                     </select>

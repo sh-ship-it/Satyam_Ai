@@ -343,6 +343,21 @@ const DICT: Record<string, string> = {
   "Google · multimodal · default": "Google · ಬಹುಮಾದರಿ · ಡಿಫಾಲ್ಟ್",
   "GPT-4o · strong reasoning": "GPT-4o · ಬಲವಾದ ತರ್ಕ",
   "left today": "ಇಂದು ಉಳಿದಿದೆ",
+  "Browser voice used — cloud voice unavailable":
+    "ಬ್ರೌಸರ್ ಧ್ವನಿ ಬಳಸಲಾಗಿದೆ — ಕ್ಲೌಡ್ ಧ್ವನಿ ಲಭ್ಯವಿಲ್ಲ",
+  // "Unknown" is already in this dictionary further down with the same value.
+  "Your session has expired. Please sign in again.": "ನಿಮ್ಮ ಅವಧಿ ಮುಗಿದಿದೆ. ಪುನಃ ಸೈನ್ ಇನ್ ಮಾಡಿ.",
+  "Session expired — sign in again to see provider status.":
+    "ಅವಧಿ ಮುಗಿದಿದೆ — ಪೂರೈಕೆದಾರರ ಸ್ಥಿತಿ ನೋಡಲು ಪುನಃ ಸೈನ್ ಇನ್ ಮಾಡಿ.",
+  "Couldn't load provider status. Is the backend running?":
+    "ಪೂರೈಕೆದಾರರ ಸ್ಥಿತಿ ಲೋಡ್ ಆಗಲಿಲ್ಲ. ಬ್ಯಾಕೆಂಡ್ ಚಾಲನೆಯಲ್ಲಿದೆಯೇ?",
+  "Gemini model": "Gemini ಮಾದರಿ",
+  "Gemini reasoning depth": "Gemini ತಾರ್ಕಿಕ ಆಳ",
+  "Low — fastest": "ಕಡಿಮೆ — ಅತಿ ವೇಗ",
+  Medium: "ಮಧ್ಯಮ",
+  "High — slowest": "ಹೆಚ್ಚು — ಅತಿ ನಿಧಾನ",
+  "Deeper reasoning is much slower · cannot be turned off":
+    "ಆಳವಾದ ತಾರ್ಕಿಕತೆ ಬಹಳ ನಿಧಾನ · ಆಫ್ ಮಾಡಲಾಗದು",
   "I couldn't do that on this screen.": "ಈ ಪರದೆಯಲ್ಲಿ ಅದನ್ನು ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.",
   "Some steps didn't apply.": "ಕೆಲವು ಹಂತಗಳು ಅನ್ವಯಿಸಲಿಲ್ಲ.",
   "Daily budget spent · using Gemini": "ದೈನಂದಿನ ಮಿತಿ ಮುಗಿದಿದೆ · Gemini ಬಳಕೆ",

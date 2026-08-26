@@ -100,6 +100,28 @@ function pickVoice(lang: "en" | "kn"): SpeechSynthesisVoice | null {
   );
 }
 
+/**
+ * Fired whenever a chosen cloud provider could not be used and the BROWSER voice
+ * spoke instead.
+ *
+ * This exists because the fallback used to be completely silent. When Sarvam was
+ * selected and its clip could not play, the officer heard the operating system's
+ * voice with no indication anything had gone wrong — which reads as "Sarvam is
+ * connected but sounds wrong", and sends you looking at the API key instead of at
+ * the real cause. A substituted voice must announce itself.
+ */
+export const TTS_FALLBACK_EVENT = "satyam:tts-fallback";
+
+export type TtsFallbackDetail = { provider: string; reason: string };
+
+function announceFallback(provider: string, reason: string): void {
+  console.warn(`[tts] "${provider}" was selected but the browser voice spoke instead — ${reason}`);
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(
+    new CustomEvent<TtsFallbackDetail>(TTS_FALLBACK_EVENT, { detail: { provider, reason } }),
+  );
+}
+
 // ── autoplay unlock (V3) ─────────────────────────────────────────────────────
 let audioUnlocked = false;
 /**
@@ -317,7 +339,7 @@ export async function speak(
     audio.playbackRate = Math.max(0.1, rate || 1);
     currentAudio = audio;
     let started = false; // once the Sarvam/Google clip actually plays, never
-                         // fall back to the browser voice (prevents double audio)
+    // fall back to the browser voice (prevents double audio)
     audio.onplay = () => {
       started = true;
       hooks?.onStart?.();
@@ -332,15 +354,29 @@ export async function speak(
       URL.revokeObjectURL(url);
       // Only degrade to the browser voice if the provider clip NEVER started and
       // we're still the active turn — otherwise just end (no second voice).
-      if (!started && session === speechSession) browserSpeak(cleaned, lang, rate, hooks);
-      else hooks?.onEnd?.();
+      if (!started && session === speechSession) {
+        announceFallback(provider, "the returned audio clip failed to decode or play");
+        browserSpeak(cleaned, lang, rate, hooks);
+      } else hooks?.onEnd?.();
     };
     await audio.play(); // may reject if autoplay not unlocked → caught below
-  } catch {
+  } catch (err) {
     // Network / CORS / autoplay block — fall back only if we're still the active
     // turn and nothing has started, so we never stack a second voice.
-    if (session === speechSession) browserSpeak(cleaned, lang, rate, hooks);
-    else hooks?.onEnd?.();
+    if (session === speechSession) {
+      // NotAllowedError here is the autoplay policy, which means
+      // unlockAudioPlayback() was never called inside a user gesture on this
+      // route. That is a wiring bug, not a provider outage, and naming it is the
+      // difference between a five-minute fix and suspecting the API key.
+      const name = (err as { name?: string })?.name;
+      announceFallback(
+        provider,
+        name === "NotAllowedError"
+          ? "the browser blocked playback (autoplay not unlocked on this screen)"
+          : `the request failed (${name || "network or provider error"})`,
+      );
+      browserSpeak(cleaned, lang, rate, hooks);
+    } else hooks?.onEnd?.();
   }
 }
 
