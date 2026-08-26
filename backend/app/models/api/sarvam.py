@@ -28,28 +28,26 @@ log = logging.getLogger(__name__)
 
 
 def _is_transient(exc: BaseException) -> bool:
-    """Retry Sarvam 5xx and transport faults, never a 4xx.
+    """Retry only a connection fault. Never an HTTP status, never a timeout.
 
-    Measured: Sarvam intermittently answers 500 `error preprocessing input text`
-    for a request that succeeds unchanged on the next attempt. Without a retry that
-    became a backend 502, and the frontend then substituted the BROWSER voice with
-    no visible signal — so an intermittent provider blip presented as "Sarvam is
-    connected but the tone is wrong".
-
-    4xx is excluded on purpose: an invalid speaker/model pair (e.g. anushka with
-    bulbul:v3) is a permanent configuration error and retrying only delays the
-    real message.
+    4xx was always excluded: an invalid speaker/model pair (anushka with bulbul:v3)
+    is a permanent configuration error and retrying only delays the real message.
     """
-    resp = getattr(exc, "response", None)
-    if resp is not None:
-        return 500 <= int(getattr(resp, "status_code", 0) or 0) < 600
-    # A TIMEOUT is deliberately NOT retried. The 500 this retry exists for comes
-    # back in under a second, so a second attempt is nearly free — but a timeout
-    # means the full budget was already spent waiting, and retrying doubles it.
-    # Measured: two timed-out attempts cost 26.5 s of silence before the frontend
-    # fell back to the browser voice, against ~2.8 s for a healthy call. Failing
-    # fast to the fallback voice is the better outcome for a voice product.
+    # Neither a TIMEOUT nor a 500 is retried any more.
+    #
+    # The retry was added when a 500 came back in under a second, which made a
+    # second attempt nearly free. Re-measured during a Sarvam degradation: a 500
+    # now takes ~30 s to arrive, so retrying it doubles a 30 s wait into 60 s of
+    # dead air. Same reasoning as the timeout case — the budget is already spent by
+    # the time the error appears.
+    #
+    # What replaced the retry is the cache in app/core/tts_cache.py: a phrase that
+    # has been spoken once never needs the provider again, which protects repeats
+    # far better than re-asking a provider that is currently failing. Only a
+    # genuine connection fault (fails immediately, no wait spent) is still retried.
     if isinstance(exc, httpx.TimeoutException):
+        return False
+    if getattr(exc, "response", None) is not None:
         return False
     return isinstance(exc, httpx.TransportError)
 
@@ -166,9 +164,14 @@ class SarvamTTS(_SarvamBase):
         spoken = _trim_for_tts(text)
         if not spoken:
             return b""
-        # 12 s: a healthy Sarvam TTS call measures ~2.5-2.8 s, so anything past this
-        # is a stall, and waiting 30 s for it only delays the fallback voice.
-        async with httpx.AsyncClient(timeout=12) as client:
+        # 25 s on a SINGLE attempt. A healthy call is ~2.8 s, but Sarvam stalls past
+        # 12 s often enough that a 12 s ceiling was handing turns to the browser
+        # voice that would have succeeded. Because timeouts are no longer retried
+        # (see _is_transient), one 25 s wait costs less worst-case wall clock than
+        # the previous 2 x 12 s did, and succeeds far more often — strictly better
+        # on both axes. Long answers are the slow case, which is why _trim_for_tts
+        # caps the input at 480 chars.
+        async with httpx.AsyncClient(timeout=25) as client:
             r = await client.post(
                 f"{_BASE}/text-to-speech",
                 headers={"Content-Type": "application/json", **self._auth()},
@@ -178,7 +181,18 @@ class SarvamTTS(_SarvamBase):
                     "speaker": "anushka",       # valid bulbul:v2 female voice (kn-IN + en-IN)
                     "model": "bulbul:v2",       # was the invalid bulbul:v3 + meera pair
                     "speech_sample_rate": 22050,
-                    "enable_preprocessing": True,
+                    # MUST stay False. With preprocessing ON, en-IN answered
+                    # HTTP 500 "error preprocessing input text" after ~30s on
+                    # EVERY English request, deterministically — measured
+                    # 30.3s/500 with it on against 0.4s/49,196 bytes with it off,
+                    # same key, same text, same speaker. kn-IN works either way.
+                    #
+                    # This is what made English voice feedback look like random
+                    # provider flakiness for so long: the failure was total for one
+                    # language and absent for the other, and the 30s stall before
+                    # the error read like a network problem rather than a rejected
+                    # parameter. Sarvam's own message named the cause all along.
+                    "enable_preprocessing": False,
                 },
             )
             if r.status_code >= 400:

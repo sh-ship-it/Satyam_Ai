@@ -715,7 +715,7 @@ function AboutPage() {
                 kind: "table",
                 head: [t("Role"), t("Default"), t("Alternatives")],
                 rows: [
-                  [t("Reasoning and routing"), "Gemini", t("Groq, OpenAI")],
+                  [t("Reasoning and routing"), "Gemini", t("Groq")],
                   [t("Text-to-SQL"), "Gemini", t("Qwen3 Coder via Ollama Cloud")],
                   [t("Embeddings"), "BGE-M3", t("None — deliberately the only embedder")],
                   [t("Reranking"), "BGE Reranker v2-m3", t("None")],

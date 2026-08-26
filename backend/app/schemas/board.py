@@ -20,7 +20,7 @@ class BoardGenerateRequest(BaseModel):
     prompt: str
     images: list[BoardImage] = []
     lang: str = "en"
-    brain_engine: Optional[str] = None          # override: gemini | groq | openai
+    brain_engine: Optional[str] = None          # override: gemini | groq
     existing_snapshot: Optional[dict] = None    # tldraw snapshot for incremental merge
 
 

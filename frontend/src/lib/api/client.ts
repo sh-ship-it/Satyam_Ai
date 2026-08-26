@@ -369,14 +369,8 @@ export type PolicyUpdate = {
 export type ModelProviderStatus = {
   default_brain_engine: string;
   gemini_configured: boolean;
-  openai_configured: boolean;
   groq_configured: boolean;
   local_available: boolean;
-  /** Requests/day the OpenAI key allows (OPENAI_DAILY_LIMIT, default 50). */
-  openai_daily_limit: number;
-  /** Budget left today. null when no OpenAI key is set. 0 means the brain has
-   *  already failed over to Gemini for the rest of the UTC day. */
-  openai_calls_remaining: number | null;
   /** Live Gemini model id, and the server's allow-list as `{ id: label }`.
    *  Served rather than hardcoded here so the frontend cannot offer a model the
    *  backend would reject. */
@@ -400,7 +394,7 @@ export async function streamChat(
     message: string;
     conversation_id?: string;
     lang?: "en" | "kn";
-    brain_engine?: "gemini" | "openai" | "groq" | "local";
+    brain_engine?: "gemini" | "groq" | "local";
     sql_engine?: "gemini" | "qwen3-coder-next" | "local";
     voice_backend?: "sarvam" | "google" | "bhashini";
   },

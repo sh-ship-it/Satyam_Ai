@@ -10,11 +10,13 @@ can use it.
 from __future__ import annotations
 
 import base64
+import logging
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 
 from app.api.deps import get_principal, get_scoped_session
 from app.config import get_settings
+from app.core import tts_cache
 from app.core.rbac import AccessDenied, Permission, Principal, require
 from app.models.registry import get_stt, get_translator, get_tts
 from app.pipeline import screen_agent
@@ -27,6 +29,8 @@ from app.schemas.voice import (
     TTSRequest,
     TTSResponse,
 )
+
+log = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -51,20 +55,40 @@ async def tts(
     _guard(principal)
     lang = _norm_lang(req.lang)
     engine = get_tts(req.backend)  # None => env default (sarvam)
+    provider = type(engine).__name__
+
+    # GoogleTTS emits MP3; Sarvam/Bhashini/local emit WAV.
+    mime = getattr(engine, "mime", None) or (
+        "audio/mpeg" if req.backend == "google" else "audio/wav"
+    )
+
+    # Cache first. Audio for a given (provider, lang, text) never changes, and the
+    # provider is intermittently unreliable — a hit is both ~2.8 s faster and immune
+    # to a blip that would otherwise drop the officer to the browser voice.
+    cached = await tts_cache.get(provider, lang, req.text)
+    if cached is not None:
+        audio, mime = cached
+        log.info("tts.cache_hit provider=%s lang=%s chars=%d", provider, lang, len(req.text))
+        return TTSResponse(
+            audio_base64=base64.b64encode(audio).decode("ascii"),
+            mime=mime,
+            provider=provider,
+        )
+
     try:
         audio = await engine.synthesize(req.text, lang=lang)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"TTS provider error: {e}")
     if not audio:
         raise HTTPException(status_code=502, detail="TTS produced no audio")
-    # GoogleTTS emits MP3; Sarvam/Bhashini/local emit WAV.
-    mime = getattr(engine, "mime", None) or (
-        "audio/mpeg" if req.backend == "google" else "audio/wav"
-    )
+
+    # Only a SUCCESSFUL, non-empty synthesis is stored, so a transient failure is
+    # never remembered as "this phrase has no audio".
+    await tts_cache.put(provider, lang, req.text, audio, mime)
     return TTSResponse(
         audio_base64=base64.b64encode(audio).decode("ascii"),
         mime=mime,
-        provider=type(engine).__name__,
+        provider=provider,
     )
 
 

@@ -41,7 +41,7 @@ async def stream_chat(
     principal: Principal,
     session: AsyncSession,
     lang: str = "en",
-    brain_engine: Literal["gemini", "groq", "openai", "local"] | None = None,
+    brain_engine: Literal["gemini", "groq", "local"] | None = None,
     sql_engine: Literal["gemini", "qwen3-coder-next"] | None = None,
 ) -> AsyncIterator[PipelineEvent]:
     state = await _store.load(conversation_id, owner_id=principal.id)

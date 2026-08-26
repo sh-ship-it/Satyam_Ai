@@ -74,12 +74,15 @@ AUDIO = {"audios": ["QUJD"]}  # base64 for b"ABC"
 
 # ── classification ───────────────────────────────────────────────────────────
 
-def test_a_500_is_transient_and_a_400_is_not():
-    assert S._is_transient(httpx.HTTPStatusError("x", request=None, response=resp(500))) is True
-    assert S._is_transient(httpx.HTTPStatusError("x", request=None, response=resp(503))) is True
-    # Permanent config error: anushka is not a valid bulbul:v3 speaker.
-    assert S._is_transient(httpx.HTTPStatusError("x", request=None, response=resp(400))) is False
-    assert S._is_transient(httpx.HTTPStatusError("x", request=None, response=resp(401))) is False
+def test_no_http_status_is_retried_including_a_500():
+    """The retry originally covered 500s, on the measurement that they arrived in
+    under a second so a second attempt was nearly free. Re-measured during a Sarvam
+    degradation, a 500 took ~30 s to arrive — retrying turns 30 s of dead air into
+    60 s. The cache in app/core/tts_cache.py replaced the retry for repeats, which
+    is a better answer than re-asking a provider that is currently failing."""
+    for status in (500, 503, 400, 401, 429):
+        exc = httpx.HTTPStatusError("x", request=None, response=resp(status))
+        assert S._is_transient(exc) is False, f"{status} must not be retried"
 
 
 def test_connect_faults_retry_but_timeouts_do_not():
@@ -95,8 +98,10 @@ def test_connect_faults_retry_but_timeouts_do_not():
 
 # ── the behaviour that matters ───────────────────────────────────────────────
 
-async def test_an_intermittent_500_is_retried_and_then_succeeds(monkeypatch, tts):
-    """This is the exact failure that made Sarvam sound like the browser voice."""
+async def test_a_500_fails_fast_to_the_caller_rather_than_retrying(monkeypatch, tts):
+    """One attempt, then raise. The route turns this into a 502 and the frontend
+    falls back to the browser voice with a visible badge — which beats making the
+    officer wait a second 30 s round trip on a provider that is already failing."""
     client = install(
         monkeypatch,
         [
@@ -104,9 +109,9 @@ async def test_an_intermittent_500_is_retried_and_then_succeeds(monkeypatch, tts
             resp(200, json_body=AUDIO),
         ],
     )
-    out = await tts.synthesize("Hello officer.", lang="en")
-    assert out == b"ABC", "a retryable blip must still produce audio"
-    assert client.calls == 2
+    with pytest.raises(httpx.HTTPStatusError):
+        await tts.synthesize("Hello officer.", lang="en")
+    assert client.calls == 1, "a 500 must not cost a second 30s wait"
 
 
 async def test_a_400_is_not_retried(monkeypatch, tts):
@@ -119,15 +124,22 @@ async def test_a_400_is_not_retried(monkeypatch, tts):
     assert client.calls == 1, "a permanent config error must not be retried"
 
 
-async def test_retries_are_bounded_tightly_because_a_person_is_waiting(monkeypatch, tts):
-    """Two attempts, not three. A persistently failing Kannada call was measured at
-    93.4 s of wall clock under 3 attempts x a 30 s timeout, and the officer hears
-    silence for every one of those seconds. The retry budget has to fit inside human
-    patience — the frontend's browser-voice fallback covers what is left."""
-    client = install(monkeypatch, [resp(500), resp(500), resp(500), resp(500)])
-    with pytest.raises(httpx.HTTPStatusError):
+async def test_a_connection_fault_still_gets_its_one_retry(monkeypatch, tts):
+    """The one case worth retrying: a refused connection fails immediately, so no
+    wait has been spent and a second attempt costs nothing."""
+    client = install(monkeypatch, [])
+    attempts = {"n": 0}
+
+    class Refused(FakeClient):
+        async def post(self, *a, **k):
+            attempts["n"] += 1
+            raise httpx.ConnectError("refused")
+
+    client = Refused([])
+    monkeypatch.setattr(S.httpx, "AsyncClient", lambda **k: client)
+    with pytest.raises(httpx.ConnectError):
         await tts.synthesize("Hello officer.", lang="en")
-    assert client.calls == 2, "two attempts total, not an unbounded or slow loop"
+    assert attempts["n"] == 2, "a free-to-retry fault should get its one retry"
 
 
 async def test_empty_audio_is_returned_as_empty_not_crashed(monkeypatch, tts):
@@ -185,3 +197,27 @@ def test_long_text_is_trimmed_on_a_sentence_boundary():
     out = S._trim_for_tts(text)
     assert len(out) <= S._TTS_MAX_CHARS
     assert out.endswith("."), "should cut at a sentence end, not mid-word"
+
+
+async def test_preprocessing_is_off_because_it_breaks_english(monkeypatch, tts):
+    """`enable_preprocessing: True` made en-IN answer HTTP 500 "error preprocessing
+    input text" after ~30s on EVERY request, deterministically. Measured against the
+    live API with one key and one text: 30.3s/500 with it on, 0.4s/49,196 bytes with
+    it off. kn-IN worked either way, which is exactly why this presented as random
+    flakiness rather than a rejected parameter — total failure in one language,
+    invisible in the other.
+
+    If this flips back to True, English voice feedback dies completely and slowly."""
+    sent: dict = {}
+
+    class Capture(FakeClient):
+        async def post(self, *a, **k):
+            sent.update(k.get("json") or {})
+            return await super().post(*a, **k)
+
+    client = Capture([resp(200, json_body=AUDIO)])
+    monkeypatch.setattr(S.httpx, "AsyncClient", lambda **k: client)
+    await tts.synthesize("Hello officer.", lang="en")
+    assert sent["enable_preprocessing"] is False, (
+        "preprocessing ON is a hard 500 for en-IN after a 30s stall"
+    )

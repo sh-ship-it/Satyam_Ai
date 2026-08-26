@@ -32,14 +32,8 @@ class DbSourceResponse(BaseModel):
 class ModelProviderStatus(BaseModel):
     default_brain_engine: str
     gemini_configured: bool
-    openai_configured: bool
     groq_configured: bool
     local_available: bool
-    # The OpenAI key allows 50 requests/day, so the remaining count is operational
-    # information, not a statistic: at zero the brain has silently failed over to
-    # Gemini and the officer should be able to see that without reading logs.
-    openai_daily_limit: int
-    openai_calls_remaining: int | None = None
     # Gemini model + reasoning depth are runtime-switchable, so the panel needs
     # the live values and the allow-list rather than a hardcoded frontend copy.
     gemini_model: str = ""
@@ -67,18 +61,12 @@ async def model_providers(
     from app.models.api.gemini import (
         GEMINI_MODELS, THINKING_LEVELS, active_gemini_model, active_thinking_level,
     )
-    from app.models.quota import openai_quota
     s = get_settings()
     return ModelProviderStatus(
         default_brain_engine=s.brain_engine,
         gemini_configured=bool(s.gemini_api_key),
-        openai_configured=bool(s.openai_api_key),
         groq_configured=bool(s.groq_api_key),
         local_available=(s.model_backend == "local"),
-        openai_daily_limit=openai_quota.limit,
-        openai_calls_remaining=(
-            await openai_quota.remaining() if s.openai_api_key else None
-        ),
         gemini_model=active_gemini_model(),
         gemini_models=dict(GEMINI_MODELS),
         gemini_thinking_level=active_thinking_level(),

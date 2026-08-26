@@ -380,6 +380,13 @@ function Ask() {
       const text = raw.trim();
       if (!text || streaming) return;
 
+      // Unlock here, synchronously, while the click/Enter that triggered send() is
+      // still the active user gesture. Doing it later in speak() is too late: the
+      // answer arrives asynchronously seconds afterwards, by which point there is
+      // no gesture to spend and the browser blocks the Sarvam clip — which is what
+      // silently degraded every reply to the browser voice.
+      unlockAudioPlayback();
+
       const base: ChatMessage[] = [...messages, { role: "user", text }];
       setMessages([...base, { role: "ai", text: "", streaming: true }]);
       persist(base);

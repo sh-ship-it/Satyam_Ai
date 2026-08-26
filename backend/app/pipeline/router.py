@@ -135,16 +135,10 @@ def _llm_lanes(
     Intent routing deliberately does NOT use the metered brain. Classifying an
     utterance into a closed enum does not need GPT-4o, and with a 50-request
     daily budget it must not: one spoken command already costs screen_agent +
-    router + compose, so letting routing spend the budget would leave roughly 16
-    commands for an entire day. An explicit `brain_engine` is still honoured when
-    it names a cheap engine, so the Settings panel keeps working — but "openai"
-    resolves to the classifier lane instead.
+    router + compose, so routing stays on the cheap lane. An explicit
+    `brain_engine` is still honoured, so the Settings panel keeps working.
     """
-    primary = (
-        get_classifier_llm()
-        if (brain_engine or "") in ("", "openai")
-        else get_llm(brain_engine)
-    )
+    primary = get_classifier_llm() if not brain_engine else get_llm(brain_engine)
     lanes = [(type(primary).__name__, primary)]
     try:
         fallback = get_fallback_llm()

@@ -54,9 +54,11 @@ class Settings(BaseSettings):
     model_backend: Literal["api", "local"] = "api"
 
     # BRAIN_ENGINE: which LLM drives chat / slots / routing (api lane).
-    #   gemini  → Gemini 2.5 Flash (default, best accuracy)
-    #   groq    → Groq low-latency / outage fallback
-    brain_engine: Literal["gemini", "groq", "openai"] = "gemini"
+    #   gemini  → Gemini 3.x Flash (default; fastest measured lane, ~0.7s)
+    #   groq    → Groq low-latency / outage fallback (~0.36s)
+    # OpenAI was removed: gpt-4o measured ~19s per call and its rate limit answered
+    # 429 only after 12.8s, which cost ~20s of dead air on every voice turn.
+    brain_engine: Literal["gemini", "groq"] = "gemini"
 
     # SQL_ENGINE: which LLM generates Text-to-SQL (api lane).
     #   gemini           → Gemini 2.5 Flash (default)
@@ -104,15 +106,6 @@ class Settings(BaseSettings):
     # reasoning models such as qwen3 for routing: they wrap the JSON in <think>
     # prose and fail schema parsing.
     groq_model: str = "openai/gpt-oss-120b"
-
-    # OpenAI (ChatGPT)
-    openai_api_key: str = ""
-    openai_model: str = "gpt-4o"
-    openai_base_url: str = "https://api.openai.com/v1"
-    # Hard requests-per-day cap, enforced in app/models/quota.py against a
-    # UTC-dated counter. The brain cascade falls through to Gemini once this is
-    # spent, so a low value degrades quality rather than breaking the app.
-    openai_daily_limit: int = 50
 
     # Sarvam (primary voice — Bulbul v3 TTS, Saaras v3 STT, Sarvam Translate MT)
     sarvam_api_key: str = ""

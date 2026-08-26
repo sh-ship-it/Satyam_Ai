@@ -141,9 +141,21 @@ export function unlockAudioPlayback(): void {
       .play()
       .then(() => {
         a.pause();
+        // Only NOW is playback genuinely unlocked.
+        //
+        // This used to be set unconditionally, right after kicking off play().
+        // If that very first attempt happened outside a user gesture the browser
+        // rejected it, but the flag latched `true` anyway — so every later call
+        // returned early at the guard above and NO subsequent gesture could ever
+        // unlock audio again. The result was a permanent, silent degrade to the
+        // browser voice for the whole page session, with Sarvam returning perfectly
+        // good audio that was never allowed to play.
+        audioUnlocked = true;
       })
-      .catch(() => {});
-    audioUnlocked = true;
+      .catch(() => {
+        // Stay locked so the next real gesture gets another attempt.
+        audioUnlocked = false;
+      });
   } catch {
     /* noop */
   }

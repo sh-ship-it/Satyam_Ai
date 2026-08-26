@@ -958,13 +958,12 @@ async def _try_llm(engine: Optional[str], user_prompt: str) -> Optional[dict]:
     """Run ONE LLM engine and return a parsed plan dict, or None on any problem
     (demo echo, parse failure, network/429 error).
 
-    Screen planning uses the cheap classifier lane, never the metered OpenAI
-    brain: picking one of ~17 screens is classification, and a spoken command
-    would otherwise cost two budget units (plan + compose) instead of one. An
-    explicit non-OpenAI engine from the Settings panel is still honoured.
+    Screen planning uses the cheap classifier lane: picking one of ~17 screens is
+    classification, not reasoning, and a spoken command already costs plan +
+    compose. An explicit engine from the Settings panel is still honoured.
     """
     try:
-        llm = get_classifier_llm() if (engine or "") in ("", "openai") else get_llm(engine)
+        llm = get_classifier_llm() if not engine else get_llm(engine)
         raw = await llm.complete(
             user_prompt, system=AGENT_SYSTEM, temperature=0.1, json_schema=AGENT_SCHEMA
         )

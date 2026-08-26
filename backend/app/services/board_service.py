@@ -6,7 +6,7 @@ generate_scene is now delegated to board_brain.py which provides:
   - 8+ node entity types with correct shapes/colours
   - 5 edge relationship styles
   - Conflict/contradiction detection
-  - Multi-engine fallback cascade (Gemini → Groq → OpenAI → keyword)
+  - Multi-engine fallback cascade (Gemini -> Groq -> keyword)
   - Incremental merge support
 
 All CRUD (save/load/list) remains here.

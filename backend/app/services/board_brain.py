@@ -7,7 +7,7 @@ project LLM adapters.
 Architecture
 ------------
 1. IntentDetector   — classifies the prompt into a DiagramKind
-2. LLMExtractor     — calls Gemini/Groq/OpenAI with a richer schema prompt
+2. LLMExtractor     — calls Gemini/Groq with a richer schema prompt
 3. LayoutEngine     — computes x,y for each node based on DiagramKind
 4. NodeStyler       — assigns shape, color, size from entity_kind
 5. EdgeStyler       — assigns arrow style, color, label from relationship type
@@ -330,10 +330,9 @@ async def _llm_extract(
 ) -> str:
     """Call whichever LLM engine is requested. Returns raw JSON string.
 
-    Routed through `complete_with_brain` rather than `get_llm` so that an
-    "openai" engine both RESERVES against the daily budget and falls through to
-    Gemini once it is spent. Calling the adapter directly would raise
-    QuotaExhausted here and surface as a failed board generation instead of a
+    Routed through `complete_with_brain` rather than `get_llm` so a dead primary
+    lane falls through to the next one. Calling an adapter directly would raise
+    here and surface as a failed board generation instead of a
     slightly-less-capable one.
     """
     s = get_settings()
@@ -820,7 +819,7 @@ async def generate_scene(
     raw: Optional[str] = None
     engines_to_try = [engine]
     # Add fallback engines if primary isn't already them
-    for fallback in ("gemini", "groq", "openai"):
+    for fallback in ("gemini", "groq"):
         if fallback not in engines_to_try:
             engines_to_try.append(fallback)
 

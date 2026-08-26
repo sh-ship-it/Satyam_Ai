@@ -599,7 +599,7 @@ def _post_translate_kn(text: str) -> str:
 
 async def _translate_to_kannada(
     english_answer: str,
-    brain_engine: Literal["gemini", "groq", "openai", "local"] | None = None,
+    brain_engine: Literal["gemini", "groq", "local"] | None = None,
 ) -> str:
     """Second-pass: translates a fully-formed English answer into Kannada.
 
@@ -622,8 +622,8 @@ async def _translate_to_kannada(
         + english_answer
     )
     # Translation is mechanical, not reasoning, so it uses the cheap classifier
-    # lane rather than the metered brain. Spending an OpenAI unit to translate an
-    # answer OpenAI just wrote would double the cost of every Kannada turn.
+    # lane rather than the brain — no point spending a good call to restate an
+    # answer the brain has already written.
     try:
         return await get_classifier_llm().complete(
             translate_prompt, system=system, temperature=0.1
@@ -642,7 +642,7 @@ async def _compose(
     question: str,
     context: str,
     lang: str = "en",
-    brain_engine: Literal["gemini", "groq", "openai", "local"] | None = None,
+    brain_engine: Literal["gemini", "groq", "local"] | None = None,
     principal: "Principal | None" = None,
 ) -> str:
     """Grounded answer composition with Groq fallback on primary failure.
@@ -659,11 +659,9 @@ async def _compose(
         return _render_grounded(question, context, lang)
 
     prompt = f"Question: {question}\n\nGrounded data:\n{context}"
-    # Answer composition is the ONE place the OpenAI daily budget is spent — it is
-    # what the 50 requests/day are for. complete_with_brain owns the whole
-    # OpenAI → Gemini → Groq cascade, so the hand-rolled two-lane try/except that
-    # used to live here is gone: it duplicated the cascade and could not see the
-    # budget, so an exhausted key looked identical to a dead one.
+    # complete_with_brain owns the whole Gemini → Groq cascade, so the hand-rolled
+    # two-lane try/except that used to live here is gone: it duplicated the cascade
+    # and logged nothing, so a dead key looked identical to bad grounding.
     try:
         english_answer, used = await complete_with_brain(
             prompt, system=system, temperature=0.2, engine=brain_engine
@@ -714,7 +712,7 @@ async def run(
     session: AsyncSession,
     state: ConversationState,
     lang: str = "en",
-    brain_engine: Literal["gemini", "groq", "openai", "local"] | None = None,
+    brain_engine: Literal["gemini", "groq", "local"] | None = None,
     sql_engine: Literal["gemini", "qwen3-coder-next"] | None = None,
 ) -> AsyncIterator[PipelineEvent]:
     # 1) guardrails

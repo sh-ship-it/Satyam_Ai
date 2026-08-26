@@ -79,9 +79,8 @@ All data is **100% synthetic** — no real FIRs or PII.
 | Role | Model | Provider | Notes |
 |------|-------|----------|-------|
 | Brain LLM (chat) | Gemini 2.5 Flash | Google | Default |
-| Brain LLM (alt) | GPT-4o | OpenAI | User-selectable |
 | Fallback LLM | Llama-3.3-70B | Groq | Auto-fallback |
-| Board AI | Gemini / Groq / OpenAI | Configurable | Scene generation |
+| Board AI | Gemini / Groq | Configurable | Scene generation |
 | Text-to-SQL | Gemini 2.5 Flash | Google | Default |
 | Text-to-SQL alt | qwen3-coder-next | Ollama Cloud | Optional |
 | Embeddings | BGE-M3 (local, FP16) | BAAI | Sole embedder — not swappable |
@@ -144,7 +143,7 @@ All data is **100% synthetic** — no real FIRs or PII.
 │  Pipeline: guardrails → router → SQL/RAG/analytics → compose → SSE     │
 │  [SPEAK] SSE event carries TTS-ready spoken summary (not full table)    │
 │                                                                          │
-│  Gemini/Groq/OpenAI  │  Sarvam TTS/STT  │  PostgreSQL + pgvector        │
+│  Gemini/Groq  │  Sarvam TTS/STT  │  PostgreSQL + pgvector        │
 │  BGE-M3 (local GPU)  │  Bhashini        │  Redis  │  audit_log chain    │
 └──────────────────────────────┬──────────────────────────────────────────┘
                                │ subprocess (global Python)
@@ -294,8 +293,9 @@ over to another lane without duplicating text the caller already has. Against th
 the payoff is limited to the `/ask` text pane: the voice copilot speaks only after
 `onEnd`, so it sees no benefit at all. Left unimplemented deliberately, and the
 claim corrected wherever it appeared (§1, §27.4) rather than being left to imply
-otherwise. `api/openai_llm.py` does implement real SSE streaming; it is currently
-unused.
+otherwise. No adapter implements real SSE streaming any more — the one that did
+(`api/openai_llm.py`) was deleted with the rest of the OpenAI lane, and it was never
+called.
 
 ### 5.3 Pipeline Directory
 
@@ -321,11 +321,10 @@ app/pipeline/
 | Component | Model | Notes |
 |-----------|-------|-------|
 | Brain LLM | Gemini 2.5 Flash | Default chat/routing |
-| Brain alt | GPT-4o (OpenAI) | Optional, `openai_llm.py` adapter |
 | Fallback LLM | Groq Llama-3.3-70B | Always Groq, not configurable |
 | SQL LLM | Gemini 2.5 Flash | Default |
 | SQL alt | qwen3-coder-next | Ollama Cloud |
-| Board AI | Configurable | Gemini / Groq / OpenAI — per `boardEngine` setting |
+| Board AI | Configurable | Gemini / Groq — per `boardEngine` setting |
 | Embedder | BGE-M3 (local, FP16) | Sole embedder, 1024-dim |
 | Reranker | bge-reranker-v2-m3 (local) | ~2.4 GB combined |
 | TTS | Sarvam Bulbul v2 (`anushka`) | `POST /voice/tts` · 22.05 kHz · input trimmed to 480 chars on a sentence boundary |
@@ -337,88 +336,41 @@ app/pipeline/
 ### 6.1 Engine Selection
 
 Three settings in `EngineSettings` (stored in `localStorage`):
-- `brainEngine` — `gemini | groq | openai | local` — powers the chat brain
+- `brainEngine` — `gemini | groq | local` — powers the chat brain
 - `sqlEngine` — `gemini | qwen3-coder-next | local` — powers Text-to-SQL
-- `boardEngine` — `gemini | groq | openai` — powers the Board AI scene generator
+- `boardEngine` — `gemini | groq` — powers the Board AI scene generator
 - `copilotStt` — `browser | sarvam` — voice copilot engine, drives **both** its mic (STT) and spoken replies (TTS) (default: `browser`)
 - `copilotPlanner` — `llm | rule` — copilot screen-agent planner: `llm` uses the brain (Gemini→Groq cascade), `rule` uses the deterministic keyword planner (default: `llm`)
 - `voiceBackend` — `sarvam | google | webspeech` — TTS engine for voice replies
 
 The Settings → Models tab shows each provider as a card with configured/unconfigured badge fetched from `GET /settings/db-source/models` (returns booleans only — never API keys). The copilot STT picker is a two-button selector independent of `voiceBackend`.
 
-### 6.2 OpenAI daily budget and the brain cascade
+### 6.2 Brain cascade
 
-The ChatGPT key allows **50 requests per UTC day**. That is small enough that the
-budget has to be a hard cap rather than a dashboard: one runaway retry loop or one
-unmetered call site burns a measurable slice of the day.
-
-**`app/models/quota.py` — `DailyQuota`**
-
-| Property | Value | Why |
-|---|---|---|
-| Counter key | `llm:quota:openai:{YYYY-MM-DD}` (UTC) | OpenAI RPD resets at UTC midnight. An IST date would roll 5h30m early and hand back budget the provider has not restored. |
-| Exhausted flag | `…:exhausted`, set on a provider 429/402 | Stops further attempts for the rest of the day instead of re-proving a spent key. |
-| TTL | 36 h | Outlives the day the key names without a midnight-aligned expiry calculation. |
-| Storage | Redis, with a process-local dict fallback | Mirrors `ConversationStore` in `pipeline/slots.py`, so tests and demo mode need no Redis. |
-| Limit | `OPENAI_DAILY_LIMIT` (default 50) | |
-
-**Reserve-before-call.** `try_reserve()` INCRs then compares, so two concurrent
-requests cannot both see "49 used" and both proceed. The cost is that a call
-failing for a *non-quota* reason (network blip, 500) has still consumed a unit,
-which under-uses the allowance rather than overshooting it. Exceeding a hard cap
-gets the key throttled for the rest of the day; losing one unit does not.
-
-**The meter lives in the adapter, not at the call sites.** `OpenAILLM.complete()`
-and `.stream()` reserve before every real HTTP request. `services/board_brain.py`
-and `pipeline/screen_agent.py` both reach the brain through `get_llm()` and know
-nothing about budgets, so caller-side metering would have left `brain_engine=openai`
-spending unmetered and the cap would not be a cap.
-
-**Reservation happens inside the tenacity retry body**, because a retried transport
-fault is a second real request and must cost a second unit. The retry predicate is
-`retry_if_exception(_is_retryable)`, so a 429 for `insufficient_quota` is *not*
-retried — the previous `stop_after_attempt(2)` spent a second reserved unit proving
-a request that can never succeed.
-
-**Cascade — `registry.complete_with_brain(...) -> (text, engine_used)`**
-
-```
-OpenAI (if requested AND remaining > 0)  →  Gemini  →  Groq
-```
-
-Gemini is the explicit failover target for an exhausted OpenAI budget; Groq is the
-final lane so a Gemini outage still answers. A `[demo:` echo counts as a miss (it
-means the key is missing) and falls through rather than shipping a placeholder as a
-grounded answer. Every downgrade logs its own event name — `brain.openai_quota_exhausted`,
-`brain.openai_429_marking_exhausted`, `brain.lane_failed`, `brain.demo_echo`,
-`brain.failover_to_gemini`, `brain.failover_to_groq` — the same discipline as
+`registry.complete_with_brain()` returns `(text, engine_actually_used)` and cascades:
+the requested engine → Gemini → Groq. A `[demo:` echo counts as a miss (it means the
+key is missing) and falls through rather than shipping a placeholder as a grounded
+answer. Every downgrade logs its own event name — `brain.lane_failed`,
+`brain.demo_echo`, `brain.failover_to_*` — the same discipline as
 `pipeline/router.py`, where it exists because a silent fallback once made a dead
 Gemini key look like bad routing.
 
-**What is deliberately kept OFF the budget.** The 50 requests buy *answer quality*,
-not classification. A single spoken command already costs screen_agent + router +
-compose, so letting the cheap lanes spend the budget would leave roughly 16 commands
-for a whole day:
+**OpenAI was removed entirely.** It had been an optional brain behind a
+50-request/UTC-day cap. Measured on the project key: gpt-4o took ~19 s for a
+one-word prompt and its rate limit answered 429 only after 12.8 s of waiting,
+against 0.36 s for Groq and ~0.7 s for `gemini-3.5-flash-lite`. On a voice product
+that gap is paid in dead air — time to first audio measured **31 s** with OpenAI
+first and **~16 s** after it was dropped. `app/models/api/openai_llm.py` and the
+whole `app/models/quota.py` daily-budget mechanism went with it, along with
+`OPENAI_API_KEY` / `OPENAI_MODEL` / `OPENAI_DAILY_LIMIT`.
 
-| Lane | Uses | Rationale |
-|---|---|---|
-| Compose / smalltalk | `complete_with_brain` | The only intended spender. |
-| Board scene extract | `complete_with_brain` | Degrades to Gemini instead of raising on an exhausted budget. |
-| Intent routing (`pipeline/router.py`) | `get_classifier_llm()` | Groq → Gemini. Classifying into a closed enum does not need GPT-4o. |
-| Screen planning (`pipeline/screen_agent.py`) | `get_classifier_llm()` | Picking one of ~17 screens does not need GPT-4o. |
-| Kannada post-translation | `get_classifier_llm()` | Spending a unit to translate an answer OpenAI just wrote would double the cost of every Kannada turn. |
-| Text-to-SQL | `get_sql_llm()` | Separate lane, never on this budget. |
-
-`GET /settings/db-source/models` reports `openai_daily_limit` and
-`openai_calls_remaining` (null when no key is set), and the Settings → Models card
-shows "42 / 50 left today" or "Daily budget spent · using Gemini". At zero the brain
-has already failed over and the officer should be able to see that without reading logs.
-
-Tests: `backend/tests/test_brain_quota.py` (19) — the counter, the UTC-date reset,
-the per-day exhausted flag, error classification, the no-retry-on-429 rule, the
-refuse-before-spending rule, and the full cascade including "Gemini not Groq".
+Classification never used the brain lane and still does not: routing
+(`pipeline/router.py`), screen planning (`pipeline/screen_agent.py`) and Kannada
+post-translation all use `get_classifier_llm()` (Groq → Gemini), and Text-to-SQL
+has its own `get_sql_llm()` lane.
 
 ---
+
 
 ## 7. Voice Pipeline
 
@@ -636,7 +588,7 @@ YOLO Process (model/inference/live_cctv.py)
 
 **AI Scene Generator (bottom-right chatbox):**
 1. User types a crime scene description (+ optional photos)
-2. `POST /api/board/generate` → Gemini (or Groq/OpenAI per `boardEngine` setting)
+2. `POST /api/board/generate` → Gemini (or Groq per `boardEngine` setting)
 3. Returns `SceneGraph` (nodes + edges) validated by Zod
 4. `applySceneToEditor()` creates geo shapes + bound arrows in tldraw
 5. `editor.zoomToFit()` ensures every scene fits regardless of complexity
@@ -1064,13 +1016,11 @@ nor bare `predict` — `/ops-predictive` sits lower in that list and would be st
 | `REDIS_URL` | `redis://localhost:6379/0` | Conversation state |
 | `JWT_SECRET` | `change-me-in-production` | HS256 — **fails to start in production if default** |
 | `MODEL_BACKEND` | `api` | `api` or `local` |
-| `BRAIN_ENGINE` | `gemini` | `gemini \| groq \| openai` |
+| `BRAIN_ENGINE` | `gemini` | `gemini \| groq` |
 | `SQL_ENGINE` | `gemini` | `gemini \| qwen3-coder-next` |
 | `VOICE_BACKEND` | `sarvam` | `sarvam \| google \| bhashini` |
 | `GEMINI_API_KEY` | `""` | Gemini 2.5 Flash |
 | `GROQ_API_KEY` | `""` | Groq fallback |
-| `OPENAI_API_KEY` | `""` | ChatGPT (gpt-4o) |
-| `OPENAI_MODEL` | `gpt-4o` | OpenAI model name |
 | `SARVAM_API_KEY` | `""` | TTS/STT/MT |
 | `BHASHINI_API_KEY` | `""` | Voice fallback |
 | `VITE_API_BASE_URL` | `http://localhost:8000` | Frontend → backend URL |
@@ -1182,7 +1132,7 @@ Apply in filename order: `for f in migrations/0*.sql; do psql "$DATABASE_URL" -f
 | Brain | Gemini 2.5 Flash | Sarvam-M / Sarvam 30B |
 | SQL | Gemini 2.5 Flash | Qwen-Coder local |
 | Voice | Sarvam → Bhashini | Bhashini + Sarvam |
-| Board AI | Gemini / Groq / OpenAI | Local Ollama |
+| Board AI | Gemini / Groq | Local Ollama |
 | YOLO | YOLOv8s (COCO) + optional gun.pt | Custom KSP-trained model |
 | Embeddings | BGE-M3 (local GPU) | BGE-M3 (local) |
 | Hosting | External cloud (synthetic data) | Fully on-prem / India-hosted |
@@ -1235,7 +1185,7 @@ Apply in filename order: `for f in migrations/0*.sql; do psql "$DATABASE_URL" -f
 | ID | Fix |
 |----|-----|
 | B1 | `[SPEAK]` tag stripped from the displayed table — only the spoken summary goes to TTS, not the full table |
-| B2 | Board AI `brain_engine` field forwarded from frontend request — chosen engine (Gemini/Groq/OpenAI) is used instead of always Gemini |
+| B2 | Board AI `brain_engine` field forwarded from frontend request — chosen engine (Gemini/Groq) is used instead of always Gemini |
 | B3 | `_build_spoken_summary(rows, message, lang)` provides deterministic spoken summary when Gemini is unavailable or rate-limited |
 | B4 | Progressive NL→SQL relaxation (4 levels) prevents "zero rows" dead ends — each level surfaces a friendly note in the chat |
 
@@ -1257,7 +1207,7 @@ The Voice Screen Agent upgrades the top-right copilot from a navigation-only sys
 Officer speaks → copilot STT → Shell.tsx parseVoiceCommand()
   → POST /voice/agent  (AgentRequest: command, current_route, lang, brain_engine)
   → screen_agent.plan()
-      ├─ LLM call (Gemini/Groq/OpenAI) with full CAPABILITY MANIFEST
+      ├─ LLM call (Gemini/Groq) with full CAPABILITY MANIFEST
       ├─ _sanitize_actions() — validate against allow-list
       └─ _rule_plan() fallback — deterministic, zero LLM, bilingual EN+KN
   → AgentPlan { route, answer, speak, actions:[{screen,action,params}] }
@@ -1475,7 +1425,7 @@ Replaced the original `board_service.py` scene generator with a 400-line intelli
 |-----------|-------------|
 | `detect_intent()` | Classifies prompt into 8 diagram types: evidence_board, crime_network, timeline, mind_map, flowchart, org_chart, money_trail, location_map |
 | `_build_system()` | Generates an intent-specific system prompt with layout guidance |
-| `_llm_extract()` | Calls Gemini/Groq/OpenAI with richer schema |
+| `_llm_extract()` | Calls Gemini/Groq with richer schema |
 | `_style_node()` | Maps `entity_kind` → tldraw shape + color + size |
 | `_style_edge()` | Maps relationship `kind` → dash style + color |
 | `apply_layout()` | 6 layout engines: ring, timeline, tree, radial, grid, hierarchical |
@@ -1483,7 +1433,7 @@ Replaced the original `board_service.py` scene generator with a 400-line intelli
 | `detect_conflicts()` | Regex scan for contradictions → adds ⚠ warning nodes |
 | `merge_into_snapshot()` | Reads existing tldraw store, deduplicates, merges incrementally |
 | `keyword_fallback()` | Zero-LLM deterministic scene from keywords |
-| `generate_scene()` | Orchestrates all above with Gemini→Groq→OpenAI→keyword cascade |
+| `generate_scene()` | Orchestrates all above with Gemini→Groq→keyword cascade |
 
 **Entity kinds and shapes:**
 
@@ -1499,7 +1449,7 @@ Replaced the original `board_service.py` scene generator with a 400-line intelli
 | event | rectangle | violet |
 | warning | triangle | red |
 
-**Multi-LLM fallback cascade:** Gemini → Groq → OpenAI → `keyword_fallback()`. Partial enrichment on batch failure — still useful.
+**Multi-LLM fallback cascade:** Gemini → Groq → `keyword_fallback()`. Partial enrichment on batch failure — still useful.
 
 **Incremental merge:** `BoardGenerateRequest` accepts `existing_snapshot` (the current tldraw store). New nodes are deduplicated by id/label and offset so they don't land on top of existing shapes.
 

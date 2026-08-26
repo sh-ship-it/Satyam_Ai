@@ -41,9 +41,9 @@ class OtherFakeLLM(FakeLLM):
 
 
 def install_lanes(monkeypatch, primary, fallback=None):
-    # Both, because the primary lane is now get_classifier_llm() for the default
-    # and "openai" brain engines (routing must not spend the 50/day OpenAI
-    # budget) and get_llm() only when an explicit cheap engine is named.
+    # Both, because the primary lane is get_classifier_llm() when no engine is
+    # named (routing is classification and stays on the cheap lane) and get_llm()
+    # only when the Settings panel names one explicitly.
     monkeypatch.setattr(R, "get_llm", lambda engine=None: primary)
     monkeypatch.setattr(R, "get_classifier_llm", lambda: primary)
     if fallback is None:

@@ -38,9 +38,9 @@ type Tab =
 export type EngineSettings = {
   apiModelEnabled: boolean;
   localModelEnabled: boolean;
-  brainEngine: "gemini" | "groq" | "openai" | "local";
+  brainEngine: "gemini" | "groq" | "local";
   sqlEngine: "gemini" | "qwen3-coder-next" | "local";
-  boardEngine: "gemini" | "groq" | "openai";
+  boardEngine: "gemini" | "groq";
   voiceBackend: "sarvam" | "google" | "webspeech";
   /** Copilot (top-right) microphone STT engine — independent of the chat voice. */
   copilotStt: "browser" | "sarvam";
@@ -383,13 +383,6 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                           ok: providers?.gemini_configured,
                         },
                         {
-                          id: "openai",
-                          label: "ChatGPT (OpenAI)",
-                          hint: t("GPT-4o · strong reasoning"),
-                          envKey: "OPENAI_API_KEY",
-                          ok: providers?.openai_configured,
-                        },
-                        {
                           id: "groq",
                           label: "Groq Llama-3.3-70B",
                           hint: t("Cloud · fastest"),
@@ -420,18 +413,6 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                           <span className="block text-[10px] font-mono opacity-60">
                             {t("Uses")} {m.envKey}
                           </span>
-                          {/* The OpenAI key is capped at 50 requests/day, so what
-                              is left is operational info: at zero the brain has
-                              already failed over to Gemini for the rest of the
-                              UTC day and the officer should see that here rather
-                              than infer it from slower, differently-worded answers. */}
-                          {m.id === "openai" && providers?.openai_calls_remaining != null && (
-                            <span className="block text-[10px] font-bold">
-                              {providers.openai_calls_remaining > 0
-                                ? `${providers.openai_calls_remaining} / ${providers.openai_daily_limit} ${t("left today")}`
-                                : t("Daily budget spent · using Gemini")}
-                            </span>
-                          )}
                         </span>
                         {/* Three states, not two. Without the unknown case, a
                             failed status fetch claimed "No key" for a key that
@@ -548,7 +529,6 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                     >
                       <option value="gemini">Gemini (recommended)</option>
                       <option value="groq">Groq Llama-3.3-70B (fast)</option>
-                      <option value="openai">ChatGPT / OpenAI (GPT-4o)</option>
                     </select>
                     <span className="text-[10px] text-muted-foreground">
                       {t("Powers the AI Scene Generator on the Board screen")}

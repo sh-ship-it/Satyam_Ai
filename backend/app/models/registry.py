@@ -29,7 +29,7 @@ from app.models.base import (
 # ── Brain LLM (chat / slots / routing) ───────────────────────────────────────
 
 @lru_cache
-def get_llm(engine: Literal["gemini", "groq", "openai", "local"] | None = None) -> LLM:
+def get_llm(engine: Literal["gemini", "groq", "local"] | None = None) -> LLM:
     """Return the brain LLM.
 
     Resolution order:
@@ -46,9 +46,6 @@ def get_llm(engine: Literal["gemini", "groq", "openai", "local"] | None = None) 
     if resolved == "groq":
         from app.models.api.groq import GroqLLM
         return GroqLLM()
-    if resolved == "openai":
-        from app.models.api.openai_llm import OpenAILLM
-        return OpenAILLM()
     # default: gemini
     from app.models.api.gemini import GeminiLLM
     return GeminiLLM()
@@ -63,15 +60,14 @@ def get_fallback_llm() -> LLM:
 
 @lru_cache
 def get_classifier_llm() -> LLM:
-    """Cheap lane for intent routing and screen planning. NEVER OpenAI.
+    """Cheap lane for intent routing and screen planning.
 
-    Classifying an utterance into a closed enum, or picking one of ~17 screens,
-    does not need GPT-4o — and at a 50/day budget it must not, because a single
-    spoken command costs screen_agent + router + compose. Spending two of those
-    three on classification leaves ~16 commands for a whole day.
+    Classifying an utterance into a closed enum, or picking one of ~17 screens, is
+    not reasoning work, and a single spoken command already costs screen_agent +
+    router + compose. Keeping the classifiers on the cheapest, fastest lane is what
+    stops one command from spending three good calls.
 
-    Groq first (fastest, and its own quota is generous), Gemini if Groq is
-    unavailable.
+    Groq first (measured 0.36s), Gemini if Groq is unavailable.
     """
     s = get_settings()
     if s.groq_api_key:
@@ -98,17 +94,11 @@ async def complete_with_brain(
     json_schema: dict | None = None,
     engine: str | None = None,
 ) -> tuple[str, str]:
-    """Budgeted brain call. Returns `(text, engine_actually_used)`.
+    """Brain call for answer composition. Returns `(text, engine_actually_used)`.
 
-    THIS IS THE ONLY PLACE THE OPENAI BUDGET IS MEANT TO BE SPENT.
-    The 50 requests/day buy ANSWER QUALITY, not classification. Routing
-    (`pipeline/router.py`) and screen planning (`pipeline/screen_agent.py`) use
-    `get_classifier_llm()` instead; Text-to-SQL has its own `get_sql_llm()` lane
-    and stays off this budget entirely.
-
-    Cascade: the requested engine → Gemini → Groq → OpenAI. OpenAI is last on
-    measured latency (see the comment on the lane loop below), and remains capped
-    at its daily budget wherever it sits in the order.
+    Cascade: the requested engine → Gemini → Groq. Routing and screen planning use
+    `get_classifier_llm()` instead, and Text-to-SQL has its own `get_sql_llm()`
+    lane, so this is only ever the answer-quality path.
 
     Every downgrade is logged with its own event name. That discipline is copied
     from `pipeline/router.py`, where it exists because a silent fallback once made
@@ -125,39 +115,23 @@ async def complete_with_brain(
                 prompt, system=system, temperature=temperature, json_schema=json_schema
             )
         except Exception as exc:  # noqa: BLE001
-            from app.models.quota import is_quota_error
-
-            if name == "openai" and is_quota_error(exc):
-                log.warning("brain.openai_429_marking_exhausted err=%s", exc)
-            else:
-                log.warning("brain.lane_failed engine=%s err=%s", name, exc)
+            log.warning("brain.lane_failed engine=%s err=%s", name, exc)
             return None
         if _is_demo(out):
             log.warning("brain.demo_echo engine=%s - no API key, falling through", name)
             return None
         return out
 
-    # Lane order: whatever was explicitly requested, then Gemini, then Groq, then
-    # OpenAI LAST.
+    # Lane order: whatever was explicitly requested, then Gemini, then Groq.
     #
-    # OpenAI is deliberately the final lane rather than the first, on measured
-    # latency: gpt-4o answered a one-word prompt in ~19 s and its rate limit
-    # returned 429 after 12.8 s of waiting, while the Groq lane answered the same
-    # prompt in 0.36 s and Gemini Flash Lite in ~0.7 s. Putting the slowest,
-    # tightest-quota provider first cost roughly 20 s on every single voice turn,
-    # and a voice assistant pays that in dead air. It stays in the cascade as a
-    # last-resort quality lane for when both of the others are down.
-    for name in [resolved, "gemini", "groq", "openai"]:
+    # OpenAI used to sit at the end of this list and has been removed entirely:
+    # gpt-4o measured ~19s for a one-word prompt and its rate limit answered 429
+    # only after 12.8s of waiting, against 0.36s for Groq and ~0.7s for Gemini
+    # Flash Lite. On a voice product that difference is paid in dead air, and a
+    # 50-request daily cap is not something a demo can rely on either.
+    for name in [resolved, "gemini", "groq"]:
         if not name or name in attempted:
             continue
-        if name == "openai":
-            # Still budget-gated even as the last lane: the 50/day cap has to hold
-            # regardless of where in the order the lane sits.
-            from app.models.quota import openai_quota
-
-            if await openai_quota.remaining() <= 0:
-                log.warning("brain.openai_quota_exhausted remaining=0 - lane skipped")
-                continue
         out = await _run(name)
         if out is None:
             continue
