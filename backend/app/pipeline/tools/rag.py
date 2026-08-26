@@ -78,7 +78,7 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core import rbac
-from app.db.session import active_vector_type
+from app.db.session import active_vector_type, get_db_source
 from app.models.registry import get_embedder, get_reranker
 
 log = logging.getLogger("satyam.rag")
@@ -106,6 +106,40 @@ CANDIDATE_MULTIPLIER = 3
 # Reciprocal Rank Fusion constant. The conventional value is 60; it damps the
 # influence of top ranks so a single strategy cannot dominate the fused order.
 RRF_K = 60
+
+# ── Lexical capability ───────────────────────────────────────────────────────
+# Two tiers, decided by what the active database has been migrated to carry.
+#
+# "idf"    — migrations 011 + 012 present (local). Query terms are filtered by
+#            corpus document frequency, then ANDed, with progressive relaxation.
+# "legacy" — neither present (cloud). The original plainto_tsquery('simple')
+#            query, unchanged.
+LEXICAL_IDF = "idf"
+LEXICAL_LEGACY = "legacy"
+
+# Vocabulary table added by migrations/012_local_bilingual_rag.sql: per-language
+# token, its English stem, and its document frequency.
+_DF_TABLE = "narrative_lexeme_df"
+
+# Most selective term groups to carry into the tsquery. Bounded so a long
+# question cannot build an unbounded conjunction.
+MAX_TERM_GROUPS = 8
+
+# A query term appearing in more than this fraction of the corpus carries too
+# little information to be worth matching on. Measured on the local corpus: the
+# template boilerplate (investig, hrs, regist, fir, vide, district, limit) sits at
+# 100%, `case` at 94%, `report`/`complain` at 81%. The 20% cut removes all of them
+# while keeping `near` (18.7%), `theft` (10.3%), `market` (6.3%), `wheeler` (4.6%).
+MAX_DF_FRACTION = 0.20
+
+# Relaxation rounds. Terms are ANDed most-selective-first; each empty round drops
+# the commonest surviving term. Bounded because each round is a query — measured
+# at 13-17 ms, so four rounds is a worst case of well under 100 ms.
+MAX_RELAXATIONS = 4
+
+# Probe result per db source ("local" / "cloud"), so switching source at runtime
+# re-probes instead of carrying the previous database's answer.
+_lexical_mode_cache: dict[str, str] = {}
 
 
 @dataclass(frozen=True)
@@ -240,31 +274,212 @@ async def _vector_candidates(
     return kept, True
 
 
+async def _lexical_mode(session: AsyncSession) -> str:
+    """Which lexical strategy the active database can support.
+
+    Probed once per source and cached: it can only change by running a migration,
+    which implies a restart or an explicit source switch. An unknown answer
+    degrades to LEXICAL_LEGACY, which is correct on every database — guessing the
+    richer mode would risk a sequential scan over every narrative.
+    """
+    source = get_db_source()
+    cached = _lexical_mode_cache.get(source)
+    if cached is not None:
+        return cached
+
+    try:
+        rows = await _execute_isolated(
+            session,
+            text(
+                "SELECT count(*) AS has_df FROM information_schema.tables "
+                "WHERE table_name = :tbl"
+            ),
+            {"tbl": _DF_TABLE},
+        )
+        row = rows[0] if rows else {}
+        mode = LEXICAL_IDF if int(row.get("has_df") or 0) else LEXICAL_LEGACY
+    except Exception as exc:  # noqa: BLE001
+        log.warning("rag.lexical_probe_failed err=%s - using legacy", exc)
+        mode = LEXICAL_LEGACY
+
+    _lexical_mode_cache[source] = mode
+    log.info("rag.lexical_mode source=%s mode=%s", source, mode)
+    return mode
+
+
+# The original query, still correct wherever the migrations have not run.
+_LEXICAL_LEGACY_SQL = text(
+    "SELECT narrative_id, case_id, body AS text, "
+    "       ts_rank(body_tsv, plainto_tsquery('simple', :q)) AS rank "
+    "FROM narratives "
+    "WHERE body_tsv @@ plainto_tsquery('simple', :q) "
+    "ORDER BY rank DESC "
+    "LIMIT :k"
+)
+
+# Selective term groups for one language, most selective first.
+#
+# Each row is an alternation of the corpus tokens sharing one English stem, e.g.
+# "(wheeler | wheelers)". Expanding by stem is what recovers stemming against the
+# unstemmed body_tsv: the query token "thefts" stems to "theft" and matches the
+# corpus token "theft", which a literal 'simple' match would miss.
+#
+# `lang` biases retrieval towards the query's language but does not partition it,
+# and the difference is worth stating because the vector arm behaves differently.
+# Kannada narratives carry Latin-script tokens too — names, "Bengaluru City",
+# vehicle numbers — so an English query does find some 'kn' groups. Measured: an
+# English question produced 4 English groups and 2 Kannada ones. Both arms run and
+# the results merge by rank.
+#
+# That is deliberate rather than tolerated: every case here exists in both
+# languages, so a cross-language hit is the same case seen through its other
+# narrative, and RRF plus the cross-encoder settle the final order. The dense arm
+# does partition cleanly by contrast, because the embedding space clusters by
+# script — probing with an English narrative's own vector returned ten English
+# neighbours and never its Kannada twin.
+#
+# The df ceiling is applied to the summed frequency of the whole group, because it
+# is the group as a whole that gets matched.
+_SELECTIVE_GROUPS_SQL = text(
+    "WITH qt AS ("
+    "    SELECT DISTINCT"
+    "      coalesce((tsvector_to_array(to_tsvector('english', t.lx)))[1], t.lx) AS stem"
+    "    FROM unnest(tsvector_to_array(to_tsvector('simple', :q))) AS t(lx)"
+    "), grp AS ("
+    "    SELECT v.stem,"
+    "           sum(v.ndoc) AS tot,"
+    "           '(' || string_agg(DISTINCT v.lexeme, ' | ' ORDER BY v.lexeme) || ')' AS alt"
+    "    FROM narrative_lexeme_df v"
+    "    JOIN qt ON qt.stem = v.stem"
+    "    WHERE v.lang = :lang"
+    "    GROUP BY v.stem"
+    ") "
+    "SELECT alt, tot FROM grp "
+    "WHERE tot > 0 "
+    "  AND tot < (SELECT ndocs FROM narrative_lexeme_corpus WHERE lang = :lang)"
+    "            * CAST(:maxdf AS float8) "
+    "ORDER BY tot "
+    "LIMIT :groups"
+)
+
+# Both branches match the STORED body_tsv rather than an expression. That is the
+# whole point: an expression index over to_tsvector('english', body) cannot be
+# used as an index condition through the narratives RLS policy, and the resulting
+# filter recomputed to_tsvector for 100,000 rows at 8.5 s — past the 5 s cap that
+# db/rls.py sets. Matching the stored column costs ~380 ms under the same policy.
+_LEXICAL_EN_SQL = text(
+    "SELECT narrative_id, case_id, body AS text, "
+    "       ts_rank(body_tsv, to_tsquery('simple', :tq)) AS rank "
+    "FROM narratives "
+    "WHERE language = 'en' "
+    "  AND body_tsv @@ to_tsquery('simple', :tq) "
+    "ORDER BY rank DESC "
+    "LIMIT :k"
+)
+
+_LEXICAL_KN_SQL = text(
+    "SELECT narrative_id, case_id, body AS text, "
+    "       ts_rank(body_tsv, to_tsquery('simple', :tq)) AS rank "
+    "FROM narratives "
+    "WHERE language <> 'en' "
+    "  AND body_tsv @@ to_tsquery('simple', :tq) "
+    "ORDER BY rank DESC "
+    "LIMIT :k"
+)
+
+
+def _relaxations(groups: list[str]) -> list[list[str]]:
+    """Progressively shorter prefixes of `groups`, most selective first.
+
+    `groups` arrives sorted by ascending document frequency, so a prefix keeps the
+    most informative terms and each step drops the commonest survivor. This is
+    "minimum should match" by relaxation: precision first, recall as a fallback.
+    Measured on the real corpus — the 5-group conjunction matched nothing and the
+    4-group one matched 8 documents, all of which contained every kept term.
+    """
+    out: list[list[str]] = []
+    for n in range(len(groups), 0, -1):
+        out.append(groups[:n])
+        if len(out) >= MAX_RELAXATIONS:
+            break
+    return out
+
+
+async def _lexical_for_lang(
+    session: AsyncSession, query: str, k: int, *, lang: str, sql
+) -> list[dict]:
+    """Selective-term conjunction search for one language, with relaxation."""
+    group_rows = await _execute_isolated(
+        session,
+        _SELECTIVE_GROUPS_SQL,
+        {
+            "q": query,
+            "lang": lang,
+            "maxdf": MAX_DF_FRACTION,
+            "groups": MAX_TERM_GROUPS,
+        },
+    )
+    groups = [r["alt"] for r in group_rows]
+    if not groups:
+        return []
+
+    for attempt in _relaxations(groups):
+        # Every token came from to_tsvector via the vocabulary table, so these are
+        # normalised lexemes and cannot smuggle tsquery operators. Still bound.
+        tq = " & ".join(attempt)
+        rows = await _execute_isolated(
+            session, sql, {"tq": tq, "k": k * CANDIDATE_MULTIPLIER}
+        )
+        if rows:
+            log.info(
+                "rag.lexical_idf lang=%s groups=%d/%d hits=%d",
+                lang,
+                len(attempt),
+                len(groups),
+                len(rows),
+            )
+            return rows
+    return []
+
+
 async def _lexical_candidates(
     session: AsyncSession, query: str, k: int
 ) -> tuple[list[dict], bool]:
     """Return (candidates, available) for the lexical strategy.
 
-    Uses body_tsv and its existing GIN index. available is False only when the
-    query raises; a query that ran and matched nothing is available with no
-    candidates.
+    available is False only when the query raises; a query that ran and matched
+    nothing is available with no candidates.
     """
-    sql = text(
-        "SELECT narrative_id, case_id, body AS text, "
-        "       ts_rank(body_tsv, plainto_tsquery('simple', :q)) AS rank "
-        "FROM narratives "
-        "WHERE body_tsv @@ plainto_tsquery('simple', :q) "
-        "ORDER BY rank DESC "
-        "LIMIT :k"
-    )
+    mode = await _lexical_mode(session)
+
+    if mode == LEXICAL_LEGACY:
+        try:
+            rows = await _execute_isolated(
+                session, _LEXICAL_LEGACY_SQL, {"q": query, "k": k * CANDIDATE_MULTIPLIER}
+            )
+        except Exception as exc:  # noqa: BLE001
+            log.warning("rag.lexical_unavailable reason=query_failed err=%s", exc)
+            return [], False
+        return rows, True
+
     try:
-        rows = await _execute_isolated(
-            session, sql, {"q": query, "k": k * CANDIDATE_MULTIPLIER}
+        # Both languages are attempted. Normally only one yields groups, since the
+        # vocabularies are language-specific, but a code-mixed question can hit
+        # both and should then search both corpora.
+        english = await _lexical_for_lang(
+            session, query, k, lang="en", sql=_LEXICAL_EN_SQL
+        )
+        kannada = await _lexical_for_lang(
+            session, query, k, lang="kn", sql=_LEXICAL_KN_SQL
         )
     except Exception as exc:  # noqa: BLE001
         log.warning("rag.lexical_unavailable reason=query_failed err=%s", exc)
         return [], False
-    return rows, True
+
+    merged = english + kannada
+    if len(merged) > 1:
+        merged.sort(key=lambda r: float(r.get("rank") or 0.0), reverse=True)
+    return merged[: k * CANDIDATE_MULTIPLIER], True
 
 
 def _candidate_key(row: dict):

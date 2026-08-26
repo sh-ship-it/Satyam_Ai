@@ -273,11 +273,21 @@ class FakeReranker:
         return list(range(len(docs)))
 
 
-def install_fakes(monkeypatch, embedder=None, reranker=None):
+def install_fakes(monkeypatch, embedder=None, reranker=None, lexical_mode=None):
     emb = embedder or FakeEmbedder()
     rr = reranker or FakeReranker()
     monkeypatch.setattr(rag, "get_embedder", lambda: emb)
     monkeypatch.setattr(rag, "get_reranker", lambda: rr)
+    # Prime the lexical-capability probe so no test issues the pg_indexes lookup.
+    # Without this the probe consumes the next scripted row set, and because the
+    # cache is module-global the damage would land on whichever test ran first —
+    # an order-dependent failure. Priming makes every test deterministic.
+    #
+    # Legacy is the default here so the pre-existing tests keep describing the
+    # single-query lexical arm they were written against; the IDF mode issues
+    # extra queries and has its own tests below.
+    mode = lexical_mode or rag.LEXICAL_LEGACY
+    monkeypatch.setattr(rag, "_lexical_mode_cache", {"cloud": mode, "local": mode})
     return emb, rr
 
 
@@ -1087,3 +1097,216 @@ async def test_guard_fails_without_savepoint_isolation(monkeypatch):
     assert session.aborted is True
     assert result.hits == []
     assert result.strategy == rag.STRATEGY_NONE
+
+
+# ==========================================================================
+# Bilingual lexical arm (migrations/011_local_bilingual_fts.sql)
+#
+# body_tsv is generated with to_tsvector('simple', body), which does no stemming.
+# Measured on the local 100k English corpus, "thefts" matched 0 narratives through
+# 'simple' and 10,324 through 'english', so the lexical half of the hybrid
+# retriever was contributing nothing for any inflected English query. The English
+# branch is only safe where migration 011's partial index backs it; without the
+# index the same predicate becomes a sequential scan over every narrative.
+# ==========================================================================
+
+IDF_MATCH_MARKER = "body_tsv @@ to_tsquery('simple', :tq)"
+DF_MARKER = "narrative_lexeme_df"
+LEGACY_MARKER = "plainto_tsquery('simple', :q)"
+
+
+def grp_row(alt, tot):
+    """A row shaped like the selective-groups query output."""
+    return {"alt": alt, "tot": tot}
+
+
+# ── mode selection ──────────────────────────────────────────────────────────
+
+async def test_legacy_mode_keeps_the_portable_single_query(monkeypatch):
+    """Cloud has neither migration; its behaviour must be exactly as before."""
+    install_fakes(monkeypatch, lexical_mode=rag.LEXICAL_LEGACY)
+    s = FakeSession([[], [lex_row(2, 200)]])
+
+    result = await rag.retrieve_narratives(s, "recent thefts", k=3)
+
+    assert s.issued(LEGACY_MARKER), "the legacy query must still be the one issued"
+    assert not s.issued(DF_MARKER), "legacy mode must not touch the IDF tables"
+    assert len(result) == 1
+
+
+async def test_idf_mode_filters_terms_before_matching(monkeypatch):
+    install_fakes(monkeypatch, lexical_mode=rag.LEXICAL_IDF)
+    s = FakeSession([
+        [],                                            # vector
+        [grp_row("(theft)", 10324), grp_row("(market)", 6290)],  # en groups
+        [lex_row(2, 200)],                             # en match
+        [],                                            # kn groups: none
+    ])
+
+    await rag.retrieve_narratives(s, "find cases about thefts in a market", k=3)
+
+    assert s.issued(DF_MARKER), "IDF mode must consult the vocabulary table"
+    assert s.issued(IDF_MATCH_MARKER)
+    assert not s.issued(LEGACY_MARKER), "IDF mode must not fall back to plainto_tsquery"
+
+
+async def test_match_uses_the_stored_column_not_a_recomputed_expression(monkeypatch):
+    """to_tsvector('english', body) cannot use an index through the RLS policy and
+    measured 8.5 s, past the 5 s cap. The stored column measured ~380 ms."""
+    install_fakes(monkeypatch, lexical_mode=rag.LEXICAL_IDF)
+    s = FakeSession([[], [grp_row("(theft)", 10324)], [lex_row(2, 200)], []])
+
+    await rag.retrieve_narratives(s, "thefts", k=3)
+
+    matches = [q for q in s.statements if "FROM narratives" in q and "to_tsquery" in q]
+    assert matches, "no lexical match query ran"
+    for q in matches:
+        assert "to_tsvector('english', body)" not in q, (
+            "matching must not recompute to_tsvector per row"
+        )
+        assert "body_tsv @@" in q
+
+
+async def test_probe_is_cached_per_source_and_not_repeated(monkeypatch):
+    """One capability probe per source, not one per retrieval."""
+    install_fakes(monkeypatch)
+    monkeypatch.setattr(rag, "_lexical_mode_cache", {})
+    # Order matters: the probe sits inside the lexical arm, after the vector query.
+    s = FakeSession([
+        [],                          # vector
+        [{"has_df": 0}],             # the probe -> legacy
+        [lex_row(2, 200)],           # lexical
+        [],                          # vector, 2nd call
+        [lex_row(3, 300)],           # lexical, 2nd call (probe cached)
+    ])
+
+    await rag.retrieve_narratives(s, "thefts", k=3)
+    await rag.retrieve_narratives(s, "robberies", k=3)
+
+    probes = [q for q in s.statements if "information_schema.tables" in q]
+    assert len(probes) == 1, f"probe should run once per source, ran {len(probes)}x"
+
+
+async def test_probe_selects_idf_only_when_the_vocabulary_exists(monkeypatch):
+    for has_df, expected in ((1, rag.LEXICAL_IDF), (0, rag.LEXICAL_LEGACY)):
+        install_fakes(monkeypatch)
+        monkeypatch.setattr(rag, "_lexical_mode_cache", {})
+        s = FakeSession([[{"has_df": has_df}]])
+        assert await rag._lexical_mode(s) == expected, f"has_df={has_df}"
+
+
+async def test_probe_failure_degrades_to_legacy(monkeypatch):
+    """An unknown answer must pick the query that is correct everywhere."""
+    install_fakes(monkeypatch)
+    monkeypatch.setattr(rag, "_lexical_mode_cache", {})
+    s = FakeSession([
+        [],                                       # vector
+        RuntimeError("catalog unavailable"),      # the probe blows up
+        [lex_row(2, 200)],                        # lexical, legacy query
+    ])
+
+    await rag.retrieve_narratives(s, "thefts", k=3)
+
+    assert s.issued(LEGACY_MARKER), (
+        "a failed probe must fall back to the portable query"
+    )
+    assert not s.issued(DF_MARKER)
+
+
+# ── relaxation ──────────────────────────────────────────────────────────────
+
+def test_relaxation_drops_the_commonest_term_first():
+    # Input is ordered by ascending document frequency, so prefixes keep the
+    # most selective groups.
+    groups = ["(two)", "(wheeler | wheelers)", "(market)", "(theft)", "(near)"]
+    steps = rag._relaxations(groups)
+
+    assert steps[0] == groups, "the first attempt must use every selective group"
+    assert steps[1] == groups[:4], "drops '(near)', the highest-frequency group"
+    assert all(len(a) > len(b) for a, b in zip(steps, steps[1:])), "must be monotone"
+    assert len(steps) <= rag.MAX_RELAXATIONS
+
+
+def test_relaxation_is_bounded_so_a_long_query_cannot_fan_out():
+    steps = rag._relaxations([f"t{i}" for i in range(40)])
+    assert len(steps) == rag.MAX_RELAXATIONS
+
+
+def test_relaxation_of_a_single_group_still_tries_it():
+    assert rag._relaxations(["(theft)"]) == [["(theft)"]]
+
+
+def test_relaxation_of_nothing_is_nothing():
+    assert rag._relaxations([]) == []
+
+
+async def test_relaxation_retries_after_an_empty_round(monkeypatch):
+    """The 5-group conjunction matched nothing on the real corpus; 4 matched 8."""
+    install_fakes(monkeypatch, lexical_mode=rag.LEXICAL_IDF)
+    s = FakeSession([
+        [],                                        # vector
+        [grp_row("(two)", 4530), grp_row("(theft)", 10324), grp_row("(near)", 18707)],
+        [],                                        # conjunction of all three -> empty
+        [lex_row(2, 200)],                         # relaxed -> a hit
+        [],                                        # kn groups: none
+    ])
+
+    result = await rag.retrieve_narratives(s, "thefts near two-wheelers", k=3)
+
+    tries = [
+        p["tq"] for q, p in zip(s.statements, s.params)
+        if "language = 'en'" in q and "tq" in p
+    ]
+    assert len(tries) == 2, f"expected one retry after the empty round, got {tries}"
+    assert tries[0] == "(two) & (theft) & (near)"
+    assert tries[1] == "(two) & (theft)", "the commonest group must be dropped"
+    assert len(result) == 1
+
+
+async def test_no_selective_terms_yields_no_lexical_candidates(monkeypatch):
+    """A query made entirely of boilerplate must not fall back to matching it."""
+    install_fakes(monkeypatch, lexical_mode=rag.LEXICAL_IDF)
+    s = FakeSession([
+        [vec_row(1, 100)],   # vector still works
+        [],                  # en groups: all too common
+        [],                  # kn groups: none
+    ])
+
+    result = await rag.retrieve_narratives(s, "the case was registered", k=3)
+
+    assert not s.issued(IDF_MATCH_MARKER), "nothing selective to match on"
+    assert result.strategy == rag.STRATEGY_VECTOR
+    assert len(result) == 1
+
+
+async def test_code_mixed_query_searches_both_corpora(monkeypatch):
+    install_fakes(monkeypatch, lexical_mode=rag.LEXICAL_IDF)
+    s = FakeSession([
+        [],                              # vector
+        [grp_row("(theft)", 10324)],     # en groups
+        [lex_row(2, 200, rank=0.10)],    # en match
+        [grp_row("(\u0c95\u0cb3\u0ccd\u0cb3\u0ca4\u0ca8)", 8250)],  # kn groups
+        [lex_row(3, 300, rank=0.90)],    # kn match
+    ])
+
+    result = await rag.retrieve_narratives(s, "theft \u0c95\u0cb3\u0ccd\u0cb3\u0ca4\u0ca8", k=5)
+
+    langs = [p["lang"] for q, p in zip(s.statements, s.params) if "lang" in p]
+    assert langs == ["en", "kn"], f"both corpora must be consulted, got {langs}"
+    # Merged by rank, so the stronger Kannada hit leads.
+    assert [h.case_id for h in result.hits][:2] == [300, 200]
+
+
+async def test_df_threshold_stays_a_float(monkeypatch):
+    """asyncpg infers an un-cast 0.20 as integer, which truncates to 0 and filters
+    every term out. The SQL casts it; this pins the Python side too."""
+    install_fakes(monkeypatch, lexical_mode=rag.LEXICAL_IDF)
+    s = FakeSession([[], [], []])
+
+    await rag.retrieve_narratives(s, "theft", k=3)
+
+    calls = [p for q, p in zip(s.statements, s.params) if "narrative_lexeme_df" in q]
+    assert calls, "the selective-groups query never ran"
+    for p in calls:
+        assert isinstance(p["maxdf"], float) and 0 < p["maxdf"] < 1
+        assert p["lang"] in ("en", "kn")

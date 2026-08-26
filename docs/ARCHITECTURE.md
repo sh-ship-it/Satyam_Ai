@@ -734,6 +734,83 @@ change the numbers** (`get_forecast_hotspots` accepts `horizon_days` and never u
 it — the windows are fixed), and notes that MO clusters ignore the filters because
 `/mo/clusters` takes no parameters.
 
+### Local-only bilingual RAG and the 1,120-station roll
+
+Everything in this section applies to the **local** database only. The Neon cloud
+database is deliberately untouched — verified after the work: 646 stations, 71,986
+narratives, 35,993 embedded, and neither new table nor new index present.
+
+**The local corpus was already ahead of the cloud one.** Cloud carries 35,993 cases
+with half the narratives embedded because of the 512 MB cap. Local carries **100,000
+cases, 416,616 persons and 200,000 narratives — 100,000 English and 100,000 Kannada,
+all 200,000 embedded**, in a 3.2 GB database with no cap. All 100,000 Kannada bodies
+contain real Kannada script; none of the English ones do. So Kannada RAG needed no
+embedding work locally. What it needed was a lexical arm that worked.
+
+**The lexical arm was dead, and the logs said so.** Every narrative query reported
+`strategy=vector`. Three compounding causes, each measured:
+
+| Cause | Evidence |
+|---|---|
+| `plainto_tsquery` ANDs every term | "find cases about thefts of two-wheelers near a market" became an 11-lexeme conjunction and matched **0 rows** |
+| `body_tsv` is `to_tsvector('simple', body)` — no stemming | "thefts" 0 hits, "robberies" 0, "murdered" 0, "vehicles" 0. The corpus says "theft" |
+| `ts_rank` has no IDF, so OR-ing instead does not help | OR matched 109,749 rows; 1 of the top 6 mentioned any distinctive term and `ts_rank_cd` tied at exactly 0.60000 |
+
+The narratives are template-generated, so `investig`, `hrs`, `regist`, `fir`, `vide`,
+`district`, `limit` appear in **100%** of documents, `case` in 94%, `report`/`complain`
+in 81%. Ranking cannot separate documents when the matched terms are the boilerplate.
+
+**An expression index was tried and rejected on measurement.** A partial functional
+GIN index over `to_tsvector('english', body)` is fast for the table owner (51 ms) and
+collapses to **8.5 s** for the app role, past the 5 s `statement_timeout` that
+`db/rls.py` sets. The narratives RLS policy is
+`EXISTS (SELECT 1 FROM cases c WHERE c.case_id = narratives.case_id AND fn_scope_ok(...))`,
+which is a security barrier, and `@@` is not leakproof — so the planner cannot use the
+tsquery as an index condition through it. The plan degrades to a filter that recomputes
+`to_tsvector` for all 100,000 English rows and runs the policy subplan 100,000 times.
+That index was dropped again rather than left as dead weight.
+
+**What shipped** (`migrations/012_local_bilingual_rag.sql`, local-guarded): keep
+matching the *stored* `body_tsv` — a column, not an expression, so it stays cheap under
+RLS — and move the intelligence into a precomputed vocabulary table
+`narrative_lexeme_df(lang, lexeme, stem, ndoc)`:
+
+- **IDF filtering** drops any term group appearing in more than 20% of the corpus, so
+  the boilerplate never reaches the query.
+- **Stem expansion** recovers stemming against an unstemmed index: a query token is
+  mapped to the corpus tokens sharing its English stem, so "thefts" → `(theft)` and
+  "two-wheelers" → `(wheelers)`.
+- **Relaxation** ANDs the surviving groups most-selective-first and drops the commonest
+  group when a round is empty — "minimum should match" by retry. Measured: the 5-group
+  conjunction matched nothing, the 4-group one matched 8, all containing every kept term.
+
+Build cost is 2 s (`ts_stat` runs at 0.9 s per 20,000 documents), producing 11,084
+English and 10,804 Kannada tokens. Query cost under RLS is **~380 ms**, inside the cap.
+
+Retrieval now reports `strategy=hybrid` with `groups=4/5` and `groups=2/3` in the logs.
+`rag.py` probes for the vocabulary table once per database source and falls back to the
+previous `plainto_tsquery` behaviour when it is absent, which is what keeps cloud
+byte-identical in behaviour.
+
+**Language handling is a bias, not a partition,** and the two arms differ. The dense arm
+partitions cleanly because the embedding space clusters by script — probing with an
+English narrative's own vector returned ten English neighbours and never its Kannada
+twin. The lexical arm does not, because Kannada narratives carry Latin-script tokens
+(names, "Bengaluru City", vehicle numbers); an English question produced 4 English
+groups and 2 Kannada ones. Both arms run and merge by rank, which is reasonable here
+because every case exists in both languages, so a cross-language hit is the same case
+seen through its other narrative.
+
+**Stations: 1,074 → 1,120** via `seed/local_expand_stations.py` (local-guarded,
+idempotent, `--dry-run` supported). The brief cites "1100+"; 1,074 was under it. New
+rows use real Karnataka taluk and town headquarters plus station types KSP genuinely
+operates (Women, CEN, Traffic), added only to districts lacking them. No district or
+range is invented — each row reuses an existing district and its modal range, so
+jurisdiction joins and `fn_scope_ok` are unaffected, and 0 cases are orphaned.
+Coordinates are seeded random points inside the bounding box of the district's existing
+stations: plausible district-level placements, **not surveyed locations**, consistent
+with a synthetic dataset.
+
 ### The forecast backtest is a real backtest now
 
 `get_forecast_backtest` was a single-fold density comparison that published a
