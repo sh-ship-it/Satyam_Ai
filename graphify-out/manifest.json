@@ -675,8 +675,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1787721387.025127,
-    "ast_hash": "deb30af33410dfb54f631da45268a4f9",
+    "mtime": 1787740937.9060402,
+    "ast_hash": "ad62bf2b6c9e08e5dc7dcd0ccfe1aa93",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -1150,8 +1150,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ops/DispatchPanel.tsx": {
-    "mtime": 1787492026.0528831,
-    "ast_hash": "66bee5707922272d589721ee1eafc652",
+    "mtime": 1787740947.8160112,
+    "ast_hash": "d4da6d24c67cff7019bbab46e5827cf6",
     "semantic_hash": ""
   },
   "backend/app/services/ops/corridor_service.py": {
@@ -2087,6 +2087,16 @@
   "backend/seed/local_expand_stations.py": {
     "mtime": 1787730921.1688092,
     "ast_hash": "24952a0a3061adbad7cbdc293a95392d",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/simScenes.check.mjs": {
+    "mtime": 1787740561.8214924,
+    "ast_hash": "a7d7165756cc6725b3b76677fcbf1d41",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/simScenes.ts": {
+    "mtime": 1787740599.5263593,
+    "ast_hash": "ff9b22b01c8aa68a22aab1bdb72b1e35",
     "semantic_hash": ""
   }
 }
