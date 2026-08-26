@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "backend/app/main.py": {
-    "mtime": 1787680990.7919407,
-    "ast_hash": "97b1783589a2d5a2ce56fb78c2c9f7ca",
+    "mtime": 1787721283.7754917,
+    "ast_hash": "b259961ee78188c484096eeeeedab121",
     "semantic_hash": ""
   },
   "backend/app/models/__init__.py": {
@@ -675,8 +675,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1787687628.843177,
-    "ast_hash": "50e41377565f82e10a0a201369ab92a3",
+    "mtime": 1787721387.025127,
+    "ast_hash": "deb30af33410dfb54f631da45268a4f9",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -810,8 +810,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/login.tsx": {
-    "mtime": 1787605934.4568305,
-    "ast_hash": "3fb8eb528bdedf07352fa84236f8bca8",
+    "mtime": 1787719645.8228593,
+    "ast_hash": "629d5bd2d7b90d2dc8fac6d5231b7de9",
     "semantic_hash": ""
   },
   "backend/app/models/api/ollama_cloud.py": {
@@ -1994,11 +1994,6 @@
     "ast_hash": "b4fa05bae612ee8f835bd588d45452b7",
     "semantic_hash": ""
   },
-  "ai face for chat.mp4": {
-    "mtime": 1787519382.7927735,
-    "ast_hash": "ecd6b2643c19f781a8b369e706281cd0",
-    "semantic_hash": ""
-  },
   "frontend/public/voice-orb.mp4": {
     "mtime": 1787517690.2121303,
     "ast_hash": "be0516ca113b1c8ddaa830dbe0e1f934",
@@ -2065,8 +2060,23 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/news.tsx": {
-    "mtime": 1787687628.5529003,
-    "ast_hash": "108dec08b696d6fcceeed297703133e3",
+    "mtime": 1787722319.6499264,
+    "ast_hash": "a3350df4be6ff789ce6452328df3292f",
+    "semantic_hash": ""
+  },
+  "backend/app/api/routes/news.py": {
+    "mtime": 1787721274.9070683,
+    "ast_hash": "b18ccb388d4615c0ef551673010e4f60",
+    "semantic_hash": ""
+  },
+  "backend/app/services/news_service.py": {
+    "mtime": 1787721261.8672721,
+    "ast_hash": "ff00a16af309bda9863b640747a4abd0",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/api/news.ts": {
+    "mtime": 1787721415.6294954,
+    "ast_hash": "f940fb04d79c18b449ca79ae6deaeb48",
     "semantic_hash": ""
   }
 }
