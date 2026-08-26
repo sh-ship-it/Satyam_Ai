@@ -225,8 +225,8 @@
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/rag.py": {
-    "mtime": 1787306193.6343591,
-    "ast_hash": "12ec991a62b2a9db6a8f5f7673afd5ac",
+    "mtime": 1787730799.3523574,
+    "ast_hash": "d93612f991375cf2651bdb15f45c5884",
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/sql_guard.py": {
@@ -790,8 +790,8 @@
     "semantic_hash": ""
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1787685597.610723,
-    "ast_hash": "e8243bf3f7b276b42bda5055b4302c74",
+    "mtime": 1787731076.6738684,
+    "ast_hash": "5c0ee00abb6bfc30fff7d4c6cf816b0e",
     "semantic_hash": ""
   },
   "frontend/src/routes/README.md": {
@@ -1785,8 +1785,8 @@
     "semantic_hash": ""
   },
   "backend/tests/test_rag_retrieval.py": {
-    "mtime": 1787306193.6373596,
-    "ast_hash": "9ae1634489683fd065f762026ecdf6d2",
+    "mtime": 1787730555.6049,
+    "ast_hash": "2421581f731e33209acc5e5ef4299bfb",
     "semantic_hash": ""
   },
   "backend/migrations/010_narrative_vector_index.sql": {
@@ -2077,6 +2077,16 @@
   "frontend/src/lib/api/news.ts": {
     "mtime": 1787721415.6294954,
     "ast_hash": "f940fb04d79c18b449ca79ae6deaeb48",
+    "semantic_hash": ""
+  },
+  "backend/migrations/012_local_bilingual_rag.sql": {
+    "mtime": 1787730202.776791,
+    "ast_hash": "c4f20bc0fd53530f958002bc15cb8f8d",
+    "semantic_hash": ""
+  },
+  "backend/seed/local_expand_stations.py": {
+    "mtime": 1787730921.1688092,
+    "ast_hash": "24952a0a3061adbad7cbdc293a95392d",
     "semantic_hash": ""
   }
 }
