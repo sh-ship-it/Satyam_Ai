@@ -150,6 +150,8 @@ function Login() {
                     msg.includes("Invalid credentials")
                   ) {
                     setError(t("Invalid email or password. Please try again."));
+                  } else if (msg.includes("Failed to fetch") || msg.includes("NetworkError")) {
+                    setError(t("Backend unreachable — check login and API status."));
                   } else if (msg) {
                     setError(msg);
                   } else {

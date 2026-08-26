@@ -420,6 +420,12 @@ const DICT: Record<string, string> = {
     "ಕರ್ನಾಟಕದ ಸುದ್ದಿ ವಾಹಿನಿಗಳು, ಪರಿಸ್ಥಿತಿ ಅರಿವಿಗಾಗಿ ನೇರ ಪ್ರಸಾರ.",
   Channels: "ವಾಹಿನಿಗಳು",
   "ON AIR": "ಪ್ರಸಾರದಲ್ಲಿ",
+  "OFF AIR": "ಪ್ರಸಾರ ಇಲ್ಲ",
+  "is off air": "ಪ್ರಸಾರದಲ್ಲಿ ಇಲ್ಲ",
+  "Finding live channels…": "ನೇರ ಪ್ರಸಾರದ ವಾಹಿನಿಗಳನ್ನು ಹುಡುಕಲಾಗುತ್ತಿದೆ…",
+  "Could not reach the channel service": "ವಾಹಿನಿ ಸೇವೆಯನ್ನು ತಲುಪಲಾಗಲಿಲ್ಲ",
+  "This channel is between broadcasts. Pick a channel marked ON AIR, or reload in a moment.":
+    "ಈ ವಾಹಿನಿ ಪ್ರಸಾರಗಳ ನಡುವೆ ಇದೆ. ಪ್ರಸಾರದಲ್ಲಿ ಎಂದು ಗುರುತಿಸಿದ ವಾಹಿನಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ, ಅಥವಾ ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಮರುಲೋಡ್ ಮಾಡಿ.",
   "Tuning in to": "ಸಂಪರ್ಕಿಸಲಾಗುತ್ತಿದೆ",
   "live stream": "ನೇರ ಪ್ರಸಾರ",
   "Open on YouTube": "ಯೂಟ್ಯೂಬ್‌ನಲ್ಲಿ ತೆರೆಯಿರಿ",
