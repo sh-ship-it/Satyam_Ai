@@ -6159,3 +6159,83 @@ sorts within that subset rather than across all 629. For a state-wide worst-list
 the ranking belongs in SQL. The `/map/hotspots` endpoint still accepts
 `date_from`/`date_to` and ignores them — harmless now that the map is gone from
 this screen, but it means `/vision` is not date-filterable either.
+
+
+---
+
+### [2026-08-25 to 2026-08-26] — Forecast Backtest Rebuilt as a Real Metric, News Feed Screen, Problem-Statement Audit, and Local-Only Bilingual RAG + Station Expansion
+
+#### Summary
+Four separate pieces of work in one continuous session: (1) the forecast "PAI 41%" card was measured and found to be a mislabelled, under-denominated single-fold statistic, and was rewritten as a genuine rolling-origin backtest; (2) a new `/news` screen streams live Karnataka news TV, which failed on first ship because a legacy YouTube endpoint returns 200 with no player config, and was fixed with a server-side resolver; (3) the codebase was audited against the KSP hackathon problem statement, feature by feature; (4) at the user's explicit instruction, the local (not cloud) database's bilingual RAG lexical arm was diagnosed as silently dead and rebuilt, and local stations were expanded from 1,074 to 1,120 to clear the "1100+" bar the brief names. Cloud was never touched by items 3 or 4, and this was independently verified.
+
+---
+
+#### Part 1 — Forecast backtest: from a mislabelled single-fold stat to a real rolling-origin metric
+
+**Diagnosis, via a temp DB probe (deleted after):** the 41% "PAI" was a hit rate, not PAI (real PAI ≈3.7×); the `ranked` CTE's `WHERE train_cnt > 0` filter excluded 345 of 452 test incidents (76%) from the denominator; the 0.02° grid averaged ~1.1 incidents/cell so ranking was Poisson noise; n=107 gave a 95% CI of ~32–50%; the backtest ranked raw density while the shipped scorer is `20 + density_score + lift_score`; `PERCENT_RANK` ties pushed the "top decile" to 11.0% of cells.
+
+**Rebuilt `get_forecast_backtest`** (`backend/app/services/intelligence_service.py`): rolling-origin folds (default 6×30d), `NTILE(10)` instead of `PERCENT_RANK`, full denominator (excluded cells' incidents counted, tracked separately), `_risk_score`/`_lift_percent` extracted from `get_forecast_hotspots` and transcribed into SQL (`_RISK_SCORE_SQL`) so the backtest validates the same formula the UI shows, Wilson 95% CI (`_wilson_ci`), PAI as a true ratio against area share, and PEI (hits vs. best-achievable selection with hindsight).
+- `backend/app/schemas/intelligence.py` — `BacktestFold` + 16 new fields on `BacktestResponse` (`pai`, `pei`, `baseline_hit_rate`, `hit_rate_ci_low/high`, `excluded_incidents`, `caveats: list[str]`, `per_fold`, etc.). `hit_rate_top_10_percent_cells` kept for compatibility but documented as a rate, not PAI.
+- `backend/app/api/routes/intelligence.py` — `/forecast/backtest` now accepts `crime_type`, `district`, `grid_size` (default 0.05, coarser than hotspots' 0.02 on purpose), `folds`, `test_days`.
+- `backend/tests/test_forecast_backtest.py` — new, 29 tests, no DB (FakeSession pattern).
+- Frontend (`forecast.tsx`, `ModelInferenceTheater.tsx`): KPI tile now shows the PAI ratio (`4.41×`) instead of the hit rate under a "PAI" label; new backtest card renders PAI/hit-rate+CI/PEI/setup/per-fold spread/caveats; forwards the screen's own grid-size control to the backtest so "Coarse/Fine" actually changes the score; dead `ModelInferenceTheater` component's `pai` variable (was silently a hit rate) renamed and relabelled `hitRate`.
+- **Measured on cloud, 6×30d:** grid 0.05° → 44.1% hit rate (CI 42–46), PAI 4.41×, PEI 0.611, n=2,581; grid 0.02° → 33.8%, PAI 3.39×, PEI 0.338; grid 0.01° → 27.7%, PAI 2.78×, PEI 0.277. The PEI column is the real finding: grid resolution, not data quality (99.6% coord coverage), was the binding constraint.
+- `docs/ARCHITECTURE.md` — new section documenting the before/after table and the measured PAI-by-grid numbers.
+- Verified: backend 190 passed (161 baseline + 29 new), frontend typecheck holding at 56.
+
+---
+
+#### Part 2 — News Feed screen (`/news`): live Karnataka TV, and the endpoint that lied about working
+
+**First ship failed.** `embed/live_stream?channel=<id>` returned HTTP 200 with a ~140 KB player payload and no player config at all — every embed rendered "This video is unavailable". A 200 response had been treated as proof the endpoint worked; it wasn't.
+
+**Fix — resolver moved server-side**, because a browser can't query it (youtube.com sends no CORS headers):
+- `backend/app/services/news_service.py` (new) — resolves each channel's **current** live video id by reading `youtube.com/channel/<id>/live` and extracting the `<link rel="canonical">` watch URL, which is present **only** while the channel is actually broadcasting — giving the video id and the liveness signal in one read. In-process cache, 180s TTL, `asyncio.Lock` so concurrent page loads cause one upstream sweep. No database writes.
+- `backend/app/api/routes/news.py` (new) — `GET /api/news/channels`, authenticated (no clearance gate — public broadcast TV, not case data), no audit row (nothing case-related is touched).
+- 10 channel IDs verified two independent ways (canonical link on the `@handle` page, then confirmed against `youtube.com/feeds/videos.xml?channel_id=...` echoing the title) after a first extraction attempt grabbed a *featured*-channel id and pointed "Public TV" at "Public Music".
+- `frontend/src/routes/news.tsx` (new) — off-air is a real, displayed state (no iframe mounted, so no YouTube error renders); defaults to the first channel that's actually live; `youtube-nocookie.com` embed. `frontend/src/lib/api/news.ts` (new) client, not routed through the shared `cachedFetch` (a channel goes on/off air within minutes; the server's 3-minute cache is the right place for staleness).
+- Wired into voice (backend `screen_agent.py` manifest + `_rule_plan` branch for `set_channel`/`next_channel`/`mute`/`unmute`/`refresh`), nav rail, gesture cycle ring, and Kannada i18n strings — with a collision check confirming "news" phrasing doesn't hijack `/reports`, `/audit`, `/ops-camera`, or `/network` voice routing in either language.
+- Verified live: 8 of 10 channels resolving to a real live video id, each independently confirmed embeddable via YouTube's oEmbed endpoint.
+
+---
+
+#### Part 3 — Problem-statement audit
+
+Audited the codebase against the KSP hackathon brief's 9 key features + 5 challenge themes. All 14 implemented (NL chatbot EN+KN, voice, context-aware conversation history, conversation-PDF export, network visualization, trend/hotspot detection, predictive analytics, explainable-AI citations + audit hash chain, RBAC, pattern discovery, network analysis, socio-demographic insights, MO fingerprinting, proactive prevention alerts). Findings reported honestly rather than generously:
+- **Stations: 646 on cloud** vs. the brief's "1100+" — the one gap a judge can trivially check.
+- **Kannada RAG doesn't retrieve on cloud** — only the English narratives are embedded there (a cloud-specific storage-budget consequence, not a code gap).
+- RLS bypassed on `DB_SOURCE=cloud` (documented pre-existing gap, `neondb_owner` is `rolbypassrls`).
+- No column-level PII masking on the Text-to-SQL path (documented pre-existing gap).
+
+This audit is what prompted the user's explicit instruction for Part 4: fix both gaps **on local only**, leave cloud untouched.
+
+---
+
+#### Part 4 — Local-only bilingual RAG rebuild + station expansion to 1,120 (cloud never touched)
+
+**Corrected an assumption from Part 3 first.** The "Kannada RAG is ~50% done" read was cloud-only. Local recon (read-only probes, `satyam` owner role) found local already had **100,000 cases, 200,000 narratives — 100k English + 100k Kannada, all 200,000 already embedded** — and all 100k Kannada bodies verified to contain real Kannada script (zero in the English set). So Kannada *embedding* needed no work locally; the real defect was elsewhere.
+
+**Found the real defect: the lexical arm of the hybrid retriever was silently dead — every query logged `strategy=vector`.** Three compounding, independently-measured causes:
+1. `plainto_tsquery` ANDs every term — an 11-word conversational query matched 0 rows.
+2. `body_tsv` is `to_tsvector('simple', body)` — no stemming; "thefts" matched 0 of 10,324 documents containing "theft".
+3. `ts_rank` has no IDF, so OR-ing all terms instead matched 109,749 rows with the top-ranked ones being template boilerplate (`case`, `report`, `investig` appear in 81–100% of documents); `ts_rank_cd` tied at exactly 0.60000.
+
+**A first fix attempt (a partial functional GIN index on `to_tsvector('english', body)`) was tried and rejected on measurement**: 51 ms for the table owner, **8.5 s for the app role** — past the 5s `statement_timeout` `db/rls.py` sets, because the narratives RLS policy is a security barrier and `@@` isn't leakproof, so the tsquery can't be pushed through it as an index condition; the plan recomputed `to_tsvector` for all 100k rows per query. That index was dropped again.
+
+**What shipped** — `backend/migrations/012_local_bilingual_rag.sql` (local-guarded: refuses to run unless `current_database() = 'satyam'`): keeps matching the **stored** `body_tsv` column (cheap under RLS, unlike an expression) and adds a precomputed vocabulary table `narrative_lexeme_df(lang, lexeme, stem, ndoc)` built via `ts_stat` (11,084 English + 10,804 Kannada tokens, 2s build). Retrieval now: (a) drops any term-group over 20% document frequency (IDF filtering — removes the boilerplate), (b) expands each query token to same-English-stem corpus variants ("thefts"→`(theft)`), (c) ANDs the surviving groups most-selective-first with relaxation on an empty round. Query cost under RLS measured at **~380 ms**, inside the cap. `backend/app/pipeline/tools/rag.py` rewritten (`_lexical_mode` probes for the vocabulary table once per DB source, `LEXICAL_IDF` vs `LEXICAL_LEGACY`; falls back to the original `plainto_tsquery` behaviour — byte-identical to before — when the table is absent, which is what keeps cloud's behaviour unchanged). `backend/tests/test_rag_retrieval.py` extended.
+- Language handling documented as a **bias, not a partition**: the dense/vector arm partitions cleanly by script, but Kannada narratives carry Latin-script tokens (names, "Bengaluru City"), so an English query legitimately also pulls a few Kannada groups; both arms run and merge by rank.
+- **Verified end to end**: restarted server, switched to local via the Settings API, ran real chat queries through `/chat/stream` — logs show `rag.lexical_idf lang=en groups=4/5 hits=15`, `rag.lexical_idf lang=kn groups=2/3 hits=15`, `rag.retrieved strategy=hybrid hits=5`. Was `strategy=vector` before.
+
+**Stations: 1,074 → 1,120**, `backend/seed/local_expand_stations.py` (new, local-guarded, idempotent, `--dry-run`). New rows use real Karnataka taluk/town names plus KSP station types (Women/CEN/Traffic) added only where a district lacks them; no district or range is invented, so `fn_scope_ok` and jurisdiction joins are unaffected (0 orphan cases after). Coordinates are seeded-random points inside each district's existing bounding box — explicitly labelled as plausible placements, not surveyed locations.
+
+**Isolation independently verified** (read-only probes against both DBs after all changes): local at 1,120 stations / 200k narratives / 200k embedded / vocabulary table present; **cloud unchanged** — 646 stations, 71,986 narratives, 35,993 embedded, no new table, no new index.
+
+`docs/ARCHITECTURE.md` — new "Local-only bilingual RAG and the 1,120-station roll" section with the full measurement trail (this is the authoritative writeup; this log entry summarizes it).
+
+Verified: backend 204 passed (190 + more RAG tests), frontend typecheck holding at 56.
+
+#### Files touched this session
+New: `backend/app/services/news_service.py`, `backend/app/api/routes/news.py`, `frontend/src/lib/api/news.ts`, `frontend/src/routes/news.tsx`, `backend/tests/test_forecast_backtest.py`, `backend/migrations/012_local_bilingual_rag.sql`, `backend/seed/local_expand_stations.py`.
+Edited: `backend/app/services/intelligence_service.py`, `backend/app/schemas/intelligence.py`, `backend/app/api/routes/intelligence.py`, `backend/app/main.py`, `backend/app/pipeline/tools/rag.py`, `backend/app/pipeline/screen_agent.py`, `backend/tests/test_rag_retrieval.py`, `frontend/src/routes/forecast.tsx`, `frontend/src/components/ModelInferenceTheater.tsx`, `frontend/src/components/Shell.tsx`, `frontend/src/lib/i18n.tsx`, `frontend/src/input/gestureActions.ts`, `docs/ARCHITECTURE.md`.
+
+**Nothing in this session was committed** — all of it sits as uncommitted changes in the working tree, per the standing "never commit unless asked in that session" rule.
