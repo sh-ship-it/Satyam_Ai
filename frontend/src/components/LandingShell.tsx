@@ -50,7 +50,7 @@ export function Header() {
                 {t("AI Digital Forensics")}
               </div>
               <span className="text-[10px] font-bold text-foreground/70">
-                {t("build by Teen Titans")}
+                {t("built by Teen Titans")}
               </span>
             </div>
           </div>
@@ -148,7 +148,7 @@ export function Footer() {
       <div className="border-t-2 border-background/20">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-6 py-5 text-xs text-background/60">
           <span>{t("© 2026 Satyam. All rights reserved.")}</span>
-          <span>{t("build by Teen Titans")}</span>
+          <span>{t("built by Teen Titans")}</span>
         </div>
       </div>
     </footer>

@@ -975,6 +975,11 @@ const DICT: Record<string, string> = {
   "Drive the cursor and hover elements using eye-gaze tracking, and click or scroll with webcam hand gestures. Say “Satyam” to wake the copilot, and the session auto-locks & blurs PII the moment you step away.":
     'ಕಣ್ಣಿನ ನೋಟ ಟ್ರ್ಯಾಕಿಂಗ್ ಬಳಸಿ ಕರ್ಸರ್ ಅನ್ನು ಚಾಲನೆ ಮಾಡಿ ಮತ್ತು ಅಂಶಗಳ ಮೇಲೆ ಸುಳಿದಾಡಿ, ಮತ್ತು ವೆಬ್‌ಕ್ಯಾಮ್ ಕೈ ಸನ್ನೆಗಳೊಂದಿಗೆ ಕ್ಲಿಕ್ ಮಾಡಿ ಅಥವಾ ಸ್ಕ್ರಾಲ್ ಮಾಡಿ. ಕೋಪೈಲಟ್ ಅನ್ನು ಎಚ್ಚರಗೊಳಿಸಲು "ಸತ್ಯಂ" ಎಂದು ಹೇಳಿ, ಮತ್ತು ನೀವು ದೂರ ಸರಿದ ತಕ್ಷಣ ಅಧಿವೇಶನವು ಸ್ವಯಂ-ಲಾಕ್ ಆಗುತ್ತದೆ ಮತ್ತು PII ಅನ್ನು ಮಸುಕುಗೊಳಿಸುತ್ತದೆ.',
   "build by Teen Titans": "ಟೀನ್ ಟೈಟಾನ್ಸ್‌ನಿಂದ ನಿರ್ಮಿಸಲಾಗಿದೆ",
+  "built by Teen Titans": "ಟೀನ್ ಟೈಟಾನ್ಸ್‌ನಿಂದ ನಿರ್ಮಿಸಲಾಗಿದೆ",
+  "build by Team Titans": "ಟೀಮ್ ಟೈಟಾನ್ಸ್‌ನಿಂದ ನಿರ್ಮಿಸಲಾಗಿದೆ",
+  "built by Team Titans": "ಟೀಮ್ ಟೈಟಾನ್ಸ್‌ನಿಂದ ನಿರ್ಮಿಸಲಾಗಿದೆ",
+  "Team Titans": "ಟೀಮ್ ಟೈಟಾನ್ಸ್",
+  "Teen Titans": "ಟೀನ್ ಟೈಟಾನ್ಸ್",
   Ingest: "ಒಳತೆಗೆದುಕೊಳ್ಳಿ",
   Forecasting: "ಮುನ್ನೋಟ",
   "Working Pipeline": "ಕಾರ್ಯನಿರ್ವಹಿಸುವ ಪೈಪ್‌ಲೈನ್",

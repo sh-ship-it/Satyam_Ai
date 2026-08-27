@@ -58,8 +58,8 @@ const LANDING_CSS = `
 .satyam-landing .sl-logo { display:flex;align-items:center;gap:10px;font-family:var(--lf);font-weight:700;letter-spacing:.06em;font-size:18px; }
 .satyam-landing .sl-logo .mark { width:30px;height:24px; }
 .satyam-landing .sl-logo b { color:#fff; }
-.satyam-landing .sl-logo span { color:var(--green-bright); }
-.satyam-landing .sl-logo .logo-sub { display:block;font-family:var(--lf);font-weight:600;font-size:9.5px;letter-spacing:.04em;color:var(--muted);margin-top:1px; }
+.satyam-landing .sl-logo span:not(.logo-sub) { color:var(--green-bright); }
+.satyam-landing .sl-logo .logo-sub { display:block;font-family:var(--lf);font-weight:600;font-size:9.5px;letter-spacing:.04em;color:var(--muted);margin-top:1px;text-shadow:none !important; }
 .satyam-landing .btn-pill { display:inline-flex;align-items:center;gap:10px;background:#f4fff1;color:#06140a;font-family:var(--lf);
   font-weight:600;font-size:14px;padding:7px 8px 7px 18px;border-radius:999px;cursor:pointer;
   box-shadow:0 0 30px rgba(var(--accent-rgb),.35);transition:transform .2s,box-shadow .2s; }
@@ -106,8 +106,7 @@ const LANDING_CSS = `
    against a 54px glyph. */
 .satyam-landing .stat,
 .satyam-landing h1 .accent,
-.satyam-landing h2 .accent,
-.satyam-landing .sl-logo span {
+.satyam-landing h2 .accent {
   text-shadow:
     -2px 0 0 var(--ink), 2px 0 0 var(--ink),
     0 -2px 0 var(--ink), 0 2px 0 var(--ink),
@@ -186,6 +185,10 @@ const LANDING_CSS = `
 .satyam-landing.light { --bg:#eef4ec;--bg2:#e3ede1;--panel:#ffffff;--text:#0a160a;--muted:rgba(18,46,14,.62);cursor:auto; }
 .satyam-landing.light #sl-cursor { display:none; }
 .satyam-landing.light .sl-logo b { color:#0a160a; }
+.satyam-landing.light .sl-logo span:not(.logo-sub) { color:#16a34a; }
+.satyam-landing.light .sl-logo .logo-sub { color:rgba(18,46,14,.7); }
+.satyam-landing.light .sl-logo .mark path:last-child { stroke:#0a160a; }
+.satyam-landing.light .sl-logo .mark path:first-child { stroke:#16a34a; }
 .satyam-landing.light .btn-pill { background:#0a160a;color:#eafff0;box-shadow:0 0 26px rgba(var(--accent-rgb),.3); }
 .satyam-landing.light .theme-btn,.satyam-landing.light .mode-btn { background:rgba(255,255,255,.72);border-color:rgba(0,0,0,.08); }
 .satyam-landing.light .theme-menu { background:rgba(255,255,255,.96);border-color:rgba(0,0,0,.08);box-shadow:0 16px 50px rgba(0,0,0,.18); }
@@ -770,7 +773,7 @@ function LandingPage() {
           >
             <b>SAT</b>
             <span>YAM</span>
-            <span className="logo-sub">{t("build by Teen Titans")}</span>
+            <span className="logo-sub">{t("built by Teen Titans")}</span>
           </span>
         </div>
         {/* The in-page "Features" anchor was removed: the header pill below now says
@@ -1256,7 +1259,7 @@ function LandingPage() {
         </div>
         <div className="foot-bottom">
           <span>{t("© 2026 Satyam. All rights reserved.")}</span>
-          <span>{t("build by Teen Titans")}</span>
+          <span>{t("built by Teen Titans")}</span>
         </div>
       </footer>
     </div>
