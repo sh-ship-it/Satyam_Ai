@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1787808975.4940717,
-    "ast_hash": "aa9055d23780921f0bc51e493eea95a9",
+    "mtime": 1787823377.2298295,
+    "ast_hash": "1a46bac99acb6033adf21bbde44ba6d9",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -675,8 +675,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1787820453.9922593,
-    "ast_hash": "003793f2eadf3fa27248a880864a5bee",
+    "mtime": 1787823715.1420581,
+    "ast_hash": "613ae86f2d29eee2fcf9c660db4dc1df",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -2200,8 +2200,23 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/documents.tsx": {
-    "mtime": 1787820570.0406282,
-    "ast_hash": "9cc6cd6c1eaace4bf5a59879083c16e0",
+    "mtime": 1787823719.548968,
+    "ast_hash": "92872b8c6fb7715a4b61e6cf0dd9bd7b",
+    "semantic_hash": ""
+  },
+  "frontend/scripts/check-languages.mjs": {
+    "mtime": 1787822924.9762545,
+    "ast_hash": "16958f9f2f9c7119662b84f213b00f37",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/LanguageMarquee.tsx": {
+    "mtime": 1787823430.299276,
+    "ast_hash": "45fd4b0354d00764cd2c4e945c4c134e",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/languages.ts": {
+    "mtime": 1787823734.5918531,
+    "ast_hash": "a97f09f99936acb40a11ac23c1a5c0b8",
     "semantic_hash": ""
   }
 }
