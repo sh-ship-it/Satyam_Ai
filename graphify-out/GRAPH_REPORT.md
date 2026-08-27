@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-08-27)
 
 ## Corpus Check
-- 384 files · ~1,898,804 words
+- 384 files · ~1,899,207 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `70414ca0`
+- Built from commit: `e863cd01`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -1197,7 +1197,7 @@ Cohesion: 0.50
 Nodes (3): build_answer_system(), Prompt templates — updated for new schema (002_schema_v2.sql).  Key schema chang, Build a rich, personalised system prompt.      Injects the logged-in officer's n
 
 ## Knowledge Gaps
-- **1009 isolated node(s):** `Table of Contents`, `1. Project Overview`, `2.1 Backend`, `2.2 AI / Model Services`, `2.3 Frontend` (+1004 more)
+- **1009 isolated node(s):** `Lang`, `Ctx`, `I18nCtx`, `ALL_TRANSLATABLE`, `BADGE_FLOAT` (+1004 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -1205,14 +1205,14 @@ Nodes (3): build_answer_system(), Prompt templates — updated for new schema (0
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 223` to `Community 93`?**
-  _High betweenness centrality (0.245) - this node is a cross-community bridge._
+  _High betweenness centrality (0.255) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 164` to `Community 265`, `Community 10`, `Community 139`, `Community 269`, `Community 15`, `Community 276`, `Community 286`, `Community 32`, `Community 33`, `Community 37`, `Community 170`, `Community 172`, `Community 175`, `Community 190`, `Community 191`, `Community 76`, `Community 210`, `Community 223`, `Community 227`, `Community 101`, `Community 110`, `Community 122`, `Community 255`?**
-  _High betweenness centrality (0.156) - this node is a cross-community bridge._
+  _High betweenness centrality (0.158) - this node is a cross-community bridge._
 - **Are the 125 inferred relationships involving `Principal` (e.g. with `AdminUserList` and `AgentPlan`) actually correct?**
   _`Principal` has 125 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 12 inferred relationships involving `useT()` (e.g. with `AdminAccessControl()` and `PolicyEditor()`) actually correct?**
   _`useT()` has 12 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Table of Contents`, `1. Project Overview`, `2.1 Backend` to the rest of the system?**
+- **What connects `Lang`, `Ctx`, `I18nCtx` to the rest of the system?**
   _1514 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.08879492600422834 - nodes in this community are weakly interconnected._
