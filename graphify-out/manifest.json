@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/Shell.tsx": {
-    "mtime": 1787823377.2298295,
-    "ast_hash": "1a46bac99acb6033adf21bbde44ba6d9",
+    "mtime": 1787827320.386428,
+    "ast_hash": "a553cccfa387564ce7bba11ca0528010",
     "semantic_hash": ""
   },
   "frontend/src/components/ThemePicker.tsx": {
@@ -675,8 +675,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1787823715.1420581,
-    "ast_hash": "613ae86f2d29eee2fcf9c660db4dc1df",
+    "mtime": 1787826144.6990757,
+    "ast_hash": "9fe08ed0db9793944bec85d695c76528",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -2217,6 +2217,16 @@
   "frontend/src/lib/languages.ts": {
     "mtime": 1787823734.5918531,
     "ast_hash": "a97f09f99936acb40a11ac23c1a5c0b8",
+    "semantic_hash": ""
+  },
+  "frontend/scripts/check-rail-dock.mjs": {
+    "mtime": 1787827326.832564,
+    "ast_hash": "bb7ceb4d733426ef53426b1363007f81",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/railDock.ts": {
+    "mtime": 1787827411.2709353,
+    "ast_hash": "e11c92f29bad58fb93a4ab63eb28cebf",
     "semantic_hash": ""
   }
 }
