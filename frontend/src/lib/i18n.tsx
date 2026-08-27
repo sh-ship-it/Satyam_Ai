@@ -709,6 +709,8 @@ const DICT: Record<string, string> = {
   "Chain-of-Custody": "ಹಸ್ತಾಂತರ ಸರಪಳಿ",
   "Forensically Sound": "ಫೋರೆನ್ಸಿಕ್ ಮಾನ್ಯತೆ ಪಡೆದ",
   "Secure Login": "ಸುರಕ್ಷಿತ ಲಾಗಿನ್",
+  "Single sign-on is not configured. Use the form above.":
+    "ಸಿಂಗಲ್ ಸೈನ್-ಆನ್ ಕಾನ್ಫಿಗರ್ ಆಗಿಲ್ಲ. ಮೇಲಿನ ನಮೂನೆಯನ್ನು ಬಳಸಿ.",
   "Kannada + English": "ಕನ್ನಡ + ಇಂಗ್ಲಿಷ್",
   "Voice Copilot": "ಧ್ವನಿ ಸಹಪೈಲಟ್",
   // "Grounded Text-to-SQL" is already in this dictionary (landing capabilities) and

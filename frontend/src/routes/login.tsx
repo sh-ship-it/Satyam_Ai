@@ -33,6 +33,26 @@ import {
 } from "@/components/ui/glass-card";
 import { applyStoredTheme, DARK_STORAGE_KEY } from "@/lib/theme";
 
+/**
+ * Prefilled demo credentials, so a judge can open the app in one click.
+ *
+ * ⚠ THESE ARE VISIBLE TO ANYONE. Vite inlines them into the client bundle, and the
+ * password field is prefilled on a public page — so this is not a secret, it is a
+ * published shared account. That is the intent for the Datathon build, on a database
+ * whose contents are entirely synthetic.
+ *
+ * Overridable by env so it can be switched off without touching this file:
+ *   VITE_DEMO_EMAIL=""  VITE_DEMO_PASSWORD=""
+ * Set both blank for any deployment carrying real data — that is the single change
+ * needed, and the fields then render empty as normal.
+ *
+ * Verified against the running backend: POST /auth/login with the derived username
+ * `test` and password `test` returns 200 with a token. The username is the part of
+ * the email before the @, which is why the account is `test`, not `test@gmail.com`.
+ */
+const DEMO_EMAIL = (import.meta.env.VITE_DEMO_EMAIL as string | undefined) ?? "test@gmail.com";
+const DEMO_PASSWORD = (import.meta.env.VITE_DEMO_PASSWORD as string | undefined) ?? "test";
+
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
@@ -267,6 +287,7 @@ function Login() {
                       type="email"
                       name="email"
                       autoComplete="email"
+                      defaultValue={DEMO_EMAIL}
                       placeholder={t("your.name@ksp.gov.in")}
                       className="h-11 w-full rounded-[5px] border-2 border-foreground bg-background pl-9 pr-3 text-sm font-medium placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring nb-shadow-sm"
                     />
@@ -284,6 +305,7 @@ function Login() {
                       type={showPw ? "text" : "password"}
                       name="password"
                       autoComplete="current-password"
+                      defaultValue={DEMO_PASSWORD}
                       placeholder={t("Enter your password")}
                       className="h-11 w-full rounded-[5px] border-2 border-foreground bg-background pl-9 pr-10 text-sm font-medium placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-ring nb-shadow-sm"
                     />
@@ -367,11 +389,31 @@ function Login() {
                   {loading ? t("Signing in…") : t("Sign in")}
                 </button>
 
-                {/* SSO */}
+                {/* SSO — an OIDC placeholder; no identity provider is wired.
+                    It used to navigate straight to /console with NO token, which is
+                    an auth bypass in shape and broken in practice: the console has
+                    no session, its first API call 401s, and Shell bounces the user
+                    back to this page. It now completes the same demo sign-in as the
+                    button above, so you always leave here holding a real token. */}
                 <button
                   type="button"
-                  onClick={() => navigate({ to: "/console" })}
-                  className="flex h-11 w-full items-center justify-center gap-2 rounded-[5px] border-2 border-foreground bg-secondary-background text-sm font-bold nb-shadow-sm transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+                  disabled={loading}
+                  onClick={async () => {
+                    setError(null);
+                    setLoading(true);
+                    try {
+                      const username = DEMO_EMAIL.includes("@")
+                        ? DEMO_EMAIL.split("@")[0]
+                        : DEMO_EMAIL;
+                      await api.login(username, DEMO_PASSWORD);
+                      navigate({ to: "/console" });
+                    } catch {
+                      setError(t("Single sign-on is not configured. Use the form above."));
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                  className="flex h-11 w-full items-center justify-center gap-2 rounded-[5px] border-2 border-foreground bg-secondary-background text-sm font-bold nb-shadow-sm transition hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none disabled:opacity-50"
                 >
                   <KeyRound className="h-4 w-4" />
                   {t("Sign in with SSO (OIDC)")}

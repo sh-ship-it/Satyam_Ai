@@ -1168,7 +1168,9 @@ function LandingPage() {
               )}
             </p>
             <div className="reveal d3" style={{ marginTop: 30 }}>
-              <Link className="btn-pill" to="/console">
+              {/* → /login: the visitor has no session yet, so the console would
+                  render empty and then bounce on its first 401. */}
+              <Link className="btn-pill" to="/login">
                 {t("Open Console")} <span className="dot">↗</span>
               </Link>
             </div>
@@ -1196,11 +1198,14 @@ function LandingPage() {
               </>
             )}
           </div>
+          {/* Footer capability links point at /login too. They read as feature
+              links, but they target screens behind auth, so sending a visitor
+              straight there hands them an empty shell. Sign-in first, every time. */}
           <div className="fcol">
             <h4>{t("Capabilities")}</h4>
-            <Link to="/console">{t("Investigation Console")}</Link>
-            <Link to="/network">{t("Network Analysis")}</Link>
-            <Link to="/forecast">{t("Forecasting")}</Link>
+            <Link to="/login">{t("Investigation Console")}</Link>
+            <Link to="/login">{t("Network Analysis")}</Link>
+            <Link to="/login">{t("Forecasting")}</Link>
           </div>
           <div className="fcol">
             <h4>{t("Explore")}</h4>

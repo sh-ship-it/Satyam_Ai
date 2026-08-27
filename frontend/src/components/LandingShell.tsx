@@ -49,7 +49,9 @@ export function Header() {
               <div className="inline-block rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-0.5 text-[10px] font-bold">
                 {t("AI Digital Forensics")}
               </div>
-              <span className="text-[10px] font-bold text-foreground/70">{t("build by Teen Titans")}</span>
+              <span className="text-[10px] font-bold text-foreground/70">
+                {t("build by Teen Titans")}
+              </span>
             </div>
           </div>
         </Link>
@@ -76,8 +78,11 @@ export function Header() {
               ಕನ್ನಡ
             </span>
           </button>
+          {/* → /login, not /console. Every public entry point goes through sign-in,
+              so a visitor always lands on the form rather than on a shell that has
+              no session and fails its first API call. */}
           <Link
-            to="/console"
+            to="/login"
             className="rounded-[5px] border-2 border-foreground bg-primary px-4 py-2 text-primary-foreground nb-shadow transition hover:translate-x-[3px] hover:translate-y-[3px]"
           >
             {t("Open Console")}
@@ -129,7 +134,9 @@ export function Footer() {
             </div>
           </div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-background/70">
-            {t("An investigator-grade platform unifying evidence triage, link analysis, geospatial intelligence, and court-ready reporting.")}
+            {t(
+              "An investigator-grade platform unifying evidence triage, link analysis, geospatial intelligence, and court-ready reporting.",
+            )}
           </p>
         </div>
 

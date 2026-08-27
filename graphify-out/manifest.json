@@ -675,8 +675,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1787826144.6990757,
-    "ast_hash": "9fe08ed0db9793944bec85d695c76528",
+    "mtime": 1787829249.8369727,
+    "ast_hash": "3784535d5871496824f31d9b5630075c",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
-    "mtime": 1787594698.7981088,
-    "ast_hash": "871cd30b175ad0f393dafecb9505e1ef",
+    "mtime": 1787829262.4988744,
+    "ast_hash": "61dce88a5a957f8eb363325b95349d73",
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {
@@ -790,8 +790,8 @@
     "semantic_hash": ""
   },
   "docs/ARCHITECTURE.md": {
-    "mtime": 1787771391.4886487,
-    "ast_hash": "89c7f218a786a9cae6615ce86fd5bd14",
+    "mtime": 1787829361.806018,
+    "ast_hash": "6c450dd8f06c535156953eabef919bab",
     "semantic_hash": ""
   },
   "frontend/src/routes/README.md": {
@@ -810,8 +810,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/login.tsx": {
-    "mtime": 1787828456.3986256,
-    "ast_hash": "1dc9711f5b2e93c913c4935b889949c5",
+    "mtime": 1787829262.356882,
+    "ast_hash": "c95122f4f5a14e6bfdbcf1ad41e1bbd9",
     "semantic_hash": ""
   },
   "backend/app/models/api/ollama_cloud.py": {
@@ -825,8 +825,8 @@
     "semantic_hash": ""
   },
   "made_till_now.md": {
-    "mtime": 1787731430.9507785,
-    "ast_hash": "5cb0a57168089f1e0502ae19699f6a2f",
+    "mtime": 1787829427.202273,
+    "ast_hash": "7db4b4992be4e2f3dd3c20080d48370e",
     "semantic_hash": ""
   },
   "frontend/src/locales/en.json": {
@@ -2242,6 +2242,11 @@
   "frontend/src/lib/ghostMascot.ts": {
     "mtime": 1787828528.5234544,
     "ast_hash": "f1e711414132460914de2d6b325ba7a7",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/ui/glass-card.tsx": {
+    "mtime": 1787829001.1697502,
+    "ast_hash": "237a67b8b9d006f0dcf0491e06dbac36",
     "semantic_hash": ""
   }
 }
