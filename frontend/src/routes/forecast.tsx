@@ -87,10 +87,11 @@ import {
  *
  * HONESTY ABOUT THE MODEL
  * There is no neural network here. `risk_score` is a hand-tuned formula over
- * incident density and a 30-vs-30-day lift, and the `why` strings are templates.
- * The labelling on this screen says "heuristic" rather than implying a trained
- * model, and `horizon_days` is marked as not yet affecting the computation because
- * the service accepts the parameter and never uses it.
+ * incident density and a recent-vs-prior-window lift, and the `why` strings are
+ * templates. The labelling on this screen says "heuristic" rather than implying a
+ * trained model. `horizon_days` now drives that comparison window (last N days vs
+ * the N before, floored at 7); it used to be accepted and ignored, which made the
+ * Horizon control a no-op.
  *
  * The validation card reports a real rolling-origin backtest of that same
  * formula: PAI as a ratio against random targeting of equal area, PEI against
@@ -1487,7 +1488,7 @@ function ForecastScreen() {
                 kind={t("Scatter")}
                 bodyClass="h-[340px]"
                 note={t(
-                  "The horizon control does not yet change these numbers — the service accepts the parameter but the underlying windows are fixed at the last 30 data-days against the prior 30.",
+                  "The horizon sets the comparison window: the last N data-days against the N days before them, floored at 7 so a short horizon is not pure noise.",
                 )}
               >
                 {!mounted || isPending("hotspots") ? (

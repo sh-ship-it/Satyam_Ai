@@ -439,6 +439,24 @@ async def get_forecast_hotspots(
     max_date = dr["mx"] if dr else None
     as_of = _fmt(max_date) or date.today().isoformat()
 
+    # The comparison window now SCALES WITH THE HORIZON.
+    #
+    # It used to be hardcoded to "last 30 days vs the 30-90 day window", with
+    # horizon_days accepted, echoed back in the response, and never used — so 3d,
+    # 7d, 14d and 30d returned byte-identical cells and the Horizon control on the
+    # screen did nothing at all. Measured before this change: top-cell risk score
+    # 59 and the same `why` text for every one of the four horizons.
+    #
+    # A forecast for the next N days is now judged on the last N days against the N
+    # days before that, which is the comparison the control claims to make. The
+    # window is floored at 7 days because a 3-day slice of this corpus holds only a
+    # handful of incidents statewide — below that the lift term is pure Poisson
+    # noise rather than signal. `_risk_score` still blends all-time density with the
+    # lift, so a short horizon stays ranked by density instead of collapsing.
+    recent_days = max(int(horizon_days), 7)
+    params["recent_days"] = recent_days
+    params["window_days"] = recent_days * 2
+
     sql = text(f"""
         WITH ref AS (
             SELECT MAX(report_date) AS max_date FROM cases
@@ -448,21 +466,28 @@ async def get_forecast_hotspots(
             round(longitude / :grid) * :grid AS lng_cell,
             crime_type,
             COUNT(*) AS total,
-            -- "recent": last 30 data-days relative to max_date
+            -- "recent": the horizon window, counted back from the latest data date
             COUNT(*) FILTER (
-                WHERE report_date >= (SELECT max_date FROM ref) - INTERVAL '30 days'
+                WHERE report_date >= (SELECT max_date FROM ref)
+                                     - make_interval(days => :recent_days)
             ) AS recent,
-            -- "baseline": 30-90 data-days ago (prior period)
+            -- "baseline": the equally long window immediately before it
             COUNT(*) FILTER (
-                WHERE report_date BETWEEN
-                    (SELECT max_date FROM ref) - INTERVAL '90 days'
-                    AND (SELECT max_date FROM ref) - INTERVAL '30 days'
+                WHERE report_date >= (SELECT max_date FROM ref)
+                                     - make_interval(days => :window_days)
+                  AND report_date <  (SELECT max_date FROM ref)
+                                     - make_interval(days => :recent_days)
             ) AS baseline_count
         FROM cases WHERE {w}
         GROUP BY lat_cell, lng_cell, crime_type
         HAVING COUNT(*) > 0
         ORDER BY total DESC
-        LIMIT 50
+        -- 500, not 50. At 0.05 deg the grid produces far fewer distinct cells than
+        -- at 0.01 deg, but a LIMIT of 50 truncated every grid size to exactly 50 —
+        -- so "Cells scored" read 50 no matter what, and changing the Grid control
+        -- looked like it did nothing even though the cells underneath were
+        -- genuinely different. The natural cell count is the informative number.
+        LIMIT 500
     """)
     rows = (await session.execute(sql, params)).mappings().all()
 
@@ -474,13 +499,15 @@ async def get_forecast_hotspots(
         lift_pct = _lift_percent(recent, baseline)
         risk_score = _risk_score(total, recent, baseline)
 
+        # The window length is named in the text so the officer can see the Horizon
+        # control taking effect, rather than having to trust that it did.
         why = [f"Historical density: {total} incidents"]
         if lift_pct > 0:
-            why.append(f"Activity up {lift_pct}% vs prior 30-day period")
+            why.append(f"Activity up {lift_pct}% vs prior {recent_days}-day period")
         if recent > 0:
-            why.append(f"Recent window: {recent} incidents in last 30 days")
+            why.append(f"Recent window: {recent} incidents in last {recent_days} days")
         if recent == 0 and baseline == 0:
-            why.append("Persistent low-level activity — watch area")
+            why.append(f"No activity in the last {recent_days * 2} days — watch area")
         cells.append(ForecastCell(
             cell_id=f"grid_{i}", lat=float(r["lat_cell"] or 0),
             lng=float(r["lng_cell"] or 0), risk_score=risk_score,
