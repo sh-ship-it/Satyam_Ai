@@ -6239,3 +6239,168 @@ New: `backend/app/services/news_service.py`, `backend/app/api/routes/news.py`, `
 Edited: `backend/app/services/intelligence_service.py`, `backend/app/schemas/intelligence.py`, `backend/app/api/routes/intelligence.py`, `backend/app/main.py`, `backend/app/pipeline/tools/rag.py`, `backend/app/pipeline/screen_agent.py`, `backend/tests/test_rag_retrieval.py`, `frontend/src/routes/forecast.tsx`, `frontend/src/components/ModelInferenceTheater.tsx`, `frontend/src/components/Shell.tsx`, `frontend/src/lib/i18n.tsx`, `frontend/src/input/gestureActions.ts`, `docs/ARCHITECTURE.md`.
 
 **Nothing in this session was committed** — all of it sits as uncommitted changes in the working tree, per the standing "never commit unless asked in that session" rule.
+
+
+---
+
+## Session — Document Translation screen, sidebar rework, login mascot & glass card
+
+Authoritative write-up is `docs/ARCHITECTURE.md` §28–§30; this entry is the summary
+and the decision trail.
+
+### Document Translation & Sealing (`/documents`) — new screen
+
+`POST /api/documents/translate | /seal | /verify`, all L2+ (`BUILD_REPORT`). Upload a
+PDF or `.txt`, extract text, translate via Sarvam, append the SHA-256 to the **existing**
+`core/audit.py` hash chain, and verify a file against it later. Nothing is stored
+server-side — bytes live in the request, the audit row keeps only digest + filename +
+note, which keeps real case content out of a synthetic-data repo and off the Neon
+budget.
+
+New: `backend/app/core/doc_crypto.py`, `backend/app/schemas/documents.py`,
+`backend/app/services/document_service.py`, `backend/app/api/routes/documents.py`,
+`backend/tests/test_documents.py`, `backend/scratch/verify_documents.py`,
+`frontend/src/lib/api/documents.ts`, `frontend/src/routes/documents.tsx`.
+
+- Magic-byte validation rather than declared MIME — the content type is
+  attacker-controlled. `evil.exe` renamed `report.pdf` is refused before a parser sees
+  it. 20 MB cap enforced server-side too. Password-protected uploads are refused, not
+  prompted for.
+- `pypdf` imported lazily → route answers **503 with an install instruction** rather
+  than taking startup down over an optional capability.
+- `/verify` checks the sealed row and its predecessor, **not** a global
+  `verify_chain()`: the shared DB has five pre-existing forked `financial.money_trail`
+  rows (earliest `audit_id=90`), so a global check would report a good seal as tampered.
+
+### AES-256 encryption: built, then removed on request
+
+Shipped, then deleted across nine files after the "Failed to fetch" failures below were
+attributed to it. `encrypt_pdf`/`AES_ALGORITHM` gone from `doc_crypto.py`, `/encrypt`
+route gone, `EncryptDialog` (199 lines) gone, `cryptography` dropped from
+`requirements.txt`, three lucide icons and 18 Kannada strings removed. `pypdf` stays
+(text extraction); `sha256_hex`/`short_digest` stay (sealing runs on them).
+
+Removal is **asserted, not just done**: `test_there_is_no_encryption_on_this_path`
+checks the symbols and the route are absent while `/translate|/seal|/verify` remain
+wired, and `verify_documents.py` step 6 asserts the live endpoint 404s. A half-reverted
+removal leaving an endpoint the UI can no longer reach is the failure mode.
+
+### Three separate causes of one "Failed to fetch"
+
+Each produced the same browser symptom while the server logged success, and fixing the
+first two did not fix the screen. Full measurements in ARCHITECTURE §28.5.
+
+1. **Duplicated `Access-Control-Expose-Headers`** — route set it, `CORSMiddleware` also
+   emits it, browsers reject a duplicated CORS header outright. Fixed on the middleware.
+2. **Non-latin-1 filename → 500 inside the ASGI layer.** `report.pdf` → 1497 bytes;
+   `ದಾಖಲೆ.pdf` and `report—final.pdf` → 500. Fixed with RFC 6266 two-parameter
+   `Content-Disposition`.
+3. **The one underneath both: `localhost` → `::1` first on Windows**, while
+   `uvicorn --host 0.0.0.0` binds IPv4 only. Measured: `127.0.0.1:8000/health` 200,
+   `[::1]:8000/health` refused. Chrome caches the winning address family per origin and
+   re-races, hence the intermittency. **curl and PowerShell always fell back to IPv4,
+   which is exactly why every server-side probe passed while the browser failed** —
+   the misleading signal that cost the most time here.
+
+   `VITE_API_BASE_URL` and `self_base_url` → `127.0.0.1`; `CORS_ORIGINS` now lists both
+   loopback spellings (a browser treats them as different origins). Not fixable
+   server-side: uvicorn never clears `IPV6_V6ONLY`, Windows defaults it to 1, so
+   `--host ::` would bind IPv6 *only* — I asserted the opposite in a comment, checked
+   it, and corrected it.
+
+**Deeper fix:** a 500 raised in a route never passes back through `CORSMiddleware`, so
+it arrives with no `Access-Control-Allow-Origin` and `fetch()` rejects with a bare
+"Failed to fetch". `main.py` now has an exception handler that reattaches the CORS
+headers (origin check delegated to Starlette's own helpers so it cannot drift from the
+middleware config; detail stays in the log, not on the wire). Pinned by
+`test_a_500_still_carries_cors_headers`.
+
+### The download itself was also broken
+
+Five of six hand-rolled blob downloads shared two defects: the anchor was never added
+to the document, and `URL.revokeObjectURL` fired synchronously after `click()`,
+cancelling the transfer. Both fail silently — this is why clicking Download did nothing
+even after the request returned 200 with a valid PDF. Now one shared
+`lib/download.ts::saveBlob`, replacing copies in `documents`, `console`, `transcripts`,
+`board`, `SettingsDialog`, and `network` (the only one that had been correct).
+
+### Translated output, and what it can honestly claim
+
+Downloads carry the **translation**, not the upload — the officer already has what they
+uploaded. PDF is composed by the browser and saved from its print dialog
+(`lib/pdf/printView.ts`, extracted from `conversationPdf.ts`) because Kannada conjuncts
+need OpenType shaping and neither `pypdf` nor `reportlab` has a shaper; a server-made
+PDF would look valid and be illegible. Plus a `.txt` with a UTF-8 BOM so Windows tools
+do not mojibake it.
+
+The language strip lists Sarvam's 23 and marks only Kannada + English live, because the
+app calls `mayura:v1` (11 languages) and `_bcp()`/`_norm_lang()` collapse everything to
+`kn-IN`/`en-IN` anyway — a Tamil upload would be sent labelled English. **The user asked
+for the caption "supported languages that can be translated into Kannada"; that would
+be false three times over, so it was not used** and the reasons were reported instead.
+
+### Sidebar / Shell
+
+- **`min-h-screen` was forcing page height on every screen.** The rail is ~900px of
+  fixed height, and `min-h-screen` lets the column grow, so short windows got a band of
+  dead background. Now `h-dvh` + `overflow-hidden`, rail scrolls internally.
+- Collapsible rail: 64px ↔ 208px, labels fade behind the width, Cmd/Ctrl+B, persisted.
+  Dock magnification scoped to the collapsed state; no outward translate because the
+  rail is a scroll container (44px × 1.42 = 62.5px, inside 64px).
+- **Self-inflicted bug worth remembering:** hiding collapsed labels with `opacity: 0`
+  left them occupying inline size, so `justify-content: center` spread ~114px of content
+  across a 44px tile and pushed every icon to a negative x, where the rail's hidden
+  overflow sliced it in half and the toggle became unreachable. Fixed with `width: 0`,
+  `gap: 0`, and `overflow: hidden` on the tile.
+- Rail order set to the requested sequence. Board and Person 360 were listed twice and
+  are placed once each; **Graphs and Audit were not in the list and were kept** rather
+  than dropped — hiding the compliance screen is not a cosmetic change.
+
+### Login page
+
+- `components/ui/glass-card.tsx` added (shadcn conventions). **Nothing was installed** —
+  `@radix-ui/react-slot`, `class-variance-authority` and `@radix-ui/react-label` were
+  already present, all 46 shadcn primitives exist, and glass-card needs only `cn`.
+  The sign-in card overrides the component's `text-white`/30% defaults, which assume a
+  dark hero and would be invisible on this light page.
+- `GhostMascot` as a full-height background layer. Liquid motion is three animations at
+  non-harmonic periods (float 7s, squash 4.4s, swirl 26s); soft edges from radial
+  gradients **not** a blur, because an SVG filter re-runs per frame and this is ~78vh.
+  Eyes track the pointer with no React state.
+- **The pasted references could not be used as given** in three cases and this was
+  reported rather than worked around silently: the `beui.dev` sidebar needs `motion/react`
+  plus two modules absent from this repo and arrived with its JSX stripped;
+  `MeshGradientSVG` needs `@paper-design/shaders-react` (a WebGL runtime, on a login
+  page); the logo marquee needs `motion` + `react-use-measure`. Behaviour was
+  reimplemented with CSS and one native API call each.
+- Trust badges 3 → **9**, one per shipped capability.
+
+### Landing page & SEO
+
+Stat corrected **14 → 20** screens (route files excluding landing/login/about/root; 17
+are sidebar-reachable). Three capability cards added — Document Translation & Sealing,
+Forecast & Response Ops, Person 360 & News Feed. Meta description rewritten to list
+only shipping capabilities.
+
+### Frontend self-checks (no framework added)
+
+Five `node --experimental-strip-types` scripts under `frontend/scripts/`, each pinning
+something that fails silently in a browser. Every one was verified to FAIL when the
+behaviour it guards was reverted — including catching a real mistake of mine, a backtick
+inside a template literal that broke `railDock.ts` parsing.
+
+### Verification
+
+Backend **349 passed, 1 deselected** (was 351 before the encryption removal replaced two
+tests with one). `scratch/verify_documents.py` ALL PASSED, all seven sections including
+the 404 assertion. Frontend typecheck held at **56** throughout (55 pre-existing
+`i18n.tsx` TS1117 duplicates + 1 pre-existing `FinancialLinksPanel.tsx` comparison);
+one 57th appeared when a badge label duplicated an existing key and was removed. Prettier
+clean on every touched file.
+
+### Note on commits
+
+Work in the earlier turns of this session was committed **outside** this session —
+`git log` shows `385af6f "Document Translation Feature"` and `0188b77 "update"` on `main`,
+level with `origin/main`, which means the AES-256 feature *and* its removal both reached
+the remote. Nothing in this session was committed by the agent, per the standing rule.

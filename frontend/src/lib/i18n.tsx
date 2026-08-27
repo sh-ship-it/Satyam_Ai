@@ -709,6 +709,23 @@ const DICT: Record<string, string> = {
   "Chain-of-Custody": "ಹಸ್ತಾಂತರ ಸರಪಳಿ",
   "Forensically Sound": "ಫೋರೆನ್ಸಿಕ್ ಮಾನ್ಯತೆ ಪಡೆದ",
   "Secure Login": "ಸುರಕ್ಷಿತ ಲಾಗಿನ್",
+  "Kannada + English": "ಕನ್ನಡ + ಇಂಗ್ಲಿಷ್",
+  "Voice Copilot": "ಧ್ವನಿ ಸಹಪೈಲಟ್",
+  // "Grounded Text-to-SQL" is already in this dictionary (landing capabilities) and
+  // the badge reuses that entry — a second key would shadow it and trip TS1117.
+  "Document Sealing": "ದಾಖಲೆ ಮುದ್ರೆ",
+  "Link + Money Trails": "ಸಂಪರ್ಕ + ಹಣದ ಜಾಡು",
+  "Hotspot Forecasting": "ಅಪರಾಧ ತಾಣ ಮುನ್ಸೂಚನೆ",
+  // ── Landing page: capabilities added after the first cut ──────────────────
+  "Document Translation & Sealing": "ದಾಖಲೆ ಅನುವಾದ ಮತ್ತು ಮುದ್ರೆ",
+  "Upload a PDF or statement, translate it to Kannada, then seal its SHA-256 to the same hash-chained ledger the audit log uses — so any later alteration of the original can be proven.":
+    "PDF ಅಥವಾ ಹೇಳಿಕೆಯನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ, ಕನ್ನಡಕ್ಕೆ ಅನುವಾದಿಸಿ, ನಂತರ ಅದರ SHA-256 ಅನ್ನು ಲೆಕ್ಕಪರಿಶೋಧನಾ ದಾಖಲೆ ಬಳಸುವ ಅದೇ ಹ್ಯಾಶ್-ಸರಪಳಿಗೆ ಮುದ್ರೆ ಹಾಕಿ — ಆಗ ಮೂಲದಲ್ಲಿ ನಂತರದ ಯಾವುದೇ ಬದಲಾವಣೆಯನ್ನು ಸಾಬೀತುಪಡಿಸಬಹುದು.",
+  "Forecast & Response Ops": "ಮುನ್ಸೂಚನೆ ಮತ್ತು ಪ್ರತಿಕ್ರಿಯೆ ಕಾರ್ಯಾಚರಣೆ",
+  "Anticipate hotspots and risk windows on a scored grid, then act on them: predictive deployment, dispatch with green corridors, and live camera review with on-device detection.":
+    "ಅಂಕ ನೀಡಿದ ಗ್ರಿಡ್‌ನಲ್ಲಿ ಅಪರಾಧ ತಾಣಗಳು ಮತ್ತು ಅಪಾಯದ ಅವಧಿಗಳನ್ನು ಮುಂಚಿತವಾಗಿ ಗುರುತಿಸಿ, ನಂತರ ಕ್ರಮ ಕೈಗೊಳ್ಳಿ: ಭವಿಷ್ಯಸೂಚಕ ನಿಯೋಜನೆ, ಹಸಿರು ಕಾರಿಡಾರ್‌ಗಳೊಂದಿಗೆ ರವಾನೆ, ಮತ್ತು ಸಾಧನದಲ್ಲೇ ಪತ್ತೆಯೊಂದಿಗೆ ನೇರ ಕ್ಯಾಮೆರಾ ಪರಿಶೀಲನೆ.",
+  "Person 360 & News Feed": "ವ್ಯಕ್ತಿ 360 ಮತ್ತು ಸುದ್ದಿ ಫೀಡ್",
+  "Pull one person's cases, links, movements and financial trail into a single dossier, and watch an ingested news feed for signals that touch open cases.":
+    "ಒಬ್ಬ ವ್ಯಕ್ತಿಯ ಪ್ರಕರಣಗಳು, ಸಂಪರ್ಕಗಳು, ಚಲನವಲನಗಳು ಮತ್ತು ಹಣಕಾಸಿನ ಜಾಡನ್ನು ಒಂದೇ ಕಡತಕ್ಕೆ ತರಿ, ಮತ್ತು ತೆರೆದ ಪ್ರಕರಣಗಳಿಗೆ ಸಂಬಂಧಿಸಿದ ಸೂಚನೆಗಳಿಗಾಗಿ ಸುದ್ದಿ ಫೀಡ್ ಗಮನಿಸಿ.",
   "Sign in to your account": "ನಿಮ್ಮ ಖಾತೆಗೆ ಸೈನ್ ಇನ್ ಮಾಡಿ",
   "Access your forensics workspace": "ನಿಮ್ಮ ಫೋರೆನ್ಸಿಕ್ ಕಾರ್ಯಸ್ಥಳವನ್ನು ಪ್ರವೇಶಿಸಿ",
   "Remember me": "ನನ್ನನ್ನು ನೆನಪಿನಲ್ಲಿಡಿ",

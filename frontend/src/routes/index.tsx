@@ -6,12 +6,22 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Satyam — Crime Intelligence, On the Data" },
-      { name: "description", content: "Satyam turns scattered case records, statements and signals into one bilingual, voice-driven, explainable intelligence picture for the Karnataka State Police — with a hands-free eye and gesture copilot, AI investigation board, and a tamper-evident audit trail." },
+      // Description lists only capabilities that actually ship. It is the snippet
+      // search engines show, so an aspirational feature here is a promise made to
+      // someone who has not seen the product yet.
+      {
+        name: "description",
+        content:
+          "Satyam turns scattered case records, statements and signals into one bilingual, voice-driven, explainable intelligence picture for the Karnataka State Police: grounded Text-to-SQL and RAG with citations, link and money-trail analysis, hotspot forecasting, response-ops dispatch and live camera review, Kannada document translation with SHA-256 sealing, a Person 360 dossier, an AI investigation board, a hands-free eye and gesture copilot, and a tamper-evident audit trail.",
+      },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap",
+      },
     ],
   }),
   component: LandingPage,
@@ -175,35 +185,54 @@ const LANDING_CSS = `
 
 // ── Theme / mode logic (mirrors the IIFE from landing.html, React-ified) ─────
 
-function hsl2rgb(h: number, s: number, l: number): [number,number,number] {
-  if (s === 0) { const v = Math.round(l*255); return [v,v,v]; }
-  const q = l < .5 ? l*(1+s) : l+s-l*s, p = 2*l-q;
-  const tc: [number,number,number] = [h+1/3,h,h-1/3].map(x => {
-    x = (x+1)%1;
-    if (x < 1/6) return p+(q-p)*6*x;
-    if (x < 1/2) return q;
-    if (x < 2/3) return p+(q-p)*(2/3-x)*6;
+function hsl2rgb(h: number, s: number, l: number): [number, number, number] {
+  if (s === 0) {
+    const v = Math.round(l * 255);
+    return [v, v, v];
+  }
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s,
+    p = 2 * l - q;
+  const tc: [number, number, number] = [h + 1 / 3, h, h - 1 / 3].map((x) => {
+    x = (x + 1) % 1;
+    if (x < 1 / 6) return p + (q - p) * 6 * x;
+    if (x < 1 / 2) return q;
+    if (x < 2 / 3) return p + (q - p) * (2 / 3 - x) * 6;
     return p;
-  }) as [number,number,number];
-  return tc.map(v => Math.round(v*255)) as [number,number,number];
+  }) as [number, number, number];
+  return tc.map((v) => Math.round(v * 255)) as [number, number, number];
 }
 
 function setAccentHue(root: HTMLElement, h: number) {
-  const main = hsl2rgb(h,0.78,0.49), bright = hsl2rgb(h,1,0.66), deep = hsl2rgb(h,0.62,0.2);
-  root.style.setProperty('--green',`rgb(${main.join(',')})`);
-  root.style.setProperty('--green-bright',`rgb(${bright.join(',')})`);
-  root.style.setProperty('--green-deep',`rgb(${deep.join(',')})`);
-  root.style.setProperty('--accent-rgb',main.join(','));
-  root.style.setProperty('--bright-rgb',bright.join(','));
-  root.style.setProperty('--line',`rgba(${bright.join(',')},0.16)`);
+  const main = hsl2rgb(h, 0.78, 0.49),
+    bright = hsl2rgb(h, 1, 0.66),
+    deep = hsl2rgb(h, 0.62, 0.2);
+  root.style.setProperty("--green", `rgb(${main.join(",")})`);
+  root.style.setProperty("--green-bright", `rgb(${bright.join(",")})`);
+  root.style.setProperty("--green-deep", `rgb(${deep.join(",")})`);
+  root.style.setProperty("--accent-rgb", main.join(","));
+  root.style.setProperty("--bright-rgb", bright.join(","));
+  root.style.setProperty("--line", `rgba(${bright.join(",")},0.16)`);
 }
 
 function applyMode(root: HTMLElement, light: boolean) {
-  if (light) root.classList.add('light'); else root.classList.remove('light');
-  const dark = {'--bg':'#050805','--bg2':'#0a0f0a','--panel':'#0c120c','--text':'#f2fff0','--muted':'rgba(214,245,208,0.55)'};
-  const lite = {'--bg':'#eef4ec','--bg2':'#e3ede1','--panel':'#ffffff','--text':'#0a160a','--muted':'rgba(18,46,14,0.62)'};
-  Object.entries(light ? lite : dark).forEach(([k,v]) => root.style.setProperty(k,v));
-  localStorage.setItem('satyam-mode', light ? 'light' : 'dark');
+  if (light) root.classList.add("light");
+  else root.classList.remove("light");
+  const dark = {
+    "--bg": "#050805",
+    "--bg2": "#0a0f0a",
+    "--panel": "#0c120c",
+    "--text": "#f2fff0",
+    "--muted": "rgba(214,245,208,0.55)",
+  };
+  const lite = {
+    "--bg": "#eef4ec",
+    "--bg2": "#e3ede1",
+    "--panel": "#ffffff",
+    "--text": "#0a160a",
+    "--muted": "rgba(18,46,14,0.62)",
+  };
+  Object.entries(light ? lite : dark).forEach(([k, v]) => root.style.setProperty(k, v));
+  localStorage.setItem("satyam-mode", light ? "light" : "dark");
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
@@ -219,284 +248,453 @@ function LandingPage() {
     if (!root) return;
 
     // Inject scoped styles once
-    const styleEl = document.createElement('style');
-    styleEl.id = 'satyam-landing-styles';
-    if (!document.getElementById('satyam-landing-styles')) {
+    const styleEl = document.createElement("style");
+    styleEl.id = "satyam-landing-styles";
+    if (!document.getElementById("satyam-landing-styles")) {
       styleEl.textContent = LANDING_CSS;
       document.head.appendChild(styleEl);
     }
 
     // Shared state
-    const S = (window as any).satyamState || ((window as any).satyamState = {hue:0.33,sat:0.92,rainbow:false,light:false});
+    const S =
+      (window as any).satyamState ||
+      ((window as any).satyamState = { hue: 0.33, sat: 0.92, rainbow: false, light: false });
 
     // Apply persisted mode/theme. Light is the default for a first-time visitor
     // (no 'satyam-mode' key yet) — only an explicit 'dark' saved from a previous
     // visit keeps the page dark. Without this, `=== 'light'` treated an absent
     // key the same as an explicit dark choice, so every fresh session opened dark.
-    const storedMode = localStorage.getItem('satyam-mode');
-    const savedMode = storedMode !== 'dark';
+    const storedMode = localStorage.getItem("satyam-mode");
+    const savedMode = storedMode !== "dark";
     S.light = savedMode;
     applyMode(root, savedMode);
-    const savedTheme = localStorage.getItem('satyam-theme');
-    if (savedTheme === 'rainbow') { S.rainbow = true; }
-    else if (savedTheme !== null) { S.hue = parseFloat(savedTheme); setAccentHue(root, S.hue); }
-    else { setAccentHue(root, S.hue); }
+    const savedTheme = localStorage.getItem("satyam-theme");
+    if (savedTheme === "rainbow") {
+      S.rainbow = true;
+    } else if (savedTheme !== null) {
+      S.hue = parseFloat(savedTheme);
+      setAccentHue(root, S.hue);
+    } else {
+      setAccentHue(root, S.hue);
+    }
     // sync active swatch
-    root.querySelectorAll<HTMLButtonElement>('.sw').forEach(sw => {
-      sw.classList.remove('active');
-      if (S.rainbow && sw.dataset.theme === 'rainbow') sw.classList.add('active');
-      else if (!S.rainbow && sw.dataset.hue && parseFloat(sw.dataset.hue) === S.hue) sw.classList.add('active');
+    root.querySelectorAll<HTMLButtonElement>(".sw").forEach((sw) => {
+      sw.classList.remove("active");
+      if (S.rainbow && sw.dataset.theme === "rainbow") sw.classList.add("active");
+      else if (!S.rainbow && sw.dataset.hue && parseFloat(sw.dataset.hue) === S.hue)
+        sw.classList.add("active");
     });
 
     // Theme switcher
-    const themeBtn = root.querySelector<HTMLButtonElement>('#sl-themeBtn');
-    const themeMenu = root.querySelector<HTMLElement>('#sl-themeMenu');
-    const onThemeBtn = (e: Event) => { e.stopPropagation(); themeMenu?.classList.toggle('open'); };
+    const themeBtn = root.querySelector<HTMLButtonElement>("#sl-themeBtn");
+    const themeMenu = root.querySelector<HTMLElement>("#sl-themeMenu");
+    const onThemeBtn = (e: Event) => {
+      e.stopPropagation();
+      themeMenu?.classList.toggle("open");
+    };
     const onThemeMenuClick = (e: Event) => e.stopPropagation();
-    const onDocClick = () => themeMenu?.classList.remove('open');
-    themeBtn?.addEventListener('click', onThemeBtn);
-    themeMenu?.addEventListener('click', onThemeMenuClick);
-    document.addEventListener('click', onDocClick);
+    const onDocClick = () => themeMenu?.classList.remove("open");
+    themeBtn?.addEventListener("click", onThemeBtn);
+    themeMenu?.addEventListener("click", onThemeMenuClick);
+    document.addEventListener("click", onDocClick);
 
-    root.querySelectorAll<HTMLButtonElement>('.sw').forEach(sw => {
-      sw.addEventListener('click', () => {
-        root.querySelectorAll('.sw').forEach(s => s.classList.remove('active'));
-        sw.classList.add('active');
-        if (sw.dataset.theme === 'rainbow') { S.rainbow = true; localStorage.setItem('satyam-theme','rainbow'); }
-        else { S.rainbow = false; S.hue = parseFloat(sw.dataset.hue!); setAccentHue(root, S.hue); localStorage.setItem('satyam-theme', sw.dataset.hue!); }
+    root.querySelectorAll<HTMLButtonElement>(".sw").forEach((sw) => {
+      sw.addEventListener("click", () => {
+        root.querySelectorAll(".sw").forEach((s) => s.classList.remove("active"));
+        sw.classList.add("active");
+        if (sw.dataset.theme === "rainbow") {
+          S.rainbow = true;
+          localStorage.setItem("satyam-theme", "rainbow");
+        } else {
+          S.rainbow = false;
+          S.hue = parseFloat(sw.dataset.hue!);
+          setAccentHue(root, S.hue);
+          localStorage.setItem("satyam-theme", sw.dataset.hue!);
+        }
       });
     });
 
     // Mode toggle
-    const modeBtn = root.querySelector<HTMLButtonElement>('#sl-modeBtn');
-    const onModeBtn = () => { S.light = !S.light; applyMode(root, S.light); };
-    modeBtn?.addEventListener('click', onModeBtn);
+    const modeBtn = root.querySelector<HTMLButtonElement>("#sl-modeBtn");
+    const onModeBtn = () => {
+      S.light = !S.light;
+      applyMode(root, S.light);
+    };
+    modeBtn?.addEventListener("click", onModeBtn);
 
     // Custom cursor + pointer tracking for particle physics
-    const cur = root.querySelector<HTMLElement>('#sl-cursor');
-    let cx = innerWidth/2, cy = innerHeight/2, tx = cx, ty = cy;
+    const cur = root.querySelector<HTMLElement>("#sl-cursor");
+    let cx = innerWidth / 2,
+      cy = innerHeight / 2,
+      tx = cx,
+      ty = cy;
     let curRaf = 0;
     // NDC pointer for Three.js raycaster + energy for velocity physics
     const pointer = { x: 0, y: 0, has: false };
-    let pEnergy = 0, pLastX = 0, pLastY = 0;
+    let pEnergy = 0,
+      pLastX = 0,
+      pLastY = 0;
     const onMouseMove = (e: MouseEvent) => {
-      tx = e.clientX; ty = e.clientY;
+      tx = e.clientX;
+      ty = e.clientY;
       pointer.x = (e.clientX / innerWidth) * 2 - 1;
       pointer.y = -(e.clientY / innerHeight) * 2 + 1;
-      const ddx = e.clientX - pLastX, ddy = e.clientY - pLastY;
-      pLastX = e.clientX; pLastY = e.clientY;
-      if (pointer.has) pEnergy = Math.min(1, pEnergy + Math.sqrt(ddx*ddx + ddy*ddy) * 0.012);
+      const ddx = e.clientX - pLastX,
+        ddy = e.clientY - pLastY;
+      pLastX = e.clientX;
+      pLastY = e.clientY;
+      if (pointer.has) pEnergy = Math.min(1, pEnergy + Math.sqrt(ddx * ddx + ddy * ddy) * 0.012);
       pointer.has = true;
     };
-    const onMouseOut = () => { pEnergy = 0; };
-    const curLoop = () => { cx += (tx-cx)*.25; cy += (ty-cy)*.25; if (cur) cur.style.transform = `translate(${cx-2}px,${cy-2}px)`; curRaf = requestAnimationFrame(curLoop); };
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseout', onMouseOut);
+    const onMouseOut = () => {
+      pEnergy = 0;
+    };
+    const curLoop = () => {
+      cx += (tx - cx) * 0.25;
+      cy += (ty - cy) * 0.25;
+      if (cur) cur.style.transform = `translate(${cx - 2}px,${cy - 2}px)`;
+      curRaf = requestAnimationFrame(curLoop);
+    };
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseout", onMouseOut);
     curRaf = requestAnimationFrame(curLoop);
 
     // Reveal on scroll
-    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), {threshold:.18});
-    root.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    const io = new IntersectionObserver(
+      (es) =>
+        es.forEach((e) => {
+          if (e.isIntersecting) e.target.classList.add("in");
+        }),
+      { threshold: 0.18 },
+    );
+    root.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 
     // Active nav
-    const navLinks = [...root.querySelectorAll<HTMLAnchorElement>('nav.floating a[data-nav]')];
-    const navSecs = ['hero','capabilities','platform','about'].map(id => root.querySelector('#sl-'+id));
-    const navIo = new IntersectionObserver(es => es.forEach(e => {
-      if (e.isIntersecting) {
-        navLinks.forEach(a => a.classList.remove('active'));
-        const m = navLinks.find(a => a.getAttribute('href') === '#sl-'+e.target.id.replace('sl-',''));
-        if (m) m.classList.add('active');
-      }
-    }), {threshold:.5});
-    navSecs.forEach(s => s && navIo.observe(s));
+    const navLinks = [...root.querySelectorAll<HTMLAnchorElement>("nav.floating a[data-nav]")];
+    const navSecs = ["hero", "capabilities", "platform", "about"].map((id) =>
+      root.querySelector("#sl-" + id),
+    );
+    const navIo = new IntersectionObserver(
+      (es) =>
+        es.forEach((e) => {
+          if (e.isIntersecting) {
+            navLinks.forEach((a) => a.classList.remove("active"));
+            const m = navLinks.find(
+              (a) => a.getAttribute("href") === "#sl-" + e.target.id.replace("sl-", ""),
+            );
+            if (m) m.classList.add("active");
+          }
+        }),
+      { threshold: 0.5 },
+    );
+    navSecs.forEach((s) => s && navIo.observe(s));
 
     // ── Three.js particle brain ─────────────────────────────────────────
-    let renderer: import('three').WebGLRenderer | null = null;
+    let renderer: import("three").WebGLRenderer | null = null;
     let rafId = 0;
 
     (async () => {
       try {
-        const THREE = await import('three');
+        const THREE = await import("three");
         const canvas = canvasRef.current;
         if (!canvas || !rootRef.current) return;
 
-        renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-        renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+        renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
         renderer.setSize(innerWidth, innerHeight);
         const threeScene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, .1, 100);
+        const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 0.1, 100);
         camera.position.z = 14;
 
         const N = 9000;
         function makeSprite() {
-          const c = document.createElement('canvas'); c.width = c.height = 64;
-          const g = c.getContext('2d')!;
-          const grd = g.createRadialGradient(32,32,0,32,32,32);
-          grd.addColorStop(0,'rgba(255,255,255,1)'); grd.addColorStop(.3,'rgba(255,255,255,.65)'); grd.addColorStop(1,'rgba(255,255,255,0)');
-          g.fillStyle = grd; g.fillRect(0,0,64,64);
+          const c = document.createElement("canvas");
+          c.width = c.height = 64;
+          const g = c.getContext("2d")!;
+          const grd = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+          grd.addColorStop(0, "rgba(255,255,255,1)");
+          grd.addColorStop(0.3, "rgba(255,255,255,.65)");
+          grd.addColorStop(1, "rgba(255,255,255,0)");
+          g.fillStyle = grd;
+          g.fillRect(0, 0, 64, 64);
           return new THREE.CanvasTexture(c);
         }
-        function hash(n: number) { return (Math.sin(n)*43758.5453)%1; }
+        function hash(n: number) {
+          return (Math.sin(n) * 43758.5453) % 1;
+        }
 
-        const A = new Float32Array(N*3), B = new Float32Array(N*3), C = new Float32Array(N*3);
-        const gold = Math.PI*(3-Math.sqrt(5));
-        for (let i=0; i<N; i++) {
-          const t=i/N, inc=Math.acos(1-2*t), az=gold*i;
-          const r=5.2+(hash(i*12.9898)*1.4)+Math.sin(inc*5)*.35;
-          const x=Math.sin(inc)*Math.cos(az), y=Math.cos(inc), z=Math.sin(inc)*Math.sin(az);
-          A[i*3]=x*r; A[i*3+1]=y*r*0.92; A[i*3+2]=z*r;
-          B[i*3]=(Math.random()*2-1)*16; B[i*3+1]=(Math.random()*2-1)*7; B[i*3+2]=(Math.random()*2-1)*9;
-          const seg=i/N, turns=6, ang=seg*Math.PI*2*turns, strand=i%2===0?0:Math.PI;
-          const hr=2.4, hy=(seg-.5)*16;
-          C[i*3]=Math.cos(ang+strand)*hr; C[i*3+1]=hy; C[i*3+2]=Math.sin(ang+strand)*hr;
+        const A = new Float32Array(N * 3),
+          B = new Float32Array(N * 3),
+          C = new Float32Array(N * 3);
+        const gold = Math.PI * (3 - Math.sqrt(5));
+        for (let i = 0; i < N; i++) {
+          const t = i / N,
+            inc = Math.acos(1 - 2 * t),
+            az = gold * i;
+          const r = 5.2 + hash(i * 12.9898) * 1.4 + Math.sin(inc * 5) * 0.35;
+          const x = Math.sin(inc) * Math.cos(az),
+            y = Math.cos(inc),
+            z = Math.sin(inc) * Math.sin(az);
+          A[i * 3] = x * r;
+          A[i * 3 + 1] = y * r * 0.92;
+          A[i * 3 + 2] = z * r;
+          B[i * 3] = (Math.random() * 2 - 1) * 16;
+          B[i * 3 + 1] = (Math.random() * 2 - 1) * 7;
+          B[i * 3 + 2] = (Math.random() * 2 - 1) * 9;
+          const seg = i / N,
+            turns = 6,
+            ang = seg * Math.PI * 2 * turns,
+            strand = i % 2 === 0 ? 0 : Math.PI;
+          const hr = 2.4,
+            hy = (seg - 0.5) * 16;
+          C[i * 3] = Math.cos(ang + strand) * hr;
+          C[i * 3 + 1] = hy;
+          C[i * 3 + 2] = Math.sin(ang + strand) * hr;
         }
         const pos = new Float32Array(A);
         const geo = new THREE.BufferGeometry();
-        geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
-        const colors = new Float32Array(N*3);
-        geo.setAttribute('color', new THREE.BufferAttribute(colors,3));
+        geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+        const colors = new Float32Array(N * 3);
+        geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
-        const mat = new THREE.PointsMaterial({size:.13, map:makeSprite(), transparent:true,
-          depthWrite:false, blending:THREE.AdditiveBlending, color:new THREE.Color('#5cff45'),
-          sizeAttenuation:true, opacity:.95});
+        const mat = new THREE.PointsMaterial({
+          size: 0.13,
+          map: makeSprite(),
+          transparent: true,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+          color: new THREE.Color("#5cff45"),
+          sizeAttenuation: true,
+          opacity: 0.95,
+        });
         mat.blending = S.light ? THREE.NormalBlending : THREE.AdditiveBlending;
-        mat.vertexColors = !!S.rainbow; mat.opacity = S.light ? 1 : 0.95; mat.needsUpdate = true;
+        mat.vertexColors = !!S.rainbow;
+        mat.opacity = S.light ? 1 : 0.95;
+        mat.needsUpdate = true;
         const pts = new THREE.Points(geo, mat);
         threeScene.add(pts);
 
         let scrollP = 0;
-        const onScroll = () => { const h = document.body.scrollHeight-innerHeight; scrollP = h>0 ? scrollY/h : 0; };
-        window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+        const onScroll = () => {
+          const h = document.body.scrollHeight - innerHeight;
+          scrollP = h > 0 ? scrollY / h : 0;
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
 
-        const lerp = (a: number, b: number, t: number) => a+(b-a)*t;
+        const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
         // ── v2 velocity-based physics: inertia + trailing filaments + wake ──
-        const vel = new Float32Array(N*3);
-        const SPRING = 0.05, DAMP = 0.87, R = 4.8, R2 = R*R;
+        const vel = new Float32Array(N * 3);
+        const SPRING = 0.05,
+          DAMP = 0.87,
+          R = 4.8,
+          R2 = R * R;
 
         // Raycaster to project the cursor onto the z=0 plane in local space
-        const _ray  = new THREE.Raycaster();
-        const _ndc  = new THREE.Vector2();
-        const _plane = new THREE.Plane(new THREE.Vector3(0,0,1), 0);
-        const _hit   = new THREE.Vector3();
+        const _ray = new THREE.Raycaster();
+        const _ndc = new THREE.Vector2();
+        const _plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+        const _hit = new THREE.Vector3();
         const _localCur = new THREE.Vector3();
-        let pcx = 0, pcy = 0, pcz = 0, havePrev = false;
-        let rotX = 0, rotY = 0;
+        let pcx = 0,
+          pcy = 0,
+          pcz = 0,
+          havePrev = false;
+        let rotX = 0,
+          rotY = 0;
 
-        let pr = 0, _ml = S.light, _mr = S.rainbow;
+        let pr = 0,
+          _ml = S.light,
+          _mr = S.rainbow;
         const _c = new THREE.Color();
 
         const frame = (t: number) => {
           rafId = requestAnimationFrame(frame);
-          pr += (scrollP-pr)*.06;
+          pr += (scrollP - pr) * 0.06;
           const s = pr;
           pEnergy *= 0.93;
 
           // Whole-cloud parallax tilt toward cursor
-          const tgtRotY = pointer.x * 0.6, tgtRotX = -pointer.y * 0.4;
-          rotY += (tgtRotY-rotY)*0.05; rotX += (tgtRotX-rotX)*0.05;
-          pts.rotation.y = t*0.00006 + pr*1.2 + rotY;
-          pts.rotation.x = Math.sin(t*0.0002)*0.1 + rotX;
+          const tgtRotY = pointer.x * 0.6,
+            tgtRotX = -pointer.y * 0.4;
+          rotY += (tgtRotY - rotY) * 0.05;
+          rotX += (tgtRotX - rotX) * 0.05;
+          pts.rotation.y = t * 0.00006 + pr * 1.2 + rotY;
+          pts.rotation.x = Math.sin(t * 0.0002) * 0.1 + rotX;
 
           // Project cursor into local particle space
           pts.updateMatrixWorld();
           _ndc.set(pointer.x, pointer.y);
           _ray.setFromCamera(_ndc, camera);
-          let curActive = false, cvx = 0, cvy = 0, cvz = 0, lcx = 0, lcy = 0, lcz = 0;
+          let curActive = false,
+            cvx = 0,
+            cvy = 0,
+            cvz = 0,
+            lcx = 0,
+            lcy = 0,
+            lcz = 0;
           if (pointer.has && _ray.ray.intersectPlane(_plane, _hit)) {
-            _localCur.copy(_hit); pts.worldToLocal(_localCur);
-            lcx = _localCur.x; lcy = _localCur.y; lcz = _localCur.z; curActive = true;
-            if (havePrev) { cvx = lcx-pcx; cvy = lcy-pcy; cvz = lcz-pcz; }
-            pcx = lcx; pcy = lcy; pcz = lcz; havePrev = true;
-          } else { havePrev = false; }
+            _localCur.copy(_hit);
+            pts.worldToLocal(_localCur);
+            lcx = _localCur.x;
+            lcy = _localCur.y;
+            lcz = _localCur.z;
+            curActive = true;
+            if (havePrev) {
+              cvx = lcx - pcx;
+              cvy = lcy - pcy;
+              cvz = lcz - pcz;
+            }
+            pcx = lcx;
+            pcy = lcy;
+            pcz = lcz;
+            havePrev = true;
+          } else {
+            havePrev = false;
+          }
           // Clamp so fast jumps don't explode the field
           cvx = Math.max(-0.6, Math.min(0.6, cvx));
           cvy = Math.max(-0.6, Math.min(0.6, cvy));
           cvz = Math.max(-0.6, Math.min(0.6, cvz));
 
-          const wob = t*0.0006;
+          const wob = t * 0.0006;
           for (let i = 0; i < N; i++) {
             // Moving "home" = morph target + living wobble
             let hx: number, hy: number, hz: number;
-            if (s<0.5) { const k=s/0.5; hx=lerp(A[i*3],B[i*3],k); hy=lerp(A[i*3+1],B[i*3+1],k); hz=lerp(A[i*3+2],B[i*3+2],k); }
-            else        { const k=(s-0.5)/0.5; hx=lerp(B[i*3],C[i*3],k); hy=lerp(B[i*3+1],C[i*3+1],k); hz=lerp(B[i*3+2],C[i*3+2],k); }
-            hx += Math.sin(wob+i)*0.05; hy += Math.cos((wob+i)*1.1)*0.05;
+            if (s < 0.5) {
+              const k = s / 0.5;
+              hx = lerp(A[i * 3], B[i * 3], k);
+              hy = lerp(A[i * 3 + 1], B[i * 3 + 1], k);
+              hz = lerp(A[i * 3 + 2], B[i * 3 + 2], k);
+            } else {
+              const k = (s - 0.5) / 0.5;
+              hx = lerp(B[i * 3], C[i * 3], k);
+              hy = lerp(B[i * 3 + 1], C[i * 3 + 1], k);
+              hz = lerp(B[i * 3 + 2], C[i * 3 + 2], k);
+            }
+            hx += Math.sin(wob + i) * 0.05;
+            hy += Math.cos((wob + i) * 1.1) * 0.05;
 
-            let px = pos[i*3], py = pos[i*3+1], pz = pos[i*3+2];
-            let vx = vel[i*3], vy = vel[i*3+1], vz = vel[i*3+2];
+            let px = pos[i * 3],
+              py = pos[i * 3 + 1],
+              pz = pos[i * 3 + 2];
+            let vx = vel[i * 3],
+              vy = vel[i * 3 + 1],
+              vz = vel[i * 3 + 2];
 
             // 1) Spring back toward home (slow spring => trails, then re-coalesce)
-            vx += (hx-px)*SPRING; vy += (hy-py)*SPRING; vz += (hz-pz)*SPRING;
+            vx += (hx - px) * SPRING;
+            vy += (hy - py) * SPRING;
+            vz += (hz - pz) * SPRING;
 
             // 2) Cursor disturbance = radial lift + tangential swirl + drag/wake
             if (curActive) {
-              const dx = px-lcx, dy = py-lcy, dz = pz-lcz, d2 = dx*dx+dy*dy+dz*dz;
+              const dx = px - lcx,
+                dy = py - lcy,
+                dz = pz - lcz,
+                d2 = dx * dx + dy * dy + dz * dz;
               if (d2 < R2) {
-                const dist = Math.sqrt(d2)+1e-4, w = 1-dist/R, inv = 1/dist, en = 0.4+pEnergy;
-                const fr = w*0.10*en;                               // radial lift
-                vx += dx*inv*fr; vy += dy*inv*fr; vz += dz*inv*fr;
-                const tl = Math.sqrt(dz*dz+dx*dx)+1e-4, ft = w*0.18*en; // tangential swirl
-                vx += (-dz/tl)*ft; vz += (dx/tl)*ft;
-                const fd = w*1.0;                                   // wake/drag along cursor
-                vx += cvx*fd; vy += cvy*fd; vz += cvz*fd;
+                const dist = Math.sqrt(d2) + 1e-4,
+                  w = 1 - dist / R,
+                  inv = 1 / dist,
+                  en = 0.4 + pEnergy;
+                const fr = w * 0.1 * en; // radial lift
+                vx += dx * inv * fr;
+                vy += dy * inv * fr;
+                vz += dz * inv * fr;
+                const tl = Math.sqrt(dz * dz + dx * dx) + 1e-4,
+                  ft = w * 0.18 * en; // tangential swirl
+                vx += (-dz / tl) * ft;
+                vz += (dx / tl) * ft;
+                const fd = w * 1.0; // wake/drag along cursor
+                vx += cvx * fd;
+                vy += cvy * fd;
+                vz += cvz * fd;
               }
             }
 
             // 3) Damping + integrate
-            vx *= DAMP; vy *= DAMP; vz *= DAMP;
-            px += vx; py += vy; pz += vz;
-            vel[i*3] = vx; vel[i*3+1] = vy; vel[i*3+2] = vz;
-            pos[i*3] = px; pos[i*3+1] = py; pos[i*3+2] = pz;
+            vx *= DAMP;
+            vy *= DAMP;
+            vz *= DAMP;
+            px += vx;
+            py += vy;
+            pz += vz;
+            vel[i * 3] = vx;
+            vel[i * 3 + 1] = vy;
+            vel[i * 3 + 2] = vz;
+            pos[i * 3] = px;
+            pos[i * 3 + 1] = py;
+            pos[i * 3 + 2] = pz;
           }
           geo.attributes.position.needsUpdate = true;
-          if (S.light!==_ml||S.rainbow!==_mr) {
-            _ml=S.light; _mr=S.rainbow;
+          if (S.light !== _ml || S.rainbow !== _mr) {
+            _ml = S.light;
+            _mr = S.rainbow;
             mat.blending = S.light ? THREE.NormalBlending : THREE.AdditiveBlending;
-            mat.vertexColors = S.rainbow; mat.opacity = S.light?1:.95; mat.needsUpdate=true;
+            mat.vertexColors = S.rainbow;
+            mat.opacity = S.light ? 1 : 0.95;
+            mat.needsUpdate = true;
           }
           if (S.rainbow) {
-            const off=t*.00006, L=S.light?.46:.62;
-            for (let i=0;i<N;i++) { _c.setHSL((i/N+off)%1,.95,L); colors[i*3]=_c.r; colors[i*3+1]=_c.g; colors[i*3+2]=_c.b; }
-            geo.attributes.color.needsUpdate=true;
-            if ((window as any).satyamSetAccentHue) (window as any).satyamSetAccentHue((off*2)%1);
+            const off = t * 0.00006,
+              L = S.light ? 0.46 : 0.62;
+            for (let i = 0; i < N; i++) {
+              _c.setHSL((i / N + off) % 1, 0.95, L);
+              colors[i * 3] = _c.r;
+              colors[i * 3 + 1] = _c.g;
+              colors[i * 3 + 2] = _c.b;
+            }
+            geo.attributes.color.needsUpdate = true;
+            if ((window as any).satyamSetAccentHue)
+              (window as any).satyamSetAccentHue((off * 2) % 1);
           } else if (S.light) {
-            mat.color.setRGB(.05,.05,.05);
+            mat.color.setRGB(0.05, 0.05, 0.05);
           } else {
-            mat.color.setHSL(S.hue, S.sat, .45+Math.sin(pr*Math.PI)*.12);
+            mat.color.setHSL(S.hue, S.sat, 0.45 + Math.sin(pr * Math.PI) * 0.12);
           }
-          camera.position.x = Math.sin(t*.0001)*.6; camera.lookAt(0,0,0);
+          camera.position.x = Math.sin(t * 0.0001) * 0.6;
+          camera.lookAt(0, 0, 0);
           renderer!.render(threeScene, camera);
         };
         rafId = requestAnimationFrame(frame);
 
-        const onResize = () => { camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer!.setSize(innerWidth,innerHeight); };
-        window.addEventListener('resize', onResize);
+        const onResize = () => {
+          camera.aspect = innerWidth / innerHeight;
+          camera.updateProjectionMatrix();
+          renderer!.setSize(innerWidth, innerHeight);
+        };
+        window.addEventListener("resize", onResize);
 
         // store cleanup refs
         return () => {
           cancelAnimationFrame(rafId);
-          window.removeEventListener('scroll', onScroll);
-          window.removeEventListener('resize', onResize);
-          geo.dispose(); mat.dispose(); renderer!.dispose();
+          window.removeEventListener("scroll", onScroll);
+          window.removeEventListener("resize", onResize);
+          geo.dispose();
+          mat.dispose();
+          renderer!.dispose();
         };
       } catch (e) {
-        console.warn('Three.js failed to load, particle brain unavailable:', e);
+        console.warn("Three.js failed to load, particle brain unavailable:", e);
       }
     })();
 
     return () => {
       cancelAnimationFrame(rafId);
       cancelAnimationFrame(curRaf);
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseout', onMouseOut);
-      document.removeEventListener('click', onDocClick);
-      themeBtn?.removeEventListener('click', onThemeBtn);
-      themeMenu?.removeEventListener('click', onThemeMenuClick);
-      modeBtn?.removeEventListener('click', onModeBtn);
-      io.disconnect(); navIo.disconnect();
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseout", onMouseOut);
+      document.removeEventListener("click", onDocClick);
+      themeBtn?.removeEventListener("click", onThemeBtn);
+      themeMenu?.removeEventListener("click", onThemeMenuClick);
+      modeBtn?.removeEventListener("click", onModeBtn);
+      io.disconnect();
+      navIo.disconnect();
       renderer?.dispose();
       // Remove scoped style on unmount so no bleed if someone re-mounts
-      document.getElementById('satyam-landing-styles')?.remove();
+      document.getElementById("satyam-landing-styles")?.remove();
     };
   }, []);
 
@@ -506,29 +704,104 @@ function LandingPage() {
       <div className="sl-godray" />
       <canvas ref={canvasRef} id="sl-scene" />
       <div className="sl-vignette" />
-      <div id="sl-cursor"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M0 0 L0 14 L4 10 L8 16 L10 15 L6 9 L12 9 Z" fill="#eafff0"/></svg></div>
+      <div id="sl-cursor">
+        <svg width="16" height="16" viewBox="0 0 16 16">
+          <path d="M0 0 L0 14 L4 10 L8 16 L10 15 L6 9 L12 9 Z" fill="#eafff0" />
+        </svg>
+      </div>
 
       <header>
         <div className="sl-logo">
-          <svg className="mark" viewBox="0 0 40 30" fill="none"><path d="M4 4 L16 15 L4 26" stroke="#6dff52" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/><path d="M22 4 L10 15 L22 26" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity=".85"/></svg>
-          <span style={{fontFamily:'var(--lf)',fontWeight:700,letterSpacing:'.06em',lineHeight:'1.05'}}><b>SAT</b><span>YAM</span><span className="logo-sub">{t("build by Teen Titans")}</span></span>
+          <svg className="mark" viewBox="0 0 40 30" fill="none">
+            <path
+              d="M4 4 L16 15 L4 26"
+              stroke="#6dff52"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M22 4 L10 15 L22 26"
+              stroke="#fff"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              opacity=".85"
+            />
+          </svg>
+          <span
+            style={{
+              fontFamily: "var(--lf)",
+              fontWeight: 700,
+              letterSpacing: ".06em",
+              lineHeight: "1.05",
+            }}
+          >
+            <b>SAT</b>
+            <span>YAM</span>
+            <span className="logo-sub">{t("build by Teen Titans")}</span>
+          </span>
         </div>
         <div className="header-right">
-          <a className="nav-link" href="#sl-features">{t("Features")}</a>
-          <Link className="nav-link" to="/login">{t("Login")}</Link>
-          <button className="mode-btn" id="sl-modeBtn" aria-label="Toggle light or dark"><span className="ic-moon">🌙</span><span className="ic-sun">☀️</span></button>
+          <a className="nav-link" href="#sl-features">
+            {t("Features")}
+          </a>
+          <Link className="nav-link" to="/login">
+            {t("Login")}
+          </Link>
+          <button className="mode-btn" id="sl-modeBtn" aria-label="Toggle light or dark">
+            <span className="ic-moon">🌙</span>
+            <span className="ic-sun">☀️</span>
+          </button>
           <div className="theme-switch">
-            <button className="theme-btn" id="sl-themeBtn" aria-label="Change theme"><span className="theme-ring" /></button>
+            <button className="theme-btn" id="sl-themeBtn" aria-label="Change theme">
+              <span className="theme-ring" />
+            </button>
             <div className="theme-menu" id="sl-themeMenu">
               <span className="tm-title">Particle Theme</span>
               <div className="tm-grid">
-                <button className="sw active" data-hue="0.33" style={{'--sw':'#39d02a'} as React.CSSProperties} title="Emerald" />
-                <button className="sw" data-hue="0.47" style={{'--sw':'#22d0b8'} as React.CSSProperties} title="Teal" />
-                <button className="sw" data-hue="0.57" style={{'--sw':'#2a8cff'} as React.CSSProperties} title="Azure" />
-                <button className="sw" data-hue="0.72" style={{'--sw':'#8c5cff'} as React.CSSProperties} title="Violet" />
-                <button className="sw" data-hue="0.85" style={{'--sw':'#ff5ce0'} as React.CSSProperties} title="Magenta" />
-                <button className="sw" data-hue="0" style={{'--sw':'#ff4d3a'} as React.CSSProperties} title="Crimson" />
-                <button className="sw" data-hue="0.09" style={{'--sw':'#ff9a3a'} as React.CSSProperties} title="Amber" />
+                <button
+                  className="sw active"
+                  data-hue="0.33"
+                  style={{ "--sw": "#39d02a" } as React.CSSProperties}
+                  title="Emerald"
+                />
+                <button
+                  className="sw"
+                  data-hue="0.47"
+                  style={{ "--sw": "#22d0b8" } as React.CSSProperties}
+                  title="Teal"
+                />
+                <button
+                  className="sw"
+                  data-hue="0.57"
+                  style={{ "--sw": "#2a8cff" } as React.CSSProperties}
+                  title="Azure"
+                />
+                <button
+                  className="sw"
+                  data-hue="0.72"
+                  style={{ "--sw": "#8c5cff" } as React.CSSProperties}
+                  title="Violet"
+                />
+                <button
+                  className="sw"
+                  data-hue="0.85"
+                  style={{ "--sw": "#ff5ce0" } as React.CSSProperties}
+                  title="Magenta"
+                />
+                <button
+                  className="sw"
+                  data-hue="0"
+                  style={{ "--sw": "#ff4d3a" } as React.CSSProperties}
+                  title="Crimson"
+                />
+                <button
+                  className="sw"
+                  data-hue="0.09"
+                  style={{ "--sw": "#ff9a3a" } as React.CSSProperties}
+                  title="Amber"
+                />
                 <button className="sw rainbow" data-theme="rainbow" title="Rainbow" />
               </div>
             </div>
@@ -536,21 +809,38 @@ function LandingPage() {
           <button
             onClick={() => setLang(lang === "EN" ? "KN" : "EN")}
             className="btn-ghost"
-            style={{ display: "inline-flex", alignItems: "center", gap: "8px", height: "40px", padding: "0 16px" }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              height: "40px",
+              padding: "0 16px",
+            }}
           >
             <span style={{ opacity: lang === "EN" ? 1 : 0.4 }}>EN</span>
             <span style={{ opacity: 0.3 }}>|</span>
             <span style={{ opacity: lang === "KN" ? 1 : 0.4 }}>ಕನ್ನಡ</span>
           </button>
-          <Link className="btn-pill" to="/about">{t("About")} <span className="dot">↗</span></Link>
+          <Link className="btn-pill" to="/about">
+            {t("About")} <span className="dot">↗</span>
+          </Link>
         </div>
       </header>
 
       <nav className="floating">
-        <a href="#sl-hero" className="active" data-nav><span className="led" />{t("Home")}</a>
-        <a href="#sl-capabilities" data-nav>{t("Capabilities")} <span className="plus">+</span></a>
-        <a href="#sl-platform" data-nav>{t("Platform")}</a>
-        <Link to="/about" data-nav>{t("About us")}</Link>
+        <a href="#sl-hero" className="active" data-nav>
+          <span className="led" />
+          {t("Home")}
+        </a>
+        <a href="#sl-capabilities" data-nav>
+          {t("Capabilities")} <span className="plus">+</span>
+        </a>
+        <a href="#sl-platform" data-nav>
+          {t("Platform")}
+        </a>
+        <Link to="/about" data-nav>
+          {t("About us")}
+        </Link>
       </nav>
 
       <main>
@@ -572,10 +862,18 @@ function LandingPage() {
                 <span className="thin">the</span> <span className="accent">Data.</span>
               </h1>
             )}
-            <p className="hero-sub reveal d2">{t("Satyam turns scattered case records, statements and signals into one bilingual, voice-driven, explainable intelligence picture for the Karnataka State Police.")}</p>
+            <p className="hero-sub reveal d2">
+              {t(
+                "Satyam turns scattered case records, statements and signals into one bilingual, voice-driven, explainable intelligence picture for the Karnataka State Police.",
+              )}
+            </p>
             <div className="hero-cta reveal d3">
-              <Link className="btn-pill" to="/login">{t("Login")} <span className="dot">↗</span></Link>
-              <a className="btn-ghost" href="#sl-features"><span className="play">▶</span> {t("Watch Demo")}</a>
+              <Link className="btn-pill" to="/login">
+                {t("Login")} <span className="dot">↗</span>
+              </Link>
+              <a className="btn-ghost" href="#sl-features">
+                <span className="play">▶</span> {t("Watch Demo")}
+              </a>
             </div>
           </div>
         </section>
@@ -584,12 +882,20 @@ function LandingPage() {
           <div className="wrap">
             <h2 className="reveal">
               {lang === "KN" ? (
-                <>ಸೂಕ್ತ ಅಪರಾಧ <span className="accent">⊗</span> ಗುಪ್ತಚರ ಪರಿಹಾರಗಳು</>
+                <>
+                  ಸೂಕ್ತ ಅಪರಾಧ <span className="accent">⊗</span> ಗುಪ್ತಚರ ಪರಿಹಾರಗಳು
+                </>
               ) : (
-                <>Tailored crime <span className="accent">⊗</span> intelligence solutions</>
+                <>
+                  Tailored crime <span className="accent">⊗</span> intelligence solutions
+                </>
               )}
             </h2>
-            <p className="lead reveal d1" style={{textAlign:'center'}}>{t("From first FIR to courtroom-ready reasoning — grounded Q&A, networks, money-trails, forecasting, and a hands-free voice & gesture copilot, all in one place.")}</p>
+            <p className="lead reveal d1" style={{ textAlign: "center" }}>
+              {t(
+                "From first FIR to courtroom-ready reasoning — grounded Q&A, networks, money-trails, forecasting, and a hands-free voice & gesture copilot, all in one place.",
+              )}
+            </p>
           </div>
         </section>
 
@@ -598,17 +904,70 @@ function LandingPage() {
             <span className="eyebrow reveal">{t("Capabilities")}</span>
             <h2 className="reveal d1">
               {lang === "KN" ? (
-                <>ನಿಮ್ಮ ಕಠಿಣ ಪ್ರಕರಣಗಳಿಗೆ<br />ನಾವು ಗುಪ್ತಚರವನ್ನು ಒದಗಿಸುತ್ತೇವೆ</>
+                <>
+                  ನಿಮ್ಮ ಕಠಿಣ ಪ್ರಕರಣಗಳಿಗೆ
+                  <br />
+                  ನಾವು ಗುಪ್ತಚರವನ್ನು ಒದಗಿಸುತ್ತೇವೆ
+                </>
               ) : (
-                <>We provide intelligence for<br />your toughest cases</>
+                <>
+                  We provide intelligence for
+                  <br />
+                  your toughest cases
+                </>
               )}
             </h2>
             <div className="grid">
-              <div className="card span7 reveal"><div className="glow" /><div className="ico">◈</div><h3>{t("Investigation Console")}</h3><p>{t("Ask in Kannada or English. Satyam runs grounded Text-to-SQL and RAG over case narratives, cites every source, and streams a spoken summary back to you.")}</p></div>
-              <div className="card span5 reveal d1"><div className="glow" /><div className="ico">◉</div><h3>{t("Network & Rings")}</h3><p>{t("Surface hidden links between people, places and cases, expand ego-networks, and auto-detect criminal rings on an interactive graph.")}</p></div>
-              <div className="card span4 reveal"><div className="glow" /><div className="ico">₹</div><h3>{t("Financial Money-Trail")}</h3><p>{t("Trace funds across accounts and transactions with a flagged BFS money-trail — never via raw LLM SQL.")}</p></div>
-              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">◆</div><h3>{t("Forecast & Trends")}</h3><p>{t("Anticipate hotspots and risk windows, and cluster modus-operandi patterns from historical data.")}</p></div>
-              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">◉</div><h3>{t("Voice, Eye & Gesture Copilot")}</h3><p>{t("Hands-free, bilingual control — speak a command, calibrate eye-gaze tracking, or use webcam hand gestures to navigate and run any screen.")}</p></div>
+              <div className="card span7 reveal">
+                <div className="glow" />
+                <div className="ico">◈</div>
+                <h3>{t("Investigation Console")}</h3>
+                <p>
+                  {t(
+                    "Ask in Kannada or English. Satyam runs grounded Text-to-SQL and RAG over case narratives, cites every source, and streams a spoken summary back to you.",
+                  )}
+                </p>
+              </div>
+              <div className="card span5 reveal d1">
+                <div className="glow" />
+                <div className="ico">◉</div>
+                <h3>{t("Network & Rings")}</h3>
+                <p>
+                  {t(
+                    "Surface hidden links between people, places and cases, expand ego-networks, and auto-detect criminal rings on an interactive graph.",
+                  )}
+                </p>
+              </div>
+              <div className="card span4 reveal">
+                <div className="glow" />
+                <div className="ico">₹</div>
+                <h3>{t("Financial Money-Trail")}</h3>
+                <p>
+                  {t(
+                    "Trace funds across accounts and transactions with a flagged BFS money-trail — never via raw LLM SQL.",
+                  )}
+                </p>
+              </div>
+              <div className="card span4 reveal d1">
+                <div className="glow" />
+                <div className="ico">◆</div>
+                <h3>{t("Forecast & Trends")}</h3>
+                <p>
+                  {t(
+                    "Anticipate hotspots and risk windows, and cluster modus-operandi patterns from historical data.",
+                  )}
+                </p>
+              </div>
+              <div className="card span4 reveal d2">
+                <div className="glow" />
+                <div className="ico">◉</div>
+                <h3>{t("Voice, Eye & Gesture Copilot")}</h3>
+                <p>
+                  {t(
+                    "Hands-free, bilingual control — speak a command, calibrate eye-gaze tracking, or use webcam hand gestures to navigate and run any screen.",
+                  )}
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -618,40 +977,169 @@ function LandingPage() {
             <span className="eyebrow reveal">{t("Platform")}</span>
             <h2 className="reveal d1">
               {lang === "KN" ? (
-                <>ಪ್ರಗತಿಯಲ್ಲಿ ಮುಂಚೂಣಿಯಲ್ಲಿರಲು<br />ನಿರ್ಮಿಸಲಾಗಿದೆ</>
+                <>
+                  ಪ್ರಗತಿಯಲ್ಲಿ ಮುಂಚೂಣಿಯಲ್ಲಿರಲು
+                  <br />
+                  ನಿರ್ಮಿಸಲಾಗಿದೆ
+                </>
               ) : (
-                <>Built to stay ahead<br />of the curve</>
+                <>
+                  Built to stay ahead
+                  <br />
+                  of the curve
+                </>
               )}
             </h2>
-            <p className="lead reveal d1">{t("Private by design, fully auditable, and powered by state-of-the-art retrieval and reasoning — on synthetic data, with role-based access at every layer.")}</p>
+            <p className="lead reveal d1">
+              {t(
+                "Private by design, fully auditable, and powered by state-of-the-art retrieval and reasoning — on synthetic data, with role-based access at every layer.",
+              )}
+            </p>
             <div className="grid">
-              <div className="card span4 reveal"><div className="stat">100%</div><div className="stat-label">{t("Synthetic, privacy-safe data")}</div></div>
-              <div className="card span4 reveal d1"><div className="stat">2×</div><div className="stat-label">{t("Bilingual — Kannada & English")}</div></div>
-              <div className="card span4 reveal d2"><div className="stat">14</div><div className="stat-label">{t("Screens in one voice-driven workspace")}</div></div>
+              <div className="card span4 reveal">
+                <div className="stat">100%</div>
+                <div className="stat-label">{t("Synthetic, privacy-safe data")}</div>
+              </div>
+              <div className="card span4 reveal d1">
+                <div className="stat">2×</div>
+                <div className="stat-label">{t("Bilingual — Kannada & English")}</div>
+              </div>
+              {/* 20 = route files under src/routes excluding the landing, login,
+                  about and the router root. 17 of them are reachable from the
+                  sidebar; the rest are drill-downs. Update the number when a screen
+                  is added, not the label. */}
+              <div className="card span4 reveal d2">
+                <div className="stat">20</div>
+                <div className="stat-label">{t("Screens in one voice-driven workspace")}</div>
+              </div>
             </div>
           </div>
         </section>
 
         <section id="sl-features">
           <div className="wrap">
-            <div style={{textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center'}}>
+            <div
+              style={{
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
               <span className="tag-chip reveal">{t("AI Functions")}</span>
-              <h2 className="reveal d1" style={{marginTop:18}}>
+              <h2 className="reveal d1" style={{ marginTop: 18 }}>
                 {lang === "KN" ? (
-                  <>ಅತ್ಯಾಧುನಿಕ AI,<br />ಬೀಟ್‌ಗಾಗಿ ನಿರ್ಮಿಸಲಾಗಿದೆ</>
+                  <>
+                    ಅತ್ಯಾಧುನಿಕ AI,
+                    <br />
+                    ಬೀಟ್‌ಗಾಗಿ ನಿರ್ಮಿಸಲಾಗಿದೆ
+                  </>
                 ) : (
-                  <>State-of-the-art AI,<br />built for the beat</>
+                  <>
+                    State-of-the-art AI,
+                    <br />
+                    built for the beat
+                  </>
                 )}
               </h2>
-              <p className="lead reveal d2" style={{textAlign:'center',maxWidth:620}}>{t("A bilingual voice agent, eye-gaze tracking, hands-free hand gesture control, an AI investigation canvas, and grounded reasoning — all behind row-level security and a tamper-evident audit trail.")}</p>
+              <p className="lead reveal d2" style={{ textAlign: "center", maxWidth: 620 }}>
+                {t(
+                  "A bilingual voice agent, eye-gaze tracking, hands-free hand gesture control, an AI investigation canvas, and grounded reasoning — all behind row-level security and a tamper-evident audit trail.",
+                )}
+              </p>
             </div>
             <div className="grid">
-              <div className="card span4 reveal"><div className="glow" /><div className="ico">◉</div><h3>{t("Voice Screen Agent")}</h3><p>{t("Speak in English or Kannada — the copilot navigates to the right screen and runs the task for you: set filters, search a network, generate a report. It answers data questions aloud, grounded in your records.")}</p></div>
-              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">⚇</div><h3>{t("Eye & Gesture Control")}</h3><p>{t("Drive the cursor and hover elements using eye-gaze tracking, and click or scroll with webcam hand gestures. Say “Satyam” to wake the copilot, and the session auto-locks & blurs PII the moment you step away.")}</p></div>
-              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">◈</div><h3>{t("AI Investigation Board")}</h3><p>{t("Describe a crime scene in plain language and the AI lays out suspects, victims, locations and links on an infinite canvas — auto-arranged with production-grade graph layouts.")}</p></div>
-              <div className="card span4 reveal"><div className="glow" /><div className="ico">◎</div><h3>{t("Grounded Text-to-SQL")}</h3><p>{t("Natural-language questions become safe, read-only SQL — validated by a sqlglot guard, scoped by Row-Level Security, and pointed only at masked views, never raw PII.")}</p></div>
-              <div className="card span4 reveal d1"><div className="glow" /><div className="ico">⛨</div><h3>{t("Tamper-Evident Audit")}</h3><p>{t("Every query is written to a SHA-256 hash-chained audit log, with four-tier PII masking and L1–L4 clearance enforced at every layer.")}</p></div>
-              <div className="card span4 reveal d2"><div className="glow" /><div className="ico">▤</div><h3>{t("Court-Ready Reports")}</h3><p>{t("Build cited intelligence briefs from cases and FIRs, then export print-ready PDFs — with on-demand Kannada translation across the whole workspace.")}</p></div>
+              <div className="card span4 reveal">
+                <div className="glow" />
+                <div className="ico">◉</div>
+                <h3>{t("Voice Screen Agent")}</h3>
+                <p>
+                  {t(
+                    "Speak in English or Kannada — the copilot navigates to the right screen and runs the task for you: set filters, search a network, generate a report. It answers data questions aloud, grounded in your records.",
+                  )}
+                </p>
+              </div>
+              <div className="card span4 reveal d1">
+                <div className="glow" />
+                <div className="ico">⚇</div>
+                <h3>{t("Eye & Gesture Control")}</h3>
+                <p>
+                  {t(
+                    "Drive the cursor and hover elements using eye-gaze tracking, and click or scroll with webcam hand gestures. Say “Satyam” to wake the copilot, and the session auto-locks & blurs PII the moment you step away.",
+                  )}
+                </p>
+              </div>
+              <div className="card span4 reveal d2">
+                <div className="glow" />
+                <div className="ico">◈</div>
+                <h3>{t("AI Investigation Board")}</h3>
+                <p>
+                  {t(
+                    "Describe a crime scene in plain language and the AI lays out suspects, victims, locations and links on an infinite canvas — auto-arranged with production-grade graph layouts.",
+                  )}
+                </p>
+              </div>
+              <div className="card span4 reveal">
+                <div className="glow" />
+                <div className="ico">◎</div>
+                <h3>{t("Grounded Text-to-SQL")}</h3>
+                <p>
+                  {t(
+                    "Natural-language questions become safe, read-only SQL — validated by a sqlglot guard, scoped by Row-Level Security, and pointed only at masked views, never raw PII.",
+                  )}
+                </p>
+              </div>
+              <div className="card span4 reveal d1">
+                <div className="glow" />
+                <div className="ico">⛨</div>
+                <h3>{t("Tamper-Evident Audit")}</h3>
+                <p>
+                  {t(
+                    "Every query is written to a SHA-256 hash-chained audit log, with four-tier PII masking and L1–L4 clearance enforced at every layer.",
+                  )}
+                </p>
+              </div>
+              <div className="card span4 reveal d2">
+                <div className="glow" />
+                <div className="ico">▤</div>
+                <h3>{t("Court-Ready Reports")}</h3>
+                <p>
+                  {t(
+                    "Build cited intelligence briefs from cases and FIRs, then export print-ready PDFs — with on-demand Kannada translation across the whole workspace.",
+                  )}
+                </p>
+              </div>
+              {/* ── Capabilities added after the first cut of this page ────────── */}
+              <div className="card span4 reveal">
+                <div className="glow" />
+                <div className="ico">⛭</div>
+                <h3>{t("Document Translation & Sealing")}</h3>
+                <p>
+                  {t(
+                    "Upload a PDF or statement, translate it to Kannada, then seal its SHA-256 to the same hash-chained ledger the audit log uses — so any later alteration of the original can be proven.",
+                  )}
+                </p>
+              </div>
+              <div className="card span4 reveal d1">
+                <div className="glow" />
+                <div className="ico">◬</div>
+                <h3>{t("Forecast & Response Ops")}</h3>
+                <p>
+                  {t(
+                    "Anticipate hotspots and risk windows on a scored grid, then act on them: predictive deployment, dispatch with green corridors, and live camera review with on-device detection.",
+                  )}
+                </p>
+              </div>
+              <div className="card span4 reveal d2">
+                <div className="glow" />
+                <div className="ico">◍</div>
+                <h3>{t("Person 360 & News Feed")}</h3>
+                <p>
+                  {t(
+                    "Pull one person's cases, links, movements and financial trail into a single dossier, and watch an ingested news feed for signals that touch open cases.",
+                  )}
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -659,16 +1147,30 @@ function LandingPage() {
         <section id="sl-contact" className="center">
           <div className="wrap">
             <span className="tag-chip reveal">2026 · KSP × SATYAM</span>
-            <h2 className="reveal d1" style={{marginTop:20,fontSize:'clamp(44px,7vw,96px)'}}>
+            <h2 className="reveal d1" style={{ marginTop: 20, fontSize: "clamp(44px,7vw,96px)" }}>
               {lang === "KN" ? (
-                <>ಇಂದು ನಮ್ಮನ್ನು<br />ಸಂಪರ್ಕಿಸಿ <span className="accent">✎</span></>
+                <>
+                  ಇಂದು ನಮ್ಮನ್ನು
+                  <br />
+                  ಸಂಪರ್ಕಿಸಿ <span className="accent">✎</span>
+                </>
               ) : (
-                <>Contact us<br />Today <span className="accent">✎</span></>
+                <>
+                  Contact us
+                  <br />
+                  Today <span className="accent">✎</span>
+                </>
               )}
             </h2>
-            <p className="lead reveal d2" style={{textAlign:'center'}}>{t("Whenever you have queries, require a walkthrough, or need prompt support — we are just a click away.")}</p>
-            <div className="reveal d3" style={{marginTop:30}}>
-              <Link className="btn-pill" to="/console">{t("Open Console")} <span className="dot">↗</span></Link>
+            <p className="lead reveal d2" style={{ textAlign: "center" }}>
+              {t(
+                "Whenever you have queries, require a walkthrough, or need prompt support — we are just a click away.",
+              )}
+            </p>
+            <div className="reveal d3" style={{ marginTop: 30 }}>
+              <Link className="btn-pill" to="/console">
+                {t("Open Console")} <span className="dot">↗</span>
+              </Link>
             </div>
           </div>
         </section>
@@ -678,23 +1180,43 @@ function LandingPage() {
         <div className="foot-grid">
           <div className="foot-brand">
             {lang === "KN" ? (
-              <>ಸತ್ಯಂ —<br /><span className="muted">ಸೂಕ್ತ  ಅಪರಾಧ <span style={{color:'var(--green-bright)'}}>⊗</span> ಗುಪ್ತಚರ</span></>
+              <>
+                ಸತ್ಯಂ —<br />
+                <span className="muted">
+                  ಸೂಕ್ತ ಅಪರಾಧ <span style={{ color: "var(--green-bright)" }}>⊗</span> ಗುಪ್ತಚರ
+                </span>
+              </>
             ) : (
-              <>SATYAM —<br /><span className="muted">tailored crime <span style={{color:'var(--green-bright)'}}>⊗</span> intelligence</span></>
+              <>
+                SATYAM —<br />
+                <span className="muted">
+                  tailored crime <span style={{ color: "var(--green-bright)" }}>⊗</span>{" "}
+                  intelligence
+                </span>
+              </>
             )}
           </div>
-          <div className="fcol"><h4>{t("Capabilities")}</h4>
+          <div className="fcol">
+            <h4>{t("Capabilities")}</h4>
             <Link to="/console">{t("Investigation Console")}</Link>
             <Link to="/network">{t("Network Analysis")}</Link>
             <Link to="/forecast">{t("Forecasting")}</Link>
           </div>
-          <div className="fcol"><h4>{t("Explore")}</h4>
+          <div className="fcol">
+            <h4>{t("Explore")}</h4>
             <Link to="/about">{t("About us")}</Link>
             <a href="#sl-contact">{t("Contact")}</a>
           </div>
-          <div className="fcol"><h4>{t("Connect")}</h4><a href="#">LinkedIn</a><a href="#">hack2skill</a></div>
+          <div className="fcol">
+            <h4>{t("Connect")}</h4>
+            <a href="#">LinkedIn</a>
+            <a href="#">hack2skill</a>
+          </div>
         </div>
-        <div className="foot-bottom"><span>{t("© 2026 Satyam. All rights reserved.")}</span><span>{t("build by Teen Titans")}</span></div>
+        <div className="foot-bottom">
+          <span>{t("© 2026 Satyam. All rights reserved.")}</span>
+          <span>{t("build by Teen Titans")}</span>
+        </div>
       </footer>
     </div>
   );

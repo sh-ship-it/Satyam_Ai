@@ -2074,3 +2074,251 @@ All 35,993 English narratives are embedded; none of the 35,993 Kannada ones are,
 bounded by the storage cap in §17.2. The reported retrieval strategy is therefore
 `hybrid` for English queries. The `rag.py` docstring should be corrected — it is
 the first thing anyone reads in that file.
+
+
+---
+
+## 28. Document Translation & Sealing (`/documents`)
+
+Screen for taking a police document, rendering it in Kannada, and proving it has not
+been altered since. Four backend endpoints, no file storage anywhere.
+
+### 28.1 What it is and is not
+
+Two guarantees get conflated in the field ("encrypt with 256, like blockchain"), and
+this module deliberately implements only one of them:
+
+| | Mechanism | What it proves |
+|---|---|---|
+| **Seal** — shipped | SHA-256 appended to the existing `audit_log` hash chain | INTEGRITY. The file is byte-identical to what was sealed. |
+| **Encrypt** — built, then removed | AES-256 PDF open password via `pypdf` | CONFIDENTIALITY. Stops a reader. Proves nothing about tampering. |
+
+Sealing reuses `core/audit.py` rather than adding a second ledger: that chain is
+already `row_hash = SHA-256(prev_hash + payload)`, serialised by a Postgres advisory
+lock. A document seal is one more row in it.
+
+**The AES-256 path was removed at the user's request** after the browser-side failures
+described in §28.5 were misattributed to it. `core/doc_crypto.py` retains only
+`sha256_hex`, `short_digest` and `extract_pdf_text`; the `/encrypt` route, the
+`EncryptDialog`, and the `cryptography` dependency are gone. `pypdf` stays — text
+extraction needs it. `backend/tests/test_documents.py::test_there_is_no_encryption_on_this_path`
+asserts the removal is complete rather than half-reverted, and step 6 of
+`scratch/verify_documents.py` asserts the live endpoint returns **404**.
+
+### 28.2 Endpoints
+
+| Method | Path | Body | Returns |
+|---|---|---|---|
+| POST | `/api/documents/translate` | multipart (`file`, `source_lang`, `target_lang`) | source text, translated text, digest, page count, `needs_ocr` |
+| POST | `/api/documents/seal` | json (`filename`, `sha256`, `note`) | `audit_id`, `prev_hash`, `row_hash`, short digest |
+| POST | `/api/documents/verify` | json (`sha256`) | whether it was sealed, and whether its chain link recomputes |
+
+All three are L2+ (`Permission.BUILD_REPORT`) — uploading files is a heavier
+capability than asking a question.
+
+### 28.3 Trust boundary
+
+This is the only place in Satyam that accepts arbitrary binary from a client, so the
+guards live here rather than being assumed elsewhere:
+
+- **Magic-byte validation**, not declared MIME. The content type is
+  attacker-controlled; `evil.exe` renamed `report.pdf` is rejected before it reaches
+  a parser.
+- 20 MB cap, enforced server-side as well as in the browser.
+- A password-protected upload is refused rather than prompted for — accepting
+  passwords for arbitrary uploads would turn this screen into a credential collector.
+- **Nothing is stored.** Bytes live in the request; the audit row keeps only the
+  digest, filename and note. That keeps real case content out of a synthetic-data
+  repository and off the Neon budget (§17.2).
+- `pypdf` is imported lazily via `_require_pypdf()`, raising `PdfToolingMissing` so
+  the route answers **503 with an install instruction** instead of taking the router —
+  and therefore startup — down over an optional capability.
+
+### 28.4 Verification is scoped to the sealed row, not the whole chain
+
+`/verify` recomputes the sealed row's own link and its predecessor, **not** a global
+`verify_chain()`. The shared demo database contains five pre-existing forked
+`financial.money_trail` rows (earliest `audit_id=90`), so a global check returns
+`False` for reasons unrelated to the document and would report a good seal as
+tampered.
+
+### 28.5 Three bugs behind one "Failed to fetch"
+
+Worth recording because each produced the *same* browser symptom while the server
+logged success, and fixing the first two did not fix the screen.
+
+1. **Duplicated CORS header.** The route set `Access-Control-Expose-Headers` while
+   `CORSMiddleware` also emits it. Browsers reject a response with a duplicated CORS
+   header outright. Fixed by configuring `expose_headers` on the middleware, never on
+   a Response. (Both headers were later removed with the encrypt endpoint.)
+2. **Non-latin-1 filename → 500.** HTTP header values must be latin-1 encodable, so a
+   Kannada or em-dash filename raised inside the ASGI layer *after* the response had
+   started. Measured: `report.pdf` → 1497 bytes; `ದಾಖಲೆ.pdf` and `report—final.pdf` →
+   500. Fixed with an RFC 6266 two-parameter `Content-Disposition` (sanitised ASCII
+   fallback plus `filename*=UTF-8''`).
+3. **The rail that hid both: `localhost` resolves to `::1` first on Windows**, and
+   `uvicorn --host 0.0.0.0` binds IPv4 only. Measured on the dev machine:
+   `127.0.0.1:8000/health` → 200, `[::1]:8000/health` → refused. Chrome caches which
+   address family won per origin and re-races periodically, so requests succeeded for
+   a while and then stopped. curl and PowerShell always fell back to IPv4, which is
+   why every server-side probe passed while the browser failed.
+
+   Fixed on the client: `VITE_API_BASE_URL` and `self_base_url` now use `127.0.0.1`,
+   and `CORS_ORIGINS` lists **both** loopback spellings because a browser treats
+   `localhost:3000` and `127.0.0.1:3000` as different origins. It cannot be fixed on
+   the server: uvicorn never clears `IPV6_V6ONLY`, which Windows defaults to 1, so
+   `--host ::` would bind IPv6 *only*.
+
+**A 500 raised in a route never passes back through `CORSMiddleware`**, so it reaches
+the browser with no `Access-Control-Allow-Origin`, the browser refuses to expose the
+response, and `fetch()` rejects with a bare "Failed to fetch". That is why a clean
+500 in the log looked like a network outage. `main.py` now registers an exception
+handler that reattaches the CORS headers — delegating the origin check to Starlette's
+own `is_allowed_origin`/`allow_explicit_origin` so it cannot drift from the middleware
+config, and keeping the exception detail in the log rather than on the wire. Pinned by
+`backend/tests/test_health.py::test_a_500_still_carries_cors_headers`.
+
+### 28.6 Why the translated PDF goes through the print dialog
+
+Kannada is a complex script: `ಕ` + `್` + `ನ` must compose into one conjunct glyph,
+which needs OpenType GSUB/GPOS shaping. Neither `pypdf` nor `reportlab` has a shaper,
+so a server-generated PDF would look like a valid document while the Kannada inside it
+was a row of disconnected letters with vowel marks misplaced — worse than useless in a
+case file. The browser has a shaper and the system Kannada fonts, and this repo
+already exported conversation PDFs through `window.print()`, so
+`frontend/src/lib/pdf/printView.ts` reuses that path. `documents.tsx` also offers a
+direct `.txt` download, UTF-8 **with a BOM** so Notepad and Excel on Windows do not
+render Kannada as mojibake.
+
+The download buttons carry the **translation**, not the upload — the officer already
+has the file they uploaded.
+
+### 28.7 Translation coverage is narrower than the UI's language strip suggests
+
+The `/documents` footer lists the 23 languages from Sarvam's picker (22 Indian +
+English) and marks Kannada and English as live. That distinction is load-bearing:
+
+- The app calls **`mayura:v1`**, which Sarvam documents as 11 languages (10 Indian +
+  English). The 23-language list is `sarvam-translate:v1`'s coverage.
+- `_bcp()` in `models/api/sarvam.py` and `_norm_lang()` in the documents route both
+  collapse every code to `kn-IN` or `en-IN`, so a Tamil upload would be sent to the
+  provider *labelled English*.
+- Sarvam documents translation "between English and 22 Indian languages" — English on
+  one side of the pair. Tamil→Kannada would be a two-hop pivot through English.
+
+`frontend/scripts/check-languages.mjs` asserts only `kn-IN` and `en-IN` carry
+`live: true`. If translation ever widens, update that assertion rather than deleting
+it.
+
+---
+
+## 29. Frontend Shell & Motion Additions
+
+### 29.1 The rail was forcing page height on every screen
+
+`Shell.tsx` used `min-h-screen`, which sets a floor and lets the column grow, so the
+tallest child decided the document height. The nav rail is ~17 items at `h-11` plus
+gaps and padding — about 900px of fixed height — so any window shorter than that
+stretched the page and left a band of empty background under every screen's content.
+
+Now `h-dvh` + `overflow-hidden` with a `shrink-0` header, and the rail is
+`shrink-0 overflow-y-auto` (scrollbar hidden — a 64px column has no room for one, and
+it still scrolls by wheel, drag and keyboard). Consequence: `audit` and `admin`, which
+had no height constraint, now scroll inside `<main>` instead of the page, so the header
+and rail stay pinned.
+
+`documents.tsx` uses `h-full` rather than `calc(100dvh - 3.5rem)`; a hard-coded header
+height is a second copy that has to stay in sync, and any disagreement shows as a gap.
+
+### 29.2 Collapsible rail with dock magnification (`lib/railDock.ts`)
+
+Rail morphs 64px ↔ 208px over 300ms; labels fade in 100ms *behind* the width so text
+is not seen sliding out from under its own clip edge; chevron rotates; **Cmd/Ctrl+B**
+toggles; state persists in `localStorage`, read in the state initialiser so the rail
+renders at its remembered width instead of flashing open and snapping shut.
+
+Hover magnification is scoped to `[data-rail="collapsed"]` — a full-width 208px row
+scaling 1.42× would burst the panel. Falloff via `+` and `:has(+ .rail-item:hover)`;
+no pointer tracking, no rAF loop, no state.
+
+**No outward translate**, because the rail is a scroll container and anything crossing
+its edge is clipped. Growth is centre-origin: a 44px tile at 1.42× is 62.5px, inside
+64px. `scripts/check-rail-dock.mjs` asserts `TILE × SCALE ≤ RAIL_WIDTH`, that every
+magnification rule is scoped to the collapsed state, and that reduced motion cancels
+rather than shortens.
+
+**The bug worth remembering:** hiding collapsed labels with `opacity: 0` was not
+enough. An invisible element still occupies its inline size, so a 44px tile held
+~114px of content and `justify-content: center` spread the overflow to *both* sides —
+putting each icon at a negative x where the rail's hidden overflow sliced it against
+the left edge, and leaving the toggle unreachable. Collapsed labels now take
+`width: 0`, with `gap: 0` and `overflow: hidden` on the tile.
+
+Rail order follows the specified sequence; **Graphs and Audit were absent from that
+list and were kept at the end rather than dropped** — removing them would leave
+`/graphs` and `/audit` reachable only by typed URL, and Audit is the compliance
+screen.
+
+### 29.3 Download helper (`lib/download.ts`)
+
+Six screens had hand-rolled blob downloads and five shared two bugs: the anchor was
+never added to the document (a detached `<a>.click()` is ignored by Firefox and by
+Chrome under some settings), and `URL.revokeObjectURL` was called synchronously on the
+next line, invalidating the URL before the browser had read it. Both produce "nothing
+happened" with no error — this is what made the encrypt flow look broken after the
+request had already returned 200 with a valid PDF. `saveBlob()` attaches, clicks,
+removes, and defers the revoke by 1s. Pinned by `scripts/check-download.mjs`.
+
+### 29.4 Login page: glass card, ghost mascot, capability badges
+
+- **`components/ui/glass-card.tsx`** — shadcn-conventioned frosted card. Its defaults
+  (`text-white` over a 30% wash) assume a dark photographic hero; `/login` is light,
+  so the sign-in card overrides the colour classes via `className` and tailwind-merge
+  resolves in the caller's favour. A `supports-[not(backdrop-filter:blur(0px))]`
+  fallback keeps a readable surface where `backdrop-filter` is unsupported.
+- **`GhostMascot`** (`lib/ghostMascot.ts` + `components/GhostMascot.tsx`) — full-height
+  background layer, `pointer-events-none` so it cannot intercept a click meant for the
+  password field. The liquid read needs three animations at *different* periods: float
+  (7s), squash (4.4s, deliberately non-harmonic so the body is not thinnest at exactly
+  the top of every rise), and a 26s colour rotation with three blob drifts. Soft edges
+  come from **radial gradients that fade to transparent, not a blur** — an SVG filter
+  re-runs whenever anything inside it changes, and at ~78vh with everything moving that
+  would be a large convolution every frame.
+  Eyes track the pointer via a passive listener writing a `transform` straight onto the
+  eye group — no React state, one DOM write per frame. Clamped so they cannot leave the
+  sockets. `scripts/check-ghost-mascot.mjs` pins the clamp, the path closing, and the
+  non-harmonic periods.
+- Trust badges extended from 3 to **9**, one per shipped capability.
+
+### 29.5 Reduced motion
+
+Every animation added here stops under `prefers-reduced-motion`, with one deliberate
+exception: the mascot's eye tracking. It moves only while the pointer does, which is
+direct feedback to the user's own input rather than something animating at them.
+
+---
+
+## 30. Frontend self-checks without a test framework
+
+The frontend has no test runner and one was not added. Five checks run under Node's
+own type stripping:
+
+```bash
+cd frontend
+node --experimental-strip-types scripts/check-download.mjs
+node --experimental-strip-types scripts/check-translated-pdf.mjs
+node --experimental-strip-types scripts/check-languages.mjs
+node --experimental-strip-types scripts/check-rail-dock.mjs
+node --experimental-strip-types scripts/check-ghost-mascot.mjs
+```
+
+Each asserts an invariant that fails silently in a browser: a download that does
+nothing, a PDF containing the source instead of the translation, a language marked
+live that the backend cannot reach, an icon clipped mid-hover, eyes leaving their
+sockets. They import from `src/lib/*.ts` — which is why the pure geometry, CSS strings
+and maths live in `lib/` rather than beside their `.tsx` components, since Node cannot
+strip JSX.
+
+Frontend typecheck baseline is **56 errors**: 55 pre-existing duplicate keys in
+`lib/i18n.tsx` (TS1117) and one pre-existing comparison in `FinancialLinksPanel.tsx`.
+Treat any 57th as introduced.
