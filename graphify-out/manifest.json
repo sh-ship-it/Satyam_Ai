@@ -810,8 +810,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/login.tsx": {
-    "mtime": 1787719645.8228593,
-    "ast_hash": "629d5bd2d7b90d2dc8fac6d5231b7de9",
+    "mtime": 1787828456.3986256,
+    "ast_hash": "1dc9711f5b2e93c913c4935b889949c5",
     "semantic_hash": ""
   },
   "backend/app/models/api/ollama_cloud.py": {
@@ -2227,6 +2227,21 @@
   "frontend/src/lib/railDock.ts": {
     "mtime": 1787827411.2709353,
     "ast_hash": "e11c92f29bad58fb93a4ab63eb28cebf",
+    "semantic_hash": ""
+  },
+  "frontend/scripts/check-ghost-mascot.mjs": {
+    "mtime": 1787828537.9409506,
+    "ast_hash": "b24ec92031f3bc9d67d41538afb08381",
+    "semantic_hash": ""
+  },
+  "frontend/src/components/GhostMascot.tsx": {
+    "mtime": 1787828439.6035073,
+    "ast_hash": "f541fe9ba8dbfb99adc37896adc47bb7",
+    "semantic_hash": ""
+  },
+  "frontend/src/lib/ghostMascot.ts": {
+    "mtime": 1787828528.5234544,
+    "ast_hash": "f1e711414132460914de2d6b325ba7a7",
     "semantic_hash": ""
   }
 }
