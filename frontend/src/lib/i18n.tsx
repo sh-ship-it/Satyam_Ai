@@ -369,6 +369,10 @@ const DICT: Record<string, string> = {
   "Sealing failed.": "ಮುದ್ರೆ ಹಾಕಲು ವಿಫಲವಾಯಿತು.",
   "Verification failed.": "ಪರಿಶೀಲನೆ ವಿಫಲವಾಯಿತು.",
   "Download the translation": "ಅನುವಾದವನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
+  // ── Sidebar rail ──────────────────────────────────────────────────────────
+  Collapse: "ಸಂಕುಚಿಸಿ",
+  "Collapse sidebar": "ಸೈಡ್‌ಬಾರ್ ಸಂಕುಚಿಸಿ",
+  "Expand sidebar": "ಸೈಡ್‌ಬಾರ್ ವಿಸ್ತರಿಸಿ",
   "Supported languages · Kannada and English are live for translation":
     "ಬೆಂಬಲಿತ ಭಾಷೆಗಳು · ಅನುವಾದಕ್ಕೆ ಕನ್ನಡ ಮತ್ತು ಇಂಗ್ಲಿಷ್ ಸಕ್ರಿಯವಾಗಿವೆ",
   "The Kannada text, carrying the source digest and seal reference.":

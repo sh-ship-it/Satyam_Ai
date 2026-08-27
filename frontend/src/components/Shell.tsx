@@ -28,6 +28,7 @@ import {
   Sparkles,
   LayoutDashboard,
   BarChart3,
+  ChevronRight,
   Siren,
 } from "lucide-react";
 import { type ReactNode, useState, useEffect, useRef, useCallback } from "react";
@@ -53,6 +54,7 @@ import { startSttSession, isBackendSttSupported } from "@/lib/voice/recorder";
 import { SESSION_EXPIRED_EVENT, streamChat, type ChatEvent } from "@/lib/api/client";
 import { planVoiceAction, type AgentPlan } from "@/lib/api/voiceAgent";
 import { SCREEN_READY_EVENT, TASK_RESULT_EVENT, type TaskResult } from "@/lib/taskBus";
+import { RAIL_OPEN_KEY, RAIL_WIDTH_OPEN_PX, RAIL_WIDTH_PX, railDockCss } from "@/lib/railDock";
 
 // The voice copilot (top-right) uses ONE engine for BOTH listening and speaking.
 // When its mic engine is "browser", replies use the device's built-in Web-Speech
@@ -197,6 +199,59 @@ export function Shell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const { lang, setLang, t } = useI18n();
   const [settingsOpen, setSettingsOpen] = useState(false);
+
+  /**
+   * Rail tooltip, positioned in VIEWPORT coordinates rather than rendered inside
+   * the link.
+   *
+   * It has to work this way now: the rail became `overflow-y-auto` to stop it
+   * forcing page height, and per spec an element with one axis scrollable computes
+   * the other axis to `auto` too — so `overflow-x` is no longer `visible` and the
+   * old `absolute left-full` label was clipped at the rail's 64px edge. A `fixed`
+   * element escapes ancestor overflow (nothing here establishes a containing block
+   * for it), so the label can sit beside the rail again.
+   */
+  const [railTip, setRailTip] = useState<{ label: string; top: number } | null>(null);
+
+  /**
+   * Rail expanded or collapsed to icons.
+   *
+   * Read from localStorage in the initialiser rather than in an effect, so the
+   * rail renders at its remembered width on the first paint instead of flashing
+   * open and snapping shut. Guarded for SSR because TanStack Start renders this on
+   * the server, where `localStorage` does not exist.
+   */
+  const [railOpen, setRailOpen] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem(RAIL_OPEN_KEY) === "1";
+  });
+
+  const toggleRail = useCallback(() => {
+    setRailOpen((prev) => {
+      const next = !prev;
+      try {
+        window.localStorage.setItem(RAIL_OPEN_KEY, next ? "1" : "0");
+      } catch {
+        /* private mode / quota — the rail still toggles for this session */
+      }
+      // Labels replace the tooltip once the rail is open, so a tooltip left
+      // hanging beside a visible label would show the name twice.
+      setRailTip(null);
+      return next;
+    });
+  }, []);
+
+  // Cmd/Ctrl+B, the shortcut the reference component uses.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "b" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        toggleRail();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [toggleRail]);
 
   // Detect admin/L4 once from the stored JWT so the Person 360 nav shows only for admins.
   const [isAdmin, setIsAdmin] = useState(false);
@@ -1208,28 +1263,41 @@ export function Shell({ children }: { children: ReactNode }) {
     }
   }, [listening, orbMode]);
 
+  // Order is the one specified for the rail. Two notes on how the request was
+  // reconciled, because it was not a clean 1:1 list:
+  //
+  //   * "Board" appeared at both 10 and 15, and "Person 360" at both 11 and 16.
+  //     Each is placed once, at its FIRST position — a nav cannot hold an entry
+  //     twice, and the earlier slot is the one the numbering implies.
+  //   * Graphs and Audit were not in the list at all. They are kept, at the end,
+  //     rather than dropped: removing them from the rail would leave /graphs and
+  //     /audit reachable only by typed URL, and Audit is the compliance screen —
+  //     hiding it is not a cosmetic change. Say where you want them and I'll move
+  //     them; say drop them and I will.
   const NAV = [
-    { to: "/ask", icon: Sparkles, label: t("Ask Satyam") },
     { to: "/console", icon: LayoutDashboard, label: t("Dashboard") },
-    { to: "/graphs", icon: BarChart3, label: t("Graphs") },
+    // Listed as "Chat"; this is that screen — grounded Q&A with the copilot.
+    { to: "/ask", icon: Sparkles, label: t("Ask Satyam") },
+    { to: "/vision", icon: Globe2, label: t("Vision") },
     { to: "/network", icon: Network, label: t("Network") },
     // Trends was folded into Forecast, so one entry covers both. `Siren` rather
     // than `ShieldCheck` because that icon already means Audit in this rail.
     { to: "/forecast", icon: Siren, label: t("Forecast") },
-    { to: "/reports", icon: FileText, label: t("Reports") },
-    { to: "/audit", icon: ShieldCheck, label: t("Audit") },
-    { to: "/transcripts", icon: ClipboardList, label: t("Transcripts") },
-    // `Tv` rather than `Video`, which already means the Camera review screen.
-    { to: "/news", icon: Tv, label: t("News Feed") },
-    // `FileLock2` rather than `FileText`, which already means Reports here — this
-    // screen's point is the seal and the password, not the document.
-    { to: "/documents", icon: FileLock2, label: t("Documents") },
-    { to: "/vision", icon: Globe2, label: t("Vision") },
-    { to: "/ops-predictive", icon: Radar, label: t("Predictive") },
-    { to: "/ops-dispatch", icon: Truck, label: t("Dispatch") },
     { to: "/ops-camera", icon: Video, label: t("Camera") },
+    { to: "/ops-predictive", icon: Radar, label: t("Predictive") },
+    // `FileLock2` rather than `FileText`, which already means Reports here — this
+    // screen's point is the seal, not the document.
+    { to: "/documents", icon: FileLock2, label: t("Documents") },
+    // Listed as "Transcription"; the screen is named Transcripts.
+    { to: "/transcripts", icon: ClipboardList, label: t("Transcripts") },
     { to: "/board", icon: Workflow, label: t("Board") },
     ...(isAdmin ? [{ to: "/dossier" as const, icon: Fingerprint, label: t("Person 360") }] : []),
+    { to: "/reports", icon: FileText, label: t("Reports") },
+    // `Tv` rather than `Video`, which already means the Camera review screen.
+    { to: "/news", icon: Tv, label: t("News Feed") },
+    { to: "/ops-dispatch", icon: Truck, label: t("Dispatch") },
+    { to: "/graphs", icon: BarChart3, label: t("Graphs") },
+    { to: "/audit", icon: ShieldCheck, label: t("Audit") },
     ...(isAdmin ? [{ to: "/admin" as const, icon: ShieldCheck, label: t("Access Control") }] : []),
   ] as const;
 
@@ -1705,32 +1773,85 @@ export function Shell({ children }: { children: ReactNode }) {
 
       {/* Body: rail + content */}
       <div className="flex flex-1 min-h-0">
+        {/* Dock magnification for the collapsed rail. See lib/railDock.ts for why
+            the growth stays inside the rail instead of popping out of it. */}
+        <style>{railDockCss()}</style>
         {/* shrink-0 keeps the 4rem width; overflow-y-auto is what stops the rail
             forcing page height on a short window. The scrollbar is hidden because
             a 64px-wide column has no room for one — the rail still scrolls by
             wheel, drag and keyboard, so nothing becomes unreachable. */}
-        <nav className="flex w-16 shrink-0 flex-col items-center gap-2 overflow-y-auto overscroll-contain border-r-2 border-foreground bg-rail py-4 text-rail-foreground [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <nav
+          // data-rail is what scopes the dock magnification to the collapsed view,
+          // as asked: the CSS keys off it, so expanding the rail turns the swell
+          // off without a second class list to keep in sync.
+          data-rail={railOpen ? "expanded" : "collapsed"}
+          style={{ width: railOpen ? RAIL_WIDTH_OPEN_PX : RAIL_WIDTH_PX }}
+          // items-center is kept as a utility as well as in railDock.ts: the rail
+          // must be centred even on the first paint, before the injected <style>
+          // has been applied.
+          className="rail flex shrink-0 flex-col items-center gap-1 overflow-y-auto overflow-x-hidden overscroll-contain border-r-2 border-foreground bg-rail py-3 text-rail-foreground [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          // A tooltip pinned to viewport coordinates goes stale the moment the rail
+          // scrolls under it, so drop it rather than leave it pointing at nothing.
+          onScroll={() => setRailTip(null)}
+          onMouseLeave={() => setRailTip(null)}
+        >
+          <button
+            type="button"
+            onClick={toggleRail}
+            aria-expanded={railOpen}
+            aria-label={railOpen ? t("Collapse sidebar") : t("Expand sidebar")}
+            className="rail-toggle mb-1 flex h-9 shrink-0 items-center gap-3 rounded-[5px] border-2 border-transparent px-2.5 text-rail-foreground/60 transition-colors hover:border-rail-foreground hover:bg-rail-foreground/10 hover:text-rail-foreground"
+          >
+            <ChevronRight className="rail-chevron h-5 w-5 shrink-0" />
+            <span className="rail-label whitespace-nowrap text-[11px] font-bold uppercase tracking-wider">
+              {t("Collapse")}
+            </span>
+          </button>
+
           {NAV.map(({ to, icon: Icon, label }) => {
             const active = pathname === to || pathname.startsWith(to + "/");
+            // Only the collapsed rail needs a tooltip; once expanded the label is
+            // right there, and showing both would name the icon twice.
+            const show = (el: HTMLElement) => {
+              if (railOpen) return;
+              const r = el.getBoundingClientRect();
+              setRailTip({ label, top: r.top + r.height / 2 });
+            };
             return (
               <Link
                 key={to}
                 to={to}
-                className={`group relative flex h-11 w-11 items-center justify-center rounded-[5px] border-2 transition ${
+                className={`rail-item relative flex h-11 shrink-0 items-center gap-3 rounded-[5px] border-2 px-2.5 ${
                   active
                     ? "border-foreground bg-primary text-primary-foreground nb-shadow-sm"
                     : "border-transparent text-rail-foreground/70 hover:border-rail-foreground hover:bg-rail-foreground/10 hover:text-rail-foreground"
                 }`}
-                title={label}
+                // aria-label, not title: `title` would raise the browser's own
+                // tooltip on top of the styled one, giving two labels for one icon.
+                // The link's content is an SVG plus a label that is clipped away
+                // when collapsed, so without this it can have no accessible name.
+                aria-label={label}
+                onMouseEnter={(e) => show(e.currentTarget)}
+                onFocus={(e) => show(e.currentTarget)}
+                onBlur={() => setRailTip(null)}
               >
-                <Icon className="h-5 w-5" />
-                <span className="pointer-events-none absolute left-full ml-2 whitespace-nowrap rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1 text-[11px] font-bold text-foreground nb-shadow-sm opacity-0 transition group-hover:opacity-100 z-50">
-                  {label}
-                </span>
+                <Icon className="rail-icon h-5 w-5 shrink-0" />
+                <span className="rail-label whitespace-nowrap text-[12px] font-bold">{label}</span>
               </Link>
             );
           })}
         </nav>
+
+        {railTip && (
+          <div
+            role="tooltip"
+            // left-16 (64px) + 8px clears the rail and its 2px border.
+            style={{ top: railTip.top, left: "calc(4rem + 8px)" }}
+            className="pointer-events-none fixed z-[60] -translate-y-1/2 whitespace-nowrap rounded-[5px] border-2 border-foreground bg-secondary-background px-2 py-1 text-[11px] font-bold text-foreground nb-shadow-sm"
+          >
+            {railTip.label}
+          </div>
+        )}
 
         <main className="flex-1 min-w-0 overflow-auto">{children}</main>
       </div>
