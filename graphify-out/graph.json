@@ -4,284 +4,64 @@
   "graph": {},
   "nodes": [
     {
-      "label": "audit.py",
+      "label": "LandingShell.tsx",
       "file_type": "code",
-      "source_file": "backend/app/core/audit.py",
+      "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "core_audit",
-      "community": 33,
-      "norm_label": "audit.py"
+      "id": "components_landingshell",
+      "community": 61,
+      "norm_label": "landingshell.tsx"
     },
     {
-      "label": "_digest()",
+      "label": "NB()",
       "file_type": "code",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L27",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L6",
       "_origin": "ast",
-      "id": "core_audit_digest",
-      "community": 33,
-      "norm_label": "_digest()"
+      "id": "components_landingshell_nb",
+      "community": 61,
+      "norm_label": "nb()"
     },
     {
-      "label": "write_audit()",
+      "label": "GridBg()",
       "file_type": "code",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L32",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L22",
       "_origin": "ast",
-      "id": "core_audit_write_audit",
-      "community": 33,
-      "norm_label": "write_audit()"
+      "id": "components_landingshell_gridbg",
+      "community": 61,
+      "norm_label": "gridbg()"
     },
     {
-      "label": "AsyncSession",
+      "label": "Header()",
       "file_type": "code",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L32",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L37",
       "_origin": "ast",
-      "id": "backend_app_core_audit_py_asyncsession",
-      "community": 33,
-      "norm_label": "asyncsession"
+      "id": "components_landingshell_header",
+      "community": 61,
+      "norm_label": "header()"
     },
     {
-      "label": "AuditLog",
+      "label": "FooterCol()",
       "file_type": "code",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L32",
-      "_origin": "ast",
-      "id": "auditlog",
-      "community": 33,
-      "norm_label": "auditlog"
-    },
-    {
-      "label": "verify_chain()",
-      "file_type": "code",
-      "source_file": "backend/app/core/audit.py",
+      "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L98",
       "_origin": "ast",
-      "id": "core_audit_verify_chain",
-      "community": 33,
-      "norm_label": "verify_chain()"
+      "id": "components_landingshell_footercol",
+      "community": 61,
+      "norm_label": "footercol()"
     },
     {
-      "label": "Tamper-evident, hash-chained audit log.  Each entry stores sha256(prev_hash + ca",
-      "file_type": "rationale",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "core_audit_rationale_1",
-      "community": 33,
-      "norm_label": "tamper-evident, hash-chained audit log.  each entry stores sha256(prev_hash + ca"
-    },
-    {
-      "label": "dossier_service.py",
+      "label": "Footer()",
       "file_type": "code",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L1",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L119",
       "_origin": "ast",
-      "id": "services_dossier_service",
-      "community": 101,
-      "norm_label": "dossier_service.py"
-    },
-    {
-      "label": "_auto_seed()",
-      "file_type": "code",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "services_dossier_service_auto_seed",
-      "community": 101,
-      "norm_label": "_auto_seed()"
-    },
-    {
-      "label": "AsyncSession",
-      "file_type": "code",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "backend_app_services_dossier_service_py_asyncsession",
-      "community": 101,
-      "norm_label": "asyncsession"
-    },
-    {
-      "label": "list_dossiers()",
-      "file_type": "code",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L122",
-      "_origin": "ast",
-      "id": "services_dossier_service_list_dossiers",
-      "community": 101,
-      "norm_label": "list_dossiers()"
-    },
-    {
-      "label": "DossierListItem",
-      "file_type": "code",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L122",
-      "_origin": "ast",
-      "id": "dossierlistitem",
-      "community": 101,
-      "norm_label": "dossierlistitem"
-    },
-    {
-      "label": "get_dossier()",
-      "file_type": "code",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L146",
-      "_origin": "ast",
-      "id": "services_dossier_service_get_dossier",
-      "community": 101,
-      "norm_label": "get_dossier()"
-    },
-    {
-      "label": "DossierDetail",
-      "file_type": "code",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L146",
-      "_origin": "ast",
-      "id": "dossierdetail",
-      "community": 101,
-      "norm_label": "dossierdetail"
-    },
-    {
-      "label": "Service layer for the Person 360 demo dossier feature.  Queries ONLY demo_doss",
-      "file_type": "rationale",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "services_dossier_service_rationale_1",
-      "community": 101,
-      "norm_label": "service layer for the person 360 demo dossier feature.  queries only demo_doss"
-    },
-    {
-      "label": "Auto-seed the 10 demo dossier subjects if table is empty.",
-      "file_type": "rationale",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L32",
-      "_origin": "ast",
-      "id": "services_dossier_service_rationale_32",
-      "community": 101,
-      "norm_label": "auto-seed the 10 demo dossier subjects if table is empty."
-    },
-    {
-      "label": "Return lightweight list of all dossier subjects.",
-      "file_type": "rationale",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L123",
-      "_origin": "ast",
-      "id": "services_dossier_service_rationale_123",
-      "community": 101,
-      "norm_label": "return lightweight list of all dossier subjects."
-    },
-    {
-      "label": "Return full 360 dossier for a given demo_id, or None if not found.",
-      "file_type": "rationale",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L147",
-      "_origin": "ast",
-      "id": "services_dossier_service_rationale_147",
-      "community": 101,
-      "norm_label": "return full 360 dossier for a given demo_id, or none if not found."
-    },
-    {
-      "label": "load_demo_dossier.py",
-      "file_type": "code",
-      "source_file": "backend/seed/load_demo_dossier.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "seed_load_demo_dossier",
-      "community": 93,
-      "norm_label": "load_demo_dossier.py"
-    },
-    {
-      "label": "_date()",
-      "file_type": "code",
-      "source_file": "backend/seed/load_demo_dossier.py",
-      "source_location": "L17",
-      "_origin": "ast",
-      "id": "seed_load_demo_dossier_date",
-      "community": 93,
-      "norm_label": "_date()"
-    },
-    {
-      "label": "main()",
-      "file_type": "code",
-      "source_file": "backend/seed/load_demo_dossier.py",
-      "source_location": "L28",
-      "_origin": "ast",
-      "id": "seed_load_demo_dossier_main",
-      "community": 93,
-      "norm_label": "main()"
-    },
-    {
-      "label": "Seed the 10 isolated demo dossiers. Safe and idempotent. Usage: python -m seed.",
-      "file_type": "rationale",
-      "source_file": "backend/seed/load_demo_dossier.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "seed_load_demo_dossier_rationale_1",
-      "community": 93,
-      "norm_label": "seed the 10 isolated demo dossiers. safe and idempotent. usage: python -m seed."
-    },
-    {
-      "label": "PredictivePanel.tsx",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "ops_predictivepanel",
-      "community": 266,
-      "norm_label": "predictivepanel.tsx"
-    },
-    {
-      "label": "RISK_BG",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L19",
-      "_origin": "ast",
-      "id": "ops_predictivepanel_risk_bg",
-      "community": 266,
-      "norm_label": "risk_bg"
-    },
-    {
-      "label": "RISK_ORDER",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L25",
-      "_origin": "ast",
-      "id": "ops_predictivepanel_risk_order",
-      "community": 266,
-      "norm_label": "risk_order"
-    },
-    {
-      "label": "LL",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L27",
-      "_origin": "ast",
-      "id": "ops_predictivepanel_ll",
-      "community": 266,
-      "norm_label": "ll"
-    },
-    {
-      "label": "cellForAlert()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L29",
-      "_origin": "ast",
-      "id": "ops_predictivepanel_cellforalert",
-      "community": 266,
-      "norm_label": "cellforalert()"
-    },
-    {
-      "label": "PredictivePanel()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L38",
-      "_origin": "ast",
-      "id": "ops_predictivepanel_predictivepanel",
-      "community": 134,
-      "norm_label": "predictivepanel()"
+      "id": "components_landingshell_footer",
+      "community": 61,
+      "norm_label": "footer()"
     },
     {
       "label": "i18n.tsx",
@@ -317,7 +97,7 @@
       "label": "Ctx",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2357",
+      "source_location": "L2362",
       "_origin": "ast",
       "id": "lib_i18n_ctx",
       "community": 26,
@@ -327,7 +107,7 @@
       "label": "I18nCtx",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2358",
+      "source_location": "L2363",
       "_origin": "ast",
       "id": "lib_i18n_i18nctx",
       "community": 26,
@@ -337,7 +117,7 @@
       "label": "ALL_TRANSLATABLE",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L2364",
+      "source_location": "L2369",
       "_origin": "ast",
       "id": "lib_i18n_all_translatable",
       "community": 26,
@@ -347,7 +127,7 @@
       "label": "loadLLMCache()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L3139",
+      "source_location": "L3144",
       "_origin": "ast",
       "id": "lib_i18n_loadllmcache",
       "community": 26,
@@ -357,7 +137,7 @@
       "label": "enrichDictWithLLM()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L3155",
+      "source_location": "L3160",
       "_origin": "ast",
       "id": "lib_i18n_enrichdictwithllm",
       "community": 26,
@@ -367,7 +147,7 @@
       "label": "enrichDataWithLLM()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L3268",
+      "source_location": "L3273",
       "_origin": "ast",
       "id": "lib_i18n_enrichdatawithllm",
       "community": 251,
@@ -377,7 +157,7 @@
       "label": "trackMiss()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L3375",
+      "source_location": "L3380",
       "_origin": "ast",
       "id": "lib_i18n_trackmiss",
       "community": 26,
@@ -387,7 +167,7 @@
       "label": "translateDynamicPatterns()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L3392",
+      "source_location": "L3397",
       "_origin": "ast",
       "id": "lib_i18n_translatedynamicpatterns",
       "community": 26,
@@ -397,7 +177,7 @@
       "label": "I18nProvider()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L3450",
+      "source_location": "L3455",
       "_origin": "ast",
       "id": "lib_i18n_i18nprovider",
       "community": 26,
@@ -407,7 +187,7 @@
       "label": "useI18n()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L3520",
+      "source_location": "L3525",
       "_origin": "ast",
       "id": "lib_i18n_usei18n",
       "community": 61,
@@ -417,11 +197,351 @@
       "label": "useT()",
       "file_type": "code",
       "source_file": "frontend/src/lib/i18n.tsx",
-      "source_location": "L3521",
+      "source_location": "L3526",
       "_origin": "ast",
       "id": "lib_i18n_uset",
       "community": 134,
       "norm_label": "uset()"
+    },
+    {
+      "label": "index.tsx",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "routes_index",
+      "community": 61,
+      "norm_label": "index.tsx"
+    },
+    {
+      "label": "Route",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "routes_index_route",
+      "community": 8,
+      "norm_label": "route"
+    },
+    {
+      "label": "hsl2rgb()",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L222",
+      "_origin": "ast",
+      "id": "routes_index_hsl2rgb",
+      "community": 61,
+      "norm_label": "hsl2rgb()"
+    },
+    {
+      "label": "setAccentHue()",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L239",
+      "_origin": "ast",
+      "id": "routes_index_setaccenthue",
+      "community": 61,
+      "norm_label": "setaccenthue()"
+    },
+    {
+      "label": "applyMode()",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L251",
+      "_origin": "ast",
+      "id": "routes_index_applymode",
+      "community": 61,
+      "norm_label": "applymode()"
+    },
+    {
+      "label": "LandingPage()",
+      "file_type": "code",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L274",
+      "_origin": "ast",
+      "id": "routes_index_landingpage",
+      "community": 61,
+      "norm_label": "landingpage()"
+    },
+    {
+      "label": "audit.py",
+      "file_type": "code",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 33,
+      "norm_label": "audit.py",
+      "id": "core_audit"
+    },
+    {
+      "label": "_digest()",
+      "file_type": "code",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L27",
+      "_origin": "ast",
+      "community": 33,
+      "norm_label": "_digest()",
+      "id": "core_audit_digest"
+    },
+    {
+      "label": "write_audit()",
+      "file_type": "code",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L32",
+      "_origin": "ast",
+      "community": 33,
+      "norm_label": "write_audit()",
+      "id": "core_audit_write_audit"
+    },
+    {
+      "label": "AsyncSession",
+      "file_type": "code",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L32",
+      "_origin": "ast",
+      "community": 33,
+      "norm_label": "asyncsession",
+      "id": "backend_app_core_audit_py_asyncsession"
+    },
+    {
+      "label": "AuditLog",
+      "file_type": "code",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L32",
+      "_origin": "ast",
+      "community": 33,
+      "norm_label": "auditlog",
+      "id": "auditlog"
+    },
+    {
+      "label": "verify_chain()",
+      "file_type": "code",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L98",
+      "_origin": "ast",
+      "community": 33,
+      "norm_label": "verify_chain()",
+      "id": "core_audit_verify_chain"
+    },
+    {
+      "label": "Tamper-evident, hash-chained audit log.  Each entry stores sha256(prev_hash + ca",
+      "file_type": "rationale",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 33,
+      "norm_label": "tamper-evident, hash-chained audit log.  each entry stores sha256(prev_hash + ca",
+      "id": "core_audit_rationale_1"
+    },
+    {
+      "label": "dossier_service.py",
+      "file_type": "code",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossier_service.py",
+      "id": "services_dossier_service"
+    },
+    {
+      "label": "_auto_seed()",
+      "file_type": "code",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "_auto_seed()",
+      "id": "services_dossier_service_auto_seed"
+    },
+    {
+      "label": "AsyncSession",
+      "file_type": "code",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "asyncsession",
+      "id": "backend_app_services_dossier_service_py_asyncsession"
+    },
+    {
+      "label": "list_dossiers()",
+      "file_type": "code",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L122",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "list_dossiers()",
+      "id": "services_dossier_service_list_dossiers"
+    },
+    {
+      "label": "DossierListItem",
+      "file_type": "code",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L122",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossierlistitem",
+      "id": "dossierlistitem"
+    },
+    {
+      "label": "get_dossier()",
+      "file_type": "code",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L146",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "get_dossier()",
+      "id": "services_dossier_service_get_dossier"
+    },
+    {
+      "label": "DossierDetail",
+      "file_type": "code",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L146",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "dossierdetail",
+      "id": "dossierdetail"
+    },
+    {
+      "label": "Service layer for the Person 360 demo dossier feature.  Queries ONLY demo_doss",
+      "file_type": "rationale",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "service layer for the person 360 demo dossier feature.  queries only demo_doss",
+      "id": "services_dossier_service_rationale_1"
+    },
+    {
+      "label": "Auto-seed the 10 demo dossier subjects if table is empty.",
+      "file_type": "rationale",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L32",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "auto-seed the 10 demo dossier subjects if table is empty.",
+      "id": "services_dossier_service_rationale_32"
+    },
+    {
+      "label": "Return lightweight list of all dossier subjects.",
+      "file_type": "rationale",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L123",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "return lightweight list of all dossier subjects.",
+      "id": "services_dossier_service_rationale_123"
+    },
+    {
+      "label": "Return full 360 dossier for a given demo_id, or None if not found.",
+      "file_type": "rationale",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L147",
+      "_origin": "ast",
+      "community": 101,
+      "norm_label": "return full 360 dossier for a given demo_id, or none if not found.",
+      "id": "services_dossier_service_rationale_147"
+    },
+    {
+      "label": "load_demo_dossier.py",
+      "file_type": "code",
+      "source_file": "backend/seed/load_demo_dossier.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 93,
+      "norm_label": "load_demo_dossier.py",
+      "id": "seed_load_demo_dossier"
+    },
+    {
+      "label": "_date()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_demo_dossier.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "community": 93,
+      "norm_label": "_date()",
+      "id": "seed_load_demo_dossier_date"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "backend/seed/load_demo_dossier.py",
+      "source_location": "L28",
+      "_origin": "ast",
+      "community": 93,
+      "norm_label": "main()",
+      "id": "seed_load_demo_dossier_main"
+    },
+    {
+      "label": "Seed the 10 isolated demo dossiers. Safe and idempotent. Usage: python -m seed.",
+      "file_type": "rationale",
+      "source_file": "backend/seed/load_demo_dossier.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 93,
+      "norm_label": "seed the 10 isolated demo dossiers. safe and idempotent. usage: python -m seed.",
+      "id": "seed_load_demo_dossier_rationale_1"
+    },
+    {
+      "label": "PredictivePanel.tsx",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 266,
+      "norm_label": "predictivepanel.tsx",
+      "id": "ops_predictivepanel"
+    },
+    {
+      "label": "RISK_BG",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L19",
+      "_origin": "ast",
+      "community": 266,
+      "norm_label": "risk_bg",
+      "id": "ops_predictivepanel_risk_bg"
+    },
+    {
+      "label": "RISK_ORDER",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L25",
+      "_origin": "ast",
+      "community": 266,
+      "norm_label": "risk_order",
+      "id": "ops_predictivepanel_risk_order"
+    },
+    {
+      "label": "LL",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L27",
+      "_origin": "ast",
+      "community": 266,
+      "norm_label": "ll",
+      "id": "ops_predictivepanel_ll"
+    },
+    {
+      "label": "cellForAlert()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L29",
+      "_origin": "ast",
+      "community": 266,
+      "norm_label": "cellforalert()",
+      "id": "ops_predictivepanel_cellforalert"
+    },
+    {
+      "label": "PredictivePanel()",
+      "file_type": "code",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L38",
+      "_origin": "ast",
+      "community": 134,
+      "norm_label": "predictivepanel()",
+      "id": "ops_predictivepanel_predictivepanel"
     },
     {
       "label": "console.tsx",
@@ -429,9 +549,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_console",
       "community": 113,
-      "norm_label": "console.tsx"
+      "norm_label": "console.tsx",
+      "id": "routes_console"
     },
     {
       "label": "Route",
@@ -439,9 +559,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L54",
       "_origin": "ast",
-      "id": "routes_console_route",
       "community": 8,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_console_route"
     },
     {
       "label": "greeting()",
@@ -449,9 +569,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L70",
       "_origin": "ast",
-      "id": "routes_console_greeting",
       "community": 113,
-      "norm_label": "greeting()"
+      "norm_label": "greeting()",
+      "id": "routes_console_greeting"
     },
     {
       "label": "fmt()",
@@ -459,9 +579,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L77",
       "_origin": "ast",
-      "id": "routes_console_fmt",
       "community": 108,
-      "norm_label": "fmt()"
+      "norm_label": "fmt()",
+      "id": "routes_console_fmt"
     },
     {
       "label": "Console()",
@@ -469,9 +589,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L79",
       "_origin": "ast",
-      "id": "routes_console_console",
       "community": 108,
-      "norm_label": "console()"
+      "norm_label": "console()",
+      "id": "routes_console_console"
     },
     {
       "label": "Panel()",
@@ -479,9 +599,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L692",
       "_origin": "ast",
-      "id": "routes_console_panel",
       "community": 113,
-      "norm_label": "panel()"
+      "norm_label": "panel()",
+      "id": "routes_console_panel"
     },
     {
       "label": "SectionLabel()",
@@ -489,9 +609,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L734",
       "_origin": "ast",
-      "id": "routes_console_sectionlabel",
       "community": 113,
-      "norm_label": "sectionlabel()"
+      "norm_label": "sectionlabel()",
+      "id": "routes_console_sectionlabel"
     },
     {
       "label": "Dash()",
@@ -499,9 +619,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L742",
       "_origin": "ast",
-      "id": "routes_console_dash",
       "community": 113,
-      "norm_label": "dash()"
+      "norm_label": "dash()",
+      "id": "routes_console_dash"
     },
     {
       "label": "Empty()",
@@ -509,9 +629,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L746",
       "_origin": "ast",
-      "id": "routes_console_empty",
       "community": 113,
-      "norm_label": "empty()"
+      "norm_label": "empty()",
+      "id": "routes_console_empty"
     },
     {
       "label": "Metric()",
@@ -519,9 +639,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L752",
       "_origin": "ast",
-      "id": "routes_console_metric",
       "community": 113,
-      "norm_label": "metric()"
+      "norm_label": "metric()",
+      "id": "routes_console_metric"
     },
     {
       "label": "Delta()",
@@ -529,9 +649,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L779",
       "_origin": "ast",
-      "id": "routes_console_delta",
       "community": 113,
-      "norm_label": "delta()"
+      "norm_label": "delta()",
+      "id": "routes_console_delta"
     },
     {
       "label": "YearBars()",
@@ -539,9 +659,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L796",
       "_origin": "ast",
-      "id": "routes_console_yearbars",
       "community": 113,
-      "norm_label": "yearbars()"
+      "norm_label": "yearbars()",
+      "id": "routes_console_yearbars"
     },
     {
       "label": "ACCENTS",
@@ -549,9 +669,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L840",
       "_origin": "ast",
-      "id": "routes_console_accents",
       "community": 113,
-      "norm_label": "accents"
+      "norm_label": "accents",
+      "id": "routes_console_accents"
     },
     {
       "label": "RankedBars()",
@@ -559,9 +679,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L845",
       "_origin": "ast",
-      "id": "routes_console_rankedbars",
       "community": 113,
-      "norm_label": "rankedbars()"
+      "norm_label": "rankedbars()",
+      "id": "routes_console_rankedbars"
     },
     {
       "label": "Distribution()",
@@ -569,9 +689,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L899",
       "_origin": "ast",
-      "id": "routes_console_distribution",
       "community": 113,
-      "norm_label": "distribution()"
+      "norm_label": "distribution()",
+      "id": "routes_console_distribution"
     },
     {
       "label": "TailList()",
@@ -579,9 +699,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L955",
       "_origin": "ast",
-      "id": "routes_console_taillist",
       "community": 113,
-      "norm_label": "taillist()"
+      "norm_label": "taillist()",
+      "id": "routes_console_taillist"
     },
     {
       "label": "DistrictTable()",
@@ -589,9 +709,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L997",
       "_origin": "ast",
-      "id": "routes_console_districttable",
       "community": 113,
-      "norm_label": "districttable()"
+      "norm_label": "districttable()",
+      "id": "routes_console_districttable"
     },
     {
       "label": "Coverage()",
@@ -599,9 +719,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L1056",
       "_origin": "ast",
-      "id": "routes_console_coverage",
       "community": 113,
-      "norm_label": "coverage()"
+      "norm_label": "coverage()",
+      "id": "routes_console_coverage"
     },
     {
       "label": "Select()",
@@ -609,9 +729,9 @@
       "source_file": "frontend/src/routes/console.tsx",
       "source_location": "L1070",
       "_origin": "ast",
-      "id": "routes_console_select",
       "community": 113,
-      "norm_label": "select()"
+      "norm_label": "select()",
+      "id": "routes_console_select"
     },
     {
       "label": "dossier.tsx",
@@ -619,9 +739,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_dossier",
       "community": 28,
-      "norm_label": "dossier.tsx"
+      "norm_label": "dossier.tsx",
+      "id": "routes_dossier"
     },
     {
       "label": "Route",
@@ -629,9 +749,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "routes_dossier_route",
       "community": 8,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_dossier_route"
     },
     {
       "label": "RISK_BG",
@@ -639,9 +759,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "routes_dossier_risk_bg",
       "community": 28,
-      "norm_label": "risk_bg"
+      "norm_label": "risk_bg",
+      "id": "routes_dossier_risk_bg"
     },
     {
       "label": "WANTED_BG",
@@ -649,9 +769,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L27",
       "_origin": "ast",
-      "id": "routes_dossier_wanted_bg",
       "community": 28,
-      "norm_label": "wanted_bg"
+      "norm_label": "wanted_bg",
+      "id": "routes_dossier_wanted_bg"
     },
     {
       "label": "RiskBadge()",
@@ -659,9 +779,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "routes_dossier_riskbadge",
       "community": 28,
-      "norm_label": "riskbadge()"
+      "norm_label": "riskbadge()",
+      "id": "routes_dossier_riskbadge"
     },
     {
       "label": "FaceCard()",
@@ -669,9 +789,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L46",
       "_origin": "ast",
-      "id": "routes_dossier_facecard",
       "community": 28,
-      "norm_label": "facecard()"
+      "norm_label": "facecard()",
+      "id": "routes_dossier_facecard"
     },
     {
       "label": "Section()",
@@ -679,9 +799,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L108",
       "_origin": "ast",
-      "id": "routes_dossier_section",
       "community": 28,
-      "norm_label": "section()"
+      "norm_label": "section()",
+      "id": "routes_dossier_section"
     },
     {
       "label": "Field()",
@@ -689,9 +809,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L123",
       "_origin": "ast",
-      "id": "routes_dossier_field",
       "community": 28,
-      "norm_label": "field()"
+      "norm_label": "field()",
+      "id": "routes_dossier_field"
     },
     {
       "label": "DossierScreen()",
@@ -699,9 +819,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L133",
       "_origin": "ast",
-      "id": "routes_dossier_dossierscreen",
       "community": 28,
-      "norm_label": "dossierscreen()"
+      "norm_label": "dossierscreen()",
+      "id": "routes_dossier_dossierscreen"
     },
     {
       "label": "DossierDetailPane()",
@@ -709,9 +829,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L334",
       "_origin": "ast",
-      "id": "routes_dossier_dossierdetailpane",
       "community": 28,
-      "norm_label": "dossierdetailpane()"
+      "norm_label": "dossierdetailpane()",
+      "id": "routes_dossier_dossierdetailpane"
     },
     {
       "label": "forecast.tsx",
@@ -719,9 +839,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_forecast",
       "community": 9,
-      "norm_label": "forecast.tsx"
+      "norm_label": "forecast.tsx",
+      "id": "routes_forecast"
     },
     {
       "label": "TAB_KEYS",
@@ -729,9 +849,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L103",
       "_origin": "ast",
-      "id": "routes_forecast_tab_keys",
       "community": 9,
-      "norm_label": "tab_keys"
+      "norm_label": "tab_keys",
+      "id": "routes_forecast_tab_keys"
     },
     {
       "label": "TabKey",
@@ -739,9 +859,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L104",
       "_origin": "ast",
-      "id": "routes_forecast_tabkey",
       "community": 9,
-      "norm_label": "tabkey"
+      "norm_label": "tabkey",
+      "id": "routes_forecast_tabkey"
     },
     {
       "label": "Search",
@@ -749,9 +869,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L106",
       "_origin": "ast",
-      "id": "routes_forecast_search",
       "community": 9,
-      "norm_label": "search"
+      "norm_label": "search",
+      "id": "routes_forecast_search"
     },
     {
       "label": "Route",
@@ -759,9 +879,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L108",
       "_origin": "ast",
-      "id": "routes_forecast_route",
       "community": 8,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_forecast_route"
     },
     {
       "label": "fmt()",
@@ -769,9 +889,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L134",
       "_origin": "ast",
-      "id": "routes_forecast_fmt",
       "community": 9,
-      "norm_label": "fmt()"
+      "norm_label": "fmt()",
+      "id": "routes_forecast_fmt"
     },
     {
       "label": "RISK_ORDER",
@@ -779,9 +899,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L135",
       "_origin": "ast",
-      "id": "routes_forecast_risk_order",
       "community": 9,
-      "norm_label": "risk_order"
+      "norm_label": "risk_order",
+      "id": "routes_forecast_risk_order"
     },
     {
       "label": "severityColor()",
@@ -789,9 +909,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L146",
       "_origin": "ast",
-      "id": "routes_forecast_severitycolor",
       "community": 9,
-      "norm_label": "severitycolor()"
+      "norm_label": "severitycolor()",
+      "id": "routes_forecast_severitycolor"
     },
     {
       "label": "Card()",
@@ -799,9 +919,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L162",
       "_origin": "ast",
-      "id": "routes_forecast_card",
       "community": 9,
-      "norm_label": "card()"
+      "norm_label": "card()",
+      "id": "routes_forecast_card"
     },
     {
       "label": "KpiTile()",
@@ -809,9 +929,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L216",
       "_origin": "ast",
-      "id": "routes_forecast_kpitile",
       "community": 9,
-      "norm_label": "kpitile()"
+      "norm_label": "kpitile()",
+      "id": "routes_forecast_kpitile"
     },
     {
       "label": "Empty()",
@@ -819,9 +939,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L248",
       "_origin": "ast",
-      "id": "routes_forecast_empty",
       "community": 9,
-      "norm_label": "empty()"
+      "norm_label": "empty()",
+      "id": "routes_forecast_empty"
     },
     {
       "label": "Skeleton()",
@@ -829,9 +949,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L270",
       "_origin": "ast",
-      "id": "routes_forecast_skeleton",
       "community": 9,
-      "norm_label": "skeleton()"
+      "norm_label": "skeleton()",
+      "id": "routes_forecast_skeleton"
     },
     {
       "label": "MeterBar()",
@@ -839,9 +959,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L281",
       "_origin": "ast",
-      "id": "routes_forecast_meterbar",
       "community": 9,
-      "norm_label": "meterbar()"
+      "norm_label": "meterbar()",
+      "id": "routes_forecast_meterbar"
     },
     {
       "label": "RiskChip()",
@@ -849,9 +969,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L303",
       "_origin": "ast",
-      "id": "routes_forecast_riskchip",
       "community": 9,
-      "norm_label": "riskchip()"
+      "norm_label": "riskchip()",
+      "id": "routes_forecast_riskchip"
     },
     {
       "label": "useDebounce()",
@@ -859,9 +979,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L316",
       "_origin": "ast",
-      "id": "routes_forecast_usedebounce",
       "community": 9,
-      "norm_label": "usedebounce()"
+      "norm_label": "usedebounce()",
+      "id": "routes_forecast_usedebounce"
     },
     {
       "label": "FilterInput()",
@@ -869,9 +989,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L326",
       "_origin": "ast",
-      "id": "routes_forecast_filterinput",
       "community": 9,
-      "norm_label": "filterinput()"
+      "norm_label": "filterinput()",
+      "id": "routes_forecast_filterinput"
     },
     {
       "label": "Segmented()",
@@ -879,9 +999,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L356",
       "_origin": "ast",
-      "id": "routes_forecast_segmented",
       "community": 9,
-      "norm_label": "segmented()"
+      "norm_label": "segmented()",
+      "id": "routes_forecast_segmented"
     },
     {
       "label": "AlertCard()",
@@ -889,9 +1009,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L393",
       "_origin": "ast",
-      "id": "routes_forecast_alertcard",
       "community": 9,
-      "norm_label": "alertcard()"
+      "norm_label": "alertcard()",
+      "id": "routes_forecast_alertcard"
     },
     {
       "label": "CrimeHeatmap()",
@@ -899,9 +1019,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L490",
       "_origin": "ast",
-      "id": "routes_forecast_crimeheatmap",
       "community": 9,
-      "norm_label": "crimeheatmap()"
+      "norm_label": "crimeheatmap()",
+      "id": "routes_forecast_crimeheatmap"
     },
     {
       "label": "ClusterRow()",
@@ -909,9 +1029,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L595",
       "_origin": "ast",
-      "id": "routes_forecast_clusterrow",
       "community": 9,
-      "norm_label": "clusterrow()"
+      "norm_label": "clusterrow()",
+      "id": "routes_forecast_clusterrow"
     },
     {
       "label": "SourceKey",
@@ -919,9 +1039,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L691",
       "_origin": "ast",
-      "id": "routes_forecast_sourcekey",
       "community": 9,
-      "norm_label": "sourcekey"
+      "norm_label": "sourcekey",
+      "id": "routes_forecast_sourcekey"
     },
     {
       "label": "ALL_SOURCES",
@@ -929,9 +1049,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L693",
       "_origin": "ast",
-      "id": "routes_forecast_all_sources",
       "community": 9,
-      "norm_label": "all_sources"
+      "norm_label": "all_sources",
+      "id": "routes_forecast_all_sources"
     },
     {
       "label": "HORIZONS",
@@ -939,9 +1059,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L704",
       "_origin": "ast",
-      "id": "routes_forecast_horizons",
       "community": 9,
-      "norm_label": "horizons"
+      "norm_label": "horizons",
+      "id": "routes_forecast_horizons"
     },
     {
       "label": "ForecastScreen()",
@@ -949,9 +1069,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L706",
       "_origin": "ast",
-      "id": "routes_forecast_forecastscreen",
       "community": 9,
-      "norm_label": "forecastscreen()"
+      "norm_label": "forecastscreen()",
+      "id": "routes_forecast_forecastscreen"
     },
     {
       "label": "SourceStatus()",
@@ -959,9 +1079,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L1925",
       "_origin": "ast",
-      "id": "routes_forecast_sourcestatus",
       "community": 9,
-      "norm_label": "sourcestatus()"
+      "norm_label": "sourcestatus()",
+      "id": "routes_forecast_sourcestatus"
     },
     {
       "label": "translateAlerts()",
@@ -969,9 +1089,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L1983",
       "_origin": "ast",
-      "id": "routes_forecast_translatealerts",
       "community": 9,
-      "norm_label": "translatealerts()"
+      "norm_label": "translatealerts()",
+      "id": "routes_forecast_translatealerts"
     },
     {
       "label": "translateCells()",
@@ -979,9 +1099,9 @@
       "source_file": "frontend/src/routes/forecast.tsx",
       "source_location": "L2001",
       "_origin": "ast",
-      "id": "routes_forecast_translatecells",
       "community": 9,
-      "norm_label": "translatecells()"
+      "norm_label": "translatecells()",
+      "id": "routes_forecast_translatecells"
     },
     {
       "label": "graphs.tsx",
@@ -989,9 +1109,9 @@
       "source_file": "frontend/src/routes/graphs.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_graphs",
       "community": 9,
-      "norm_label": "graphs.tsx"
+      "norm_label": "graphs.tsx",
+      "id": "routes_graphs"
     },
     {
       "label": "Search",
@@ -999,9 +1119,9 @@
       "source_file": "frontend/src/routes/graphs.tsx",
       "source_location": "L50",
       "_origin": "ast",
-      "id": "routes_graphs_search",
       "community": 9,
-      "norm_label": "search"
+      "norm_label": "search",
+      "id": "routes_graphs_search"
     },
     {
       "label": "Route",
@@ -1009,9 +1129,9 @@
       "source_file": "frontend/src/routes/graphs.tsx",
       "source_location": "L52",
       "_origin": "ast",
-      "id": "routes_graphs_route",
       "community": 9,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_graphs_route"
     },
     {
       "label": "fmt()",
@@ -1019,9 +1139,9 @@
       "source_file": "frontend/src/routes/graphs.tsx",
       "source_location": "L80",
       "_origin": "ast",
-      "id": "routes_graphs_fmt",
       "community": 9,
-      "norm_label": "fmt()"
+      "norm_label": "fmt()",
+      "id": "routes_graphs_fmt"
     },
     {
       "label": "ChartCard()",
@@ -1029,9 +1149,9 @@
       "source_file": "frontend/src/routes/graphs.tsx",
       "source_location": "L82",
       "_origin": "ast",
-      "id": "routes_graphs_chartcard",
       "community": 9,
-      "norm_label": "chartcard()"
+      "norm_label": "chartcard()",
+      "id": "routes_graphs_chartcard"
     },
     {
       "label": "Skeleton()",
@@ -1039,9 +1159,9 @@
       "source_file": "frontend/src/routes/graphs.tsx",
       "source_location": "L127",
       "_origin": "ast",
-      "id": "routes_graphs_skeleton",
       "community": 9,
-      "norm_label": "skeleton()"
+      "norm_label": "skeleton()",
+      "id": "routes_graphs_skeleton"
     },
     {
       "label": "NoData()",
@@ -1049,9 +1169,9 @@
       "source_file": "frontend/src/routes/graphs.tsx",
       "source_location": "L135",
       "_origin": "ast",
-      "id": "routes_graphs_nodata",
       "community": 9,
-      "norm_label": "nodata()"
+      "norm_label": "nodata()",
+      "id": "routes_graphs_nodata"
     },
     {
       "label": "GraphsScreen()",
@@ -1059,9 +1179,9 @@
       "source_file": "frontend/src/routes/graphs.tsx",
       "source_location": "L147",
       "_origin": "ast",
-      "id": "routes_graphs_graphsscreen",
       "community": 9,
-      "norm_label": "graphsscreen()"
+      "norm_label": "graphsscreen()",
+      "id": "routes_graphs_graphsscreen"
     },
     {
       "label": "TreemapCell()",
@@ -1069,9 +1189,9 @@
       "source_file": "frontend/src/routes/graphs.tsx",
       "source_location": "L1189",
       "_origin": "ast",
-      "id": "routes_graphs_treemapcell",
       "community": 9,
-      "norm_label": "treemapcell()"
+      "norm_label": "treemapcell()",
+      "id": "routes_graphs_treemapcell"
     },
     {
       "label": "news.tsx",
@@ -1079,9 +1199,9 @@
       "source_file": "frontend/src/routes/news.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_news",
       "community": 214,
-      "norm_label": "news.tsx"
+      "norm_label": "news.tsx",
+      "id": "routes_news"
     },
     {
       "label": "Search",
@@ -1089,9 +1209,9 @@
       "source_file": "frontend/src/routes/news.tsx",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "routes_news_search",
       "community": 214,
-      "norm_label": "search"
+      "norm_label": "search",
+      "id": "routes_news_search"
     },
     {
       "label": "Route",
@@ -1099,9 +1219,9 @@
       "source_file": "frontend/src/routes/news.tsx",
       "source_location": "L38",
       "_origin": "ast",
-      "id": "routes_news_route",
       "community": 214,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_news_route"
     },
     {
       "label": "NewsScreen()",
@@ -1109,9 +1229,9 @@
       "source_file": "frontend/src/routes/news.tsx",
       "source_location": "L58",
       "_origin": "ast",
-      "id": "routes_news_newsscreen",
       "community": 214,
-      "norm_label": "newsscreen()"
+      "norm_label": "newsscreen()",
+      "id": "routes_news_newsscreen"
     },
     {
       "label": "reports.tsx",
@@ -1119,9 +1239,9 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "routes_reports",
       "community": 214,
-      "norm_label": "reports.tsx"
+      "norm_label": "reports.tsx",
+      "id": "routes_reports"
     },
     {
       "label": "Route",
@@ -1129,9 +1249,9 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L31",
       "_origin": "ast",
-      "id": "routes_reports_route",
       "community": 214,
-      "norm_label": "route"
+      "norm_label": "route",
+      "id": "routes_reports_route"
     },
     {
       "label": "ItemType",
@@ -1139,9 +1259,9 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "routes_reports_itemtype",
       "community": 214,
-      "norm_label": "itemtype"
+      "norm_label": "itemtype",
+      "id": "routes_reports_itemtype"
     },
     {
       "label": "ReportItem",
@@ -1149,9 +1269,9 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L43",
       "_origin": "ast",
-      "id": "routes_reports_reportitem",
       "community": 214,
-      "norm_label": "reportitem"
+      "norm_label": "reportitem",
+      "id": "routes_reports_reportitem"
     },
     {
       "label": "Template",
@@ -1159,9 +1279,9 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L51",
       "_origin": "ast",
-      "id": "routes_reports_template",
       "community": 214,
-      "norm_label": "template"
+      "norm_label": "template",
+      "id": "routes_reports_template"
     },
     {
       "label": "TEMPLATES",
@@ -1169,9 +1289,9 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L53",
       "_origin": "ast",
-      "id": "routes_reports_templates",
       "community": 214,
-      "norm_label": "templates"
+      "norm_label": "templates",
+      "id": "routes_reports_templates"
     },
     {
       "label": "injectPrintStyles()",
@@ -1179,9 +1299,9 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L70",
       "_origin": "ast",
-      "id": "routes_reports_injectprintstyles",
       "community": 214,
-      "norm_label": "injectprintstyles()"
+      "norm_label": "injectprintstyles()",
+      "id": "routes_reports_injectprintstyles"
     },
     {
       "label": "AddItemBar()",
@@ -1189,9 +1309,9 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L88",
       "_origin": "ast",
-      "id": "routes_reports_additembar",
       "community": 214,
-      "norm_label": "additembar()"
+      "norm_label": "additembar()",
+      "id": "routes_reports_additembar"
     },
     {
       "label": "UploadPanel()",
@@ -1199,9 +1319,9 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L203",
       "_origin": "ast",
-      "id": "routes_reports_uploadpanel",
       "community": 214,
-      "norm_label": "uploadpanel()"
+      "norm_label": "uploadpanel()",
+      "id": "routes_reports_uploadpanel"
     },
     {
       "label": "Reports()",
@@ -1209,9 +1329,9 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L356",
       "_origin": "ast",
-      "id": "routes_reports_reports",
       "community": 214,
-      "norm_label": "reports()"
+      "norm_label": "reports()",
+      "id": "routes_reports_reports"
     },
     {
       "label": "ItemIcon()",
@@ -1219,9 +1339,9 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L1118",
       "_origin": "ast",
-      "id": "routes_reports_itemicon",
       "community": 214,
-      "norm_label": "itemicon()"
+      "norm_label": "itemicon()",
+      "id": "routes_reports_itemicon"
     },
     {
       "label": "DocSection()",
@@ -1229,9 +1349,9 @@
       "source_file": "frontend/src/routes/reports.tsx",
       "source_location": "L1138",
       "_origin": "ast",
-      "id": "routes_reports_docsection",
       "community": 214,
-      "norm_label": "docsection()"
+      "norm_label": "docsection()",
+      "id": "routes_reports_docsection"
     },
     {
       "label": "ARCHITECTURE.md",
@@ -3492,126 +3612,6 @@
       "community": 126,
       "norm_label": "32.3 architectural integrity & verification protocol",
       "id": "docs_architecture_32_3_architectural_integrity_verification_protocol"
-    },
-    {
-      "label": "LandingShell.tsx",
-      "file_type": "code",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "landingshell.tsx",
-      "id": "components_landingshell"
-    },
-    {
-      "label": "NB()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L6",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "nb()",
-      "id": "components_landingshell_nb"
-    },
-    {
-      "label": "GridBg()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L22",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "gridbg()",
-      "id": "components_landingshell_gridbg"
-    },
-    {
-      "label": "Header()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L37",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "header()",
-      "id": "components_landingshell_header"
-    },
-    {
-      "label": "FooterCol()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L98",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "footercol()",
-      "id": "components_landingshell_footercol"
-    },
-    {
-      "label": "Footer()",
-      "file_type": "code",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L119",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "footer()",
-      "id": "components_landingshell_footer"
-    },
-    {
-      "label": "index.tsx",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "index.tsx",
-      "id": "routes_index"
-    },
-    {
-      "label": "Route",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L5",
-      "_origin": "ast",
-      "community": 8,
-      "norm_label": "route",
-      "id": "routes_index_route"
-    },
-    {
-      "label": "hsl2rgb()",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L219",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "hsl2rgb()",
-      "id": "routes_index_hsl2rgb"
-    },
-    {
-      "label": "setAccentHue()",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L236",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "setaccenthue()",
-      "id": "routes_index_setaccenthue"
-    },
-    {
-      "label": "applyMode()",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L248",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "applymode()",
-      "id": "routes_index_applymode"
-    },
-    {
-      "label": "LandingPage()",
-      "file_type": "code",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L271",
-      "_origin": "ast",
-      "community": 61,
-      "norm_label": "landingpage()",
-      "id": "routes_index_landingpage"
     },
     {
       "label": "login.tsx",
@@ -38318,798 +38318,205 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L17",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L93",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "core_audit",
-      "target": "core_audit_digest"
+      "source": "components_landingshell",
+      "target": "components_landingshell_footer"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L41",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L76",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "core_audit",
-      "target": "core_audit_verify_chain"
+      "source": "components_landingshell",
+      "target": "components_landingshell_footercol"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L22",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L14",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "core_audit",
-      "target": "core_audit_write_audit"
+      "source": "components_landingshell",
+      "target": "components_landingshell_gridbg"
     },
     {
-      "relation": "rationale_for",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audit_rationale_1",
-      "target": "core_audit"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L47",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audit_verify_chain",
-      "target": "core_audit_digest"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L34",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audit_write_audit",
-      "target": "core_audit_digest"
-    },
-    {
-      "relation": "references",
-      "context": "return_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L22",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audit_write_audit",
-      "target": "auditlog"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L22",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "core_audit_write_audit",
-      "target": "backend_app_core_audit_py_asyncsession"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/admin.py",
-      "source_location": "L164",
-      "weight": 1.0,
-      "source": "routes_admin_update_policy",
-      "target": "core_audit_write_audit"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/board.py",
-      "source_location": "L42",
-      "weight": 1.0,
-      "source": "routes_board_board_generate",
-      "target": "core_audit_write_audit"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/dossier.py",
-      "source_location": "L53",
-      "weight": 1.0,
-      "source": "routes_dossier_get_dossier",
-      "target": "core_audit_write_audit"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/financial.py",
-      "source_location": "L28",
-      "weight": 1.0,
-      "source": "routes_financial_money_trail",
-      "target": "core_audit_write_audit"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/intelligence.py",
-      "source_location": "L165",
-      "weight": 1.0,
-      "source": "routes_intelligence_forecast_alerts",
-      "target": "core_audit_write_audit"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/intelligence.py",
-      "source_location": "L59",
-      "weight": 1.0,
-      "source": "routes_intelligence_network_case",
-      "target": "core_audit_write_audit"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/intelligence.py",
-      "source_location": "L72",
-      "weight": 1.0,
-      "source": "routes_intelligence_network_person",
-      "target": "core_audit_write_audit"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/intelligence.py",
-      "source_location": "L47",
-      "weight": 1.0,
-      "source": "routes_intelligence_network_rings",
-      "target": "core_audit_write_audit"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/intelligence.py",
-      "source_location": "L138",
-      "weight": 1.0,
-      "source": "routes_intelligence_offender_profile",
-      "target": "core_audit_write_audit"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/intelligence.py",
-      "source_location": "L224",
-      "weight": 1.0,
-      "source": "routes_intelligence_socio_demographics",
-      "target": "core_audit_write_audit"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/security.py",
-      "source_location": "L44",
-      "weight": 1.0,
-      "source": "routes_security_security_event",
-      "target": "core_audit_write_audit"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/services/chat_service.py",
+      "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L29",
       "weight": 1.0,
-      "source": "services_chat_service_audit_query",
-      "target": "core_audit_write_audit"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/services/chat_service.py",
-      "source_location": "L21",
-      "weight": 1.0,
-      "source": "services_chat_service_stream_chat",
-      "target": "core_audit_write_audit"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L14",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_core_audit_py_asyncsession",
-      "target": "db_models_auditlog"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L41",
-      "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "core_audit_verify_chain",
-      "target": "backend_app_core_audit_py_asyncsession"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/core/audit.py",
-      "source_location": "L14",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "auditlog",
-      "target": "db_models_auditlog"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "backend/app/api/routes/audit.py",
-      "source_location": "L31",
-      "weight": 1.0,
-      "source": "routes_audit_list_audit",
-      "target": "core_audit_verify_chain"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L26",
-      "weight": 1.0,
-      "source": "services_dossier_service",
-      "target": "datetime",
-      "confidence_score": 1.0
+      "source": "components_landingshell",
+      "target": "components_landingshell_header"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L31",
-      "weight": 1.0,
-      "source": "services_dossier_service",
-      "target": "services_dossier_service_auto_seed",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L44",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L4",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "services_dossier_service",
-      "target": "services_dossier_service_get_dossier"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "services_dossier_service",
-      "target": "services_dossier_service_list_dossiers"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "services_dossier_service_rationale_1",
-      "target": "services_dossier_service"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L31",
-      "weight": 1.0,
-      "source": "services_dossier_service_auto_seed",
-      "target": "backend_app_services_dossier_service_py_asyncsession",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L128",
-      "weight": 1.0,
-      "source": "services_dossier_service_list_dossiers",
-      "target": "services_dossier_service_auto_seed",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L32",
-      "weight": 1.0,
-      "source": "services_dossier_service_rationale_32",
-      "target": "services_dossier_service_auto_seed",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L21",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "backend_app_api_routes_dossier_py_dossierdetail"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L21",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "backend_app_api_routes_dossier_py_dossierlistitem"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L14",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "db_demo_dossier_models_dossierbankaccount"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L14",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "db_demo_dossier_models_dossiercontact"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L14",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "db_demo_dossier_models_dossiercrime"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L14",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "db_demo_dossier_models_dossierfamily"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L14",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "backend_app_services_dossier_service_py_asyncsession",
-      "target": "db_demo_dossier_models_dossierperson"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L44",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "services_dossier_service_get_dossier",
-      "target": "backend_app_services_dossier_service_py_asyncsession"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "services_dossier_service_list_dossiers",
-      "target": "backend_app_services_dossier_service_py_asyncsession"
-    },
-    {
-      "relation": "references",
-      "context": "generic_arg",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L122",
-      "weight": 1.0,
-      "source": "services_dossier_service_list_dossiers",
-      "target": "dossierlistitem",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L123",
-      "weight": 1.0,
-      "source": "services_dossier_service_rationale_123",
-      "target": "services_dossier_service_list_dossiers",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "return_type",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L146",
-      "weight": 1.0,
-      "source": "services_dossier_service_get_dossier",
-      "target": "dossierdetail",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/app/services/dossier_service.py",
-      "source_location": "L147",
-      "weight": 1.0,
-      "source": "services_dossier_service_rationale_147",
-      "target": "services_dossier_service_get_dossier",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_demo_dossier.py",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "seed_load_demo_dossier",
-      "target": "datetime"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_demo_dossier.py",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "seed_load_demo_dossier",
-      "target": "seed_load_demo_dossier_date"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_demo_dossier.py",
-      "source_location": "L25",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "seed_load_demo_dossier",
-      "target": "seed_load_demo_dossier_main"
-    },
-    {
-      "relation": "rationale_for",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_demo_dossier.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "seed_load_demo_dossier_rationale_1",
-      "target": "seed_load_demo_dossier"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "backend/seed/load_demo_dossier.py",
-      "source_location": "L52",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "seed_load_demo_dossier_main",
-      "target": "seed_load_demo_dossier_date"
+      "source": "components_landingshell",
+      "target": "components_landingshell_nb"
     },
     {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_intelligence"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_intelligence_forecastalert"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_intelligence_forecastcell"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_intelligence_intelligence"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops_responseops"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops_riskzone"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "api_responseops_suggestion"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L3",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "components_crimemap"
+      "source": "components_landingshell",
+      "target": "components_themepicker"
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_file": "frontend/src/components/LandingShell.tsx",
       "source_location": "L3",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "components_crimemap_crimemap"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "components_crimemap_hotspot"
+      "source": "components_landingshell",
+      "target": "components_themepicker_themepicker"
     },
     {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L17",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L4",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
+      "source": "components_landingshell",
       "target": "lib_i18n"
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "lib_i18n_usei18n",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L5",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L4",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "lib_i18n_uset"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "lib_tdata_tdata",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L30",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_cellforalert"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L18",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_ll"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_predictivepanel"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_risk_bg"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "ops_predictivepanel",
-      "target": "ops_predictivepanel_risk_order"
+      "source": "components_landingshell",
+      "target": "lib_i18n_usei18n"
     },
     {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/ops-predictive.tsx",
-      "source_location": "L5",
+      "source_file": "frontend/src/routes/about.tsx",
+      "source_location": "L21",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "routes_ops_predictive",
-      "target": "ops_predictivepanel"
+      "source": "routes_about",
+      "target": "components_landingshell"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/about.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_about",
+      "target": "components_landingshell_nb"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell_nb"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/about.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_about",
+      "target": "components_landingshell_gridbg"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell_gridbg"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L39",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L38",
       "weight": 1.0,
-      "source": "ops_predictivepanel_predictivepanel",
+      "source": "components_landingshell_header",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/about.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_about",
+      "target": "components_landingshell_header"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell_header"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "components_landingshell_footercol",
       "target": "lib_i18n_usei18n"
     },
     {
@@ -39117,22 +38524,33 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
-      "source_location": "L39",
+      "source_file": "frontend/src/components/LandingShell.tsx",
+      "source_location": "L113",
       "weight": 1.0,
-      "source": "ops_predictivepanel_predictivepanel",
-      "target": "lib_i18n_uset"
+      "source": "components_landingshell_footer",
+      "target": "lib_i18n_usei18n"
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/ops-predictive.tsx",
-      "source_location": "L5",
+      "source_file": "frontend/src/routes/about.tsx",
+      "source_location": "L21",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "routes_ops_predictive",
-      "target": "ops_predictivepanel_predictivepanel"
+      "source": "routes_about",
+      "target": "components_landingshell_footer"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "components_landingshell_footer"
     },
     {
       "relation": "imports_from",
@@ -39187,17 +38605,6 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "components_handsfreelayer",
-      "target": "lib_i18n"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
       "target": "lib_i18n"
     },
     {
@@ -39394,9 +38801,9 @@
       "source_file": "frontend/src/lib/i18n.tsx",
       "source_location": "L3392",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_i18n",
-      "target": "lib_i18n_translatedynamicpatterns",
-      "confidence_score": 1.0
+      "target": "lib_i18n_translatedynamicpatterns"
     },
     {
       "relation": "contains",
@@ -39438,6 +38845,17 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "ops_dispatchpanel",
+      "target": "lib_i18n"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
       "target": "lib_i18n"
     },
     {
@@ -39524,9 +38942,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "lib_i18n",
-      "confidence_score": 1.0
+      "target": "lib_i18n"
     },
     {
       "relation": "imports_from",
@@ -39546,9 +38964,9 @@
       "source_file": "frontend/src/routes/graphs.tsx",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_graphs",
-      "target": "lib_i18n",
-      "confidence_score": 1.0
+      "target": "lib_i18n"
     },
     {
       "relation": "imports_from",
@@ -39927,50 +39345,6 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L113",
-      "weight": 1.0,
-      "source": "components_landingshell_footer",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L92",
-      "weight": 1.0,
-      "source": "components_landingshell_footercol",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L38",
-      "weight": 1.0,
-      "source": "components_landingshell_header",
-      "target": "lib_i18n_usei18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/ProfileMenu.tsx",
       "source_location": "L3",
       "weight": 1.0,
@@ -40103,6 +39477,28 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "ops_predictivepanel_predictivepanel",
+      "target": "lib_i18n_usei18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/routes/about.tsx",
       "source_location": "L25",
       "weight": 1.0,
@@ -40194,9 +39590,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "lib_i18n_usei18n",
-      "confidence_score": 1.0
+      "target": "lib_i18n_usei18n"
     },
     {
       "relation": "calls",
@@ -40708,6 +40104,28 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "ops_predictivepanel_predictivepanel",
+      "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "frontend/src/components/ops/ReviewPanel.tsx",
       "source_location": "L4",
       "weight": 1.0,
@@ -40887,9 +40305,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "lib_i18n_uset",
-      "confidence_score": 1.0
+      "target": "lib_i18n_uset"
     },
     {
       "relation": "calls",
@@ -41264,6 +40682,886 @@
       "weight": 1.0,
       "source": "vision_visionworkspace_visionworkspace",
       "target": "lib_i18n_uset"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "api_client"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L200",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "routes_index_applymode"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L177",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "routes_index_hsl2rgb"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L210",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "routes_index_landingpage"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "routes_index_route"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L190",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index",
+      "target": "routes_index_setaccenthue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_routetree_gen",
+      "target": "routes_index"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_routetree_gen",
+      "target": "routes_index_route"
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routeTree.gen.ts",
+      "source_location": "L208",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_routetree_gen_fileroutesbypath",
+      "target": "routes_index_route"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/index.tsx",
+      "source_location": "L191",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_index_setaccenthue",
+      "target": "routes_index_hsl2rgb"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_audit",
+      "target": "core_audit_digest"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_audit",
+      "target": "core_audit_verify_chain"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_audit",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_audit_rationale_1",
+      "target": "core_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_audit_verify_chain",
+      "target": "core_audit_digest"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_audit_write_audit",
+      "target": "core_audit_digest"
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_audit_write_audit",
+      "target": "auditlog"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_audit_write_audit",
+      "target": "backend_app_core_audit_py_asyncsession"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/admin.py",
+      "source_location": "L164",
+      "weight": 1.0,
+      "source": "routes_admin_update_policy",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/board.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "routes_board_board_generate",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/dossier.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "routes_dossier_get_dossier",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/financial.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "routes_financial_money_trail",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/intelligence.py",
+      "source_location": "L165",
+      "weight": 1.0,
+      "source": "routes_intelligence_forecast_alerts",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/intelligence.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "routes_intelligence_network_case",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/intelligence.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "routes_intelligence_network_person",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/intelligence.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "routes_intelligence_network_rings",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/intelligence.py",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "routes_intelligence_offender_profile",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/intelligence.py",
+      "source_location": "L224",
+      "weight": 1.0,
+      "source": "routes_intelligence_socio_demographics",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/security.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "routes_security_security_event",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/services/chat_service.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "services_chat_service_audit_query",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/services/chat_service.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "services_chat_service_stream_chat",
+      "target": "core_audit_write_audit"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L14",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_core_audit_py_asyncsession",
+      "target": "db_models_auditlog"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "core_audit_verify_chain",
+      "target": "backend_app_core_audit_py_asyncsession"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/core/audit.py",
+      "source_location": "L14",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "auditlog",
+      "target": "db_models_auditlog"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "backend/app/api/routes/audit.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "routes_audit_list_audit",
+      "target": "core_audit_verify_chain"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service",
+      "target": "datetime"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service",
+      "target": "services_dossier_service_auto_seed"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service",
+      "target": "services_dossier_service_get_dossier"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service",
+      "target": "services_dossier_service_list_dossiers"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service_rationale_1",
+      "target": "services_dossier_service"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service_auto_seed",
+      "target": "backend_app_services_dossier_service_py_asyncsession"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L128",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service_list_dossiers",
+      "target": "services_dossier_service_auto_seed"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service_rationale_32",
+      "target": "services_dossier_service_auto_seed"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L21",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_dossier_service_py_asyncsession",
+      "target": "backend_app_api_routes_dossier_py_dossierdetail"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L21",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_dossier_service_py_asyncsession",
+      "target": "backend_app_api_routes_dossier_py_dossierlistitem"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L14",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_dossier_service_py_asyncsession",
+      "target": "db_demo_dossier_models_dossierbankaccount"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L14",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_dossier_service_py_asyncsession",
+      "target": "db_demo_dossier_models_dossiercontact"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L14",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_dossier_service_py_asyncsession",
+      "target": "db_demo_dossier_models_dossiercrime"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L14",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_dossier_service_py_asyncsession",
+      "target": "db_demo_dossier_models_dossierfamily"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L14",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "backend_app_services_dossier_service_py_asyncsession",
+      "target": "db_demo_dossier_models_dossierperson"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service_get_dossier",
+      "target": "backend_app_services_dossier_service_py_asyncsession"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service_list_dossiers",
+      "target": "backend_app_services_dossier_service_py_asyncsession"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service_list_dossiers",
+      "target": "dossierlistitem"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service_rationale_123",
+      "target": "services_dossier_service_list_dossiers"
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L146",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service_get_dossier",
+      "target": "dossierdetail"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/app/services/dossier_service.py",
+      "source_location": "L147",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "services_dossier_service_rationale_147",
+      "target": "services_dossier_service_get_dossier"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_demo_dossier.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_demo_dossier",
+      "target": "datetime"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_demo_dossier.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_demo_dossier",
+      "target": "seed_load_demo_dossier_date"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_demo_dossier.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_demo_dossier",
+      "target": "seed_load_demo_dossier_main"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_demo_dossier.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_demo_dossier_rationale_1",
+      "target": "seed_load_demo_dossier"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "backend/seed/load_demo_dossier.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "seed_load_demo_dossier_main",
+      "target": "seed_load_demo_dossier_date"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_client"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_client_api"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_intelligence"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_intelligence_forecastalert"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_intelligence_forecastcell"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_intelligence_intelligence"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops_responseops"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops_riskzone"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "api_responseops_suggestion"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "components_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "components_crimemap_crimemap"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "components_crimemap_hotspot"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "lib_tdata_tdata"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_cellforalert"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_ll"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_predictivepanel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_risk_bg"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/components/ops/PredictivePanel.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ops_predictivepanel",
+      "target": "ops_predictivepanel_risk_order"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/ops-predictive.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_ops_predictive",
+      "target": "ops_predictivepanel"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend/src/routes/ops-predictive.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "routes_ops_predictive",
+      "target": "ops_predictivepanel_predictivepanel"
     },
     {
       "relation": "imports_from",
@@ -42035,9 +42333,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "api_dossier_dossier",
-      "confidence_score": 1.0
+      "target": "api_dossier_dossier"
     },
     {
       "relation": "imports",
@@ -42046,9 +42344,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "api_dossier_dossierdetail",
-      "confidence_score": 1.0
+      "target": "api_dossier_dossierdetail"
     },
     {
       "relation": "imports",
@@ -42057,9 +42355,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "api_dossier_dossierlistitem",
-      "confidence_score": 1.0
+      "target": "api_dossier_dossierlistitem"
     },
     {
       "relation": "imports",
@@ -42068,9 +42366,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "components_shell_shell",
-      "confidence_score": 1.0
+      "target": "components_shell_shell"
     },
     {
       "relation": "imports",
@@ -42079,9 +42377,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "lib_tdata_tdata",
-      "confidence_score": 1.0
+      "target": "lib_tdata_tdata"
     },
     {
       "relation": "contains",
@@ -42089,9 +42387,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L334",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "routes_dossier_dossierdetailpane",
-      "confidence_score": 1.0
+      "target": "routes_dossier_dossierdetailpane"
     },
     {
       "relation": "contains",
@@ -42099,9 +42397,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L133",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "routes_dossier_dossierscreen",
-      "confidence_score": 1.0
+      "target": "routes_dossier_dossierscreen"
     },
     {
       "relation": "contains",
@@ -42109,9 +42407,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "routes_dossier_facecard",
-      "confidence_score": 1.0
+      "target": "routes_dossier_facecard"
     },
     {
       "relation": "contains",
@@ -42119,9 +42417,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L123",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "routes_dossier_field",
-      "confidence_score": 1.0
+      "target": "routes_dossier_field"
     },
     {
       "relation": "contains",
@@ -42129,9 +42427,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "routes_dossier_risk_bg",
-      "confidence_score": 1.0
+      "target": "routes_dossier_risk_bg"
     },
     {
       "relation": "contains",
@@ -42139,9 +42437,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "routes_dossier_riskbadge",
-      "confidence_score": 1.0
+      "target": "routes_dossier_riskbadge"
     },
     {
       "relation": "contains",
@@ -42149,9 +42447,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "routes_dossier_route",
-      "confidence_score": 1.0
+      "target": "routes_dossier_route"
     },
     {
       "relation": "contains",
@@ -42159,9 +42457,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L108",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "routes_dossier_section",
-      "confidence_score": 1.0
+      "target": "routes_dossier_section"
     },
     {
       "relation": "contains",
@@ -42169,9 +42467,9 @@
       "source_file": "frontend/src/routes/dossier.tsx",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "routes_dossier",
-      "target": "routes_dossier_wanted_bg",
-      "confidence_score": 1.0
+      "target": "routes_dossier_wanted_bg"
     },
     {
       "relation": "imports",
@@ -45881,304 +46179,6 @@
       "confidence_score": 1.0,
       "source": "docs_architecture_32_2_highlighted_deep_dives_for_every_implemented_feature",
       "target": "docs_architecture_feature_9_smart_investigation_board_with_ai_scene_generation_multi_algorithm_layout_engines"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L93",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_landingshell_footer"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L76",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_landingshell_footercol"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_landingshell_gridbg"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_landingshell_header"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_landingshell_nb"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_themepicker"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/components/LandingShell.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "components_landingshell",
-      "target": "components_themepicker_themepicker"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/about.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_about",
-      "target": "components_landingshell"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "components_landingshell"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/about.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_about",
-      "target": "components_landingshell_nb"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "components_landingshell_nb"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/about.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_about",
-      "target": "components_landingshell_gridbg"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "components_landingshell_gridbg"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/about.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_about",
-      "target": "components_landingshell_header"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "components_landingshell_header"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/about.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_about",
-      "target": "components_landingshell_footer"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "components_landingshell_footer"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "api_client"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "api_client_api"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L200",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "routes_index_applymode"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L177",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "routes_index_hsl2rgb"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L210",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "routes_index_landingpage"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "routes_index_route"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L190",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index",
-      "target": "routes_index_setaccenthue"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_routetree_gen",
-      "target": "routes_index"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_routetree_gen",
-      "target": "routes_index_route"
-    },
-    {
-      "relation": "references",
-      "context": "field",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routeTree.gen.ts",
-      "source_location": "L208",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_routetree_gen_fileroutesbypath",
-      "target": "routes_index_route"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "frontend/src/routes/index.tsx",
-      "source_location": "L191",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "routes_index_setaccenthue",
-      "target": "routes_index_hsl2rgb"
     },
     {
       "relation": "imports_from",
@@ -115148,5 +115148,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e08b5575b451db8b856d97b6e07c11fd2d8fc06c"
+  "built_at_commit": "6ae3a40eb2400fdb3660800d5dcf77b096f0b3c3"
 }

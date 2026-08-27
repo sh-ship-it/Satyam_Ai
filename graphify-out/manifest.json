@@ -385,8 +385,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/LandingShell.tsx": {
-    "mtime": 1787834972.3766901,
-    "ast_hash": "a34b1b4f7a87403c1c849377cd5fca47",
+    "mtime": 1787852428.8965216,
+    "ast_hash": "44276ac174f6a1ef625ced0b8d204601",
     "semantic_hash": ""
   },
   "frontend/src/components/ProfileMenu.tsx": {
@@ -670,8 +670,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1787848247.0318527,
-    "ast_hash": "b429e412621ab7abc0edf12c525d57c5",
+    "mtime": 1787852057.8462546,
+    "ast_hash": "7a44c0c6364d79c49bbe4ce3fc1d5166",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -710,8 +710,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
-    "mtime": 1787834920.7988026,
-    "ast_hash": "25f9e3a6c9c2148db5f7109a4add79ed",
+    "mtime": 1787852456.8948402,
+    "ast_hash": "3dc59e083bb7afeca2f75d30a7419363",
     "semantic_hash": ""
   },
   "frontend/src/routes/network.tsx": {

@@ -1,7 +1,7 @@
 # Graph Report - Satyam  (2026-08-27)
 
 ## Corpus Check
-- 347 files · ~1,899,267 words
+- 347 files · ~1,899,320 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e08b5575`
+- Built from commit: `6ae3a40e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -276,14 +276,14 @@
 10. `GraphResponse` - 42 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `AuditLog` --uses--> `AuditLog`  [INFERRED]
-  backend/app/core/audit.py → backend/app/db/models.py
 - `DocumentsScreen()` --calls--> `useI18n()`  [INFERRED]
   frontend/src/routes/documents.tsx → frontend/src/lib/i18n.tsx
 - `Audit()` --calls--> `useT()`  [INFERRED]
   frontend/src/routes/audit.tsx → frontend/src/lib/i18n.tsx
 - `Legend()` --calls--> `useT()`  [INFERRED]
   frontend/src/routes/network.tsx → frontend/src/lib/i18n.tsx
+- `AuditLog` --uses--> `AuditLog`  [INFERRED]
+  backend/app/core/audit.py → backend/app/db/models.py
 - `test_the_documents_screen_is_voice_addressable()` --calls--> `_sanitize_actions()`  [INFERRED]
   backend/tests/test_documents.py → backend/app/pipeline/screen_agent.py
 
@@ -1230,7 +1230,7 @@ Cohesion: 0.67
 Nodes (3): 1. SQL Grammar AST Security Gate (`sqlglot`), 2. 4-Tier Progressive Zero-Result Recovery Hierarchy, 31.14 Grounded Natural Language-to-SQL & Progressive Relaxation Grammar
 
 ## Knowledge Gaps
-- **1065 isolated node(s):** `DossierListItem`, `DossierDetail`, `RISK_BG`, `RISK_ORDER`, `LL` (+1060 more)
+- **1065 isolated node(s):** `Lang`, `Ctx`, `I18nCtx`, `ALL_TRANSLATABLE`, `DossierListItem` (+1060 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -1238,14 +1238,14 @@ Nodes (3): 1. SQL Grammar AST Security Gate (`sqlglot`), 2. 4-Tier Progressive Z
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 223` to `Community 26`?**
-  _High betweenness centrality (0.245) - this node is a cross-community bridge._
+  _High betweenness centrality (0.244) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 66` to `Community 261`, `Community 265`, `Community 10`, `Community 139`, `Community 141`, `Community 15`, `Community 158`, `Community 287`, `Community 32`, `Community 33`, `Community 286`, `Community 37`, `Community 170`, `Community 172`, `Community 46`, `Community 175`, `Community 181`, `Community 187`, `Community 190`, `Community 192`, `Community 196`, `Community 76`, `Community 121`, `Community 122`?**
   _High betweenness centrality (0.176) - this node is a cross-community bridge._
 - **Are the 123 inferred relationships involving `Principal` (e.g. with `AdminUserList` and `AgentPlan`) actually correct?**
   _`Principal` has 123 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 12 inferred relationships involving `useT()` (e.g. with `AdminAccessControl()` and `PolicyEditor()`) actually correct?**
   _`useT()` has 12 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Tamper-evident, hash-chained audit log.  Each entry stores sha256(prev_hash + ca`, `DossierListItem`, `DossierDetail` to the rest of the system?**
+- **What connects `Lang`, `Ctx`, `I18nCtx` to the rest of the system?**
   _1562 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.08879492600422834 - nodes in this community are weakly interconnected._
