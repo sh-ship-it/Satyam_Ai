@@ -275,10 +275,10 @@ function NewsScreen() {
                   <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border px-3 py-2">
                     <div className="min-w-0">
                       <div className="truncate text-[13px] font-bold text-foreground">
-                        {active.name}
+                        {t(active.name)}
                       </div>
                       <div className="text-[10px] text-muted-foreground">
-                        {active.broadcaster} · {t("Kannada")}
+                        {t(active.broadcaster)} · {t("Kannada")}
                       </div>
                     </div>
                     <a
@@ -350,10 +350,10 @@ function NewsScreen() {
                                     : "text-muted-foreground"
                               }`}
                             >
-                              {c.name}
+                              {t(c.name)}
                             </span>
                             <span className="block truncate text-[10px] text-muted-foreground">
-                              {c.broadcaster}
+                              {t(c.broadcaster)}
                             </span>
                           </span>
                           {c.live ? (

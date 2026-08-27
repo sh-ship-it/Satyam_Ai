@@ -21,11 +21,113 @@ from app.db.demo_dossier_models import (
 from app.schemas.dossier import DossierDetail, DossierListItem
 
 
+import json
+from pathlib import Path
+import datetime as dt
+
+_SEED_FILE = Path(__file__).parent.parent.parent / "seed" / "demo_dossier.json"
+
+
+async def _auto_seed(session: AsyncSession) -> None:
+    """Auto-seed the 10 demo dossier subjects if table is empty."""
+    if not _SEED_FILE.exists():
+        return
+    try:
+        data = json.loads(_SEED_FILE.read_text(encoding="utf-8"))
+        for p in data:
+            dob_val = dt.date.fromisoformat(p["dob"]) if p.get("dob") else None
+            person = DossierPerson(
+                slug=p["slug"],
+                full_name=p["full_name"],
+                aliases=p.get("aliases", []),
+                gender=p.get("gender"),
+                dob=dob_val,
+                age=p.get("age"),
+                height_cm=p.get("height_cm"),
+                build=p.get("build"),
+                complexion=p.get("complexion"),
+                identifying_marks=p.get("identifying_marks"),
+                blood_group=p.get("blood_group"),
+                nationality=p.get("nationality", "Indian"),
+                risk_level=p.get("risk_level"),
+                wanted_status=p.get("wanted_status"),
+                primary_phone=p.get("primary_phone"),
+                secondary_phone=p.get("secondary_phone"),
+                email=p.get("email"),
+                home_address=p.get("home_address"),
+                district=p.get("district"),
+                pincode=p.get("pincode"),
+                photo_front=p.get("photo_front"),
+                photo_left=p.get("photo_left"),
+                photo_right=p.get("photo_right"),
+                summary=p.get("summary"),
+            )
+            session.add(person)
+            await session.flush()
+            for f in p.get("family", []):
+                session.add(DossierFamily(
+                    demo_id=person.demo_id,
+                    name=f["name"],
+                    relation=f["relation"],
+                    age=f.get("age"),
+                    phone=f.get("phone"),
+                    occupation=f.get("occupation"),
+                    address=f.get("address"),
+                    notes=f.get("notes"),
+                ))
+            for b in p.get("banks", []):
+                opened_val = dt.date.fromisoformat(b["opened_on"]) if b.get("opened_on") else None
+                session.add(DossierBankAccount(
+                    demo_id=person.demo_id,
+                    bank_name=b["bank_name"],
+                    account_no=b["account_no"],
+                    ifsc=b.get("ifsc"),
+                    branch=b.get("branch"),
+                    account_type=b.get("account_type"),
+                    balance_inr=Decimal(str(b["balance_inr"])) if b.get("balance_inr") is not None else None,
+                    status=b.get("status", "Active"),
+                    opened_on=opened_val,
+                    flagged=b.get("flagged", False),
+                    flag_reason=b.get("flag_reason"),
+                ))
+            for c in p.get("crimes", []):
+                occ_val = dt.date.fromisoformat(c["occurred_on"]) if c.get("occurred_on") else None
+                session.add(DossierCrime(
+                    demo_id=person.demo_id,
+                    case_ref=c["case_ref"],
+                    crime_type=c["crime_type"],
+                    sections=c.get("sections"),
+                    role=c.get("role"),
+                    status=c.get("status"),
+                    occurred_on=occ_val,
+                    station=c.get("station"),
+                    district=c.get("district"),
+                    sentence=c.get("sentence"),
+                    narrative=c.get("narrative"),
+                ))
+            for ct in p.get("contacts", []):
+                session.add(DossierContact(
+                    demo_id=person.demo_id,
+                    label=ct.get("label"),
+                    name=ct.get("name"),
+                    relation=ct.get("relation"),
+                    phone=ct.get("phone"),
+                    notes=ct.get("notes"),
+                ))
+        await session.commit()
+    except Exception:
+        await session.rollback()
+
+
 async def list_dossiers(session: AsyncSession) -> list[DossierListItem]:
     """Return lightweight list of all dossier subjects."""
     stmt = select(DossierPerson).order_by(DossierPerson.demo_id)
     result = await session.execute(stmt)
     rows = result.scalars().all()
+    if not rows:
+        await _auto_seed(session)
+        result = await session.execute(stmt)
+        rows = result.scalars().all()
     return [
         DossierListItem(
             demo_id=p.demo_id,

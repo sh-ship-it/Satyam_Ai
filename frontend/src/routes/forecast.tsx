@@ -444,7 +444,7 @@ function AlertCard({
           </button>
         </div>
 
-        <p className="mt-2 text-[11px] leading-relaxed text-foreground/75">{a.why}</p>
+        <p className="mt-2 text-[11px] leading-relaxed text-foreground/75">{t(a.why)}</p>
 
         <div className="mt-2.5 flex items-center gap-1.5">
           <button
@@ -474,11 +474,11 @@ function AlertCard({
             <div className="mb-0.5 flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
               <Zap className="h-3 w-3" /> {t("Recommended action")}
             </div>
-            <p className="text-[11px] font-semibold text-foreground">{a.recommended_action}</p>
+            <p className="text-[11px] font-semibold text-foreground">{t(a.recommended_action)}</p>
           </div>
           <p className="flex items-start gap-1.5 rounded border border-border bg-background/70 px-2 py-1.5 text-[10px] italic leading-relaxed text-muted-foreground">
             <Info className="mt-px h-3 w-3 shrink-0" />
-            {a.fairness_note}
+            {t(a.fairness_note)}
           </p>
         </div>
       )}
@@ -1449,7 +1449,7 @@ function ForecastScreen() {
                         {t("What this means")}
                       </div>
                       <p className="mt-1 text-[11px] leading-relaxed text-foreground/80">
-                        {backtest.explanation}
+                        {t(backtest.explanation)}
                       </p>
                     </div>
 
@@ -1465,7 +1465,7 @@ function ForecastScreen() {
                               className="flex gap-1.5 text-[10px] leading-relaxed text-muted-foreground"
                             >
                               <span className="mt-[0.35rem] h-1 w-1 shrink-0 rounded-full bg-muted-foreground/60" />
-                              <span>{c}</span>
+                              <span>{t(c)}</span>
                             </li>
                           ))}
                         </ul>

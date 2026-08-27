@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 import { CrimeMap } from "@/components/CrimeMap";
 import { intelligence, type ForecastAlert, type ForecastCell } from "@/lib/api/intelligence";
-import { api } from "@/lib/api/client";
-import { useT } from "@/lib/i18n";
+import { useI18n } from "@/lib/i18n";
+import { tData } from "@/lib/tData";
 
 const RISK_BG: Record<string, string> = {
   Critical: "bg-destructive text-destructive-foreground",
@@ -36,7 +36,7 @@ function cellForAlert(alert: ForecastAlert, cells: ForecastCell[]): ForecastCell
 }
 
 export function PredictivePanel() {
-  const t = useT();
+  const { t, lang } = useI18n();
   const [cells, setCells] = useState<ForecastCell[]>([]);
   const [alerts, setAlerts] = useState<ForecastAlert[]>([]);
   const [loading, setLoading] = useState(false);
@@ -195,31 +195,31 @@ export function PredictivePanel() {
               >
                 <div className="mb-1 flex items-center gap-2">
                   <ShieldAlert className="h-4 w-4 shrink-0" />
-                  <span className="font-extrabold">{a.crime_type}</span>
+                  <span className="font-extrabold">{tData("crime_type", a.crime_type, lang)}</span>
                   <span
                     className={`ml-auto rounded-[4px] px-1.5 py-0.5 text-[10px] font-bold ${RISK_BG[a.risk_level] ?? "bg-muted"}`}
                   >
-                    {a.risk_level}
+                    {tData("risk_label", a.risk_level, lang)}
                   </span>
                 </div>
                 <div className="mb-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
                   <span className="inline-flex items-center gap-1">
-                    <MapPin className="h-3 w-3" /> {a.district}
+                    <MapPin className="h-3 w-3" /> {tData("district", a.district, lang)}
                   </span>
                   <span className="inline-flex items-center gap-1">
                     <Clock className="h-3 w-3" /> {a.patrol_window}
                   </span>
                 </div>
-                {a.why && <p className="mb-2 text-[11px] text-foreground/75">{a.why}</p>}
+                {a.why && <p className="mb-2 text-[11px] text-foreground/75">{t(a.why)}</p>}
                 <div className="mb-2 flex items-start gap-1.5 rounded-[6px] border-2 border-foreground/20 bg-muted/30 px-2 py-1.5">
                   <Zap className="mt-0.5 h-3 w-3 shrink-0 text-[#0a8f6b]" />
-                  <span className="text-[11px] font-semibold">{a.recommended_action}</span>
+                  <span className="text-[11px] font-semibold">{t(a.recommended_action)}</span>
                 </div>
                 {a.fairness_note && (
                   <div className="mb-2 flex items-start gap-1.5">
                     <Info className="mt-0.5 h-3 w-3 shrink-0 text-muted-foreground" />
                     <span className="text-[10px] italic text-muted-foreground">
-                      {a.fairness_note}
+                      {t(a.fairness_note)}
                     </span>
                   </div>
                 )}

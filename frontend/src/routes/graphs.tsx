@@ -1035,11 +1035,14 @@ function GraphsScreen() {
               ) : (
                 <ChartContainer config={{}} className="h-full w-full aspect-auto">
                   <FunnelChart margin={{ top: 8, right: 90, bottom: 8, left: 8 }}>
-                    <Tooltip {...tooltipStyle} formatter={(v: number) => fmt(v)} />
+                    <Tooltip
+                      {...tooltipStyle}
+                      formatter={(v: number, name: string) => [fmt(v), tData("status", name, lang)]}
+                    />
                     <Funnel
                       dataKey="value"
                       nameKey="name"
-                      data={disposition.map((s) => ({ name: s.name, value: s.count }))}
+                      data={disposition.map((s) => ({ name: tData("status", s.name, lang), value: s.count }))}
                       isAnimationActive={false}
                     >
                       {disposition.map((s, i) => (

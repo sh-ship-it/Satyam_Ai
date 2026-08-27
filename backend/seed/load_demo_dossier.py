@@ -22,18 +22,22 @@ def _date(v):
     return v
 
 
+from app.db.session import active_url
+
+
 async def main() -> None:
-    url = os.environ.get("DATABASE_URL", "")
+    url = active_url()
     # Convert SQLAlchemy URL to asyncpg DSN
     dsn = url.replace("postgresql+asyncpg://", "postgresql://")
     conn = await asyncpg.connect(dsn)
     try:
-        # ONLY truncate demo tables — never real dataset tables
+        # ONLY clear demo tables — never real dataset tables
         await conn.execute("""
-            TRUNCATE demo_dossier_contacts, demo_dossier_crimes,
-                     demo_dossier_bank_accounts, demo_dossier_family,
-                     demo_dossier_persons
-            RESTART IDENTITY CASCADE
+            DELETE FROM demo_dossier_contacts;
+            DELETE FROM demo_dossier_crimes;
+            DELETE FROM demo_dossier_bank_accounts;
+            DELETE FROM demo_dossier_family;
+            DELETE FROM demo_dossier_persons;
         """)
         data = json.loads(SEED_FILE.read_text())
         for p in data:
@@ -93,7 +97,7 @@ async def main() -> None:
                 """, pid, ct.get("label"), ct.get("name"), ct.get("relation"),
                     ct.get("phone"), ct.get("notes"))
         count = await conn.fetchval("SELECT count(*) FROM demo_dossier_persons")
-        print(f"\u2705 Seeded {count} demo dossier persons.")
+        print(f"[OK] Seeded {count} demo dossier persons.")
     finally:
         await conn.close()
 

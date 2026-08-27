@@ -698,46 +698,46 @@ function Reports() {
               <div className="flex items-start justify-between gap-6">
                 <div>
                   <div className="text-[9px] font-bold uppercase tracking-[0.25em] text-blue-200/80 mb-1">
-                    Karnataka State Police
+                    {t("Karnataka State Police")}
                   </div>
                   <h1 className="text-[22px] font-extrabold tracking-tight leading-tight">
-                    {reportTitle}
+                    {t(reportTitle)}
                   </h1>
                   <div className="text-[11px] text-blue-100/70 mt-1.5 flex items-center gap-3">
                     <span>Ref: {reportRef}</span>
                     <span>·</span>
-                    <span>Generated: {today}</span>
+                    <span>{t("Generated")}: {today}</span>
                     {officerName && (
                       <>
                         <span>·</span>
-                        <span>By: {officerName}</span>
+                        <span>{t("By")}: {officerName}</span>
                       </>
                     )}
                   </div>
                 </div>
                 <div className="shrink-0 text-right">
                   <div className="text-[9px] text-blue-200/60 uppercase tracking-wider">
-                    Classification
+                    {t("Classification")}
                   </div>
-                  <div className="text-sm font-bold text-yellow-300 mt-0.5">CONFIDENTIAL</div>
-                  <div className="text-[9px] text-blue-200/60 mt-2">Synthetic data only</div>
+                  <div className="text-sm font-bold text-yellow-300 mt-0.5">{t("CONFIDENTIAL")}</div>
+                  <div className="text-[9px] text-blue-200/60 mt-2">{t("Synthetic data only")}</div>
                 </div>
               </div>
               {/* Stats bar */}
               <div className="mt-5 grid grid-cols-3 gap-3">
                 {[
                   {
-                    label: "Total FIRs",
+                    label: t("Total FIRs"),
                     val: stationsLoading ? "—" : totalFirs.toLocaleString(),
                     icon: BarChart3,
                   },
                   {
-                    label: "Cleared",
+                    label: t("Cleared"),
                     val: stationsLoading ? "—" : `${totalCleared.toLocaleString()} (${clearRate}%)`,
                     icon: TrendingUp,
                   },
                   {
-                    label: "Stations",
+                    label: t("Stations"),
                     val: stationsLoading ? "—" : stations.length.toString(),
                     icon: MapPin,
                   },
@@ -765,17 +765,30 @@ function Reports() {
               >
                 <div className="bg-muted/30 rounded-xl p-4 text-sm leading-relaxed">
                   {topStation ? (
-                    <p>
-                      Top performing station:{" "}
-                      <strong>{tData("station", topStation.station, lang)}</strong> with{" "}
-                      <strong>{topStation.firs.toLocaleString()}</strong> FIRs registered,{" "}
-                      <strong>{topStation.cleared}</strong> cases cleared. Report covers{" "}
-                      <strong>{stations.length}</strong> stations in the scoped jurisdiction.{" "}
-                      Overall clearance rate: <strong>{clearRate}%</strong>.
-                      {items.length > 0 &&
-                        ` Report includes ${items.length} selected item${items.length > 1 ? "s" : ""}.`}
-                      <sup className="text-primary ml-0.5">[1]</sup>
-                    </p>
+                    lang === "kn" ? (
+                      <p>
+                        {t("Top performing station")}: <strong>{tData("station", topStation.station, lang)}</strong>,{" "}
+                        <strong>{topStation.firs.toLocaleString()}</strong> {t("FIRs registered")},{" "}
+                        <strong>{topStation.cleared}</strong> {t("cases cleared")}. {t("Report covers")}{" "}
+                        <strong>{stations.length}</strong> {t("stations in the scoped jurisdiction")}.{" "}
+                        {t("Overall clearance rate")}: <strong>{clearRate}%</strong>.
+                        {items.length > 0 &&
+                          ` ${t("Report includes")} ${items.length} ${t("selected items")}.`}
+                        <sup className="text-primary ml-0.5">[1]</sup>
+                      </p>
+                    ) : (
+                      <p>
+                        Top performing station:{" "}
+                        <strong>{tData("station", topStation.station, lang)}</strong> with{" "}
+                        <strong>{topStation.firs.toLocaleString()}</strong> FIRs registered,{" "}
+                        <strong>{topStation.cleared}</strong> cases cleared. Report covers{" "}
+                        <strong>{stations.length}</strong> stations in the scoped jurisdiction.{" "}
+                        Overall clearance rate: <strong>{clearRate}%</strong>.
+                        {items.length > 0 &&
+                          ` Report includes ${items.length} selected item${items.length > 1 ? "s" : ""}.`}
+                        <sup className="text-primary ml-0.5">[1]</sup>
+                      </p>
+                    )
                   ) : (
                     <p className="text-muted-foreground italic">{t("Loading station data…")}</p>
                   )}

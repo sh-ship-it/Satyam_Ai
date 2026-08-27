@@ -148,27 +148,43 @@ function DossierScreen() {
     } catch { setIsAdmin(false); }
   }, []);
 
-  const [list, setList]           = useState<DossierListItem[]>([]);
-  const [selected, setSelected]   = useState<DossierDetail | null>(null);
+  const [list, setList]                   = useState<DossierListItem[]>([]);
+  const [loadingList, setLoadingList]     = useState(true);
+  const [listError, setListError]         = useState<string | null>(null);
+  const [selected, setSelected]           = useState<DossierDetail | null>(null);
   const [loadingDetail, setLoadingDetail] = useState(false);
-  const [search, setSearch]       = useState("");
+  const [search, setSearch]               = useState("");
 
   // In-memory cache so clicking a previously loaded person is instant.
   const cacheRef = useRef<Record<number, DossierDetail>>({});
 
+  const loadList = () => {
+    setLoadingList(true);
+    setListError(null);
+    dossier.list()
+      .then(items => {
+        setList(items);
+        if (items.length > 0) {
+          open(items[0].demo_id);
+        }
+        // Pre-fetch all detail pages silently after list arrives.
+        items.forEach(item => {
+          dossier.detail(item.demo_id).then(d => {
+            cacheRef.current[item.demo_id] = d;
+          }).catch(() => {});
+        });
+      })
+      .catch((err) => {
+        setListError(err?.message ?? "Could not load dossier list.");
+      })
+      .finally(() => {
+        setLoadingList(false);
+      });
+  };
+
   useEffect(() => {
     if (!isAdmin) return;
-    // Load the list, then pre-fetch all details in the background so
-    // every subsequent click is instant (no visible delay).
-    dossier.list().then(items => {
-      setList(items);
-      // Pre-fetch all 10 detail pages silently after list arrives.
-      items.forEach(item => {
-        dossier.detail(item.demo_id).then(d => {
-          cacheRef.current[item.demo_id] = d;
-        }).catch(() => {});
-      });
-    }).catch(() => {});
+    loadList();
   }, [isAdmin]);
 
   function open(id: number) {
@@ -190,7 +206,7 @@ function DossierScreen() {
     (p.district ?? "").toLowerCase().includes(search.toLowerCase())
   );
 
-  if (isAdmin === null) return <Shell><div className="p-8 text-sm text-muted-foreground">Loading…</div></Shell>;
+  if (isAdmin === null) return <Shell><div className="p-8 text-sm text-muted-foreground">{t("Loading…")}</div></Shell>;
 
   if (!isAdmin) return (
     <Shell>
@@ -198,7 +214,7 @@ function DossierScreen() {
         <Lock className="h-12 w-12 text-destructive/60" />
         <h2 className="text-xl font-extrabold">{t("Admin access required")}</h2>
         <p className="text-sm text-muted-foreground max-w-sm">
-          Person 360 dossier requires clearance L4 (DGP / ADGP / IGP / SP / admin). Sign in with an admin account.
+          {t("Person 360 dossier requires clearance L4 (DGP / ADGP / IGP / SP / admin). Sign in with an admin account.")}
         </p>
       </div>
     </Shell>
@@ -223,9 +239,23 @@ function DossierScreen() {
             </div>
           </div>
           <div className="flex-1 overflow-auto">
-            {list.length === 0 && (
+            {loadingList ? (
               <div className="p-4 text-xs text-muted-foreground animate-pulse">{t("Loading…")}</div>
-            )}
+            ) : listError ? (
+              <div className="p-4 text-xs text-destructive">
+                <p>{listError}</p>
+                <button
+                  onClick={loadList}
+                  className="mt-2 inline-flex items-center gap-1 rounded bg-muted px-2 py-1 font-bold text-foreground hover:bg-muted/80"
+                >
+                  {t("Try again")}
+                </button>
+              </div>
+            ) : filtered.length === 0 ? (
+              <div className="p-4 text-xs text-muted-foreground text-center">
+                {search ? t("No matching persons found.") : t("No dossier records available.")}
+              </div>
+            ) : null}
             {filtered.map(p => (
               <button
                 key={p.demo_id}
@@ -318,7 +348,7 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
               <RiskBadge level={d.risk_level} />
               {d.wanted_status && (
                 <span className={`inline-flex items-center rounded-[4px] px-2 py-0.5 text-[10px] font-bold uppercase ${WANTED_BG[d.wanted_status] ?? "bg-muted"}`}>
-                  {d.wanted_status}
+                  {t(d.wanted_status)}
                 </span>
               )}
               <span className="inline-flex items-center rounded-[4px] border border-yellow-400 bg-yellow-50 px-2 py-0.5 text-[9px] font-bold text-yellow-700">
@@ -330,7 +360,7 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
                 {t("Also known as")}: {d.aliases.join(", ")}
               </p>
             )}
-            <p className="mt-1 text-sm text-foreground/80 max-w-xl">{d.summary}</p>
+            <p className="mt-1 text-sm text-foreground/80 max-w-xl">{t(d.summary ?? "")}</p>
           </div>
           <button
             onClick={onPrint}
@@ -354,15 +384,15 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
             <Field label={t("Date of Birth")} value={d.dob ?? "—"} />
             <Field label={t("Age")} value={d.age != null ? `${d.age} ${t("years")}` : null} />
             <Field label={t("Height")} value={d.height_cm != null ? `${d.height_cm} cm` : null} />
-            <Field label={t("Build")} value={d.build} />
-            <Field label={t("Complexion")} value={d.complexion} />
+            <Field label={t("Build")} value={t(d.build ?? "") || d.build} />
+            <Field label={t("Complexion")} value={t(d.complexion ?? "") || d.complexion} />
             <Field label={t("Blood Group")} value={d.blood_group} />
-            <Field label={t("Nationality")} value={d.nationality} />
+            <Field label={t("Nationality")} value={t(d.nationality ?? "") || d.nationality} />
           </div>
           {d.identifying_marks && (
             <div className="mt-2">
               <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("Identifying Marks")}</div>
-              <div className="mt-0.5 rounded-[4px] border border-border bg-muted/30 px-2 py-1 text-xs font-medium">{d.identifying_marks}</div>
+              <div className="mt-0.5 rounded-[4px] border border-border bg-muted/30 px-2 py-1 text-xs font-medium">{t(d.identifying_marks)}</div>
             </div>
           )}
         </Section>
@@ -400,7 +430,7 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
             <tbody className="divide-y divide-border">
               {d.banks.map(b => (
                 <tr key={b.id} className={b.flagged ? "bg-destructive/5" : ""}>
-                  <td className="py-1.5 pr-3 font-medium">{b.bank_name}</td>
+                  <td className="py-1.5 pr-3 font-medium">{t(b.bank_name)}</td>
                   <td className="py-1.5 pr-3 font-mono">{b.account_no}</td>
                   <td className="py-1.5 pr-3 text-muted-foreground">{b.ifsc ?? "—"}</td>
                   <td className="py-1.5 pr-3">{t(b.account_type ?? "") || "—"}</td>
@@ -412,9 +442,9 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
                   </td>
                   <td className="py-1.5">
                     {b.flagged ? (
-                      <span title={b.flag_reason ?? ""} className="inline-flex items-center gap-1 text-destructive">
+                      <span title={t(b.flag_reason ?? "")} className="inline-flex items-center gap-1 text-destructive">
                         <AlertTriangle className="h-3 w-3" />
-                        <span className="text-[9px] max-w-[120px] truncate">{b.flag_reason}</span>
+                        <span className="text-[9px] max-w-[120px] truncate">{t(b.flag_reason ?? "")}</span>
                       </span>
                     ) : <span className="text-muted-foreground">—</span>}
                   </td>
@@ -447,8 +477,8 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
                 {c.station && <span>🏛 {tData("station", c.station, lang)}</span>}
                 {c.sections && <span className="font-mono">§ {c.sections}</span>}
               </div>
-              {c.sentence && <p className="mt-1 text-[10px] font-medium text-purple-700 dark:text-purple-300">{t("Sentence")}: {c.sentence}</p>}
-              {c.narrative && <p className="mt-1 text-[11px] text-foreground/75 leading-snug">{c.narrative}</p>}
+              {c.sentence && <p className="mt-1 text-[10px] font-medium text-purple-700 dark:text-purple-300">{t("Sentence")}: {t(c.sentence)}</p>}
+              {c.narrative && <p className="mt-1 text-[11px] text-foreground/75 leading-snug">{t(c.narrative)}</p>}
             </div>
           ))}
         </div>
@@ -463,14 +493,14 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
                 <div key={f.id} className="rounded-[6px] border border-border bg-muted/20 px-3 py-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold">{f.name}</span>
-                    <span className="rounded-[3px] bg-muted px-1.5 py-0.5 text-[9px] font-medium">{f.relation}</span>
+                    <span className="rounded-[3px] bg-muted px-1.5 py-0.5 text-[9px] font-medium">{t(f.relation)}</span>
                   </div>
                   <div className="mt-0.5 flex flex-wrap gap-x-3 text-[10px] text-muted-foreground">
-                    {f.age && <span>Age {f.age}</span>}
+                    {f.age && <span>{t("Age")} {f.age}</span>}
                     {f.phone && <span>{f.phone}</span>}
-                    {f.occupation && <span>{f.occupation}</span>}
+                    {f.occupation && <span>{t(f.occupation)}</span>}
                   </div>
-                  {f.notes && <p className="mt-0.5 text-[10px] italic text-muted-foreground">{f.notes}</p>}
+                  {f.notes && <p className="mt-0.5 text-[10px] italic text-muted-foreground">{t(f.notes)}</p>}
                 </div>
               ))}
             </div>
@@ -485,13 +515,13 @@ function DossierDetailPane({ d, onPrint }: { d: DossierDetail; onPrint: () => vo
                 <div key={c.id} className="rounded-[6px] border border-border bg-muted/20 px-3 py-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold">{c.name ?? "Unknown"}</span>
-                    {c.label && <span className="rounded-[3px] bg-orange-100 dark:bg-orange-900/30 px-1.5 py-0.5 text-[9px] font-medium text-orange-800 dark:text-orange-300">{c.label}</span>}
+                    {c.label && <span className="rounded-[3px] bg-orange-100 dark:bg-orange-900/30 px-1.5 py-0.5 text-[9px] font-medium text-orange-800 dark:text-orange-300">{t(c.label)}</span>}
                   </div>
                   <div className="mt-0.5 flex flex-wrap gap-x-3 text-[10px] text-muted-foreground">
-                    {c.relation && <span>{c.relation}</span>}
+                    {c.relation && <span>{t(c.relation)}</span>}
                     {c.phone && <span>{c.phone}</span>}
                   </div>
-                  {c.notes && <p className="mt-0.5 text-[10px] italic text-muted-foreground">{c.notes}</p>}
+                  {c.notes && <p className="mt-0.5 text-[10px] italic text-muted-foreground">{t(c.notes)}</p>}
                 </div>
               ))}
             </div>

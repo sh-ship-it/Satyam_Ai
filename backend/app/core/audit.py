@@ -15,7 +15,7 @@ from typing import Optional
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.models import AuditLog
+from app.db.models import AuditLog, User
 
 # Constant key for the transaction-level advisory lock that serializes every
 # audit-chain append. All writers contend on this single key, so the
@@ -58,17 +58,30 @@ async def write_audit(
     ).scalar_one_or_none()
     prev_hash = last.row_hash if last else "GENESIS"
 
+    valid_user_id = None
+    if user_id is not None:
+        try:
+            user_exists = (
+                await session.execute(
+                    select(User.user_id).where(User.user_id == user_id)
+                )
+            ).scalar_one_or_none()
+            if user_exists is not None:
+                valid_user_id = user_id
+        except Exception:
+            valid_user_id = None
+
     # Build canonical payload (deterministic field order)
     payload = {
         "action":       action,
-        "user_id":      user_id,
+        "user_id":      valid_user_id,
         "case_id":      case_id,
         "reason":       reason,
         "query_text":   query_text or detail,
         "generated_sql": generated_sql,
     }
     entry = AuditLog(
-        user_id=user_id,
+        user_id=valid_user_id,
         action=action,
         case_id=case_id,
         reason=reason or detail,

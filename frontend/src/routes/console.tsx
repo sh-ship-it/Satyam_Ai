@@ -422,6 +422,8 @@ function Console() {
                   rows={summary?.status_mix ?? []}
                   total={k?.total_firs ?? 0}
                   accent="slate"
+                  lang={lang}
+                  translateKey="status"
                 />
               </Panel>
             </div>
@@ -860,7 +862,7 @@ function RankedBars({
   return (
     <div className="space-y-1">
       {rows.map((r) => {
-        const label = translateKey && lang ? tData(translateKey, r.name, lang) : r.name;
+        const label = translateKey && lang ? tData(translateKey, r.name, lang) : (lang === "KN" ? (DICT[r.name] ?? r.name) : r.name);
         return (
           <div key={r.name} className="flex items-center gap-2">
             <span
