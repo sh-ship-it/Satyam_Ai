@@ -36,6 +36,11 @@
 25. [Client-Side Read Cache](#25-client-side-read-cache)
 26. [Theming & Motion System](#26-theming--motion-system)
 27. [About Handbook & SEO Surface](#27-about-handbook--seo-surface)
+28. [Document Translation & Sealing](#28-document-translation--sealing-documents)
+29. [Frontend Shell & Motion Additions](#29-frontend-shell--motion-additions)
+30. [Frontend self-checks without a test framework](#30-frontend-self-checks-without-a-test-framework)
+31. [ML, Statistical and Graph Algorithms — Full Formulas](#31-ml-statistical-and-graph-algorithms--full-formulas)
+32. [Master Highlighted Feature Catalog & Implementation Deep-Dive](#32-master-highlighted-feature-catalog--implementation-deep-dive)
 
 ---
 
@@ -2322,3 +2327,772 @@ strip JSX.
 Frontend typecheck baseline is **56 errors**: 55 pre-existing duplicate keys in
 `lib/i18n.tsx` (TS1117) and one pre-existing comparison in `FinancialLinksPanel.tsx`.
 Treat any 57th as introduced.
+
+---
+
+## 31. ML, Statistical and Graph Algorithms — Full Formulas
+
+Every algorithm and mathematical model below is transcribed directly from the active Satyam codebase, complete with formal equations, loss functions, parameter bounds, complexity metrics, and concrete implementation locations.
+
+Where a feature in the system is an empirical, hand-tuned heuristic rather than a learned statistical weights model, it is explicitly documented with its exact mathematical form and design rationale (§31.15).
+
+```
+┌───────────────────────────────────────────────────────────────────────────────────────────┐
+│                           SATYAM MATHEMATICAL & ML ENGINE MAP                             │
+├──────────────────────────────┬─────────────────────────────┬──────────────────────────────┤
+│    SEMANTIC & NLP LAYER      │    SPATIO-TEMPORAL LAYER    │     VISION & EDGE LAYER      │
+├──────────────────────────────┼─────────────────────────────┼──────────────────────────────┤
+│ • BGE-M3 Dense Embeddings    │ • Log-Damped Risk Surface   │ • YOLOv8s CIoU Multi-Task    │
+│ • BGE-Reranker-v2-M3 Neural  │ • Rolling-Origin Backtest   │ • ByteTrack Kalman MOT       │
+│ • Selective IDF Truncation   │ • PAI & PEI Spatial Metrics │ • Kinetic Assault Vectoring  │
+│ • Reciprocal Rank Fusion     │ • Wilson 95% Score Bounds   │ • Crowd Surge Anomaly Rate   │
+│ • Progressive SQL Grammar    │ • Haversine Geodesic Mesh   │ • MediaPipe 3D Landmark LERP │
+├──────────────────────────────┼─────────────────────────────┼──────────────────────────────┤
+│      GRAPH & FLOW LAYER      │     SOCIO-ECONOMIC LAYER    │     SECURITY & CRYPTO        │
+├──────────────────────────────┼─────────────────────────────┼──────────────────────────────┤
+│ • Bipartite Ego Centrality   │ • Pearson Correlation (r)   │ • SHA-256 Recurrence Chain   │
+│ • Multi-Hop Financial BFS    │ • Social Risk Index (SRI)   │ • Advisory Transaction Locks │
+│ • Coulomb-Hooke Force Engine │ • Demographics Stratification│ • Zero-Knowledge RLS GUCs   │
+│ • Sugiyama & ELK Radial Math │ • Age/Gender Histograms     │ • Clearance Decision Trees   │
+└──────────────────────────────┴─────────────────────────────┴──────────────────────────────┘
+```
+
+---
+
+### 31.1 Dense Vector Semantic Retrieval — BGE-M3 + pgvector HNSW
+
+**Location:** `backend/app/models/local/embedder_bge.py`, `backend/app/pipeline/tools/rag.py`
+
+#### 1. Representation & Vector Normalization
+Let $\mathcal{X}$ denote the space of natural language case narratives and queries. The dense embedding model $E: \mathcal{X} \to \mathbb{R}^d$ maps text to a latent embedding space of dimension $d = 1024$ using `BAAI/bge-m3` (dense output arm, CLS pooling, sequence capacity $L_{\max} = 8192$ tokens).
+
+To enable exact equivalence between inner product search and cosine similarity, embeddings are $L_2$-normalized prior to storage and query execution:
+$$\hat{\mathbf{v}} = \frac{\mathbf{v}}{\|\mathbf{v}\|_2} = \frac{\mathbf{v}}{\sqrt{\sum_{i=1}^{1024} v_i^2}}$$
+
+#### 2. Cosine Distance Metric Formulation
+The cosine similarity between query embedding $\hat{\mathbf{q}}$ and narrative document embedding $\hat{\mathbf{d}}$ reduces to the Euclidean dot product:
+$$\cos(\mathbf{q}, \mathbf{d}) = \frac{\mathbf{q} \cdot \mathbf{d}}{\|\mathbf{q}\|_2 \|\mathbf{d}\|_2} = \hat{\mathbf{q}} \cdot \hat{\mathbf{d}} = \sum_{i=1}^{1024} \hat{q}_i \hat{d}_i$$
+
+pgvector implements the cosine distance operator `<=>`, defined over the metric range $[0, 2]$:
+$$\mathcal{D}_{\text{cosine}}(\mathbf{q}, \mathbf{d}) = 1 - \cos(\mathbf{q}, \mathbf{d}) = 1 - \sum_{i=1}^{1024} \hat{q}_i \hat{d}_i$$
+
+#### 3. SQL Query Execution & Runtime Typing
+The SQL query resolves the vector column data type dynamically per request (`vector` for FP32 in PostgreSQL 17 local; `halfvec` for FP16 in Neon PostgreSQL 16 cloud):
+```sql
+SELECT n.narrative_id, n.case_id, n.body AS text,
+       (n.embedding <=> (:qvec)::{vector|halfvec}) AS distance
+FROM narratives n
+WHERE n.embedding IS NOT NULL
+ORDER BY n.embedding <=> (:qvec)::{vector|halfvec}
+LIMIT :k;  -- k * CANDIDATE_MULTIPLIER = 5 * 3 = 15
+```
+
+#### 4. Python-Side Distance Ceiling
+To preserve diagnostic observability (distinguishing between zero-match queries and database un-embedded status), distance thresholding is applied in Python after retrieval:
+$$\text{Accept}(d) \iff \mathcal{D}_{\text{cosine}}(\mathbf{q}, \mathbf{d}) \le \tau_{\text{dist}} = 0.60$$
+
+#### 5. HNSW (Hierarchical Navigable Small World) Index Geometry
+The vector space is indexed with an HNSW graph $\mathcal{G} = \{G_0, G_1, \dots, G_L\}$.
+- **Layer distribution:** Element maximum layer $l$ is sampled from an exponential distribution with parameter $m_L = \frac{1}{\ln(M)}$:
+  $$l = \left\lfloor -\ln(\text{uniform}(0, 1)) \cdot \frac{1}{\ln(M)} \right\rfloor$$
+- **Graph hyperparameters:** $M = 16$ (bidirectional links per node), $ef_{\text{construction}} = 64$ (size of dynamic candidate list during construction).
+- **Search complexity:** $\mathcal{O}(\log N)$ distance evaluations per query.
+- **Storage Economics:** 
+  $$\text{Bytes}_{\text{row}} = \text{Bytes}_{\text{halfvec}} + \text{Bytes}_{\text{HNSW}} = 2052\,\text{B} + 2740\,\text{B} = 4792\,\text{B / record}$$
+
+---
+
+### 31.2 Cross-Encoder Neural Reranking — BGE-Reranker-v2-M3
+
+**Location:** `backend/app/models/local/reranker_bge.py`, `backend/app/pipeline/tools/rag.py`
+
+#### 1. Joint Cross-Attention Mathematical Formulation
+Unlike bi-encoders where query and document are projected independently, the cross-encoder cross-attends across all token pairs of both inputs simultaneously:
+$$s(q, d) = \sigma\left(\mathbf{W}^T \cdot \text{Transformer}([q \,\|\, \text{[SEP]} \,\|\, d])_{[\text{CLS}]} + b\right)$$
+where $[q \,\|\, \text{[SEP]} \,\|\, d]$ is the concatenated sequence truncated at length $L_{\max} = 512$, $\mathbf{W} \in \mathbb{R}^{d_{\text{hidden}}}$ is the projection vector, and $\sigma(z) = \frac{1}{1 + e^{-z}}$.
+
+#### 2. Permutation Generation
+Given the fused candidate set $\mathcal{C} = \{d_1, d_2, \dots, d_M\}$, the reranker computes:
+$$\pi^* = \operatorname{argsort}_{i \in \{1, \dots, M\}} \left( s(q, d_i) \right) \quad \text{in descending order}$$
+The top-$k$ documents are selected: $\mathcal{R}_{\text{final}} = \{ d_{\pi^*(1)}, d_{\pi^*(2)}, \dots, d_{\pi^*(k)} \}$, with default $k = 5$.
+
+#### 3. Post-Reranking Clearance Gating
+To guarantee that the neural cross-encoder evaluates authentic contextual semantics rather than synthetic redaction placeholders, clearance redaction is executed strictly *after* reranking:
+$$\text{OutputText}(d_i) = \begin{cases} \text{body}(d_i) & \text{if } \text{Principal.can\_see\_narrative}(\text{crime\_type}(d_i)) \\ \text{"[Restricted: protected-crime narrative. Insufficient clearance.]"} & \text{otherwise} \end{cases}$$
+
+---
+
+### 31.3 Lexical Retrieval & Selective Document Frequency Truncation
+
+**Location:** `backend/app/pipeline/tools/rag.py`, `backend/migrations/012_local_bilingual_rag.sql`
+
+#### 1. Corpus Document Frequency & Information Density
+For lexeme $t$ in language $L \in \{\text{"en"}, \text{"kn"}\}$, document frequency $n(t)$ is precomputed in `narrative_lexeme_df`:
+$$n(t) = |\{d \in \mathcal{D}_L : t \in d\}|$$
+The standard Inverse Document Frequency (IDF) is:
+$$\text{IDF}(t) = \ln\left( \frac{N_L - n(t) + 0.5}{n(t) + 0.5} + 1 \right)$$
+
+#### 2. Selective DF Thresholding
+To eliminate non-informative boilerplate tokens (e.g. `investig`, `fir`, `regist`, `district` which occur in $100\%$ of template documents), query terms are filtered by a document frequency ceiling:
+$$\text{Keep}(s) \iff 0 < \text{tot}(s) \le N_L \cdot \text{MAX\_DF\_FRACTION} \quad (\text{MAX\_DF\_FRACTION} = 0.20)$$
+where stem-group frequency $\text{tot}(s)$ aggregates all inflectional variants sharing English stem $s$:
+$$\text{tot}(s) = \sum_{t \in \text{Stem}(s)} n(t), \quad \text{alt}(s) = \bigvee_{t \in \text{Stem}(s)} t$$
+This guarantees an explicit IDF lower bound:
+$$\frac{\text{tot}(s)}{N} \le 0.20 \iff \text{IDF}(s) > \ln\left(\frac{1}{0.20}\right) = \ln(5) \approx 1.609$$
+
+#### 3. Progressive Conjunction Relaxation
+Query term groups $\{g_1, g_2, \dots, g_m\}$ are sorted in ascending order of $\text{tot}(s)$ (most selective first). The conjunction query is constructed iteratively:
+$$\mathcal{Q}_j = \bigwedge_{i=1}^{j} g_i \quad \text{for } j = \min(m, \text{MAX\_TERM\_GROUPS}), \dots, 1$$
+The algorithm tests each $\mathcal{Q}_j$ sequentially up to $\text{MAX\_RELAXATIONS} = 4$. The first non-empty result set satisfies precision while guaranteeing reachable recall without unbounded disjunctive table scans.
+
+---
+
+### 31.4 Reciprocal Rank Fusion (RRF) Multi-Arm Blending
+
+**Location:** `backend/app/pipeline/tools/rag.py::_rrf_fuse`
+
+To merge candidate sets from distinct retrieval modalities without requiring score normalization calibration across disparate metric spaces (cosine distance $[0, 2]$ vs PostgreSQL `ts_rank` $[0, 1]$), Reciprocal Rank Fusion is evaluated:
+
+$$\text{RRF\_Score}(d) = \sum_{m \in \mathcal{M}} \frac{1}{k_{\text{rrf}} + \operatorname{rank}_m(d)}$$
+
+Where:
+- $\mathcal{M} = \{\text{vector}, \text{lexical}\}$
+- $\operatorname{rank}_m(d) \in \{1, 2, \dots, |\mathcal{C}_m|\}$ is the 1-based ordinal rank of document $d$ within strategy $m$.
+- $k_{\text{rrf}} = 60$ is the smoothing constant that prevents high-ranking outliers in one strategy from dominating the unified order.
+- If $d \notin \mathcal{C}_m$, its contribution from strategy $m$ is $0$.
+- Deterministic tie-breaking: ties are broken by initial order of appearance with the vector strategy prioritized:
+  $$\operatorname{TieBreak}(a, b) = \begin{cases} a \succ b & \text{if } \text{RRF}(a) > \text{RRF}(b) \\ a \succ b & \text{if } \text{RRF}(a) = \text{RRF}(b) \land \text{FirstSeen}(a) < \text{FirstSeen}(b) \end{cases}$$
+
+---
+
+### 31.5 Spatio-Temporal Crime Forecasting & Multi-Factor Risk Surface
+
+**Location:** `backend/app/services/intelligence_service.py`
+
+#### 1. Geodesic Grid Discretization
+Statewide geographic space is discretized into regular bounding boxes parameterized by resolution $g \in \{0.01^\circ, 0.02^\circ, 0.05^\circ, 0.10^\circ\}$ (where $0.01^\circ \approx 1.11\,\text{km}$):
+$$\text{lat}_c = \operatorname{round}\left(\frac{\text{latitude}}{g}\right) \cdot g, \quad \text{lng}_c = \operatorname{round}\left(\frac{\text{longitude}}{g}\right) \cdot g$$
+
+#### 2. Temporal Horizon & Incident Aggregation
+Given reference temporal anchor $t_{\text{as\_of}} = \max(\text{report\_date})$ and user horizon $H \in \{3, 7, 14, 30\}$ days:
+$$T_{\text{recent}} = \max(H, 7)\,\text{days}, \quad T_{\text{baseline}} = 2 \cdot T_{\text{recent}}\,\text{days}$$
+$$\text{Recent Window: } \mathcal{W}_{\text{recent}} = (t_{\text{as\_of}} - T_{\text{recent}},\, t_{\text{as\_of}}]$$
+$$\text{Baseline Window: } \mathcal{W}_{\text{baseline}} = (t_{\text{as\_of}} - T_{\text{baseline}},\, t_{\text{as\_of}} - T_{\text{recent}}]$$
+
+Counts are aggregated per cell $c = (\text{lat}_c, \text{lng}_c)$ and crime type $k$:
+$$N_{\text{total}}(c, k) = \sum_{i \in \text{Cases}} \mathbb{I}\left(c_i = c \land k_i = k \land t_i \le t_{\text{as\_of}}\right)$$
+$$N_{\text{recent}}(c, k) = \sum_{i \in \text{Cases}} \mathbb{I}\left(c_i = c \land k_i = k \land t_i \in \mathcal{W}_{\text{recent}}\right)$$
+$$N_{\text{baseline}}(c, k) = \sum_{i \in \text{Cases}} \mathbb{I}\left(c_i = c \land k_i = k \land t_i \in \mathcal{W}_{\text{baseline}}\right)$$
+
+#### 3. Non-Linear Risk Score Formulation
+The cell risk score combines a logarithmic volume density term with a bounded recency-velocity lift:
+$$\text{DensityScore}(c, k) = \min\left(50, \left\lfloor 10 \cdot \ln(1 + N_{\text{total}}(c, k)) \right\rfloor\right)$$
+
+$$\text{LiftPercent}(c, k) = \begin{cases} \left\lfloor \frac{N_{\text{recent}}(c, k) - N_{\text{baseline}}(c, k)}{N_{\text{baseline}}(c, k)} \cdot 100 \right\rfloor & \text{if } N_{\text{baseline}}(c, k) > 0 \\ 50 & \text{if } N_{\text{baseline}}(c, k) = 0 \land N_{\text{recent}}(c, k) > 0 \\ 0 & \text{otherwise} \end{cases}$$
+
+$$\text{LiftScore}(c, k) = \min\left(30, \max\left(0, \left\lfloor 0.3 \cdot \text{LiftPercent}(c, k) \right\rfloor\right)\right)$$
+
+$$\text{RiskScore}(c, k) = \min\left(99, 20 + \text{DensityScore}(c, k) + \text{LiftScore}(c, k)\right) \in [20, 99]$$
+
+Each spatial cell inherits the supremum risk across all active crime categories:
+$$\text{RiskScore}(c) = \max_{k} \text{RiskScore}(c, k)$$
+
+#### 4. Discrete Threat Categorization
+$$\text{RiskLabel}(S) = \begin{cases} \text{"Critical"} & \text{if } S \ge 75 \\ \text{"High"} & \text{if } 55 \le S < 75 \\ \text{"Medium"} & \text{if } 30 \le S < 55 \\ \text{"Low"} & \text{if } S < 30 \end{cases}$$
+
+#### 5. Early Warning Alert Scoring Formula
+For statewide macro alerts surfaced by `GET /api/forecast/alerts`:
+$$\text{AlertScore}(k, d) = \min\left(99,\, 30 + \min\left(40, \left\lfloor \frac{\text{LiftPercent}}{2} \right\rfloor\right) + \min\left(20, \left\lfloor \frac{N_{\text{total}}}{50} \right\rfloor\right)\right)$$
+Recommended deployment patrol shift window:
+$$h_{\text{peak}} = \max\left(0, \min\left(22, \lfloor \bar{h}_{\text{incident}} \rfloor\right)\right), \quad \text{Shift} = [h_{\text{peak}},\, \min(23, h_{\text{peak}} + 2)]$$
+
+---
+
+### 31.6 Rolling-Origin Temporal Backtesting & Spatial Validation Framework
+
+**Location:** `backend/app/services/intelligence_service.py::get_forecast_backtest`
+
+```
+Temporal Origin Splitting (Walk-Forward Validation):
+Fold k:   |──────── Train Window (History <= Origin_k) ────────|── Test Window (test_days) ──|
+                                                                ^ Origin_k                    ^ TestEnd_k
+```
+
+#### 1. Rolling-Origin Partitioning
+For $K$ folds ($K \in [1, 24]$, default 6) and test window duration $\Delta t_{\text{test}} \in [7, 90]$ days (default 30 days):
+$$\text{Origin}_k = t_{\text{as\_of}} - (k + 1) \cdot \Delta t_{\text{test}}$$
+$$\text{TestEnd}_k = t_{\text{as\_of}} - k \cdot \Delta t_{\text{test}}$$
+
+Strict temporal causality is enforced: all feature variables ($N_{\text{total}}, N_{\text{recent}}, N_{\text{baseline}}$) are computed strictly from incidents occurring at $t \le \text{Origin}_k$.
+
+#### 2. Spatial Decile Selection
+Within each fold $k$, the top decile of rankable spatial cells is selected using `NTILE(10)` ordered by $\text{RiskScore}$ descending:
+$$\mathcal{S}_k = \{c \in \Omega_k : \text{decile}(c) = 1\}, \quad \text{where } \text{decile}(c) = \operatorname{NTILE}_{10}(\text{RiskScore}(c))$$
+
+#### 3. Statistical Evaluation Metrics (Pooled Across Folds)
+- **Hit Rate:** Fraction of all held-out test incidents occurring within selected cells:
+  $$\text{HitRate} = \frac{\sum_{k=1}^K \sum_{c \in \mathcal{S}_k} N_{\text{test}}(c, k)}{\sum_{k=1}^K \sum_{c \in \Omega_k} N_{\text{test}}(c, k)} = \frac{\text{Hits}_{\text{total}}}{N_{\text{test, total}}}$$
+- **Area Share:** Proportion of total geographic study area targeted:
+  $$\text{AreaShare} = \frac{\sum_{k=1}^K |\mathcal{S}_k|}{\sum_{k=1}^K |\Omega_k|} = \frac{\text{Cells}_{\text{selected}}}{\text{Cells}_{\text{study}}}$$
+- **Prediction Accuracy Index (PAI):** Ratio of hit rate to area share ($> 1.0$ indicates performance superior to random spatial targeting):
+  $$\text{PAI} = \frac{\text{HitRate}}{\text{AreaShare}} = \frac{\text{Hits} / N_{\text{test}}}{\text{Cells}_{\text{selected}} / \text{Cells}_{\text{study}}}$$
+- **Predictive Efficiency Index (PEI):** Ratio of achieved hits to the theoretical maximum hits achievable by a perfect hindsight oracle choosing the identical number of cells:
+  $$\text{PEI} = \frac{\text{Hits}}{\text{Hits}_{\max}} = \frac{\sum_{k=1}^K \sum_{c \in \mathcal{S}_k} N_{\text{test}}(c, k)}{\sum_{k=1}^K \sum_{r=1}^{|\mathcal{S}_k|} N_{\text{test}}(\pi_k^{\text{oracle}}(r), k)}$$
+  where $\pi_k^{\text{oracle}}$ orders cells by descending held-out test incident count $N_{\text{test}}(c, k)$.
+
+#### 4. Wilson Score Confidence Interval (95% CI)
+To avoid degenerate interval estimates associated with small sample sizes or extreme proportions, the 95% Wilson binomial score interval ($z = 1.959964$) is computed:
+$$\hat{p} = \frac{\text{Hits}}{N_{\text{test}}}, \quad D = 1 + \frac{z^2}{N_{\text{test}}}$$
+$$\text{Center} = \frac{\hat{p} + \frac{z^2}{2 N_{\text{test}}}}{D}$$
+$$\text{Margin} = \frac{z \sqrt{\frac{\hat{p}(1 - \hat{p})}{N_{\text{test}}} + \frac{z^2}{4 N_{\text{test}}^2}}}{D}$$
+$$\text{CI}_{95\%} = \left[ \max(0, \text{Center} - \text{Margin}),\, \min(1, \text{Center} + \text{Margin}) \right]$$
+
+---
+
+### 31.7 Edge Computer Vision AI & Real-Time Video Analytics
+
+**Location:** `model/inference/live_cctv.py`, `ai_camera/detect_video.py`, `backend/app/api/routes/ops.py`
+
+#### 1. YOLOv8s Neural Architecture & Multi-Task Loss
+Object detection runs on a YOLOv8s convolutional network (22.5 MB weights, CSPDarknet53 feature backbone with C2f modules, PAN-FPN multiscale feature pyramid, and an anchor-free decoupled detection head).
+
+The end-to-end training and fine-tuning loss is:
+$$\mathcal{L}_{\text{total}} = \lambda_{\text{box}} \mathcal{L}_{\text{CIoU}} + \lambda_{\text{cls}} \mathcal{L}_{\text{BCE}} + \lambda_{\text{dfl}} \mathcal{L}_{\text{DFL}}$$
+
+Where **Complete Intersection over Union (CIoU)** incorporates overlap area, central point distance, and aspect ratio consistency:
+$$\text{IoU} = \frac{|\mathbf{b} \cap \mathbf{b}^{gt}|}{|\mathbf{b} \cup \mathbf{b}^{gt}|}$$
+$$\mathcal{L}_{\text{CIoU}} = 1 - \text{IoU} + \frac{\rho^2(\mathbf{b}, \mathbf{b}^{gt})}{c^2} + \alpha v$$
+$$\rho(\mathbf{b}, \mathbf{b}^{gt}) = \|(c_x, c_y) - (c_x^{gt}, c_y^{gt})\|_2 = \sqrt{(c_x - c_x^{gt})^2 + (c_y - c_y^{gt})^2}$$
+$$v = \frac{4}{\pi^2} \left( \arctan\frac{w^{gt}}{h^{gt}} - \arctan\frac{w}{h} \right)^2, \quad \alpha = \frac{v}{(1 - \text{IoU}) + v}$$
+$c$ is the diagonal length of the smallest enclosing bounding box.
+
+Distribution Focal Loss ($\mathcal{L}_{\text{DFL}}$) optimizes the continuous bounding box regression coordinates around discrete bin labels $y$:
+$$\mathcal{L}_{\text{DFL}}(S_i, S_{i+1}) = - \left( (y_{i+1} - y)\log(S_i) + (y - y_i)\log(S_{i+1}) \right)$$
+
+#### 2. ByteTrack Multi-Object Tracking (MOT) State Space
+For every detected entity, a discrete-time linear Kalman filter maintains state vector:
+$$\mathbf{x} = [x_c, y_c, a, h, \dot{x}_c, \dot{y}_c, \dot{a}, \dot{h}]^T$$
+where $(x_c, y_c)$ is the 2D bounding box center, $a = w/h$ is the aspect ratio, $h$ is box height, and the dotted components represent the respective first-order temporal velocities.
+
+State transition and observation updates:
+$$\mathbf{x}_{k} = \mathbf{F} \mathbf{x}_{k-1} + \mathbf{w}_k, \quad \mathbf{w}_k \sim \mathcal{N}(0, \mathbf{Q})$$
+$$\mathbf{z}_k = \mathbf{H} \mathbf{x}_k + \mathbf{v}_k, \quad \mathbf{v}_k \sim \mathcal{N}(0, \mathbf{R})$$
+Track-to-detection assignment is solved via the Hungarian algorithm across two stages (first associating detections with $\text{conf} \ge 0.5$, followed by associating remaining unmatched tracks with low-confidence detections $\text{conf} \in [0.1, 0.5)$).
+
+#### 3. Kinetic Assault & Physical Violence Heuristic Formula
+For all tracked persons $i$ with centroid trajectory $c_i(t) = (x_i(t), y_i(t))$, instantaneous frame velocity $v_i(t)$ is:
+$$v_i(t) = \|c_i(t) - c_i(t-1)\|_2 = \sqrt{(x_i(t) - x_i(t-1))^2 + (y_i(t) - y_i(t-1))^2}$$
+
+For all pairs of persons $(i, j)$ where $i < j$:
+$$d_{ij}(t) = \|c_i(t) - c_j(t)\|_2 = \sqrt{(x_i(t) - x_j(t))^2 + (y_i(t) - y_j(t))^2}$$
+$$\text{IsFightPair}(i, j) \iff d_{ij}(t) < \text{FIGHT\_DIST (80 px)} \land \max(v_i(t), v_j(t)) > \text{FIGHT\_SPEED (6.0 px/frame)}$$
+
+When active fight pairs $N_{\text{fight\_pairs}} \ge 1$, the alert confidence is:
+$$\text{Conf}_{\text{fight}} = \min\left(0.92,\, 0.65 + 0.05 \cdot N_{\text{fight\_pairs}}\right)$$
+
+#### 4. Crowd Density Surge Metric
+Let $N_{\text{people}}(t)$ be the number of active tracked persons in frame $t$:
+$$N_{\text{people}}(t) \ge \text{CROWD\_THRESH (4)} \implies \text{Conf}_{\text{crowd}} = \min\left(0.90,\, 0.55 + 0.04 \cdot N_{\text{people}}(t)\right)$$
+
+#### 5. Stalled / Suspicious Vehicle Anomaly
+For vehicles $k \in \{\text{car}, \text{motorcycle}, \text{bus}, \text{truck}\}$:
+$$v_k(t) < 2.0\,\text{px/frame for continuous duration } \Delta t \ge 3.0\,\text{seconds} \implies \text{Conf}_{\text{stall}} = \min\left(0.95,\, 0.60 + \frac{\Delta t}{20.0}\right)$$
+
+#### 6. Weapon & Firearm Threat Detection
+Specialized secondary firearm weights (`model/gun.pt` or class name matching in primary head):
+$$\text{FirearmAlert} \iff \text{class} \in \{\text{"gun"}, \text{"pistol"}, \text{"rifle"}, \text{"weapon"}, \text{"knife"}\} \land \text{conf} \ge \tau_{\text{weapon}} = 0.35$$
+
+---
+
+### 31.8 Response Ops Fleet Dispatch, Geodesy & Dynamic Green Corridor
+
+**Location:** `backend/app/services/ops/risk_service.py`, `corridor_service.py`, `routing_service.py`, `sim_service.py`
+
+#### 1. Predictive Readiness Risk Zone Formula
+Grid cells ($\sim 1.1\,\text{km}$, $\text{GRID\_SIZE} = 0.01^\circ$) are scored across historical lookback $T_{\text{lookback}} = 365$ days:
+$$\text{SeverityWeights: } w(\text{Murder/Rape/Dacoity/Kidnap}) = 4,\, w(\text{Robbery/Burglary/Riot}) = 3,\, w(\text{Theft/Cheating}) = 2,\, w(\text{Other}) = 1$$
+$$\text{IncidentScore}(Z) = \left( \frac{\sum_{i \in Z} w(\text{crime}_i)}{\max_{Z'} \sum_{i \in Z'} w(\text{crime}_i)} \right) \cdot 40.0$$
+$$\text{DensityScore}(Z) = \left( \frac{|Z|}{\max_{Z'} |Z'|} \right) \cdot 30.0$$
+$$\text{TimeScore}(Z) = \begin{cases} 30.0 & \text{if } \text{PeakHour}(Z) \in [20, 24] \cup [0, 4] \\ 12.0 & \text{otherwise} \end{cases}$$
+$$\text{ZoneRiskScore}(Z) = \operatorname{round}\left(\text{IncidentScore}(Z) + \text{DensityScore}(Z) + \text{TimeScore}(Z),\, 1\right) \in [0, 100]$$
+
+#### 2. Haversine Spherical Geodesic Metric
+For coordinate pairs $(\phi_1, \lambda_1)$ and $(\phi_2, \lambda_2)$ in radians:
+$$a = \sin^2\left(\frac{\Delta \phi}{2}\right) + \cos(\phi_1)\cos(\phi_2)\sin^2\left(\frac{\Delta \lambda}{2}\right)$$
+$$d_{\text{Haversine}}(\mathbf{p}_1, \mathbf{p}_2) = 2 R \cdot \operatorname{atan2}\left(\sqrt{a}, \sqrt{1 - a}\right) \quad (R = 6371.0\,\text{km})$$
+
+#### 3. Optimal Nearest Idle Patrol Dispatch & Pre-positioning Improvement
+For top risk zones $Z_1, \dots, Z_5$, the system solves the greedy assignment problem:
+$$P^*(Z) = \arg\min_{P \in \text{Patrols}_{\text{IDLE}}} d_{\text{Haversine}}(\text{pos}(P), \text{center}(Z))$$
+The estimated transit time reduction achieved by proactive pre-positioning is:
+$$\Delta T_{\text{response\_improvement}} = \frac{1}{2} \cdot \left( \frac{d_{\text{Haversine}}(P^*, Z)}{v_{\text{patrol}}} \right) \cdot 3600\,\text{seconds} \quad (v_{\text{patrol}} = 40.0\,\text{km/h})$$
+
+#### 4. Dynamic Green Wave Signal Prioritization Geometry
+Let $\mathcal{R} = \{\mathbf{r}_1, \mathbf{r}_2, \dots, \mathbf{r}_m\}$ represent the discrete GPS waypoints along a dispatch route.
+- **Route Corridor Preemption:**
+  $$\text{ActivateGreen}(S_j) \iff \min_{\mathbf{r} \in \mathcal{R}} d_{\text{Haversine}}(\text{pos}(S_j), \mathbf{r}) \le R_{\text{corridor}} = 0.5\,\text{km}$$
+- **Moving Unit Proximity Trigger:**
+  $$\text{PreemptNear}(S_j, \mathbf{p}_{\text{unit}}) \iff d_{\text{Haversine}}(\text{pos}(S_j), \mathbf{p}_{\text{unit}}) \le R_{\text{active}} = 0.3\,\text{km}$$
+
+#### 5. Discrete Kinematic Patrol Simulation
+Routes are subsampled to $N \le 60$ waypoints. Position evolves via discrete forward integration:
+$$\mathbf{p}_{k+1} = \mathbf{p}_k + \mathbf{v}_k \Delta t, \quad \Delta t = 0.8\,\text{seconds / tick}$$
+Lifecycle state transitions:
+$$\text{IDLE} \xrightarrow{\text{Dispatch}} \text{ACCEPTED (2s)} \xrightarrow{\text{Transit}} \text{EN\_ROUTE} \xrightarrow{\text{Arrival}} \text{ON\_SCENE (6s)} \xrightarrow{\text{Clear}} \text{IDLE}$$
+
+---
+
+### 31.9 Multimodal Hands-Free Vision, Biometric Auto-Lock & Kinetic Smoothing
+
+**Location:** `frontend/src/lib/vision/`, `GestureController.tsx`, `FacePresenceController.tsx`
+
+#### 1. MediaPipe Tasks 3D Hand Landmark Kinematics
+WASM GPU-accelerated neural landmark tracking evaluates $K = 21$ hand joints $\mathbf{P} = \{\mathbf{p}_0, \mathbf{p}_1, \dots, \mathbf{p}_{20}\}$ where $\mathbf{p}_k = (x_k, y_k, z_k) \in \mathbb{R}^3$.
+- **Index Tip Position:** $\mathbf{p}_{\text{index}} = \mathbf{p}_8$
+- **Thumb Tip Position:** $\mathbf{p}_{\text{thumb}} = \mathbf{p}_4$
+- **Euclidean Pinch Distance:**
+  $$d_{\text{pinch}} = \|\mathbf{p}_4 - \mathbf{p}_8\|_2 = \sqrt{(x_4 - x_8)^2 + (y_4 - y_8)^2 + (z_4 - z_8)^2}$$
+  $$\text{TriggerClick} \iff d_{\text{pinch}} < \tau_{\text{pinch}} = 0.065$$
+
+#### 2. Exponential Moving Average (LERP) Cursor Smoothing
+To eliminate high-frequency hand tremors from the video cursor coordinate $\mathbf{c}_t = (x_{\text{screen}}, y_{\text{screen}})_t$:
+$$\mathbf{c}_{\text{smoothed}}(t) = (1 - \alpha)\mathbf{c}_{\text{smoothed}}(t - 1) + \alpha \mathbf{c}_{\text{raw}}(t) \quad (\alpha = 0.35)$$
+
+#### 3. Temporal Majority-Voting & Gesture Hold Filter
+Let $g_t \in \mathcal{G}$ be the frame-level classification output.
+- **Majority-Voting Window:** Mode over a sliding temporal buffer of $W = 5$ frames:
+  $$g^*_t = \operatorname{mode}\left(\{g_{t-4}, g_{t-3}, g_{t-2}, g_{t-1}, g_t\}\right)$$
+- **Hold Duration Threshold:** A gesture triggers its structured intent only if stable for duration $T_{\text{hold}}$:
+  $$\text{ExecuteIntent}(g^*) \iff \Delta t(g^* = \text{const}) \ge 400\,\text{ms}$$
+
+#### 4. Face Presence Absence Auto-Lock Metric
+`FaceDetector` runs at interval $\Delta t = 400\,\text{ms}$. If no human face is detected within the video stream:
+$$t - t_{\text{last\_face\_detected}} \ge T_{\text{absence\_threshold}} = 15.0\,\text{seconds} \implies \text{Trigger}(\text{"satyam:session-lock"})$$
+The UI engages full-screen backdrop blur and logs an audited security event to `audit_log`.
+
+---
+
+### 31.10 Socio-Demographic Correlation & Social Risk Index (PS4)
+
+**Location:** `backend/app/services/intelligence_service.py::get_socio_correlation`
+
+#### 1. Pearson Product-Moment Correlation Coefficient
+For statewide district data vectors $\mathbf{x} = [x_1, \dots, x_n]$ (e.g. crime rate) and $\mathbf{y} = [y_1, \dots, y_n]$ (e.g. literacy rate, urbanization percent, income index):
+
+$$r_{xy} = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^n (x_i - \bar{x})^2} \sqrt{\sum_{i=1}^n (y_i - \bar{y})^2}} = \frac{n \sum_{i=1}^n x_i y_i - \left(\sum_{i=1}^n x_i\right)\left(\sum_{i=1}^n y_i\right)}{\sqrt{\left[n \sum_{i=1}^n x_i^2 - \left(\sum_{i=1}^n x_i\right)^2\right] \left[n \sum_{i=1}^n y_i^2 - \left(\sum_{i=1}^n y_i\right)^2\right]}}$$
+
+Guards: $r_{xy} = \text{None}$ if $n < 3$ or denominator $= 0$.
+
+#### 2. District Social Risk Index (SRI)
+$$\text{SRI}(d) = \min\left(99,\, 20 + \lfloor 8 \cdot \ln(1 + N_{\text{crime}}(d)) \rfloor + \min(20, N_{\text{accused}}(d))\right)$$
+Key diagnostic drivers fire dynamically:
+- `"High crime density"` $\iff N_{\text{crime}}(d) > 1000$
+- `"High repeat-offender concentration"` $\iff N_{\text{accused}}(d) > 100$
+
+---
+
+### 31.11 Graph Analytics, Centrality & Multi-Hop BFS Flow (PS2 / PS7)
+
+**Location:** `backend/app/pipeline/tools/analytics.py`, `backend/app/services/financial_service.py`, `frontend/src/lib/forceGraph.ts`
+
+#### 1. Bipartite Ego-Graph Projection & Degree Centrality
+The criminal intelligence graph is modeled as a bipartite graph $G = (V_P \cup V_C, E)$ where $V_P$ are persons and $V_C$ are crime cases:
+$$C_D(v) = \operatorname{deg}(v) = |\{u \in V : (u, v) \in E\}|$$
+
+#### 2. Multi-Hop BFS Money-Trail Expansion (PS7)
+Starting from seed account set $\mathcal{S}_0$, the frontier expands breadth-first up to $D_{\max} = 3$ hops:
+$$\mathcal{S}_{d+1} = \left\{ v \notin \bigcup_{i=0}^d \mathcal{S}_i \;\middle|\; \exists u \in \mathcal{S}_d \text{ s.t. } (u, v) \in E_{\text{txn}} \land \text{amount}(u, v) \ge \theta_{\text{min}} \right\}$$
+Edge aggregation:
+$$\text{Amount}(u, v) = \sum_{t \in \text{Txns}(u, v)} \text{amount}(t), \quad \text{IsSuspicious}(u, v) = \bigvee_{t \in \text{Txns}(u, v)} \text{is\_suspicious}(t)$$
+
+#### 3. Force-Directed Spring-Embedder Physical Simulation
+The 2D canvas layout integrates Coulomb repulsive forces, Hooke's spring forces, and velocity damping:
+- **Repulsive Force (all pairs, $\mathcal{O}(n^2)$):**
+  $$\mathbf{F}_{\text{rep}}(u, v) = \frac{k_{\text{rep}}}{\max(\|\mathbf{p}_u - \mathbf{p}_v\|_2^2,\, d_{\min}^2)} \cdot \frac{\mathbf{p}_u - \mathbf{p}_v}{\|\mathbf{p}_u - \mathbf{p}_v\|_2} \quad (k_{\text{rep}} = 18,\, d_{\min} = 1.2)$$
+- **Spring Attractive Force (connected pairs):**
+  $$\mathbf{F}_{\text{spring}}(u, v) = -k_{\text{spring}} \left( \|\mathbf{p}_u - \mathbf{p}_v\|_2 - L_0 \right) \cdot \frac{\mathbf{p}_u - \mathbf{p}_v}{\|\mathbf{p}_u - \mathbf{p}_v\|_2} \quad (k_{\text{spring}} = 0.012,\, L_0 = 22)$$
+- **Centripetal Gravity Force:**
+  $$\mathbf{F}_{\text{grav}}(u) = -k_{\text{grav}} (\mathbf{p}_u - \mathbf{c}_{\text{center}}) \quad (k_{\text{grav}} = 0.002,\, \mathbf{c} = (50, 50))$$
+- **Velocity Integration & Kinetic Cooling:**
+  $$\mathbf{v}_u(t + \Delta t) = \left( \mathbf{v}_u(t) + \frac{\mathbf{F}_{\text{total}}(u)}{m_u} \Delta t \right) \cdot \gamma^{\Delta t} \quad (\gamma = 0.82,\, \|\mathbf{v}\| \le 4.0)$$
+  $$\mathbf{p}_u(t + \Delta t) = \mathbf{p}_u(t) + \mathbf{v}_u(t + \Delta t) \cdot \Delta t \cdot \alpha(t), \quad \alpha(t) = \max(0.15,\, \alpha(0) \cdot 0.985^t)$$
+- **Settlement Criterion:** The physics engine terminates when kinetic energy satisfies:
+  $$E_{\text{kinetic}} = \frac{1}{n} \sum_{u \in V} \|\mathbf{v}_u\|_2^2 < E_{\text{rest}} = 0.0004$$
+
+---
+
+### 31.12 Investigation Board Layout Algorithms
+
+**Location:** `backend/app/services/board_brain.py`, `frontend/src/lib/boardLayout.ts`
+
+#### 1. Sugiyama 4-Phase Layered DAG Layout (Dagre)
+1. **Cycle Removal:** Greedy feedback arc set heuristic reverses back-edges to form a directed acyclic graph.
+2. **Layer Assignment:** Integer programming / Network Simplex solves node ranking to minimize total edge length:
+   $$\min \sum_{(u, v) \in E} (\text{layer}(v) - \text{layer}(u)) \quad \text{s.t. } \text{layer}(v) - \text{layer}(u) \ge \delta(u, v) \ge 1$$
+3. **Crossing Reduction:** Iterative layer-by-layer barycentric / median heuristic vertex reordering.
+4. **Coordinate Assignment:** Node placement subject to separation constraints ($\text{nodesep} = 60\,\text{px}$, $\text{ranksep} = 80\,\text{px}$).
+
+#### 2. Polar Radial Layout Transformation
+For central hubs (e.g. primary suspect, central crime incident):
+$$x_i = x_0 + r \cdot \cos\left(\frac{2\pi i}{N} + \theta_0\right), \quad y_i = y_0 + r \cdot \sin\left(\frac{2\pi i}{N} + \theta_0\right)$$
+
+#### 3. Iterative Repulsive Bounding-Box Collision Resolution
+To guarantee zero visual node overlapping across arbitrary LLM-generated scene graphs, an 80-iteration iterative separation projection is computed:
+For intersecting axis-aligned bounding boxes $A = (x_A, y_A, w_A, h_A)$ and $B = (x_B, y_B, w_B, h_B)$:
+$$\Delta x = \frac{w_A + w_B}{2} + \text{pad} - |x_A - x_B|, \quad \Delta y = \frac{h_A + h_B}{2} + \text{pad} - |y_A - y_B|$$
+$$\text{If } \Delta x > 0 \land \Delta y > 0: \quad \text{Resolve along minimal axis: } \mathbf{s} = \begin{cases} (\operatorname{sgn}(x_B - x_A)\Delta x,\, 0) & \text{if } \Delta x < \Delta y \\ (0,\, \operatorname{sgn}(y_B - y_A)\Delta y) & \text{otherwise} \end{cases}$$
+$$\mathbf{p}_A \leftarrow \mathbf{p}_A - \frac{1}{2}\mathbf{s}, \quad \mathbf{p}_B \leftarrow \mathbf{p}_B + \frac{1}{2}\mathbf{s}$$
+
+---
+
+### 31.13 Cryptographic Audit Hash Chain Recurrence
+
+**Location:** `backend/app/core/audit.py`, `backend/app/db/session.py`
+
+#### 1. Hash Recurrence Relation
+Let $R_k$ represent the $k$-th audited record. The cryptographic hash chain is defined recursively:
+$$H_0 = \text{"GENESIS"}$$
+$$H_k = \text{SHA-256}\left( H_{k-1} \,\|\, \text{CanonicalJSON}\left( \text{timestamp}_k, \text{user\_id}_k, \text{action}_k, \text{query\_text}_k, \text{client\_ip}_k \right) \right)$$
+where $\text{CanonicalJSON}(P)$ is serialized with lexicographically sorted keys, compact delimiters (`","`, `":"`), and UTC ISO timestamps.
+
+#### 2. Concurrency Control & Fork Prevention
+To prevent blockchain-style branching forks under concurrent async FastAPI workers, appends are serialized using PostgreSQL transaction-level advisory locking:
+```sql
+SELECT pg_advisory_xact_lock(728311042);
+SELECT row_hash FROM audit_log ORDER BY audit_id DESC LIMIT 1;
+-- Compute H_k = SHA-256(prev_hash || canonical_payload)
+INSERT INTO audit_log (at, user_id, action, query_text, prev_hash, row_hash) VALUES (...);
+```
+
+---
+
+### 31.14 Grounded Natural Language-to-SQL & Progressive Relaxation Grammar
+
+**Location:** `backend/app/pipeline/tools/text_to_sql.py`, `rule_sql.py`, `sql_guard.py`
+
+#### 1. SQL Grammar AST Security Gate (`sqlglot`)
+Every query generated by LLMs must strictly satisfy the AST validation theorem:
+$$\text{ValidQuery}(Q) \iff \text{NodeType}(Q) = \text{Select} \land \text{Tables}(Q) \subseteq \mathcal{T}_{\text{allow}} \land \neg \text{HasMutations}(Q)$$
+where $\mathcal{T}_{\text{allow}} = \{\text{cases}, \text{persons}, \text{case\_persons}, \text{narratives}, \text{stations}, \text{district\_socio\_economic\_indicators}\}$.
+Auto-enforced limit: $\operatorname{LIMIT}(Q) \le 200$.
+
+#### 2. 4-Tier Progressive Zero-Result Recovery Hierarchy
+When an exact SQL query returns 0 rows due to over-constrained natural language filters, the engine relaxes predicates progressively:
+- **Level 0 (Exact Match):** $\mathcal{F}_{\text{district}} \land \mathcal{F}_{\text{crime\_type}} \land \mathcal{F}_{\text{year}}$
+- **Level 1 (Drop Date):** $\mathcal{F}_{\text{district}} \land \mathcal{F}_{\text{crime\_type}}$ (surfaces: *"No records for that time period — showing results across all years."*)
+- **Level 2 (Drop Crime Type):** $\mathcal{F}_{\text{district}}$ (surfaces: *"No matching crime type in that district — showing all incidents in area."*)
+- **Level 3 (Statewide Recency Fallback):** $\operatorname{ORDER BY} \text{report\_date DESC LIMIT } 10$
+
+---
+
+### 31.15 Summary Matrix: Model vs. Statistical vs. Heuristic
+
+| System Surface | Methodology | Mathematical / Algorithm Class | Trained Weights? |
+|---|---|---|:---:|
+| **Semantic Narrative Search** | Dense Bi-Encoder + pgvector | Cosine Distance + HNSW ANN | ✅ (`bge-m3`) |
+| **Document Reranking** | Neural Cross-Encoder | Joint Transformer Cross-Attention | ✅ (`bge-reranker-v2-m3`) |
+| **Lexical Keyword Search** | Selective DF Truncation + GIN | TF-IDF Filtering + Progressive Conjunction | ❌ (Statistical) |
+| **Hybrid Search Fusion** | Reciprocal Rank Fusion | Non-linear Rank Order Sum ($k=60$) | ❌ (Mathematical) |
+| **Hotspot Risk Surface** | Spatio-Temporal Scorer | $\min(99, 20 + \lfloor 10\ln(1+N) \rfloor + 0.3\cdot\text{Lift})$ | ❌ (Empirical Formula) |
+| **Forecast Backtest** | Walk-Forward Validation | PAI / PEI / Wilson 95% Score Interval | ❌ (Statistical) |
+| **CCTV Object Detection** | YOLOv8s Convolutional Net | CIoU Loss + Distribution Focal Loss | ✅ (`yolov8s.pt`) |
+| **CCTV Multi-Object Tracking**| ByteTrack Algorithm | 8-State Kalman Filter + Hungarian Matching | ❌ (Kinematic Filter) |
+| **CCTV Fight / Assault Detection**| Kinetic Vector Analysis | Pairwise Euclidean Proximity + Frame Speed | ❌ (Heuristic Rule) |
+| **Hands-Free Gesture Tracking** | MediaPipe Tasks Vision | 21 3D Landmarks + LERP + Sliding Window | ✅ (MediaPipe WASM) |
+| **Patrol Fleet Allocation** | Greedy Geodesic Optimizer | Haversine Spherical Distance + Minimization | ❌ (Optimization) |
+| **Green Wave Traffic Corridor** | Buffer Zone Preemption | Spatial Waypoint Distance Intersection | ❌ (Computational Geometry)|
+| **Socio-Crime Correlation** | Parametric Statistics | Pearson Product-Moment ($r_{xy}$) | ❌ (Statistical) |
+| **Criminal Ring Analysis** | Bipartite Graph Theory | Degree Centrality + Co-Offending Multi-Hop | ❌ (Graph Theory) |
+| **Financial Money Trail** | Breadth-First Search | Bounded Multi-Hop BFS Expansion ($D \le 3$) | ❌ (Graph Traversal) |
+| **Investigation Board Layout** | Hierarchical & Radial Layout | Sugiyama 4-Phase DAG + 80-Iter Collision Box | ❌ (Graph Layout) |
+| **Tamper-Evident Audit Chain** | Cryptographic Ledger | SHA-256 Hash Chain + Advisory Locking | ❌ (Cryptographic) |
+| **Conversational Chat & Voice** | Transformer LLM + TTS/STT | Gemini 2.5 Flash / Groq / Sarvam Bulbul & Saaras | ✅ (Frontier LLMs & ASR) |
+
+---
+
+## 32. Master Highlighted Feature Catalog & Implementation Deep-Dive
+
+This section catalogs, benchmarks, and highlights **every single feature implemented in Satyam**. Each feature is broken down by its operational workflow, underlying algorithmic mechanics, security boundaries, and user value.
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                        SATYAM HIGHLIGHTED FEATURE ECOSYSTEM                            │
+├──────────────────────────────────────┬─────────────────────────────────────────────────┤
+│  COMMAND & INTELLIGENCE FEATURES     │  RESPONSE OPERATIONS & REAL-TIME VISION         │
+├──────────────────────────────────────┼─────────────────────────────────────────────────┤
+│  🌟 Feature 1: Grounded Text-to-SQL  │  🌟 Feature 4: Real-Time Tactical Edge Video AI │
+│  🌟 Feature 2: Hybrid Multilingual   │  🌟 Feature 5: Response Ops Predictive Fleet &  │
+│     Vector RAG (EN+KN)               │     Dynamic Green Wave Corridor                 │
+│  🌟 Feature 3: Spatio-Temporal Risk  │  🌟 Feature 7: Multimodal Hands-Free Gestures & │
+│     Forecasting & Backtesting        │     Biometric Face Absence Auto-Lock            │
+│  🌟 Feature 6: Network Intelligence, │  🌟 Feature 8: Autonomous Voice Screen Agent    │
+│     Rings & Financial BFS Trail      │  🌟 Feature 9: Smart Investigation Board AI     │
+├──────────────────────────────────────┼─────────────────────────────────────────────────┤
+│  EVIDENTIARY & DOSSIER PLATFORM      │  SECURITY, GOVERNANCE & UI ARCHITECTURE         │
+├──────────────────────────────────────┼─────────────────────────────────────────────────┤
+│  🌟 Feature 10: Person 360 Forensic  │  🌟 Feature 12: Cryptographic SHA-256 Audit     │
+│     Dossier & Height-Grid Mugshot    │     Hash Chain with Advisory Locking            │
+│  🌟 Feature 11: Socio-Demographics & │  🌟 Feature 14: Dynamic On-The-Fly Kannada      │
+│     Social Risk Index (SRI)          │     Translation & LLM Lexicon Enrichment        │
+│  🌟 Feature 13: Certified Document   │  🌟 Feature 15: Fine-Grained RBAC / ABAC Matrix │
+│     Translation, Seal & Verification │  🌟 Feature 16: Neobrutalist UI Design System   │
+└──────────────────────────────────────┴─────────────────────────────────────────────────┘
+```
+
+---
+
+### 32.1 Complete Feature Implementation Matrix
+
+| # | Highlighted Feature | Primary Route | Backend Service Seam | Core Mathematical / ML Engine | Security & Access Gate | User / Officer Value |
+|---|---|---|---|---|---|---|
+| 🌟 1 | **Conversational Grounded Text-to-SQL** | `/console`, `/ask` | `pipeline/tools/text_to_sql.py`, `rule_sql.py` | `sqlglot` AST Validator, 4-tier progressive relaxation grammar | RLS session GUCs, Read-only single SELECT | Instant natural language queries into complex relational crime data without SQL knowledge |
+| 🌟 2 | **Hybrid Bilingual Vector RAG** | `/console`, `/ask`, `/cases/{id}` | `pipeline/tools/rag.py`, `embedder_bge.py` | Dense BGE-M3 (1024d) + HNSW ANN + Selective IDF GIN + RRF ($k=60$) + BGE-Reranker-v2 | Fail-closed clearance masking (`can_see_narrative`) | Semantic discovery of Modus Operandi across 200,000 bilingual FIR case narratives |
+| 🌟 3 | **Spatio-Temporal Crime Risk Forecasting** | `/forecast` | `services/intelligence_service.py` | Non-linear log-density + recency lift formula, rolling-origin backtest, PAI, PEI, Wilson CI | RLS jurisdiction scoping | Proactive hotspot discovery and empirical forecasting validation against historical ground truth |
+| 🌟 4 | **Edge Tactical Vision & CCTV Intelligence** | `/ops-camera` | `model/inference/live_cctv.py`, `api/routes/ops.py` | YOLOv8s CIoU detection + ByteTrack Kalman MOT + Kinetic assault heuristics | L2+ write guard (`Permission.RUN_ANALYTICS`) | Automated edge detection of fights, crowd surges, stalled vehicles, and weapons from CCTV feeds |
+| 🌟 5 | **Response Ops & Dynamic Green Wave Corridor** | `/ops-predictive`, `/ops-dispatch`, `/vision` | `services/ops/risk_service.py`, `corridor_service.py` | Haversine geodesy, greedy patrol pre-positioning, radial signal preemption buffer | L2+ dispatch execution | Automated emergency fleet dispatch with preemptive traffic signal clearing along response routes |
+| 🌟 6 | **Criminal Network Intelligence & Financial BFS** | `/network` | `pipeline/tools/analytics.py`, `services/financial_service.py` | Bipartite ego-network degree centrality, multi-hop BFS transaction flow ($D \le 3$), Hooke-Coulomb physics | L2+ financial read guard | Visual graph dissection of syndicate relationships, repeat co-offenders, and money laundering paths |
+| 🌟 7 | **Multimodal Hands-Free Gestures & Auto-Lock** | Statewide (Shell) | `frontend/src/lib/vision/`, `HandsFreeLayer.tsx` | MediaPipe Tasks 21 3D landmarks, LERP tremor damping, sliding window vote, face absence auto-lock | Client-side privacy WASM, SHA-256 security audit | Touch-free operation in tactical/incident war-rooms; automatic data protection when officer steps away |
+| 🌟 8 | **Autonomous Voice Screen Agent** | Statewide (Shell) | `pipeline/screen_agent.py`, `Shell.tsx` | Sarvam Saaras v3 STT, Sarvam Bulbul v2 TTS, Gemini/Groq cascade, allow-list action coercer | `Permission.CHAT`, RLS-scoped sample resolution | Complete hands-free navigation and automated multi-step screen workflow execution via natural voice |
+| 🌟 9 | **Smart Investigation Board AI** | `/board` | `services/board_brain.py`, `boardLayout.ts` | Gemini/Groq scene parsing, Sugiyama DAG (Dagre), ELK layered/radial, 80-iter repulsive box collision | Isolated board store, JSONB snapshots | Infinite visual canvas for investigative brainstorming with automated AI crime scene synthesis |
+| 🌟 10 | **Person 360 Forensic Dossier** | `/dossier`, `/profile/:id` | `services/dossier_service.py`, `dossier.tsx` | Forensic height grid overlay, multi-angle face card lightbox, financial & associate cross-linking | L4+ clearance only | Comprehensive 360-degree suspect profile consolidating criminal history, family, accounts, and ties |
+| 🌟 11 | **Socio-Demographics & Social Risk Index (SRI)** | `/socio` | `services/intelligence_service.py::get_socio_correlation` | Pearson product-moment correlation ($r_{xy}$), logarithmic Social Risk Index formula | RLS district scoping | Quantitative correlation between crime density and economic indicators (literacy, urbanization, income) |
+| 🌟 12 | **Cryptographic SHA-256 Audit Hash Chain** | `/audit` | `core/audit.py`, `audit_service.py` | SHA-256 recurrence relation, PostgreSQL transaction advisory locking (`pg_advisory_xact_lock`) | Immutable audit ledger, L4 admin verify | Mathematical proof of tamper-evident audit history across all user queries and system actions |
+| 🌟 13 | **Certified Document Translation & Sealing** | `/documents` | `services/document_service.py`, `documents.tsx` | Magic-byte binary gate, Sarvam neural translation, SHA-256 digital sealing, browser OpenType shaping | L2+ (`Permission.BUILD_REPORT`), no server file storage | Official translation of police notices into Kannada with cryptographic integrity verification |
+| 🌟 14 | **Dynamic On-The-Fly Kannada Translation** | Statewide | `services/news_service.py`, `i18n.tsx`, `settings.py` | 500+ static DICT, LLM batch enrichment (Groq Llama-3.3-70B), dynamic OTF pipeline | Client-side persistent cache | Complete native Kannada experience spanning static UI, database records, and dynamic ML model outputs |
+| 🌟 15 | **Fine-Grained RBAC / ABAC Security Matrix** | Statewide | `core/rbac.py`, `db/rls.py`, `admin_service.py` | 14 KSP Ranks, 4 Clearance Levels, dynamic PostgreSQL Row-Level Security GUCs, column PII masking | Hardcoded security policies, anti-lockout guards | Strict legal data isolation ensuring officers only access records within their station, district, or clearance |
+| 🌟 16 | **Neobrutalist UI Design System & Theming** | Statewide | `lib/theme.ts`, `viewTransition.ts`, `LandingThree.tsx` | 13 curated themes, View Transitions circular clip reveal, Three.js 9,000-particle kinetic physics | Scoped CSS styling, accessibility contrast compliance | High-contrast, state-of-the-art police command interface engineered for low-latency tactical monitoring |
+
+---
+
+### 32.2 Highlighted Deep-Dives for Every Implemented Feature
+
+---
+
+#### 🌟 Feature 1: Grounded Conversational Text-to-SQL with 4-Tier Progressive Zero-Result Recovery
+* **Primary Route:** `/console`, `/ask`
+* **Source Files:** `backend/app/pipeline/tools/text_to_sql.py`, `rule_sql.py`, `sql_guard.py`
+* **Architecture & Mechanics:**
+  - Translates natural language inquiries (English, Kannada, or code-mixed) into strict PostgreSQL queries.
+  - Multi-turn conversation context memory (incorporates last 6 dialogue turns for pronoun resolution and follow-up filtering).
+  - Validated by `sql_guard.py` using `sqlglot` Abstract Syntax Trees to guarantee read-only single `SELECT` operations against 6 allow-listed tables with auto-enforced `LIMIT 200`.
+  - **4-Tier Progressive Recovery:** If an exact query yields 0 records, it systematically broadens filters:
+    1. $\text{Level } 0$: Exact temporal + categorical + spatial filters.
+    2. $\text{Level } 1$: Strips date constraints, retaining place and crime category.
+    3. $\text{Level } 2$: Strips crime category, showing all activity in the target area.
+    4. $\text{Level } 3$: Returns most recent statewide cases.
+* **Highlighted Innovation:** Deterministic `[SPEAK]` block extraction decouples natural spoken conversational answers for voice TTS from structured tabular markdown data displayed in the UI.
+
+---
+
+#### 🌟 Feature 2: Hybrid Multilingual Vector RAG with IDF Filtering & Cross-Encoder Reranking
+* **Primary Route:** `/console`, `/ask`, `/cases/{id}`
+* **Source Files:** `backend/app/pipeline/tools/rag.py`, `embedder_bge.py`, `reranker_bge.py`
+* **Architecture & Mechanics:**
+  - **Dense Arm:** `BAAI/bge-m3` generates 1024-dimensional normalized embeddings indexed with pgvector HNSW.
+  - **Lexical Arm:** Stemmed document frequency filtering in PostgreSQL (`narrative_lexeme_df`) drops non-informative boilerplate tokens ($\text{DF} > 20\%$) and dynamically constructs selective conjunction queries.
+  - **Fusion:** Merges dense and lexical candidate lists via Reciprocal Rank Fusion (RRF, $k=60$).
+  - **Reranker:** Joint neural cross-attention via `BAAI/bge-reranker-v2-m3` scores semantic candidate pairs.
+  - **Security Gate:** Post-reranking clearance check withholds sensitive narratives for protected crimes (POCSO, sexual offenses) if user clearance is below Level 3.
+* **Highlighted Innovation:** True dual-language capability supporting 100,000 English and 100,000 native Kannada narratives with zero vector index degradation.
+
+---
+
+#### 🌟 Feature 3: Spatio-Temporal Crime Risk Forecasting & Multi-Fold Rolling-Origin Validation
+* **Primary Route:** `/forecast`
+* **Source Files:** `backend/app/services/intelligence_service.py`, `frontend/src/routes/forecast.tsx`
+* **Architecture & Mechanics:**
+  - Discretizes geographic crime occurrences into a multi-resolution spatial grid ($0.01^\circ$ to $0.10^\circ$).
+  - Computes non-linear risk scores combining log-damped volume density ($\max 50$) with 30-day recency-lift velocity ($\max 30$) over a base score of 20: $\text{RiskScore} \in [20, 99]$.
+  - **Empirical Validation Engine:** Walk-forward rolling-origin backtesting across $K=6$ consecutive 30-day temporal folds.
+  - Measures true Predictive Accuracy Index ($\text{PAI} = \text{HitRate}/\text{AreaShare}$) and Predictive Efficiency Index ($\text{PEI} = \text{Hits}/\text{Hits}_{\max}$) with 95% Wilson binomial confidence intervals.
+* **Highlighted Innovation:** Honest transparency architecture displaying exact statistical caveats, sample density warnings, and baseline random comparisons directly on the operational dashboard.
+
+---
+
+#### 🌟 Feature 4: Real-Time Tactical Edge Video AI (YOLOv8s + ByteTrack + Assault/Crowd/Weapon Detection)
+* **Primary Route:** `/ops-camera`
+* **Source Files:** `model/inference/live_cctv.py`, `ai_camera/detect_video.py`, `api/routes/ops.py`
+* **Architecture & Mechanics:**
+  - Runs YOLOv8s object detection in an isolated background process communicating with the FastAPI backend.
+  - Multi-object tracking via ByteTrack with an 8-state kinematic Kalman filter.
+  - **Kinetic Assault Detection:** Computes pairwise Euclidean spatial proximity ($d < 80\,\text{px}$) and instantaneous frame velocities ($v > 6.0\,\text{px/frame}$) to detect violent physical altercations.
+  - **Crowd & Vehicle Anomaly:** Real-time crowd surge monitoring ($\ge 4$ persons) and stalled vehicle detection ($v < 2.0\,\text{px/frame}$ for $\ge 3.0\,\text{s}$).
+  - Dedicated firearm/weapon confidence thresholding ($\tau \ge 0.35$).
+* **Highlighted Innovation:** Built-in low-latency MJPEG live-stream server broadcasting annotated bounding boxes and detection alert banners directly into browser `<img>` elements.
+
+---
+
+#### 🌟 Feature 5: Response Ops Predictive Fleet Readiness & Dynamic Green Wave Corridor
+* **Primary Route:** `/ops-predictive`, `/ops-dispatch`, `/vision`
+* **Source Files:** `backend/app/services/ops/risk_service.py`, `corridor_service.py`, `sim_service.py`
+* **Architecture & Mechanics:**
+  - Scores $\sim 1.1\,\text{km}$ operational risk zones by incident severity weights, density, and nocturnal peak hours ($20:00 - 04:00$).
+  - Evaluates greedy optimal patrol allocation, computing estimated emergency response time savings via Haversine spherical geodesy.
+  - **Dynamic Green Corridor Preemption:** Automatically flips all traffic signals along a dispatch route ($R \le 0.5\,\text{km}$) or near a moving unit ($R \le 0.3\,\text{km}$) to `GREEN`.
+  - Subsampled 60-step discrete kinematic patrol simulation broadcasting live telemetry over WebSockets.
+* **Highlighted Innovation:** Graceful fallback resilience allowing the tactical map and simulation panels to operate client-side from real historical crime density even when live backend WebSockets are offline.
+
+---
+
+#### 🌟 Feature 6: Network Intelligence, Criminal Ring Analysis & BFS Financial Money Trail
+* **Primary Route:** `/network`
+* **Source Files:** `backend/app/pipeline/tools/analytics.py`, `services/financial_service.py`, `forceGraph.ts`
+* **Architecture & Mechanics:**
+  - Builds bipartite person-case graphs with degree centrality metrics and shared-case association links.
+  - **Financial BFS Money Trail (PS7):** Traverses account-to-account transactions up to 3 hops deep with minimum amount and suspicious flag filters.
+  - Calculates aggregated total inflows, outflows, degrees, and flagged transaction counts per banking entity.
+  - Custom browser-side force-directed physics engine balancing Hooke attractive spring forces with Coulomb repulsive electrostatic forces.
+* **Highlighted Innovation:** Graph seed normalization preventing duplicate seed nodes when resolving numerical IDs vs textual suspect names.
+
+---
+
+#### 🌟 Feature 7: Multimodal Hands-Free Gesture Navigation & Biometric Face Absence Auto-Lock
+* **Primary Route:** Statewide (Shell)
+* **Source Files:** `frontend/src/lib/vision/`, `HandsFreeLayer.tsx`, `FacePresenceController.tsx`
+* **Architecture & Mechanics:**
+  - Browser-local WASM execution powered by `@mediapipe/tasks-vision 0.10.18` (zero video frames transmitted over network).
+  - Tracks 21 3D hand landmarks; calculates index-thumb pinch metrics ($d < 0.065$) to trigger simulated DOM click events.
+  - Exponential Moving Average (LERP, $\alpha=0.35$) eliminates hand jitter for smooth cursor targeting.
+  - **Biometric Security Auto-Lock:** Continuously monitors officer face presence; automatically locks the console and blurs all sensitive PII if the officer is absent for $\ge 15$ seconds, appending an audit record to the tamper-evident log.
+* **Highlighted Innovation:** Seamless fusion of gesture events into the universal voice copilot bus (`satyam:run-task`), enabling unified hands-free tactical control.
+
+---
+
+#### 🌟 Feature 8: Autonomous Voice Screen Agent with Bilingual Speech (Sarvam AI)
+* **Primary Route:** Statewide (Shell)
+* **Source Files:** `backend/app/pipeline/screen_agent.py`, `frontend/src/components/Shell.tsx`, `taskBus.ts`
+* **Architecture & Mechanics:**
+  - Listens to voice commands in English or Kannada via Sarvam Saaras v3 STT or Web Speech API.
+  - LLM planner (Gemini $\to$ Groq cascade) or deterministic rule parser maps natural commands to structured UI actions across all 14 screens.
+  - Type-safe parameter coercion validates data domains and sanitizes actions against an approved manifest.
+  - Dynamic sample sentinel resolution (`__SAMPLE_PERSON__`, `__SAMPLE_DISTRICT__`) populates real RLS-scoped data for vague requests.
+  - Speaks synthesized confirmations in high-fidelity Kannada or English using Sarvam Bulbul v2 (`anushka` voice model).
+* **Highlighted Innovation:** Bidirectional action-result feedback loop (`satyam:screen-ready` and `satyam:task-result`) ensuring the assistant speaks the ground truth of applied UI actions.
+
+---
+
+#### 🌟 Feature 9: Smart Investigation Board with AI Scene Generation & Multi-Algorithm Layout Engines
+* **Primary Route:** `/board`
+* **Source Files:** `backend/app/services/board_brain.py`, `frontend/src/lib/boardLayout.ts`, `board.tsx`
+* **Architecture & Mechanics:**
+  - Embeds full tldraw v5.1.1 design canvas with shapes, arrows, notes, freehand drawing, and image exports.
+  - **AI Scene Synthesis:** Natural language prompt is classified into 8 diagram schemas (evidence board, crime network, timeline, mind map, flowchart, org chart, money trail, location map).
+  - Generates typed entities (suspects, victims, weapons, locations, accounts) and semantic relationships.
+  - Automatic layout selection combining Sugiyama hierarchical DAG algorithms (`@dagrejs/dagre`), ELK radial/force engines (`elkjs`), and an 80-iteration repulsive bounding-box collision resolver.
+* **Highlighted Innovation:** Incremental snapshot merging allowing investigators to add new evidence nodes to an existing investigation board without visual collisions or state resets.
+
+---
+
+#### 🌟 Feature 10: Person 360 Forensic Dossier & Height-Grid Mugshot Lightbox
+* **Primary Route:** `/dossier`, `/profile/:personId`
+* **Source Files:** `backend/app/services/dossier_service.py`, `frontend/src/routes/dossier.tsx`
+* **Architecture & Mechanics:**
+  - Consolidated investigative dossier screen restricted to Level 4+ senior officers.
+  - Multi-angle forensic face cards (front, left profile, right profile) rendered with calibrated height-grid scale lines and lightbox zoom.
+  - Structured aggregation of crime history timelines, family relationships, verified aliases, and known criminal associates.
+  - Financial intelligence table detailing bank accounts, wallet balances, and risk compliance flags.
+* **Highlighted Innovation:** High-speed client prefetching caching all persona records on initial mount for zero-latency investigative browsing.
+
+---
+
+#### 🌟 Feature 11: Socio-Demographic Correlation Analysis & Social Risk Index (SRI)
+* **Primary Route:** `/socio`
+* **Source Files:** `backend/app/services/intelligence_service.py`, `frontend/src/routes/socio.tsx`
+* **Architecture & Mechanics:**
+  - Joins actual Karnataka census and economic indicators from `district_socio_economic_indicators`.
+  - Computes Pearson correlation coefficients ($r$) between district crime rates and literacy rates, urbanization percentages, and income indices.
+  - Calculates district Social Risk Index (SRI) combining logarithmic crime volume and repeat-accused densities.
+  - Interactive multi-variable scatter plots with dynamic linear regression trend overlays.
+* **Highlighted Innovation:** Grounded data integrity replacing placeholder indicators with real socio-economic tables.
+
+---
+
+#### 🌟 Feature 12: Cryptographic Tamper-Evident SHA-256 Audit Hash Chain
+* **Primary Route:** `/audit`
+* **Source Files:** `backend/app/core/audit.py`, `backend/app/api/routes/audit.py`, `audit.tsx`
+* **Architecture & Mechanics:**
+  - Records every natural language query, SQL execution, admin policy modification, and security alert.
+  - Appends rows sequentially with recursive SHA-256 hash chains: $H_k = \text{SHA-256}(H_{k-1} \,\|\, \text{Payload}_k)$.
+  - Serialized via PostgreSQL transaction advisory locks (`pg_advisory_xact_lock(728311042)`) to eliminate race conditions.
+  - Committed in an isolated database transaction ensuring audit persistence even during client network disconnects.
+  - L4 admin verification endpoint traverses the entire ledger to mathematically prove zero history tampering.
+* **Highlighted Innovation:** Single-document verification scoping allowing sealed digital files to be verified independently without disruption from legacy demo forks.
+
+---
+
+#### 🌟 Feature 13: Certified Document Translation, Digital Sealing & Verification
+* **Primary Route:** `/documents`
+* **Source Files:** `backend/app/services/document_service.py`, `frontend/src/routes/documents.tsx`
+* **Architecture & Mechanics:**
+  - Secure portal for uploading official police documents (FIRs, charge sheets, memos) up to 20 MB.
+  - Magic-byte validation protecting against malicious file format spoofing.
+  - Neural text extraction (`pypdf`) and multi-engine translation (Sarvam Mayura v1 / Llama-3.3-70B) into certified Kannada.
+  - Appends document SHA-256 digests directly to the immutable audit hash chain.
+  - **OpenType Kannada Shaping:** Renders translated documents through the browser print engine to ensure accurate complex Kannada conjunct glyph rendering (`ಕ್ + ಷ = ಕ್ಷ`).
+* **Highlighted Innovation:** Zero server-side file persistence—maintains absolute privacy by processing document streams in-memory without disk writes.
+
+---
+
+#### 🌟 Feature 14: Dynamic On-The-Fly Kannada Translation & Bilingual LLM Enrichment
+* **Primary Route:** Statewide
+* **Source Files:** `frontend/src/lib/i18n.tsx`, `backend/app/api/routes/settings.py`
+* **Architecture & Mechanics:**
+  - 500+ static Kannada UI dictionary entries (`i18n.tsx`) covering navigation, labels, and system messages.
+  - Categorical database translator (`tData`) covering 41 districts, 1,120 police stations, and crime classifications.
+  - **Dynamic On-The-Fly (OTF) Translation:** Batches dynamic backend ML strings (forecast alert reasons, fairness notes, backtest explanations) to `/settings/db-source/translate`.
+  - 2-phase offline LLM lexicon enrichment caching translated UI keys in local storage.
+* **Highlighted Innovation:** Language toggle authority where header EN/KN buttons govern both visual text and voice TTS synthesis without erratic auto-detection drift.
+
+---
+
+#### 🌟 Feature 15: Fine-Grained RBAC / ABAC Security Matrix & Multi-Tier PII Masking
+* **Primary Route:** Statewide
+* **Source Files:** `backend/app/core/rbac.py`, `core/masking.py`, `db/rls.py`, `admin.tsx`
+* **Architecture & Mechanics:**
+  - Formal mapping of 14 Karnataka State Police ranks across 4 Clearance Levels (L1 to L4) and 4 Jurisdictional Scopes (Station, District, Range, State).
+  - PostgreSQL Row-Level Security (`fn_scope_ok`) enforced via transaction-local session GUCs.
+  - Multi-tier PII masking: bullet-masks civilian names (`A. ████`) and coarsens geographic coordinates ($1.1\,\text{km}$ truncation) for officers below Level 3.
+  - Strict protection rules for sensitive crimes (POCSO, sexual offenses, atrocities) requiring L3/L4 clearance for narrative body exposure.
+  - Admin access control portal with policy override capabilities and anti-lockout safeguards.
+* **Highlighted Innovation:** Dual-mode security engine distinguishing between cloud deployments and least-privilege non-owner local database enforcement (`DB_SOURCE=local`).
+
+---
+
+#### 🌟 Feature 16: Neobrutalist UI Design System, 13 Dynamic Themes & Motion Physics
+* **Primary Route:** Statewide
+* **Source Files:** `frontend/src/lib/theme.ts`, `viewTransition.ts`, `LandingThree.tsx`, `index.css`
+* **Architecture & Mechanics:**
+  - Striking neobrutalist police command aesthetic featuring high-contrast borders, sharp shadows, and theme tokens.
+  - 13 switchable theme palettes (KSP Khaki, Tactical Dark, Neon Amber, Cyber Terminal, Emerald, Crimson, etc.).
+  - Circular reveal theme transitions powered by the native browser View Transitions API.
+  - Interactive Three.js particle morphing brain on the landing page driven by a 9,000-particle kinetic velocity physics simulation.
+  - Accessible contrast ratios ($> 14:1$) in compliance with operational tactical control room standards.
+* **Highlighted Innovation:** Seamless integration of low-overhead client-side read caching (`readCache.ts`) eliminating duplicate redundant network calls across screen navigations.
+
+---
+
+### 32.3 Architectural Integrity & Verification Protocol
+
+The 16 core features and mathematical formulations documented above are verified against live unit tests, RLS security barriers, and AST guardrails:
+
+```bash
+# Backend Test Suite (55 unit & regression tests)
+cd backend && pytest tests/ -v
+
+# Forecast Backtesting Verification
+pytest tests/test_forecast_backtest.py -v
+
+# Document Translation & Sealing Integration
+pytest tests/test_documents.py -v
+
+# Frontend Static & Invariant Checks
+cd frontend
+node --experimental-strip-types scripts/check-download.mjs
+node --experimental-strip-types scripts/check-translated-pdf.mjs
+node --experimental-strip-types scripts/check-languages.mjs
+node --experimental-strip-types scripts/check-rail-dock.mjs
+node --experimental-strip-types scripts/check-ghost-mascot.mjs
+```
+
+All algorithms operate within the strict ethical parameters of the Satyam mission: **100% synthetic data**, **zero individual-guilt prediction**, **deterministic human-in-the-loop validation**, and **uncompromising cryptographic audit transparency**.
+
