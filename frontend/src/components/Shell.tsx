@@ -1234,9 +1234,17 @@ export function Shell({ children }: { children: ReactNode }) {
   ] as const;
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    /* h-dvh + overflow-hidden, NOT min-h-screen.
+       `min-h-screen` sets a floor and lets the column grow, so the tallest thing
+       inside decided the page height. That was the nav rail below: ~17 items at
+       h-11 plus gaps and padding is about 900px of fixed height, so on any window
+       shorter than that the rail stretched the document and left a band of empty
+       background under every screen's content — the "extra page".
+       Pinning the shell to the viewport and scrolling the two inner regions
+       instead means no screen can produce page scroll. */
+    <div className="flex h-dvh flex-col overflow-hidden bg-background">
       {/* Top bar */}
-      <header className="flex h-14 items-center justify-between border-b-2 border-foreground bg-header px-5 text-header-foreground">
+      <header className="flex h-14 shrink-0 items-center justify-between border-b-2 border-foreground bg-header px-5 text-header-foreground">
         <div className="flex items-center gap-3">
           <div className="grid h-8 w-8 place-items-center rounded-[5px] border-2 border-foreground bg-primary text-primary-foreground text-[11px] font-extrabold nb-shadow-sm">
             SY
@@ -1697,7 +1705,11 @@ export function Shell({ children }: { children: ReactNode }) {
 
       {/* Body: rail + content */}
       <div className="flex flex-1 min-h-0">
-        <nav className="flex w-16 flex-col items-center gap-2 border-r-2 border-foreground bg-rail py-4 text-rail-foreground">
+        {/* shrink-0 keeps the 4rem width; overflow-y-auto is what stops the rail
+            forcing page height on a short window. The scrollbar is hidden because
+            a 64px-wide column has no room for one — the rail still scrolls by
+            wheel, drag and keyboard, so nothing becomes unreachable. */}
+        <nav className="flex w-16 shrink-0 flex-col items-center gap-2 overflow-y-auto overscroll-contain border-r-2 border-foreground bg-rail py-4 text-rail-foreground [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {NAV.map(({ to, icon: Icon, label }) => {
             const active = pathname === to || pathname.startsWith(to + "/");
             return (

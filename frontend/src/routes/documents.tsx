@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   Upload,
 } from "lucide-react";
+import { LanguageMarquee } from "@/components/LanguageMarquee";
 import { Shell } from "@/components/Shell";
 import { useI18n } from "@/lib/i18n";
 import { announceScreenReady, runActions } from "@/lib/taskBus";
@@ -276,10 +277,19 @@ function DocumentsScreen() {
   return (
     <Shell>
       <style>{CSS}</style>
-      <div className="h-[calc(100vh-3.5rem)] overflow-auto bg-background">
-        <div className="mx-auto max-w-[1500px] px-6 py-5">
+      {/* ══ Viewport-locked layout ═══════════════════════════════════════════
+          h-full, not calc(100dvh - 3.5rem). Shell is now h-dvh with a shrink-0
+          header, so <main> already has exactly the right height and 100% of it is
+          both correct and immune to the header changing size. Subtracting a
+          hard-coded 3.5rem was a second place that had to be kept in sync with
+          the header, and it silently left a gap whenever they disagreed.
+
+          overflow-hidden here means the PAGE never scrolls; only the two content
+          columns do, each inside its own box. */}
+      <div className="flex h-full flex-col overflow-hidden bg-background">
+        <div className="mx-auto flex min-h-0 w-full max-w-[1500px] flex-1 flex-col px-6 pb-3 pt-4">
           {/* ══ Header ══════════════════════════════════════════════════════ */}
-          <div className="flex flex-wrap items-end justify-between gap-3">
+          <div className="flex shrink-0 flex-wrap items-end justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
                 <FileText className="h-4 w-4 text-primary" />
@@ -299,9 +309,16 @@ function DocumentsScreen() {
             </span>
           </div>
 
-          <div className="mt-4 grid gap-4 lg:grid-cols-[400px_1fr]">
+          {/* min-h-0 on every flex/grid descendant that should scroll: without it
+              a flex child's min-height defaults to its content, so the child grows
+              past the container instead of scrolling inside it — which is what put
+              a scrollbar on the page. */}
+          <div className="mt-3 grid min-h-0 flex-1 gap-4 lg:grid-cols-[400px_1fr]">
             {/* ══ Left: upload + actions ════════════════════════════════════ */}
-            <div className="space-y-3">
+            {/* Scrolls on its own. The action stack is taller than a laptop
+                viewport once a result is in, and the text panes must not be
+                pushed off-screen by it. */}
+            <div className="min-h-0 space-y-3 overflow-y-auto pb-1 pr-1 lg:max-h-full">
               {/* Dropzone */}
               <div
                 onDragOver={(e) => {
@@ -572,9 +589,9 @@ function DocumentsScreen() {
             </div>
 
             {/* ══ Right: text panes ═════════════════════════════════════════ */}
-            <div className="min-w-0">
+            <div className="min-h-0 min-w-0">
               {result?.needs_ocr ? (
-                <div className="doc-rise flex h-full min-h-[300px] flex-col items-center justify-center gap-3 rounded-lg border border-border bg-card p-8 text-center">
+                <div className="doc-rise flex h-full min-h-[220px] flex-col items-center justify-center gap-3 rounded-lg border border-border bg-card p-8 text-center">
                   <ScanLine className="h-8 w-8 text-amber-500" />
                   <p className="text-sm font-bold text-foreground">
                     {t("This looks like a scan — no text layer found")}
@@ -586,7 +603,7 @@ function DocumentsScreen() {
                   </p>
                 </div>
               ) : result ? (
-                <div className="grid gap-3 md:grid-cols-2">
+                <div className="grid h-full min-h-0 gap-3 md:grid-cols-2">
                   <Pane
                     title={t("Original")}
                     body={result.source_text}
@@ -602,7 +619,7 @@ function DocumentsScreen() {
                   />
                 </div>
               ) : (
-                <div className="flex h-full min-h-[300px] flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-card/50 p-8 text-center">
+                <div className="flex h-full min-h-[220px] flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-card/50 p-8 text-center">
                   <FileText className="h-7 w-7 text-muted-foreground/40" />
                   <p className="text-xs font-semibold text-muted-foreground">
                     {t("The original and its translation will appear here.")}
@@ -610,6 +627,28 @@ function DocumentsScreen() {
                 </div>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* ══ Bottom: Indic language coverage ══════════════════════════════════
+            Outside the scrolling area and `shrink-0`, so it stays pinned to the
+            foot of the viewport instead of adding page height.
+
+            Hidden below `sm`: on a phone the vertical budget is better spent on
+            the document itself, and a decorative strip is the first thing that
+            should go. */}
+        <div className="hidden shrink-0 border-t border-border py-2.5 sm:block">
+          <div className="mx-auto max-w-[1500px]">
+            {/* Wording is deliberate. "Supported languages that can be translated
+                into Kannada" was asked for and would be false twice over: this
+                app calls mayura:v1, which covers 11 languages, not the 23 in this
+                list (that is sarvam-translate:v1), and `_bcp()` in
+                models/api/sarvam.py collapses every code to kn-IN or en-IN, so
+                only those two reach the provider at all. See the note in
+                lib/languages.ts. */}
+            <LanguageMarquee
+              label={t("Supported languages · Kannada and English are live for translation")}
+            />
           </div>
         </div>
       </div>
@@ -633,11 +672,14 @@ function Pane({
   const [copied, setCopied] = useState(false);
   return (
     <section
-      className={`doc-rise flex min-h-[300px] flex-col rounded-lg border bg-card p-3 ${
+      // h-full + min-h-0, not a min-height in pixels: the pane has to shrink to
+      // whatever the viewport leaves it and scroll its own body. A pixel minimum
+      // is what forces the container taller than the screen on a short display.
+      className={`doc-rise flex h-full min-h-0 flex-col rounded-lg border bg-card p-3 ${
         accent ? "border-primary/40" : "border-border"
       }`}
     >
-      <div className="mb-2 flex items-center justify-between gap-2">
+      <div className="mb-2 flex shrink-0 items-center justify-between gap-2">
         <div className="min-w-0">
           <h2 className="truncate text-[11px] font-bold uppercase tracking-wider text-foreground">
             {title}
@@ -661,7 +703,7 @@ function Pane({
           {copied ? t("Copied") : t("Copy")}
         </button>
       </div>
-      <div className="max-h-[58vh] flex-1 overflow-auto whitespace-pre-wrap break-words rounded bg-muted/30 p-2.5 text-[11.5px] leading-relaxed text-foreground">
+      <div className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words rounded bg-muted/30 p-2.5 text-[11.5px] leading-relaxed text-foreground">
         {body || t("(empty)")}
       </div>
     </section>

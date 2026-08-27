@@ -369,6 +369,8 @@ const DICT: Record<string, string> = {
   "Sealing failed.": "ಮುದ್ರೆ ಹಾಕಲು ವಿಫಲವಾಯಿತು.",
   "Verification failed.": "ಪರಿಶೀಲನೆ ವಿಫಲವಾಯಿತು.",
   "Download the translation": "ಅನುವಾದವನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
+  "Supported languages · Kannada and English are live for translation":
+    "ಬೆಂಬಲಿತ ಭಾಷೆಗಳು · ಅನುವಾದಕ್ಕೆ ಕನ್ನಡ ಮತ್ತು ಇಂಗ್ಲಿಷ್ ಸಕ್ರಿಯವಾಗಿವೆ",
   "The Kannada text, carrying the source digest and seal reference.":
     "ಕನ್ನಡ ಪಠ್ಯ, ಮೂಲದ ಡೈಜೆಸ್ಟ್ ಮತ್ತು ಮುದ್ರೆಯ ಉಲ್ಲೇಖದೊಂದಿಗೆ.",
   "The English text, carrying the source digest and seal reference.":
