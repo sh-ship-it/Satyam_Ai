@@ -17,6 +17,8 @@ import {
   FileLock2,
   Network,
   Radar,
+  Bot,
+  Accessibility,
 } from "lucide-react";
 import { useT } from "@/lib/i18n";
 import { api } from "@/lib/api/client";
@@ -150,53 +152,77 @@ function Login() {
               clipped by the row's bounds. */}
           {/* One badge per shipped capability. `index` picks a float phase from
               BADGE_FLOAT below, and the modulo there means adding a badge never
-              needs a matching timing entry. */}
+              needs a matching timing entry.
+
+              A GRID, not flex-wrap. Wrapping laid the badges out by their own widths,
+              so "Chain-of-Custody" and "Secure Login" produced ragged columns that
+              did not line up between rows. Fixed-fraction grid columns give every
+              badge the same cell, so the icons align vertically and the rows read as
+              a single block. `items-start` keeps the icons on one baseline even when
+              a longer label wraps to two lines. */}
           <TrustBadgeStyles />
-          <div className="mt-10 flex flex-wrap gap-x-7 gap-y-5 py-3">
+          {/* Compact: 11 badges at the original size pushed the sign-in card down and
+              ate most of the column. Five columns from `sm` up turns three rows into
+              two and a bit, and the tiles below are 36px rather than 48px. */}
+          <div className="mt-6 grid grid-cols-4 items-start gap-x-3 gap-y-3 py-2 sm:grid-cols-5 lg:grid-cols-6">
             <TrustBadge
               index={0}
-              icon={<ShieldCheck className="h-7 w-7 text-success" strokeWidth={2.5} />}
+              icon={<ShieldCheck className="h-[18px] w-[18px] text-success" strokeWidth={2.5} />}
               label={t("Chain-of-Custody")}
             />
             <TrustBadge
               index={1}
-              icon={<Fingerprint className="h-7 w-7 text-primary" strokeWidth={2.5} />}
+              icon={<Fingerprint className="h-[18px] w-[18px] text-primary" strokeWidth={2.5} />}
               label={t("Forensically Sound")}
             />
             <TrustBadge
               index={2}
-              icon={<Lock className="h-7 w-7 text-destructive" strokeWidth={2.5} />}
+              icon={<Lock className="h-[18px] w-[18px] text-destructive" strokeWidth={2.5} />}
               label={t("Secure Login")}
             />
             <TrustBadge
               index={3}
-              icon={<Languages className="h-7 w-7 text-primary" strokeWidth={2.5} />}
+              icon={<Languages className="h-[18px] w-[18px] text-primary" strokeWidth={2.5} />}
               label={t("Kannada + English")}
             />
             <TrustBadge
               index={4}
-              icon={<Mic className="h-7 w-7 text-success" strokeWidth={2.5} />}
+              icon={<Mic className="h-[18px] w-[18px] text-success" strokeWidth={2.5} />}
               label={t("Voice Copilot")}
             />
             <TrustBadge
               index={5}
-              icon={<Database className="h-7 w-7 text-primary" strokeWidth={2.5} />}
+              icon={<Database className="h-[18px] w-[18px] text-primary" strokeWidth={2.5} />}
               label={t("Grounded Text-to-SQL")}
             />
             <TrustBadge
               index={6}
-              icon={<FileLock2 className="h-7 w-7 text-destructive" strokeWidth={2.5} />}
+              icon={<FileLock2 className="h-[18px] w-[18px] text-destructive" strokeWidth={2.5} />}
               label={t("Document Sealing")}
             />
             <TrustBadge
               index={7}
-              icon={<Network className="h-7 w-7 text-primary" strokeWidth={2.5} />}
+              icon={<Network className="h-[18px] w-[18px] text-primary" strokeWidth={2.5} />}
               label={t("Link + Money Trails")}
             />
             <TrustBadge
               index={8}
-              icon={<Radar className="h-7 w-7 text-success" strokeWidth={2.5} />}
+              icon={<Radar className="h-[18px] w-[18px] text-success" strokeWidth={2.5} />}
               label={t("Hotspot Forecasting")}
+            />
+            {/* The voice screen agent: it navigates to the right screen and runs the
+                task, rather than only answering. */}
+            <TrustBadge
+              index={9}
+              icon={<Bot className="h-[18px] w-[18px] text-primary" strokeWidth={2.5} />}
+              label={t("Autopilot AI")}
+            />
+            {/* Eye-gaze, hand gestures and full voice control mean the workspace is
+                operable without a mouse or keyboard at all. */}
+            <TrustBadge
+              index={10}
+              icon={<Accessibility className="h-[18px] w-[18px] text-success" strokeWidth={2.5} />}
+              label={t("Accessible by Design")}
             />
           </div>
         </div>
@@ -491,14 +517,18 @@ function TrustBadge({
 }) {
   const f = BADGE_FLOAT[index % BADGE_FLOAT.length];
   return (
-    <div className="flex flex-col items-center gap-2">
+    // w-full so the badge fills its grid cell and the icon centres on the column;
+    // balance keeps a two-word label from breaking as one long line plus one word.
+    <div className="flex w-full flex-col items-center gap-1.5">
       <div
-        className="tb-float grid h-12 w-12 place-items-center rounded-[5px] border-2 border-foreground bg-secondary-background"
+        className="tb-float grid h-9 w-9 shrink-0 place-items-center rounded-[5px] border-2 border-foreground bg-secondary-background"
         style={{ animationDuration: f.duration, animationDelay: f.delay }}
       >
         {icon}
       </div>
-      <span className="text-xs font-bold">{label}</span>
+      <span className="text-center text-[9.5px] font-bold leading-tight [text-wrap:balance]">
+        {label}
+      </span>
     </div>
   );
 }

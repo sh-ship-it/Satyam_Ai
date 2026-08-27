@@ -37,6 +37,8 @@ const LANDING_CSS = `
   --green:#39d02a; --green-bright:#6dff52; --green-deep:#155a0e;
   --text:#f2fff0; --muted:rgba(214,245,208,0.55); --line:rgba(120,220,110,0.14);
   --accent-rgb:57,208,42; --bright-rgb:109,255,82;
+  /* Outline colour for bright-on-pale text. See .sl-ink-outline below. */
+  --ink:#06120a;
   --lf:'Space Grotesk',system-ui,sans-serif; --lb:'Inter',system-ui,sans-serif;
   background:var(--bg); color:var(--text); font-family:var(--lb);
   overflow-x:hidden; cursor:none; -webkit-font-smoothing:antialiased;
@@ -83,6 +85,35 @@ const LANDING_CSS = `
   color:var(--green-bright);text-transform:uppercase;margin-bottom:22px; }
 .satyam-landing .eyebrow::before { content:'[';color:var(--muted); }
 .satyam-landing .eyebrow::after { content:']';color:var(--muted); }
+/* ── Dark outline on the bright-green text ───────────────────────────────────
+   #6dff52 on this page's pale surface is around 1.6:1 against white — well under
+   the 4.5:1 WCAG AA minimum for body text, and the small letterspaced caps of the
+   eyebrow are the worst case. A four-direction dark text-shadow puts a 1px keyline
+   around each glyph, which restores legibility WITHOUT changing the brand colour or
+   darkening the fill.
+   Left unconditional rather than scoped to light mode: on the dark surface the
+   outline lands on near-black over near-black, so it is invisible there and costs
+   nothing. One rule instead of two that can drift apart. */
+.satyam-landing .eyebrow,
+.satyam-landing .fcol h4,
+.satyam-landing .tag-chip,
+.satyam-landing nav.floating a .plus {
+  text-shadow:
+    -1px 0 0 var(--ink), 1px 0 0 var(--ink),
+    0 -1px 0 var(--ink), 0 1px 0 var(--ink);
+}
+/* Large type needs a proportionally thicker keyline, or a 1px outline disappears
+   against a 54px glyph. */
+.satyam-landing .stat,
+.satyam-landing h1 .accent,
+.satyam-landing h2 .accent,
+.satyam-landing .sl-logo span {
+  text-shadow:
+    -2px 0 0 var(--ink), 2px 0 0 var(--ink),
+    0 -2px 0 var(--ink), 0 2px 0 var(--ink),
+    -1.5px -1.5px 0 var(--ink), 1.5px -1.5px 0 var(--ink),
+    -1.5px 1.5px 0 var(--ink), 1.5px 1.5px 0 var(--ink);
+}
 .satyam-landing h1 { font-family:var(--lf);font-weight:600;font-size:clamp(48px,8.5vw,128px);line-height:.92;letter-spacing:-.02em; }
 .satyam-landing h1 .thin { font-weight:400;color:var(--text); }
 .satyam-landing.light h1 .thin { color:#0a160a; }
@@ -742,10 +773,12 @@ function LandingPage() {
             <span className="logo-sub">{t("build by Teen Titans")}</span>
           </span>
         </div>
+        {/* The in-page "Features" anchor was removed: the header pill below now says
+            Features and goes to /about, which is the full handbook and the page
+            carrying the SEO surface. Two links called Features that went to different
+            places would be the confusing outcome. The #sl-features section anchor
+            still exists and is still used by "Watch Demo". */}
         <div className="header-right">
-          <a className="nav-link" href="#sl-features">
-            {t("Features")}
-          </a>
           <Link className="nav-link" to="/login">
             {t("Login")}
           </Link>
@@ -821,8 +854,11 @@ function LandingPage() {
             <span style={{ opacity: 0.3 }}>|</span>
             <span style={{ opacity: lang === "KN" ? 1 : 0.4 }}>ಕನ್ನಡ</span>
           </button>
+          {/* Labelled Features, not About: /about is the handbook that documents every
+              capability and holds the SEO surface, so that is what a visitor is
+              actually looking for when they reach for this. */}
           <Link className="btn-pill" to="/about">
-            {t("About")} <span className="dot">↗</span>
+            {t("Features")} <span className="dot">↗</span>
           </Link>
         </div>
       </header>
@@ -839,7 +875,7 @@ function LandingPage() {
           {t("Platform")}
         </a>
         <Link to="/about" data-nav>
-          {t("About us")}
+          {t("Features")}
         </Link>
       </nav>
 
@@ -1209,7 +1245,7 @@ function LandingPage() {
           </div>
           <div className="fcol">
             <h4>{t("Explore")}</h4>
-            <Link to="/about">{t("About us")}</Link>
+            <Link to="/about">{t("Features")}</Link>
             <a href="#sl-contact">{t("Contact")}</a>
           </div>
           <div className="fcol">

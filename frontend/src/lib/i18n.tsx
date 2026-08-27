@@ -718,6 +718,8 @@ const DICT: Record<string, string> = {
   "Document Sealing": "ದಾಖಲೆ ಮುದ್ರೆ",
   "Link + Money Trails": "ಸಂಪರ್ಕ + ಹಣದ ಜಾಡು",
   "Hotspot Forecasting": "ಅಪರಾಧ ತಾಣ ಮುನ್ಸೂಚನೆ",
+  "Autopilot AI": "ಆಟೋಪೈಲಟ್ AI",
+  "Accessible by Design": "ವಿನ್ಯಾಸದಿಂದಲೇ ಸುಗಮ ಪ್ರವೇಶ",
   // ── Landing page: capabilities added after the first cut ──────────────────
   "Document Translation & Sealing": "ದಾಖಲೆ ಅನುವಾದ ಮತ್ತು ಮುದ್ರೆ",
   "Upload a PDF or statement, translate it to Kannada, then seal its SHA-256 to the same hash-chained ledger the audit log uses — so any later alteration of the original can be proven.":

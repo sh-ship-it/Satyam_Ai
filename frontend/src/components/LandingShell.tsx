@@ -56,13 +56,15 @@ export function Header() {
           </div>
         </Link>
 
+        {/* One "Features" link, pointing at /about — the handbook that documents
+            every capability and carries the SEO surface. The old pair (an "About"
+            link plus a "#features" in-page anchor) meant two labels for one
+            destination and an anchor that resolves to nothing on most pages using
+            this shell. */}
         <nav className="hidden items-center gap-7 text-sm font-bold md:flex">
           <Link to="/about" className="hover:underline underline-offset-4">
-            {t("About")}
-          </Link>
-          <a href="#features" className="hover:underline underline-offset-4">
             {t("Features")}
-          </a>
+          </Link>
           <ThemePicker buttonClass="flex items-center gap-2 text-sm font-bold text-foreground hover:underline underline-offset-4 bg-transparent border-0 p-0 cursor-pointer" />
           <Link to="/login" className="hover:underline underline-offset-4">
             {t("Login")}
