@@ -1251,11 +1251,6 @@ function LandingPage() {
             <Link to="/about">{t("Features")}</Link>
             <a href="#sl-contact">{t("Contact")}</a>
           </div>
-          <div className="fcol">
-            <h4>{t("Connect")}</h4>
-            <a href="#">LinkedIn</a>
-            <a href="#">hack2skill</a>
-          </div>
         </div>
         <div className="foot-bottom">
           <span>{t("© 2026 Satyam. All rights reserved.")}</span>

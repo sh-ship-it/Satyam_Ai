@@ -4,6 +4,182 @@ export type Lang = "EN" | "KN";
 
 // English source string -> Kannada translation
 const DICT: Record<string, string> = {
+  // ── Complete SEO & Handbook (about.tsx) Translations ──────────────────────
+  "How Satyam works — bilingual crime intelligence for Karnataka State Police": "ಸತ್ಯಂ ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ — ಕರ್ನಾಟಕ ರಾಜ್ಯ ಪೊಲೀಸ್‌ಗಾಗಿ ದ್ವಿಭಾಷಾ ಅಪರಾಧ ಗುಪ್ತಚರ",
+  "A complete technical handbook for Satyam: the grounded query pipeline, the SQL guard, rank-based access control and Postgres row-level security, the tamper-evident audit chain, hybrid BGE-M3 retrieval, and the English/Kannada voice path.": "ಸತ್ಯಂ ತಾಂತ್ರಿಕ ಕೈಪಿಡಿ: ಆಧಾರಿತ ಕ್ವೆರಿ ಪೈಪ್‌ಲೈನ್, SQL ಗಾರ್ಡ್, ಹುದ್ದೆ-ಆಧಾರಿತ ಪ್ರವೇಶ ನಿಯಂತ್ರಣ ಮತ್ತು Postgres ರೋ-ಲೆವೆಲ್ ಸೆಕ್ಯುರಿಟಿ, ಆಡಿಟ್ ಚೈನ್, ಹೈಬ್ರಿಡ್ BGE-M3 ರಿಟ್ರೀವಲ್ ಮತ್ತು ಕನ್ನಡ/ಇಂಗ್ಲಿಷ್ ಧ್ವನಿ ಸಂವಹನ ಮಾರ್ಗ.",
+  "crime intelligence, Karnataka State Police, text-to-SQL, retrieval augmented generation, pgvector, row-level security, audit chain, Kannada NLP, bilingual voice assistant, police analytics": "ಅಪರಾಧ ಗುಪ್ತಚರ, ಕರ್ನಾಟಕ ರಾಜ್ಯ ಪೊಲೀಸ್, text-to-SQL, RAG, pgvector, ರೋ-ಲೆವೆಲ್ ಸೆಕ್ಯುರಿಟಿ, ಆಡಿಟ್ ಚೈನ್, ಕನ್ನಡ NLP, ದ್ವಿಭಾಷಾ ಧ್ವನಿ ಸಹಾಯಕ, ಪೊಲೀಸ್ ವಿಶ್ಲೇಷಣೆ",
+  "How Satyam works — a technical handbook": "ಸತ್ಯಂ ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ — ತಾಂತ್ರಿಕ ಕೈಪಿಡಿ",
+  "Five chapters on how Satyam answers a police question: intent routing, grounded retrieval, the SQL guard, row-level security, and the tamper-evident audit chain.": "ಪೊಲೀಸ್ ಪ್ರಶ್ನೆಗೆ ಸತ್ಯಂ ಹೇಗೆ ಉತ್ತರಿಸುತ್ತದೆ ಎಂಬುದರ ಕುರಿತು ಐದು ಅಧ್ಯಾಯಗಳು: ಉದ್ದೇಶ ರೂಟಿಂಗ್, ಆಧಾರಿತ ಮಾಹಿತಿ ಪಡೆಯುವಿಕೆ, SQL ಗಾರ್ಡ್, ರೋ-ಲೆವೆಲ್ ಸೆಕ್ಯುರಿಟಿ ಮತ್ತು ಆಡಿಟ್ ಚೈನ್.",
+  "Intent routing, grounded retrieval, the SQL guard, row-level security, and a hash-chained audit log.": "ಉದ್ದೇಶ ರೂಟಿಂಗ್, ಆಧಾರಿತ ಮಾಹಿತಿ ಪಡೆಯುವಿಕೆ, SQL ಗಾರ್ಡ್, ರೋ-ಲೆವೆಲ್ ಸೆಕ್ಯುರಿಟಿ ಮತ್ತು ಹ್ಯಾಶ್-ಚೈನ್ಡ್ ಆಡಿಟ್ ಲಾಗ್.",
+  "A technical handbook covering Satyam's grounded query pipeline, access-control model, retrieval stack and bilingual voice path.": "ಸತ್ಯಂನ ಆಧಾರಿತ ಕ್ವೆರಿ ಪೈಪ್‌ಲೈನ್, ಪ್ರವೇಶ ನಿಯಂತ್ರಣ ಮಾದರಿ, ಮಾಹಿತಿ ಮರುಪಡೆಯುವಿಕೆ ಶ್ರೇಣಿ ಮತ್ತು ದ್ವಿಭಾಷಾ ಧ್ವನಿ ಮಾರ್ಗವನ್ನು ಒಳಗೊಂಡ ತಾಂತ್ರಿಕ ಕೈಪಿಡಿ.",
+  "How it works": "ಇದು ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ",
+  "The Satyam handbook": "ಸತ್ಯಂ ಕೈಪಿಡಿ",
+  "Chapter": "ಅಧ್ಯಾಯ",
+  "Answers an officer can": "ಅಧಿಕಾರಿಯು ಪಡೆಯಬಹುದಾದ",
+  "take to court": "ನ್ಯಾಯಾಲಯಕ್ಕೆ ಕೊಂಡೊಯ್ಯಲು ಉತ್ತರಗಳು",
+  "See it running": "ಕಾರ್ಯಾಚರಣೆಯಲ್ಲಿ ನೋಡಿ",
+  "Open the console and ask it something in English or Kannada.": "ಕನ್ಸೋಲ್ ತೆರೆಯಿರಿ ಮತ್ತು ಇಂಗ್ಲಿಷ್ ಅಥವಾ ಕನ್ನಡದಲ್ಲಿ ಪ್ರಶ್ನಿಸಿ.",
+  "Sign in": "ಸೈನ್ ಇನ್",
+  "Satyam answers questions about crime records in English and Kannada, by voice or by typing. This handbook is the complete account of how it does that — the routing, the grounding, the access model, and the parts that are not finished.": "ಸತ್ಯಂ ಅಪರಾಧ ದಾಖಲೆಗಳ ಕುರಿತ ಪ್ರಶ್ನೆಗಳಿಗೆ ಇಂಗ್ಲಿಷ್ ಮತ್ತು ಕನ್ನಡದಲ್ಲಿ ಧ್ವನಿ ಅಥವಾ ಟೈಪಿಂಗ್ ಮೂಲಕ ಉತ್ತರಿಸುತ್ತದೆ. ಈ ಕೈಪಿಡಿಯು ಅದು ಹೇಗೆ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ ಎಂಬುದರ ಸಂಪೂರ್ಣ ವಿವರಣೆಯಾಗಿದೆ — ರೂಟಿಂಗ್, ಆಧಾರಿತ ಮಾಹಿತಿ, ಪ್ರವೇಶ ನಿಯಂತ್ರಣ ಮಾದರಿ ಮತ್ತು ಅಭಿವೃದ್ಧಿಯಲ್ಲಿರುವ ಭಾಗಗಳು.",
+  "All records in this system are synthetic. No real case or person appears in it.": "ಈ ವ್ಯವಸ್ಥೆಯಲ್ಲಿರುವ ಎಲ್ಲಾ ದಾಖಲೆಗಳು ಕಾಲ್ಪನಿಕ (ಸಿಂಥೆಟಿಕ್). ಯಾವುದೇ ನೈಜ ಪ್ರಕರಣ ಅಥವಾ ವ್ಯಕ್ತಿ ಇದರಲ್ಲಿ ಕಾಣಿಸುವುದಿಲ್ಲ.",
+
+  // Chapter 1 — Overview
+  "Overview": "ಅವಲೋಕನ",
+  "Satyam is a bilingual, voice-enabled crime-intelligence assistant built for the Karnataka State Police. An officer asks a question in English or Kannada, by typing or speaking, and gets an answer assembled from case records their rank is cleared to see.": "ಸತ್ಯಂ ಕರ್ನಾಟಕ ರಾಜ್ಯ ಪೊಲೀಸ್‌ಗಾಗಿ ನಿರ್ಮಿಸಲಾದ ದ್ವಿಭಾಷಾ, ಧ್ವನಿ-ಸಕ್ರಿಯ ಅಪರಾಧ-ಗುಪ್ತಚರ ಸಹಾಯಕರಾಗಿದ್ದಾರೆ. ಒಬ್ಬ ಅಧಿಕಾರಿ ಇಂಗ್ಲಿಷ್ ಅಥವಾ ಕನ್ನಡದಲ್ಲಿ ಟೈಪ್ ಮಾಡುವ ಮೂಲಕ ಅಥವಾ ಮಾತನಾಡುವ ಮೂಲಕ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳುತ್ತಾರೆ ಮತ್ತು ಅವರ ಶ್ರೇಣಿಯ ಕ್ಲಿಯರೆನ್ಸ್ ವ್ಯಾಪ್ತಿಯಲ್ಲಿರುವ ಪ್ರಕರಣ ದಾಖಲೆಗಳಿಂದ ಸಂಯೋಜಿಸಲಾದ ಉತ್ತರವನ್ನು ಪಡೆಯುತ್ತಾರೆ.",
+  "The whole system is organised around one refusal: the language model is never allowed to answer from memory. It may decide what kind of question was asked, and it may put an answer into words. It may not supply the facts.": "ಇಡೀ ವ್ಯವಸ್ಥೆಯನ್ನು ಒಂದು ಕಟ್ಟುನಿಟ್ಟಾದ ನಿರಾಕರಣೆಯ ಸುತ್ತ ಸಂಘಟಿಸಲಾಗಿದೆ: ಭಾಷಾ ಮಾದರಿಯು (LLM) ಎಂದಿಗೂ ತನ್ನ ನೆನಪಿನಿಂದ ಉತ್ತರಿಸಲು ಅನುಮತಿಸಲಾಗುವುದಿಲ್ಲ. ಯಾವ ರೀತಿಯ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಲಾಗಿದೆ ಎಂಬುದನ್ನು ಅದು ನಿರ್ಧರಿಸಬಹುದು ಮತ್ತು ಉತ್ತರವನ್ನು ರಚಿಸಬಹುದು. ಆದರೆ ಅದು ತಾನಾಗಿಯೇ ಸಂಗತಿಗಳನ್ನು ಒದಗಿಸುವಂತಿಲ್ಲ.",
+  "The problem it addresses": "ಇದು ಪರಿಹರಿಸುವ ಸವಾಲುಗಳು",
+  'Police case data is not hard to store; it is hard to ask questions of. Counts live in one table, statements live in unstructured narrative text, relationships between people are implicit in who appears on which case, and geography is a pair of coordinates. Answering something as ordinary as "which stations near Hubballi logged the most two-wheeler thefts last year, and are any of the accused connected?" means joining four of those shapes by hand.': 'ಪೊಲೀಸ್ ಪ್ರಕರಣಗಳ ಡೇಟಾವನ್ನು ಸಂಗ್ರಹಿಸುವುದು ಕಷ್ಟವೇನಲ್ಲ; ಆದರೆ ಅದರಿಂದ ಪ್ರಶ್ನೆಗಳನ್ನು ಕೇಳಿ ಉತ್ತರ ಪಡೆಯುವುದು ಕಷ್ಟಕರ. ಸಂಖ್ಯೆಗಳು ಒಂದು ಕೋಷ್ಟಕದಲ್ಲಿರುತ್ತವೆ, ಹೇಳಿಕೆಗಳು ಅಸಂಘಟಿತ ನಿರೂಪಣಾ ಪಠ್ಯದಲ್ಲಿರುತ್ತವೆ, ವ್ಯಕ್ತಿಗಳ ನಡುವಿನ ಸಂಬಂಧಗಳು ಪ್ರಕರಣಗಳಲ್ಲಿ ಸೂಚ್ಯವಾಗಿರುತ್ತವೆ ಮತ್ತು ಭೌಗೋಳಿಕತೆಯು ನಿರ್ದೇಶಾಂಕಗಳ ಜೋಡಿಯಾಗಿರುತ್ತದೆ. "ಕಳೆದ ವರ್ಷ ಹುಬ್ಬಳ್ಳಿ ಬಳಿಯ ಯಾವ ಠಾಣೆಗಳಲ್ಲಿ ಅತಿ ಹೆಚ್ಚು ದ್ವಿಚಕ್ರ ವಾಹನ ಕಳ್ಳತನ ದಾಖಲಾಗಿದೆ ಮತ್ತು ಆರೋಪಿಗಳಲ್ಲಿ ಯಾರಾದರೂ ಪರಸ್ಪರ ಸಂಪರ್ಕ ಹೊಂದಿದ್ದಾರೆಯೇ?" ಎಂಬ ಸಾಮಾನ್ಯ ಪ್ರಶ್ನೆಗೆ ಉತ್ತರಿಸಲು ಈ ನಾಲ್ಕು ವಿಭಿನ್ನ ಆಕಾರಗಳನ್ನು ನಾವೇ ಜೋಡಿಸಬೇಕಾಗುತ್ತದೆ.',
+  "The other half of the problem is authority. Two officers asking the identical question must not receive the identical answer, because a station-level constable and a state-level ADGP are not entitled to the same rows. Any system that answers questions over this data has to enforce that difference in a way that survives an operator making a mistake.": "ಸಮಸ್ಯೆಯ ಇನ್ನೊಂದು ಭಾಗವೆಂದರೆ ಅಧಿಕಾರ ವ್ಯಾಪ್ತಿ. ಒಂದೇ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳುವ ಇಬ್ಬರು ಅಧಿಕಾರಿಗಳು ಒಂದೇ ರೀತಿಯ ಉತ್ತರವನ್ನು ಪಡೆಯಬಾರದು, ಏಕೆಂದರೆ ಠಾಣಾ ಹಂತದ ಕಾನ್‌ಸ್ಟೆಬಲ್ ಮತ್ತು ರಾಜ್ಯ ಮಟ್ಟದ ಎಡಿಜಿಪಿ ಒಂದೇ ದಾಖಲೆಗಳನ್ನು ನೋಡಲು ಅರ್ಹರಲ್ಲ. ಈ ಡೇಟಾದ ಮೇಲೆ ಉತ್ತರಿಸುವ ಯಾವುದೇ ವ್ಯವಸ್ಥೆಯು ನಿರ್ವಾಹಕರ ತಪ್ಪುಗಳನ್ನು ಮೀರಿದ ರೀತಿಯಲ್ಲಿ ಆ ವ್ಯತ್ಯಾಸವನ್ನು ಜಾರಿಗೊಳಿಸಬೇಕು.",
+  "What grounded means here": "ಇಲ್ಲಿ ಆಧಾರಿತ (Grounded) ಎಂದರೆ ಏನು",
+  "A grounded answer is one where every claim can be traced back to a row that was actually read from the database during that request. Satyam achieves that by never asking the model for facts. Instead the model picks a lane, and the lane goes and gets real data.": "ಆಧಾರಿತ ಉತ್ತರವೆಂದರೆ ಪ್ರತಿಯೊಂದು ಮಾಹಿತಿಯನ್ನೂ ಆ ವಿನಂತಿಯ ಸಮಯದಲ್ಲಿ ಡೇಟಾಬೇಸ್‌ನಿಂದ ನಿಜವಾಗಿ ಓದಲಾದ ಸಾಲಿಗೆ ಹಿಂದಿರುಗಿ ಪತ್ತೆಹಚ್ಚಬಹುದಾಗಿದೆ. ಮಾದರಿಯಿಂದ ಎಂದಿಗೂ ಸತ್ಯಾಂಶಗಳನ್ನು ಕೇಳದಿರುವ ಮೂಲಕ ಸತ್ಯಂ ಇದನ್ನು ಸಾಧಿಸುತ್ತದೆ. ಬದಲಾಗಿ ಮಾದರಿಯು ಒಂದು ಮಾರ್ಗವನ್ನು ಆರಿಸಿಕೊಳ್ಳುತ್ತದೆ ಮತ್ತು ಆ ಮಾರ್ಗವು ನೈಜ ಡೇಟಾವನ್ನು ಪಡೆಯುತ್ತದೆ.",
+  "Structured questions about counts, rates and case lists. The model proposes SQL; a parser rewrites and constrains it before it runs.": "ಸಂಖ್ಯೆಗಳು, ದರಗಳು ಮತ್ತು ಪ್ರಕರಣಗಳ ಪಟ್ಟಿಗಳ ಕುರಿತ ರಚನಾತ್ಮಕ ಪ್ರಶ್ನೆಗಳು. ಮಾದರಿಯು SQL ಅನ್ನು ಪ್ರಸ್ತಾಪಿಸುತ್ತದೆ; ಪಾರ್ಸರ್ ಅದನ್ನು ಚಲಾಯಿಸುವ ಮೊದಲು ಪುನಃ ಬರೆದು ನಿರ್ಬಂಧಿಸುತ್ತದೆ.",
+  "Questions about what happened, answered from case narrative text by hybrid semantic and keyword retrieval.": "ಘಟನೆಗಳ ಕುರಿತ ಪ್ರಶ್ನೆಗಳಿಗೆ ಹೈಬ್ರಿಡ್ ಸೆಮ್ಯಾಂಟಿಕ್ ಮತ್ತು ಕೀವರ್ಡ್ ಮರುಪಡೆಯುವಿಕೆ ಮೂಲಕ ಕೇಸ್ ನಿರೂಪಣಾ ಪಠ್ಯದಿಂದ ಉತ್ತರಿಸಲಾಗುತ್ತದೆ.",
+  "Geographic concentration of a crime type, aggregated into map cells. Requires clearance L2 or above.": "ನಕ್ಷೆಯ ಕೋಶಗಳಲ್ಲಿ ಒಟ್ಟುಗೂಡಿಸಲಾದ ಅಪರಾಧ ಪ್ರಕಾರದ ಭೌಗೋಳಿಕ ಸಾಂದ್ರತೆ. L2 ಅಥವಾ ಹೆಚ್ಚಿನ ಕ್ಲಿಯರೆನ್ಸ್ ಅಗತ್ಯವಿದೆ.",
+  "Link analysis around a named person, either their full ego network or a victim-offender framing when the question implies direction.": "ಹೆಸರಿಸಲಾದ ವ್ಯಕ್ತಿಯ ಸುತ್ತಲಿನ ಲಿಂಕ್ ವಿಶ್ಲೇಷಣೆ, ಪ್ರಶ್ನೆಯು ನಿರ್ದೇಶನವನ್ನು ಸೂಚಿಸಿದಾಗ ಅವರ ಸಂಪೂರ್ಣ ನೆಟ್‌ವರ್ಕ್ ಅಥವಾ ಸಂತ್ರಸ್ತ-ಅಪರಾಧಿ ಚೌಕಟ್ಟು.",
+  "Recognised, then handed to the Reports screen. The chat lane does not itself produce a document.": "ಗುರುತಿಸಿ ನಂತರ ವರದಿಗಳ ಪರದೆಗೆ ವರ್ಗಾಯಿಸಲಾಗುತ್ತದೆ. ಚಾಟ್ ಮಾರ್ಗವು ಸ್ವತಃ ದಾಖಲೆಯನ್ನು ರಚಿಸುವುದಿಲ್ಲ.",
+  "Greetings and questions about Satyam itself. This is the only lane allowed to answer without touching the database.": "ಶುಭಾಶಯಗಳು ಮತ್ತು ಸತ್ಯಂ ಕುರಿತ ಪ್ರಶ್ನೆಗಳು. ಡೇಟಾಬೇಸ್ ಮುಟ್ಟದೆ ಉತ್ತರಿಸಲು ಅನುಮತಿಸಲಾದ ಏಕೈಕ ಮಾರ್ಗ ಇದು.",
+  "The dataset": "ದತ್ತಾಂಶ ಸಂಗ್ರಹ (ಡೇಟಾಸೆಟ್)",
+  "Every record shipped with Satyam is synthetic. Nothing in the system is real case data, no real person appears in it, and it is not used to make predictions about individuals. The generator produces a coherent corpus rather than random noise, so link analysis and hotspot aggregation return structure worth looking at.": "ಸತ್ಯಂ ಜೊತೆಗೆ ಒದಗಿಸಲಾದ ಪ್ರತಿಯೊಂದು ದಾಖಲೆಯೂ ಕಾಲ್ಪನಿಕ (ಸಿಂಥೆಟಿಕ್). ವ್ಯವಸ್ಥೆಯಲ್ಲಿರುವುದು ಯಾವುದೇ ನೈಜ ಪ್ರಕರಣದ ಡೇಟಾ ಅಲ್ಲ, ಯಾವುದೇ ನೈಜ ವ್ಯಕ್ತಿ ಇದರಲ್ಲಿ ಕಾಣಿಸುವುದಿಲ್ಲ ಮತ್ತು ವ್ಯಕ್ತಿಗಳ ಬಗ್ಗೆ ಭವಿಷ್ಯ ನುಡಿಯಲು ಇದನ್ನು ಬಳಸಲಾಗುವುದಿಲ್ಲ. ಜನರೇಟರ್ ಯಾದೃಚ್ಛಿಕ ಶಬ್ದದ ಬದಲಿಗೆ ಸುಸಂಬದ್ಧವಾದ ದತ್ತಾಂಶವನ್ನು ಉತ್ಪಾದಿಸುತ್ತದೆ, ಆದ್ದರಿಂದ ಲಿಂಕ್ ವಿಶ್ಲೇಷಣೆ ಮತ್ತು ಹಾಟ್‌ಸ್ಪಾಟ್ ಒಟ್ಟುಗೂಡಿಸುವಿಕೆಯು ಅರ್ಥಪೂರ್ಣ ಫಲಿತಾಂಶಗಳನ್ನು ನೀಡುತ್ತದೆ.",
+  "Two narratives per case": "ಪ್ರತಿ ಪ್ರಕರಣಕ್ಕೆ ಎರಡು ನಿರೂಪಣೆಗಳು",
+  "Each case carries an English narrative and a Kannada one, which is why the narrative count is exactly twice the case count. This matters for retrieval, and Chapter IV explains why only half of them are currently searchable by meaning.": "ಪ್ರತಿಯೊಂದು ಪ್ರಕರಣವು ಇಂಗ್ಲಿಷ್ ನಿರೂಪಣೆ ಮತ್ತು ಕನ್ನಡ ನಿರೂಪಣೆಯನ್ನು ಹೊಂದಿರುತ್ತದೆ, ಅದಕ್ಕಾಗಿಯೇ ನಿರೂಪಣೆಗಳ ಸಂಖ್ಯೆಯು ಪ್ರಕರಣಗಳ ಸಂಖ್ಯೆಗಿಂತ ನಿಖರವಾಗಿ ಎರಡು ಪಟ್ಟು ಇರುತ್ತದೆ. ಇದು ಮಾಹಿತಿ ಮರುಪಡೆಯುವಿಕೆಗೆ ಮುಖ್ಯವಾಗಿದೆ ಮತ್ತು ಅವುಗಳಲ್ಲಿ ಅರ್ಧದಷ್ಟು ಮಾತ್ರ ಏಕೆ ಪ್ರಸ್ತುತ ಅರ್ಥದ ಆಧಾರದ ಮೇಲೆ ಹುಡುಕಬಲ್ಲವು ಎಂಬುದನ್ನು ಅಧ್ಯಾಯ IV ವಿವರಿಸುತ್ತದೆ.",
+
+  // Chapter 2 — Pipeline
+  "How a question is answered": "ಪ್ರಶ್ನೆಗೆ ಹೇಗೆ ಉತ್ತರಿಸಲಾಗುತ್ತದೆ",
+  "One request, start to finish. A question arrives at the streaming chat endpoint, is classified, dispatched to a grounded lane, composed into prose, and streamed back while an audit record is written.": "ಪ್ರಾರಂಭದಿಂದ ಮುಕ್ತಾಯದವರೆಗೆ ಒಂದು ವಿನಂತಿ. ಪ್ರಶ್ನೆಯು ಸ್ಟ್ರೀಮಿಂಗ್ ಚಾಟ್ ಎಂಡ್‌ಪಾಯಿಂಟ್‌ಗೆ ಬರುತ್ತದೆ, ವರ್ಗೀಕರಿಸಲ್ಪಡುತ್ತದೆ, ಆಧಾರಿತ ಮಾರ್ಗಕ್ಕೆ ಕಳುಹಿಸಲ್ಪಡುತ್ತದೆ, ಉತ್ತರವಾಗಿ ರಚಿಸಲ್ಪಡುತ್ತದೆ ಮತ್ತು ಆಡಿಟ್ ದಾಖಲೆಯನ್ನು ಬರೆಯುವಾಗ ಸ್ಟ್ರೀಮ್ ಆಗಿ ಹಿಂತಿರುಗುತ್ತದೆ.",
+  "Ingest and language detection": "ಇನ್‌ಪುಟ್ ಮತ್ತು ಭಾಷಾ ಪತ್ತೆಹಚ್ಚುವಿಕೆ",
+  "A question can be typed or spoken. Spoken audio is uploaded to the speech endpoint, which by default asks the recogniser to identify the language itself rather than being told, and returns the detected language alongside the transcript.": "ಪ್ರಶ್ನೆಯನ್ನು ಟೈಪ್ ಮಾಡಬಹುದು ಅಥವಾ ಮಾತನಾಡಬಹುದು. ಮಾತನಾಡುವ ಆಡಿಯೊವನ್ನು ಸ್ಪೀಚ್ ಎಂಡ್‌ಪಾಯಿಂಟ್‌ಗೆ ಅಪ್‌ಲೋಡ್ ಮಾಡಲಾಗುತ್ತದೆ, ಇದು ಡೀಫಾಲ್ಟ್ ಆಗಿ ಭಾಷೆಯನ್ನು ಸ್ವತಃ ಗುರುತಿಸಲು ರೆಕಗ್ನೈಜರ್ ಅನ್ನು ಕೇಳುತ್ತದೆ ಮತ್ತು ಲಿಪ್ಯಂತರದೊಂದಿಗೆ ಪತ್ತೆಯಾದ ಭಾಷೆಯನ್ನು ನೀಡುತ್ತದೆ.",
+  "There is a second, cheaper detector in the browser: if any character in the text falls inside the Kannada Unicode block, the text is treated as Kannada. That decides which language the reply is composed and spoken in. The two detectors are independent on purpose, so typed Kannada is handled without involving a speech model at all.": "ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಎರಡನೇ ಡಿಟೆಕ್ಟರ್ ಇದೆ: ಪಠ್ಯದಲ್ಲಿನ ಯಾವುದೇ ಅಕ್ಷರವು ಕನ್ನಡ ಯುನಿಕೋಡ್ ಬ್ಲಾಕ್ ಒಳಗೆ ಬಿದ್ದರೆ, ಪಠ್ಯವನ್ನು ಕನ್ನಡವೆಂದು ಪರಿಗಣಿಸಲಾಗುತ್ತದೆ. ಇದು ಪ್ರತ್ಯುತ್ತರವನ್ನು ಯಾವ ಭಾಷೆಯಲ್ಲಿ ರಚಿಸಬೇಕು ಮತ್ತು ಮಾತನಾಡಬೇಕು ಎಂಬುದನ್ನು ನಿರ್ಧರಿಸುತ್ತದೆ. ಎರಡೂ ಡಿಟೆಕ್ಟರ್‌ಗಳು ಸ್ವತಂತ್ರವಾಗಿವೆ, ಆದ್ದರಿಂದ ಟೈಪ್ ಮಾಡಿದ ಕನ್ನಡವನ್ನು ಸ್ಪೀಚ್ ಮಾಡೆಲ್ ಇಲ್ಲದೆಯೇ ನಿರ್ವಹಿಸಲಾಗುತ್ತದೆ.",
+  "Intent routing, and what happens when it fails": "ಉದ್ದೇಶ ರೂಟಿಂಗ್ ಮತ್ತು ಅದು ವಿಫಲವಾದಾಗ ಏನಾಗುತ್ತದೆ",
+  "The router asks a language model to return a strict JSON object naming one of the six lanes plus any parameters it can extract, at temperature zero. The result is validated against the list of real lane names, so a hallucinated lane is discarded rather than dispatched.": "ರೂಟರ್ ಶೂನ್ಯ ತಾಪಮಾನದಲ್ಲಿ (temperature zero) ಆರು ಮಾರ್ಗಗಳಲ್ಲಿ ಒಂದನ್ನು ಮತ್ತು ಹೊರತೆಗೆಯಬಹುದಾದ ಯಾವುದೇ ನಿಯತಾಂಕಗಳನ್ನು ಹೆಸರಿಸುವ ಕಟ್ಟುನಿಟ್ಟಾದ JSON ಆಬ್ಜೆಕ್ಟ್ ಅನ್ನು ಹಿಂತಿರುಗಿಸಲು ಭಾಷಾ ಮಾದರಿಯನ್ನು ಕೇಳುತ್ತದೆ. ಫಲಿತಾಂಶವನ್ನು ನೈಜ ಮಾರ್ಗಗಳ ಪಟ್ಟಿಯ ವಿರುದ್ಧ ಮೌಲ್ಯೀಕರಿಸಲಾಗುತ್ತದೆ, ಆದ್ದರಿಂದ ತಪ್ಪಾದ ಮಾರ್ಗವನ್ನು ತ್ಯಜಿಸಲಾಗುತ್ತದೆ.",
+  "The configured brain model, currently Gemini by default.": "ಕಾನ್ಫಿಗರ್ ಮಾಡಲಾದ ಮುಖ್ಯ ಮಾದರಿ, ಪ್ರಸ್ತುತ ಡೀಫಾಲ್ಟ್ ಆಗಿ ಜೆಮಿನಿ.",
+  "A second provider, attempted only when it is a different provider from the primary — one rate limit should not take out both lanes.": "ಎರಡನೇ ಪೂರೈಕೆದಾರ, ಪ್ರಾಥಮಿಕಕ್ಕಿಂತ ಭಿನ್ನವಾದಾಗ ಮಾತ್ರ ಪ್ರಯತ್ನಿಸಲಾಗುತ್ತದೆ — ಒಂದು ದರ ಮಿತಿಯು ಎರಡೂ ಮಾರ್ಗಗಳನ್ನು ಸ್ಥಗಿತಗೊಳಿಸಬಾರದು.",
+  "A deterministic pattern matcher, ordered most-specific first. It always produces a lane, so the system degrades instead of failing, and it records that routing is degraded.": "ನಿರ್ದಿಷ್ಟ ಪ್ಯಾಟರ್ನ್ ಮ್ಯಾಚರ್. ಇದು ಯಾವಾಗಲೂ ಒಂದು ಮಾರ್ಗವನ್ನು ಒದಗಿಸುತ್ತದೆ, ಆದ್ದರಿಂದ ಸಿಸ್ಟಮ್ ವಿಫಲವಾಗುವ ಬದಲು ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ ಮತ್ತು ರೂಟಿಂಗ್ ಹಿನ್ನಡೆಯನ್ನು ದಾಖಲಿಸುತ್ತದೆ.",
+  "Executing the lane": "ಮಾರ್ಗದ ಕಾರ್ಯಾಚರಣೆ",
+  "Each lane returns rows plus citations. The structured lane cites FIR numbers; the narrative lane cites case identifiers, and deliberately omits any record whose text was withheld for clearance, because citing a source the reader is not allowed to open is worse than not citing it.": "ಪ್ರತಿಯೊಂದು ಮಾರ್ಗವು ಸಾಲುಗಳು ಮತ್ತು ಉಲ್ಲೇಖಗಳನ್ನು ಹಿಂದಿರುಗಿಸುತ್ತದೆ. ರಚನಾತ್ಮಕ ಮಾರ್ಗವು ಎಫ್‌ಐಆರ್ ಸಂಖ್ಯೆಗಳನ್ನು ಉಲ್ಲೇಖಿಸುತ್ತದೆ; ನಿರೂಪಣಾ ಮಾರ್ಗವು ಪ್ರಕರಣದ ಗುರುತುಗಳನ್ನು ಉಲ್ಲೇಖಿಸುತ್ತದೆ ಮತ್ತು ಕ್ಲಿಯರೆನ್ಸ್‌ಗಾಗಿ ತಡೆಹಿಡಿಯಲಾದ ಯಾವುದೇ ದಾಖಲೆಯನ್ನು ಬಿಟ್ಟುಬಿಡುತ್ತದೆ, ಏಕೆಂದರೆ ಓದುಗರಿಗೆ ತೆರೆಯಲು ಅನುಮತಿಯಿಲ್ಲದ ಮೂಲವನ್ನು ಉಲ್ಲೇಖಿಸುವುದು ಕೆಟ್ಟದಾಗಿದೆ.",
+  "The structured lane can also recover. If a generated query returns nothing, the filters are progressively broadened — first the year, then the crime type, then the place — and the answer states plainly that the question had to be widened, rather than reporting zero results as though the answer were zero.": "ರಚನಾತ್ಮಕ ಮಾರ್ಗವು ಚೇತರಿಸಿಕೊಳ್ಳಬಹುದು. ರಚಿತವಾದ ಕ್ವೆರಿ ಏನನ್ನೂ ನೀಡದಿದ್ದರೆ, ಫಿಲ್ಟರ್‌ಗಳನ್ನು ವಿಸ್ತರಿಸಲಾಗುತ್ತದೆ — ಮೊದಲು ವರ್ಷ, ನಂತರ ಅಪರಾಧ ಪ್ರಕಾರ, ನಂತರ ಸ್ಥಳ — ಮತ್ತು ಶೂನ್ಯ ಫಲಿತಾಂಶಗಳನ್ನು ವರದಿ ಮಾಡುವ ಬದಲು ಪ್ರಶ್ನೆಯನ್ನು ವಿಸ್ತರಿಸಬೇಕಾಗಿತ್ತು ಎಂದು ಸ್ಪಷ್ಟವಾಗಿ ತಿಳಿಸುತ್ತದೆ.",
+  "Composing the answer": "ಉತ್ತರ ರಚನೆ",
+  "The retrieved rows are handed to a model with instructions to summarise only what it was given. It is also asked to mark a two-to-three sentence spoken version inside a delimiter, which is extracted and sent as its own event so the voice reply is a briefing rather than a machine reading a table aloud. If the model omits it, the spoken summary is built from the rows in code instead.": "ಪಡೆದ ಸಾಲುಗಳನ್ನು ಮಾದರಿಗೆ ನೀಡಲಾಗುತ್ತದೆ ಮತ್ತು ಅದಕ್ಕೆ ನೀಡಲಾದದ್ದನ್ನು ಮಾತ್ರ ಸಂಕ್ಷೇಪಿಸಲು ಸೂಚಿಸಲಾಗುತ್ತದೆ. ಇದು ಡಿಲಿಮಿಟರ್ ಒಳಗೆ ಎರಡು-ಮೂರು ವಾಕ್ಯಗಳ ಮಾತನಾಡುವ ಆವೃತ್ತಿಯನ್ನು ಗುರುತಿಸಲು ಕೇಳಲಾಗುತ್ತದೆ, ಇದನ್ನು ಹೊರತೆಗೆದು ತನ್ನದೇ ಆದ ಈವೆಂಟ್ ಆಗಿ ಕಳುಹಿಸಲಾಗುತ್ತದೆ ಇದರಿಂದ ಧ್ವನಿ ಪ್ರತ್ಯುತ್ತರವು ಬ್ರೀಫಿಂಗ್ ಆಗಿರುತ್ತದೆ. ಮಾದರಿಯು ಅದನ್ನು ಬಿಟ್ಟುಬಿಟ್ಟರೆ, ಕೋಡ್‌ನಲ್ಲಿರುವ ಸಾಲುಗಳಿಂದ ಸ್ಪೋಕನ್ ಸಾರಾಂಶವನ್ನು ನಿರ್ಮಿಸಲಾಗುತ್ತದೆ.",
+  "Kannada answers take two passes. The answer is composed in English, translated, and then run through a deterministic dictionary that fixes crime types, case statuses, district and station names, and table headers. The second pass exists because a translation model asked to preserve police terminology does not reliably do so.": "ಕನ್ನಡ ಉತ್ತರಗಳು ಎರಡು ಹಂತಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳುತ್ತವೆ. ಉತ್ತರವನ್ನು ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ ರಚಿಸಿ, ಅನುವಾದಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ನಂತರ ಅಪರಾಧ ಪ್ರಕಾರಗಳು, ಪ್ರಕರಣದ ಸ್ಥಿತಿಗಳು, ಜಿಲ್ಲೆ ಮತ್ತು ಠಾಣೆ ಹೆಸರುಗಳು ಮತ್ತು ಕೋಷ್ಟಕ ಶೀರ್ಷಿಕೆಗಳನ್ನು ಸರಿಪಡಿಸುವ ನಿಘಂಟಿನ ಮೂಲಕ ರನ್ ಮಾಡಲಾಗುತ್ತದೆ. ಪೊಲೀಸ್ ಪರಿಭಾಷೆಯನ್ನು ಸಂರಕ್ಷಿಸಲು ಈ ಎರಡನೇ ಹಂತ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.",
+  "Streaming is presentational": "ಸ್ಟ್ರೀಮಿಂಗ್ ಪ್ರಸ್ತುತಿಗಾಗಿ ಮಾತ್ರ",
+  "Words arrive one at a time in the interface, but the model call is awaited in full first and the finished answer is then split and emitted in pieces. It reads like token streaming and is not. Worth knowing before timing anything against it.": "ಪದಗಳು ಇಂಟರ್‌ಫೇಸ್‌ನಲ್ಲಿ ಒಂದೊಂದಾಗಿ ಬರುತ್ತವೆ, ಆದರೆ ಮಾದರಿ ಕರೆಯನ್ನು ಮೊದಲು ಸಂಪೂರ್ಣವಾಗಿ ಕಾಯಲಾಗುತ್ತದೆ ಮತ್ತು ಪೂರ್ಣಗೊಂಡ ಉತ್ತರವನ್ನು ನಂತರ ವಿಭಜಿಸಿ ತುಂಡುಗಳಾಗಿ ಹೊರಸೂಸಲಾಗುತ್ತದೆ.",
+  "What the browser receives": "ಬ್ರೌಸರ್ ಏನನ್ನು ಸ್ವೀಕರಿಸುತ್ತದೆ",
+  "The reply is a server-sent event stream. Every frame is a JSON object carrying its own type, which the client switches on:": "ಪ್ರತ್ಯುತ್ತರವು ಸರ್ವರ್-ಕಳುಹಿಸಿದ ಈವೆಂಟ್ (SSE) ಸ್ಟ್ರೀಮ್ ಆಗಿದೆ. ಪ್ರತಿಯೊಂದು ಫ್ರೇಮ್ ತನ್ನದೇ ಆದ ಪ್ರಕಾರವನ್ನು ಹೊಂದಿರುವ JSON ಆಬ್ಜೆಕ್ಟ್ ಆಗಿದೆ:",
+  "A lane started or finished. Carries a detail string — the sanitised SQL, or the retrieval strategy and hit count.": "ಒಂದು ಮಾರ್ಗ ಪ್ರಾರಂಭವಾಗಿದೆ ಅಥವಾ ಪೂರ್ಣಗೊಂಡಿದೆ. ವಿವರವಾದ ಸ್ಟ್ರಿಂಗ್ ಅನ್ನು ಹೊಂದಿರುತ್ತದೆ — ಸ್ಯಾನಿಟೈಸ್ ಮಾಡಿದ SQL, ಅಥವಾ ಮರುಪಡೆಯುವಿಕೆ ತಂತ್ರ ಮತ್ತು ಹಿಟ್ ಎಣಿಕೆ.",
+  "The question was refused, by guardrails or by insufficient permission.": "ಗಾರ್ಡ್‌ರೈಲ್ಸ್ ಅಥವಾ ಅಸಮರ್ಪಕ ಅನುಮತಿಯಿಂದ ಪ್ರಶ್ನೆಯನ್ನು ತಿರಸ್ಕರಿಸಲಾಗಿದೆ.",
+  "The short spoken summary, sent once, ahead of the written answer.": "ಲಿಖಿತ ಉತ್ತರಕ್ಕಿಂತ ಮುಂಚಿತವಾಗಿ ಕಳುಹಿಸಲಾದ ಕಿರು ಧ್ವನಿ ಸಾರಾಂಶ.",
+  "A chunk of the written answer.": "ಲಿಖಿತ ಉತ್ತರದ ಒಂದು ಭಾಗ.",
+  "A source reference, or a deep link into another screen.": "ಮೂಲ ಉಲ್ಲೇಖ ಅಥವಾ ಮತ್ತೊಂದು ಪರದೆಯ ಲಿಂಕ್.",
+  "End of turn, carrying the conversation identifier.": "ಸಂಭಾಷಣೆಯ ಐಡಿಯನ್ನು ಹೊಂದಿರುವ ಸರದಿಯ ಮುಕ್ತಾಯ.",
+  "Why the stream manages its own database session": "ಸ್ಟ್ರೀಮ್ ತನ್ನದೇ ಆದ ಡೇಟಾಬೇಸ್ ಸೆಷನ್ ಅನ್ನು ಏಕೆ ನಿರ್ವಹಿಸುತ್ತದೆ",
+  "The access-control context is set as transaction-local database settings. A session injected by the framework is released when the handler returns — which, for a streaming response, is before the first frame is produced. The endpoint therefore opens and holds its own session for the life of the stream. Without that, the security context would be gone by the time any data was read.": "ಪ್ರವೇಶ-ನಿಯಂತ್ರಣ ಸಂದರ್ಭವನ್ನು ವಹಿವಾಟು-ಸ್ಥಳೀಯ ಡೇಟಾಬೇಸ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಾಗಿ ಹೊಂದಿಸಲಾಗಿದೆ. ಫ್ರೇಮ್‌ವರ್ಕ್‌ನಿಂದ ಚುಚ್ಚಲಾದ ಅಧಿವೇಶನವು ಹ್ಯಾಂಡ್ಲರ್ ಹಿಂತಿರುಗಿದಾಗ ಬಿಡುಗಡೆಯಾಗುತ್ತದೆ — ಇದು ಸ್ಟ್ರೀಮಿಂಗ್ ಪ್ರತಿಕ್ರಿಯೆಗಾಗಿ, ಮೊದಲ ಫ್ರೇಮ್ ಉತ್ಪಾದಿಸುವ ಮೊದಲು. ಆದ್ದರಿಂದ ಎಂಡ್‌ಪಾಯಿಂಟ್ ಸ್ಟ್ರೀಮ್‌ನ ಜೀವಿತಾವಧಿಗೆ ತನ್ನದೇ ಆದ ಸೆಷನ್ ತೆರೆಯುತ್ತದೆ ಮತ್ತು ಹಿಡಿದಿಟ್ಟುಕೊಳ್ಳುತ್ತದೆ.",
+
+  // Chapter 3 — Security & Access
+  "Authority and evidence integrity": "ಅಧಿಕಾರ ಮತ್ತು ಸಾಕ್ಷ್ಯಾಧಾರಗಳ ಸಮಗ್ರತೆ",
+  "Two officers asking the same question should not get the same answer. This chapter covers how Satyam decides who sees what, how it stops a generated query from becoming a liability, and how it makes its own log impossible to edit quietly.": "ಒಂದೇ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳುವ ಇಬ್ಬರು ಅಧಿಕಾರಿಗಳು ಒಂದೇ ರೀತಿಯ ಉತ್ತರವನ್ನು ಪಡೆಯಬಾರದು. ಸತ್ಯಂ ಯಾರು ಏನನ್ನು ನೋಡುತ್ತಾರೆ ಎಂಬುದನ್ನು ಹೇಗೆ ನಿರ್ಧರಿಸುತ್ತದೆ, ರಚಿತವಾದ ಕ್ವೆರಿ ಹೊಣೆಯಾಗದಂತೆ ಹೇಗೆ ತಡೆಯುತ್ತದೆ ಮತ್ತು ತನ್ನದೇ ಆದ ಲಾಗ್ ಅನ್ನು ಬದಲಾಯಿಸಲಾಗದಂತೆ ಹೇಗೆ ಮಾಡುತ್ತದೆ ಎಂಬುದನ್ನು ಈ ಅಧ್ಯಾಯವು ಒಳಗೊಂಡಿದೆ.",
+  "Rank becomes scope and clearance": "ಹುದ್ದೆಯು ವ್ಯಾಪ್ತಿ ಮತ್ತು ಕ್ಲಿಯರೆನ್ಸ್ ಆಗುತ್ತದೆ",
+  "At sign-in, an officer's rank is resolved into two independent things. Scope answers how wide: which rows exist for this person. Clearance answers how deep: which capabilities and which sensitive fields are available. They are separate because seniority in geography and entitlement to protected material are not the same axis.": "ಸೈನ್-ಇನ್ ಸಮಯದಲ್ಲಿ, ಅಧಿಕಾರಿಯ ಶ್ರೇಣಿಯನ್ನು ಎರಡು ಸ್ವತಂತ್ರ ವಿಷಯಗಳಾಗಿ ಪರಿಹರಿಸಲಾಗುತ್ತದೆ. ವ್ಯಾಪ್ತಿಯು ಎಷ್ಟು ವಿಸ್ತಾರವಾಗಿದೆ: ಈ ವ್ಯಕ್ತಿಗೆ ಯಾವ ಸಾಲುಗಳು ಅಸ್ತಿತ್ವದಲ್ಲಿವೆ. ಕ್ಲಿಯರೆನ್ಸ್ ಎಷ್ಟು ಆಳವಾಗಿದೆ: ಯಾವ ಸಾಮರ್ಥ್ಯಗಳು ಮತ್ತು ಸೂಕ್ಷ್ಮ ಕ್ಷೇತ್ರಗಳು ಲಭ್ಯವಿದೆ ಎಂಬುದನ್ನು ನಿರ್ಧರಿಸುತ್ತದೆ.",
+  "Records in the officer's range": "ಅಧಿಕಾರಿಯ ಶ್ರೇಣಿಯ ವ್ಯಾಪ್ತಿಯ ದಾಖಲೆಗಳು",
+  "Records in the officer's district": "ಅಧಿಕಾರಿಯ ಜಿಲ್ಲೆಯ ವ್ಯಾಪ್ತಿಯ ದಾಖಲೆಗಳು",
+  "Records for the officer's station": "ಅಧಿಕಾರಿಯ ಠಾಣೆಯ ವ್ಯಾಪ್ತಿಯ ದಾಖಲೆಗಳು",
+  "Ask a question, read a case": "ಪ್ರಶ್ನೆ ಕೇಳಿ, ಪ್ರಕರಣ ಓದಿ",
+  "Run hotspot and network analytics, build a report": "ಹಾಟ್‌ಸ್ಪಾಟ್ ಮತ್ತು ನೆಟ್‌ವರ್ಕ್ ವಿಶ್ಲೇಷಣೆ ನಡೆಸಿ, ವರದಿ ನಿರ್ಮಿಸಿ",
+  "Read sensitive fields, read the audit log": "ಸೂಕ್ಷ್ಮ ವಿವರಗಳನ್ನು ಓದಿ, ಆಡಿಟ್ ಲಾಗ್ ಓದಿ",
+  "Read protected-crime records, administer access": "ರಕ್ಷಿತ-ಅಪರಾಧ ದಾಖಲೆಗಳನ್ನು ಓದಿ, ಪ್ರವೇಶ ನಿರ್ವಹಿಸಿ",
+  "A defined set of crime categories is treated as protected, including offences under POCSO and crimes against women and against Scheduled Castes and Tribes. A narrative attached to a protected case is withheld below L3, and the full case record requires L4. When a protected record matches a search, the officer is told that a restricted record matched without being shown its contents — silently dropping it would misrepresent the result as an absence.": "POCSO ಅಡಿಯಲ್ಲಿನ ಅಪರಾಧಗಳು ಮತ್ತು ಮಹಿಳೆಯರು ಹಾಗೂ ಪರಿಶಿಷ್ಟ ಜಾತಿ/ಪಂಗಡಗಳ ವಿರುದ್ಧದ ಅಪರಾಧಗಳು ಸೇರಿದಂತೆ ನಿರ್ದಿಷ್ಟ ಅಪರಾಧ ವರ್ಗಗಳನ್ನು ರಕ್ಷಿತವೆಂದು ಪರಿಗಣಿಸಲಾಗುತ್ತದೆ. ರಕ್ಷಿತ ಪ್ರಕರಣಕ್ಕೆ ಲಗತ್ತಿಸಲಾದ ನಿರೂಪಣೆಯನ್ನು L3 ಗಿಂತ ಕೆಳಗೆ ತಡೆಹಿಡಿಯಲಾಗುತ್ತದೆ ಮತ್ತು ಪೂರ್ಣ ಪ್ರಕರಣದ ದಾಖಲೆಗೆ L4 ಅಗತ್ಯವಿದೆ.",
+  "Row scoping in the database, not the application": "ಅಪ್ಲಿಕೇಶನ್‌ನಲ್ಲಿ ಅಲ್ಲ, ಡೇಟಾಬೇಸ್‌ನಲ್ಲೇ ರೋ ಸ್ಕೋಪಿಂಗ್",
+  "Scope is applied by Postgres row-level security. At the start of each request the officer's scope, range, district, station and clearance are written as transaction-local settings, and the table policies filter against those. A statement timeout is set in the same breath, so a pathological generated query cannot occupy a connection indefinitely.": "ವ್ಯಾಪ್ತಿಯನ್ನು Postgres ರೋ-ಲೆವೆಲ್ ಸೆಕ್ಯುರಿಟಿ (RLS) ಮೂಲಕ ಅನ್ವಯಿಸಲಾಗುತ್ತದೆ. ಪ್ರತಿ ವಿನಂತಿಯ ಪ್ರಾರಂಭದಲ್ಲಿ ಅಧಿಕಾರಿಯ ವ್ಯಾಪ್ತಿ, ಶ್ರೇಣಿ, ಜಿಲ್ಲೆ, ಠಾಣೆ ಮತ್ತು ಕ್ಲಿಯರೆನ್ಸ್ ಅನ್ನು ವಹಿವಾಟು-ಸ್ಥಳೀಯ ಸೆಟ್ಟಿಂಗ್‌ಗಳಾಗಿ ಬರೆಯಲಾಗುತ್ತದೆ ಮತ್ತು ಟೇಬಲ್ ನೀತಿಗಳು ಅವುಗಳ ವಿರುದ್ಧ ಫಿಲ್ಟರ್ ಮಾಡುತ್ತವೆ.",
+  "Placing this in the database rather than in application code is the whole point: it holds for every query that session makes, including one a language model wrote, and including one added later by a developer who has not read this page.": "ಇದನ್ನು ಅಪ್ಲಿಕೇಶನ್ ಕೋಡ್‌ನಲ್ಲಿ ಇರಿಸುವ ಬದಲು ಡೇಟಾಬೇಸ್‌ನಲ್ಲಿ ಇರಿಸುವುದೇ ಪ್ರಮುಖ ಅಂಶವಾಗಿದೆ: ಆ ಅಧಿವೇಶನವು ಮಾಡುವ ಪ್ರತಿಯೊಂದು ಕ್ವೆರಿಗೂ ಇದು ಅನ್ವಯಿಸುತ್ತದೆ, ಇದರಲ್ಲಿ ಭಾಷಾ ಮಾದರಿ ಬರೆದ ಕ್ವೆರಿಯೂ ಸೇರಿದೆ.",
+  "The SQL guard": "SQL ಗಾರ್ಡ್ (ರಕ್ಷಕ)",
+  "Generated SQL is parsed before it is trusted, and what runs is regenerated from the parse tree rather than being the model's original text. A query has to satisfy all of the following:": "ರಚಿತವಾದ SQL ಅನ್ನು ನಂಬುವ ಮೊದಲು ಪಾರ್ಸ್ ಮಾಡಲಾಗುತ್ತದೆ ಮತ್ತು ಚಾಲನೆಯಾಗುವುದು ಮಾದರಿಯ ಮೂಲ ಪಠ್ಯವಾಗಿರದೆ ಪಾರ್ಸ್ ಟ್ರೀಯಿಂದ ಮರುಉತ್ಪತ್ತಿಗೊಳ್ಳುತ್ತದೆ. ಕ್ವೆರಿಯು ಈ ಕೆಳಗಿನ ಎಲ್ಲವನ್ನೂ ಪೂರೈಸಬೇಕು:",
+  "Exactly one statement, which closes off statement chaining and comment injection.": "ನಿಖರವಾಗಿ ಒಂದೇ ಸ್ಟೇಟ್‌ಮೆಂಟ್, ಇದು ಸ್ಟೇಟ್‌ಮೆಂಟ್ ಚೈನಿಂಗ್ ಮತ್ತು ಕಾಮೆಂಟ್ ಇಂಜೆಕ್ಷನ್ ಅನ್ನು ನಿರ್ಬಂಧಿಸುತ್ತದೆ.",
+  "A SELECT. Any insert, update, delete or schema change anywhere in the tree is rejected.": "SELECT ಮಾತ್ರ. ಟ್ರೀಯಲ್ಲಿ ಎಲ್ಲಿಯಾದರೂ ಇನ್ಸರ್ಟ್, ಅಪ್‌ಡೇಟ್, ಡಿಲೀಟ್ ಅಥವಾ ಸ್ಕೀಮಾ ಬದಲಾವಣೆಯನ್ನು ತಿರಸ್ಕರಿಸಲಾಗುತ್ತದೆ.",
+  "Only the six allow-listed tables: cases, persons, case_persons, stations, officers and narratives.": "ಕೇವಲ ಆರು ಅನುಮತಿಸಲಾದ ಕೋಷ್ಟಕಗಳು: cases, persons, case_persons, stations, officers ಮತ್ತು narratives.",
+  "A row limit, which is added when absent and reduced when it exceeds the ceiling of 200.": "ರೋ ಮಿತಿ, ಇಲ್ಲದಿದ್ದಾಗ ಸೇರಿಸಲಾಗುತ್ತದೆ ಮತ್ತು 200 ರ ಮಿತಿಯನ್ನು ಮೀರಿದಾಗ ಕಡಿಮೆ ಮಾಡಲಾಗುತ್ತದೆ.",
+  "What the guard does not do": "ಗಾರ್ಡ್ ಏನು ಮಾಡುವುದಿಲ್ಲ",
+  "The guard decides the shape of the query, not who may see the rows it returns. Row scoping is row-level security's job, and column-level masking of personal fields is applied in the application layer after the query runs, for callers below clearance L3. Those are three separate mechanisms and it is worth not confusing them.": "ಗಾರ್ಡ್ ಕ್ವೆರಿಯ ಆಕಾರವನ್ನು ನಿರ್ಧರಿಸುತ್ತದೆ, ಅದು ಹಿಂದಿರುಗಿಸುವ ಸಾಲುಗಳನ್ನು ಯಾರು ನೋಡಬಹುದು ಎಂಬುದನ್ನಲ್ಲ. ರೋ ಸ್ಕೋಪಿಂಗ್ RLS ನ ಕೆಲಸವಾಗಿದೆ ಮತ್ತು ವೈಯಕ್ತಿಕ ವಿವರಗಳ ಕಾಲಮ್-ಹಂತದ ಮಾಸ್ಕಿಂಗ್ ಅನ್ನು ಅಪ್ಲಿಕೇಶನ್ ಲೇಯರ್‌ನಲ್ಲಿ ಅನ್ವಯಿಸಲಾಗುತ್ತದೆ.",
+  "The same guard also validates the deterministic query builder used when no model is available, so there is one enforcement point rather than one per code path.": "ಯಾವುದೇ ಮಾದರಿ ಲಭ್ಯವಿಲ್ಲದಿದ್ದಾಗ ಬಳಸಲಾಗುವ ಡಿಟರ್ಮಿನಿಸ್ಟಿಕ್ ಕ್ವೆರಿ ಬಿಲ್ಡರ್ ಅನ್ನು ಅದೇ ಗಾರ್ಡ್ ಮೌಲ್ಯೀಕರಿಸುತ್ತದೆ.",
+  "An audit log that cannot be edited quietly": "ರಹಸ್ಯವಾಗಿ ಸಂಪಾದಿಸಲಾಗದ ಆಡಿಟ್ ಲಾಗ್",
+  "Every audited action appends a row whose hash covers both its own canonical contents and the hash of the row before it. Changing or deleting any earlier entry breaks every hash after it, which a single pass over the table detects.": "ಪ್ರತಿಯೊಂದು ಆಡಿಟ್ ಮಾಡಲಾದ ಕ್ರಿಯೆಯು ತನ್ನದೇ ಆದ ಅಂಗೀಕೃತ ವಿಷಯಗಳು ಮತ್ತು ಅದರ ಹಿಂದಿನ ಸಾಲಿನ ಹ್ಯಾಶ್ ಎರಡನ್ನೂ ಒಳಗೊಂಡಿರುವ ಹ್ಯಾಶ್ ಅನ್ನು ಸೇರಿಸುತ್ತದೆ. ಯಾವುದೇ ಹಿಂದಿನ ನಮೂದನ್ನು ಬದಲಾಯಿಸುವುದು ಅಥವಾ ಅಳಿಸುವುದು ಅದರ ನಂತರದ ಪ್ರತಿಯೊಂದು ಹ್ಯಾಶ್ ಅನ್ನು ಮುರಿಯುತ್ತದೆ.",
+  "Serialise": "ಸರಣೀಕರಣ (Serialise)",
+  "Link": "ಲಿಂಕ್ (Link)",
+  "Canonicalise": "ಕ್ಯಾನೊನಿಕಲೈಸ್",
+  "Hash": "ಹ್ಯಾಶ್ (Hash)",
+  "A transaction-level advisory lock is taken so concurrent writers cannot read the same previous hash and fork the chain into two valid-looking branches.": "ವಹಿವಾಟು-ಮಟ್ಟದ ಅಡ್ವೈಸರಿ ಲಾಕ್ ತೆಗೆದುಕೊಳ್ಳಲಾಗುತ್ತದೆ ಆದ್ದರಿಂದ ಸಮಕಾಲೀನ ಬರಹಗಾರರು ಒಂದೇ ಹಿಂದಿನ ಹ್ಯಾಶ್ ಅನ್ನು ಓದಲು ಮತ್ತು ಸರಣಿಯನ್ನು ವಿಭಜಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+  "The previous row's hash is read, or a fixed genesis value for the first entry.": "ಹಿಂದಿನ ಸಾಲಿನ ಹ್ಯಾಶ್ ಅನ್ನು ಓದಲಾಗುತ್ತದೆ, ಅಥವಾ ಮೊದಲ ನಮೂದಿಗೆ ಸ್ಥಿರ ಜೆನೆಸಿಸ್ ಮೌಲ್ಯವನ್ನು ಬಳಸಲಾಗುತ್ತದೆ.",
+  "The entry is serialised with sorted keys and fixed separators, so the same content always produces the same bytes.": "ವಿಂಗಡಿಸಲಾದ ಕೀಗಳು ಮತ್ತು ಸ್ಥಿರ ವಿಭಜಕಗಳೊಂದಿಗೆ ನಮೂದನ್ನು ಸರಣೀಕರಿಸಲಾಗುತ್ತದೆ, ಆದ್ದರಿಂದ ಅದೇ ವಿಷಯವು ಯಾವಾಗಲೂ ಅದೇ ಬೈಟ್‌ಗಳನ್ನು ಉತ್ಪಾದಿಸುತ್ತದೆ.",
+  "The chat path writes its audit row in a separate committed transaction, before streaming begins. If it shared the stream's transaction, a reader closing the tab mid-answer would roll back the evidence that the question was ever asked.": "ಚಾಟ್ ಮಾರ್ಗವು ಸ್ಟ್ರೀಮಿಂಗ್ ಪ್ರಾರಂಭವಾಗುವ ಮೊದಲು ಪ್ರತ್ಯೇಕ ಕಮಿಟ್ ಆದ ವಹಿವಾಟಿನಲ್ಲಿ ತನ್ನ ಆಡಿಟ್ ಸಾಲನ್ನು ಬರೆಯುತ್ತದೆ.",
+
+  // Chapter 4 — Retrieval & Language
+  "Retrieval and language": "ಮಾಹಿತಿ ಮರುಪಡೆಯುವಿಕೆ ಮತ್ತು ಭಾಷೆ",
+  "How Satyam searches unstructured narrative text, and how the same answer is produced in two languages.": "ಸತ್ಯಂ ಅಸಂಘಟಿತ ನಿರೂಪಣಾ ಪಠ್ಯವನ್ನು ಹೇಗೆ ಹುಡುಕುತ್ತದೆ ಮತ್ತು ಎರಡು ಭಾಷೆಗಳಲ್ಲಿ ಅದೇ ಉತ್ತರವನ್ನು ಹೇಗೆ ಉತ್ಪಾದಿಸಲಾಗುತ್ತದೆ.",
+  "Two search strategies, fused": "ಎರಡು ಹುಡುಕಾಟ ತಂತ್ರಗಳ ಸಂಯೋಜನೆ (ಫ್ಯೂಷನ್)",
+  "Narrative search runs a meaning-based search and a keyword search on every query, and combines them. Semantic search finds a chain snatching described without using the word snatching; keyword search reliably finds a vehicle registration or a specific section number, which an embedding tends to blur.": "ನಿರೂಪಣಾ ಹುಡುಕಾಟವು ಪ್ರತಿ ಕ್ವೆರಿಯಲ್ಲಿ ಅರ್ಥ-ಆಧಾರಿತ ಹುಡುಕಾಟ ಮತ್ತು ಕೀವರ್ಡ್ ಹುಡುಕಾಟವನ್ನು ನಡೆಸುತ್ತದೆ ಮತ್ತು ಅವುಗಳನ್ನು ಸಂಯೋಜಿಸುತ್ತದೆ. ಸೆಮ್ಯಾಂಟಿಕ್ ಹುಡುಕಾಟವು ಸ್ನ್ಯಾಚಿಂಗ್ ಎಂಬ ಪದವನ್ನು ಬಳಸದೆ ವಿವರಿಸಿದ ಸರಗಳ್ಳತನವನ್ನು ಕಂಡುಕೊಳ್ಳುತ್ತದೆ; ಕೀವರ್ಡ್ ಹುಡುಕಾಟವು ವಾಹನ ನೋಂದಣಿ ಅಥವಾ ನಿರ್ದಿಷ್ಟ ಸೆಕ್ಷನ್ ಸಂಖ್ಯೆಯನ್ನು ನಿಖರವಾಗಿ ಕಂಡುಕೊಳ್ಳುತ್ತದೆ.",
+  "BGE-M3 produces a 1024-dimension vector, normalised so cosine similarity is the operator the database index already uses.": "BGE-M3 1024-ಆಯಾಮದ ವೆಕ್ಟರ್ ಅನ್ನು ಉತ್ಪಾದಿಸುತ್ತದೆ, ಸಾಮಾನ್ಯೀಕರಿಸಲಾಗಿದೆ ಆದ್ದರಿಂದ ಕೊಸೈನ್ ಹೋಲಿಕೆಯು ಡೇಟಾಬೇಸ್ ಸೂಚ್ಯಂಕ ಈಗಾಗಲೇ ಬಳಸುವ ಆಪರೇಟರ್ ಆಗಿದೆ.",
+  "An approximate nearest-neighbour scan over stored narrative vectors, and a Postgres full-text search served by its own index.": "ಸಂಗ್ರಹಿಸಲಾದ ನಿರೂಪಣಾ ವೆಕ್ಟರ್‌ಗಳ ಮೇಲೆ ಸರಿಸುಮಾರು ಹತ್ತಿರದ-ನೆರೆಹೊರೆಯ ಸ್ಕ್ಯಾನ್ ಮತ್ತು ತನ್ನದೇ ಆದ ಸೂಚ್ಯಂಕದಿಂದ ಒದಗಿಸಲಾದ Postgres ಪೂರ್ಣ-ಪಠ್ಯ ಹುಡುಕಾಟ.",
+  "Reciprocal rank fusion combines the two orderings. It uses only rank position, not score, because a cosine distance and a text-rank score are not on comparable scales and calibrating them would need tuning data this project does not have.": "ರೆಸಿಪ್ರೊಕಲ್ ರ್ಯಾಂಕ್ ಫ್ಯೂಷನ್ ಎರಡು ಶ್ರೇಯಾಂಕಗಳನ್ನು ಸಂಯೋಜಿಸುತ್ತದೆ. ಇದು ಶ್ರೇಣಿಯ ಸ್ಥಾನವನ್ನು ಮಾತ್ರ ಬಳಸುತ್ತದೆ, ಸ್ಕೋರ್ ಅಲ್ಲ.",
+  "A cross-encoder reads each candidate against the question and reorders them. This is a quality step, so if it fails the fused order is used rather than losing the results.": "ಕ್ರಾಸ್-ಎನ್‌ಕೋಡರ್ ಪ್ರಶ್ನೆಯ ವಿರುದ್ಧ ಪ್ರತಿ ಅಭ್ಯರ್ಥಿಯನ್ನು ಓದುತ್ತದೆ ಮತ್ತು ಅವುಗಳನ್ನು ಮರುಕ್ರಮಗೊಳಿಸುತ್ತದೆ. ಇದು ಗುಣಮಟ್ಟದ ಹಂತವಾಗಿದೆ, ಆದ್ದರಿಂದ ಇದು ವಿಫಲವಾದರೆ ಫಲಿತಾಂಶಗಳನ್ನು ಕಳೆದುಕೊಳ್ಳುವ ಬದಲು ಸಂಯೋಜಿತ ಕ್ರಮವನ್ನು ಬಳಸಲಾಗುತ್ತದೆ.",
+  "Current retrieval coverage": "ಪ್ರಸ್ತುತ ಮಾಹಿತಿ ಮರುಪಡೆಯುವಿಕೆ ವ್ಯಾಪ್ತಿ",
+  "Half the narrative corpus is searchable by meaning: 35,993 of 71,986 narratives carry an embedding. Those are the English ones. The Kannada narratives are stored and keyword-searchable, but not embedded.": "ನಿರೂಪಣಾ ಕಾರ್ಪಸ್‌ನ ಅರ್ಧದಷ್ಟು ಅರ್ಥದ ಆಧಾರದ ಮೇಲೆ ಹುಡುಕಬಹುದಾಗಿದೆ: 71,986 ನಿರೂಪಣೆಗಳಲ್ಲಿ 35,993 ಎಂಬೆಡ್ಡಿಂಗ್ ಅನ್ನು ಹೊಂದಿವೆ. ಅವು ಇಂಗ್ಲಿಷ್ ನಿರೂಪಣೆಗಳಾಗಿವೆ. ಕನ್ನಡ ನಿರೂಪಣೆಗಳನ್ನು ಸಂಗ್ರಹಿಸಲಾಗಿದೆ ಮತ್ತು ಕೀವರ್ಡ್-ಹುಡುಕಬಹುದು, ಆದರೆ ಎಂಬೆಡ್ ಮಾಡಲಾಗಿಲ್ಲ.",
+  "That is a budget decision rather than an oversight. The database has a hard storage ceiling, and past it the provider rejects writes that grow storage — which would include the audit row written on every query, making it an availability problem rather than a billing one. Each additional embedded narrative costs roughly 4.8 KB once its share of the vector index is counted, and embedding the remaining half would push the database past the cap. Every backfill projects its own cost first and refuses to start if it would not fit.": "ಇದು ಮೇಲ್ವಿಚಾರಣೆಯ ಬದಲು ಬಜೆಟ್ ನಿರ್ಧಾರವಾಗಿದೆ. ಡೇಟಾಬೇಸ್ ಕಠಿಣ ಸಂಗ್ರಹಣಾ ಮಿತಿಯನ್ನು ಹೊಂದಿದೆ, ಮತ್ತು ಅದನ್ನು ಮೀರಿದರೆ ಪೂರೈಕೆದಾರರು ಸಂಗ್ರಹಣೆಯನ್ನು ಹೆಚ್ಚಿಸುವ ಬರಹಗಳನ್ನು ತಿರಸ್ಕರಿಸುತ್ತಾರೆ.",
+  "Known weakness in Kannada keyword search": "ಕನ್ನಡ ಕೀವರ್ಡ್ ಹುಡುಕಾಟದಲ್ಲಿ ತಿಳಿದಿರುವ ಇತಿಮಿತಿ",
+  "The keyword index is built without language-specific processing and requires every term in the query to appear, so recall on Kannada narratives is poor. Semantic search is the proper fix, and it is the half of the corpus that is not yet embedded.": "ಕೀವರ್ಡ್ ಸೂಚ್ಯಂಕವನ್ನು ಭಾಷಾ-ನಿರ್ದಿಷ್ಟ ಪ್ರಕ್ರಿಯೆಯಿಲ್ಲದೆ ನಿರ್ಮಿಸಲಾಗಿದೆ ಮತ್ತು ಕ್ವೆರಿಯಲ್ಲಿನ ಪ್ರತಿಯೊಂದು ಪದವೂ ಕಾಣಿಸಿಕೊಳ್ಳಬೇಕಾಗುತ್ತದೆ, ಆದ್ದರಿಂದ ಕನ್ನಡ ನಿರೂಪಣೆಗಳಲ್ಲಿ ಮರುಪಡೆಯುವಿಕೆ ದುರ್ಬಲವಾಗಿದೆ.",
+  "The bilingual voice path": "ದ್ವಿಭಾಷಾ ಧ್ವನಿ ಸಂವಹನ ಮಾರ್ಗ",
+  "Speech in and speech out both run through hosted Indic models. Recognition is asked to detect the language rather than being told it. Synthesis is given the target language and a fixed voice, and the text is trimmed on a sentence boundary to stay inside the provider's input limit, so a long answer is cut cleanly instead of mid-word.": "ಧ್ವನಿ ಇನ್‌ಪುಟ್ ಮತ್ತು ಧ್ವನಿ ಔಟ್‌ಪುಟ್ ಎರಡೂ ಹೋಸ್ಟ್ ಮಾಡಲಾದ ಇಂಡಿಕ್ ಮಾದರಿಗಳ ಮೂಲಕ ಚಲಿಸುತ್ತವೆ. ಭಾಷೆಯನ್ನು ಗುರುತಿಸಲು ಸೂಚಿಸಲಾಗುತ್ತದೆ. ಸಂಶ್ಲೇಷಣೆಗೆ ಗುರಿ ಭಾಷೆ ಮತ್ತು ಸ್ಥಿರ ಧ್ವನಿಯನ್ನು ನೀಡಲಾಗುತ್ತದೆ.",
+  "Voice does more than dictate. Spoken commands are matched against a route table covering every screen in both languages, so an officer can say the Kannada or English name of a screen and be taken there. Where a command implies work rather than navigation, a planner turns it into actions the destination screen executes on arrival, with placeholders resolved against records the officer is actually allowed to see.": "ಧ್ವನಿಯು ಡಿಕ್ಟೇಶನ್‌ಗಿಂತ ಹೆಚ್ಚಿನದನ್ನು ಮಾಡುತ್ತದೆ. ಮಾತನಾಡುವ ಆಜ್ಞೆಗಳನ್ನು ಎರಡೂ ಭಾಷೆಗಳಲ್ಲಿ ಪ್ರತಿ ಪರದೆಯನ್ನು ಒಳಗೊಂಡಿರುವ ಮಾರ್ಗ ಕೋಷ್ಟಕಕ್ಕೆ ಹೊಂದಿಸಲಾಗುತ್ತದೆ, ಆದ್ದರಿಂದ ಅಧಿಕಾರಿಯು ಪರದೆಯ ಕನ್ನಡ ಅಥವಾ ಇಂಗ್ಲಿಷ್ ಹೆಸರನ್ನು ಹೇಳಿ ಅಲ್ಲಿಗೆ ಹೋಗಬಹುದು.",
+
+  // Chapter 5 — Platform
+  "The platform": "ಪ್ಲಾಟ್‌ಫಾರ್ಮ್",
+  "The screens an officer works in, the models behind them, and what is genuinely finished versus what is scaffolding.": "ಅಧಿಕಾರಿಯು ಕಾರ್ಯನಿರ್ವಹಿಸುವ ಪರದೆಗಳು, ಅವುಗಳ ಹಿಂದಿನ AI ಮಾದರಿಗಳು ಮತ್ತು ಯಾವುದು ಪೂರ್ಣಗೊಂಡಿದೆ ಮತ್ತು ಯಾವುದು ಸ್ಕ್ಯಾಫೋಲ್ಡಿಂಗ್ ಆಗಿದೆ ಎಂಬ ವಿವರಣೆ.",
+  "Screens": "ಪರದೆಗಳು (ಸ್ಕ್ರೀನ್‌ಗಳು)",
+  "Screen": "ಪರದೆ",
+  "Purpose": "ಉದ್ದೇಶ",
+  "Models, and why they are swappable": "AI ಮಾದರಿಗಳು ಮತ್ತು ಅವುಗಳನ್ನು ಏಕೆ ಬದಲಾಯಿಸಬಹುದು",
+  "Models sit behind a registry, so a lane asks for a capability rather than for a vendor. The brain model, the model that writes SQL, and the voice provider are selected independently and can be changed from the Settings panel per request, without a redeploy.": "ಮಾದರಿಗಳು ನೋಂದಣಿಯ ಹಿಂದೆ ಇರುತ್ತವೆ, ಆದ್ದರಿಂದ ಮಾರ್ಗವು ಮಾರಾಟಗಾರರ ಬದಲು ಸಾಮರ್ಥ್ಯವನ್ನು ಕೇಳುತ್ತದೆ. ಮುಖ್ಯ ಮಾದರಿ, SQL ಬರೆಯುವ ಮಾದರಿ ಮತ್ತು ಧ್ವನಿ ಪೂರೈಕೆದಾರರನ್ನು ಸ್ವತಂತ್ರವಾಗಿ ಆಯ್ಕೆಮಾಡಲಾಗುತ್ತದೆ ಮತ್ತು ಮರುನಿಯೋಜನೆ ಇಲ್ಲದೆ ಬದಲಾಯಿಸಬಹುದು.",
+  "Embeddings are the exception with no alternative. A vector store is only coherent if every vector in it came from the same model, so allowing a second embedder would silently corrupt retrieval rather than degrade it.": "ಎಂಬೆಡ್ಡಿಂಗ್‌ಗಳು ಯಾವುದೇ ಪರ್ಯಾಯವಿಲ್ಲದ ಅಪವಾದವಾಗಿದೆ. ವೆಕ್ಟರ್ ಸ್ಟೋರ್‌ನಲ್ಲಿರುವ ಪ್ರತಿಯೊಂದು ವೆಕ್ಟರ್ ಒಂದೇ ಮಾದರಿಯಿಂದ ಬಂದಿದ್ದರೆ ಮಾತ್ರ ಸುಸಂಬದ್ಧವಾಗಿರುತ್ತದೆ.",
+  "Honest status": "ಪ್ರಾಮಾಣಿಕ ಸ್ಥಿತಿ (Honest status)",
+  "Some parts of the system are scaffolding, and it is more useful to say so than to let someone discover it during an evaluation.": "ವ್ಯವಸ್ಥೆಯ ಕೆಲವು ಭಾಗಗಳು ಸ್ಕ್ಯಾಫೋಲ್ಡಿಂಗ್ ಆಗಿವೆ, ಮತ್ತು ಮೌಲ್ಯಮಾಪನದ ಸಮಯದಲ್ಲಿ ಯಾರಾದರೂ ಅದನ್ನು ಕಂಡುಹಿಡಿಯುವುದಕ್ಕಿಂತ ಮುಂಚಿತವಾಗಿ ತಿಳಿಸುವುದು ಹೆಚ್ಚು ಉಪಯುಕ್ತವಾಗಿದೆ.",
+  "Fully offline operation is not available. Selecting the local model backend gives placeholder responses rather than a self-hosted model; the interfaces exist and the implementations do not.": "ಸಂಪೂರ್ಣ ಆಫ್‌ಲೈನ್ ಕಾರ್ಯಾಚರಣೆ ಲಭ್ಯವಿಲ್ಲ. ಸ್ಥಳೀಯ ಮಾದರಿಯ ಬ್ಯಾಕೆಂಡ್ ಅನ್ನು ಆಯ್ಕೆ ಮಾಡುವುದರಿಂದ ಸ್ವಯಂ-ಹೋಸ್ಟ್ ಮಾಡಿದ ಮಾದರಿಯ ಬದಲಿಗೆ ಪ್ಲೇಸ್‌ಹೋಲ್ಡರ್ ಪ್ರತಿಕ್ರಿಯೆಗಳನ್ನು ನೀಡುತ್ತದೆ; ಇಂಟರ್‌ಫೇಸ್‌ಗಳು ಅಸ್ತಿತ್ವದಲ್ಲಿವೆ ಆದರೆ ಸಂಪೂರ್ಣ ಅನುಷ್ಠಾನಗಳಿಲ್ಲ.",
+  "One of the two Indic speech providers is stubbed. The default provider works; the alternative is an interface awaiting its compute call.": "ಎರಡು ಇಂಡಿಕ್ ಸ್ಪೀಚ್ ಪೂರೈಕೆದಾರರಲ್ಲಿ ಒಂದನ್ನು ಸ್ಟಬ್ ಮಾಡಲಾಗಿದೆ. ಡೀಫಾಲ್ಟ್ ಪೂರೈಕೆದಾರರು ಕೆಲಸ ಮಾಡುತ್ತಾರೆ; ಪರ್ಯಾಯವು ತನ್ನ ಕಂಪ್ಯೂಟ್ ಕರೆಗಾಗಿ ಕಾಯುತ್ತಿರುವ ಇಂಟರ್‌ಫೇಸ್ ಆಗಿದೆ.",
+  "The chat lane for reports recognises the request and points at the Reports screen. It does not generate a document.": "ವರದಿಗಳ ಚಾಟ್ ಮಾರ್ಗವು ವಿನಂತಿಯನ್ನು ಗುರುತಿಸುತ್ತದೆ ಮತ್ತು ವರದಿಗಳ ಪರದೆಯತ್ತ ಸೂಚಿಸುತ್ತದೆ. ಇದು ನೇರವಾಗಿ ದಾಖಲೆಯನ್ನು ರಚಿಸುವುದಿಲ್ಲ.",
+  "Half the narrative corpus is not embedded, bounded by the storage ceiling described in Chapter IV.": "ನಿರೂಪಣಾ ಕಾರ್ಪಸ್‌ನ ಅರ್ಧದಷ್ಟು ಭಾಗವನ್ನು ಎಂಬೆಡ್ ಮಾಡಲಾಗಿಲ್ಲ, ಇದು ಅಧ್ಯಾಯ IV ರಲ್ಲಿ ವಿವರಿಸಿದ ಸಂಗ್ರಹಣಾ ಮಿತಿಯಿಂದ ಸೀಮಿತವಾಗಿದೆ.",
+  "Written answers appear to stream but are composed in full before the first word is sent.": "ಲಿಖಿತ ಉತ್ತರಗಳು ಸ್ಟ್ರೀಮ್ ಆಗಿ ಗೋಚರಿಸುತ್ತವೆ ಆದರೆ ಮೊದಲ ಪದವನ್ನು ಕಳುಹಿಸುವ ಮೊದಲು ಸಂಪೂರ್ಣವಾಗಿ ರಚಿಸಲ್ಪಡುತ್ತವೆ.",
+  "Stack": "ತಂತ್ರಜ್ಞಾನ ಶ್ರೇಣಿ (Stack)",
+  "Layer": "ಶ್ರೇಣಿ",
+  "Choices": "ಆಯ್ಕೆಗಳು",
+  "Interface": "ಇಂಟರ್‌ಫೇಸ್",
+  "Visualisation": "ದೃಶ್ಯೀಕರಣ",
+  "Service": "ಸೇವೆ",
+  "Data": "ಡೇಟಾ",
+  "Safety": "ಸುರಕ್ಷತೆ",
+  "None — deliberately the only embedder": "ಯಾವುದೂ ಇಲ್ಲ — ಉದ್ದೇಶಪೂರ್ವಕವಾಗಿ ಏಕೈಕ ಎಂಬೆಡ್ಡರ್",
+  "None": "ಯಾವುದೂ ಇಲ್ಲ",
+  "Qwen3 Coder via Ollama Cloud": "Qwen3 Coder (Ollama Cloud ಮೂಲಕ)",
+  "Sarvam": "ಸರ್ವಂ (Sarvam)",
+  "Google Cloud voice": "ಗೂಗಲ್ ಕ್ಲೌಡ್ ಧ್ವನಿ",
+
+  // Page Titles across Satyam
+  "Satyam — Crime Intelligence Workspace": "ಸತ್ಯಂ — ಅಪರಾಧ ಗುಪ್ತಚರ ಕಾರ್ಯಕ್ಷೇತ್ರ",
+  "Bilingual, voice-enabled conversational AI for police crime intelligence.": "ಪೊಲೀಸ್ ಅಪರಾಧ ಗುಪ್ತಚರಕ್ಕಾಗಿ ದ್ವಿಭಾಷಾ, ಧ್ವನಿ-ಸಕ್ರಿಯ ಸಂಭಾಷಣಾ AI.",
+  "Command-center copilot for crime intelligence.": "ಅಪರಾಧ ಗುಪ್ತಚರಕ್ಕಾಗಿ ಕಮಾಂಡ್-ಸೆಂಟರ್ ಕೋಪೈಲಟ್.",
+  "Ask Satyam · Conversational Copilot · Satyam": "ಸತ್ಯಂ ಪ್ರಶ್ನಿಸಿ · ಸಂಭಾಷಣಾ ಕೋಪೈಲಟ್ · ಸತ್ಯಂ",
+  "Case Console · Triage & Analysis · Satyam": "ಕೇಸ್ ಕನ್ಸೋಲ್ · ವಿಂಗಡಣೆ ಮತ್ತು ವಿಶ್ಲೇಷಣೆ · ಸತ್ಯಂ",
+  "Audit Trail · Tamper-Evident Chain · Satyam": "ಆಡಿಟ್ ಜಾಡು · ಹ್ಯಾಶ್-ಚೈನ್ ದಾಖಲೆ · ಸತ್ಯಂ",
+  "Crime Graphs & Analytics · Satyam": "ಅಪರಾಧ ಗ್ರಾಫ್‌ಗಳು ಮತ್ತು ವಿಶ್ಲೇಷಣೆ · ಸತ್ಯಂ",
+  "Forecast & Pattern Detection · Satyam": "ಮುನ್ಸೂಚನೆ ಮತ್ತು ಮಾದರಿ ಪತ್ತೆ · ಸತ್ಯಂ",
+  "Court Reports · Intelligence Brief · Satyam": "ನ್ಯಾಯಾಲಯ ವರದಿಗಳು · ಗುಪ್ತಚರ ಸಂಕ್ಷಿಪ್ತ ವರದಿ · ಸತ್ಯಂ",
+  "Person 360 · Satyam": "ವ್ಯಕ್ತಿ 360 · ಸತ್ಯಂ",
+  "Investigation Board · Satyam": "ತನಿಖಾ ಬೋರ್ಡ್ · ಸತ್ಯಂ",
+  "Live News Feed · Kannada Broadcasts · Satyam": "ಲೈವ್ ನ್ಯೂಸ್ ಫೀಡ್ · ಕನ್ನಡ ಪ್ರಸಾರಗಳು · ಸತ್ಯಂ",
+  "Transcripts & Voice History · Satyam": "ಲಿಪ್ಯಂತರಗಳು ಮತ್ತು ಧ್ವನಿ ಇತಿಹಾಸ · ಸತ್ಯಂ",
+  "Access Control & Admin · Satyam": "ಪ್ರವೇಶ ನಿಯಂತ್ರಣ ಮತ್ತು ನಿರ್ವಹಣೆ · ಸತ್ಯಂ",
+  "Sign in · Satyam Crime Intelligence": "ಸೈನ್ ಇನ್ · ಸತ್ಯಂ ಅಪರಾಧ ಗುಪ್ತಚರ",
+  "Network Analysis · Link & Ego Graphs · Satyam": "ನೆಟ್‌ವರ್ಕ್ ವಿಶ್ಲೇಷಣೆ · ಲಿಂಕ್ ಮತ್ತು ಈಗೋ ಗ್ರಾಫ್‌ಗಳು · ಸತ್ಯಂ",
+  "Case Documents & Evidence Search · Satyam": "ಪ್ರಕರಣ ದಾಖಲೆಗಳು ಮತ್ತು ಸಾಕ್ಷ್ಯ ಹುಡುಕಾಟ · ಸತ್ಯಂ",
+  "Socio Dashboard · Satyam": "ಸಾಮಾಜಿಕ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ · ಸತ್ಯಂ",
+  "Predictive Deployment · Satyam": "ಮುನ್ಸೂಚಕ ಗಸ್ತು ನಿಯೋಜನೆ · ಸತ್ಯಂ",
+  "Dispatch & Green Corridor · Satyam": "ರವಾನೆ ಮತ್ತು ಗ್ರೀನ್ ಕಾರಿಡಾರ್ · ಸತ್ಯಂ",
+  "Camera Review · Satyam": "ಕ್ಯಾಮೆರಾ ಪರಿಶೀಲನೆ · ಸತ್ಯಂ",
+
   // ── Targeted Screenshot UI & Status Translations ───────────────────────────
   "Pending Trial": "ವಿಚಾರಣೆಗೆ ಬಾಕಿ",
   "Convicted": "ಶಿಕ್ಷೆ ವಿಧಿಸಲಾಗಿದೆ",
@@ -3477,6 +3653,66 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     window.addEventListener("satyam-translations-updated", handleUpdate);
     return () => window.removeEventListener("satyam-translations-updated", handleUpdate);
   }, []);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.documentElement.lang = lang === "KN" ? "kn" : "en";
+
+    const updateSeo = () => {
+      const titleEl = document.querySelector("title");
+      if (titleEl) {
+        const currentTitle = titleEl.textContent || "";
+        const origTitle = titleEl.getAttribute("data-orig-title") || currentTitle;
+        if (!titleEl.getAttribute("data-orig-title") && currentTitle) {
+          titleEl.setAttribute("data-orig-title", origTitle);
+        }
+        if (lang === "KN") {
+          const transTitle = t(origTitle);
+          if (transTitle && transTitle !== currentTitle) {
+            titleEl.textContent = transTitle;
+          }
+        } else if (currentTitle !== origTitle) {
+          titleEl.textContent = origTitle;
+        }
+      }
+
+      const metaTags = [
+        { sel: 'meta[name="description"]', attr: "content" },
+        { sel: 'meta[name="keywords"]', attr: "content" },
+        { sel: 'meta[property="og:title"]', attr: "content" },
+        { sel: 'meta[property="og:description"]', attr: "content" },
+        { sel: 'meta[name="twitter:title"]', attr: "content" },
+        { sel: 'meta[name="twitter:description"]', attr: "content" },
+      ];
+
+      for (const { sel, attr } of metaTags) {
+        const el = document.querySelector(sel);
+        if (el) {
+          const orig = el.getAttribute("data-orig-seo") || el.getAttribute(attr) || "";
+          if (!el.getAttribute("data-orig-seo") && orig) {
+            el.setAttribute("data-orig-seo", orig);
+          }
+          if (lang === "KN") {
+            const trans = t(orig);
+            if (trans && trans !== orig) {
+              el.setAttribute(attr, trans);
+            }
+          } else if (orig) {
+            el.setAttribute(attr, orig);
+          }
+        }
+      }
+
+      const ogLoc = document.querySelector('meta[property="og:locale"]');
+      if (ogLoc) {
+        ogLoc.setAttribute("content", lang === "KN" ? "kn_IN" : "en_IN");
+      }
+    };
+
+    updateSeo();
+    const interval = setInterval(updateSeo, 400);
+    return () => clearInterval(interval);
+  }, [lang, tick]);
 
   const setLang = (l: Lang) => {
     setLangState(l);
