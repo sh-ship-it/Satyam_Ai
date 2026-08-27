@@ -857,12 +857,13 @@ function RankedBars({
   lang?: string;
   translateKey?: string;
 }) {
+  const t = useT();
   if (!rows.length) return <p className="py-6 text-center text-xs text-muted-foreground">—</p>;
   const max = Math.max(...rows.map((r) => r.count));
   return (
     <div className="space-y-1">
       {rows.map((r) => {
-        const label = translateKey && lang ? tData(translateKey, r.name, lang) : (lang === "KN" ? (DICT[r.name] ?? r.name) : r.name);
+        const label = translateKey && lang ? tData(translateKey, r.name, lang) : t(r.name);
         return (
           <div key={r.name} className="flex items-center gap-2">
             <span
