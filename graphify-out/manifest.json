@@ -70,8 +70,8 @@
     "semantic_hash": ""
   },
   "backend/app/core/audit.py": {
-    "mtime": 1782105026.7130497,
-    "ast_hash": "ae40ae9d94cb7707467bc1a00a0b3861",
+    "mtime": 1787847235.5387356,
+    "ast_hash": "f158b7bd556156710951cd408c118fbb",
     "semantic_hash": ""
   },
   "backend/app/core/masking.py": {
@@ -375,8 +375,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/CrimeMap.tsx": {
-    "mtime": 1787491993.9682426,
-    "ast_hash": "a226741af8e5ab5c8762651cb2cd70dc",
+    "mtime": 1787843255.7747178,
+    "ast_hash": "7aa164368be93c7d1fd17dc4599ed9a2",
     "semantic_hash": ""
   },
   "frontend/src/components/DarkModeToggle.tsx": {
@@ -670,8 +670,8 @@
     "semantic_hash": ""
   },
   "frontend/src/lib/i18n.tsx": {
-    "mtime": 1787830051.1571572,
-    "ast_hash": "eb7337fc93fd2084a700b2fb7e5c60a4",
+    "mtime": 1787848247.0318527,
+    "ast_hash": "b429e412621ab7abc0edf12c525d57c5",
     "semantic_hash": ""
   },
   "frontend/src/lib/utils.ts": {
@@ -705,8 +705,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/console.tsx": {
-    "mtime": 1787814073.4056914,
-    "ast_hash": "e5a2f45b780b7725e29e54767ca672dd",
+    "mtime": 1787845470.2901912,
+    "ast_hash": "e41d2806ca14b5fe78fa959e4cbd22ef",
     "semantic_hash": ""
   },
   "frontend/src/routes/index.tsx": {
@@ -720,8 +720,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/reports.tsx": {
-    "mtime": 1787747888.8594022,
-    "ast_hash": "60598583009867623b911ee4f0fe0b98",
+    "mtime": 1787848152.7968447,
+    "ast_hash": "8edf8f1b7d5aa40d2d1060f68500ba6f",
     "semantic_hash": ""
   },
   "frontend/src/routes/transcripts.tsx": {
@@ -975,8 +975,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/forecast.tsx": {
-    "mtime": 1787806196.231694,
-    "ast_hash": "eeec9fa7c684caaffbd668a2295f7fdb",
+    "mtime": 1787845493.0295405,
+    "ast_hash": "98124466c564d2cddb5a20edb85f2ea6",
     "semantic_hash": ""
   },
   "frontend/src/routes/profile.$personId.tsx": {
@@ -1015,8 +1015,8 @@
     "semantic_hash": ""
   },
   "frontend/src/locales/kn-data.json": {
-    "mtime": 1782300696.2794304,
-    "ast_hash": "770e41753cab76cd9bf0f8ab977f2bef",
+    "mtime": 1787848272.057015,
+    "ast_hash": "dc67cab820162cbcdac694efbd0432bd",
     "semantic_hash": ""
   },
   "backend/app/pipeline/tools/rule_sql.py": {
@@ -1115,8 +1115,8 @@
     "semantic_hash": ""
   },
   "frontend/src/components/ops/PredictivePanel.tsx": {
-    "mtime": 1782106291.997803,
-    "ast_hash": "a137f5b4755bd171268cb449d0d301ba",
+    "mtime": 1787845531.8121755,
+    "ast_hash": "8845f48fefb27577dedb76b46ed46001",
     "semantic_hash": ""
   },
   "backend/app/services/ops/routing_service.py": {
@@ -1220,8 +1220,8 @@
     "semantic_hash": ""
   },
   "backend/app/services/dossier_service.py": {
-    "mtime": 1782129140.5947728,
-    "ast_hash": "4b21ce40552459a7f9d611b44a858bb1",
+    "mtime": 1787847131.5851076,
+    "ast_hash": "b4a014ef1037ecb59b2557320352b665",
     "semantic_hash": ""
   },
   "backend/migrations/004_demo_dossier.sql": {
@@ -1235,8 +1235,8 @@
     "semantic_hash": ""
   },
   "backend/seed/load_demo_dossier.py": {
-    "mtime": 1782130530.748775,
-    "ast_hash": "6779e3c888f0f17f8e4a02fb5a33ff56",
+    "mtime": 1787847094.8251188,
+    "ast_hash": "3310d396fbeaeff20a59f00d302e3f23",
     "semantic_hash": ""
   },
   "frontend/src/lib/api/dossier.ts": {
@@ -1245,8 +1245,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/dossier.tsx": {
-    "mtime": 1782300728.748418,
-    "ast_hash": "e99478b05be0d57e1f751408a5bfe47c",
+    "mtime": 1787848136.5612254,
+    "ast_hash": "24c8c6cdb633d6b8bd59d7cb5450a6ca",
     "semantic_hash": ""
   },
   "frontend/public/demo-dossier/anwar-baig/front.png": {
@@ -1710,7 +1710,7 @@
     "semantic_hash": ""
   },
   "frontend/src/components/vision/map/basemaps.ts": {
-    "mtime": 1787484136.3255656,
+    "mtime": 1787843230.8184688,
     "ast_hash": "649e696b0dfbb12435434695991b958b",
     "semantic_hash": ""
   },
@@ -1870,8 +1870,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/graphs.tsx": {
-    "mtime": 1787678094.4146872,
-    "ast_hash": "3f39496d637d0d27f7a85e3c835ec181",
+    "mtime": 1787848184.9226904,
+    "ast_hash": "26afeb237cdc2dfe9bf35e45de4e2a1e",
     "semantic_hash": ""
   },
   "frontend/src/lib/chartPalette.ts": {
@@ -1885,8 +1885,8 @@
     "semantic_hash": ""
   },
   "frontend/src/routes/news.tsx": {
-    "mtime": 1787746791.7363822,
-    "ast_hash": "c7590aa85cc739a0487c101e16c9c09a",
+    "mtime": 1787848172.5144088,
+    "ast_hash": "8fb1ddb1b36069d507b3b7df5ca690b6",
     "semantic_hash": ""
   },
   "backend/app/api/routes/news.py": {
