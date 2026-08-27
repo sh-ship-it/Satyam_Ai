@@ -343,6 +343,51 @@ const DICT: Record<string, string> = {
   "Google · multimodal · default": "Google · ಬಹುಮಾದರಿ · ಡಿಫಾಲ್ಟ್",
   "GPT-4o · strong reasoning": "GPT-4o · ಬಲವಾದ ತರ್ಕ",
   "left today": "ಇಂದು ಉಳಿದಿದೆ",
+  // ── Document Translation screen ───────────────────────────────────────────
+  Documents: "ದಾಖಲೆಗಳು",
+  "Document Translation": "ದಾಖಲೆ ಅನುವಾದ",
+  "Translate a document to Kannada, seal it to the tamper-evident audit chain, then download the translation.":
+    "ದಾಖಲೆಯನ್ನು ಕನ್ನಡಕ್ಕೆ ಅನುವಾದಿಸಿ, ಲೆಕ್ಕಪರಿಶೋಧನಾ ಸರಪಳಿಗೆ ಮುದ್ರೆ ಹಾಕಿ, ನಂತರ ಅನುವಾದವನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.",
+  "Synthetic / test documents only": "ಕೃತಕ / ಪರೀಕ್ಷಾ ದಾಖಲೆಗಳು ಮಾತ್ರ",
+  "Drop a PDF here, or click to choose": "PDF ಅನ್ನು ಇಲ್ಲಿ ಬಿಡಿ, ಅಥವಾ ಆಯ್ಕೆ ಮಾಡಲು ಕ್ಲಿಕ್ ಮಾಡಿ",
+  "PDF or .txt · up to 20 MB · nothing is stored on the server":
+    "PDF ಅಥವಾ .txt · 20 MB ವರೆಗೆ · ಸರ್ವರ್‌ನಲ್ಲಿ ಏನೂ ಸಂಗ್ರಹವಾಗುವುದಿಲ್ಲ",
+  "Choose a document to upload": "ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ದಾಖಲೆ ಆಯ್ಕೆಮಾಡಿ",
+  "That file is larger than the 20 MB limit.": "ಆ ಫೈಲ್ 20 MB ಮಿತಿಗಿಂತ ದೊಡ್ಡದಾಗಿದೆ.",
+  "Translate to": "ಇದಕ್ಕೆ ಅನುವಾದಿಸಿ",
+  "Extract & translate": "ಪಠ್ಯ ತೆಗೆದು ಅನುವಾದಿಸಿ",
+  // "Working…" is already in this dictionary further down (ops simulation panel).
+  "Reading file": "ಫೈಲ್ ಓದುತ್ತಿದೆ",
+  "Extracting text": "ಪಠ್ಯ ತೆಗೆಯುತ್ತಿದೆ",
+  Translating: "ಅನುವಾದಿಸುತ್ತಿದೆ",
+  Integrity: "ಸಮಗ್ರತೆ",
+  "Sealing appends this document's SHA-256 to the hash-chained audit log. It proves the file was not altered — it does not hide the contents.":
+    "ಮುದ್ರೆ ಈ ದಾಖಲೆಯ SHA-256 ಅನ್ನು ಲೆಕ್ಕಪರಿಶೋಧನಾ ಸರಪಳಿಗೆ ಸೇರಿಸುತ್ತದೆ. ಫೈಲ್ ಬದಲಾಗಿಲ್ಲ ಎಂದು ಸಾಬೀತುಪಡಿಸುತ್ತದೆ — ವಿಷಯವನ್ನು ಮರೆಮಾಡುವುದಿಲ್ಲ.",
+  "Seal to audit chain": "ಲೆಕ್ಕಪರಿಶೋಧನಾ ಸರಪಳಿಗೆ ಮುದ್ರೆ ಹಾಕಿ",
+  "Sealed to the audit chain": "ಲೆಕ್ಕಪರಿಶೋಧನಾ ಸರಪಳಿಗೆ ಮುದ್ರೆ ಹಾಕಲಾಗಿದೆ",
+  "Verify this document": "ಈ ದಾಖಲೆಯನ್ನು ಪರಿಶೀಲಿಸಿ",
+  "Sealing failed.": "ಮುದ್ರೆ ಹಾಕಲು ವಿಫಲವಾಯಿತು.",
+  "Verification failed.": "ಪರಿಶೀಲನೆ ವಿಫಲವಾಯಿತು.",
+  "Download the translation": "ಅನುವಾದವನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
+  "The Kannada text, carrying the source digest and seal reference.":
+    "ಕನ್ನಡ ಪಠ್ಯ, ಮೂಲದ ಡೈಜೆಸ್ಟ್ ಮತ್ತು ಮುದ್ರೆಯ ಉಲ್ಲೇಖದೊಂದಿಗೆ.",
+  "The English text, carrying the source digest and seal reference.":
+    "ಇಂಗ್ಲಿಷ್ ಪಠ್ಯ, ಮೂಲದ ಡೈಜೆಸ್ಟ್ ಮತ್ತು ಮುದ್ರೆಯ ಉಲ್ಲೇಖದೊಂದಿಗೆ.",
+  "Translated PDF": "ಅನುವಾದಿತ PDF",
+  "Opens the print dialog — choose “Save as PDF” as the destination.":
+    "ಮುದ್ರಣ ಸಂವಾದವನ್ನು ತೆರೆಯುತ್ತದೆ — ಗಮ್ಯಸ್ಥಾನವಾಗಿ “Save as PDF” ಆಯ್ಕೆಮಾಡಿ.",
+  "Translated text (.txt)": "ಅನುವಾದಿತ ಪಠ್ಯ (.txt)",
+  Original: "ಮೂಲ",
+  "Kannada translation": "ಕನ್ನಡ ಅನುವಾದ",
+  "English translation": "ಇಂಗ್ಲಿಷ್ ಅನುವಾದ",
+  "The original and its translation will appear here.": "ಮೂಲ ಮತ್ತು ಅದರ ಅನುವಾದ ಇಲ್ಲಿ ಕಾಣಿಸುತ್ತದೆ.",
+  "This looks like a scan — no text layer found": "ಇದು ಸ್ಕ್ಯಾನ್ ಎಂದು ತೋರುತ್ತದೆ — ಪಠ್ಯ ಪದರ ಸಿಗಲಿಲ್ಲ",
+  "The file opened correctly but carries no selectable text, so there is nothing to translate yet. Scanned and handwritten pages need OCR, which is the next step planned for this screen.":
+    "ಫೈಲ್ ಸರಿಯಾಗಿ ತೆರೆಯಿತು ಆದರೆ ಆಯ್ಕೆ ಮಾಡಬಹುದಾದ ಪಠ್ಯ ಇಲ್ಲ. ಸ್ಕ್ಯಾನ್ ಮತ್ತು ಕೈಬರಹದ ಪುಟಗಳಿಗೆ OCR ಬೇಕು.",
+  pages: "ಪುಟಗಳು",
+  chars: "ಅಕ್ಷರಗಳು",
+  "(empty)": "(ಖಾಲಿ)",
+  "Something went wrong.": "ಏನೋ ತಪ್ಪಾಗಿದೆ.",
   "Browser voice used — cloud voice unavailable":
     "ಬ್ರೌಸರ್ ಧ್ವನಿ ಬಳಸಲಾಗಿದೆ — ಕ್ಲೌಡ್ ಧ್ವನಿ ಲಭ್ಯವಿಲ್ಲ",
   // "Unknown" is already in this dictionary further down with the same value.

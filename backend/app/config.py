@@ -43,11 +43,21 @@ class Settings(BaseSettings):
     jwt_expire_minutes: int = 480
 
     # CORS (comma-separated)
-    cors_origins: str = "http://localhost:3000,https://satyam-50043446981.development.catalystappsail.in"
+    #
+    # localhost:3000 AND 127.0.0.1:3000 are both listed because they are DIFFERENT
+    # origins to a browser. Opening the UI by one name while only the other is
+    # allowed fails with a bare "Failed to fetch" that names no cause, which is a
+    # miserable thing to debug — cheaper to allow both loopback spellings.
+    cors_origins: str = (
+        "http://localhost:3000,http://127.0.0.1:3000,"
+        "https://satyam-50043446981.development.catalystappsail.in"
+    )
 
     # Base URL the backend reaches itself on — used by spawned subprocesses
     # (e.g. the YOLO detector) to call back into /api/ops/detect/notify.
-    self_base_url: str = "http://localhost:8000"
+    # 127.0.0.1, not localhost: a subprocess resolving ::1 first cannot reach a
+    # server bound to IPv4 only, and the callback fails silently.
+    self_base_url: str = "http://127.0.0.1:8000"
 
     # ── Model adapter layer ───────────────────────────────────────────────────
     # MODEL_BACKEND: selects the overall compute plane (api | local).

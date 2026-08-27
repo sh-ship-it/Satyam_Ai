@@ -26,6 +26,7 @@ import {
 import { useT } from "@/lib/i18n";
 import { announceScreenReady, runActions } from "@/lib/taskBus";
 import { boardApi, type BoardImage } from "@/lib/api/board";
+import { saveBlob } from "@/lib/download";
 import { loadEngineSettings } from "@/components/SettingsDialog";
 import { toast } from "sonner";
 import { Tldraw, createShapeId, toRichText, useEditor, type Editor, type TLShapeId } from "tldraw";
@@ -946,12 +947,7 @@ function BoardInner({
         pixelRatio: 2,
         background: true,
       });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${boardTitle || "board"}.png`;
-      a.click();
-      URL.revokeObjectURL(url);
+      saveBlob(blob, `${boardTitle || "board"}.png`);
     } catch {
       toast.error("Export failed.");
     }

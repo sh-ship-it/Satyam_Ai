@@ -25,6 +25,7 @@ import { ForceGraph, fitLinkDistance, ringLayout } from "@/lib/forceGraph";
 import { tData, tAuto } from "@/lib/tData";
 import { api } from "@/lib/api/client";
 import { intelligence, type SearchResult, type OffenderListItem } from "@/lib/api/intelligence";
+import { saveBlob } from "@/lib/download";
 import { createPortal } from "react-dom";
 
 type SimParams = { repulsion: number; spring: number; gravity: number; damping: number };
@@ -957,16 +958,7 @@ function NetworkScreen() {
 
   const stamp = () => new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
 
-  const triggerDownload = (blob: Blob, filename: string) => {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  };
+  const triggerDownload = saveBlob;
 
   const getScopedData = (scope: "selection" | "all") => {
     if (scope === "all" || selectedSet.size === 0) {

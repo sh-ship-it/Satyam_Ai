@@ -11,6 +11,15 @@ httpx==0.28.1
 sqlglot==26.0.1
 redis==5.2.1
 python-multipart==0.0.20
+# ── Document Translation screen (/documents) ──────────────────────────────────
+# pypdf: PDF text extraction. Pure Python, no NumPy dependency, so it cannot
+# disturb the NumPy-1.x ABI lock below.
+# Imported LAZILY (app/core/doc_crypto.py) so a missing install degrades the
+# documents feature to a 503 with an actionable message instead of stopping the
+# whole backend from booting.
+# `cryptography` was here for pypdf's AES-256 PDF encryption; that feature was
+# removed, and nothing else in the tree imports it, so it went with it.
+pypdf==5.1.0
 Faker==33.1.0
 tenacity==9.0.0
 orjson==3.10.13

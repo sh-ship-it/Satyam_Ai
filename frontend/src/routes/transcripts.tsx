@@ -20,6 +20,7 @@ import {
 import { useT } from "@/lib/i18n";
 import { loadConversations, fmtTime, type StoredConversation } from "@/lib/conversationStore";
 import { exportConversationPdf, exportConversationsPdf } from "@/lib/pdf/conversationPdf";
+import { saveBlob } from "@/lib/download";
 
 export const Route = createFileRoute("/transcripts")({
   head: () => ({
@@ -232,13 +233,7 @@ function VoiceTranscriptsTab() {
     const content = items
       .map((it) => `[${new Date(it.createdAt).toLocaleString()}] (${it.lang})\n${it.text}\n`)
       .join("\n---\n\n");
-    const blob = new Blob([content], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `satyam-transcripts-${Date.now()}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+    saveBlob(new Blob([content], { type: "text/plain" }), `satyam-transcripts-${Date.now()}.txt`);
   };
 
   const filtered = items.filter(

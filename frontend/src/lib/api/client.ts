@@ -6,9 +6,13 @@
 
 import { cachedFetch, invalidateReadCache } from "./readCache";
 
+// 127.0.0.1 rather than localhost: on Windows `localhost` resolves to ::1 before
+// 127.0.0.1, and `uvicorn --host 0.0.0.0` binds IPv4 only — so the browser
+// intermittently cannot connect and fetch() rejects with a bare "Failed to fetch"
+// that is indistinguishable from a CORS fault. See frontend/.env for the measurement.
 export const API_BASE =
   (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/$/, "") ??
-  "http://localhost:8000";
+  "http://127.0.0.1:8000";
 
 const TOKEN_KEY = "satyam.token";
 const USER_KEY = "satyam-user";

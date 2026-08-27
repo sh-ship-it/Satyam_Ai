@@ -149,6 +149,24 @@ SCREEN_CAPABILITIES: dict[str, dict] = {
             "export": {"desc": "Export the board as PNG", "params": {}},
         },
     },
+    # Document translation + integrity sealing. Declared here so a spoken
+    # "translate this document into Kannada" reaches this screen instead of
+    # scoring onto /reports, which owns "report" and "pdf".
+    "/documents": {
+        "name": "Document Translation (upload, translate to Kannada, seal, download)",
+        "keywords": ["document translation", "translate document", "document", "documents",
+                     "upload document", "seal document", "download translation"],
+        "kn": ["ದಾಖಲೆ", "ದಾಖಲೆ ಅನುವಾದ", "ಅನುವಾದ ಡೌನ್‌ಲೋಡ್"],
+        "actions": {
+            "pick_file": {"desc": "Open the file chooser", "params": {}},
+            "set_target": {"desc": "Set the translation target language",
+                           "params": {"lang": "kn|en"}},
+            "translate": {"desc": "Extract and translate the chosen document", "params": {}},
+            "seal": {"desc": "Seal the document digest to the audit chain", "params": {}},
+            "verify": {"desc": "Verify the document against the audit chain", "params": {}},
+            "download": {"desc": "Download the translation as a PDF", "params": {}},
+        },
+    },
     "/audit": {
         "name": "Audit Log",
         "keywords": ["audit", "compliance", "chain", "logs", "log"],

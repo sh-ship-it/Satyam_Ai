@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { enrichDictWithLLM, enrichDataWithLLM } from "@/lib/i18n";
+import { saveBlob } from "@/lib/download";
 import { api, type SessionUser } from "@/lib/api/client";
 import { loadHandsFree, saveHandsFree, defaultHandsFree } from "@/config/handsFreeConfig";
 import type { HandsFreeSettings } from "@/input/types";
@@ -1167,14 +1168,8 @@ function DataActions({ t }: { t: (s: string) => string }) {
         { ts: new Date().toISOString(), action: "viewed_case", id: "FIR-2026-00421" },
       ],
     };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
     const file = `satyam-data-${Date.now()}.json`;
-    a.href = url;
-    a.download = file;
-    a.click();
-    URL.revokeObjectURL(url);
+    saveBlob(new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }), file);
     setConfirm(null);
     setStatus({ kind: "exported", file });
   };

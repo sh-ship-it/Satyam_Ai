@@ -23,6 +23,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as GraphsRouteImport } from './routes/graphs'
 import { Route as ForecastRouteImport } from './routes/forecast'
 import { Route as DossierRouteImport } from './routes/dossier'
+import { Route as DocumentsRouteImport } from './routes/documents'
 import { Route as ConsoleRouteImport } from './routes/console'
 import { Route as BoardRouteImport } from './routes/board'
 import { Route as AuditRouteImport } from './routes/audit'
@@ -102,6 +103,11 @@ const DossierRoute = DossierRouteImport.update({
   path: '/dossier',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocumentsRoute = DocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ConsoleRoute = ConsoleRouteImport.update({
   id: '/console',
   path: '/console',
@@ -151,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/audit': typeof AuditRoute
   '/board': typeof BoardRoute
   '/console': typeof ConsoleRoute
+  '/documents': typeof DocumentsRoute
   '/dossier': typeof DossierRoute
   '/forecast': typeof ForecastRoute
   '/graphs': typeof GraphsRoute
@@ -175,6 +182,7 @@ export interface FileRoutesByTo {
   '/audit': typeof AuditRoute
   '/board': typeof BoardRoute
   '/console': typeof ConsoleRoute
+  '/documents': typeof DocumentsRoute
   '/dossier': typeof DossierRoute
   '/forecast': typeof ForecastRoute
   '/graphs': typeof GraphsRoute
@@ -200,6 +208,7 @@ export interface FileRoutesById {
   '/audit': typeof AuditRoute
   '/board': typeof BoardRoute
   '/console': typeof ConsoleRoute
+  '/documents': typeof DocumentsRoute
   '/dossier': typeof DossierRoute
   '/forecast': typeof ForecastRoute
   '/graphs': typeof GraphsRoute
@@ -226,6 +235,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/board'
     | '/console'
+    | '/documents'
     | '/dossier'
     | '/forecast'
     | '/graphs'
@@ -250,6 +260,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/board'
     | '/console'
+    | '/documents'
     | '/dossier'
     | '/forecast'
     | '/graphs'
@@ -274,6 +285,7 @@ export interface FileRouteTypes {
     | '/audit'
     | '/board'
     | '/console'
+    | '/documents'
     | '/dossier'
     | '/forecast'
     | '/graphs'
@@ -299,6 +311,7 @@ export interface RootRouteChildren {
   AuditRoute: typeof AuditRoute
   BoardRoute: typeof BoardRoute
   ConsoleRoute: typeof ConsoleRoute
+  DocumentsRoute: typeof DocumentsRoute
   DossierRoute: typeof DossierRoute
   ForecastRoute: typeof ForecastRoute
   GraphsRoute: typeof GraphsRoute
@@ -416,6 +429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DossierRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/documents': {
+      id: '/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof DocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/console': {
       id: '/console'
       path: '/console'
@@ -483,6 +503,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuditRoute: AuditRoute,
   BoardRoute: BoardRoute,
   ConsoleRoute: ConsoleRoute,
+  DocumentsRoute: DocumentsRoute,
   DossierRoute: DossierRoute,
   ForecastRoute: ForecastRoute,
   GraphsRoute: GraphsRoute,

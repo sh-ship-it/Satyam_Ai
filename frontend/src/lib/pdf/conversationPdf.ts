@@ -1,9 +1,6 @@
 import type { StoredConversation } from "@/lib/conversationStore";
 import { fmtTime } from "@/lib/conversationStore";
-
-function esc(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
+import { esc, openPrint } from "@/lib/pdf/printView";
 
 function renderConvHtml(c: StoredConversation): string {
   const rows = c.messages
@@ -38,41 +35,6 @@ function renderConvHtml(c: StoredConversation): string {
     </div>
     ${rows}
   </section>`;
-}
-
-function openPrint(title: string, inner: string) {
-  const w = window.open("", "_blank");
-  if (!w) {
-    alert("Allow pop-ups to export PDF.");
-    return;
-  }
-  w.document.write(`<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>${esc(title)}</title>
-  <style>
-    @page { margin: 18mm 16mm; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; max-width: 760px; margin: 0 auto; padding: 0; color: #0f172a; }
-    @media print { body { max-width: 100%; } }
-  </style>
-</head>
-<body>
-  <div style="border-bottom:3px solid #4f46e5;padding-bottom:10px;margin-bottom:20px">
-    <div style="font-size:22px;font-weight:800;color:#4f46e5">Satyam — KSP Crime Intelligence</div>
-    <div style="font-size:11px;color:#64748b;margin-top:2px">
-      Conversation transcript · generated ${esc(fmtTime(Date.now()))} · Synthetic data only
-    </div>
-  </div>
-  ${inner}
-  <div style="border-top:1px solid #e2e8f0;margin-top:20px;padding-top:8px;font-size:10px;color:#94a3b8;text-align:center">
-    CONFIDENTIAL — Karnataka State Police · Satyam Intelligence System · Datathon 2026
-  </div>
-</body>
-</html>`);
-  w.document.close();
-  w.focus();
-  setTimeout(() => w.print(), 300);
 }
 
 export function exportConversationPdf(c: StoredConversation): void {

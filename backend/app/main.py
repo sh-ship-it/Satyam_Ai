@@ -15,8 +15,9 @@ import sklearn as _sk  # noqa: F401  – pre-load for cache
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from app.api.routes import audit, auth, cases, chat, health
 from app.api.routes import map as map_routes
@@ -30,6 +31,7 @@ from app.api.routes import board as board_routes
 from app.api.routes import admin as admin_routes
 from app.api.routes import security as security_routes
 from app.api.routes import news as news_routes
+from app.api.routes import documents as document_routes
 from app.config import get_settings
 from app.logging_config import configure_logging, get_logger
 
@@ -94,8 +96,7 @@ def create_app() -> FastAPI:
         description="Conversational AI for the KSP crime database (grounded, RBAC, audited).",
         lifespan=lifespan,
     )
-    app.add_middleware(
-        CORSMiddleware,
+    cors_kwargs = dict(
         allow_origins=settings.cors_origin_list,
         # Quick-tunnel demo links (cloudflared) get a random subdomain per run, so
         # a fixed allow_origins entry can't be added ahead of time. Regex-matching
@@ -106,7 +107,46 @@ def create_app() -> FastAPI:
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
+        # No expose_headers: every remaining endpoint answers JSON, and JS can read
+        # a JSON body without any header being exposed. This carried
+        # X-Document-Sha256 and Content-Disposition for the /documents/encrypt
+        # binary download, which has been removed.
+        #
+        # Worth remembering if a binary download is added back: configure the
+        # header list HERE, never on the Response. CORSMiddleware emits
+        # Access-Control-Expose-Headers itself, so setting it again in a route
+        # produced TWO copies, and a browser rejects a duplicated CORS header
+        # outright — the endpoint answered 200 and the fetch still failed with
+        # "Failed to fetch", which reads like an outage rather than a header clash.
     )
+    app.add_middleware(CORSMiddleware, **cors_kwargs)
+
+    # An unhandled exception unwinds PAST CORSMiddleware to Starlette's outermost
+    # error handler, so the 500 reaches the browser with no
+    # Access-Control-Allow-Origin. The browser then refuses to expose the response
+    # at all and fetch() rejects with "Failed to fetch" — which reads like the
+    # server is unreachable. That is exactly how the /documents/encrypt latin-1
+    # header bug hid for so long: the server logged a clean 500 and the UI showed a
+    # network error. This handler puts the CORS headers back so any future 500
+    # surfaces as a 500.
+    #
+    # The origin check is delegated to a CORSMiddleware instance built from the
+    # same kwargs, rather than re-implemented, so the two can never disagree.
+    _cors = CORSMiddleware(app=app, **cors_kwargs)
+
+    @app.exception_handler(Exception)
+    async def _cors_aware_500(request: Request, exc: Exception) -> JSONResponse:
+        log.exception("satyam.unhandled_error", path=request.url.path)
+        # Deliberately generic: the detail is in the log, not on the wire.
+        resp = JSONResponse({"detail": "internal error"}, status_code=500)
+        origin = request.headers.get("origin")
+        if origin and _cors.is_allowed_origin(origin=origin):
+            resp.headers.update(_cors.simple_headers)
+            # allow_explicit_origin sets Access-Control-Allow-Origin AND appends
+            # Vary: Origin — Starlette's own helper, so a credentialed response can
+            # never end up with a wildcard by accident.
+            _cors.allow_explicit_origin(resp.headers, origin)
+        return resp
 
     app.include_router(health.router, tags=["health"])
     app.include_router(auth.router, prefix="/auth", tags=["auth"])
@@ -126,6 +166,7 @@ def create_app() -> FastAPI:
     app.include_router(admin_routes.router, prefix="/admin", tags=["admin"])
     app.include_router(security_routes.router, prefix="/security", tags=["security"])
     app.include_router(news_routes.router, prefix="/api/news", tags=["news"])
+    app.include_router(document_routes.router, prefix="/api/documents", tags=["documents"])
     if settings.enable_response_ops:
         app.include_router(ops_routes.router, prefix="/api/ops", tags=["response-ops"])
     if settings.enable_vision:

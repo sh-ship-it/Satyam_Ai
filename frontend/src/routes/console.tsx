@@ -23,6 +23,7 @@ import { useI18n, useT } from "@/lib/i18n";
 import { announceScreenReady, runActions } from "@/lib/taskBus";
 import { tData } from "@/lib/tData";
 import { api, API_BASE, getAuthToken, getCachedUser } from "@/lib/api/client";
+import { saveBlob } from "@/lib/download";
 import {
   dashboard,
   type DashboardStationRow,
@@ -266,15 +267,10 @@ function Console() {
         .map((v) => `"${String(v).replace(/"/g, '""')}"`)
         .join(","),
     );
-    const blob = new Blob([[head.join(","), ...lines].join("\n")], {
-      type: "text/csv;charset=utf-8",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `satyam-stations-${year ?? "all"}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    saveBlob(
+      new Blob([[head.join(","), ...lines].join("\n")], { type: "text/csv;charset=utf-8" }),
+      `satyam-stations-${year ?? "all"}.csv`,
+    );
   }
 
   return (

@@ -18,6 +18,7 @@ import {
   Radar,
   Truck,
   Tv,
+  FileLock2,
   Video,
   Fingerprint,
   Workflow,
@@ -109,6 +110,15 @@ const SCREEN_ROUTES: VoiceScreen[] = [
     to: "/news",
     words:
       /(news feed|news channels?|news|live tv|tv channels?|watch tv|broadcast)|ಸುದ್ದಿ|ವಾರ್ತೆ|ಟಿವಿ|ಚಾನೆಲ್/i,
+  },
+  // MUST stay above /reports, which claims bare "pdf" and "document"-adjacent
+  // words: "translate this document" and "encrypt the pdf" belong here, not in the
+  // Report Builder. Deliberately does NOT claim bare "translate" — that is a
+  // language instruction the voice layer handles for any screen.
+  {
+    to: "/documents",
+    words:
+      /(document translation|translate (?:the |this )?(?:document|file|pdf)|document screen|seal (?:the |this )?(?:document|file|pdf)|encrypt)|ದಾಖಲೆ ಅನುವಾದ|ದಾಖಲೆ/i,
   },
   { to: "/reports", words: /(report|reports|brief|dossier|pdf)|ವರದಿ/i },
   { to: "/audit", words: /(audit|compliance|chain|logs?)|ಆಡಿಟ್/i },
@@ -398,6 +408,7 @@ export function Shell({ children }: { children: ReactNode }) {
       "/audit": t("Audit"),
       "/transcripts": t("Transcripts"),
       "/news": t("News Feed"),
+      "/documents": t("Documents"),
     };
 
     const handle = (detail: { text?: string; lang?: string; rate?: number; speak?: boolean }) => {
@@ -1210,6 +1221,9 @@ export function Shell({ children }: { children: ReactNode }) {
     { to: "/transcripts", icon: ClipboardList, label: t("Transcripts") },
     // `Tv` rather than `Video`, which already means the Camera review screen.
     { to: "/news", icon: Tv, label: t("News Feed") },
+    // `FileLock2` rather than `FileText`, which already means Reports here — this
+    // screen's point is the seal and the password, not the document.
+    { to: "/documents", icon: FileLock2, label: t("Documents") },
     { to: "/vision", icon: Globe2, label: t("Vision") },
     { to: "/ops-predictive", icon: Radar, label: t("Predictive") },
     { to: "/ops-dispatch", icon: Truck, label: t("Dispatch") },
