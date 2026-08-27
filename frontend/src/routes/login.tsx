@@ -16,6 +16,7 @@ import { useT } from "@/lib/i18n";
 import { api } from "@/lib/api/client";
 import { CreateAccountDialog } from "@/components/CreateAccountDialog";
 import { GridScan } from "@/components/GridScan";
+import { GhostMascot } from "@/components/GhostMascot";
 import { applyStoredTheme, DARK_STORAGE_KEY } from "@/lib/theme";
 
 export const Route = createFileRoute("/login")({
@@ -61,6 +62,29 @@ function Login() {
         chromaticAberration={0.002}
         noiseIntensity={0.01}
       />
+
+      {/* ── Mascot, as a background layer ──────────────────────────────────────
+          Between the grid (z-0) and the content (z-10), centred on the viewport
+          rather than inside a column, and `pointer-events-none` so it cannot
+          intercept a click meant for the form behind — a decorative layer stealing
+          the password field's focus would be a genuine defect, not a cosmetic one.
+
+          Height-driven size (`h-[min(78vh,720px)]` with `w-auto`) because the ghost
+          is taller than it is wide: sizing by width would let it run past the top and
+          bottom of a short window. The cap stops it becoming absurd on a large
+          monitor.
+
+          Opacity 25%: the sign-in form has to stay readable on top of it. Raise it if
+          you want the ghost more present — it is one number.
+
+          Hidden below `lg`: stacked to one column the form fills the screen, and a
+          full-height character behind live text at that size hurts legibility. */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] hidden select-none items-center justify-center opacity-25 lg:flex"
+        aria-hidden
+      >
+        <GhostMascot className="h-[min(78vh,720px)] w-auto [&>svg]:h-full [&>svg]:w-auto" />
+      </div>
 
       {/* Main split layout */}
       <div className="relative z-10 mx-auto grid min-h-[calc(100vh-32px)] max-w-7xl grid-cols-1 items-center gap-10 px-6 py-12 lg:grid-cols-2 lg:px-12">
