@@ -1,16 +1,16 @@
 # Graph Report - Satyam  (2026-08-27)
 
 ## Corpus Check
-- 347 files · ~1,904,350 words
+- 347 files · ~1,901,984 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3831 nodes · 7416 edges · 264 communities (251 shown, 13 thin omitted)
+- 3831 nodes · 7417 edges · 264 communities (251 shown, 13 thin omitted)
 - Extraction: 79% EXTRACTED · 21% INFERRED · 0% AMBIGUOUS · INFERRED: 1546 edges (avg confidence: 0.55)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `cafd47a6`
+- Built from commit: `73fccdde`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -266,7 +266,7 @@
 ## God Nodes (most connected - your core abstractions)
 1. `Principal` - 132 edges
 2. `cn()` - 82 edges
-3. `useT()` - 78 edges
+3. `useT()` - 79 edges
 4. `Permission` - 70 edges
 5. `AccessDenied` - 63 edges
 6. `useI18n()` - 58 edges
@@ -655,7 +655,7 @@ Nodes (30): Drop anything not in the manifest. Guarantees the frontend only ever
 
 ### Community 113 - "Community 113"
 Cohesion: 0.08
-Nodes (18): DashboardStationRow, DistrictRow, BorderGlow(), Markdown(), ChatLane, ChatMessage, Conversation, generateId() (+10 more)
+Nodes (19): DashboardStationRow, DistrictRow, BorderGlow(), Markdown(), ChatLane, ChatMessage, Conversation, generateId() (+11 more)
 
 ### Community 114 - "Community 114"
 Cohesion: 0.18
@@ -1230,7 +1230,7 @@ Cohesion: 0.67
 Nodes (3): 1. SQL Grammar AST Security Gate (`sqlglot`), 2. 4-Tier Progressive Zero-Result Recovery Hierarchy, 31.14 Grounded Natural Language-to-SQL & Progressive Relaxation Grammar
 
 ## Knowledge Gaps
-- **1065 isolated node(s):** `Lang`, `Ctx`, `I18nCtx`, `ALL_TRANSLATABLE`, `DossierListItem` (+1060 more)
+- **1065 isolated node(s):** `Lang`, `Ctx`, `I18nCtx`, `ALL_TRANSLATABLE`, `ACCENTS` (+1060 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -1238,7 +1238,7 @@ Nodes (3): 1. SQL Grammar AST Security Gate (`sqlglot`), 2. 4-Tier Progressive Z
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `DICT` connect `Community 223` to `Community 26`?**
-  _High betweenness centrality (0.244) - this node is a cross-community bridge._
+  _High betweenness centrality (0.245) - this node is a cross-community bridge._
 - **Why does `Principal` connect `Community 66` to `Community 261`, `Community 265`, `Community 10`, `Community 139`, `Community 141`, `Community 15`, `Community 158`, `Community 287`, `Community 32`, `Community 33`, `Community 286`, `Community 37`, `Community 170`, `Community 172`, `Community 46`, `Community 175`, `Community 181`, `Community 187`, `Community 190`, `Community 192`, `Community 196`, `Community 76`, `Community 121`, `Community 122`?**
   _High betweenness centrality (0.176) - this node is a cross-community bridge._
 - **Are the 123 inferred relationships involving `Principal` (e.g. with `AdminUserList` and `AgentPlan`) actually correct?**
