@@ -9,10 +9,13 @@ If SARVAM_API_KEY is unset the client runs in demo mode (deterministic stubs);
 TTS demo returns b"" so the route 502s and the frontend uses its browser fallback.
 
 VALID speaker/model pairs (speakers are NOT interchangeable across versions):
-  - bulbul:v2  → anushka, manisha, vidya, arya (F) / abhilash, karun, hitesh (M)
-  - bulbul:v3  → ritu, priya, neha, pooja, shreya, ... (different catalog)
-We use bulbul:v2 + anushka (documented, stable, supports kn-IN & en-IN).
-v2 caps a single input at ~500 chars, so we trim on a sentence boundary.
+  - bulbul:v2  → DEPRECATED as of 2026-08-29. API returns HTTP 400.
+  - bulbul:v3  → aditya, ritu, ashutosh, priya, neha, rahul, pooja, rohan, simran,
+                 kavya, amit, dev, ishita, shreya, ratan, varun, manan, sumit, roopa,
+                 kabir, aayan, shubh, advait, anand, tanya, tarun, sunny, mani, gokul,
+                 vijay, shruti, suhani, mohit, kavitha, rehan, soham, rupali, niharika
+We use bulbul:v3 + priya (female, supports kn-IN & en-IN, verified 2026-08-29).
+v3 caps a single input at ~500 chars, so we trim on a sentence boundary.
 """
 from __future__ import annotations
 
@@ -178,8 +181,8 @@ class SarvamTTS(_SarvamBase):
                 json={
                     "inputs": [spoken],
                     "target_language_code": _bcp(lang),
-                    "speaker": "anushka",       # valid bulbul:v2 female voice (kn-IN + en-IN)
-                    "model": "bulbul:v2",       # was the invalid bulbul:v3 + meera pair
+                    "speaker": "priya",         # valid bulbul:v3 female voice (kn-IN + en-IN)
+                    "model": "bulbul:v3",       # bulbul:v2 was deprecated 2026-08-29 (HTTP 400)
                     "speech_sample_rate": 22050,
                     # MUST stay False. With preprocessing ON, en-IN answered
                     # HTTP 500 "error preprocessing input text" after ~30s on
