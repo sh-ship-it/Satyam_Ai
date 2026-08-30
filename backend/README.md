@@ -1,90 +1,146 @@
-# Satyam — Backend
+# Satyam — Backend Service
 
-Conversational AI for the KSP crime database. FastAPI + PostgreSQL/pgvector +
-Redis, with a router-first grounded pipeline and a swappable model layer
-(`MODEL_BACKEND=api|local`).
+FastAPI service powering the Satyam Conversational AI for police crime intelligence (KSP × hack2skill). Includes a router-first grounded pipeline, PostgreSQL 16 + pgvector database, Redis session caching, RBAC/ABAC with Postgres Row-Level Security (RLS), cryptographic hash-chained audit logging, and swappable model adapters (`MODEL_BACKEND=api|local`).
 
-> Synthetic data only. Records describe *reported* crime, not ground truth. No
-> individual-level prediction, no residence profiling, human-in-the-loop, DPDP
-> Act 2023 aligned.
+> 🛡️ **Synthetic Data Only**: Records describe reported synthetic crime data. No individual-level guilt prediction, human-in-the-loop validation, DPDP Act 2023 aligned.
 
-## Stack
+---
 
-| Layer | Choice |
-|------|--------|
-| API | FastAPI (async), SSE streaming for chat |
-| DB | PostgreSQL 16 + pgvector (hybrid retrieval) |
-| Cache / state | Redis (conversation slots) |
-| Auth | Own OIDC/JWT (HS256), role switcher for demo |
-| Access control | RBAC + ABAC, enforced again by Postgres RLS |
-| Audit | Hash-chained, tamper-evident log |
-| Models (api lane) | Gemini 2.5 Flash (chat/Text-to-SQL), Bhashini (Kannada STT/TTS/MT), Groq (low-latency fallback) |
-| Embeddings | BGE-M3 (local, sole embedder — no hosted lane) |
-| Models (local lane) | vLLM/Ollama, BGE-M3, Whisper/IndicConformer, Indic-Parler-TTS |
-| Analytics | NetworkX (link analysis), grouped SQL hotspots |
-| SQL safety | sqlglot allow-list + LIMIT enforcement |
+## 🛠️ Tech Stack & Architecture
 
-## Quick start (demo mode, no keys needed)
+| Layer | Implementation | Notes |
+| :--- | :--- | :--- |
+| **API Framework** | FastAPI (asyncio) | SSE token streaming, REST endpoints, Pydantic v2 schemas |
+| **Database** | PostgreSQL 16 + pgvector | Async SQLAlchemy 2.0 + asyncpg, HNSW narrative vector indexing |
+| **State / Cache** | Redis 7 | Conversation state, slot memory, TTS caching |
+| **Authentication** | PyJWT (HS256) | 14 KSP hierarchical ranks, 4 clearance levels, role switcher |
+| **Access Control** | RBAC + ABAC + Postgres RLS | Least-privilege `satyam_app` role scopes queries by station/district |
+| **Audit Logging** | Cryptographic SHA-256 Hash Chain | Immutable, tamper-evident query verification |
+| **Model Lanes (API)** | Gemini 2.5/3.5 Flash · Groq Llama-3.3-70B · Sarvam AI · Bhashini | Hosted free-tier and low-latency API providers |
+| **Embeddings & Reranker** | BGE-M3 (1024-dim, FP16) · bge-reranker-v2-m3 | Sole embedder (local CUDA / CPU), hybrid vector search |
+| **SQL Safety** | sqlglot AST validator | Multi-table allow-listing, auto-LIMIT, single SELECT guard |
+
+---
+
+## ⚡ Quick Start (Offline Demo Mode)
+
+Satyam runs fully offline without requiring third-party API keys by utilizing its deterministic demo inference engine:
 
 ```bash
 cd backend
-python -m venv .venv && source .venv/bin/activate
+
+# 1. Create and activate Python virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# 2. Install PyTorch & Dependencies
+pip install torch --index-url https://download.pytorch.org/whl/cu121  # or /cpu for non-GPU
 pip install -r requirements.txt
-cp .env.example .env            # works out of the box in demo mode
-uvicorn app.main:app --reload   # http://localhost:8000/docs
+
+# 3. Copy environment configuration
+cp .env.example .env
+
+# 4. Start the FastAPI development server
+uvicorn app.main:app --reload --port 8000
 ```
+- **Interactive Swagger Docs:** [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Redoc Documentation:** [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
-With no model API keys set, every model lane returns deterministic demo output,
-so the whole pipeline runs end-to-end offline. Add keys in `.env` to go live.
+---
 
-## With a database
+## 🗄️ Database Setup & Migrations
+
+PostgreSQL with `pgvector` extension and Redis must be running.
+
+### 1. Sequential Database Migrations
+Migrations in `migrations/` must be applied in sequential order using the superuser/owner role:
 
 ```bash
-psql "$DATABASE_URL" -f migrations/001_init.sql
-python -m seed.seed      # loads synthetic cases + computes BGE-M3 embeddings
+psql -U satyam -d satyam -f migrations/002_schema_v2.sql
+psql -U satyam -d satyam -f migrations/003_add_ps4_ps7_tables.sql
+psql -U satyam -d satyam -f migrations/003_users_extend.sql
+psql -U satyam -d satyam -f migrations/004_demo_dossier.sql
+psql -U satyam -d satyam -f migrations/005_boards.sql
+psql -U satyam -d satyam -f migrations/006_admin_access_control.sql
+psql -U satyam -d satyam -f migrations/008_local_app_grants.sql
+psql -U satyam -d satyam -f migrations/010_narrative_vector_index.sql
+psql -U satyam -d satyam -f migrations/011_ops_rls.sql
+psql -U satyam -d satyam -f migrations/012_local_bilingual_rag.sql
 ```
 
-## Docker (full stack)
+### 2. Seeding Synthetic Data
 
 ```bash
-docker compose up --build    # postgres+pgvector, redis, backend, frontend
+# Load 100k synthetic FIR cases, stations, officers, persons & narratives
+python -m seed.load_seed
+
+# Initialize Response-Ops tables (units, dispatch, cameras, corridors)
+python -m seed.init_ops
+
+# Seed demo dossiers for Person 360 suspect investigations
+python -m seed.load_demo_dossier
+
+# Seed socio-economic indicators and financial hawala/mule tables
+python -m seed.load_new_tables --db local
+
+# Generate BGE-M3 narrative embeddings & construct HNSW index (Required for RAG)
+python -m seed.embed_narratives
+
+# Check storage consumption and quota headroom
+python -m app.core.storage
 ```
 
-## Tests
+---
+
+## 🧪 Testing
+
+Run pytest unit tests across all routes, pipelines, and security layers:
 
 ```bash
-pytest -q     # unit tests run in demo mode, no DB required
+# Unit test suite (runs in demo mode, no database required)
+pytest -q
+
+# Integration tests (requires active, seeded database)
+pytest -m integration
 ```
 
-## Model backends
+---
 
-`MODEL_BACKEND=api` (default) uses hosted free-tier lanes. `MODEL_BACKEND=local`
-swaps in the on-prem stubs under `app/models/local/` — drop your real weights
-there (vLLM/Ollama endpoint, BGE-M3, Whisper, Parler-TTS) without touching the
-pipeline. Embeddings are always BGE-M3.
-
-## Gemini safety notes (baked into `app/models/api/gemini.py`)
-
-- Use `BLOCK_ONLY_HIGH` / `OFF` thresholds. `BLOCK_NONE` is **restricted**
-  (allowlist or monthly-invoiced billing) and unavailable on a free key.
-- Child-safety filters are always-on and cannot be disabled — the client raises
-  `BlockedByModel`, and the pipeline falls back to a templated DB answer or the
-  Groq open-model lane.
-- Search grounding disabled; `responseSchema` + temperature 0 for Text-to-SQL
-  and slot extraction; key stays server-side; 429 backoff via tenacity.
-
-## Layout
+## 📁 Backend Directory Layout
 
 ```
-app/
-  api/        deps + routes (health, auth, chat-SSE, cases, map, network, reports, audit)
-  core/       security (JWT), rbac (RBAC+ABAC), audit (hash chain), masking
-  db/         async engine/session, RLS context, ORM models
-  models/     base interfaces, registry, api/* lanes, local/* stubs
-  pipeline/   router, slots, guardrails, prompts, orchestrator, tools/*
-  schemas/    Pydantic DTOs
-  services/   case/map/network/report/chat services
-migrations/   001_init.sql (schema + pgvector + RLS + audit)
-seed/         synthetic generator + loader
-tests/        unit tests (demo mode)
+backend/
+├── app/
+│   ├── api/
+│   │   ├── deps.py               # Dependency injection & authentication
+│   │   └── routes/               # API route definitions
+│   │       ├── admin.py          # Access control & clearance overrides
+│   │       ├── audit.py          # Tamper-evident hash chain verification
+│   │       ├── auth.py           # OIDC / JWT authentication & demo switcher
+│   │       ├── board.py          # tldraw investigation canvas persistence
+│   │       ├── cases.py          # Case search, details & masking
+│   │       ├── chat.py           # SSE token streaming & spoken summary
+│   │       ├── documents.py      # Legal document translation & sealing
+│   │       ├── dossier.py        # Person 360 suspect dossier
+│   │       ├── financial.py      # Hawala & mule account money trails
+│   │       ├── health.py         # Health checks & data telemetry
+│   │       ├── intelligence.py   # Statistical queries & socio-economic data
+│   │       ├── map.py            # Geospatial incident queries & heatmaps
+│   │       ├── network.py        # Graph link analysis & ego networks
+│   │       ├── news.py           # OSINT crime intelligence stream
+│   │       ├── ops.py            # Response-Ops dispatch & green corridor
+│   │       ├── reports.py        # Verifiable intelligence reports
+│   │       ├── security.py       # Zero-trust session revocation
+│   │       ├── settings.py       # Dynamic database source switcher
+│   │       ├── vision.py         # Tactical surveillance & telemetry
+│   │       └── voice.py          # Speech-to-Text & Text-to-Speech routes
+│   ├── core/                     # Security, RBAC/ABAC, audit, masking, storage guard
+│   ├── db/                       # SQLAlchemy async engine, RLS context, ORM models
+│   ├── models/                   # Model registry and adapters (Gemini, Groq, Sarvam, Bhashini, BGE-M3)
+│   ├── pipeline/                 # Router, slots, guardrails, SQL guard, Text-to-SQL, Vector RAG
+│   ├── schemas/                  # Pydantic request/response schemas
+│   └── services/                 # Business logic implementations
+├── migrations/                   # Sequential PostgreSQL migration scripts
+├── seed/                         # Synthetic dataset loaders and embedder
+└── tests/                        # Pytest unit & integration test suites
 ```
