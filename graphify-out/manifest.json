@@ -765,13 +765,13 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1787306193.6273584,
-    "ast_hash": "56915f9dbc39655e5428a003f608718b",
+    "mtime": 1788094776.0644145,
+    "ast_hash": "66e8648f782ca3bf443b03fbd6c31259",
     "semantic_hash": ""
   },
   "backend/README.md": {
-    "mtime": 1781282330.9285784,
-    "ast_hash": "c643c4e576931224e558a0e2c37dcad7",
+    "mtime": 1788094786.9931524,
+    "ast_hash": "0a7c7ed9df48894ca8ba23250a4388a3",
     "semantic_hash": ""
   },
   "backend/requirements.txt": {
@@ -2062,6 +2062,11 @@
   "frontend/src/components/ui/glass-card.tsx": {
     "mtime": 1787829001.1697502,
     "ast_hash": "237a67b8b9d006f0dcf0491e06dbac36",
+    "semantic_hash": ""
+  },
+  "frontend/README.md": {
+    "mtime": 1788094794.6678522,
+    "ast_hash": "64f6d924efb9bbd0ccb38199a95d133a",
     "semantic_hash": ""
   }
 }
